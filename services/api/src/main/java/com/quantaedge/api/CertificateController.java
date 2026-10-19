@@ -111,13 +111,19 @@ public class CertificateController {
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
   @GetMapping("/students/me/certificates/{certificateId}")
   public Map<String, Object> myCertificate(@PathVariable long certificateId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     if (certificateId < 1) throw new IllegalArgumentException("Choose a valid certificate.");
-    return publicCertificateById(certificateId, context.studentId(),institutionId);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
+    Map<String,Object> certificate=publicCertificateById(certificateId,context.studentId(),institutionId);
+    if(number(certificate.get("course_id"))!=courseId)
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found in the selected course.");
+    return certificate;
   }
 
   /** Subjects mapped to the selected enrolled course and eligible for course completion certificates. */
@@ -817,37 +823,48 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    return studentCertificateArtifact(certificateId,format,context,false,requireInstitution(tenant));
+    return studentCertificateArtifact(certificateId,courseId,format,context,false,requireInstitution(tenant));
   }
 
   @GetMapping("/students/me/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    return studentCertificateArtifact(certificateId,format,context,true,requireInstitution(tenant));
+    return studentCertificateArtifact(certificateId,courseId,format,context,true,requireInstitution(tenant));
   }
 
-  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId,String format,
+  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId,Long courseId,String format,
       AuthContext context,boolean inline,long institutionId) {
     context=authorization.requireStudent(context);
-    return certificateArtifact(certificateId,context.studentId(),format,inline,institutionId);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
+    return certificateArtifact(certificateId,context.studentId(),format,inline,institutionId,courseId);
   }
 
   private ResponseEntity<byte[]> certificateArtifact(long certificateId,long studentId,
       String format,boolean inline,long institutionId) {
+    return certificateArtifact(certificateId,studentId,format,inline,institutionId,null);
+  }
+
+  private ResponseEntity<byte[]> certificateArtifact(long certificateId,long studentId,
+      String format,boolean inline,long institutionId,Long courseId) {
     String normalizedFormat = format == null ? "pdf" : format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
     }
     Map<String, Object> certificate = loadCertificateArtifactRow(certificateId,studentId,institutionId);
     if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
+    if(courseId!=null && number(certificate.get("program_id"))!=courseId)
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found in the selected course.");
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.GONE, "This certificate has been revoked and is no longer downloadable as valid proof.");
     }
