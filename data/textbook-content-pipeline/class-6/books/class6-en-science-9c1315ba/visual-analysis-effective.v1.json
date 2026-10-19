@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "91bf29169e6be83e22717e39119f3fcd1584cfbce0481d0e784000478d1cbe8b",
+  "raw_analysis_sha256": "8a2428c5a65e6dc6427d52184f972444e85898808f320da75fb9e070b40aa218",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:09:24Z",
+      "checkpointed_at": "2026-10-19T03:12:59Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:10:04Z",
+      "checkpointed_at": "2026-10-19T03:13:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:10:55Z",
+      "checkpointed_at": "2026-10-19T03:14:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:11:33Z",
+      "checkpointed_at": "2026-10-19T03:15:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -40214,6 +40214,86 @@
         "context_relation": "The QR code is likely related to the content of the textbook.",
         "limitations": [
           "The image does not provide any specific information about the content of the textbook or the QR code's purpose."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3fecab267e713f6a6abd47d7",
+      "asset_sha256": "fe0fa2e4e8109ebf184e91eb28212e1d8a3e823c5762116b2f06619b58a0acf8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/fe0fa2e4e8109ebf184e91eb28212e1d8a3e823c5762116b2f06619b58a0acf8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of aged, yellowed paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Mindful Eating: A Path",
+          "Chapter       to a Healthy Body 3",
+          "कोऽरुक्? कोऽरुक्? कोऽरुक्?",
+          "हितभुक् मितभुक् ऋतुभुक्",
+          "(सुभाषित)",
+          "Who is healthy? Who is healthy? Who is healthy? One",
+          "who eats food that is wholesome, in moderate quantities,",
+          "and appropriate for the season, time, and place.",
+          "(Wise saying)",
+          "Medu  and  Mishti  read",
+          "‘thought  of the day’ on",
+          "अन्‍   नेन जातानि जीवन्‍त"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The image is a visual representation of a page from a textbook discussing mindful eating and its importance for a healthy body.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The visible text is in English and Hindi, indicating a bilingual approach to the content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:16:04Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of aged, yellowed paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Mindful Eating: A Path",
+          "Chapter       to a Healthy Body 3",
+          "कोऽरुक्? कोऽरुक्? कोऽरुक्?",
+          "हितभुक् मितभुक् ऋतुभुक्",
+          "(सुभाषित)",
+          "Who is healthy? Who is healthy? Who is healthy? One",
+          "who eats food that is wholesome, in moderate quantities,",
+          "and appropriate for the season, time, and place.",
+          "(Wise saying)",
+          "Medu  and  Mishti  read",
+          "‘thought  of the day’ on",
+          "अन्‍   नेन जातानि जीवन्‍त"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The image is a visual representation of a page from a textbook discussing mindful eating and its importance for a healthy body.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The visible text is in English and Hindi, indicating a bilingual approach to the content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
