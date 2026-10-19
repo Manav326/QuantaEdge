@@ -60,9 +60,18 @@ public class NotificationContentValidator {
         if (!assetId.isEmpty() && assetId.length() > 80) {
           throw new IllegalArgumentException("Media asset reference is invalid.");
         }
-        if (type.equals("image") && !Boolean.TRUE.equals(block.path("decorative").asBoolean(false))
+        if ((type.equals("image") || type.equals("animation"))
+            && !Boolean.TRUE.equals(block.path("decorative").asBoolean(false))
             && block.path("alt").asText("").trim().isEmpty()) {
-          throw new IllegalArgumentException("Meaningful images require alternative text.");
+          throw new IllegalArgumentException("Meaningful images and animations require alternative text.");
+        }
+        if (type.equals("hero") && !assetId.isEmpty()
+            && block.path("alt").asText(block.path("title").asText("")).trim().isEmpty()) {
+          throw new IllegalArgumentException("Hero images require alternative text or a descriptive title.");
+        }
+        if (type.equals("video") && !assetId.isEmpty()
+            && block.path("alt").asText(block.path("title").asText("")).trim().isEmpty()) {
+          throw new IllegalArgumentException("Videos require an accessible title or alternative text.");
         }
       }
     }
@@ -79,6 +88,10 @@ public class NotificationContentValidator {
       Iterator<String> names = node.fieldNames();
       while (names.hasNext()) {
         String name = names.next();
+        nodeCount[0]++;
+        if (nodeCount[0] > MAX_DOCUMENT_NODES) {
+          throw new IllegalArgumentException("Notification content contains too many nested elements.");
+        }
         String normalizedName = name.toLowerCase(java.util.Locale.ROOT);
         if (UNSAFE_KEYS.contains(normalizedName)) {
           throw new IllegalArgumentException("Executable HTML and script properties are not allowed in notification content.");
