@@ -646,7 +646,7 @@ public class LearningDocumentController {
     if (startPage < 1) throw badRequest("The first page must be at least 1.");
     if (limit < 1) throw badRequest("The page batch size must be at least 1.");
     int boundedLimit = Math.min(limit, 10);
-    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId);
+    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId,requireCourseId(courseId));
     int sourceStart = ((Number) metadata.get("page_start")).intValue();
     int sourceEnd = ((Number) metadata.get("page_end")).intValue();
     int visibleCount = sourceEnd - sourceStart + 1;
@@ -693,7 +693,7 @@ public class LearningDocumentController {
     // Authenticate and re-check active enrollment/publication before even looking in the cache.
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId);
+    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId,requireCourseId(courseId));
     int start = ((Number) metadata.get("page_start")).intValue();
     int end = ((Number) metadata.get("page_end")).intValue();
     int visibleCount = end - start + 1;
@@ -732,7 +732,7 @@ public class LearningDocumentController {
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId);
+    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId,requireCourseId(courseId));
     int pageCount = ((Number) document.get("page_count")).intValue();
     int lastPage = integerValue(body.get("lastPage"), "lastPage", 1, pageCount);
     jdbc.update("""
