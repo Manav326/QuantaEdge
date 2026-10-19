@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1289,
-    "successful_visual_analyses": 1272,
-    "missing_visual_analyses": 6199,
+    "raw_analysis_result_rows": 1292,
+    "successful_visual_analyses": 1275,
+    "missing_visual_analyses": 6196,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6216,
+    "unresolved_count": 6213,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58885,9 +58885,21 @@
       "asset_path": "assets/038072a1c679ac07826dcb2ecd235d5d96d7c4d5b84d317c53296a371d5d0203.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a battery, focusing on its metallic surface and terminals.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "electrical components"
+        ],
+        "context_relation": "The image is a close-up of a battery, which is part of the educational content about batteries and their use in circuits.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the battery itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58903,9 +58915,28 @@
       "asset_path": "assets/68171e37409ad798144134c8a710e3d46b68d958f274af233f319588f01603d5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the use of multiple cells in circuits and the term 'battery' for both single and multiple cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "cells",
+          "circuit",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The text discusses the use of multiple cells in circuits and the term 'battery' for both single and multiple cells.",
+        "limitations": [
+          "The text does not provide specific details about the circuit or the components used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58921,9 +58952,27 @@
       "asset_path": "assets/129b85570450959c89d0cd5ac6b9b6b30658c4bb13c07cb0d8f2abfb002846d8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the connection of multiple cells to provide energy to a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "connection of cells",
+          "energy provision",
+          "battery usage",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a part of a textbook explaining the concept of connecting multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not provide specific details about the physical appearance or components of the cells."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
