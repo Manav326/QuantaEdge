@@ -1,5 +1,6 @@
 'use client';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
+import PasswordField from '../components/PasswordField';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import { useUiTranslation, PeopleLanguageSwitcher } from '../i18n/UiLocaleProvider';
 
@@ -81,10 +82,9 @@ export default function PeopleLogin() {
               required
             />
             <label htmlFor="password">{t('people.auth.password')}</label>
-            <input
+            <PasswordField
               id="password"
               className="input"
-              type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
