@@ -192,6 +192,6 @@ export default function ProgressPage(){
       }):<div className="topic-line"><span><UiText message="legacy.web.your.test.status.and.result.will.appea.0798ef2f" /></span></div>}</div>
       <Link href={courseId!==null?'/student/certificates?courseId='+encodeURIComponent(String(courseId)):'/student/courses'} className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
       <Link href={'/student/tests'+(courseId!==null?'?courseId='+courseId:'')} className="button button-dark"><UiText message="legacy.web.view.all.tests.and.results.f924b495" /></Link>
-      <Link href={courseId!==null ? '/student/structured-lessons?courseId='+encodeURIComponent(String(courseId))+(activeCourse?.subjects?.[0] ? '&subjectCode='+encodeURIComponent(String(activeCourse.subjects[0].subject_code||activeCourse.subjects[0].code||'')) : '') : '/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
+      <Link href={courseId!==null ? '/student/structured-lessons?courseId='+encodeURIComponent(String(activeCourse?.public_id || courseId))+(activeCourse?.subjects?.[0] ? '&subjectCode='+encodeURIComponent(String(activeCourse.subjects[0].subject_code||activeCourse.subjects[0].code||'')) : '') : '/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
     </section></main>;
 }
