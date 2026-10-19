@@ -500,4 +500,53 @@ class AuthServiceTest {
         contains("environment='LOCAL_PREVIEW' and active=true order by id limit 1"), eq(Long.class));
   }
 
+  @Test
+  void parentPersonalLearningAccessIsCheckedAgainstExactInstitutionAndParentOwner() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
+
+    assertTrue(auth.hasParentPersonalLearningAccess(501L, 31L));
+
+    org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
+    org.mockito.ArgumentCaptor<Object[]> parameters = org.mockito.ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForObject(sql.capture(), eq(Boolean.class), parameters.capture());
+    assertTrue(sql.getValue().contains("ce.institution_id=? and ce.holder_user_id=?"));
+    assertTrue(sql.getValue().contains("st.user_account_id=?"));
+    assertTrue(sql.getValue().contains("e.status in ('ACTIVE','PAUSED')"));
+    assertIterableEquals(List.of(31L, 501L, 31L, 501L), List.of(parameters.getValue()));
+  }
+
+  @Test
+  void parentPersonalLearningAccessFailsClosedWhenThereIsNoOwnCourseInInstitution() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(false);
+
+    assertFalse(auth.hasParentPersonalLearningAccess(501L, 32L));
+  }
+
+  @Test
+  void parentWorkspaceCanOnlyBeRecoveredFromTheMatchingParentOwnedLearnerProfile() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForList(contains("as parent_user_id"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("parent_user_id", 501L)));
+    when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", 501L))
+        .thenReturn(Map.of("role", "PARENT", "display_name", "Parent learner"));
+
+    AuthContext parent = auth.openParentWorkspaceContext(801L);
+
+    assertEquals(501L, parent.userId());
+    assertEquals("PARENT", parent.role());
+    assertNull(parent.studentId());
+  }
+
+  @Test
+  void unrelatedLearnerCannotUseParentWorkspaceRecovery() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForList(contains("as parent_user_id"), any(Object[].class))).thenReturn(List.of());
+
+    assertThrows(SecurityException.class, () -> auth.openParentWorkspaceContext(802L));
+  }
+
 }
