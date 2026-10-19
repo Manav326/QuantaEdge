@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1095,
+    "assets_selected": 1097,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1092,
-    "assets_remaining": 986,
+    "assets_analyzed": 1094,
+    "assets_remaining": 984,
     "assets_completion_percent": 52.6,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1090,
+    "assets_skipped_from_checkpoint": 1092,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:50:08Z"
+      "checkpointed_at": "2026-10-19T17:54:15Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:50:49Z"
+      "checkpointed_at": "2026-10-19T17:54:57Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:51:42Z"
+      "checkpointed_at": "2026-10-19T17:55:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35630,6 +35630,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:53:26Z"
+    },
+    {
+      "asset_id": "8ab8cce12fad0148c2d9bb15",
+      "asset_sha256": "43ad86cbbe8d18b0a5df6f9c40c9df0f06b61fa5c253531898c835983048d3fc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/43ad86cbbe8d18b0a5df6f9c40c9df0f06b61fa5c253531898c835983048d3fc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A light bulb with a brain inside it, emitting light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A light bulb with a brain inside it, emitting light."
+        ],
+        "concepts": [
+          "Light bulb",
+          "Brain",
+          "Light emission"
+        ],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not represent any specific concept or relationship from the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:56:27Z"
+    },
+    {
+      "asset_id": "897242749ef9a718e851345e",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Key points about magnets and magnetic materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points",
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "Magnet poles",
+          "North pole",
+          "South pole",
+          "Magnetic materials",
+          "Non-magnetic materials",
+          "Magnet direction"
+        ],
+        "context_relation": "The image is a visual summary of key points about magnets and magnetic materials.",
+        "limitations": [
+          "The image does not show any diagrams or charts.",
+          "The image does not include any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:57:10Z"
     }
   ]
 }

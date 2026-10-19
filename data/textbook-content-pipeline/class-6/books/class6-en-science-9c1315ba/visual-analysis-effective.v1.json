@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0909b0f112eb1b44a86f50adc99fe8e669fcfd67440998b0c5d1617435457839",
+  "raw_analysis_sha256": "d7650f310707b403a276db4438bc9cb14d46a0a125140397e65aa1b6735d8e47",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:50:08Z",
+      "checkpointed_at": "2026-10-19T17:54:15Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:50:49Z",
+      "checkpointed_at": "2026-10-19T17:54:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:51:42Z",
+      "checkpointed_at": "2026-10-19T17:55:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -53511,6 +53511,128 @@
         ],
         "context_relation": "explaining how to keep magnets safe",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8ab8cce12fad0148c2d9bb15",
+      "asset_sha256": "43ad86cbbe8d18b0a5df6f9c40c9df0f06b61fa5c253531898c835983048d3fc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/43ad86cbbe8d18b0a5df6f9c40c9df0f06b61fa5c253531898c835983048d3fc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A light bulb with a brain inside it, emitting light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A light bulb with a brain inside it, emitting light."
+        ],
+        "concepts": [
+          "Light bulb",
+          "Brain",
+          "Light emission"
+        ],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not represent any specific concept or relationship from the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:56:27Z",
+      "effective_analysis": {
+        "visual_summary": "A light bulb with a brain inside it, emitting light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A light bulb with a brain inside it, emitting light."
+        ],
+        "concepts": [
+          "Light bulb",
+          "Brain",
+          "Light emission"
+        ],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not represent any specific concept or relationship from the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "897242749ef9a718e851345e",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Key points about magnets and magnetic materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points",
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "Magnet poles",
+          "North pole",
+          "South pole",
+          "Magnetic materials",
+          "Non-magnetic materials",
+          "Magnet direction"
+        ],
+        "context_relation": "The image is a visual summary of key points about magnets and magnetic materials.",
+        "limitations": [
+          "The image does not show any diagrams or charts.",
+          "The image does not include any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:57:10Z",
+      "effective_analysis": {
+        "visual_summary": "Key points about magnets and magnetic materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points",
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "Magnet poles",
+          "North pole",
+          "South pole",
+          "Magnetic materials",
+          "Non-magnetic materials",
+          "Magnet direction"
+        ],
+        "context_relation": "The image is a visual summary of key points about magnets and magnetic materials.",
+        "limitations": [
+          "The image does not show any diagrams or charts.",
+          "The image does not include any equations or formulas."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1109,
-    "successful_visual_analyses": 1095,
-    "missing_visual_analyses": 969,
+    "raw_analysis_result_rows": 1111,
+    "successful_visual_analyses": 1097,
+    "missing_visual_analyses": 967,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 983,
+    "unresolved_count": 981,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42372,9 +42372,24 @@
       "asset_path": "assets/43ad86cbbe8d18b0a5df6f9c40c9df0f06b61fa5c253531898c835983048d3fc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A light bulb with a brain inside it, emitting light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A light bulb with a brain inside it, emitting light."
+        ],
+        "concepts": [
+          "Light bulb",
+          "Brain",
+          "Light emission"
+        ],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not represent any specific concept or relationship from the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42390,9 +42405,33 @@
       "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Key points about magnets and magnetic materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points",
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "Magnet poles",
+          "North pole",
+          "South pole",
+          "Magnetic materials",
+          "Non-magnetic materials",
+          "Magnet direction"
+        ],
+        "context_relation": "The image is a visual summary of key points about magnets and magnetic materials.",
+        "limitations": [
+          "The image does not show any diagrams or charts.",
+          "The image does not include any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
