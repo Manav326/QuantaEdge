@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1005,
+    "assets_selected": 1008,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1003,
-    "assets_remaining": 1075,
-    "assets_completion_percent": 48.3,
+    "assets_analyzed": 1006,
+    "assets_remaining": 1072,
+    "assets_completion_percent": 48.4,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1000,
+    "assets_skipped_from_checkpoint": 1003,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:13:43Z"
+      "checkpointed_at": "2026-10-19T13:20:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:14:45Z"
+      "checkpointed_at": "2026-10-19T13:21:52Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32405,6 +32405,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T13:19:36Z"
+    },
+    {
+      "asset_id": "a02230d99335d40717d13912",
+      "asset_sha256": "d8b4c4bcc1289e1368afa08d05cb1da0383d7d27f34f49aac524b06fc68bdcb1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/d8b4c4bcc1289e1368afa08d05cb1da0383d7d27f34f49aac524b06fc68bdcb1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink book cover with various colorful magnets attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a visual representation of magnets attached to a book cover, likely for educational purposes.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:23:24Z"
+    },
+    {
+      "asset_id": "3215fa2cda56b206c4fb74f1",
+      "asset_sha256": "9ad14fea23b3cc4485b6ff179bd1150f0cdf39382f6cc99bfe611c4f097213be",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/9ad14fea23b3cc4485b6ff179bd1150f0cdf39382f6cc99bfe611c4f097213be.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden box with a partially open door, revealing a dark interior.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden box with a partially open door, which is likely used to illustrate a concept related to the box's contents or structure.",
+        "limitations": [
+          "The image does not provide specific details about the contents or purpose of the box."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:25:01Z"
+    },
+    {
+      "asset_id": "54366f2641a3388966bf5894",
+      "asset_sha256": "aa79cbe868f76df76579af41151957ed5b77982ce0697fef903ac710ca54ad0b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/aa79cbe868f76df76579af41151957ed5b77982ce0697fef903ac710ca54ad0b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a rectangular object with a green and black color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnets",
+          "lodestones",
+          "iron",
+          "artificial magnets",
+          "school laboratory",
+          "pencil boxes",
+          "stickers",
+          "toys"
+        ],
+        "context_relation": "The image is related to the text discussing the history and uses of magnets.",
+        "limitations": [
+          "The image does not provide specific details about the magnets' properties or uses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:26:37Z"
     }
   ]
 }
