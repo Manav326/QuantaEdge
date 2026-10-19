@@ -227,9 +227,11 @@ public class SourceIngestionController {
       @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
           InstitutionTenantContext tenant) {
     context = requireReviewer(context);
-    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> rows = jdbc.queryForList(
-        "select status,reconciliation from learning_book_intake where pdf_asset_id=?", assetId);
+        "select status,reconciliation from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?",
+        assetId,institutionId,courseId);
     if (rows.isEmpty()) throw notFound("Classified book intake", assetId);
     String current = String.valueOf(rows.getFirst().get("status"));
     if ("PENDING".equals(current) || "BLOCKED".equals(current)) {
@@ -253,14 +255,14 @@ public class SourceIngestionController {
     }
     jdbc.update("""
       update learning_book_intake set status='REVIEWED',reviewed_by_staff_id=?,
-        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=?
-      """, context.staffId(), notes, assetId);
+        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=? and institution_id=? and course_id=?
+      """, context.staffId(), notes, assetId,institutionId,courseId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/review",
         "Recorded human review of book inventory; no chapter ranges were auto-approved and no content was published.");
     return jdbc.queryForMap("""
       select pdf_asset_id,status,reviewed_by_staff_id,reviewed_at,review_notes,reconciliation
-      from learning_book_intake where pdf_asset_id=?
-      """, assetId);
+      from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /**
@@ -279,12 +281,13 @@ public class SourceIngestionController {
       @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
           InstitutionTenantContext tenant) {
     context = requireReviewer(context);
-    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.subject_id,a.page_count,i.status
       from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     int pageCount = ((Number) intake.get("page_count")).intValue();
@@ -326,15 +329,15 @@ public class SourceIngestionController {
       update learning_book_intake set chapter_ranges=?::jsonb,
         ranges_reviewed_by_staff_id=?,ranges_reviewed_at=now(),
         ranges_review_notes=?,updated_at=now()
-      where pdf_asset_id=?
-      """, rangesJson, context.staffId(), optionalText(body.get("notes"), 2000), assetId);
+      where pdf_asset_id=? and institution_id=? and course_id=?
+      """, rangesJson, context.staffId(), optionalText(body.get("notes"), 2000), assetId,institutionId,courseId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/chapter-ranges",
         "Saved manually reviewed chapter page ranges. Ranges remain draft-only and do not publish content.");
     return jdbc.queryForMap("""
       select pdf_asset_id,chapter_ranges,ranges_reviewed_by_staff_id,ranges_reviewed_at,
              ranges_review_notes
-      from learning_book_intake where pdf_asset_id=?
-      """, assetId);
+      from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /**
