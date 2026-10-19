@@ -222,7 +222,6 @@ export default function GlobalNotificationHost() {
     return () => {
       notificationHostReady = false;
       window.removeEventListener(EVENT, onNotification);
-      if (window.fetch === wrappedFetch) window.fetch = originalFetch;
       timersRef.current.forEach(timer => window.clearTimeout(timer));
       timersRef.current.clear();
       queuedRef.current = [];

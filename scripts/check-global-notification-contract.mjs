@@ -30,3 +30,4 @@ for (const path of ['apps/web/app/layout.tsx', 'apps/admin/app/layout.tsx', 'app
 const workflow = readFileSync('.github/workflows/ci.yml', 'utf8');
 assert.ok(workflow.includes('node scripts/check-global-notification-contract.mjs'), 'The notification contract must run in CI');
 console.log('Global notification contract passed: early API interception, buffered errors, and fixed viewport host.');
+assert.ok(!source.includes('if (window.fetch === wrappedFetch) window.fetch = originalFetch;'), 'Component cleanup must not reference module-scoped interceptor locals');

@@ -507,3 +507,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - All non-2xx API responses and non-aborted API network failures now route through the central host. Response inspection still uses `response.clone()`, so existing API callers can read the original response.
 - Added `scripts/check-global-notification-contract.mjs` to require identical Web/Admin/People hosts, module-scope interception, pending-notice draining, fixed viewport rendering, root mounting and CI wiring.
 - CI note: run #4460 failed only in `ApplicationStartupSmokeTest.signupMembershipAuditPersistsNullActorAsJsonNull` because PostgreSQL's JSONB `?` operator collided with JDBC placeholders. Follow-up commit `9f7d0be` replaced that test predicate with `jsonb_exists`; run #4461 was in progress when this notification follow-up began. This notification change still requires its own full CI result.
+
+
+## Global notification interceptor cleanup correction (2026-10-19)
+
+- After moving the `fetch` interceptor to module initialization, removed the old component-effect cleanup statement that referenced function-local `wrappedFetch` and `originalFetch` variables. The interceptor remains installed for the app lifetime while the notification host unmounts/remounts safely.
+- Extended `scripts/check-global-notification-contract.mjs` to guard against restoring the module-scoped interceptor from component cleanup. The same host source is kept byte-for-byte identical across Web, Admin and People Operations.
+- CI must verify this correction; do not treat the prior notification run as accepted until the new run completes.
