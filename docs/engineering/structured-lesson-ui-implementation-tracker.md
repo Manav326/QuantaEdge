@@ -295,3 +295,11 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Profile photo, personal details, learning details, eligibility actions, sign-in methods, profile identity, username, and password are locked by default. Each editable card has a separate pencil control; local save/cancel controls appear where applicable. Existing endpoints, validation and credential rules are retained.
 - New action labels are centralized in the Web and shared localization catalogues. Added UI helper copy remains under ten words.
 - **Validation status:** source assertions and translation JSON parsing passed before commit; CI must pass on this commit.
+
+
+## CI correction — centralized localization copies (2026-10-19)
+
+- Build #4432 failed in **Detect affected components**, step **Verify centralized UI localization catalogs and app copies**.
+- Root cause: new profile-edit action labels were added to the canonical English/Hinglish catalogs and Web generated copies, but Admin and People generated copies were stale.
+- Fix: regenerate Admin and People catalog copies from `localization/catalogs` byte-for-byte. Do not hand-edit generated app catalogs independently.
+- Verification: compare all generated files against canonical content and rerun `python3 scripts/sync_ui_localization.py --check` in GitHub Actions. Other build jobs in #4432 were skipped after this early failure; Android APK build passed.

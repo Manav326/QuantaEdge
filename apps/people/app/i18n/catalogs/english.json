@@ -3603,5 +3603,15 @@
   "web.workspace.parentFallbackName": "Parent account",
   "web.workspace.progressSavesAutomatically": "Progress saves automatically",
   "web.workspace.safeLearningSpace": "Safe learning space",
-  "web.workspace.studentFallbackName": "Student"
+  "web.workspace.studentFallbackName": "Student",
+  "student.profile.edit": "Edit",
+  "student.profile.editPhoto": "Edit profile photo",
+  "student.profile.editAbout": "Edit personal details",
+  "student.profile.editLearning": "Edit learning details",
+  "student.profile.editEligibility": "Edit account eligibility",
+  "student.profile.editAccountDetails": "Edit profile details",
+  "student.profile.editUsername": "Edit username",
+  "student.profile.editPassword": "Edit password",
+  "student.profile.editVerification": "Edit sign-in methods",
+  "student.profile.verification": "Sign-in methods"
 }
