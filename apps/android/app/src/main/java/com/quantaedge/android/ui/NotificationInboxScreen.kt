@@ -116,6 +116,7 @@ private data class NotificationRow(
     val id: Long,
     val title: String,
     val summary: String,
+    val senderLabel: String,
     val scope: String,
     val state: String,
     val deliveredAt: String,
@@ -161,6 +162,7 @@ private fun NotificationInboxDialog(
                     id = row.optLong("recipient_id"),
                     title = row.optString("title", text("Notification", "सूचना")),
                     summary = row.optString("summary"),
+                    senderLabel = row.optString("sender_label"),
                     scope = row.optString("scope", "USER"),
                     state = row.optString("state", "CREATED"),
                     deliveredAt = row.optString("delivered_at"),
@@ -272,6 +274,12 @@ private fun NotificationInboxDialog(
                                         }
                                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                             Text(row.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                                            Text(row.senderLabel.ifBlank { when(row.scope) {
+                                                "HRMS_PLATFORM" -> text("HRMS Platform", "HRMS प्लेटफ़ॉर्म")
+                                                "INSTITUTION" -> text("Institution", "संस्थान")
+                                                "COURSE" -> text("Course", "कोर्स")
+                                                else -> text("Personal", "व्यक्तिगत")
+                                            } }, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                                             Text(row.summary, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                             val readableDate = readableNotificationDate(row.deliveredAt)
                                             if (readableDate.isNotBlank()) Text(readableDate, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
