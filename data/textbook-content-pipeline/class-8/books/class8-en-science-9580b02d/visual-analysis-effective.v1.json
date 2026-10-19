@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b05523fab2a7343a67faf6d74a8c8d8dda67202dbf4d2f4694fdc7919b2a233f",
+  "raw_analysis_sha256": "87d35ea95ca9298f29dd595d751147ae74fa78b142c43a7bb21d4653ee2919e4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:09:27Z",
+      "checkpointed_at": "2026-10-19T04:13:01Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:10:16Z",
+      "checkpointed_at": "2026-10-19T04:13:50Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:10:56Z",
+      "checkpointed_at": "2026-10-19T04:14:28Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -35317,6 +35317,124 @@
         "limitations": [
           "The page is completely blank and does not contain any visible content or text."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9bcd6594c9f4c08e24d88e7f",
+      "asset_sha256": "60e8d2e3e70dbe11d5282931dc5bb1d9ec51a2962a2da928ec26f55b3b889d9d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 35,
+      "asset_path": "page-0035.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0dbf5516b11b557350908814812e56dffe672b7bf2a86274ad40b97dc632b713",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about microorganisms and their characteristics, including a diagram of an ostrich egg and instructions for observing pond and soil water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "15",
+          "Ever heard of ...",
+          "The yolk (the yellow part of an egg) of an ostrich egg is a single cell—the largest known cell in the living world—measuring about 130 mm to 170 mm in diameter. The egg contains extra non-cellular material: a shell for protection and a white liquid that nourishes the cell during its continued develo",
+          "2.3 What Are Microorganisms?",
+          "Some living organisms are made up of just one or very few cells. They are so small that they can not be seen with the naked eye. These are called microorganisms. Some microorganisms, like bacteria and Amoeba, are made of just one cell (unicellular). Others, like some fungi and algae, have many cells",
+          "Activity 2.4: Let us observe pond water/stagnant water",
+          "- Take a container and collect pond or stagnant water in it with the help of your teacher or elder(s).",
+          "- Use a dropper and place a drop of pond or stagnant water on a microscope slide. Put a coverslip and observe it under the microscope.",
+          "- Observe the tiny organisms found in the pond or stagnant water.",
+          "Activity 2.5: Let us observe soil suspension",
+          "- Take a beaker and collect some moist soil in it from the nearby field or garden. Do not touch the soil with your bare hands—use a spoon or gloves."
+        ],
+        "concepts": [
+          "microorganisms",
+          "unicellular",
+          "multicellular",
+          "microscope",
+          "pond water",
+          "stagnant water",
+          "soil suspension"
+        ],
+        "context_relation": "The page provides educational content about microorganisms, their characteristics, and instructions for observing them.",
+        "limitations": [
+          "The page does not provide specific details about the types of microorganisms or their characteristics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:19:09Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about microorganisms and their characteristics, including a diagram of an ostrich egg and instructions for observing pond and soil water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "15",
+          "Ever heard of ...",
+          "The yolk (the yellow part of an egg) of an ostrich egg is a single cell—the largest known cell in the living world—measuring about 130 mm to 170 mm in diameter. The egg contains extra non-cellular material: a shell for protection and a white liquid that nourishes the cell during its continued develo",
+          "2.3 What Are Microorganisms?",
+          "Some living organisms are made up of just one or very few cells. They are so small that they can not be seen with the naked eye. These are called microorganisms. Some microorganisms, like bacteria and Amoeba, are made of just one cell (unicellular). Others, like some fungi and algae, have many cells",
+          "Activity 2.4: Let us observe pond water/stagnant water",
+          "- Take a container and collect pond or stagnant water in it with the help of your teacher or elder(s).",
+          "- Use a dropper and place a drop of pond or stagnant water on a microscope slide. Put a coverslip and observe it under the microscope.",
+          "- Observe the tiny organisms found in the pond or stagnant water.",
+          "Activity 2.5: Let us observe soil suspension",
+          "- Take a beaker and collect some moist soil in it from the nearby field or garden. Do not touch the soil with your bare hands—use a spoon or gloves."
+        ],
+        "concepts": [
+          "microorganisms",
+          "unicellular",
+          "multicellular",
+          "microscope",
+          "pond water",
+          "stagnant water",
+          "soil suspension"
+        ],
+        "context_relation": "The page provides educational content about microorganisms, their characteristics, and instructions for observing them.",
+        "limitations": [
+          "The page does not provide specific details about the types of microorganisms or their characteristics."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2293afe2ee2b77525e9aa976",
+      "asset_sha256": "b3716956217b50844ac967e3a97ccd8a1d3cc4bfb718c54f8defce0e9b511f50",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/b3716956217b50844ac967e3a97ccd8a1d3cc4bfb718c54f8defce0e9b511f50.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue, star-like structure with a purple center and small blue dots around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about observing soil suspension under a microscope.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:20:41Z",
+      "effective_analysis": {
+        "visual_summary": "A blue, star-like structure with a purple center and small blue dots around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about observing soil suspension under a microscope.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
