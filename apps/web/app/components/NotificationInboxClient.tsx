@@ -16,6 +16,7 @@ type NotificationItem = {
   scope: string;
   title: string;
   summary: string;
+  sender_label?: string;
   contentDocument: unknown;
   course_id?: number | null;
   expires_at?: string | null;
@@ -187,7 +188,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
               }}>
               <span className={styles.scopeIcon} aria-hidden="true">{scope === 'HRMS_PLATFORM' ? '✦' : scope === 'INSTITUTION' ? '▦' : scope === 'COURSE' ? '▤' : '◉'}</span>
               <span className={styles.itemCopy}>
-                <span className={styles.itemMeta}><span className={styles.category}>{scopeLabel}</span><time dateTime={item.delivered_at}>{item.delivered_at ? formatUserTimestamp(item.delivered_at) : t('Just now', 'Abhi')}</time></span>
+                <span className={styles.itemMeta}><span className={styles.category}>{scopeLabel}</span><span className={styles.senderLabel}>{item.sender_label || scopeLabel}</span><time dateTime={item.delivered_at}>{item.delivered_at ? formatUserTimestamp(item.delivered_at) : t('Just now', 'Abhi')}</time></span>
                 <strong>{item.title}</strong>
                 <span className={styles.summary}>{item.summary}</span>
               </span>
