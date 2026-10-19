@@ -8,6 +8,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Assessments.module.css';
 
+type CourseOption={id:number;course_id:number;code:string;display_name:string;curriculum_class_code:string};
 type BankQuestion = { question_id:number; question_type:string; prompt:string; difficulty:string; marks?:number|null; lesson_title:string; chapter_id:number; chapter_name:string; chapter_code:string; subject_name:string; };
 type Assessment = { assessment_id:number; test_id?:string|null; title:string; description?:string; duration_minutes:number; max_attempts:number; status:string; offline_enabled?:boolean; assessment_type?:string; is_generated?:boolean; generation_version?:number; class_code:string; subject_code:string; subject_name:string; chapter_id?:number|null; chapter_name?:string|null; question_count:number; max_score:number; attempt_count:number; review_count:number; assigned_grader_names?:string|null; };
 type Staff = {staff_id:number;display_name:string;role:string;can_grade:boolean};
@@ -48,8 +49,11 @@ export default function AssessmentsPage(){
   const t=useUiTranslation();
   const tRef=useRef(t);
   useEffect(()=>{tRef.current=t;},[t]);
-  const [classCode,setClassCode]=useState('6');
+  const [courses,setCourses]=useState<CourseOption[]>([]);
+  const [courseId,setCourseId]=useState('');
+  const [classCode,setClassCode]=useState('');
   const [subjectCode,setSubjectCode]=useState('maths');
+  const [subjectOptions,setSubjectOptions]=useState<Array<{code:string;name:string}>>([]);
   const [chapterId,setChapterId]=useState('');
   const [statusFilter,setStatusFilter]=useState('ALL');
   const [assessments,setAssessments]=useState<Assessment[]>([]);
@@ -93,32 +97,38 @@ export default function AssessmentsPage(){
   const filteredBank=bank;
 
   const loadAssessments=useCallback(async()=>{
+    if(!courseId){setAssessments([]);setAssessmentTotal(0);setChapters([]);setLoading(courses.length===0);return;}
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
+      const params=new URLSearchParams({classCode,subjectCode,courseId,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
       const [assessmentRows,staffRows,contentRows]=await Promise.all([
         api('/api/v1/admin/assessments?'+params.toString()),
         api('/api/v1/admin/assessment-staff'),
-        api('/api/v1/admin/content?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode))
+        api('/api/v1/admin/content?courseId='+encodeURIComponent(courseId))
       ]);
       setAssessments(Array.isArray(assessmentRows?.items)?assessmentRows.items:(Array.isArray(assessmentRows)?assessmentRows:[]));
       setAssessmentTotal(Number(assessmentRows?.total??(Array.isArray(assessmentRows)?assessmentRows.length:0)));
       setStaff(Array.isArray(staffRows)?staffRows:[]);
+      const subjectMap=new Map<string,{code:string;name:string}>();
       const chapterMap=new Map<number,{id:number;code:string;name:string}>();
       (Array.isArray(contentRows)?contentRows:[]).forEach((row:any)=>{
+        if(row.subject_code)subjectMap.set(String(row.subject_code),{code:String(row.subject_code),name:String(row.subject_name||row.subject_code)});
         const id=Number(row.chapter_id);
         if(id>0&&row.chapter_name)chapterMap.set(id,{id,code:String(row.chapter_code||''),name:String(row.chapter_name)});
       });
+      const nextSubjects=[...subjectMap.values()];setSubjectOptions(nextSubjects);
       setChapters([...chapterMap.values()]);
       setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
+      if(nextSubjects.length&&!nextSubjects.some(item=>item.code===subjectCode))setSubjectCode(nextSubjects[0].code);
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));}
     finally{setLoading(false);}
-  },[classCode,subjectCode,statusFilter,assessmentPage,assessmentPageSize]);
+  },[classCode,subjectCode,courseId,courses.length,statusFilter,assessmentPage,assessmentPageSize]);
 
   const loadBank=useCallback(async(nextPage=bankPage,nextPageSize=bankPageSize)=>{
+    if(!courseId){setBank([]);setBankTotal(0);setBankLoading(false);return;}
     setBankLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
+      const params=new URLSearchParams({classCode,subjectCode,courseId,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       if(chapterId)params.set('chapterId',chapterId);
       if(search.trim())params.set('query',search.trim());
       const data=await api('/api/v1/admin/assessment-question-bank?'+params.toString());
@@ -127,7 +137,7 @@ export default function AssessmentsPage(){
       setBankPage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.bankLoadFailed'));}
     finally{setBankLoading(false);}
-  },[classCode,subjectCode,chapterId,search,bankPage,bankPageSize]);
+  },[classCode,subjectCode,courseId,chapterId,search,bankPage,bankPageSize]);
 
   const loadQueue=useCallback(async(nextPage=queuePage,nextPageSize=queuePageSize)=>{
     setLoading(true);setError('');
@@ -142,6 +152,8 @@ export default function AssessmentsPage(){
     finally{setLoading(false);}
   },[queueStatus,query,queuePage,queuePageSize]);
 
+  useEffect(()=>{let active=true;api('/api/v1/admin/content/programs').then((data:any)=>{if(!active)return;const rows=Array.isArray(data)?data:[];setCourses(rows);const current=rows.some((row:CourseOption)=>String(row.course_id||row.id)===courseId)?courseId:String(rows[0]?.course_id||rows[0]?.id||'');if(current!==courseId)setCourseId(current);const chosen=rows.find((row:CourseOption)=>String(row.course_id||row.id)===current);if(chosen?.curriculum_class_code)setClassCode(String(chosen.curriculum_class_code));}).catch((e:any)=>{if(active)setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));});return()=>{active=false;};},[]);
+  useEffect(()=>{const chosen=courses.find(row=>String(row.course_id||row.id)===courseId);if(chosen?.curriculum_class_code)setClassCode(String(chosen.curriculum_class_code));},[courses,courseId]);
   useEffect(()=>{void loadAssessments();},[loadAssessments]);
   useEffect(()=>{if(activeTab==='review')void loadQueue();},[activeTab,loadQueue]);
 
@@ -152,7 +164,7 @@ export default function AssessmentsPage(){
     setBusy(true);setError('');setNotice('');
     try{
       const row=await api('/api/v1/admin/assessments',{method:'POST',body:JSON.stringify({
-        title:title.trim(),description:description.trim(),classCode,subjectCode,
+        title:title.trim(),description:description.trim(),classCode,subjectCode,courseId:Number(courseId),
         chapterId:chapterId?Number(chapterId):null,
         durationMinutes:Number(duration),maxAttempts:Number(maxAttempts),questionIds:selectedQuestionIds
       })});
@@ -254,8 +266,8 @@ export default function AssessmentsPage(){
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.step01')}</span><h2>{t('admin.assessments.chooseCurriculum')}</h2><p>{t('admin.assessments.chooseCurriculumDescription')}</p></div><b>01</b></div>
           <div className={styles.fields}>
-            <label>{t('admin.assessments.class')}<select value={classCode} onChange={e=>{setClassCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}}><option value="6">{t('admin.assessments.classValue',{classCode:6})}</option><option value="7">{t('admin.assessments.classValue',{classCode:7})}</option><option value="8">{t('admin.assessments.classValue',{classCode:8})}</option></select></label>
-            <label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}}><option value="maths">{t('admin.assessments.subjectMathematics')}</option><option value="science">{t('admin.assessments.subjectScience')}</option></select></label>
+            <label>Course<select value={courseId} onChange={e=>{setCourseId(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}} disabled={!courses.length}><option value="">{courses.length?'Select a course':'No courses assigned to this institution'}</option>{courses.map(course=><option key={course.course_id||course.id} value={course.course_id||course.id}>{course.display_name} · {course.code}</option>)}</select></label>
+            <label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}} disabled={!subjectOptions.length}>{subjectOptions.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
             <label>{t('admin.assessments.chapterFilterOptional')}<select value={chapterId} onChange={e=>{setChapterId(e.target.value);setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);}}><option value="">{t('admin.assessments.anyPublishedChapter')}</option>{chapters.map(ch=><option key={ch.id} value={ch.id}>{ch.code} — {ch.name}</option>)}</select></label>
             <button type="button" className={styles.secondaryButton} onClick={()=>void loadBank()} disabled={bankLoading}>{bankLoading?t('admin.assessments.loading'):t('admin.assessments.loadSearchQuestionBank')}</button>
           </div>
@@ -280,7 +292,7 @@ export default function AssessmentsPage(){
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.governance')}</span><h2>{t('admin.assessments.testCatalogue')}</h2><p>{t('admin.assessments.catalogueDescription')}</p></div><select className={styles.filter} value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setAssessmentPage(0)}}><option value="ALL">{t('admin.assessments.allStatuses')}</option><option value="DRAFT">{t('admin.assessments.draftsOnly')}</option><option value="PUBLISHED">{t('admin.assessments.publishedOnly')}</option><option value="ARCHIVED">{t('admin.assessments.archivedOnly')}</option></select></div>
-          <div className={styles.fields+' '+styles.compactFields}><label>{t('admin.assessments.class')}<select value={classCode} onChange={e=>{setClassCode(e.target.value);setAssessmentPage(0)}}><option value="6">{t('admin.assessments.classValue',{classCode:6})}</option><option value="7">{t('admin.assessments.classValue',{classCode:7})}</option><option value="8">{t('admin.assessments.classValue',{classCode:8})}</option></select></label><label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setAssessmentPage(0)}}><option value="maths">{t('admin.assessments.subjectMathematics')}</option><option value="science">{t('admin.assessments.subjectScience')}</option></select></label></div>
+          <div className={styles.fields+' '+styles.compactFields}><label>Course<select value={courseId} onChange={e=>{setCourseId(e.target.value);setAssessmentPage(0)}} disabled={!courses.length}>{courses.map(course=><option key={course.course_id||course.id} value={course.course_id||course.id}>{course.display_name} · {course.code}</option>)}</select></label><label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setAssessmentPage(0)}} disabled={!subjectOptions.length}>{subjectOptions.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label></div>
           {loading?<p className={styles.empty}>{t('admin.assessments.loadingTests')}</p>:assessments.length===0?<div className={styles.empty}><b>{t('admin.assessments.noAssessmentsFilter')}</b><span>{t('admin.assessments.createDraftHint')}</span></div>:<div className={styles.testList}>{assessments.map(row=><article className={styles.testCard} key={row.assessment_id}>
             <div className={styles.testIcon}>✓</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.title}</h3>{row.test_id&&<small>{t('admin.assessments.testId',{testId:row.test_id})}</small>}<span className={styles['status'+row.status]}>{statusText(row.status,t)}</span></div><p>{t('admin.assessments.classValue',{classCode:row.class_code})} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{row.is_generated?(row.assessment_type==='TOPIC_END'?t('admin.assessments.systemTopicEnd'):t('admin.assessments.systemChapterEnd')):t('admin.assessments.adminCreatedTest')}{row.is_generated?' · '+t('admin.assessments.version',{version:row.generation_version||1}):''}</small><small>{t('admin.assessments.questionMarksDurationAttempts',{questions:row.question_count,marks:row.max_score,minutes:row.duration_minutes,attempts:row.max_attempts})}</small><small>{t('admin.assessments.submittedStartedAwaiting',{submitted:row.attempt_count,awaiting:row.review_count})}</small><small>{t('admin.assessments.delivery')} {row.offline_enabled?t('admin.assessments.protectedOfflineEnabled'):t('admin.assessments.onlineOnly')}{row.offline_enabled?' · '+t('admin.assessments.encryptedLocalAnswersNote'):''}</small>
               <div className={styles.inlineAssign}><select aria-label={t('admin.assessments.assignGraderAria',{title:row.title})} value={graderByAssessment[row.assessment_id]||''} onChange={e=>setGraderByAssessment(m=>({...m,[row.assessment_id]:e.target.value}))}><option value="">{t('admin.assessments.assignPermittedStaffOption')}</option>{eligibleStaff.map(s=><option key={s.staff_id} value={s.staff_id}>{s.display_name} · {s.role}</option>)}</select><button type="button" disabled={busy||!eligibleStaff.length||!graderByAssessment[row.assessment_id]} onClick={()=>void assignGrader(row)}>{t('admin.assessments.assignChecker')}</button></div>
