@@ -245,7 +245,7 @@ export default function TestsClient(){
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
-  useEffect(()=>{setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);},[courseId]);
+  useEffect(()=>{setTestsPage(0);setResultsPage(0);},[courseId]);
   useEffect(()=>{
     if(subjectFilter==='ALL')return;
     if(!(activeCourse?.subjects||[]).some(subject=>String(subject.subject_code||subject.code||'')===subjectFilter))setSubjectFilter('ALL');
