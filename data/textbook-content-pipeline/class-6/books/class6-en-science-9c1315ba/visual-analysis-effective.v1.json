@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "230de2a4ff6695eec012c50aff511ce8d965da7ac415f6c8da4b031e1efbea39",
+  "raw_analysis_sha256": "fd3a83cf25f93533f518241c89794b34e8bf24f6cb03b16f432996d5d13ad86f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:16:12Z",
+      "checkpointed_at": "2026-10-19T05:19:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:16:51Z",
+      "checkpointed_at": "2026-10-19T05:20:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:17:42Z",
+      "checkpointed_at": "2026-10-19T05:21:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:18:20Z",
+      "checkpointed_at": "2026-10-19T05:22:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -42160,6 +42160,80 @@
         "context_relation": "The image is related to the topic of food sources and their nutritional benefits.",
         "limitations": [
           "The image does not provide specific nutritional information for each item."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ca41f778f6bc3165e4f6e9c4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of various sources of fats and carbohydrates.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Butter",
+          "Pistachios",
+          "Sunflower seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing"
+        ],
+        "concepts": [
+          "sources of fats",
+          "sources of carbohydrates",
+          "energy for performing"
+        ],
+        "context_relation": "The image is a list of sources of fats and carbohydrates, providing information about their role in energy production.",
+        "limitations": [
+          "The image does not provide specific quantities or percentages of these sources in the diet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:22:17Z",
+      "effective_analysis": {
+        "visual_summary": "A list of various sources of fats and carbohydrates.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Butter",
+          "Pistachios",
+          "Sunflower seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing"
+        ],
+        "concepts": [
+          "sources of fats",
+          "sources of carbohydrates",
+          "energy for performing"
+        ],
+        "context_relation": "The image is a list of sources of fats and carbohydrates, providing information about their role in energy production.",
+        "limitations": [
+          "The image does not provide specific quantities or percentages of these sources in the diet."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
