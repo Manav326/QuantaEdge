@@ -64,10 +64,26 @@ assert.ok(brandProvider.includes("{ name: 'qe-tenant-parent', path: '/parent' }"
 const service = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
 for (const required of [
   'audience_snapshot->\'institutionIds\' @> jsonb_build_array(?::bigint)',
-  'scopedIdempotencyKey(', 'resolveAudience(', 'dispatchScheduledCampaign(', 'cancelCampaign(',
+  'scopedIdempotencyKey(', 'resolveAudience(', 'dispatchScheduledCampaign(', 'cancelCampaign(', 'markUnread(', 'dismissNotification(',
 ]) {
   assert.ok(service.includes(required), `Notification service is missing ${required}`);
 }
+const notificationController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
+for (const route of [
+  '/notifications/{recipientId}/read',
+  '/notifications/{recipientId}/unread',
+  '/notifications/{recipientId}/dismiss',
+  '/notifications/read-all',
+]) {
+  assert.ok(notificationController.includes(route), `Notification inbox action is missing: ${route}`);
+}
+const webInbox = read('apps/web/app/components/NotificationInboxClient.tsx');
+assert.ok(webInbox.includes('ARCHIVED') && webInbox.includes('/dismiss') && webInbox.includes('/unread'),
+  'Web inbox must expose archive, restore and mark-unread controls.');
+const androidInbox = read('apps/android/app/src/main/java/com/quantaedge/android/ui/NotificationInboxScreen.kt');
+assert.ok(androidInbox.includes('filterArchived') && androidInbox.includes('/dismiss') && androidInbox.includes('/unread'),
+  'Android inbox must expose archive, restore and mark-unread controls.');
+
 const media = read('services/api/src/main/java/com/quantaedge/api/NotificationMediaController.java');
 assert.ok(media.includes('X-Content-Type-Options') &&
   media.includes('sha256(bytes)') && media.includes('MAX_IMAGE_BYTES') &&
