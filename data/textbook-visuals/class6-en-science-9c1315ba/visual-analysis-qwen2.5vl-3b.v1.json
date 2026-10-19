@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 922,
+    "assets_selected": 925,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 920,
-    "assets_remaining": 1158,
-    "assets_completion_percent": 44.3,
+    "assets_analyzed": 923,
+    "assets_remaining": 1155,
+    "assets_completion_percent": 44.4,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 917,
+    "assets_skipped_from_checkpoint": 920,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:43:01Z"
+      "checkpointed_at": "2026-10-19T09:53:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:44:01Z"
+      "checkpointed_at": "2026-10-19T09:54:08Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -29251,6 +29251,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T09:51:55Z"
+    },
+    {
+      "asset_id": "7f5ffbd308b732c51818ded1",
+      "asset_sha256": "72d250286e96c7a5c7dcfbded709019d7edeadc5bc326d4eceb21dc1653ea896",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/72d250286e96c7a5c7dcfbded709019d7edeadc5bc326d4eceb21dc1653ea896.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "340d019d60d41708fce42e837781417f5205f16836997f7acbb10c45b0b3ba55",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A variety of fruits and vegetables, including tomatoes, oranges, mangoes, and bell peppers, arranged together.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "fruits",
+          "vegetables",
+          "tomatoes",
+          "oranges",
+          "mangoes",
+          "bell peppers"
+        ],
+        "context_relation": "The image represents a variety of fruits and vegetables, which are important for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:55:44Z"
+    },
+    {
+      "asset_id": "199df7ed7c6ce7e9c48b2fab",
+      "asset_sha256": "8fabcb2021a3091158485af2212518efefc8a4c74a341a221b76c9a2e6988fa6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/8fabcb2021a3091158485af2212518efefc8a4c74a341a221b76c9a2e6988fa6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "340d019d60d41708fce42e837781417f5205f16836997f7acbb10c45b0b3ba55",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a bottle of milk, a pot of rice, two fish, two eggs, and some mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Papaya",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "diseases"
+        ],
+        "context_relation": "The image illustrates the nutritional value of different food items.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:57:22Z"
+    },
+    {
+      "asset_id": "f7291ab301dec52cfbfa662e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "340d019d60d41708fce42e837781417f5205f16836997f7acbb10c45b0b3ba55",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of vitamins and minerals in protecting the body from diseases.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "From Fig. 3.5, you have learnt that vitamins (A, B1, C and D) and minerals (calcium, iodine, and iron) are two groups of food components that protect our body from various diseases.",
+          "But, how can we overcome vitamin and mineral deficiency diseases or disorders?"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "protecting the body",
+          "diseases",
+          "overcoming deficiency diseases"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, or tables.",
+          "The image does not show any illustrations or cartoons.",
+          "The image does not show any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:57:52Z"
     }
   ]
 }

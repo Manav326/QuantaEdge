@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 931,
-    "successful_visual_analyses": 922,
-    "missing_visual_analyses": 1147,
+    "raw_analysis_result_rows": 934,
+    "successful_visual_analyses": 925,
+    "missing_visual_analyses": 1144,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1156,
+    "unresolved_count": 1153,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36161,9 +36161,25 @@
       "asset_path": "assets/72d250286e96c7a5c7dcfbded709019d7edeadc5bc326d4eceb21dc1653ea896.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A variety of fruits and vegetables, including tomatoes, oranges, mangoes, and bell peppers, arranged together.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "fruits",
+          "vegetables",
+          "tomatoes",
+          "oranges",
+          "mangoes",
+          "bell peppers"
+        ],
+        "context_relation": "The image represents a variety of fruits and vegetables, which are important for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36179,9 +36195,33 @@
       "asset_path": "assets/8fabcb2021a3091158485af2212518efefc8a4c74a341a221b76c9a2e6988fa6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a bottle of milk, a pot of rice, two fish, two eggs, and some mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Papaya",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "diseases"
+        ],
+        "context_relation": "The image illustrates the nutritional value of different food items.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36197,9 +36237,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of vitamins and minerals in protecting the body from diseases.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "From Fig. 3.5, you have learnt that vitamins (A, B1, C and D) and minerals (calcium, iodine, and iron) are two groups of food components that protect our body from various diseases.",
+          "But, how can we overcome vitamin and mineral deficiency diseases or disorders?"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "protecting the body",
+          "diseases",
+          "overcoming deficiency diseases"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, or tables.",
+          "The image does not show any illustrations or cartoons.",
+          "The image does not show any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
