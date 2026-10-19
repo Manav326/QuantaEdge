@@ -4,6 +4,15 @@
 **Source of route inventory:** `docs/qa/ui-screen-inventory.csv`  
 **Target contract:** all authenticated learner and staff learning interactions are scoped by the resolved institution, then the selected/assigned course, then a subject that belongs to that course. No student-facing class-root or legacy subject-track fallback is accepted. An institution label comes from the trusted tenant context; it is not a user-supplied authorization value.
 
+## Merge status — 2026-10-19
+
+- **Merged into `main`:** PR [#84](https://github.com/Manav326/QuantaEdge/pull/84), squash commit `d6dc124c295985875ff2798a8b3c20ce800c7136`.
+- **Hierarchy retained:** Institutions → Course → Subject → published structured lesson.
+- **Current verification:** the latest post-cleanup GitHub Actions build for `main` is queued/running under [run #39247906171](https://github.com/Manav326/QuantaEdge/actions/runs/39247906171); its final result has not yet been verified.
+- **Deferred by explicit instruction:** pre-merge API verification had 13 failing tests and 4 errors out of 429 tests. These test cases were not treated as a merge blocker and must be revisited after the merged code is available for runtime validation. This does **not** mean the tests passed.
+- The route-by-route and runtime QA checkboxes below remain open until their actual scenarios are executed.
+
+
 ## Non-negotiable implementation rules
 
 1. The institution is resolved from the authenticated session / validated institution context. It must not be inferred from a class code, client-controlled ID, or local-storage value.
@@ -25,18 +34,18 @@
 
 | Area | Current source change | Verification state |
 |---|---|---|
-| Shared learner scope component | `apps/web/app/student/InstitutionCourseSubjectScope.tsx` and its CSS module display the validated institution context and expose course + course-owned subjects | Implemented on branch; build pending |
-| Structured lessons | Course + subject controls; catalogue API uses course ID and optional course-owned subject; direct lesson links preserve both | Implemented on branch; build/runtime pending |
-| Learning entry route | `/student/learn` now routes to the structured-lesson catalogue rather than the old class-subject browser | Implemented on branch; route validation pending |
-| Practice entry route | Course/subject selection; links to approved structured lessons; no class/program fallback in this entry | Implemented on branch; API/UX verification pending |
-| Textbook library | Shared scope component; course-specific expanded-subject state; reader routes preserve course and subject; UI labels course instead of class | Implemented on branch; build/runtime pending |
-| Tests/results | Shared scope component; subject selection is carried to test and results queries | Implemented on branch; API test/build pending |
-| Live classes | Shared scope component; course-owned subject list and URL preserved across changes | Implemented on branch; build/runtime pending |
-| Progress | Shared institution/course/subject scope; subject-specific breakdowns are filtered locally within the selected course | Implemented on branch; build/runtime pending |
+| Shared learner scope component | `apps/web/app/student/InstitutionCourseSubjectScope.tsx` and its CSS module display the validated institution context and expose course + course-owned subjects | Merged into main; runtime QA pending |
+| Structured lessons | Course + subject controls; catalogue API uses course ID and optional course-owned subject; direct lesson links preserve both | Merged into main; build/runtime verification pending |
+| Learning entry route | `/student/learn` now routes to the structured-lesson catalogue rather than the old class-subject browser | Merged into main; route validation pending |
+| Practice entry route | Course/subject selection; links to approved structured lessons; no class/program fallback in this entry | Merged into main; API/UX verification pending |
+| Textbook library | Shared scope component; course-specific expanded-subject state; reader routes preserve course and subject; UI labels course instead of class | Merged into main; build/runtime verification pending |
+| Tests/results | Shared scope component; subject selection is carried to test and results queries | Merged into main; API test/build verification pending |
+| Live classes | Shared scope component; course-owned subject list and URL preserved across changes | Merged into main; build/runtime verification pending |
+| Progress | Shared institution/course/subject scope; subject-specific breakdowns are filtered locally within the selected course | Merged into main; build/runtime verification pending |
 | Android learning catalogue | Course-required learning flow; dynamic subject list from the selected course; no visible “return to existing lessons” switch | Implemented on branch; Android build pending |
 | Android live classes | Subject choices come from current course mapping; blank selection means all subjects in that course | Implemented on branch; Android build pending |
-| Student dashboard / course list | Learning links route to structured lessons with explicit course + subject; dashboard identity shows institution/course rather than class | Implemented on branch; build/runtime pending |
-| API assessment results | Optional subject filter added to the course-scoped result query while keeping an overload for test/source compatibility | Implemented on branch; API tests pending |
+| Student dashboard / course list | Learning links route to structured lessons with explicit course + subject; dashboard identity shows institution/course rather than class | Merged into main; build/runtime verification pending |
+| API assessment results | Optional subject filter added to the course-scoped result query while keeping an overload for test/source compatibility | Merged into main; API test follow-up pending |
 
 ## Route-by-route audit checklist
 
@@ -139,4 +148,4 @@ This pass explicitly includes the admin workspace. Course scope is resolved from
 
 - The reusable learning-resource catalogue itself is currently a shared catalogue endpoint and is not filtered by `courseId`; only its placements are course-filtered. Confirm the intended ownership model for catalogue records (shared platform resource versus institution-owned resource) before claiming full tenant isolation for that library.
 - The parent directory is institution-scoped and lists each parent's linked children/course names; it is an account directory, not a selected-course progress report. Any child-progress/report view must still select a course when the child has multiple active enrollments.
-- CI and runtime acceptance are not complete merely because source contracts pass. Re-check the newest branch run, then execute admin course-switch, unmapped-subject, cross-institution, and direct-ID tampering scenarios before merging.
+- CI and runtime acceptance are not complete merely because source contracts pass. Re-check the newest branch run, then execute admin course-switch, unmapped-subject, cross-institution, and direct-ID tampering scenarios before claiming runtime acceptance is complete.
