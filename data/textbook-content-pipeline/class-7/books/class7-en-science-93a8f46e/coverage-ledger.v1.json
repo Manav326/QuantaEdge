@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1669,
-    "successful_visual_analyses": 1647,
-    "missing_visual_analyses": 5819,
+    "raw_analysis_result_rows": 1672,
+    "successful_visual_analyses": 1650,
+    "missing_visual_analyses": 5816,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5841,
+    "unresolved_count": 5838,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -72283,9 +72283,28 @@
       "asset_path": "assets/9548d8ba04a8cba8e546458a351a03de65a0cbb19935dea102033538cf559f3f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram of a circuit with a lamp and two types of materials: a conductor and an insulator.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Electric current",
+          "Conductors",
+          "Insulators",
+          "Circuit",
+          "Lamp"
+        ],
+        "context_relation": "The image illustrates the difference between conductors and insulators in a circuit.",
+        "limitations": [
+          "The image does not show the actual materials used in the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72301,9 +72320,27 @@
       "asset_path": "assets/be36c469ade8a0367ef45e800e35521d28796261bfcb3eeca5f520994b760f45.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72319,9 +72356,27 @@
       "asset_path": "assets/bc306ce3baf0f5dd07512c562860c59b95a37c8de954d4f8b9faebd9bdfa0856.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a thin gray line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others. The materials through which electric current can flow easily are called good conductors, or conductors of electricity. The materials through which current cannot pa"
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to pass through them.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a paragraph explaining the difference between conductors and insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

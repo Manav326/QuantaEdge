@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1647,
+    "assets_selected": 1650,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1645,
-    "assets_remaining": 5843,
+    "assets_analyzed": 1648,
+    "assets_remaining": 5840,
     "assets_completion_percent": 22.0,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1642,
+    "assets_skipped_from_checkpoint": 1645,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:02:40Z"
+      "checkpointed_at": "2026-10-19T13:05:44Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:03:01Z"
+      "checkpointed_at": "2026-10-19T13:06:05Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -62019,6 +62019,118 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T13:05:02Z"
+    },
+    {
+      "asset_id": "b54dbfa7c9c6bd481f878e08",
+      "asset_sha256": "9548d8ba04a8cba8e546458a351a03de65a0cbb19935dea102033538cf559f3f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/9548d8ba04a8cba8e546458a351a03de65a0cbb19935dea102033538cf559f3f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of a circuit with a lamp and two types of materials: a conductor and an insulator.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Electric current",
+          "Conductors",
+          "Insulators",
+          "Circuit",
+          "Lamp"
+        ],
+        "context_relation": "The image illustrates the difference between conductors and insulators in a circuit.",
+        "limitations": [
+          "The image does not show the actual materials used in the circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:06:46Z"
+    },
+    {
+      "asset_id": "438b1c2fc061de8ac75eff05",
+      "asset_sha256": "be36c469ade8a0367ef45e800e35521d28796261bfcb3eeca5f520994b760f45",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/be36c469ade8a0367ef45e800e35521d28796261bfcb3eeca5f520994b760f45.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:07:29Z"
+    },
+    {
+      "asset_id": "6dc639eb64ff9171c710ce94",
+      "asset_sha256": "bc306ce3baf0f5dd07512c562860c59b95a37c8de954d4f8b9faebd9bdfa0856",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/bc306ce3baf0f5dd07512c562860c59b95a37c8de954d4f8b9faebd9bdfa0856.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a thin gray line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others. The materials through which electric current can flow easily are called good conductors, or conductors of electricity. The materials through which current cannot pa"
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to pass through them.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a paragraph explaining the difference between conductors and insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:08:11Z"
     }
   ]
 }
