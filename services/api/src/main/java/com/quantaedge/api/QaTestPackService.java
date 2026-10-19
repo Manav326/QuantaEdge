@@ -389,6 +389,20 @@ public class QaTestPackService {
         "1 run-owned HRMS-side course-quality reviewer", Long.toString(ownedStaffReviewers),
         Map.of("actual", ownedStaffReviewers));
 
+    long quantaEdgeOwnedClassCourses = scalarCount("""
+      select count(distinct p.id)
+      from curriculum_program p
+      join institution_tenant qe on qe.tenant_code='QUANTA-EDGE' and qe.status='ACTIVE'
+      join institution_course_release r on r.program_id=p.id and r.source_institution_id=qe.id
+      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=qe.id and a.status='ASSIGNED'
+      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=qe.id and e.status='ACTIVE'
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+      """);
+    addCheck(runId, checks, "QUANTAEDGE_OWNS_CLASSES_6_7_8",
+        quantaEdgeOwnedClassCourses == 3,
+        "QuantaEdge remains the institution owner of active Classes 6, 7 and 8",
+        Long.toString(quantaEdgeOwnedClassCourses), Map.of("actual", quantaEdgeOwnedClassCourses));
+
     long courseReleaseCount = scalarCount("select count(*) from institution_course_release where qa_test_run_id=?", runId);
     long orphanCourseReleases = scalarCount("""
       select count(*) from institution_course_release r
@@ -772,6 +786,7 @@ public class QaTestPackService {
     credentials.put("institutionAdminA", courseGraph.get("institution_admin_a_credentials"));
     credentials.put("institutionAdminB", courseGraph.get("institution_admin_b_credentials"));
     credentials.put("institutionAdminC", courseGraph.get("institution_admin_c_credentials"));
+    credentials.put("quantaEdgeCourseOwnerAdmin", courseGraph.get("quantaEdgeOwnerAdminCredentials"));
     credentials.put("parentA", Map.of("institutionCode", "QAT" + slug + "A", "mobile", parentAMobile, "username", parentAUsername, "password", fixturePassword));
     credentials.put("parentB", Map.of("institutionCode", "QAT" + slug + "B", "mobile", parentBMobile, "username", parentBUsername, "password", fixturePassword));
     credentials.put("childA", Map.of("institutionCode", "QAT" + slug + "A", "parentMobile", parentAMobile, "username", childAUsername, "password", fixturePassword));
@@ -785,14 +800,14 @@ public class QaTestPackService {
     result.put("credentials", credentials);
     result.put("fixtureSummary", Map.ofEntries(
         Map.entry("institutions", 3),
-        Map.entry("institutionAdminAccounts", 3),
+        Map.entry("institutionAdminAccounts", 4),
         Map.entry("parentAccounts", 2),
         Map.entry("minorChildren", 2),
         Map.entry("independentLearners", 1),
         Map.entry("guardianRelationships", 2),
-        Map.entry("institutionOwnedCourseReleases", 2),
+        Map.entry("quantaEdgeCourseReleaseRevisions", 2),
         Map.entry("courseAssignments", 3),
-        Map.entry("hrmsApprovedCrossInstitutionAssignments", 1),
+        Map.entry("hrmsApprovedCrossInstitutionAssignments", 3),
         Map.entry("unassignedThirdInstitutionChecks", 1),
         Map.entry("institutionCourseEntitlements", 3),
         Map.entry("institutionScopedCourseEnrollments", 3),
