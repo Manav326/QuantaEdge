@@ -155,7 +155,7 @@ public class DiagnosticController {
       where diagnostic_attempt_id=? and question_id=?
       """,serialized,evaluation.correct(),attemptId,questionId);
     learningState.recordAttempt(context.studentId(),questionId,number(rows.getFirst().get("lesson_id")),
-        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC",institutionId);
+        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC",institutionId,courseId);
     Map<String,Object> response=new LinkedHashMap<>();
     response.put("questionId",questionId);response.put("correct",evaluation.correct());
     response.put("graded",evaluation.autoGraded());
