@@ -612,10 +612,7 @@ public class GuardianController {
       where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
       """,courseId);
     if(subjects.isEmpty())throw new IllegalStateException("This course has no active subject tracks yet.");
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """,studentId,institutionId,courseId);
+    // Enrolling in one course must not pause other course enrollments; report focus is separate.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
