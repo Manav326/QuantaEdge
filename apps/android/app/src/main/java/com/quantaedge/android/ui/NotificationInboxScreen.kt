@@ -141,6 +141,7 @@ private fun NotificationInboxDialog(
     var beforeId by remember { mutableStateOf<Long?>(null) }
     var hasMore by remember { mutableStateOf(false) }
     var filterUnread by remember { mutableStateOf(false) }
+    var filterArchived by remember { mutableStateOf(false) }
 
     fun text(en: String, hi: String) = if (hindi) hi else en
 
@@ -181,7 +182,7 @@ private fun NotificationInboxDialog(
         }
     }
 
-    LaunchedEffect(filterUnread) { load(append = false, unreadOnly = filterUnread) }
+    LaunchedEffect(filterUnread, filterArchived) { load(append = false, unreadOnly = filterUnread && !filterArchived) }
 
     suspend fun markRead(id: Long) {
         val row = items.firstOrNull { it.id == id } ?: return
@@ -192,6 +193,32 @@ private fun NotificationInboxDialog(
                 onChanged()
             }
             .onFailure { error = it.message ?: text("Read state could not be saved.", "पढ़ी हुई स्थिति सेव नहीं हो सकी।") }
+    }
+
+    suspend fun markUnread(id: Long) {
+        runCatching { ApiClient.postObject("/api/v1/notifications/$id/unread") }
+            .onSuccess {
+                items = items.map { if (it.id == id) it.copy(state = "CREATED") else it }
+                onChanged()
+            }
+            .onFailure { error = it.message ?: text("Could not restore this notification.", "सूचना वापस नहीं ला सके।") }
+    }
+
+    suspend fun dismissNotification(id: Long) {
+        runCatching { ApiClient.postObject("/api/v1/notifications/$id/dismiss") }
+            .onSuccess {
+                items = items.map { if (it.id == id) it.copy(state = "DISMISSED") else it }
+                onChanged()
+            }
+            .onFailure { error = it.message ?: text("Could not archive this notification.", "सूचना archive नहीं हो सकी।") }
+    }
+
+    val visibleRows = items.filter { row ->
+        when {
+            filterArchived -> row.state == "DISMISSED"
+            filterUnread -> row.state != "READ" && row.state != "DISMISSED"
+            else -> row.state != "DISMISSED"
+        }
     }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -214,19 +241,21 @@ private fun NotificationInboxDialog(
                     }
                     TextButton(onClick = onDismiss) { Text(text("Close", "बंद करें")) }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (filterUnread) Button(onClick = { filterUnread = false }) { Text(text("All", "सभी")) }
-                    else OutlinedButton(onClick = { filterUnread = false }) { Text(text("All", "सभी")) }
-                    if (filterUnread) OutlinedButton(onClick = { filterUnread = true }) { Text(text("Unread", "अपठित")) }
-                    else Button(onClick = { filterUnread = true }) { Text(text("Unread", "अपठित")) }
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    if (!filterUnread && !filterArchived) Button(onClick = { filterUnread = false; filterArchived = false }) { Text(text("All", "सभी")) }
+                    else OutlinedButton(onClick = { filterUnread = false; filterArchived = false }) { Text(text("All", "सभी")) }
+                    if (filterUnread) Button(onClick = { filterUnread = true; filterArchived = false }) { Text(text("Unread", "अपठित")) }
+                    else OutlinedButton(onClick = { filterUnread = true; filterArchived = false }) { Text(text("Unread", "अपठित")) }
+                    if (filterArchived) Button(onClick = { filterArchived = true; filterUnread = false }) { Text(text("Archived", "संग्रहित")) }
+                    else OutlinedButton(onClick = { filterArchived = true; filterUnread = false }) { Text(text("Archived", "संग्रहित")) }
                     Spacer(Modifier.weight(1f))
                     TextButton(
-                        enabled = !saving && items.any { it.state != "READ" },
+                        enabled = !saving && items.any { it.state != "READ" && it.state != "DISMISSED" },
                         onClick = {
                             scope.launch {
                                 saving = true
                                 runCatching { ApiClient.postObject("/api/v1/notifications/read-all") }
-                                    .onSuccess { items = items.map { it.copy(state = "READ") }; onChanged() }
+                                    .onSuccess { items = items.map { if (it.state == "DISMISSED") it else it.copy(state = "READ") }; onChanged() }
                                     .onFailure { error = it.message ?: text("Could not mark notifications as read.", "सूचनाएँ read नहीं हो सकीं।") }
                                 saving = false
                             }
@@ -236,7 +265,7 @@ private fun NotificationInboxDialog(
                 if (error.isNotBlank()) {
                     Card { Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(error, color = MaterialTheme.colorScheme.error)
-                        OutlinedButton(onClick = { scope.launch { load(false, filterUnread) } }) { Text(text("Retry", "फिर प्रयास करें")) }
+                        OutlinedButton(onClick = { scope.launch { load(false, filterUnread && !filterArchived) } }) { Text(text("Retry", "फिर प्रयास करें")) }
                     } }
                 }
                 if (loading && items.isEmpty()) {
@@ -254,13 +283,13 @@ private fun NotificationInboxDialog(
                         modifier = Modifier.fillMaxWidth().weight(1f, fill = false).heightIn(max = 515.dp),
                         verticalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
-                        items(items, key = { it.id }) { row ->
+                        items(visibleRows, key = { it.id }) { row ->
                             val expanded = expandedId == row.id
                             val unread = row.state != "READ" && row.state != "DISMISSED"
                             Card(
                                 modifier = Modifier.fillMaxWidth().clickable {
                                     expandedId = if (expanded) 0L else row.id
-                                    if (!expanded) scope.launch { markRead(row.id) }
+                                    if (!expanded && row.state != "DISMISSED") scope.launch { markRead(row.id) }
                                 },
                                 shape = RoundedCornerShape(15.dp)
                             ) {
@@ -291,6 +320,32 @@ private fun NotificationInboxDialog(
                                         NotificationRichContent(row.content, onNavigate, ::text)
                                         if (row.expiresAt.isNotBlank()) Text(text("Available until ", "उपलब्धता की अंतिम तिथि: ") + readableNotificationDate(row.expiresAt),
                                             style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                            if (row.state == "DISMISSED") {
+                                                OutlinedButton(enabled = !saving, onClick = {
+                                                    scope.launch {
+                                                        saving = true
+                                                        markUnread(row.id)
+                                                        saving = false
+                                                    }
+                                                }) { Text(text("Restore to inbox", "Inbox में वापस")) }
+                                            } else {
+                                                if (row.state == "READ") OutlinedButton(enabled = !saving, onClick = {
+                                                    scope.launch {
+                                                        saving = true
+                                                        markUnread(row.id)
+                                                        saving = false
+                                                    }
+                                                }) { Text(text("Mark unread", "Unread करें")) }
+                                                OutlinedButton(enabled = !saving, onClick = {
+                                                    scope.launch {
+                                                        saving = true
+                                                        dismissNotification(row.id)
+                                                        saving = false
+                                                    }
+                                                }) { Text(text("Archive", "संग्रहित करें")) }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -299,7 +354,7 @@ private fun NotificationInboxDialog(
                             OutlinedButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = !loading,
-                                onClick = { scope.launch { load(append = true, unreadOnly = filterUnread) } }
+                                onClick = { scope.launch { load(append = true, unreadOnly = filterUnread && !filterArchived) } }
                             ) { Text(if (loading) text("Loading…", "लोड हो रहा है…") else text("Load older", "पुरानी सूचनाएँ")) }
                         }
                     }
