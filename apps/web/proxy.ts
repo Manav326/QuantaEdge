@@ -56,9 +56,15 @@ export function proxy(request: NextRequest) {
   if (parentLearningRoute) {
     if (!parentLearningMode) {
       const url = request.nextUrl.clone();
-      url.pathname = path === '/parent/learning'
-        ? '/student'
-        : '/student' + path.slice('/parent/learning'.length);
+      // A parent following an expired/stale learning link should land back in
+      // their family workspace rather than being bounced into the student login.
+      if (hasWorkspaceSessionHint(request, 'PARENT')) {
+        url.pathname = '/parent/courses';
+      } else {
+        url.pathname = path === '/parent/learning'
+          ? '/student'
+          : '/student' + path.slice('/parent/learning'.length);
+      }
       return NextResponse.redirect(url);
     }
     if (!hasWorkspaceSessionHint(request, 'STUDENT')) {
