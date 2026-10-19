@@ -282,13 +282,18 @@ export default function SourceIngestionPage() {
       setExistingMappings([]);
       return () => { active = false; };
     }
-    api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource) + '/chapter-mappings')
+    if (!courseId) {
+      setExistingMappings([]);
+      return () => { active = false; };
+    }
+    api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource)
+      + '/chapter-mappings?courseId=' + encodeURIComponent(courseId))
       .then(rows => { if (active) setExistingMappings(Array.isArray(rows) ? rows : []); })
       .catch(e => {
         if (active) setMappingError(localizedError(e, t, 'admin.sourceIngestion.mappingLoadFailed'));
       });
     return () => { active = false; };
-  }, [selectedSource]);
+  }, [selectedSource, courseId]);
 
   async function startJob() {
     if (!classCode || !subjectCode) { setError(t('admin.sourceIngestion.chooseClassSubject')); return; }
@@ -569,11 +574,7 @@ export default function SourceIngestionPage() {
               {subjects.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
             </select>
           </label>
-          <label>{t('admin.sourceIngestion.subject')}
-            <select value={subjectCode} onChange={e => { setSubjectCode(e.target.value); setConfirmSubjectMapping(false); }}>
-              {subjects.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
-            </select>
-          </label>
+
           <label>{t('admin.sourceIngestion.sourceTitle')}
             <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={t('admin.sourceIngestion.bookTitlePlaceholder')} />
           </label>
