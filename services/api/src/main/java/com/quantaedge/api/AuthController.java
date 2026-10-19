@@ -64,11 +64,24 @@ public class AuthController {
     }
     InstitutionTenantContext tenant=requireTenant(institutionCode);
     requireMembershipService().requireExistingMembership(context,tenant);
+    if (!auth.hasParentPersonalLearningAccess(context.userId(), tenant.institutionId())) {
+      throw new SecurityException("Purchase or enroll in a course for your own account before opening My Learning.");
+    }
     AuthContext learner = auth.openParentLearningContext(context.userId());
     requireMembershipService().ensureStudentMembership(learner.studentId(),tenant.institutionId(),
         "PARENT_PERSONAL_LEARNING",context.userId());
     boolean androidClient = isAndroidClient(clientHeader);
-    return withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+    ResponseEntity<Map<String,Object>> session =
+        withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+    ResponseCookie learningMode = ResponseCookie.from("QE_PARENT_PERSONAL_LEARNING", "1")
+        .httpOnly(false).secure(secureCookies).sameSite("Strict").path("/")
+        .maxAge(Duration.ofHours(12)).build();
+    return ResponseEntity.status(session.getStatusCode())
+        .headers(headers -> {
+          headers.addAll(session.getHeaders());
+          headers.add("Set-Cookie", learningMode.toString());
+        })
+        .body(session.getBody());
   }
 
   @PostMapping("/google/link")
@@ -336,9 +349,27 @@ public class AuthController {
   }
 
   @PostMapping("/switch-parent")
-  public ResponseEntity<Map<String,Object>> switchParent() {
-    return ResponseEntity.status(403).body(Map.of(
-        "message","Parent and student accounts are separate. Sign out and sign in to the correct account."));
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<Map<String,Object>> switchParent(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    if (context == null || !context.isStudent() || context.studentId() == null) {
+      throw new SecurityException("A parent-owned personal learning session is required.");
+    }
+    InstitutionTenantContext tenant = requireTenant(institutionCode);
+    AuthContext parent = auth.openParentWorkspaceContext(context.studentId());
+    requireMembershipService().requireExistingMembership(parent, tenant);
+    boolean androidClient = isAndroidClient(clientHeader);
+    ResponseEntity<Map<String,Object>> session =
+        withCookie(auth.issueSession(parent, "PARENT", androidClient), "PARENT", androidClient);
+    ResponseCookie learningMode = expiredCookie("QE_PARENT_PERSONAL_LEARNING");
+    return ResponseEntity.status(session.getStatusCode())
+        .headers(headers -> {
+          headers.addAll(session.getHeaders());
+          headers.add("Set-Cookie", learningMode.toString());
+        })
+        .body(session.getBody());
   }
 
   @GetMapping("/me")
@@ -424,6 +455,7 @@ public class AuthController {
       // revocation checks have been attempted. Other application cookies remain untouched.
       result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_COOKIE).toString());
       result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_REFRESH_COOKIE).toString());
+      result.header("Set-Cookie", expiredCookie("QE_PARENT_PERSONAL_LEARNING").toString());
     }
     return result.body(Map.of("loggedOut", true));
   }
