@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1573,
-    "successful_visual_analyses": 1551,
-    "missing_visual_analyses": 5915,
+    "raw_analysis_result_rows": 1576,
+    "successful_visual_analyses": 1554,
+    "missing_visual_analyses": 5912,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5937,
+    "unresolved_count": 5934,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -69089,9 +69089,20 @@
       "asset_path": "assets/3ffbf44d0c3e1e130f7c645c4b9c1aaadb852b3095edd1bac20571b364bd74a4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69107,9 +69118,16 @@
       "asset_path": "assets/b3c05c18adffe9d7edeb965e120341d97255ca60f047bb032209494fb5230c02.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red and black wire forming a loop.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69125,9 +69143,28 @@
       "asset_path": "assets/a8dcc9ffea071e3e76aff94eef81f7b5aca8d2f592b05de5e3e98c0dc0b20094.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An incomplete diagram or table showing components of an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "components",
+          "simpler representation"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and their components.",
+        "limitations": [
+          "The image is incomplete and does not show the actual diagram or table."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

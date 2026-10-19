@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1f320075287e211f0765dde8898af03628b4b37e5350a44d00449a6c74058df4",
+  "raw_analysis_sha256": "2e54be37244d25e5f7a6f3cc81970b96ac353bfaf5cbfbe50b9278bcdf9325a7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:33:17Z",
+      "checkpointed_at": "2026-10-19T11:36:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:33:38Z",
+      "checkpointed_at": "2026-10-19T11:36:31Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -92301,6 +92301,146 @@
         ],
         "context_relation": "The image represents a basic electrical circuit diagram.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a92345fceee7743bd4eec6cd",
+      "asset_sha256": "3ffbf44d0c3e1e130f7c645c4b9c1aaadb852b3095edd1bac20571b364bd74a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/3ffbf44d0c3e1e130f7c645c4b9c1aaadb852b3095edd1bac20571b364bd74a4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:37:04Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2dcd2ef687e3673f5ae8ab24",
+      "asset_sha256": "b3c05c18adffe9d7edeb965e120341d97255ca60f047bb032209494fb5230c02",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/b3c05c18adffe9d7edeb965e120341d97255ca60f047bb032209494fb5230c02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red and black wire forming a loop.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:37:37Z",
+      "effective_analysis": {
+        "visual_summary": "A red and black wire forming a loop.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c5e784d108fd268a7b2c123f",
+      "asset_sha256": "a8dcc9ffea071e3e76aff94eef81f7b5aca8d2f592b05de5e3e98c0dc0b20094",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/a8dcc9ffea071e3e76aff94eef81f7b5aca8d2f592b05de5e3e98c0dc0b20094.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An incomplete diagram or table showing components of an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "components",
+          "simpler representation"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and their components.",
+        "limitations": [
+          "The image is incomplete and does not show the actual diagram or table."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:38:14Z",
+      "effective_analysis": {
+        "visual_summary": "An incomplete diagram or table showing components of an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "components",
+          "simpler representation"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and their components.",
+        "limitations": [
+          "The image is incomplete and does not show the actual diagram or table."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
