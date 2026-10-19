@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './components/apiClient';
 import Link from 'next/link';
 import AdminSidebar from './components/AdminSidebar';
 import { useUiTranslation } from './i18n/useUiTranslation';
@@ -22,14 +24,14 @@ export default function AdminHome(){
   const [loading,setLoading]=useState(true);
 
   async function logout(){
-    await fetch('/api/v1/auth/logout',{method:'POST'});
+    await apiFetch('/api/v1/auth/logout',{method:'POST'});
     router.replace('/login');
   }
 
   useEffect(()=>{
     let mounted=true;
     (async()=>{
-      const mr=await fetch('/api/v1/auth/me',{cache:'no-store'});
+      const mr=await apiFetch('/api/v1/auth/me',{cache:'no-store'});
       if(!mr.ok){router.replace('/login');return;}
       const mb=await mr.json();
       if(mb.role!=='ADMIN'){
@@ -59,9 +61,9 @@ export default function AdminHome(){
     const query='?courseId='+encodeURIComponent(courseId);
     (async()=>{
       const responses=await Promise.all([
-        fetch('/api/v1/admin/overview'+query,{cache:'no-store'}),
-        fetch('/api/v1/admin/analytics'+query,{cache:'no-store'}),
-        fetch('/api/v1/admin/tutor/analytics'+query,{cache:'no-store'})
+        apiFetch('/api/v1/admin/overview'+query,{cache:'no-store'}),
+        apiFetch('/api/v1/admin/analytics'+query,{cache:'no-store'}),
+        apiFetch('/api/v1/admin/tutor/analytics'+query,{cache:'no-store'})
       ]);
       const overviewBody=await responses[0].json().catch(()=>({}));
       if(!responses[0].ok)throw new Error(overviewBody.message||overviewBody.detail||'Admin course data unavailable');

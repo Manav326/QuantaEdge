@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { formatUserTimestamp } from '../components/formatUserTimestamp';
 
 import AdminSidebar from '../components/AdminSidebar';
@@ -74,7 +76,7 @@ export default function AdminCertificatesPage() {
         limit: String(PAGE_SIZE),
         offset: String(page * PAGE_SIZE),
       });
-      const response = await fetch('/api/v1/admin/certificates?' + params.toString(), {
+      const response = await apiFetch('/api/v1/admin/certificates?' + params.toString(), {
         cache: 'no-store',
         credentials: 'same-origin',
       });
@@ -105,7 +107,7 @@ export default function AdminCertificatesPage() {
     setError('');
     setNotice('');
     try {
-      const response = await fetch('/api/v1/admin/certificates/' + certificate.id + '/revoke?courseId=' + encodeURIComponent(String(courseId)), {
+      const response = await apiFetch('/api/v1/admin/certificates/' + certificate.id + '/revoke?courseId=' + encodeURIComponent(String(courseId)), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -137,7 +139,7 @@ export default function AdminCertificatesPage() {
     setAuditLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/v1/admin/certificates/' + certificateId + '/audit?courseId=' + encodeURIComponent(String(courseId)), {
+      const response = await apiFetch('/api/v1/admin/certificates/' + certificateId + '/audit?courseId=' + encodeURIComponent(String(courseId)), {
         cache: 'no-store',
         credentials: 'same-origin',
       });

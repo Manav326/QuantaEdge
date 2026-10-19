@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
 import { useUiTranslation } from '../i18n/useUiTranslation';
@@ -53,7 +55,7 @@ export default function AdminStudents() {
         offset: String(page * pageSize),
       });
       if (query.trim()) params.set('query', query.trim());
-      const response = await fetch('/api/v1/admin/students?' + params.toString(), {
+      const response = await apiFetch('/api/v1/admin/students?' + params.toString(), {
         cache: 'no-store',
         credentials: 'same-origin',
       });

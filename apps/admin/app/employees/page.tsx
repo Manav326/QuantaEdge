@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatUserTimestamp } from '../components/formatUserTimestamp';
@@ -96,7 +98,7 @@ export default function AdminStaffPage() {
     let active=true;
     (async()=>{
       const params=new URLSearchParams({limit:String(auditPageSize),offset:String(auditPage*auditPageSize)});
-      const response=await fetch('/api/v1/admin/staff/audit?'+params.toString(),{cache:'no-store'});
+      const response=await apiFetch('/api/v1/admin/staff/audit?'+params.toString(),{cache:'no-store'});
       const data=await readJson(response,t);
       if(!active)return;
       setAudit(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
@@ -110,15 +112,15 @@ export default function AdminStaffPage() {
   const adminPermissionsComplete=newRole!=='ADMIN'||newPermissions.length===availablePermissions.length;
 
   async function loadStaff() {
-    const r=await fetch('/api/v1/admin/staff',{cache:'no-store'});
+    const r=await apiFetch('/api/v1/admin/staff',{cache:'no-store'});
     const data=await readJson(r,t);
     setStaff(Array.isArray(data)?data:[]);
   }
    async function loadAdminData(admin:boolean) {
     const tasks:Promise<any>[]=[];
     if(admin) {
-      tasks.push(fetch('/api/v1/admin/staff',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>setStaff(Array.isArray(data)?data:[])));
-      tasks.push(fetch('/api/v1/admin/staff/permissions',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>{
+      tasks.push(apiFetch('/api/v1/admin/staff',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>setStaff(Array.isArray(data)?data:[])));
+      tasks.push(apiFetch('/api/v1/admin/staff/permissions',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>{
         const rows=Array.isArray(data)?data:[];
         setAvailablePermissions(rows);
         setNewPermissions(defaultsForRole('CONTENT_AUTHOR',rows));
@@ -131,7 +133,7 @@ export default function AdminStaffPage() {
     let mounted=true;
     (async()=>{
       try {
-        const response=await fetch('/api/v1/auth/me',{cache:'no-store'});
+        const response=await apiFetch('/api/v1/auth/me',{cache:'no-store'});
         const identity=await readJson(response,t);
         if(!identity.staffId) { router.replace('/login'); return; }
         if(!mounted)return;
@@ -191,7 +193,7 @@ export default function AdminStaffPage() {
   async function createStaff() {
     setSaving(true);setError('');setNotice('');
     try {
-      const response=await fetch('/api/v1/admin/staff',{
+      const response=await apiFetch('/api/v1/admin/staff',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({displayName:newName.trim(),mobile:newMobile,role:newRole,permissions:newPermissions})
       });
@@ -207,7 +209,7 @@ export default function AdminStaffPage() {
     if(!selected)return;
     setSaving(true);setError('');setNotice('');
     try {
-      const response=await fetch('/api/v1/admin/staff/'+selected.id+'/permissions',{
+      const response=await apiFetch('/api/v1/admin/staff/'+selected.id+'/permissions',{
         method:'PUT',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({role:draftRole,permissions:draftPermissions})
       });
@@ -229,7 +231,7 @@ export default function AdminStaffPage() {
     if(!next&&!window.confirm(t('admin.employees.suspendConfirm',{name:row.display_name})))return;
     setSaving(true);setError('');setNotice('');
     try {
-      const response=await fetch('/api/v1/admin/staff/'+row.id+'/status',{
+      const response=await apiFetch('/api/v1/admin/staff/'+row.id+'/status',{
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:next})
       });
       const updated=await readJson(response,t);

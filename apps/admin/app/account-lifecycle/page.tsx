@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -28,8 +30,8 @@ export default function AccountLifecyclePage() {
     setError('');
     try {
       const [adultResponse,parentResponse]=await Promise.all([
-        fetch('/api/v1/admin/account-lifecycle/adult-verifications?status=PENDING',{cache:'no-store'}),
-        fetch('/api/v1/admin/account-lifecycle/parent-eligibility?status=PENDING',{cache:'no-store'}),
+        apiFetch('/api/v1/admin/account-lifecycle/adult-verifications?status=PENDING',{cache:'no-store'}),
+        apiFetch('/api/v1/admin/account-lifecycle/parent-eligibility?status=PENDING',{cache:'no-store'}),
       ]);
       if([adultResponse.status,parentResponse.status].some(status=>status===401||status===403)){
         router.replace('/login'); return;
@@ -52,7 +54,7 @@ export default function AccountLifecyclePage() {
     if(reference.length<4){setError(t('admin.lifecycle.needAdultReference'));return;}
     setBusy(key);setError('');setNotice('');
     try {
-      const response=await fetch('/api/v1/admin/account-lifecycle/students/'+item.student_id+'/adult-verification',{
+      const response=await apiFetch('/api/v1/admin/account-lifecycle/students/'+item.student_id+'/adult-verification',{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({adultOver18Confirmed:approved,verificationReference:reference}),
       });
@@ -72,7 +74,7 @@ export default function AccountLifecyclePage() {
     if(reference.length<4){setError(t('admin.lifecycle.needParentReference'));return;}
     setBusy(key);setError('');setNotice('');
     try {
-      const response=await fetch('/api/v1/admin/account-lifecycle/users/'+item.user_id+'/parent-eligibility',{
+      const response=await apiFetch('/api/v1/admin/account-lifecycle/users/'+item.user_id+'/parent-eligibility',{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({eligible,verificationReference:reference}),
       });
