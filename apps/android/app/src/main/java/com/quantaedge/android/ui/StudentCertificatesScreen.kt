@@ -64,6 +64,7 @@ private fun localizedCertificateSubject(code: String, displayName: String, langu
 @Composable
 fun StudentCertificatesScreen(
     language: String,
+    courseId: Long,
     certificateLanguage: String,
     onCertificateLanguageChange: (String) -> Unit,
     initialAssessmentAttemptId: Long = 0L,
@@ -138,13 +139,13 @@ fun StudentCertificatesScreen(
             // Load each section independently: a failed progress/track request must not
             // prevent issued certificates or the assessment picker from appearing.
             val tracksResult = runCatching {
-                ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks")
+                ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks?courseId=" + courseId)
             }
             val certificatesResult = runCatching {
-                ApiClient.getObject("/api/v1/students/me/certificates")
+                ApiClient.getObject("/api/v1/students/me/certificates?courseId=" + courseId)
             }
             val eligibleResult = runCatching {
-                ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
+                ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments?courseId=" + courseId)
             }
 
             subjectTracks = tracksResult.getOrNull()?.optJSONArray("items").toObjectList()
@@ -180,7 +181,7 @@ fun StudentCertificatesScreen(
         }
     }
 
-    LaunchedEffect(language, initialAssessmentAttemptId) { reload() }
+    LaunchedEffect(language, initialAssessmentAttemptId, courseId) { reload() }
 
     fun verifyScannedCertificate(code: String) {
         scope.launch {
@@ -617,7 +618,7 @@ fun StudentCertificatesScreen(
                         val trackName = localizedCertificateSubject(item.optString("subject_code"), item.optString("subject_name"), language)
                         val courseId = item.optLongValue("course_id", "courseId", "program_id", "programId")
                         val scopeLabel = if (courseId > 0L) item.optString("course_name") else
-                            (if (language == "hi") "कक्षा " else "Class ") + item.optString("class_code")
+                            item.optString("course_name", if (language == "hi") "कोर्स" else "Course")
                         val score = item.optString("final_score", item.optString("score", "—")) + "/" + item.optString("max_score", "—")
                         val status = when (item.optString("certificate_status")) {
                             "ISSUED" -> if (language == "hi") "प्रमाणपत्र जारी" else "Certificate issued"
