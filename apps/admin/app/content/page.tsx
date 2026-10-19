@@ -511,9 +511,13 @@ export default function ContentStudio(){
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.openContentFailed'))}
  }
  function beginCreate(type:'chapter'|'lesson'){
-  const chapter=rows.find(r=>r.chapter_id!==null&&(classFilter==='ALL'||r.class_code===classFilter)&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
+  const chapter=rows.find(r=>r.chapter_id!==null&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
+  const selectedCourse=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
+  const subjectCode=subjectFilter!=='ALL'?subjectFilter:(chapter?.subject_code||selectedCourse?.subjects?.[0]?.subject_code||selectedCourse?.subjects?.[0]?.code||'');
+  const mappedSubject=(selectedCourse?.subjects||[]).find((subject:any)=>String(subject.subject_code||subject.code||'')===subjectCode);
+  const classCode=chapter?.class_code||mappedSubject?.curriculum_class_code||selectedCourse?.curriculum_class_code||'';
   setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');
-  setCreateForm({classCode:classFilter!=='ALL'?classFilter:chapter?.class_code||classOptions[0]?.[0]||'6',subjectCode:subjectFilter!=='ALL'?subjectFilter:chapter?.subject_code||'maths',courseId:programFilter||'',chapterId:selected?.type==='chapter'?selected.id:Number(chapter?.chapter_id||0),code:'',displayName:'',description:'',curriculumSource:'',curriculumSourceUrl:'',curriculumSourceEdition:'',curriculumSourcePages:'',alignmentSourceTitle:'',alignmentSourceUrl:'',alignmentSourceEdition:'',alignmentPageRange:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
+  setCreateForm({classCode,subjectCode,courseId:programFilter||'',chapterId:selected?.type==='chapter'?selected.id:Number(chapter?.chapter_id||0),code:'',displayName:'',description:'',curriculumSource:'',curriculumSourceUrl:'',curriculumSourceEdition:'',curriculumSourcePages:'',alignmentSourceTitle:'',alignmentSourceUrl:'',alignmentSourceEdition:'',alignmentPageRange:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
  }
  async function create(){
   if(!createType)return;setSaving(true);setError('');setNotice('');
