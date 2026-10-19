@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 792,
+    "assets_selected": 794,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 789,
-    "assets_remaining": 1502,
-    "assets_completion_percent": 34.4,
+    "assets_analyzed": 791,
+    "assets_remaining": 1500,
+    "assets_completion_percent": 34.5,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 787,
+    "assets_skipped_from_checkpoint": 789,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:38:46Z"
+      "checkpointed_at": "2026-10-19T04:45:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:39:35Z"
+      "checkpointed_at": "2026-10-19T04:46:46Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:40:14Z"
+      "checkpointed_at": "2026-10-19T04:47:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24391,6 +24391,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T04:44:47Z"
+    },
+    {
+      "asset_id": "3d360a501fdff6cb75d0170f",
+      "asset_sha256": "4cff0b24aedb3c923b6576e860089cf3bc65300c0c616bea7789419d81fb6648",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/4cff0b24aedb3c923b6576e860089cf3bc65300c0c616bea7789419d81fb6648.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of three fungi with spore production.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fungi",
+          "spore production",
+          "soil suspension",
+          "diagram of fungi",
+          "organism in soil suspension"
+        ],
+        "context_relation": "The image is a part of a textbook visual that explains fungi in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the fungi species or their characteristics.",
+          "The image does not show the presence of chlorophyll or other specific features of algae."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:49:00Z"
+    },
+    {
+      "asset_id": "762b14d964c90e1923a287d1",
+      "asset_sha256": "dab9bee514feca19bb3cfe02cd5ecd18064272a7efdc47664f74464e60b0af10",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/dab9bee514feca19bb3cfe02cd5ecd18064272a7efdc47664f74464e60b0af10.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of two types of fungi with different structures.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bread mould\n(Fungi)",
+          "Branched filament without chlorophyll having\nsac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having\nbrush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green"
+        ],
+        "concepts": [
+          "Fungi",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Spherical",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is related to the description of organisms present in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the organisms' functions or their impact on soil."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:50:42Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 805,
-    "successful_visual_analyses": 792,
-    "missing_visual_analyses": 1486,
+    "raw_analysis_result_rows": 807,
+    "successful_visual_analyses": 794,
+    "missing_visual_analyses": 1484,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1499,
+    "unresolved_count": 1497,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31144,9 +31144,25 @@
       "asset_path": "assets/4cff0b24aedb3c923b6576e860089cf3bc65300c0c616bea7789419d81fb6648.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of three fungi with spore production.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fungi",
+          "spore production",
+          "soil suspension",
+          "diagram of fungi",
+          "organism in soil suspension"
+        ],
+        "context_relation": "The image is a part of a textbook visual that explains fungi in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the fungi species or their characteristics.",
+          "The image does not show the presence of chlorophyll or other specific features of algae."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31162,9 +31178,32 @@
       "asset_path": "assets/dab9bee514feca19bb3cfe02cd5ecd18064272a7efdc47664f74464e60b0af10.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of two types of fungi with different structures.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bread mould\n(Fungi)",
+          "Branched filament without chlorophyll having\nsac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having\nbrush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green"
+        ],
+        "concepts": [
+          "Fungi",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Spherical",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is related to the description of organisms present in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the organisms' functions or their impact on soil."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
