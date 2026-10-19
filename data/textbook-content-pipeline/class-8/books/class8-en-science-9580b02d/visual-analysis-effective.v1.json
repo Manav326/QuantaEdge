@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "723952bc1963c193b547ec7481e167aaf8ccf479251c364843b1a210409f6388",
+  "raw_analysis_sha256": "9682423f56001641f09f70afb4019ef999d2ee188d1216f2097f02f84e2ed355",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:59:57Z",
+      "checkpointed_at": "2026-10-19T17:05:35Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:00:43Z",
+      "checkpointed_at": "2026-10-19T17:06:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:01:19Z",
+      "checkpointed_at": "2026-10-19T17:06:56Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -42786,6 +42786,144 @@
         "context_relation": "The image is unrelated to the text content.",
         "limitations": [
           "No specific text or formula is present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d50fc8b4b898d689e9d138fc",
+      "asset_sha256": "5157cc522a0de0609d11053b89371f8c39a5ca6e38bec30c3fad73b08d7283dd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/5157cc522a0de0609d11053b89371f8c39a5ca6e38bec30c3fad73b08d7283dd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plate with a bowl of soup and a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plate",
+          "bowl",
+          "soup",
+          "glass",
+          "water"
+        ],
+        "context_relation": "The image represents a meal setting.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:08:26Z",
+      "effective_analysis": {
+        "visual_summary": "A plate with a bowl of soup and a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plate",
+          "bowl",
+          "soup",
+          "glass",
+          "water"
+        ],
+        "context_relation": "The image represents a meal setting.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f843ab9f491f53633c151e0",
+      "asset_sha256": "c7eaa9221ded811ad4793ea62e5d437a88736144c3bee21051101e00561ab9bf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/c7eaa9221ded811ad4793ea62e5d437a88736144c3bee21051101e00561ab9bf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a dog and a bed bug, with a plate of food and a glass of water in the background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.4 Diseases: What Are the Causes and Types?",
+          "A disease is a condition that affects the normal working of the",
+          "body or mind. It can happen when one or more organs or organ",
+          "systems stop functioning properly. Some diseases are caused by",
+          "germs like bacteria, viruses, fungi, worms, or even by protozoa",
+          "(single-celled organisms). These disease-causing organisms are",
+          "called pathogens. Other diseases may result from poor nutrition",
+          "or an unhealthy lifestyle. Some diseas",
+          "A dog is looking at a bed bug.",
+          "A plate of food and a glass of water are in the background."
+        ],
+        "concepts": [
+          "disease",
+          "pathogens",
+          "germs",
+          "bacteria",
+          "viruses",
+          "fungi",
+          "worms",
+          "protozoa",
+          "pathways",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image illustrates the concept of diseases and their causes, specifically focusing on how bed bugs can be a cause of disease.",
+        "limitations": [
+          "The image does not provide specific examples of diseases or their causes.",
+          "The image does not show the relationship between bed bugs and diseases.",
+          "The image does not include information about the symptoms or effects of diseases."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:10:14Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a dog and a bed bug, with a plate of food and a glass of water in the background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.4 Diseases: What Are the Causes and Types?",
+          "A disease is a condition that affects the normal working of the",
+          "body or mind. It can happen when one or more organs or organ",
+          "systems stop functioning properly. Some diseases are caused by",
+          "germs like bacteria, viruses, fungi, worms, or even by protozoa",
+          "(single-celled organisms). These disease-causing organisms are",
+          "called pathogens. Other diseases may result from poor nutrition",
+          "or an unhealthy lifestyle. Some diseas",
+          "A dog is looking at a bed bug.",
+          "A plate of food and a glass of water are in the background."
+        ],
+        "concepts": [
+          "disease",
+          "pathogens",
+          "germs",
+          "bacteria",
+          "viruses",
+          "fungi",
+          "worms",
+          "protozoa",
+          "pathways",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image illustrates the concept of diseases and their causes, specifically focusing on how bed bugs can be a cause of disease.",
+        "limitations": [
+          "The image does not provide specific examples of diseases or their causes.",
+          "The image does not show the relationship between bed bugs and diseases.",
+          "The image does not include information about the symptoms or effects of diseases."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
