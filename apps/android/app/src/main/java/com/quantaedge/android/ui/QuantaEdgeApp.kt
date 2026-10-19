@@ -2890,12 +2890,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun viewParentCertificate(childId: Long, certificateId: Long) {
+    fun viewParentCertificate(childId: Long, courseId: Long, certificateId: Long) {
         runTask {
-            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (childId <= 0L || courseId <= 0L || certificateId <= 0L) throw IOException("Choose the child's course before opening a certificate.")
             val bytes = withContext(Dispatchers.IO) {
                 ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
-                    certificateId + "/view?format=pdf")
+                    certificateId + "/view?courseId=" + courseId + "&format=pdf")
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
@@ -2914,13 +2914,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun downloadParentCertificate(childId: Long, certificateId: Long, format: String) {
+    fun downloadParentCertificate(childId: Long, courseId: Long, certificateId: Long, format: String) {
         runTask {
-            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (childId <= 0L || courseId <= 0L || certificateId <= 0L) throw IOException("Choose the child's course before downloading a certificate.")
             if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
             val bytes = withContext(Dispatchers.IO) {
                 ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
-                    certificateId + "/download?format=" + format)
+                    certificateId + "/download?courseId=" + courseId + "&format=" + format)
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             pendingCertificateBytes = bytes
@@ -3082,7 +3082,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             parentReport.put("_courseName", courseName)
             parentReport.put("_requiresCourseSelection", false)
             parentCertificates = runCatching {
-                ApiClient.getObject("/api/v1/guardians/children/" + childId + "/certificates")
+                ApiClient.getObject("/api/v1/guardians/children/" + childId + "/certificates?courseId=" + courseId)
                     .optJSONArray("items").objectItems()
             }.getOrDefault(emptyList())
             route = AppRoute.PARENT_REPORT
@@ -7126,10 +7126,11 @@ private fun ParentReportScreen(
     certificates: List<JSONObject>,
     onSelectChild: (JSONObject) -> Unit,
     onSelectCourse: (Long) -> Unit,
-    onViewCertificate: (Long, Long) -> Unit,
-    onDownloadCertificate: (Long, Long, String) -> Unit
+    onViewCertificate: (Long, Long, Long) -> Unit,
+    onDownloadCertificate: (Long, Long, Long, String) -> Unit
 ) {
     val childId = report.optLong("_childId", 0L)
+    val selectedCourseId = report.optLong("_courseId", report.optLong("courseId", 0L))
     val needsCourseSelection = report.optBoolean("_requiresCourseSelection")
     val noEnrolledCourse = report.optBoolean("_noEnrolledCourse")
     val availableCourses = report.optJSONArray("_courses")?.objectItems()?.filter {
@@ -7258,18 +7259,18 @@ private fun ParentReportScreen(
                     "ISSUED" -> {
                         Text(t("Certificate available","प्रमाणपत्र उपलब्ध है"), color=MaterialTheme.colorScheme.primary)
                         val certificateId = cert.optLong("id", 0L)
-                        val canAccess = !busy && childId > 0L && certificateId > 0L
+                        val canAccess = !busy && childId > 0L && selectedCourseId > 0L && certificateId > 0L
                         if (compact) {
                             Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
-                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                OutlinedButton(onClick = { onViewCertificate(childId, selectedCourseId, certificateId) },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("View certificate", "प्रमाणपत्र देखें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "pdf") },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("Save PDF", "PDF सेव करें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "png") },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("Save PNG", "PNG सेव करें"))
                                 }
