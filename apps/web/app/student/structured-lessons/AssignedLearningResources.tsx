@@ -34,7 +34,7 @@ function formatSize(size?: number | null): string {
   return size >= 1024 * 1024 ? (size / (1024 * 1024)).toFixed(1) + ' MB' : Math.max(1, Math.round(size / 1024)) + ' KB';
 }
 
-export default function AssignedLearningResources({ artifactId, language }: { artifactId: string; language: 'hi' | 'en' }) {
+export default function AssignedLearningResources({ artifactId, language, courseId }: { artifactId: string; language: 'hi' | 'en'; courseId: number }) {
   const [resources, setResources] = useState<AssignedResource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -46,7 +46,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     setLoading(true);
     setError('');
     try {
-      const query = new URLSearchParams({ artifactId, language });
+      const query = new URLSearchParams({ artifactId, language, courseId: String(courseId) });
       const response = await fetch('/api/v1/learning/resources?' + query.toString(), {
         credentials: 'same-origin', cache: 'no-store', signal,
       });
@@ -68,7 +68,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     } finally {
       setLoading(false);
     }
-  }, [artifactId, language]);
+  }, [artifactId, language, courseId]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -143,7 +143,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
             onEnded={event => void saveProgress(item, event.currentTarget.currentTime, true)} />}
           {kind === 'IMAGE' && mediaUrl && <a className={styles.openLink} href={mediaUrl} target="_blank" rel="noreferrer">{t('चित्र खोलें', 'Open image')}</a>}
           {item.externalUrl && <a className={styles.openLink} href={item.externalUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन खोलें', 'Open resource')} ↗</a>}
-          {kind === 'PDF' && item.learningDocumentId && <Link className={styles.openLink} href="/student/textbooks">{t('पाठ्यपुस्तक लाइब्रेरी में खोलें', 'Open textbook library')} ↗</Link>}
+          {kind === 'PDF' && item.learningDocumentId && <Link className={styles.openLink} href={'/student/textbooks?courseId=' + encodeURIComponent(String(courseId))}>{t('पाठ्यपुस्तक लाइब्रेरी में खोलें', 'Open textbook library')} ↗</Link>}
           {item.sourceKind === 'CONTENT_ASSET' && item.assetUrl && !isVideo && !isAudio && kind !== 'IMAGE' &&
             <a className={styles.openLink} href={item.assetUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन खोलें', 'Open resource')} ↗</a>}
           {item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE' && !item.learningDocumentId && !item.assetUrl && !item.externalUrl &&
