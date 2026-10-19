@@ -245,7 +245,7 @@ public class LearningMetricsService {
           )
         ) as sessions_30d,
         (
-          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
+          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int)))),0)
            from student_practice_session ps
            where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
              and ps.completed_at is not null and ps.created_at>=now()-interval '30 days'
@@ -263,7 +263,7 @@ public class LearningMetricsService {
                where (s.program_id=selected_course.id
                  or (s.program_id is null and selected_course.class_id=s.class_id))
              ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int))),0)
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int)))),0)
             from student_diagnostic_attempt da
             where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
               and da.submitted_at is not null and da.started_at>=now()-interval '30 days'
@@ -281,7 +281,7 @@ public class LearningMetricsService {
                   and (s.program_id=selected_course.id
                     or (s.program_id is null and selected_course.class_id=s.class_id))
               ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int))),0)
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int)))),0)
             from student_assessment_attempt att
             join assessment a on a.id=att.assessment_id
             join curriculum_subject s on s.id=a.subject_id and s.active=true
@@ -312,13 +312,13 @@ public class LearningMetricsService {
          +(select count(*) from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.started_at>=now()-interval '30 days')
          +(select count(*) from student_assessment_attempt att where att.student_id=? __TENANT_ATT__ and att.status in ('AWAITING_REVIEW','GRADED','RELEASED') and att.started_at>=now()-interval '30 days')) as sessions_30d,
         ((select coalesce(sum(ls.minutes),0) from learning_session ls where ls.student_id=? __TENANT_LS__ and ls.started_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int)))),0)
            from student_practice_session ps where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED' and ps.completed_at is not null
              and ps.created_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int)))),0)
            from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.submitted_at is not null
              and da.started_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int)))),0)
            from student_assessment_attempt att where att.student_id=? __TENANT_ATT__ and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')) as minutes_30d
       """;
