@@ -94,6 +94,9 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
           throw Object.assign(new Error('Student sign-in is required.'), { auth: true });
         }
         if (!activateResponse.ok) throw new Error(activateBody.detail || activateBody.message || activateBody.error || 'The selected course could not be activated.');
+        setCourses(previous => previous.map(course => Number(course.id) === selectedId
+          ? { ...course, is_enrolled: true, enrolled: true, paused: false }
+          : course));
       }
       setCourseId(selectedId);
       if (selectedId !== null) {
