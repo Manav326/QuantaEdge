@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1392,
+    "assets_selected": 1395,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
     "assets_analyzed": 1390,
     "assets_remaining": 6098,
     "assets_completion_percent": 18.6,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1387,
+    "assets_skipped_from_checkpoint": 1390,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -295,7 +295,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178083731",
+      "run_id": "39219695642",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -2352,7 +2352,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178083731",
+      "run_id": "39219695642",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -4670,7 +4670,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178083731",
+      "run_id": "39219695642",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -4687,9 +4687,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178083731",
+      "run_id": "39219695642",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -9817,7 +9817,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -9826,8 +9826,10 @@
         ],
         "concepts": [
           "science",
+          "exploration",
           "curiosity",
-          "open-mindedness",
+          "questions",
+          "unknown",
           "process",
           "environment",
           "society",
@@ -9836,18 +9838,24 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnectedness"
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
         ],
-        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The page does not provide specific examples or activities for the reader to engage with."
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:42:21Z"
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T08:19:05Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
