@@ -180,7 +180,7 @@ public class NotificationMediaController {
       select exists(
         select 1 from notification_recipient r
         join notification_campaign c on c.id=r.campaign_id and c.status='SENT'
-        where r.institution_id=? and """+identityCondition+"""
+        where (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM')) and """+identityCondition+"""
           and (c.content_document::text like ?)
           and (c.expires_at is null or c.expires_at>now())
       )
