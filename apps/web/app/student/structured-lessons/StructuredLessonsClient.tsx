@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type LessonItem = {
   artifactId: string; subjectCode: string; chapterNumber: number;
@@ -72,7 +73,7 @@ export default function StructuredLessonsClient() {
       <h1><UiText message="web.navigation.student.structuredLessons" /></h1>
       <p><UiText message="legacy.web.explain.visuals.activities.and.one.que.c789dbec" /></p>
     </div>
-    <div className="qe-course-page-actions"><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={value => void changeCourse(value)} loading={loadingCourses} label={locale === 'english' ? 'Course' : 'कोर्स'}/><label>{locale === 'english' ? 'Subject' : 'विषय'}<select value={subjectCode} onChange={event => changeSubject(event.target.value)} disabled={loadingCourses || courseId === null}><option value="ALL">{locale === 'english' ? 'All subjects' : 'सभी विषय'}</option>{(activeCourse?.subjects || []).map(subject => { const code = String(subject.subject_code || subject.code || ''); return code ? <option key={code} value={code}>{String(subject.subject_name || subject.display_name || code)}</option> : null; })}</select></label><button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></div></header>
+    <div className="qe-course-page-actions"><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId} onCourseChange={value => void changeCourse(value)} subjectCode={subjectCode} onSubjectChange={changeSubject} loading={loadingCourses} language={locale} courseLabel={locale === 'english' ? 'Course' : 'कोर्स'} subjectLabel={locale === 'english' ? 'Subject' : 'विषय'} allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} /><button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></div></header>
     {courseError && !loadingCourses && <p role="alert" className="error-message">{courseError}</p>}{error && <p role="alert" className="error-message">{error}</p>}
     {busy ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
       items.length === 0 ? <section className="auth-card" role="status">
