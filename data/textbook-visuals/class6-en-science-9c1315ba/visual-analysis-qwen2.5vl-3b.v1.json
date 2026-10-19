@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1016,
+    "assets_selected": 1019,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1014,
-    "assets_remaining": 1064,
-    "assets_completion_percent": 48.8,
+    "assets_analyzed": 1017,
+    "assets_remaining": 1061,
+    "assets_completion_percent": 48.9,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1011,
+    "assets_skipped_from_checkpoint": 1014,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:42:50Z"
+      "checkpointed_at": "2026-10-19T13:50:09Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:43:51Z"
+      "checkpointed_at": "2026-10-19T13:51:10Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32763,6 +32763,124 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T13:48:56Z"
+    },
+    {
+      "asset_id": "0cc82425ca179bff1ca48591",
+      "asset_sha256": "01dbd757f2ebd1acf4acdeff1dd2fddff2a188549cd0b05c07c079662af5b171",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/01dbd757f2ebd1acf4acdeff1dd2fddff2a188549cd0b05c07c079662af5b171.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red string or wire forming a loop.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any information about the textbook's content or the materials attracted by a magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:52:45Z"
+    },
+    {
+      "asset_id": "fdd673119eceade7cd3a2f9a",
+      "asset_sha256": "da475ab3c666238817c98e6a70fbeeaec4577cb9207fcad563170be0cb27e490",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/da475ab3c666238817c98e6a70fbeeaec4577cb9207fcad563170be0cb27e490.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green plastic ruler with measurements in centimeters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0",
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15"
+        ],
+        "concepts": [
+          "ruler",
+          "measurement"
+        ],
+        "context_relation": "The ruler is used to measure the length of objects in the experiment.",
+        "limitations": [
+          "The ruler is only visible in the image, not the experiment itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:54:22Z"
+    },
+    {
+      "asset_id": "2ed1377220339dc4e779beba",
+      "asset_sha256": "3ac4d5ef05a4344aadda22cc05bf6b5870caa9e70c2c298f9dc70c2ecb852fe0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/3ac4d5ef05a4344aadda22cc05bf6b5870caa9e70c2c298f9dc70c2ecb852fe0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table summarizing the materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The table is used to record observations about materials attracted by a magnet.",
+        "limitations": [
+          "The table does not include any specific predictions or observations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:56:01Z"
     }
   ]
 }
