@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1071,
-    "successful_visual_analyses": 1059,
-    "missing_visual_analyses": 1007,
+    "raw_analysis_result_rows": 1073,
+    "successful_visual_analyses": 1061,
+    "missing_visual_analyses": 1005,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1019,
+    "unresolved_count": 1017,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41139,9 +41139,28 @@
       "asset_path": "assets/73c72f9e6af47157c45238824382dd38dd461a96abf99a30abc535041c3a8548.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the interaction between two bar magnets and a set of pencils.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "S",
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "magnets",
+          "attraction",
+          "repulsion",
+          "pencils"
+        ],
+        "context_relation": "The image illustrates the interaction between two bar magnets and a set of pencils.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41157,9 +41176,29 @@
       "asset_path": "assets/055da70f221c5d8e741a51c508369481fe3ae869d6c0d94099283ac24d509856.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the interaction between a bar magnet and a set of pencils.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Attraction and Repulsion between Magnets",
+          "Bar Magnets",
+          "North and South Poles",
+          "Interaction between Magnets and Pencils"
+        ],
+        "context_relation": "The image shows an experiment to observe the interaction between a bar magnet and a set of pencils.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
