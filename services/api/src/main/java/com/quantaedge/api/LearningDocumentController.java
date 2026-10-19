@@ -503,7 +503,7 @@ public class LearningDocumentController {
     }
     long institutionId=requireInstitution(tenant);
     requireAssignedCourse(courseId,institutionId);
-    requireDocumentInCourse(documentId,courseId);
+    requireDocumentInCourse(documentId,courseId,institutionId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256,a.file_size_bytes
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
