@@ -184,6 +184,11 @@ public class RichNotificationService {
       };
     }
     LinkedHashMap<String,Recipient> result=new LinkedHashMap<>();
+    if("HRMS_PLATFORM".equals(normalized) && Boolean.TRUE.equals(filter.get("individualTargets"))) {
+      resolvePlatformDirectRecipients(filter,result);
+      if(result.isEmpty())throw new IllegalArgumentException("Select at least one eligible individual recipient.");
+      return List.copyOf(result.values());
+    }
     if("USER".equals(normalized)) {
       resolveDirectRecipients(institutionId,filter,result);
     } else {
@@ -221,6 +226,30 @@ public class RichNotificationService {
       throw new IllegalArgumentException("The resolved audience exceeds 10,000 recipients. Narrow the audience or split the campaign.");
     }
     return List.copyOf(result.values());
+  }
+
+  private void resolvePlatformDirectRecipients(Map<String,Object> filter,Map<String,Recipient> target) {
+    Object raw=filter.get("recipients");
+    if(!(raw instanceof List<?> list)||list.isEmpty()) {
+      throw new IllegalArgumentException("Select at least one individual recipient.");
+    }
+    if(list.size()>200)throw new IllegalArgumentException("HRMS individual campaigns may target at most 200 recipients.");
+    Set<Long> tenants=new LinkedHashSet<>();
+    for(Object item:list) {
+      if(!(item instanceof Map<?,?> map))throw new IllegalArgumentException("An individual recipient selection is invalid.");
+      long institutionId;
+      try { institutionId=Long.parseLong(String.valueOf(map.get("institutionId"))); }
+      catch(RuntimeException ex) { throw new IllegalArgumentException("Choose the institution for each individual recipient."); }
+      if(institutionId<1||!isActiveInstitution(institutionId)) {
+        throw new SecurityException("An individual recipient must belong to an active institution.");
+      }
+      tenants.add(institutionId);
+      String kind=String.valueOf(map.get("kind")).trim().toUpperCase(Locale.ROOT);
+      Object rawId=map.get("id");
+      Map<String,Object> one=Map.of("recipients",List.of(Map.of("kind",kind,"id",rawId)));
+      resolveDirectRecipients(institutionId,one,target);
+    }
+    if(tenants.size()>100)throw new IllegalArgumentException("A single HRMS campaign may target at most 100 institutions.");
   }
 
   private void resolveDirectRecipients(Long institutionId,Map<String,Object> filter,Map<String,Recipient> target) {
@@ -582,7 +611,8 @@ public class RichNotificationService {
       Long user="USER_ACCOUNT".equals(recipient.kind())?recipient.identityId():null;
       Long staff="STAFF_ACCOUNT".equals(recipient.kind())?recipient.identityId():null;
       Long institutionAdmin="INSTITUTION_ADMIN".equals(recipient.kind())?recipient.identityId():null;
-      Long deliveryInstitutionId="HRMS_PLATFORM".equals(scope)?null:recipient.institutionId();
+      Long deliveryInstitutionId="HRMS_PLATFORM".equals(scope)
+          && !Boolean.TRUE.equals(filter.get("individualTargets"))?null:recipient.institutionId();
       batch.add(new Object[]{campaignId,deliveryInstitutionId,recipient.kind(),student,user,staff,institutionAdmin});
     }
     jdbc.batchUpdate("""
