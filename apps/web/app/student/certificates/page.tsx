@@ -29,6 +29,9 @@ function localizedTrackName(code: string | undefined, name: string | undefined, 
 
 type Certificate = {
   id: number;
+  course_id?: number | null;
+  program_id?: number | null;
+  course_name?: string | null;
   certificate_number: string;
   achievement_type: string;
   class_code: string;
