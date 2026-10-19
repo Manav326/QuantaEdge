@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "264c2a35bdc885f61d33906427f5877236e710d15fb1161eed6efe0590f9bd3c",
+  "raw_analysis_sha256": "a6d4b5c737ff44ed468bbc4176b0155013c59913bccbafbb9d06e77c939724a7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:02:50Z",
+      "checkpointed_at": "2026-10-19T09:06:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:03:11Z",
+      "checkpointed_at": "2026-10-19T09:06:24Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -83352,6 +83352,196 @@
         "context_relation": "The image is a visual representation of a physics experiment involving batteries and wires.",
         "limitations": [
           "The image does not provide specific instructions or steps for the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a3fad54cf7a1a127a16fd588",
+      "asset_sha256": "1640c35e4f9b454ff1810e12d65e48f5b4d1ae6afa0906819955cb4859abc31c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/1640c35e4f9b454ff1810e12d65e48f5b4d1ae6afa0906819955cb4859abc31c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two batteries connected by a green wire, with '+' signs indicating positive terminals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Two batteries connected by a green wire, with '+' signs indicating positive terminals."
+        ],
+        "concepts": [
+          "Batteries",
+          "Positive terminal",
+          "Green wire"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the negative terminal or the spring side of the holder."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:07:02Z",
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected by a green wire, with '+' signs indicating positive terminals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Two batteries connected by a green wire, with '+' signs indicating positive terminals."
+        ],
+        "concepts": [
+          "Batteries",
+          "Positive terminal",
+          "Green wire"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the negative terminal or the spring side of the holder."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "43ad54e6ac3c851e2ea7d7fc",
+      "asset_sha256": "a5b0c1d7d0e24299c53fd72f6e0c6f04f70bc870f15adf11391fdf7b26904408",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/a5b0c1d7d0e24299c53fd72f6e0c6f04f70bc870f15adf11391fdf7b26904408.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two batteries connected by wires, one with a '+' and the other with a '-', indicating polarity.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "polarity",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the actual setup of the batteries in a holder."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:07:43Z",
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected by wires, one with a '+' and the other with a '-', indicating polarity.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "polarity",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the actual setup of the batteries in a holder."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e7b39e3dd541dc9eb92c183e",
+      "asset_sha256": "52d3726bec04aa233855068de9ad3c2470e682aeb5b1d87dba5980dc17c3e4b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/52d3726bec04aa233855068de9ad3c2470e682aeb5b1d87dba5980dc17c3e4b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow wire is shown with a negative terminal towards the spring side of a holder and a positive terminal towards the battery.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the context of inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of the holder and battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:08:25Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow wire is shown with a negative terminal towards the spring side of a holder and a positive terminal towards the battery.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the context of inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of the holder and battery."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

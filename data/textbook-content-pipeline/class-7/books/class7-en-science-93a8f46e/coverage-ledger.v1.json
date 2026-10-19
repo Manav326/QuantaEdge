@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1423,
-    "successful_visual_analyses": 1402,
-    "missing_visual_analyses": 6065,
+    "raw_analysis_result_rows": 1426,
+    "successful_visual_analyses": 1405,
+    "missing_visual_analyses": 6062,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6086,
+    "unresolved_count": 6083,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -63564,9 +63564,24 @@
       "asset_path": "assets/1640c35e4f9b454ff1810e12d65e48f5b4d1ae6afa0906819955cb4859abc31c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected by a green wire, with '+' signs indicating positive terminals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Two batteries connected by a green wire, with '+' signs indicating positive terminals."
+        ],
+        "concepts": [
+          "Batteries",
+          "Positive terminal",
+          "Green wire"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the negative terminal or the spring side of the holder."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -63582,9 +63597,31 @@
       "asset_path": "assets/a5b0c1d7d0e24299c53fd72f6e0c6f04f70bc870f15adf11391fdf7b26904408.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected by wires, one with a '+' and the other with a '-', indicating polarity.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "polarity",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is related to the text about deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not show the actual setup of the batteries in a holder."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -63600,9 +63637,34 @@
       "asset_path": "assets/52d3726bec04aa233855068de9ad3c2470e682aeb5b1d87dba5980dc17c3e4b5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow wire is shown with a negative terminal towards the spring side of a holder and a positive terminal towards the battery.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the context of inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of the holder and battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
