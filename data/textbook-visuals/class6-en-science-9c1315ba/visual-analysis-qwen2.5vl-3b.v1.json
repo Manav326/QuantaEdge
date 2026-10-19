@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1141,
+    "assets_selected": 1142,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 1137,
     "assets_remaining": 941,
     "assets_completion_percent": 54.7,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1136,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 1137,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:40:24Z"
+      "checkpointed_at": "2026-10-19T19:45:24Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:41:05Z"
+      "checkpointed_at": "2026-10-19T19:46:04Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:41:59Z"
+      "checkpointed_at": "2026-10-19T19:46:57Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37446,7 +37446,7 @@
           "Deepa                Between 13 and 14",
           "Hardeep                       14",
           "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
-          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
+          "“But why should the number be different?” Hardeep asked thoughtfully.",
           "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
           "Anish gives an idea, “Let us check this.”",
           "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
@@ -37467,7 +37467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:43:51Z"
+      "checkpointed_at": "2026-10-19T19:47:30Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37508,6 +37508,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:44:35Z"
+    },
+    {
+      "asset_id": "4fb4aaecec5e71a335b305a3",
+      "asset_sha256": "6740670a8aa904ebd4040a6f41a9dff247bdb7015e8c438c7f79086bc45f749f",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/6740670a8aa904ebd4040a6f41a9dff247bdb7015e8c438c7f79086bc45f749f.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
