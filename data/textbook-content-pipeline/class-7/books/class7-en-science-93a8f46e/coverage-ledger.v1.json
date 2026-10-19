@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1660,
-    "successful_visual_analyses": 1638,
-    "missing_visual_analyses": 5828,
+    "raw_analysis_result_rows": 1663,
+    "successful_visual_analyses": 1641,
+    "missing_visual_analyses": 5825,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5850,
+    "unresolved_count": 5847,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -71973,9 +71973,27 @@
       "asset_path": "assets/fd4b4f368316b51eca7f63cf9f28f3f40763bc7a4541b4b32dfb2179b88e92e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71991,9 +72009,26 @@
       "asset_path": "assets/08df8f47701c4e5e09863c95dd7ff8c8f63f088575329b2629e2ff2d8e85aa79.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person holding an umbrella, possibly depicting a weather-related concept.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others. The materials through which electric current can flow easily are called good conductors, or conductors of electricity. The materials through which current cannot pa"
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of materials in terms of their ability to conduct electricity.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72009,9 +72044,23 @@
       "asset_path": "assets/ead3d7b5dc7d5e9fa58f6270530827d97e855c87ffd67bcd68d9c80a02168208.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a diver underwater, with bubbles and a thought bubble.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "diver",
+          "underwater",
+          "bubbles",
+          "thought bubble"
+        ],
+        "context_relation": "The image is a visual representation of a diver underwater, possibly discussing the concept of good and poor conductors of electricity.",
+        "limitations": [
+          "The image does not provide specific details about the diver or the underwater environment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
