@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 886,
+    "assets_selected": 887,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 882,
     "assets_remaining": 1196,
     "assets_completion_percent": 42.4,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 881,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 882,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:33:59Z"
+      "checkpointed_at": "2026-10-19T04:38:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:34:45Z"
+      "checkpointed_at": "2026-10-19T04:38:51Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:35:46Z"
+      "checkpointed_at": "2026-10-19T04:39:48Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:36:31Z"
+      "checkpointed_at": "2026-10-19T04:40:30Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27945,6 +27945,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T04:37:12Z"
+    },
+    {
+      "asset_id": "5680d52843eea61550e90445",
+      "asset_sha256": "91ce010df3d05d0ad72d7152c4c41aa646e651d55b873efb0093bf33fad76169",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/91ce010df3d05d0ad72d7152c4c41aa646e651d55b873efb0093bf33fad76169.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
