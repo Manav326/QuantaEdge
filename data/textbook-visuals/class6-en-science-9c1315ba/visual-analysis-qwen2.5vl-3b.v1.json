@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1002,
+    "assets_selected": 1005,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1000,
-    "assets_remaining": 1078,
-    "assets_completion_percent": 48.1,
+    "assets_analyzed": 1003,
+    "assets_remaining": 1075,
+    "assets_completion_percent": 48.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 997,
+    "assets_skipped_from_checkpoint": 1000,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:05:37Z"
+      "checkpointed_at": "2026-10-19T13:13:43Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:06:39Z"
+      "checkpointed_at": "2026-10-19T13:14:45Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32305,6 +32305,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T13:12:28Z"
+    },
+    {
+      "asset_id": "699c4c488fcab8331ab773d7",
+      "asset_sha256": "755a75372c98c22dc2634b1631d1d482f11e3a90370af81e4d899419bf78f2b6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/755a75372c98c22dc2634b1631d1d482f11e3a90370af81e4d899419bf78f2b6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red box filled with nails and a few nails sticking out of the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnets",
+          "nails",
+          "school laboratory",
+          "artificial magnets",
+          "pencil boxes",
+          "stickers",
+          "toys"
+        ],
+        "context_relation": "The image represents a common item that has magnets attached to it, specifically nails.",
+        "limitations": [
+          "The image does not provide specific details about the magnets or their uses.",
+          "The image does not show the magnets in a dynamic or interactive manner."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:16:23Z"
+    },
+    {
+      "asset_id": "75cebf7ff846c841c9ca4b3f",
+      "asset_sha256": "c81d9a608b297618d7d028b13abb88b8b9f7229b25a4a46ba35881e163419eb0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c81d9a608b297618d7d028b13abb88b8b9f7229b25a4a46ba35881e163419eb0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green phone case with a floral pattern and a green strap, showing the phone's screen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a phone case, not related to the text about magnets.",
+        "limitations": [
+          "The image does not provide any information about magnets or their uses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:17:57Z"
+    },
+    {
+      "asset_id": "a25391260599bac444c69946",
+      "asset_sha256": "25c20fc837245b5da08f436ebc2877c308cc059790aaa06da4328413651cff75",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/25c20fc837245b5da08f436ebc2877c308cc059790aaa06da4328413651cff75.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a pencil box with a blue lid and a pink interior, open to reveal its contents.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pencil box",
+          "magnets",
+          "school laboratory",
+          "artificial magnets",
+          "toy magnets"
+        ],
+        "context_relation": "The image is related to the text discussing the history and types of magnets, including those used in school laboratories and toys.",
+        "limitations": [
+          "The image does not provide specific details about the magnets or their uses.",
+          "The image does not show any specific items that have magnets attached to them."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:19:36Z"
     }
   ]
 }

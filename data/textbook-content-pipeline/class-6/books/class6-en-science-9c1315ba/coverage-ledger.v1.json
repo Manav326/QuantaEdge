@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1015,
-    "successful_visual_analyses": 1002,
-    "missing_visual_analyses": 1063,
+    "raw_analysis_result_rows": 1018,
+    "successful_visual_analyses": 1005,
+    "missing_visual_analyses": 1060,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1076,
+    "unresolved_count": 1073,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39139,9 +39139,27 @@
       "asset_path": "assets/755a75372c98c22dc2634b1631d1d482f11e3a90370af81e4d899419bf78f2b6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red box filled with nails and a few nails sticking out of the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnets",
+          "nails",
+          "school laboratory",
+          "artificial magnets",
+          "pencil boxes",
+          "stickers",
+          "toys"
+        ],
+        "context_relation": "The image represents a common item that has magnets attached to it, specifically nails.",
+        "limitations": [
+          "The image does not provide specific details about the magnets or their uses.",
+          "The image does not show the magnets in a dynamic or interactive manner."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39157,9 +39175,18 @@
       "asset_path": "assets/c81d9a608b297618d7d028b13abb88b8b9f7229b25a4a46ba35881e163419eb0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green phone case with a floral pattern and a green strap, showing the phone's screen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a phone case, not related to the text about magnets.",
+        "limitations": [
+          "The image does not provide any information about magnets or their uses."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39175,9 +39202,25 @@
       "asset_path": "assets/25c20fc837245b5da08f436ebc2877c308cc059790aaa06da4328413651cff75.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a pencil box with a blue lid and a pink interior, open to reveal its contents.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pencil box",
+          "magnets",
+          "school laboratory",
+          "artificial magnets",
+          "toy magnets"
+        ],
+        "context_relation": "The image is related to the text discussing the history and types of magnets, including those used in school laboratories and toys.",
+        "limitations": [
+          "The image does not provide specific details about the magnets or their uses.",
+          "The image does not show any specific items that have magnets attached to them."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
