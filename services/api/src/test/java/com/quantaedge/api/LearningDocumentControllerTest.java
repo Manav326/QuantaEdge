@@ -44,8 +44,6 @@ class LearningDocumentControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningDocumentController(jdbc, authorization, staffAudit);
-    when(jdbc.queryForList(contains("from student_program_enrollment spe"), any(Object[].class)))
-        .thenReturn(List.of(Map.of("id", 71L)));
   }
 
   @Test
