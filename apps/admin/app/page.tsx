@@ -5,17 +5,20 @@ import AdminSidebar from './components/AdminSidebar';
 import { useUiTranslation } from './i18n/useUiTranslation';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
+import { AdminCourseSelector, useAdminCourseScope } from './components/AdminCourseScope';
 
 type AnyRow=Record<string,any>;
 
 export default function AdminHome(){
   const router=useRouter();
   const t=useUiTranslation();
+  const {courses,courseId,activeCourse,loadingCourses,courseError,selectCourse}=useAdminCourseScope();
   const [me,setMe]=useState<AnyRow|null>(null);
   const [overview,setOverview]=useState<AnyRow|null>(null);
   const [analytics,setAnalytics]=useState<AnyRow|null>(null);
   const [tutorAnalytics,setTutorAnalytics]=useState<AnyRow|null>(null);
   const [error,setError]=useState('');
+  const [identityLoading,setIdentityLoading]=useState(true);
   const [loading,setLoading]=useState(true);
 
   async function logout(){
@@ -26,7 +29,7 @@ export default function AdminHome(){
   useEffect(()=>{
     let mounted=true;
     (async()=>{
-      const mr=await fetch('/api/v1/auth/me');
+      const mr=await fetch('/api/v1/auth/me',{cache:'no-store'});
       if(!mr.ok){router.replace('/login');return;}
       const mb=await mr.json();
       if(mb.role!=='ADMIN'){
@@ -36,23 +39,45 @@ export default function AdminHome(){
         else router.replace('/login');
         return;
       }
-      if(!mounted)return;
-      setMe(mb);
-      const responses=await Promise.all([
-        fetch('/api/v1/admin/overview'),
-        fetch('/api/v1/admin/analytics'),
-        fetch('/api/v1/admin/tutor/analytics')
-      ]);
-      const overviewBody=await responses[0].json();
-      if(!responses[0].ok)throw new Error(overviewBody.message||'Admin data unavailable');
-      if(!mounted)return;
-      setOverview(overviewBody);
-      if(responses[1].ok)setAnalytics(await responses[1].json());
-      if(responses[2].ok)setTutorAnalytics(await responses[2].json());
-    })().catch((e:any)=>{if(mounted)setError(e.message||'Admin data unavailable');})
-      .finally(()=>{if(mounted)setLoading(false);});
+      if(mounted)setMe(mb);
+    })().catch((e:any)=>{if(mounted)setError(e.message||'Admin identity unavailable');})
+      .finally(()=>{if(mounted)setIdentityLoading(false);});
     return ()=>{mounted=false;};
   },[router]);
+
+  useEffect(()=>{
+    if(identityLoading||!me||me.role!=='ADMIN')return;
+    if(loadingCourses){setLoading(true);return;}
+    if(!courseId){
+      setOverview(null);setAnalytics(null);setTutorAnalytics(null);
+      setError(courseError||'No courses are assigned to this institution. Assign a course before reviewing course analytics.');
+      setLoading(false);
+      return;
+    }
+    let mounted=true;
+    setLoading(true);setError('');
+    const query='?courseId='+encodeURIComponent(courseId);
+    (async()=>{
+      const responses=await Promise.all([
+        fetch('/api/v1/admin/overview'+query,{cache:'no-store'}),
+        fetch('/api/v1/admin/analytics'+query,{cache:'no-store'}),
+        fetch('/api/v1/admin/tutor/analytics'+query,{cache:'no-store'})
+      ]);
+      const overviewBody=await responses[0].json().catch(()=>({}));
+      if(!responses[0].ok)throw new Error(overviewBody.message||overviewBody.detail||'Admin course data unavailable');
+      if(!mounted)return;
+      setOverview(overviewBody);
+      const analyticsBody=await responses[1].json().catch(()=>({}));
+      if(!responses[1].ok)throw new Error(analyticsBody.message||analyticsBody.detail||'Course learning analytics unavailable');
+      if(!mounted)return;
+      setAnalytics(analyticsBody);
+      const tutorBody=await responses[2].json().catch(()=>({}));
+      if(responses[2].ok)setTutorAnalytics(tutorBody);
+      else setTutorAnalytics(null);
+    })().catch((e:any)=>{if(mounted){setError(e.message||'Admin course data unavailable');setOverview(null);}})
+      .finally(()=>{if(mounted)setLoading(false);});
+    return ()=>{mounted=false;};
+  },[identityLoading,me,courseId,loadingCourses,courseError]);
 
   const summary=overview?.summary||{};
   const reviewRows:AnyRow[]=overview?.review||[];
@@ -66,12 +91,12 @@ export default function AdminHome(){
   const activeQuestions=countQuestionStatus(['DRAFT','REVIEW','REJECTED','APPROVED','PUBLISHED']);
   const inactiveQuestions=reviewRows.filter(row=>row.active===false).reduce((n,row)=>n+Number(row.count||0),0);
 
-  if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}>{t('admin.dashboard.tryAgain')}</button></div></section></main>;
-  if(loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">{t('admin.dashboard.learning')}</span><h1>{t('admin.dashboard.preparingWorkspace')}</h1><p>{t('admin.dashboard.connectingRecords')}</p></div></section></main>;
+  if(error)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p>{courses.length>0&&<AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses} label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.course')} onChange={value=>{if(selectCourse(value)){setError('');setOverview(null);}}}/>}<button className="button button-dark" onClick={()=>window.location.reload()}>{t('admin.dashboard.tryAgain')}</button></div></section></main>;
+  if(identityLoading||loadingCourses||loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">{t('admin.dashboard.learning')}</span><h1>{t('admin.dashboard.preparingWorkspace')}</h1><p>{t('admin.dashboard.connectingRecords')}</p></div></section></main>;
 
   const pendingReview=countQuestionStatus(['REVIEW']);
   const primaryStats=[
-    {label:t('admin.dashboard.stat.activeClasses'),value:summary.classes??'—',helper:t('admin.dashboard.stat.curriculumTracksEnabled'),tone:'violet',icon:'▦'},
+    {label:t('admin.contentStudio.course'),value:activeCourse?.display_name||'—',helper:activeCourse?.code||t('admin.contentStudio.noCoursesAssigned'),tone:'violet',icon:'▦'},
     {label:t('admin.dashboard.stat.publishedChapters'),value:summary.chapters??'—',helper:t('admin.dashboard.stat.readyToLearn'),tone:'mint',icon:'◈'},
     {label:t('admin.dashboard.stat.publishedLessons'),value:summary.published_lessons??'—',helper:t('admin.dashboard.stat.availableInCurriculum'),tone:'blue',icon:'▤'},
     {label:t('admin.dashboard.stat.questionsAwaitingReview'),value:pendingReview,helper:t('admin.dashboard.stat.submittedForReview'),tone:'amber',icon:'✳'}
@@ -90,6 +115,13 @@ export default function AdminHome(){
         <div><span className="admin-kicker">{t('admin.dashboard.hero.operations')}</span><h1>{t('admin.dashboard.hero.greeting')}, {me.displayName||'Admin'} <span className="admin-title-spark">✦</span></h1><p>{t('admin.dashboard.hero.liveView')}</p></div>
         <div className="admin-top-actions"><span className="top-status"><span className="status-dot"/> {t('admin.dashboard.hero.connected')}</span><button className="admin-refresh" onClick={()=>window.location.reload()} title={t('admin.dashboard.hero.refresh')}>↻</button></div>
       </header>
+
+      <div style={{display:'flex',alignItems:'end',gap:12,flexWrap:'wrap',margin:'18px 0 8px'}}>
+        <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+          label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.noCoursesAssigned')}
+          onChange={value=>{if(selectCourse(value)){setOverview(null);setError('');}}} disabled={Boolean(courseError)} />
+        {activeCourse&&<span className="admin-live-label">{t('admin.contentStudio.subject')}: {activeCourse.subjects.map(subject=>subject.subject_name).join(' · ')||'—'}</span>}
+      </div>
 
       <nav className="admin-mobile-nav" aria-label={t('admin.navigation.label')}>
         <Link className="active" href="/">{t('admin.navigation.overview')}</Link><Link href="/content">{t('admin.navigation.short.content')}</Link><Link href="/translations">{t('admin.navigation.languageReview')}</Link><Link href="/questions">{t('admin.navigation.questionReview')}</Link><Link href="/students">{t('admin.navigation.students')}</Link><Link href="/parents">{t('admin.navigation.parentsFamilies')}</Link>
