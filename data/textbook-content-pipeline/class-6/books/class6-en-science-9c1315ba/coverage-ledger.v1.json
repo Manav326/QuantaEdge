@@ -32859,27 +32859,24 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing aquatic habitats and amphibians.",
+        "visual_summary": "The text discusses the habitats of aquatic animals and amphibians, and the impact of habitat damage on plant and animal populations.",
         "visual_type": "uncertain",
         "visible_text": [
-          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.\nSome animals, such as frogs, can live in water as well as\non land. These are called amphibians.\nWhat would happen if the habitat of a plant or an an",
-          "The population of the Bengal Tiger, Cheetah, and Great Indian\nBustard has declined in India due to loss of natural habitats\ncaused by human activities. The Government of India has\ninitiated several projects to conserve our biodiversity. 'Project\nTiger' was initiated in 1973 to protect the declining ",
-          "Bengal Tiger\nCheetah\nGreat Indian Bustard",
-          "Do you\nknow?"
+          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.",
+          "Some animals, such as frogs, can live in water as well as\non land. These are called amphibians.",
+          "What would happen if the habitat of a plant or an animal\nis damaged? What would happen if a goat does not get grass\nto eat? Can a fish survive without water?",
+          "Check with your parents, grandparents, and neighbours\nto know about the plants, birds, insects or any other animal\nthey used to see frequently in their childhood but do not see\nas often now. These changes often happen when habitats\nare damaged. The damage to habitats of plants and animals\nresults in"
         ],
         "concepts": [
           "aquatic habitats",
           "amphibians",
           "habitat damage",
-          "biodiversity",
-          "Project Tiger",
-          "Cheetah Reintroduction Project",
-          "Great Indian Bustards",
-          "protected areas"
+          "biodiversity"
         ],
-        "context_relation": "educational",
+        "context_relation": "explanation",
         "limitations": [
-          "No specific limitations provided.",
+          "The text does not provide specific examples of plants or animals that live in water or on land.",
+          "The text does not provide information on the specific impacts of habitat damage on plant and animal populations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },

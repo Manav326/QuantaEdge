@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f067299022675ff2ed340fe39208a617bb9b5be355f1a0eea2aad828aa438f1f",
+  "raw_analysis_sha256": "8e266965e8c47a1a738ced729b81f058e0ab9690f5499afc24e31091b15694c6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:01:19Z",
+      "checkpointed_at": "2026-10-19T01:06:11Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:01:59Z",
+      "checkpointed_at": "2026-10-19T01:06:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:02:51Z",
+      "checkpointed_at": "2026-10-19T01:07:46Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:03:32Z",
+      "checkpointed_at": "2026-10-19T01:08:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -38240,27 +38240,24 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing aquatic habitats and amphibians.",
+        "visual_summary": "The text discusses the habitats of aquatic animals and amphibians, and the impact of habitat damage on plant and animal populations.",
         "visual_type": "uncertain",
         "visible_text": [
-          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.\nSome animals, such as frogs, can live in water as well as\non land. These are called amphibians.\nWhat would happen if the habitat of a plant or an an",
-          "The population of the Bengal Tiger, Cheetah, and Great Indian\nBustard has declined in India due to loss of natural habitats\ncaused by human activities. The Government of India has\ninitiated several projects to conserve our biodiversity. 'Project\nTiger' was initiated in 1973 to protect the declining ",
-          "Bengal Tiger\nCheetah\nGreat Indian Bustard",
-          "Do you\nknow?"
+          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.",
+          "Some animals, such as frogs, can live in water as well as\non land. These are called amphibians.",
+          "What would happen if the habitat of a plant or an animal\nis damaged? What would happen if a goat does not get grass\nto eat? Can a fish survive without water?",
+          "Check with your parents, grandparents, and neighbours\nto know about the plants, birds, insects or any other animal\nthey used to see frequently in their childhood but do not see\nas often now. These changes often happen when habitats\nare damaged. The damage to habitats of plants and animals\nresults in"
         ],
         "concepts": [
           "aquatic habitats",
           "amphibians",
           "habitat damage",
-          "biodiversity",
-          "Project Tiger",
-          "Cheetah Reintroduction Project",
-          "Great Indian Bustards",
-          "protected areas"
+          "biodiversity"
         ],
-        "context_relation": "educational",
+        "context_relation": "explanation",
         "limitations": [
-          "No specific limitations provided.",
+          "The text does not provide specific examples of plants or animals that live in water or on land.",
+          "The text does not provide information on the specific impacts of habitat damage on plant and animal populations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -38268,29 +38265,26 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:05:21Z",
+      "checkpointed_at": "2026-10-19T01:08:48Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing aquatic habitats and amphibians.",
+        "visual_summary": "The text discusses the habitats of aquatic animals and amphibians, and the impact of habitat damage on plant and animal populations.",
         "visual_type": "uncertain",
         "visible_text": [
-          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.\nSome animals, such as frogs, can live in water as well as\non land. These are called amphibians.\nWhat would happen if the habitat of a plant or an an",
-          "The population of the Bengal Tiger, Cheetah, and Great Indian\nBustard has declined in India due to loss of natural habitats\ncaused by human activities. The Government of India has\ninitiated several projects to conserve our biodiversity. 'Project\nTiger' was initiated in 1973 to protect the declining ",
-          "Bengal Tiger\nCheetah\nGreat Indian Bustard",
-          "Do you\nknow?"
+          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.",
+          "Some animals, such as frogs, can live in water as well as\non land. These are called amphibians.",
+          "What would happen if the habitat of a plant or an animal\nis damaged? What would happen if a goat does not get grass\nto eat? Can a fish survive without water?",
+          "Check with your parents, grandparents, and neighbours\nto know about the plants, birds, insects or any other animal\nthey used to see frequently in their childhood but do not see\nas often now. These changes often happen when habitats\nare damaged. The damage to habitats of plants and animals\nresults in"
         ],
         "concepts": [
           "aquatic habitats",
           "amphibians",
           "habitat damage",
-          "biodiversity",
-          "Project Tiger",
-          "Cheetah Reintroduction Project",
-          "Great Indian Bustards",
-          "protected areas"
+          "biodiversity"
         ],
-        "context_relation": "educational",
+        "context_relation": "explanation",
         "limitations": [
-          "No specific limitations provided.",
+          "The text does not provide specific examples of plants or animals that live in water or on land.",
+          "The text does not provide information on the specific impacts of habitat damage on plant and animal populations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },

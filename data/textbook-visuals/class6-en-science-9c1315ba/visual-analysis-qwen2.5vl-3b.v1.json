@@ -11,8 +11,8 @@
     "assets_selected": 832,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 827,
-    "assets_remaining": 1251,
+    "assets_analyzed": 828,
+    "assets_remaining": 1250,
     "assets_completion_percent": 39.8,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 827,
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:01:19Z"
+      "checkpointed_at": "2026-10-19T01:06:11Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:01:59Z"
+      "checkpointed_at": "2026-10-19T01:06:53Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:02:51Z"
+      "checkpointed_at": "2026-10-19T01:07:46Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:03:32Z"
+      "checkpointed_at": "2026-10-19T01:08:26Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -25867,27 +25867,24 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing aquatic habitats and amphibians.",
+        "visual_summary": "The text discusses the habitats of aquatic animals and amphibians, and the impact of habitat damage on plant and animal populations.",
         "visual_type": "uncertain",
         "visible_text": [
-          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.\nSome animals, such as frogs, can live in water as well as\non land. These are called amphibians.\nWhat would happen if the habitat of a plant or an an",
-          "The population of the Bengal Tiger, Cheetah, and Great Indian\nBustard has declined in India due to loss of natural habitats\ncaused by human activities. The Government of India has\ninitiated several projects to conserve our biodiversity. 'Project\nTiger' was initiated in 1973 to protect the declining ",
-          "Bengal Tiger\nCheetah\nGreat Indian Bustard",
-          "Do you\nknow?"
+          "The plants and animals that live in water are said to live\nin aquatic habitats. Some examples of aquatic habitats are\nponds, lakes, rivers, and oceans.",
+          "Some animals, such as frogs, can live in water as well as\non land. These are called amphibians.",
+          "What would happen if the habitat of a plant or an animal\nis damaged? What would happen if a goat does not get grass\nto eat? Can a fish survive without water?",
+          "Check with your parents, grandparents, and neighbours\nto know about the plants, birds, insects or any other animal\nthey used to see frequently in their childhood but do not see\nas often now. These changes often happen when habitats\nare damaged. The damage to habitats of plants and animals\nresults in"
         ],
         "concepts": [
           "aquatic habitats",
           "amphibians",
           "habitat damage",
-          "biodiversity",
-          "Project Tiger",
-          "Cheetah Reintroduction Project",
-          "Great Indian Bustards",
-          "protected areas"
+          "biodiversity"
         ],
-        "context_relation": "educational",
+        "context_relation": "explanation",
         "limitations": [
-          "No specific limitations provided.",
+          "The text does not provide specific examples of plants or animals that live in water or on land.",
+          "The text does not provide information on the specific impacts of habitat damage on plant and animal populations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -25895,7 +25892,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:05:21Z"
+      "checkpointed_at": "2026-10-19T01:08:48Z"
     }
   ]
 }
