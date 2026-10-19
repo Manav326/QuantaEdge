@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1089,
-    "successful_visual_analyses": 1075,
-    "missing_visual_analyses": 989,
+    "raw_analysis_result_rows": 1091,
+    "successful_visual_analyses": 1077,
+    "missing_visual_analyses": 987,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1003,
+    "unresolved_count": 1001,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41747,9 +41747,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Observing the effect of magnet through non-magnetic materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Observing the effect of magnet through non-magnetic materials",
+          "Material placed",
+          "between the magnet and the compass needle",
+          "S. no.     Wood",
+          "2.    Cardboard",
+          "3.     Plastic",
+          "4.    Glass",
+          "You would observe that there is no appreciable change in the deflection of the needle when a sheet of any of the above material is placed between the magnet and the compass needle. Therefore, we can conclude that the magnetic effect can act through non-magnetic materials."
+        ],
+        "concepts": [
+          "Observing the effect of magnet",
+          "Non-magnetic materials",
+          "Magnetic effect",
+          "Deflection of the needle"
+        ],
+        "context_relation": "The table is used to demonstrate that the magnetic effect can pass through non-magnetic materials.",
+        "limitations": [
+          "The table does not provide specific details about the materials used or the exact conditions under which the observations were made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41765,9 +41788,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing the effect of different materials on a compass needle.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Observing the effect of magnet through non-magnetic materials",
+          "Material placed between the magnet and the compass needle",
+          "S. no.     Wood",
+          "2.    Cardboard",
+          "3.     Plastic",
+          "4.    Glass",
+          "You would observe that there is no appreciable change in the deflection of the needle when a sheet of any of the above material is placed between the magnet and the compass needle. Therefore, we can conclude that the magnetic effect can act through non-magnetic materials."
+        ],
+        "concepts": [
+          "Magnetic effect",
+          "Non-magnetic materials",
+          "Compass needle",
+          "Deflection"
+        ],
+        "context_relation": "The table is a result of the experiment described in the text.",
+        "limitations": [
+          "The experiment only tested the effect on a compass needle, not on other types of magnetic materials.",
+          "The experiment did not test the effect on non-magnetic materials other than those listed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
