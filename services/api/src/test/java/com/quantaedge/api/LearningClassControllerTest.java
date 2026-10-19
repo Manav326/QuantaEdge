@@ -228,7 +228,7 @@ class LearningClassControllerTest {
             "provider","CUSTOM","title","Revision class","status","SCHEDULED",
             "starts_at",starts,"ends_at",starts.plusHours(1),"join_window_minutes",30)));
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.joinLiveClass(88L,student, TEST_TENANT));
+        ()->controller.joinLiveClass(88L, 71L, student, TEST_TENANT));
     assertEquals(409,error.getStatusCode().value());
     verify(jdbc,never()).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
   }
