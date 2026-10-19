@@ -443,7 +443,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var certificateLanguage by rememberSaveable {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
-    var currentSubject by rememberSaveable { mutableStateOf("maths") }
+    var currentSubject by rememberSaveable { mutableStateOf("") }
     var resourceSubjectFilter by rememberSaveable { mutableStateOf("ALL") }
     var currentCourseId by rememberSaveable { mutableStateOf(preferences.getLong("activeCourseId", 0L)) }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
@@ -1875,12 +1875,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
         route = AppRoute.CLASSES
         runTask {
-            val courseQuery = "&courseId=" + currentCourseId
+            val selectedCourse = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }
+                ?: throw IOException("Select an available course before loading classes.")
+            val subjectBelongsToCourse = subjectCode.isBlank() || selectedCourse.optJSONArray("subjects")?.let { array ->
+                (0 until array.length()).any { index ->
+                    val item = array.optJSONObject(index) ?: return@any false
+                    item.textAny("subject_code", "code") == subjectCode
+                }
+            } == true
+            val scopedSubject = subjectCode.takeIf { subjectBelongsToCourse } ?: ""
+            currentSubject = scopedSubject
+            val courseQuery = "courseId=" + currentCourseId +
+                if (scopedSubject.isNotBlank()) "&subjectCode=" + ApiClient.encodeQuery(scopedSubject) else ""
             liveClasses = ApiClient.getObject(
-                "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
+                "/api/v1/learning/live-classes?" + courseQuery
             ).optJSONArray("items").objectItems()
             val onlineRows = ApiClient.getObject(
-                "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
+                "/api/v1/learning/recorded-classes?" + courseQuery
             ).optJSONArray("items").objectItems()
             val localRows = offlineVideoStore.downloadedRecordings()
             val localById = localRows.associateBy { it.longAny("recorded_class_id", "recordingId", "id") }
@@ -4114,7 +4125,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         )
                     } else LearningClassesScreen(
-                        subject = currentSubject,
+                        subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { array ->
+                            (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
+                        }.orEmpty(),
+                        selectedSubjectCode = currentSubject,
                         liveItems = liveClasses,
                         recordedItems = recordedClasses,
                         busy = busy,
