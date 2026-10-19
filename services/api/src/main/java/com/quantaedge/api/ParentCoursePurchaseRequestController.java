@@ -85,9 +85,11 @@ public class ParentCoursePurchaseRequestController {
     if (guardians.isEmpty()) throw new SecurityException("No active parent account is linked to this learner.");
 
     List<Long> requestIds = new java.util.ArrayList<>();
+    List<Map<String,Object>> requestDetails = new java.util.ArrayList<>();
+    String latestRequestedAt = null;
     for (Map<String,Object> guardian : guardians) {
       long guardianId = ((Number) guardian.get("guardian_user_id")).longValue();
-      Long requestId = jdbc.queryForObject("""
+      Map<String,Object> savedRequest = jdbc.queryForMap("""
         insert into parent_course_purchase_request(
           guardian_user_id,student_id,course_id,institution_id,institution_offer_id,
           status,requested_at,created_at,updated_at
@@ -95,12 +97,29 @@ public class ParentCoursePurchaseRequestController {
         on conflict (guardian_user_id,student_id,institution_id,course_id)
           where status='PENDING' and institution_id is not null
         do update set institution_offer_id=excluded.institution_offer_id,updated_at=now()
-        returning id
-        """, Long.class, guardianId, studentId, courseId, institutionId, institutionOfferId);
+        returning id,status,requested_at
+        """, guardianId, studentId, courseId, institutionId, institutionOfferId);
+      Long requestId = ((Number) savedRequest.get("id")).longValue();
       requestIds.add(requestId);
+      Object requestedAt = savedRequest.get("requested_at");
+      String requestedAtText = requestedAt == null ? null : String.valueOf(requestedAt);
+      if (latestRequestedAt == null && requestedAtText != null) latestRequestedAt = requestedAtText;
+      Map<String,Object> detail = new java.util.LinkedHashMap<>();
+      detail.put("requestId", requestId);
+      detail.put("status", String.valueOf(savedRequest.get("status")));
+      detail.put("requestedAt", requestedAtText);
+      requestDetails.add(detail);
     }
-    return Map.of("requested", true, "studentId", studentId,
-        "courseId", courseId, "requestIds", requestIds, "notifiedParents", requestIds.size());
+    Map<String,Object> response = new java.util.LinkedHashMap<>();
+    response.put("requested", true);
+    response.put("studentId", studentId);
+    response.put("courseId", courseId);
+    response.put("requestIds", requestIds);
+    response.put("requestDetails", requestDetails);
+    response.put("requestedAt", latestRequestedAt);
+    response.put("status", "PENDING");
+    response.put("notifiedParents", requestIds.size());
+    return response;
   }
 
   @GetMapping("/parent/course-requests")
