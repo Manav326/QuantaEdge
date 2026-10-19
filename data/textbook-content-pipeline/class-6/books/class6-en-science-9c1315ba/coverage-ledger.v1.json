@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1049,
-    "successful_visual_analyses": 1039,
-    "missing_visual_analyses": 1029,
+    "raw_analysis_result_rows": 1051,
+    "successful_visual_analyses": 1041,
+    "missing_visual_analyses": 1027,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1039,
+    "unresolved_count": 1037,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40408,9 +40408,24 @@
       "asset_path": "assets/64e2d1259c27c6b95164f57aade36a5d6f698e611654c4f9ac3ebff13a2925a7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with a thoughtful expression, holding her chin and looking to the side.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thoughtful expression",
+          "girl",
+          "chin",
+          "thinking",
+          "looking to the side"
+        ],
+        "context_relation": "The image is a visual representation of a girl thinking, which is related to the educational content about magnetic materials.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40426,9 +40441,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images related to the activity described in the text block. The page is completely black and no text or images are visible. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish v"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

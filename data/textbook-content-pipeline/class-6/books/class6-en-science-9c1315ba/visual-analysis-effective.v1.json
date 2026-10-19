@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1622a08600332209900bf470ab164e588a75787f7112be0cc02c00c206a708c1",
+  "raw_analysis_sha256": "f88ae9537f2a1b095419114eeb7d707e79f95d23a316a452cfca814e25f7d550",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:54:49Z",
+      "checkpointed_at": "2026-10-19T15:59:26Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:55:30Z",
+      "checkpointed_at": "2026-10-19T16:00:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:56:24Z",
+      "checkpointed_at": "2026-10-19T16:00:59Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -50430,6 +50430,98 @@
         "context_relation": "The image is related to the concept of magnetic materials and their properties.",
         "limitations": [
           "The image does not provide specific details about the materials that stick to the magnet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "434f020846f960fda5a5e6bf",
+      "asset_sha256": "64e2d1259c27c6b95164f57aade36a5d6f698e611654c4f9ac3ebff13a2925a7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/64e2d1259c27c6b95164f57aade36a5d6f698e611654c4f9ac3ebff13a2925a7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with a thoughtful expression, holding her chin and looking to the side.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thoughtful expression",
+          "girl",
+          "chin",
+          "thinking",
+          "looking to the side"
+        ],
+        "context_relation": "The image is a visual representation of a girl thinking, which is related to the educational content about magnetic materials.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:01:38Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with a thoughtful expression, holding her chin and looking to the side.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thoughtful expression",
+          "girl",
+          "chin",
+          "thinking",
+          "looking to the side"
+        ],
+        "context_relation": "The image is a visual representation of a girl thinking, which is related to the educational content about magnetic materials.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "82e6577eb85987ebc96b1d83",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images related to the activity described in the text block. The page is completely black and no text or images are visible. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish v"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:01:54Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images related to the activity described in the text block. The page is completely black and no text or images are visible. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish v"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
