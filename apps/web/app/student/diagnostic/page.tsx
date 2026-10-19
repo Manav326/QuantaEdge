@@ -23,7 +23,7 @@ export default function DiagnosticPage(){
   const router=useRouter();
   const searchParams=useSearchParams();
   const rawCourseId=searchParams.get('courseId')||'';
-  const requestedCourseId=/^\\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const requestedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
   const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale}=useLocale();
   const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;

@@ -51,7 +51,7 @@ function StudentCertificatesContent() {
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
   const { brand } = useTenantBranding();
   const courseText = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
+  const requestedCourseId = /^\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [profile, setProfile] = useState<any>(null);

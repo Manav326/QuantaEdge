@@ -22,7 +22,7 @@ export default function PracticeClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawCourseId = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\\d+$/.test(rawCourseId) && Number(rawCourseId) > 0 ? Number(rawCourseId) : null;
+  const requestedCourseId = /^\d+$/.test(rawCourseId) && Number(rawCourseId) > 0 ? Number(rawCourseId) : null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const { locale, learningLanguage } = useLocale();
   const requestedSubject = searchParams.get('subjectCode') || 'ALL';
