@@ -213,13 +213,16 @@ public class LearningDocumentController {
     String from="""
       from learning_document d
       join learning_pdf_asset a on a.id=d.pdf_asset_id
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=d.subject_id
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join curriculum_program p on p.id=s.program_id
       """;
     StringBuilder where=new StringBuilder("""
-      where exists(select 1 from curriculum_program scope_program
+      where dca.institution_id=? and dca.course_id=?
+        and exists(select 1 from curriculum_program scope_program
         join curriculum_program_subject cps on cps.program_id=scope_program.id
         join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
           and scope_subject.class_id=cps.class_id and scope_subject.active=true
@@ -229,16 +232,18 @@ public class LearningDocumentController {
             (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
       """);
     List<Object> filterArgs=new ArrayList<>();
+    filterArgs.add(institutionId);
+    filterArgs.add(courseId);
     filterArgs.add(courseId);
     appendDocumentFilter(where,filterArgs,"c.code",classFilter);
     appendDocumentFilter(where,filterArgs,"s.code",subjectFilter);
-    appendDocumentFilter(where,filterArgs,"d.status",statusFilter);
+    appendDocumentFilter(where,filterArgs,"dca.status",statusFilter);
     appendDocumentFilter(where,filterArgs,"d.language",languageFilter);
     appendDocumentFilter(where,filterArgs,"d.scope",scopeFilter);
     List<Object> pageArgs=new ArrayList<>(filterArgs);pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     String selectSql="""
       select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
-             d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             d.page_start,d.page_end,d.language,dca.status as status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,p.id as course_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -249,11 +254,11 @@ public class LearningDocumentController {
     List<Map<String,Object>> items=jdbc.queryForList(selectSql+from+where+orderLimit,pageArgs.toArray());
     Long total=jdbc.queryForObject("select count(*) "+from+where,Long.class,filterArgs.toArray());
     Map<String,Object> facets=new LinkedHashMap<>();
-    facets.put("class",documentFacetCounts(from,"c.code","class",courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("subject",documentFacetCounts(from,"s.code","subject",courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("status",documentFacetCounts(from,"d.status","status",courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("language",documentFacetCounts(from,"d.language","language",courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("scope",documentFacetCounts(from,"d.scope","scope",courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("class",documentFacetCounts(from,"c.code","class",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("subject",documentFacetCounts(from,"s.code","subject",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("status",documentFacetCounts(from,"dca.status","status",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("language",documentFacetCounts(from,"d.language","language",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("scope",documentFacetCounts(from,"d.scope","scope",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
     Map<String,Object> result=new LinkedHashMap<>();result.put("items",items);result.put("total",total==null?0L:total);
     result.put("limit",rowLimit);result.put("offset",rowOffset);result.put("facets",facets);return result;
   }
@@ -275,10 +280,11 @@ public class LearningDocumentController {
     where.append(')');args.addAll(values);
   }
 
-  private Map<String,Long> documentFacetCounts(String from,String column,String excluded,Long courseId,
+  private Map<String,Long> documentFacetCounts(String from,String column,String excluded,Long institutionId,Long courseId,
       List<String> classes,List<String> subjects,List<String> statuses,List<String> languages,List<String> scopes) {
     StringBuilder where=new StringBuilder("""
-      where exists(select 1 from curriculum_program scope_program
+      where dca.institution_id=? and dca.course_id=?
+        and exists(select 1 from curriculum_program scope_program
         join curriculum_program_subject cps on cps.program_id=scope_program.id
         join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
           and scope_subject.class_id=cps.class_id and scope_subject.active=true
@@ -287,10 +293,10 @@ public class LearningDocumentController {
           and (scope_subject.program_id=scope_program.id or
             (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
       """);
-    List<Object> args=new ArrayList<>(List.of(courseId));
+    List<Object> args=new ArrayList<>(List.of(institutionId,courseId,courseId));
     if(!"class".equals(excluded))appendDocumentFilter(where,args,"c.code",classes);
     if(!"subject".equals(excluded))appendDocumentFilter(where,args,"s.code",subjects);
-    if(!"status".equals(excluded))appendDocumentFilter(where,args,"d.status",statuses);
+    if(!"status".equals(excluded))appendDocumentFilter(where,args,"dca.status",statuses);
     if(!"language".equals(excluded))appendDocumentFilter(where,args,"d.language",languages);
     if(!"scope".equals(excluded))appendDocumentFilter(where,args,"d.scope",scopes);
     List<Map<String,Object>> rows=jdbc.queryForList("select "+column+" as facet_value,count(*) as facet_count "+from+where+" group by "+column,args.toArray());
@@ -367,11 +373,16 @@ public class LearningDocumentController {
       returning id
       """, Long.class, assetId, scope, subjectId, chapterId, bookPart, title, sourceTitle, sourceUrl,
       edition, language, start, end, context.staffId());
+    jdbc.update("""
+      insert into learning_document_course_assignment(
+        institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+      ) values(?,?,?,?,'DRAFT',?)
+      """,institutionId,courseId,documentId,subjectId,context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/created",
         "Attached a private PDF to " + scope + " for class " + classCode + ", subject " + subjectCode
             + (chapterId == null ? "" : ", chapter " + chapterId)
             + (bookPart == null ? "" : ", textbook part " + bookPart) + ".");
-    return assignmentById(documentId);
+    return assignmentById(documentId,institutionId,courseId);
   }
 
   @PatchMapping("/admin/learning-documents/{documentId}/status")
@@ -386,7 +397,7 @@ public class LearningDocumentController {
     context = authorization.requireAuth(context);
     long institutionId=requireInstitution(tenant);
     requireAssignedCourse(courseId,institutionId);
-    requireDocumentInCourse(documentId,courseId);
+    requireDocumentInCourse(documentId,courseId,institutionId);
     String nextStatus = requiredText(body.get("status"), "status", 20).toUpperCase(Locale.ROOT);
     if (!List.of("DRAFT", "PUBLISHED", "ARCHIVED").contains(nextStatus)) {
       throw badRequest("Choose DRAFT, PUBLISHED, or ARCHIVED.");
