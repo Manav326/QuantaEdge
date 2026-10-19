@@ -514,6 +514,9 @@ class AuthServiceTest {
     assertTrue(sql.getValue().contains("ce.institution_id=? and ce.holder_user_id=?"));
     assertTrue(sql.getValue().contains("st.user_account_id=?"));
     assertTrue(sql.getValue().contains("e.status in ('ACTIVE','PAUSED')"));
+    assertTrue(sql.getValue().contains("assignment.status='ASSIGNED'"));
+    assertTrue(sql.getValue().contains("tenant_scope.status='ACTIVE'"));
+    assertTrue(sql.getValue().contains("p.status='ACTIVE' and p.code<>'GENERAL'"));
     assertIterableEquals(List.of(31L, 501L, 31L, 501L), List.of(parameters.getValue()));
   }
 
