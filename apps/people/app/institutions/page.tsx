@@ -119,7 +119,7 @@ export default function InstitutionsAdminPage() {
         presetId:String(d.themeTokens?.presetId||'quantaedge-orange'),
         appearance:String(d.themeTokens?.appearance||'system'),
         primary:String(d.themeTokens?.brandPrimary||d.themeTokens?.primary||'#F97316'),
-        accent:String(d.themeTokens?.brandAccent||d.themeTokens?.accent||'#C2410C'),
+        accent:String(d.themeTokens?.brandAccent||d.themeTokens?.accent||'#0F766E'),
       });
       setBilling({currency:d.currency||'INR',unitPriceRupees:d.unit_price_paise===undefined?'0.00':(d.unit_price_paise/100).toFixed(2),
         billingCadence:d.billing_cadence||'MONTHLY',effectiveFrom:d.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:d.effective_until?.slice(0,10)||''});
@@ -204,7 +204,7 @@ export default function InstitutionsAdminPage() {
     if(detail){
       if(card==='profile')setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});
       if(card==='courses')setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));
-      if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#C2410C')});
+      if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')});
       if(card==='billing')setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
     }
     setShowAdmin(false);setAdmin({username:'',displayName:'',initialPassword:''});setEditingCard(null);setError('');
@@ -441,7 +441,7 @@ export default function InstitutionsAdminPage() {
                 <div className={styles.readOnlyItem}><span>App icon</span>{detail.app_icon_url?<img className={styles.readOnlyIcon} src={detail.app_icon_url} alt={(detail.brand_display_name||detail.display_name)+' app icon'}/>:<small className={styles.emptyValue}>No app icon uploaded</small>}</div>
                 <div className={styles.readOnlyItem}><span>Palette preset</span><strong>{themePresets.find(p=>p.id===String(detail.themeTokens?.presetId||'quantaedge-orange'))?.name||String(detail.themeTokens?.presetId||'QuantaEdge Orange')}</strong></div>
                 <div className={styles.readOnlyItem}><span>Default appearance</span><strong>{String(detail.themeTokens?.appearance||'system').replace('system','Follow device preference').replace('light','Always light').replace('dark','Always dark')}</strong></div>
-                <div className={styles.readOnlyItem}><span>Brand colours</span><div className={styles.brandSwatches}><span><i style={{background:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316')}}/>Primary {String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316')}</span><span><i style={{background:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#C2410C')}}/>Accent {String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#C2410C')}</span></div></div>
+                <div className={styles.readOnlyItem}><span>Brand colours</span><div className={styles.brandSwatches}><span><i style={{background:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316')}}/>Primary {String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316')}</span><span><i style={{background:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')}}/>Accent {String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')}</span></div></div>
               </div>
             </>}
           </section>
