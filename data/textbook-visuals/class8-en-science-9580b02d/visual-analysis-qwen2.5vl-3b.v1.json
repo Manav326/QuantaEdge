@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 751,
+    "assets_selected": 753,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 748,
-    "assets_remaining": 1543,
-    "assets_completion_percent": 32.6,
+    "assets_analyzed": 750,
+    "assets_remaining": 1541,
+    "assets_completion_percent": 32.7,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 746,
+    "assets_skipped_from_checkpoint": 748,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:28:18Z"
+      "checkpointed_at": "2026-10-19T02:34:11Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:29:06Z"
+      "checkpointed_at": "2026-10-19T02:34:59Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:29:44Z"
+      "checkpointed_at": "2026-10-19T02:35:36Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22859,6 +22859,74 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T02:33:02Z"
+    },
+    {
+      "asset_id": "7874245cc90004c9f8faeb91",
+      "asset_sha256": "d11d5804e4c2f366f7fcd304ea864880209cf3889db497040e8868f817e08ea9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/d11d5804e4c2f366f7fcd304ea864880209cf3889db497040e8868f817e08ea9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of onion cells under a microscope, showing the internal structure and organization of the cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "microscopic observation",
+          "onion cells"
+        ],
+        "context_relation": "The image is a visual representation of the cells observed in the activity described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the cell's components or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:37:09Z"
+    },
+    {
+      "asset_id": "fc33c210daadd27a0ab26aa5",
+      "asset_sha256": "55b33dfc223f2c20e67d4b4c9c92293e4b32b94f9a263863459470be7e03c7d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/55b33dfc223f2c20e67d4b4c9c92293e4b32b94f9a263863459470be7e03c7d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a forceps and pulling out a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "an onion peel"
+        ],
+        "concepts": [
+          "cell",
+          "onion peel",
+          "forceps",
+          "petri dish"
+        ],
+        "context_relation": "The image is a part of an educational activity to demonstrate the removal of an onion peel.",
+        "limitations": [
+          "The image does not show the entire activity or the final result."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:38:50Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "176ff459b97ca1d673e2daf9462519c27f8aa1fbd3c90820d3e496263d533b9e",
+  "raw_analysis_sha256": "3755f2294fb9b4c5c5a42b975668196ff416720eb0a9d7f33db11d40d1d192f7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:28:18Z",
+      "checkpointed_at": "2026-10-19T02:34:11Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:29:06Z",
+      "checkpointed_at": "2026-10-19T02:34:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:29:44Z",
+      "checkpointed_at": "2026-10-19T02:35:36Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33529,6 +33529,110 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text content.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7874245cc90004c9f8faeb91",
+      "asset_sha256": "d11d5804e4c2f366f7fcd304ea864880209cf3889db497040e8868f817e08ea9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/d11d5804e4c2f366f7fcd304ea864880209cf3889db497040e8868f817e08ea9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of onion cells under a microscope, showing the internal structure and organization of the cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "microscopic observation",
+          "onion cells"
+        ],
+        "context_relation": "The image is a visual representation of the cells observed in the activity described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the cell's components or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:37:09Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of onion cells under a microscope, showing the internal structure and organization of the cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "microscopic observation",
+          "onion cells"
+        ],
+        "context_relation": "The image is a visual representation of the cells observed in the activity described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the cell's components or functions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fc33c210daadd27a0ab26aa5",
+      "asset_sha256": "55b33dfc223f2c20e67d4b4c9c92293e4b32b94f9a263863459470be7e03c7d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/55b33dfc223f2c20e67d4b4c9c92293e4b32b94f9a263863459470be7e03c7d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a forceps and pulling out a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "an onion peel"
+        ],
+        "concepts": [
+          "cell",
+          "onion peel",
+          "forceps",
+          "petri dish"
+        ],
+        "context_relation": "The image is a part of an educational activity to demonstrate the removal of an onion peel.",
+        "limitations": [
+          "The image does not show the entire activity or the final result."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:38:50Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a forceps and pulling out a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "an onion peel"
+        ],
+        "concepts": [
+          "cell",
+          "onion peel",
+          "forceps",
+          "petri dish"
+        ],
+        "context_relation": "The image is a part of an educational activity to demonstrate the removal of an onion peel.",
+        "limitations": [
+          "The image does not show the entire activity or the final result."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

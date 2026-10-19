@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 761,
-    "successful_visual_analyses": 751,
-    "missing_visual_analyses": 1530,
+    "raw_analysis_result_rows": 763,
+    "successful_visual_analyses": 753,
+    "missing_visual_analyses": 1528,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1540,
+    "unresolved_count": 1538,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29650,9 +29650,22 @@
       "asset_path": "assets/d11d5804e4c2f366f7fcd304ea864880209cf3889db497040e8868f817e08ea9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of onion cells under a microscope, showing the internal structure and organization of the cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "microscopic observation",
+          "onion cells"
+        ],
+        "context_relation": "The image is a visual representation of the cells observed in the activity described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the cell's components or functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29668,9 +29681,26 @@
       "asset_path": "assets/55b33dfc223f2c20e67d4b4c9c92293e4b32b94f9a263863459470be7e03c7d1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a forceps and pulling out a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "an onion peel"
+        ],
+        "concepts": [
+          "cell",
+          "onion peel",
+          "forceps",
+          "petri dish"
+        ],
+        "context_relation": "The image is a part of an educational activity to demonstrate the removal of an onion peel.",
+        "limitations": [
+          "The image does not show the entire activity or the final result."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
