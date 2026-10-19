@@ -72,6 +72,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('p=root/f"class-{grade}.v1.json"', coordinator)
         self.assertIn("active_classes", coordinator)
         self.assertIn("already has an active Layer 4–5 run", coordinator)
+        self.assertIn('else job.get("started_at")', coordinator)
+        self.assertIn("checkpoint_baseline=", coordinator)
     def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
