@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "88e6bef6bcc5f8be795a252669fa3aaa2f9ccd2607295b19fa5671780f45773c",
+  "raw_analysis_sha256": "2e6a0eeec056af4bd44d5fe822f17a5352b394838f4e0b95d9b2250b92fba037",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:14:13Z",
+      "checkpointed_at": "2026-10-19T10:21:17Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:15:13Z",
+      "checkpointed_at": "2026-10-19T10:22:16Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -44254,6 +44254,128 @@
         "context_relation": "The image is a visual representation of the text.",
         "limitations": [
           "The image does not provide specific details about the vitamins and minerals mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a1f7f046fcf6ae767d80b2a8",
+      "asset_sha256": "b83644be40ff53e3c028bebcf7498c1e264ffdf6e210fa9536c550059d210fb0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/b83644be40ff53e3c028bebcf7498c1e264ffdf6e210fa9536c550059d210fb0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73fbcc30d53d522a15fefc8d42f24a5062bcc93cf520d8d112abe1e759009f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:23:47Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "04a5de505082379ff93eccc9",
+      "asset_sha256": "47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73fbcc30d53d522a15fefc8d42f24a5062bcc93cf520d8d112abe1e759009f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a smooth surface and visible grain patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden plank, likely used as a background or part of a design.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single object and does not depict any specific scene or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:25:21Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a smooth surface and visible grain patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden plank, likely used as a background or part of a design.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single object and does not depict any specific scene or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c149e0f4fc755aeb33a6664",
+      "asset_sha256": "b9357f07d1f68e45ca83abbd95e36ed058758e93ce024b1b9ac2144f51882515",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/b9357f07d1f68e45ca83abbd95e36ed058758e93ce024b1b9ac2144f51882515.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73fbcc30d53d522a15fefc8d42f24a5062bcc93cf520d8d112abe1e759009f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a man in a suit and tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a portrait of a man in formal attire.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the visual content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:26:53Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a man in a suit and tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a portrait of a man in formal attire.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the visual content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
