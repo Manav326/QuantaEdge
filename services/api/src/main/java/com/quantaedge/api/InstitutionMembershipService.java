@@ -65,7 +65,7 @@ public class InstitutionMembershipService {
       jdbc.update("""
         insert into institution_membership_event(
           institution_id,membership_id,student_id,event_type,details
-        ) values(?,?,?,'MEMBERSHIP_CREATED',jsonb_build_object('source',?,'actorUserId',?))
+        ) values(?,?,?,'MEMBERSHIP_CREATED',jsonb_build_object('source',?,'actorUserId',?::bigint))
         """,institutionId,membershipId,studentId,normalSource(source),actorUserId);
     }
     Object rawUserId=learner.getFirst().get("user_account_id");
