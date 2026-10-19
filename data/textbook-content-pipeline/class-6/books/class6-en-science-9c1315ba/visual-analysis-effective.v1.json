@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d7650f310707b403a276db4438bc9cb14d46a0a125140397e65aa1b6735d8e47",
+  "raw_analysis_sha256": "330bdf91e5936a663b1b5b9f5e59538c589091b31973f02d1ee04d530b136a38",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:54:15Z",
+      "checkpointed_at": "2026-10-19T17:57:58Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:54:57Z",
+      "checkpointed_at": "2026-10-19T17:58:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:55:50Z",
+      "checkpointed_at": "2026-10-19T17:59:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -53632,6 +53632,132 @@
         "limitations": [
           "The image does not show any diagrams or charts.",
           "The image does not include any equations or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7153f5ab3c1e31d92c9d2f28",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including their poles, magnetic materials, and the behavior of freely suspended magnets.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "magnet poles",
+          "magnetic materials",
+          "non-magnetic materials",
+          "freely suspended magnet"
+        ],
+        "context_relation": "The page is discussing the properties and behavior of magnets.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not contain any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:59:52Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including their poles, magnetic materials, and the behavior of freely suspended magnets.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "magnet poles",
+          "magnetic materials",
+          "non-magnetic materials",
+          "freely suspended magnet"
+        ],
+        "context_relation": "The page is discussing the properties and behavior of magnets.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not contain any equations or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e517f9f6e7a708446e8f4ac",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0aa9da10667952bf62647d9c7d78b4589d6b174a593d7855f8fbfdc7b50caf74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including their poles, magnetic materials, and the behavior of freely suspended magnets.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "magnet poles",
+          "magnetic materials",
+          "non-magnetic materials",
+          "freely suspended magnet"
+        ],
+        "context_relation": "The text provides information about the properties and behavior of magnets.",
+        "limitations": [
+          "The text does not include any diagrams or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:00:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including their poles, magnetic materials, and the behavior of freely suspended magnets.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction."
+        ],
+        "concepts": [
+          "magnet poles",
+          "magnetic materials",
+          "non-magnetic materials",
+          "freely suspended magnet"
+        ],
+        "context_relation": "The text provides information about the properties and behavior of magnets.",
+        "limitations": [
+          "The text does not include any diagrams or illustrations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
