@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1260,
+    "assets_selected": 1263,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1258,
-    "assets_remaining": 6230,
+    "assets_analyzed": 1261,
+    "assets_remaining": 6227,
     "assets_completion_percent": 16.8,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1255,
+    "assets_skipped_from_checkpoint": 1258,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:56:12Z"
+      "checkpointed_at": "2026-10-19T02:01:31Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:56:40Z"
+      "checkpointed_at": "2026-10-19T02:02:00Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -47895,6 +47895,90 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T02:00:37Z"
+    },
+    {
+      "asset_id": "45f25e490dc7f984cc440e0c",
+      "asset_sha256": "620fb6998303581c59bf2916fec4025bf09881add608994997baa1c3befdd555",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/620fb6998303581c59bf2916fec4025bf09881add608994997baa1c3befdd555.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a magnifying glass.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:03:05Z"
+    },
+    {
+      "asset_id": "f9b2f3e67df142c07fbabeee",
+      "asset_sha256": "041bb064a6ab35b1d60f8c119afb60eb073963050ef17ccda2d8e7731077d198",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/041bb064a6ab35b1d60f8c119afb60eb073963050ef17ccda2d8e7731077d198.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A child holding a magnifying glass, smiling and looking through it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text.",
+          "The image is a cartoon and may not accurately represent the educational content.",
+          "The image does not show any specific educational content or relationship to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:04:16Z"
+    },
+    {
+      "asset_id": "fbb8899846e81bc1847d2002",
+      "asset_sha256": "155547e1c06f21789f06fe0a882fe4e7e1c9c5e439d193513b06eec980554292",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/155547e1c06f21789f06fe0a882fe4e7e1c9c5e439d193513b06eec980554292.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a flag-like object at the top, possibly representing a historical or educational document.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational document discussing the concept of batteries and their usage in devices.",
+        "limitations": [
+          "The image does not provide specific details about the battery or its usage in devices."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:05:23Z"
     }
   ]
 }
