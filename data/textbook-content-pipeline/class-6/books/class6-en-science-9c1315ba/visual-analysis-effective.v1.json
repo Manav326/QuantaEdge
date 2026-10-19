@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1acfee25d542fd6fa768d135707c08a36d6696e4dd7f5b1cee7ee3f602609396",
+  "raw_analysis_sha256": "9e5ef629c017503e7fb704e3a9c7311848cdc08979aacf9d28af4a45aa9b13cc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:41:57Z",
+      "checkpointed_at": "2026-10-19T16:45:49Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:42:38Z",
+      "checkpointed_at": "2026-10-19T16:46:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:43:32Z",
+      "checkpointed_at": "2026-10-19T16:47:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -51702,6 +51702,130 @@
         "context_relation": "The image shows an experiment to observe the interaction between a bar magnet and a set of pencils.",
         "limitations": [
           "The image does not show the actual experiment, only a diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4ee9dde9239d600fc1b31b2f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e769274f54486c8a8a697b041f9a467c231dac14b2df98be729697dad52c9996",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:47:41Z",
+      "effective_analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "857b9826b41878ad9f6b93f3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e769274f54486c8a8a697b041f9a467c231dac14b2df98be729697dad52c9996",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:48:01Z",
+      "effective_analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

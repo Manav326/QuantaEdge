@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1061,
+    "assets_selected": 1063,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1058,
-    "assets_remaining": 1020,
-    "assets_completion_percent": 50.9,
+    "assets_analyzed": 1060,
+    "assets_remaining": 1018,
+    "assets_completion_percent": 51.0,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1056,
+    "assets_skipped_from_checkpoint": 1058,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:41:57Z"
+      "checkpointed_at": "2026-10-19T16:45:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:42:38Z"
+      "checkpointed_at": "2026-10-19T16:46:29Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:43:32Z"
+      "checkpointed_at": "2026-10-19T16:47:20Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34440,6 +34440,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T16:44:58Z"
+    },
+    {
+      "asset_id": "4ee9dde9239d600fc1b31b2f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e769274f54486c8a8a697b041f9a467c231dac14b2df98be729697dad52c9996",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:47:41Z"
+    },
+    {
+      "asset_id": "857b9826b41878ad9f6b93f3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e769274f54486c8a8a697b041f9a467c231dac14b2df98be729697dad52c9996",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pair of bar magnets labeled A and B are placed on pencils, with one end of magnet B brought near the end of magnet A.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens."
+        ],
+        "concepts": [
+          "Magnets",
+          "North and South poles",
+          "Attraction and Repulsion",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving magnets.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:48:01Z"
     }
   ]
 }
