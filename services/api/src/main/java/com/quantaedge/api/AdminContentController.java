@@ -72,7 +72,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_VIEW");
     long institutionId = requireInstitution(tenant);
-    return jdbc.queryForList("""
+    List<Map<String,Object>> courses=jdbc.queryForList("""
       select distinct p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
              p.curriculum_version,c.code as curriculum_class_code
       from curriculum_program p
@@ -84,6 +84,23 @@ public class AdminContentController {
       where p.status='ACTIVE' and p.code<>'GENERAL'
       order by p.display_name,p.id
       """, institutionId);
+    for(Map<String,Object> course:courses) {
+      long courseId=((Number)course.get("course_id")).longValue();
+      List<Map<String,Object>> subjects=jdbc.queryForList("""
+        select s.id as subject_id,s.code as subject_code,s.display_name as subject_name,
+          s.class_id,c.code as curriculum_class_code,c.display_name as curriculum_class_name,
+          cps.sort_order as course_subject_sort_order
+        from curriculum_program_subject cps
+        join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        join curriculum_class c on c.id=s.class_id and c.active=true
+        where cps.program_id=?
+          and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id and cps.class_id=s.class_id))
+        order by cps.sort_order,s.sort_order,s.code
+        """,courseId);
+      course.put("subjects",subjects);
+    }
+    return courses;
   }
 
   @GetMapping
