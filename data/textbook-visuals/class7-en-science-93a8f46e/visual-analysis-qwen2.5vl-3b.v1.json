@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1266,
+    "assets_selected": 1269,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1264,
-    "assets_remaining": 6224,
+    "assets_analyzed": 1267,
+    "assets_remaining": 6221,
     "assets_completion_percent": 16.9,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1261,
+    "assets_skipped_from_checkpoint": 1264,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:06:23Z"
+      "checkpointed_at": "2026-10-19T02:11:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:06:51Z"
+      "checkpointed_at": "2026-10-19T02:11:39Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -48063,6 +48063,108 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T02:10:16Z"
+    },
+    {
+      "asset_id": "e0b49a0d7334f8b35bfabfc4",
+      "asset_sha256": "66c70584fadd5ca6fa7411d0f60fc0e36cc7641e4d8a7b19eed5080019c907ec",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/66c70584fadd5ca6fa7411d0f60fc0e36cc7641e4d8a7b19eed5080019c907ec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a metallic surface with a triangular shape, possibly a part of a device or machinery.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a close-up of a metallic surface, not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:12:48Z"
+    },
+    {
+      "asset_id": "9e15f73c0a663379ca72c4f9",
+      "asset_sha256": "921d5b11bfd2cd5e33e0dd3537af83d27dfee3814a664a1af2b6033790af5aa1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/921d5b11bfd2cd5e33e0dd3537af83d27dfee3814a664a1af2b6033790af5aa1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a textbook page with text about connecting multiple cells to provide energy for a longer time.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "Connecting cells",
+          "Energy provision",
+          "Battery",
+          "Incandescent Lamp"
+        ],
+        "context_relation": "The text is discussing the concept of connecting multiple cells to provide energy for a longer time, which is a part of the broader topic of batteries and their applications in devices.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details or figures.",
+          "The text is partially obscured, making it difficult to read some parts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:14:08Z"
+    },
+    {
+      "asset_id": "14290c3642a4c922c6185ce2",
+      "asset_sha256": "0facf468aaa3aeca0c295c6b4459c0c0bf46dd4a24d54458af953849d2ab7eef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/0facf468aaa3aeca0c295c6b4459c0c0bf46dd4a24d54458af953849d2ab7eef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a battery and a circuit diagram, possibly showing a connection between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So,"
+        ],
+        "concepts": [
+          "battery",
+          "connection",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the text discussing the use of multiple cells to provide energy for longer periods or more energy.",
+        "limitations": [
+          "The image is blurry and not fully visible, making it difficult to discern all details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:15:18Z"
     }
   ]
 }
