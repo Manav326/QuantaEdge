@@ -122,6 +122,30 @@ public class ParentCoursePurchaseRequestController {
     return response;
   }
 
+  /** Learners can verify that their parent request was recorded and track its lifecycle. */
+  @GetMapping("/marketplace/student/purchase-requests")
+  public List<Map<String,Object>> studentPurchaseRequests(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE, required=false)
+          InstitutionTenantContext tenant) {
+    context = authorization.requireStudent(context);
+    long institutionId = requireTenant(tenant).institutionId();
+    return jdbc.queryForList("""
+      select r.id as request_id,r.course_id,r.status,r.requested_at,r.updated_at,r.resolved_at,
+        p.public_id as course_public_id,p.code as course_code,
+        coalesce(nullif(o.title_override,''),p.display_name) as course_name,
+        o.price_paise,o.currency
+      from parent_course_purchase_request r
+      join student st on st.id=r.student_id and st.active=true
+      join curriculum_program p on p.id=r.course_id
+      left join institution_marketplace_offer o
+        on o.id=r.institution_offer_id and o.institution_id=r.institution_id
+      where r.student_id=? and r.institution_id=?
+      order by r.requested_at desc,r.id desc
+      limit 50
+      """, context.studentId(), institutionId);
+  }
+
   @GetMapping("/parent/course-requests")
   public List<Map<String,Object>> parentRequests(
       @RequestAttribute(value="authContext", required=false) AuthContext context,
