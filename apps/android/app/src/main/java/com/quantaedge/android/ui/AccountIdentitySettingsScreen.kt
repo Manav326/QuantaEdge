@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -67,6 +68,9 @@ fun AccountIdentitySettingsScreen(
     var currentPassword by rememberSaveable { mutableStateOf("") }
     var newPassword by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
+    var currentPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
     val accountType = profile.optString("accountType", "USER")
     val childManaged = profile.optBoolean("credentialsManagedByParent")
     val gmailVerified = profile.optBoolean("gmailVerified")
@@ -227,15 +231,18 @@ fun AccountIdentitySettingsScreen(
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     if (passwordSet) OutlinedTextField(value = currentPassword, onValueChange = { currentPassword = it },
                         label = { Text(t("Current password", "मौजूदा पासवर्ड")) }, singleLine = true,
-                        visualTransformation = PasswordVisualTransformation(), enabled = !busy,
+                        visualTransformation = if (currentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(), enabled = !busy,
+                        trailingIcon = { PasswordVisibilityToggle(currentPasswordVisible, { currentPasswordVisible = !currentPasswordVisible }, t(if (currentPasswordVisible) "Hide password" else "Show password", if (currentPasswordVisible) "पासवर्ड छिपाएँ" else "पासवर्ड दिखाएँ")) },
                         modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(value = newPassword, onValueChange = { newPassword = it },
                         label = { Text(t("New password (8+ characters)", "नया पासवर्ड (कम से कम 8 अक्षर)")) },
-                        singleLine = true, visualTransformation = PasswordVisualTransformation(), enabled = !busy,
+                        singleLine = true, visualTransformation = if (newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(), enabled = !busy,
+                        trailingIcon = { PasswordVisibilityToggle(newPasswordVisible, { newPasswordVisible = !newPasswordVisible }, t(if (newPasswordVisible) "Hide password" else "Show password", if (newPasswordVisible) "पासवर्ड छिपाएँ" else "पासवर्ड दिखाएँ")) },
                         modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(value = confirmPassword, onValueChange = { confirmPassword = it },
                         label = { Text(t("Confirm new password", "नए पासवर्ड की पुष्टि करें")) },
-                        singleLine = true, visualTransformation = PasswordVisualTransformation(), enabled = !busy,
+                        singleLine = true, visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(), enabled = !busy,
+                        trailingIcon = { PasswordVisibilityToggle(confirmPasswordVisible, { confirmPasswordVisible = !confirmPasswordVisible }, t(if (confirmPasswordVisible) "Hide password" else "Show password", if (confirmPasswordVisible) "पासवर्ड छिपाएँ" else "पासवर्ड दिखाएँ")) },
                         modifier = Modifier.fillMaxWidth())
                     Button(onClick = { onSavePassword(currentPassword, newPassword) },
                         enabled = !busy && newPassword.length >= 8 && newPassword == confirmPassword &&
