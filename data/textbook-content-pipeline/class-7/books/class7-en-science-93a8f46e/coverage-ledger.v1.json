@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1313,
-    "successful_visual_analyses": 1295,
-    "missing_visual_analyses": 6175,
+    "raw_analysis_result_rows": 1316,
+    "successful_visual_analyses": 1298,
+    "missing_visual_analyses": 6172,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6193,
+    "unresolved_count": 6190,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59660,9 +59660,25 @@
       "asset_path": "assets/79a64af32413f756250d4914c453cbb3381fcecdd510d1d394c69ed783b0b70c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of an LED lamp, showing its internal components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp"
+        ],
+        "context_relation": "The image is a diagram that provides a detailed view of the internal components of an LED lamp, which is used in place of an incandescent lamp in modern torches.",
+        "limitations": [
+          "The image does not provide information about the specific components or their functions within the LED lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59678,9 +59694,16 @@
       "asset_path": "assets/e6df16eef316067318e9acf9bdf0fd84270cf43dca37b09fe09ebcab9e0f4468.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a brown top and a black bottom, possibly representing a historical document or a scroll of text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59696,9 +59719,26 @@
       "asset_path": "assets/78ff82905f12a77a20b095f50f245b6fe7b259f133641a09cc7e421c13594498.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of an LED lamp and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "components"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an LED lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components' functions or how they work."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

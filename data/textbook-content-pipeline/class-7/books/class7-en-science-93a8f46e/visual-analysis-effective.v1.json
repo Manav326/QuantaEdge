@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "035a154ec54845326c3d219fea9c537cf80d998538db8cb48033967b8b006d01",
+  "raw_analysis_sha256": "41762e489c38a469994f400d454cc5bda58a3e538f4dc3b21e56a7eca89aacb1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:56:05Z",
+      "checkpointed_at": "2026-10-19T03:00:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:56:34Z",
+      "checkpointed_at": "2026-10-19T03:00:32Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77090,6 +77090,152 @@
         "context_relation": "The image shows a modern LED flashlight, which is a replacement for traditional incandescent torches.",
         "limitations": [
           "The image does not provide specific details about the components or features of the LED lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6f4eb558c9980b8339ae0f69",
+      "asset_sha256": "79a64af32413f756250d4914c453cbb3381fcecdd510d1d394c69ed783b0b70c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/79a64af32413f756250d4914c453cbb3381fcecdd510d1d394c69ed783b0b70c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of an LED lamp, showing its internal components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp"
+        ],
+        "context_relation": "The image is a diagram that provides a detailed view of the internal components of an LED lamp, which is used in place of an incandescent lamp in modern torches.",
+        "limitations": [
+          "The image does not provide information about the specific components or their functions within the LED lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:01:44Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of an LED lamp, showing its internal components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp"
+        ],
+        "context_relation": "The image is a diagram that provides a detailed view of the internal components of an LED lamp, which is used in place of an incandescent lamp in modern torches.",
+        "limitations": [
+          "The image does not provide information about the specific components or their functions within the LED lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c355883483bb273056f1bf7b",
+      "asset_sha256": "e6df16eef316067318e9acf9bdf0fd84270cf43dca37b09fe09ebcab9e0f4468",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/e6df16eef316067318e9acf9bdf0fd84270cf43dca37b09fe09ebcab9e0f4468.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a brown top and a black bottom, possibly representing a historical document or a scroll of text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:02:48Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a brown top and a black bottom, possibly representing a historical document or a scroll of text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1d7a2f46c8af3f14d16ada47",
+      "asset_sha256": "78ff82905f12a77a20b095f50f245b6fe7b259f133641a09cc7e421c13594498",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/78ff82905f12a77a20b095f50f245b6fe7b259f133641a09cc7e421c13594498.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of an LED lamp and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "components"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an LED lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components' functions or how they work."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:03:58Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of an LED lamp and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "components"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an LED lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components' functions or how they work."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
