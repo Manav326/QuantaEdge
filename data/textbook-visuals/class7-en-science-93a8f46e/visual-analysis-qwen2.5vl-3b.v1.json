@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1542,
+    "assets_selected": 1545,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1540,
-    "assets_remaining": 5948,
+    "assets_analyzed": 1543,
+    "assets_remaining": 5945,
     "assets_completion_percent": 20.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1537,
+    "assets_skipped_from_checkpoint": 1540,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:24:25Z"
+      "checkpointed_at": "2026-10-19T11:27:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:24:46Z"
+      "checkpointed_at": "2026-10-19T11:27:49Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -58402,6 +58402,116 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T11:26:45Z"
+    },
+    {
+      "asset_id": "0d21799dbf2c06c10b639cd7",
+      "asset_sha256": "5c32d07a1c90c7d2c05bfff1925be56154fb03c9a27651d552211ea4ddb11ca3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/5c32d07a1c90c7d2c05bfff1925be56154fb03c9a27651d552211ea4ddb11ca3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red wire is shown emerging from a black square, possibly representing a component in an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Components",
+          "Symbols",
+          "Table 3.2"
+        ],
+        "context_relation": "The image is a visual representation of an electrical circuit component, possibly a wire emerging from a square, which is related to the topic of circuit diagrams in Table 3.2.",
+        "limitations": [
+          "The image does not provide specific details about the components or symbols in Table 3.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:28:28Z"
+    },
+    {
+      "asset_id": "37431f16d279091701f6582e",
+      "asset_sha256": "c0a6eed93d013a2a8f7170ece0017fa54b4dbcce4190600a755816ce99347388",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/c0a6eed93d013a2a8f7170ece0017fa54b4dbcce4190600a755816ce99347388.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is related to the topic of circuit diagrams in an electrical context.",
+        "limitations": [
+          "The table is incomplete and does not provide specific details about the components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:29:05Z"
+    },
+    {
+      "asset_id": "6afdaffd7b7c09f0ebf54235",
+      "asset_sha256": "08711d6288cd9feaa70b3b4d4bddf274c23c506ae3aed2a524ffa64c0f612318",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/08711d6288cd9feaa70b3b4d4bddf274c23c506ae3aed2a524ffa64c0f612318.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbols for components"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific examples or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:29:43Z"
     }
   ]
 }
