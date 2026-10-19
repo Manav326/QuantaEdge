@@ -693,14 +693,18 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
 }
 
 /* Unified smooth surface system for the public, school-entry, learner and parent pages.
-   Ordinary containers stay neutral; the brand tint is reserved for intentional selection/action states. */
-html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock) {
+   Shared learner shell selectors are intentional; embedded media, lesson artefacts and unrelated widgets
+   are not blanket-restyled. Brand tint is reserved for intentional selection/action states. */
+html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card) {
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
-html[data-qe-appearance="dark"] [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
-html[data-qe-appearance="dark"] [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
-html[data-qe-appearance="dark"] [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
-html[data-qe-appearance="dark"] [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card, .login-panel),
+html[data-qe-appearance="dark"] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]),
+html[data-qe-appearance="dark"] .site :is(.student-card, .parent-card, .report-card, .subject-card, .strip, .section-soft, .promise) {
   background-color: var(--qe-color-surface);
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
@@ -710,36 +714,48 @@ html[data-qe-appearance="dark"] :is(.qe-workspace-topbar, .qe-workspace-mobile-n
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
 }
-html[data-qe-appearance="dark"] :is(.qe-modal, .qe-dropdown, .qe-popover, [class*="dialog"]:not([class*="dialogue"]), [class*="Dialog"], [class*="popover"], [class*="Popover"], [class*="dropdown"], [class*="Dropdown"]) {
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.qe-modal, .qe-dropdown, .qe-popover, [class*="dialog"], [class*="Dialog"], [class*="popover"], [class*="Popover"], [class*="dropdown"], [class*="Dropdown"]),
+html[data-qe-appearance="dark"] :is(.auth-card [class*="dialog"], .site [class*="popover"], .qe-tenant-landing [class*="dialog"]) {
   background-color: var(--qe-color-surface-elevated);
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
   box-shadow: var(--qe-elevation-3);
 }
-html[data-qe-appearance="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
-html[data-qe-appearance="dark"] select,
-html[data-qe-appearance="dark"] textarea {
+html[data-qe-appearance="dark"] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
+html[data-qe-appearance="dark"] .qe-workspace-content select,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) select,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) textarea {
   background-color: var(--qe-color-surface-elevated);
   color: var(--qe-color-text);
   border-color: var(--qe-color-border);
   color-scheme: dark;
 }
-html[data-qe-appearance="dark"] input::placeholder,
-html[data-qe-appearance="dark"] textarea::placeholder {
+html[data-qe-appearance="dark"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea::placeholder,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) input::placeholder,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) textarea::placeholder {
   color: var(--qe-color-text-muted);
 }
-html[data-qe-appearance="dark"] table {
+html[data-qe-appearance="dark"] .qe-workspace-content table,
+html[data-qe-appearance="dark"] .qe-workspace-content table thead,
+html[data-qe-appearance="dark"] .qe-workspace-content table tbody,
+html[data-qe-appearance="dark"] .qe-tenant-landing table {
   background-color: var(--qe-color-surface);
   color: var(--qe-color-text);
 }
-html[data-qe-appearance="dark"] :is(th, thead) {
+html[data-qe-appearance="dark"] .qe-workspace-content :is(th, thead),
+html[data-qe-appearance="dark"] .qe-tenant-landing :is(th, thead) {
   background-color: var(--qe-color-surface-elevated);
   color: var(--qe-color-text);
 }
-html[data-qe-appearance="dark"] :is(td, th) {
+html[data-qe-appearance="dark"] .qe-workspace-content :is(td, th),
+html[data-qe-appearance="dark"] .qe-tenant-landing :is(td, th) {
   border-color: var(--qe-color-border-subtle);
 }
-html[data-qe-appearance="dark"] :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]) {
+html[data-qe-appearance="dark"] .qe-workspace-content :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]),
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]) {
   color: var(--qe-color-text-muted);
 }
 html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
@@ -747,7 +763,7 @@ html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not(
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock) {
+  html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card) {
     transition: none;
   }
 }
