@@ -608,6 +608,9 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=s.id
+          and dca.institution_id=m.institution_id and dca.course_id=? and dca.status='PUBLISHED'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join lateral (
         select t.id,t.display_name
@@ -618,7 +621,7 @@ public class LearningDocumentController {
       ) ct on true
       left join student_learning_document_progress p
         on p.learning_document_id=d.id and p.student_id=st.id and p.institution_id=m.institution_id
-      where d.status='PUBLISHED'
+      where dca.status='PUBLISHED'
         and d.language=?
         and (?='' or s.code=?)
         and __LEARNER_SCOPE__
@@ -628,7 +631,7 @@ public class LearningDocumentController {
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
       """.replace("__LEARNER_SCOPE__",learnerScope).replace("__PROGRAM_SCOPE__",programScope);
-    return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
+    return jdbc.queryForList(sql, context.studentId(),institutionId,programId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
   }
 
   /** Source-compatible overloads for existing Java callers. */
@@ -807,8 +810,11 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=s.id
+          and dca.institution_id=m.institution_id and dca.course_id=? and dca.status='PUBLISHED'
       left join curriculum_chapter ch on ch.id=d.chapter_id
-      where d.id=? and d.status='PUBLISHED'
+      where d.id=?
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
         and exists(
@@ -824,25 +830,29 @@ public class LearningDocumentController {
           where ep.id=? and ep.status='ACTIVE' and ep.code<>'GENERAL'
             and (s.program_id=ep.id or (s.program_id is null and ep.class_id=s.class_id))
         )
-      """,studentId,institutionId,documentId,courseId);
+      """,studentId,institutionId,courseId,documentId,courseId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
   }
 
-  private Map<String, Object> assignmentById(long documentId) {
+  private Map<String, Object> assignmentById(long documentId,long institutionId,long courseId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,d.language,
-             d.page_start,d.page_end,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             d.page_start,d.page_end,d.version_no,dca.status as status,dca.institution_id,dca.course_id,
+             dca.created_at,dca.updated_at,dca.published_at,dca.published_by_staff_id,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
-      from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      from learning_document d
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=? and dca.subject_id=d.subject_id
+      join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=?
-      """, documentId);
+      """, institutionId,courseId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
   }
@@ -868,18 +878,21 @@ public class LearningDocumentController {
     }
   }
 
-  private void requireDocumentInCourse(long documentId,long courseId) {
+  private void requireDocumentInCourse(long documentId,long courseId,long institutionId) {
     Boolean belongs=jdbc.queryForObject("""
       select exists(select 1 from learning_document d
+        join learning_document_course_assignment dca
+          on dca.learning_document_id=d.id and dca.subject_id=d.subject_id
+            and dca.institution_id=? and dca.course_id=?
         join curriculum_subject s on s.id=d.subject_id and s.active=true
         join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         join curriculum_program_subject cps on cps.program_id=p.id
           and cps.subject_id=s.id and cps.class_id=s.class_id
         where d.id=? and (s.program_id=p.id or
           (s.program_id is null and p.class_id=s.class_id)))
-      """,Boolean.class,courseId,documentId);
+      """,Boolean.class,institutionId,courseId,courseId,documentId);
     if(!Boolean.TRUE.equals(belongs))throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-        "The learning document is not part of the selected course.");
+        "The learning document is not assigned to the selected institution and course.");
   }
 
   private AuthContext requireContentView(AuthContext context) {
