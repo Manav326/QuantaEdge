@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f6b5a12e0859141a0ba91fd2f7e3f3579872ee0561842fbc527ea78fb5ed059c",
+  "raw_analysis_sha256": "b90721401546f0b6bc0df7684018cf7678aaa7b00f10852a915934fbf8f75923",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:40:41Z",
+      "checkpointed_at": "2026-10-19T09:45:10Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:42:02Z",
+      "checkpointed_at": "2026-10-19T09:46:30Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:42:56Z",
+      "checkpointed_at": "2026-10-19T09:47:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -37646,6 +37646,68 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8564a7c12965a5eb7e99e750",
+      "asset_sha256": "387fe7e804cd63561e6dae74ee398d9343cf4eff1395b3c34513d8845d07aeb2",
+      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 39,
+      "asset_path": "page-0039.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9aee8788edac618858f2dab",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a set of stairs.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear context",
+          "No visible text"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T09:53:19Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a set of stairs.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear context",
+          "No visible text"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
