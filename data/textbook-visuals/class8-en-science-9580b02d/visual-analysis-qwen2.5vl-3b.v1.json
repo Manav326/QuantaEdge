@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 953,
+    "assets_selected": 955,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 950,
-    "assets_remaining": 1341,
+    "assets_analyzed": 951,
+    "assets_remaining": 1340,
     "assets_completion_percent": 41.5,
-    "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 948,
+    "assets_failed": 16,
+    "assets_skipped_from_checkpoint": 950,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:11:25Z"
+      "checkpointed_at": "2026-10-19T19:14:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:12:13Z"
+      "checkpointed_at": "2026-10-19T19:15:15Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:12:51Z"
+      "checkpointed_at": "2026-10-19T19:15:53Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30311,6 +30311,52 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T19:13:16Z"
+    },
+    {
+      "asset_id": "9c98ea470aafbf3dbbeffd67",
+      "asset_sha256": "6257767b10661dd8961e818a3a43cbfad1e594872ad378045eb0f58d5773fdf1",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "page-0058.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "b9c667437e73e6e45bfcaca9",
+      "asset_sha256": "45d7d52acaf3c916eaf9dc7f0e2b102f8e04e146009ce7a83bb3d34e5c2b52a2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/45d7d52acaf3c916eaf9dc7f0e2b102f8e04e146009ce7a83bb3d34e5c2b52a2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a blue shirt, holding their ear and pointing upwards with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about vaccines.",
+        "limitations": [
+          "The image does not provide any specific information about vaccines or health.",
+          "The image is a cartoon illustration and not a real person or a medical diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:22:29Z"
     }
   ]
 }

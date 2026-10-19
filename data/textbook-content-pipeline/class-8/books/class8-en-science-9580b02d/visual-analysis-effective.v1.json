@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5ddb1878e334b86cee5a92145452d53eec52beb8ca7f840d8650090eeb7c5fe9",
+  "raw_analysis_sha256": "bc633782965ef7bbf93d7c8de48a5193401a357b7f5fd39f6f38dc7b881100fa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:11:25Z",
+      "checkpointed_at": "2026-10-19T19:14:27Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:12:13Z",
+      "checkpointed_at": "2026-10-19T19:15:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:12:51Z",
+      "checkpointed_at": "2026-10-19T19:15:53Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -45130,6 +45130,68 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9c98ea470aafbf3dbbeffd67",
+      "asset_sha256": "6257767b10661dd8961e818a3a43cbfad1e594872ad378045eb0f58d5773fdf1",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "page-0058.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b9c667437e73e6e45bfcaca9",
+      "asset_sha256": "45d7d52acaf3c916eaf9dc7f0e2b102f8e04e146009ce7a83bb3d34e5c2b52a2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/45d7d52acaf3c916eaf9dc7f0e2b102f8e04e146009ce7a83bb3d34e5c2b52a2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a blue shirt, holding their ear and pointing upwards with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about vaccines.",
+        "limitations": [
+          "The image does not provide any specific information about vaccines or health.",
+          "The image is a cartoon illustration and not a real person or a medical diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:22:29Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a blue shirt, holding their ear and pointing upwards with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about vaccines.",
+        "limitations": [
+          "The image does not provide any specific information about vaccines or health.",
+          "The image is a cartoon illustration and not a real person or a medical diagram."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
