@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "45c6e3ad377d50270b82a84ce9ec8240342c795b8abc28b1a76f9ba0d85d9699",
+  "raw_analysis_sha256": "723952bc1963c193b547ec7481e167aaf8ccf479251c364843b1a210409f6388",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:50:47Z",
+      "checkpointed_at": "2026-10-19T16:59:57Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:51:33Z",
+      "checkpointed_at": "2026-10-19T17:00:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:52:10Z",
+      "checkpointed_at": "2026-10-19T17:01:19Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -42672,6 +42672,120 @@
         "context_relation": "The image is a visual representation of the text discussing the importance of keeping the environment clean and the factors that contribute to health, such as air quality and social interactions.",
         "limitations": [
           "The image does not provide specific details about the playgrounds or the AQI index."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4890a50501689d848b83179b",
+      "asset_sha256": "d3a938b9f31009b93141ee0daa005ade6cc71b84cc2830d5a74c9428625998f3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/d3a938b9f31009b93141ee0daa005ade6cc71b84cc2830d5a74c9428625998f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A shirtless man in blue shorts, standing with one arm extended.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "disease",
+          "pathogens",
+          "germs",
+          "bacteria",
+          "viruses",
+          "fungi",
+          "worms",
+          "protozoa",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image is related to the topic of diseases and their causes.",
+        "limitations": [
+          "The image does not provide specific examples or details about diseases."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:02:58Z",
+      "effective_analysis": {
+        "visual_summary": "A shirtless man in blue shorts, standing with one arm extended.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "disease",
+          "pathogens",
+          "germs",
+          "bacteria",
+          "viruses",
+          "fungi",
+          "worms",
+          "protozoa",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image is related to the topic of diseases and their causes.",
+        "limitations": [
+          "The image does not provide specific examples or details about diseases."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a5421345f90524c7e18670b7",
+      "asset_sha256": "e460fbfbce046282242216a84de3e7065204a139c3560931faf64db8182092cd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/e460fbfbce046282242216a84de3e7065204a139c3560931faf64db8182092cd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two glasses of water on a wooden coaster.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "glasses",
+          "water",
+          "coaster",
+          "wooden",
+          "illustration"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or formula is present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:04:28Z",
+      "effective_analysis": {
+        "visual_summary": "Two glasses of water on a wooden coaster.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "glasses",
+          "water",
+          "coaster",
+          "wooden",
+          "illustration"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or formula is present in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

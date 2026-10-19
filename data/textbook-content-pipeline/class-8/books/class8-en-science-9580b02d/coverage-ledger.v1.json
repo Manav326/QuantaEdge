@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 920,
-    "successful_visual_analyses": 907,
-    "missing_visual_analyses": 1371,
+    "raw_analysis_result_rows": 922,
+    "successful_visual_analyses": 909,
+    "missing_visual_analyses": 1369,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1384,
+    "unresolved_count": 1382,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35338,9 +35338,29 @@
       "asset_path": "assets/d3a938b9f31009b93141ee0daa005ade6cc71b84cc2830d5a74c9428625998f3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A shirtless man in blue shorts, standing with one arm extended.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "disease",
+          "pathogens",
+          "germs",
+          "bacteria",
+          "viruses",
+          "fungi",
+          "worms",
+          "protozoa",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image is related to the topic of diseases and their causes.",
+        "limitations": [
+          "The image does not provide specific examples or details about diseases."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35356,9 +35376,24 @@
       "asset_path": "assets/e460fbfbce046282242216a84de3e7065204a139c3560931faf64db8182092cd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two glasses of water on a wooden coaster.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "glasses",
+          "water",
+          "coaster",
+          "wooden",
+          "illustration"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or formula is present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
