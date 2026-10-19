@@ -1,7 +1,7 @@
 'use client';
 
 
-import { apiFetch } from '../app/components/apiClient';
+import { apiFetch } from '../components/apiClient';
 import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
 import { useTenantBranding } from '../components/TenantBrandingProvider';

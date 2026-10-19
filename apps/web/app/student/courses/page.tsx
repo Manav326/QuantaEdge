@@ -1,7 +1,7 @@
 'use client';
 
 
-import { apiFetch } from '../../app/components/apiClient';
+import { apiFetch } from '../../components/apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';

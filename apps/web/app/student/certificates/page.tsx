@@ -1,7 +1,7 @@
 'use client';
 
 
-import { apiFetch } from '../../app/components/apiClient';
+import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';

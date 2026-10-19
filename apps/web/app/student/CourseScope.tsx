@@ -1,7 +1,7 @@
 'use client';
 
 
-import { apiFetch } from '../app/components/apiClient';
+import { apiFetch } from '../components/apiClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 

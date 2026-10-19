@@ -1,7 +1,7 @@
 'use client';
 
 
-import { apiFetch } from '../../app/components/apiClient';
+import { apiFetch } from '../../components/apiClient';
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import PasswordField from '../../components/PasswordField';
