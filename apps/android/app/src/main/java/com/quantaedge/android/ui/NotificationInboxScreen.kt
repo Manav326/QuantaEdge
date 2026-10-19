@@ -280,7 +280,7 @@ private fun NotificationInboxDialog(
                                     }
                                     if (expanded) {
                                         HorizontalDivider()
-                                        NotificationRichContent(row.content, onNavigate, text)
+                                        NotificationRichContent(row.content, onNavigate, ::text)
                                         if (row.expiresAt.isNotBlank()) Text(text("Available until ", "उपलब्धता की अंतिम तिथि: ") + readableNotificationDate(row.expiresAt),
                                             style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
