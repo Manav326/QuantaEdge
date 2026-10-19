@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8c90d901d7038d4f4bdb4b3db612c976f4c7e4c5aad6957f2d4c758be71c4ea7",
+  "raw_analysis_sha256": "9c227c642cebc720eccad10483e86be7ed392a80ce56d2678e6b3cf0b99cc1fe",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -104411,8 +104411,7 @@
         "visible_text": [
           "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
           "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available. For each cell, also find out which device(s) it is used for. Prepare a report.",
-          "Prepare a list of objects in your home under three categories: (i) Objects which are electrical insulators only (ii) Objects which are electrical conductors only (iii) Objects which are made of both, whose some parts are insulators and some electrical conductors",
-          "Electric cells or batteries are compact portable sources of electrical energy that make the use of some electrical devices more convenient. These cells and batteries come in various shapes and sizes for different purposes, such as cylindrical batteries for torchlights, clocks, remotes, toys; button "
+          "Prepare a list of objects in your home under three categories: (i) Objects which are electrical insulators only (ii) Objects which are electrical conductors only (iii) Objects which are made of both, whose some parts are insulators and some electrical conductors"
         ],
         "concepts": [
           "solar panel",
@@ -104421,28 +104420,25 @@
           "cells",
           "electrical insulators",
           "electrical conductors",
-          "cylindrical batteries",
-          "button cells",
-          "rechargeable batteries"
+          "objects in home"
         ],
-        "context_relation": "educational",
+        "context_relation": "instructions",
         "limitations": [
-          "The instructions are for a specific activity and do not provide a solution or answer."
+          "The instructions are for educational purposes and do not claim to be complete or exhaustive."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
-      "checkpointed_at": "2026-10-19T18:36:00Z",
+      "checkpointed_at": "2026-10-19T18:36:39Z",
       "effective_analysis": {
         "visual_summary": "Instructions for creating a circuit using a solar panel and a toy fan, and visiting an electrical items shop to identify different types of cells.",
         "visual_type": "diagram",
         "visible_text": [
           "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
           "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available. For each cell, also find out which device(s) it is used for. Prepare a report.",
-          "Prepare a list of objects in your home under three categories: (i) Objects which are electrical insulators only (ii) Objects which are electrical conductors only (iii) Objects which are made of both, whose some parts are insulators and some electrical conductors",
-          "Electric cells or batteries are compact portable sources of electrical energy that make the use of some electrical devices more convenient. These cells and batteries come in various shapes and sizes for different purposes, such as cylindrical batteries for torchlights, clocks, remotes, toys; button "
+          "Prepare a list of objects in your home under three categories: (i) Objects which are electrical insulators only (ii) Objects which are electrical conductors only (iii) Objects which are made of both, whose some parts are insulators and some electrical conductors"
         ],
         "concepts": [
           "solar panel",
@@ -104451,16 +104447,202 @@
           "cells",
           "electrical insulators",
           "electrical conductors",
-          "cylindrical batteries",
-          "button cells",
-          "rechargeable batteries"
+          "objects in home"
         ],
-        "context_relation": "educational",
+        "context_relation": "instructions",
         "limitations": [
-          "The instructions are for a specific activity and do not provide a solution or answer."
+          "The instructions are for educational purposes and do not claim to be complete or exhaustive."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3fbaabc78bef6da0638a6cb9",
+      "asset_sha256": "e5a1ecb3367fe3ee462dbf0d4fae6819b7d224bbf5932ff63c285e0adaac9414",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/e5a1ecb3367fe3ee462dbf0d4fae6819b7d224bbf5932ff63c285e0adaac9414.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9b83a3c8b1ab85eb9807d37a",
+      "asset_sha256": "3807ed151c89444db8a2c5987b10ccc6e3b81b041f31e7c779f2f761f448ae23",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/3807ed151c89444db8a2c5987b10ccc6e3b81b041f31e7c779f2f761f448ae23.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans",
+          "tawas"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals and decide to visit the local ironsmiths.",
+        "limitations": [
+          "The conversation is limited to the items made by Sudarshan uncle.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:41:39Z",
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans",
+          "tawas"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals and decide to visit the local ironsmiths.",
+        "limitations": [
+          "The conversation is limited to the items made by Sudarshan uncle.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fd80169923623eb78f270d79",
+      "asset_sha256": "9bbd8b3aae6a584fb73f766a53d53afea59f72f00c613856ae99c3514babb7ca",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/9bbd8b3aae6a584fb73f766a53d53afea59f72f00c613856ae99c3514babb7ca.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing metal items with Yashwant and Anandi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "Yashwant and Anandi live in a village in Rajasthan.",
+          "Their school has assigned them a project to learn about craftspersons who work with metals.",
+          "They decide to visit the local ironsmiths who practise this craft.",
+          "Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1).",
+          "They are curious to learn how these ironsmiths make different items of daily use.",
+          "They interact with an elderly craftsperson, Sudarshan uncle.",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),",
+          "and other metal items."
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "metal items",
+          "Rajasthan",
+          "school project",
+          "elderly craftsperson",
+          "Sudarshan uncle",
+          "Yashwant and Anandi"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metal items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the specific metal items made by Sudarshan uncle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:43:40Z",
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing metal items with Yashwant and Anandi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "Yashwant and Anandi live in a village in Rajasthan.",
+          "Their school has assigned them a project to learn about craftspersons who work with metals.",
+          "They decide to visit the local ironsmiths who practise this craft.",
+          "Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1).",
+          "They are curious to learn how these ironsmiths make different items of daily use.",
+          "They interact with an elderly craftsperson, Sudarshan uncle.",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),",
+          "and other metal items."
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "metal items",
+          "Rajasthan",
+          "school project",
+          "elderly craftsperson",
+          "Sudarshan uncle",
+          "Yashwant and Anandi"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metal items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the specific metal items made by Sudarshan uncle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3fed92dd41050f1b3bbc86ad",
+      "asset_sha256": "3afafc3fd474fbbf3a548cdfa686c2603036373073da8ef52965a2edba2baa4f",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/3afafc3fd474fbbf3a548cdfa686c2603036373073da8ef52965a2edba2baa4f.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
