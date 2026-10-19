@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1116,
+    "assets_selected": 1118,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1113,
-    "assets_remaining": 965,
-    "assets_completion_percent": 53.6,
+    "assets_analyzed": 1115,
+    "assets_remaining": 963,
+    "assets_completion_percent": 53.7,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1111,
+    "assets_skipped_from_checkpoint": 1113,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:32:52Z"
+      "checkpointed_at": "2026-10-19T18:36:55Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:33:32Z"
+      "checkpointed_at": "2026-10-19T18:37:36Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:34:26Z"
+      "checkpointed_at": "2026-10-19T18:38:30Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36407,6 +36407,111 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T18:36:06Z"
+    },
+    {
+      "asset_id": "00f3b4381f3db206bee969fa",
+      "asset_sha256": "81ead655e2b1a0328e17ec93924db4a05712c96f3b81819f9d3ca22742dcbc24",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/81ead655e2b1a0328e17ec93924db4a05712c96f3b81819f9d3ca22742dcbc24.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of different shapes of magnets, including bar, disc, cylindrical, ring, and spherical magnets.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bar",
+          "Disc",
+          "Cylindrical",
+          "Ring",
+          "Spherical",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "S",
+          "N",
+          "N",
+          "N",
+          "S",
+          "N",
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "magnets",
+          "shapes",
+          "pairs",
+          "poles"
+        ],
+        "context_relation": "The image illustrates the different shapes of magnets and their poles, as mentioned in the text.",
+        "limitations": [
+          "The image does not show the poles of the magnets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:39:13Z"
+    },
+    {
+      "asset_id": "4f37da67ec98d7491bf49bc1",
+      "asset_sha256": "931be2afa779aa22be7f1a699c3fc80d869941ee65ef8ed6716b956f1da45c69",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/931be2afa779aa22be7f1a699c3fc80d869941ee65ef8ed6716b956f1da45c69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of magnets with their corresponding poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar",
+          "Disc",
+          "Cylindrical",
+          "Ring",
+          "Spherical",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "Magnet",
+          "S",
+          "N",
+          "N",
+          "N",
+          "S",
+          "N",
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "magnets",
+          "shapes",
+          "poles"
+        ],
+        "context_relation": "The image illustrates the different shapes of magnets and their corresponding poles.",
+        "limitations": [
+          "The image does not provide specific information about the properties of the magnets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:39:54Z"
     }
   ]
 }
