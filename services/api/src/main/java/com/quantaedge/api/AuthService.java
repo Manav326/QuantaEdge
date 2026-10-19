@@ -681,6 +681,24 @@ public class AuthService {
         passwordAttemptKey(authType,identifier),authType);
   }
 
+  /** Reconstitute the parent session only from the learner profile created for that parent. */
+  @Transactional
+  public AuthContext openParentWorkspaceContext(long studentId) {
+    List<Map<String,Object>> linkedParents = jdbc.queryForList("""
+      select ua.id as parent_user_id
+      from student st
+      join user_account ua on ua.id=st.user_account_id
+      where st.id=? and st.active=true and st.environment='PRODUCTION'
+        and ua.role='PARENT' and ua.active=true
+      for update of st, ua
+      """, studentId);
+    if (linkedParents.isEmpty()) {
+      throw new SecurityException("This learner session is not linked to an active parent-owned learning profile.");
+    }
+    long parentUserId = ((Number) linkedParents.getFirst().get("parent_user_id")).longValue();
+    return contextForUser(parentUserId);
+  }
+
   /**
    * A parent may enter their own learner workspace only when they hold an active
    * entitlement or an active/paused enrollment in this institution. Child-owned
