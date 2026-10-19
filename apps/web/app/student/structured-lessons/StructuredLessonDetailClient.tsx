@@ -1,4 +1,6 @@
 'use client';
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
@@ -41,8 +43,8 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         const base = '/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId);
         const scopedQuery = '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) + '&language=' + learningLanguage;
         const [lessonResponse, savedResponse] = await Promise.all([
-          fetch(base + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
-          fetch(base + '/responses' + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
+          apiFetch(base + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
+          apiFetch(base + '/responses' + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
         ]);
         if ([lessonResponse, savedResponse].some(r => r.status === 401 || r.status === 403)) { router.replace('/login/student'); return; }
         const body = await lessonResponse.json();
@@ -57,7 +59,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     return () => { active = false; };
   }, [artifactId, learningLanguage, locale, router, courseId, activeCourse?.public_id, loadingCourses, courseError]);
   async function submitQuestion(question: StructuredQuestion, response: QuestionResponse): Promise<QuestionResult> {
-    const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+    const http = await apiFetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
       '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&language=' + learningLanguage, {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response }),
@@ -68,7 +70,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       feedback: body.feedback, feedbackByLocale: body.feedbackByLocale } as QuestionResult;
   }
   async function saveActivity(blockId: string, value: string): Promise<void> {
-    const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+    const http = await apiFetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
       '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')),  {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response: value }),

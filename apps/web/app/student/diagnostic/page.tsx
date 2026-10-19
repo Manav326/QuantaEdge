@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -45,7 +47,7 @@ export default function DiagnosticPage(){
       try{
         if(loadingCourses)return;
         if(courseId===null){setQs([]);setAttemptId(null);setUnavailable(true);setError(courseError||tx('पहले एक enrolled course चुनें।','Choose an enrolled course first.'));return;}
-        const response=await fetch('/api/v1/diagnostic?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+        const response=await apiFetch('/api/v1/diagnostic?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body:DiagnosticPayload=await readJson(response);
         if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.load.diagnostic.f6a469cb'));
@@ -59,7 +61,7 @@ export default function DiagnosticPage(){
         setIdx(firstUnanswered<0?Math.max(0,questions.length-1):firstUnanswered);
         if(firstUnanswered>=0)setValue(questions[firstUnanswered].selectedAnswer??'');
         if(firstUnanswered<0&&questions.length&&body.attemptId){
-          const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit?courseId='+encodeURIComponent(String(courseId)),{method:'POST',cache:'no-store',credentials:'same-origin'});
+          const submitted=await apiFetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit?courseId='+encodeURIComponent(String(courseId)),{method:'POST',cache:'no-store',credentials:'same-origin'});
           const submitBody=await readJson(submitted);
           if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
           if(live)router.replace('/student');
@@ -80,7 +82,7 @@ export default function DiagnosticPage(){
     if(!q||!attemptId||saving||result)return;
     setSaving(true);setError('');
     try{
-      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/answers/'+q.id+'?courseId='+encodeURIComponent(String(courseId||'')),{
+      const response=await apiFetch('/api/v1/diagnostic/attempts/'+attemptId+'/answers/'+q.id+'?courseId='+encodeURIComponent(String(courseId||'')),{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:v})
       });
       const body=await readJson(response);
@@ -100,7 +102,7 @@ export default function DiagnosticPage(){
     }
     setSubmitting(true);setError('');
     try{
-      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit?courseId='+encodeURIComponent(String(courseId||'')),{method:'POST',credentials:'same-origin'});
+      const response=await apiFetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit?courseId='+encodeURIComponent(String(courseId||'')),{method:'POST',credentials:'same-origin'});
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
       router.replace('/student');

@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
@@ -29,7 +31,7 @@ async function api(url:string,init:RequestInit={}) {
   const headers=new Headers(init.headers||{});
   headers.set('X-QE-Workspace','STUDENT');
   if(init.body)headers.set('Content-Type','application/json');
-  const response=await fetch(url,{...init,headers,credentials:'same-origin',cache:'no-store'});
+  const response=await apiFetch(url,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text();let body:any={};
   try{body=raw?JSON.parse(raw):{}}catch{body={message:raw}}
   if(!response.ok){if(response.status===401||response.status===403)throw Object.assign(new Error('Student sign-in is required.'),{auth:true});throw new Error(body.detail||body.message||body.error||('Request failed ('+response.status+')'));}
@@ -122,7 +124,7 @@ export default function StudentClassesClient(){
 
   useEffect(()=>()=>{
     const id=joinedSessionRef.current;
-    if(id && activeCourseId!==null)void fetch('/api/v1/learning/live-classes/'+id+'/leave?courseId='+activeCourseId,{method:'POST',credentials:'same-origin',keepalive:true}).catch(()=>undefined);
+    if(id && activeCourseId!==null)void apiFetch('/api/v1/learning/live-classes/'+id+'/leave?courseId='+activeCourseId,{method:'POST',credentials:'same-origin',keepalive:true}).catch(()=>undefined);
   },[activeCourseId]);
 
   async function joinClass(session:LiveClass){

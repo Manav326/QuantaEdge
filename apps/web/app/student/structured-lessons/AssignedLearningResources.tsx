@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './AssignedLearningResources.module.css';
@@ -47,7 +49,7 @@ export default function AssignedLearningResources({ artifactId, language, course
     setError('');
     try {
       const query = new URLSearchParams({ artifactId, language, courseId: String(courseId) });
-      const response = await fetch('/api/v1/learning/resources?' + query.toString(), {
+      const response = await apiFetch('/api/v1/learning/resources?' + query.toString(), {
         credentials: 'same-origin', cache: 'no-store', signal,
       });
       if (response.status === 401 || response.status === 403) throw new Error(t('संसाधन देखने के लिए विद्यार्थी खाते में साइन इन करें।', 'Sign in to your student account to view these resources.'));
@@ -81,7 +83,7 @@ export default function AssignedLearningResources({ artifactId, language, course
     state.lastSaved = position;
     watch.current.set(item.resourceId, state);
     try {
-      const response = await fetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId + '&courseId=' + encodeURIComponent(String(courseId)), {
+      const response = await apiFetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId + '&courseId=' + encodeURIComponent(String(courseId)), {
         method: 'PUT', credentials: 'same-origin', cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lastPositionSeconds: Math.max(0, Math.floor(position)), watchedSeconds: Math.max(0, Math.floor(state.watchedSeconds)), completed }),

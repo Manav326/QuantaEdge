@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -81,20 +83,20 @@ export default function ParentCoursesPage() {
     setLoading(true);
     setError('');
     try {
-      const session = await readJson(await fetch('/api/v1/auth/me', { credentials: 'same-origin', cache: 'no-store' }));
+      const session = await readJson(await apiFetch('/api/v1/auth/me', { credentials: 'same-origin', cache: 'no-store' }));
       if (session.role !== 'PARENT' || session.workspace !== 'PARENT' || Number(session.userId) <= 0) {
         router.replace('/login');
         return;
       }
-      const personalAccessCheck = fetch('/api/v1/auth/my-learning-access', {
+      const personalAccessCheck = apiFetch('/api/v1/auth/my-learning-access', {
         credentials: 'same-origin', cache: 'no-store',
       }).then(readJson).then(body => setPersonalLearningAvailable(body.available === true))
         .catch(() => setPersonalLearningAvailable(false));
       const responses = await Promise.all([
-        fetch('/api/v1/marketplace/family/courses', { credentials: 'same-origin', cache: 'no-store' }),
-        fetch('/api/v1/guardians/children', { credentials: 'same-origin', cache: 'no-store' }),
-        fetch('/api/v1/parent/course-requests', { credentials: 'same-origin', cache: 'no-store' }),
-        fetch('/api/v1/marketplace/family/entitlements', { credentials: 'same-origin', cache: 'no-store' }),
+        apiFetch('/api/v1/marketplace/family/courses', { credentials: 'same-origin', cache: 'no-store' }),
+        apiFetch('/api/v1/guardians/children', { credentials: 'same-origin', cache: 'no-store' }),
+        apiFetch('/api/v1/parent/course-requests', { credentials: 'same-origin', cache: 'no-store' }),
+        apiFetch('/api/v1/marketplace/family/entitlements', { credentials: 'same-origin', cache: 'no-store' }),
       ]);
       const results = await Promise.all(responses.map(response => readJson(response)));
       await personalAccessCheck;
@@ -122,7 +124,7 @@ export default function ParentCoursesPage() {
     setNotice('');
     setPendingVerify(draft);
     try {
-      await readJson(await fetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
+      await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: draft.paymentId, orderId: draft.orderId, signature: draft.signature }),
@@ -144,7 +146,7 @@ export default function ParentCoursesPage() {
     setBusy('checkout-' + courseId);
     setError(''); setNotice('');
     try {
-      const body = await readJson(await fetch('/api/v1/marketplace/family/courses/' + courseId + '/orders', {
+      const body = await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/orders', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID() },
         body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined }),
@@ -197,7 +199,7 @@ export default function ParentCoursesPage() {
     }
     setBusy('free-' + courseId); setError(''); setNotice('');
     try {
-      await readJson(await fetch('/api/v1/marketplace/family/courses/' + courseId + '/enroll-free', {
+      await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/enroll-free', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined }),
@@ -212,7 +214,7 @@ export default function ParentCoursesPage() {
   async function dismissRequest(requestId: number) {
     setBusy('request-' + requestId); setError(''); setNotice('');
     try {
-      await readJson(await fetch('/api/v1/parent/course-requests/' + requestId + '/dismiss', {
+      await readJson(await apiFetch('/api/v1/parent/course-requests/' + requestId + '/dismiss', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       setNotice(english ? 'Purchase request dismissed.' : 'कोर्स खरीद अनुरोध हटाया गया।');
@@ -235,7 +237,7 @@ export default function ParentCoursesPage() {
     if (!confirmed) return;
     setBusy('transfer-' + entitlement.entitlement_id); setError(''); setNotice('');
     try {
-      await readJson(await fetch('/api/v1/marketplace/family/entitlements/' + entitlement.entitlement_id + '/transfer', {
+      await readJson(await apiFetch('/api/v1/marketplace/family/entitlements/' + entitlement.entitlement_id + '/transfer', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ studentId }),
@@ -250,7 +252,7 @@ export default function ParentCoursesPage() {
   async function openMyLearning() {
     setBusy('my-learning'); setError('');
     try {
-      const body = await readJson(await fetch('/api/v1/auth/my-learning-session', {
+      const body = await readJson(await apiFetch('/api/v1/auth/my-learning-session', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       if (body.role !== 'STUDENT' || body.workspace !== 'STUDENT' || Number(body.studentId) <= 0) {
