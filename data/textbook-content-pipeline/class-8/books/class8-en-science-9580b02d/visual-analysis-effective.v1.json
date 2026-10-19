@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8e8e033eb48b6599a0391c967c54815a82e1f376ab2eeffc5986b3ff7ece60fa",
+  "raw_analysis_sha256": "b658fa6068418677192ac233b05252bd85ccf5e86c810275f7c00bcf7b518ebb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:12:30Z",
+      "checkpointed_at": "2026-10-19T01:19:31Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:13:18Z",
+      "checkpointed_at": "2026-10-19T01:20:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:13:56Z",
+      "checkpointed_at": "2026-10-19T01:20:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -32238,6 +32238,120 @@
         "context_relation": "exploring the investigative world of science",
         "limitations": [
           "The text does not provide specific instructions or methods for conducting experiments."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79bfdc6cc1c3c5fd7f9914bc",
+      "asset_sha256": "94ed5a1a70e6545b429500bf157f1e92632f5898cbab2d212efca32e29a07adb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/94ed5a1a70e6545b429500bf157f1e92632f5898cbab2d212efca32e29a07adb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d64cb4df7378074905d718bb3d35c44d07a7629d8db203a93b7e7d6dbbfedea6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a group of people observing and collecting samples from a stream, with various microorganisms and cells displayed above them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The Invisible Living",
+          "World: Beyond Our Naked Eye",
+          "Probe and ponder",
+          "Have you ever wondered what you might see if the invisible world around you became visible?",
+          "How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "Have you thought how these tiny living beings interact with each other?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Observation of microorganisms",
+          "Interaction between microorganisms",
+          "Impact on understanding of size and complexity",
+          "Concept of 'living'"
+        ],
+        "context_relation": "The image is related to the text about the invisible world and its impact on our understanding of life.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or cells.",
+          "The image does not show the interaction between the microorganisms."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:23:14Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a group of people observing and collecting samples from a stream, with various microorganisms and cells displayed above them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The Invisible Living",
+          "World: Beyond Our Naked Eye",
+          "Probe and ponder",
+          "Have you ever wondered what you might see if the invisible world around you became visible?",
+          "How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "Have you thought how these tiny living beings interact with each other?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Observation of microorganisms",
+          "Interaction between microorganisms",
+          "Impact on understanding of size and complexity",
+          "Concept of 'living'"
+        ],
+        "context_relation": "The image is related to the text about the invisible world and its impact on our understanding of life.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or cells.",
+          "The image does not show the interaction between the microorganisms."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e6f08aec0b2560c591fbc69f",
+      "asset_sha256": "73d999f8675ad1f0dc975a0ed9d5a916d223a68c663e2e8efa8c0fc9f80e758e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/73d999f8675ad1f0dc975a0ed9d5a916d223a68c663e2e8efa8c0fc9f80e758e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d64cb4df7378074905d718bb3d35c44d07a7629d8db203a93b7e7d6dbbfedea6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0877CH02' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH02"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the text 'The Invisible Living World: Beyond Our Naked Eye' from the 'Curiosity— Textbook of Science for Grade 8' book.",
+        "limitations": [
+          "The image does not provide any visual content related to the text.",
+          "The text is not visible in the image, so no specific questions or observations can be made based on the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:24:54Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877CH02' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH02"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the text 'The Invisible Living World: Beyond Our Naked Eye' from the 'Curiosity— Textbook of Science for Grade 8' book.",
+        "limitations": [
+          "The image does not provide any visual content related to the text.",
+          "The text is not visible in the image, so no specific questions or observations can be made based on the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

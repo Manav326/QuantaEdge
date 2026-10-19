@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 737,
-    "successful_visual_analyses": 729,
-    "missing_visual_analyses": 1554,
+    "raw_analysis_result_rows": 739,
+    "successful_visual_analyses": 731,
+    "missing_visual_analyses": 1552,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1562,
+    "unresolved_count": 1560,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28835,9 +28835,32 @@
       "asset_path": "assets/94ed5a1a70e6545b429500bf157f1e92632f5898cbab2d212efca32e29a07adb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a group of people observing and collecting samples from a stream, with various microorganisms and cells displayed above them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The Invisible Living",
+          "World: Beyond Our Naked Eye",
+          "Probe and ponder",
+          "Have you ever wondered what you might see if the invisible world around you became visible?",
+          "How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "Have you thought how these tiny living beings interact with each other?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Observation of microorganisms",
+          "Interaction between microorganisms",
+          "Impact on understanding of size and complexity",
+          "Concept of 'living'"
+        ],
+        "context_relation": "The image is related to the text about the invisible world and its impact on our understanding of life.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or cells.",
+          "The image does not show the interaction between the microorganisms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28853,9 +28876,21 @@
       "asset_path": "assets/73d999f8675ad1f0dc975a0ed9d5a916d223a68c663e2e8efa8c0fc9f80e758e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877CH02' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH02"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the text 'The Invisible Living World: Beyond Our Naked Eye' from the 'Curiosity— Textbook of Science for Grade 8' book.",
+        "limitations": [
+          "The image does not provide any visual content related to the text.",
+          "The text is not visible in the image, so no specific questions or observations can be made based on the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
