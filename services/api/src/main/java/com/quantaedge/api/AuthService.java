@@ -693,6 +693,12 @@ public class AuthService {
         from course_entitlement ce
         join curriculum_program p on p.id=ce.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where ce.institution_id=? and ce.holder_user_id=?
+          and (ce.holder_student_id is null or exists(
+            select 1 from student holder_profile
+            where holder_profile.id=ce.holder_student_id
+              and holder_profile.user_account_id=ce.holder_user_id
+              and holder_profile.active=true and holder_profile.environment='PRODUCTION'
+          ))
           and exists(
             select 1
             from institution_course_assignment assignment
