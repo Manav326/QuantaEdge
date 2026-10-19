@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3a32de993ac5c58af93fb8799fbd86cbdc4b7fe7407184d9fb4221af220eaf2e",
+  "raw_analysis_sha256": "e889287650fbad49da0b67c3fbf356e6e83ff85ac44241db334fc3c847c41eb7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:55:18Z",
+      "checkpointed_at": "2026-10-19T16:03:42Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:56:05Z",
+      "checkpointed_at": "2026-10-19T16:04:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:56:42Z",
+      "checkpointed_at": "2026-10-19T16:05:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -41827,6 +41827,104 @@
         "limitations": [
           "The image does not provide specific information about the health content."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dc506ed1002aec99405db49b",
+      "asset_sha256": "a78b91392ef16357b077faacd1fea07ba89ecb233d3126e2149ca3c5d059b3b9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/a78b91392ef16357b077faacd1fea07ba89ecb233d3126e2149ca3c5d059b3b9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "395606d6db3655c289a42c04cf5947d7fcba63339bdf11d4cffb93bd53e13ef3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Logo of the National Ayush Mission with a green leaf and a cup of tea, surrounded by the text 'NATIONAL AYUSH MISSION'.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "NATIONAL AYUSH MISSION"
+        ],
+        "concepts": [
+          "National Ayush Mission"
+        ],
+        "context_relation": "The logo represents the National Ayush Mission, which is related to Ayurvedic healthcare.",
+        "limitations": [
+          "The image does not provide specific details about the mission's activities or goals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:06:44Z",
+      "effective_analysis": {
+        "visual_summary": "Logo of the National Ayush Mission with a green leaf and a cup of tea, surrounded by the text 'NATIONAL AYUSH MISSION'.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "NATIONAL AYUSH MISSION"
+        ],
+        "concepts": [
+          "National Ayush Mission"
+        ],
+        "context_relation": "The logo represents the National Ayush Mission, which is related to Ayurvedic healthcare.",
+        "limitations": [
+          "The image does not provide specific details about the mission's activities or goals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "72c31d2590f6b7670212ac6e",
+      "asset_sha256": "7cc4c542143eb738894fdef2cdf58b71e7b4eb3c52f67bd67d51d7f1f3b48ba3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/7cc4c542143eb738894fdef2cdf58b71e7b4eb3c52f67bd67d51d7f1f3b48ba3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "395606d6db3655c289a42c04cf5947d7fcba63339bdf11d4cffb93bd53e13ef3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three colored circles with icons representing a brain, a running figure, and a group of people.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Health",
+          "Physical well-being",
+          "Positive mindset",
+          "Strong relationships",
+          "Body care",
+          "Social life"
+        ],
+        "context_relation": "Exploring the meaning of health",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:08:18Z",
+      "effective_analysis": {
+        "visual_summary": "Three colored circles with icons representing a brain, a running figure, and a group of people.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Health",
+          "Physical well-being",
+          "Positive mindset",
+          "Strong relationships",
+          "Body care",
+          "Social life"
+        ],
+        "context_relation": "Exploring the meaning of health",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
