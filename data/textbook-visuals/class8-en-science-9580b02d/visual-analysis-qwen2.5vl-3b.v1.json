@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 786,
+    "assets_selected": 788,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 783,
-    "assets_remaining": 1508,
-    "assets_completion_percent": 34.2,
+    "assets_analyzed": 785,
+    "assets_remaining": 1506,
+    "assets_completion_percent": 34.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 781,
+    "assets_skipped_from_checkpoint": 783,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:21:53Z"
+      "checkpointed_at": "2026-10-19T04:27:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:22:42Z"
+      "checkpointed_at": "2026-10-19T04:28:36Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:23:22Z"
+      "checkpointed_at": "2026-10-19T04:29:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24161,6 +24161,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T04:26:36Z"
+    },
+    {
+      "asset_id": "40cc1a7f98da37e251299186",
+      "asset_sha256": "8d89d98235592b2092424aa707ffbd6a0a79864496b3d9774dd104f1cfdc9c7b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/8d89d98235592b2092424aa707ffbd6a0a79864496b3d9774dd104f1cfdc9c7b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a small object, possibly a piece of paper or a thin strip, with a small orange dot on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of a small object with an orange dot, possibly for educational purposes.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:30:50Z"
+    },
+    {
+      "asset_id": "606b99794f04774b685b8c3d",
+      "asset_sha256": "368125a86a7fba7b4c093e2de7a3c19aedf4a434651fa1c822d380b306ec4009",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/368125a86a7fba7b4c093e2de7a3c19aedf4a434651fa1c822d380b306ec4009.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a microscope to observe a sample.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Pour some water into the beaker and stir it with a glass rod.",
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer.",
+          "Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small particles in the sample."
+        ],
+        "concepts": [
+          "soil suspension",
+          "microscope",
+          "observing particles",
+          "sample preparation"
+        ],
+        "context_relation": "The image illustrates the process of preparing and observing a soil suspension under a microscope.",
+        "limitations": [
+          "The image does not show the actual observation of particles in the sample."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:32:35Z"
     }
   ]
 }
