@@ -1375,6 +1375,7 @@ public class AssessmentController {
   public Map<String,Object> studentResults(
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(required = false) Long courseId,
+      @RequestParam(required = false) String subjectCode,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
@@ -1394,6 +1395,8 @@ public class AssessmentController {
     if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String selectedSubject = safeText(subjectCode,40);
+    if(selectedSubject.isBlank()) selectedSubject=null;
     String resultScope="""
         exists(select 1 from curriculum_program_subject cps
           join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
@@ -1407,6 +1410,7 @@ public class AssessmentController {
         and exists(select 1 from student_program_enrollment spe
           where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope)
             and spe.program_id=? and spe.status='ACTIVE')
+        and (?::text is null or lower(s.code)=lower(?))
         """;
     String sql="""
       with tenant_scope as (select ?::bigint as institution_id),
@@ -1468,6 +1472,7 @@ public class AssessmentController {
       """.replace("__RESULT_SCOPE__",resultScope);
     List<Object> args=new ArrayList<>(List.of(institutionId,language,language,language,context.studentId()));
     args.add(courseId);args.add(courseId);
+    args.add(selectedSubject);args.add(selectedSubject);
     args.add(rowLimit);args.add(rowOffset);
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args.toArray());
     List<Map<String,Object>> items=new ArrayList<>();
@@ -1488,9 +1493,14 @@ public class AssessmentController {
       where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
         and att.status='RELEASED' and __RESULT_SCOPE__
       """.replace("__RESULT_SCOPE__",resultScope);
-    Object[] totalArgs=new Object[]{institutionId,context.studentId(),courseId,courseId};
+    Object[] totalArgs=new Object[]{institutionId,context.studentId(),courseId,courseId,selectedSubject,selectedSubject};
     Long total=jdbc.queryForObject(totalSql,Long.class,totalArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+  }
+
+  public Map<String,Object> studentResults(String language,Long courseId,Integer limit,Integer offset,
+      AuthContext context,InstitutionTenantContext tenant) {
+    return studentResults(language,courseId,null,limit,offset,context,tenant);
   }
 
   public Map<String,Object> studentResults(String language,Integer limit,Integer offset,AuthContext context) {
