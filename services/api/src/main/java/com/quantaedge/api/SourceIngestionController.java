@@ -129,16 +129,6 @@ public class SourceIngestionController {
     Map<String,Object> selectedTrack=resolveCourseSubject(courseId,institutionId,classCode,subjectCode);
     long classId=((Number)selectedTrack.get("class_id")).longValue();
     long subjectId=((Number)selectedTrack.get("subject_id")).longValue();
-    List<Map<String,Object>> existingScope=jdbc.queryForList(
-        "select institution_id,course_id from learning_book_intake where pdf_asset_id=?",assetId);
-    if(!existingScope.isEmpty()) {
-      Map<String,Object> scope=existingScope.getFirst();
-      if(((Number)scope.get("institution_id")).longValue()!=institutionId
-          ||(scope.get("course_id")!=null&&((Number)scope.get("course_id")).longValue()!=courseId)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-            "This uploaded book belongs to a different institution course.");
-      }
-    }
     List<Map<String,Object>> assets = jdbc.queryForList(
         "select id,sha256 from learning_pdf_asset where id=?", assetId);
     if (assets.isEmpty()) throw notFound("PDF asset", assetId);
@@ -150,8 +140,8 @@ public class SourceIngestionController {
       values(?,?,?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
         '{"missing_from_book":[],"extra_in_book":[],"ambiguous":[],"page_boundary_warnings":[]}'::jsonb,
         null,?,?,now(),now())
-      on conflict(pdf_asset_id) do update set course_id=coalesce(learning_book_intake.course_id,excluded.course_id),
-        category=excluded.category,class_id=excluded.class_id,
+      on conflict (pdf_asset_id,institution_id,course_id) where course_id is not null
+      do update set category=excluded.category,class_id=excluded.class_id,
         subject_id=excluded.subject_id,language=excluded.language,part_label=excluded.part_label,
         status=case when learning_book_intake.class_id<>excluded.class_id
           or learning_book_intake.subject_id<>excluded.subject_id
@@ -224,8 +214,8 @@ public class SourceIngestionController {
         i.subject_id,s.code as subject_code,i.language,i.part_label,i.status,i.inventory,i.reconciliation
       from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id join curriculum_subject s on s.id=i.subject_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /** Record a human review decision without publishing or approving any chapter boundaries. */
