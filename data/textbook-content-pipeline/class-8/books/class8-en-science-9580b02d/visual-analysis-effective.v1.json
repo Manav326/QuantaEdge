@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7686976eaac06006dc4bfff037ec1f637c81cc71b7784f7b625be8f6e2be399e",
+  "raw_analysis_sha256": "4c1c2ba59442426ab7755bb46cd6612f138009e8ed241a7d8ec04e5fae5f08ef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:16:41Z",
+      "checkpointed_at": "2026-10-19T03:22:32Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:17:30Z",
+      "checkpointed_at": "2026-10-19T03:23:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:18:09Z",
+      "checkpointed_at": "2026-10-19T03:23:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34417,6 +34417,116 @@
         ],
         "context_relation": "The image is a part of an educational content about climbing stairs.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f9ca87aee81dbea5fc095b0",
+      "asset_sha256": "7c7edb53cad95518c21dc60dfb8d2a1ac65a2c38cd38b8a80afd305722ef8fbb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/7c7edb53cad95518c21dc60dfb8d2a1ac65a2c38cd38b8a80afd305722ef8fbb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a neuron with dendrites and axon.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "neuron",
+          "dendrites",
+          "axon",
+          "neural communication"
+        ],
+        "context_relation": "The image represents a simplified diagram of a neuron, which is a fundamental unit of the nervous system.",
+        "limitations": [
+          "The image does not provide specific details about the function or structure of the neuron."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:25:34Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a neuron with dendrites and axon.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "neuron",
+          "dendrites",
+          "axon",
+          "neural communication"
+        ],
+        "context_relation": "The image represents a simplified diagram of a neuron, which is a fundamental unit of the nervous system.",
+        "limitations": [
+          "The image does not provide specific details about the function or structure of the neuron."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "db80078cd615daaebb509a1c",
+      "asset_sha256": "dbfb2f12a5a342e06529c4ec409cf37ba5a8ee9e3627a88c69a6dd4316c0a1db",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/dbfb2f12a5a342e06529c4ec409cf37ba5a8ee9e3627a88c69a6dd4316c0a1db.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a red cell with pink spots, possibly representing a cell structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "cell wall",
+          "plant cell",
+          "nucleus",
+          "growth"
+        ],
+        "context_relation": "The image is likely related to the chapter on the invisible living world, specifically focusing on plant cells and their components.",
+        "limitations": [
+          "The image does not provide specific details about the structure or function of the cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:27:16Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a red cell with pink spots, possibly representing a cell structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "cell wall",
+          "plant cell",
+          "nucleus",
+          "growth"
+        ],
+        "context_relation": "The image is likely related to the chapter on the invisible living world, specifically focusing on plant cells and their components.",
+        "limitations": [
+          "The image does not provide specific details about the structure or function of the cell."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

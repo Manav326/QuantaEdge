@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 777,
-    "successful_visual_analyses": 766,
-    "missing_visual_analyses": 1514,
+    "raw_analysis_result_rows": 779,
+    "successful_visual_analyses": 768,
+    "missing_visual_analyses": 1512,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1525,
+    "unresolved_count": 1523,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30207,9 +30207,23 @@
       "asset_path": "assets/7c7edb53cad95518c21dc60dfb8d2a1ac65a2c38cd38b8a80afd305722ef8fbb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a neuron with dendrites and axon.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "neuron",
+          "dendrites",
+          "axon",
+          "neural communication"
+        ],
+        "context_relation": "The image represents a simplified diagram of a neuron, which is a fundamental unit of the nervous system.",
+        "limitations": [
+          "The image does not provide specific details about the function or structure of the neuron."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30225,9 +30239,28 @@
       "asset_path": "assets/dbfb2f12a5a342e06529c4ec409cf37ba5a8ee9e3627a88c69a6dd4316c0a1db.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a red cell with pink spots, possibly representing a cell structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "cell wall",
+          "plant cell",
+          "nucleus",
+          "growth"
+        ],
+        "context_relation": "The image is likely related to the chapter on the invisible living world, specifically focusing on plant cells and their components.",
+        "limitations": [
+          "The image does not provide specific details about the structure or function of the cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
