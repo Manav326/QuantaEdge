@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 729,
-    "successful_visual_analyses": 722,
-    "missing_visual_analyses": 1562,
+    "raw_analysis_result_rows": 731,
+    "successful_visual_analyses": 724,
+    "missing_visual_analyses": 1560,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1569,
+    "unresolved_count": 1567,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26865,7 +26865,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -26874,15 +26874,17 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Contributors",
-          "Editors",
-          "Support",
-          "Publication process"
+          "Acknowledgment",
+          "Textbook",
+          "Freelance Language Editor",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors",
+        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations mentioned",
+          "The page does not contain any visual elements.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -28590,9 +28592,39 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A calendar page showing the month of March 2025.",
+        "visual_type": "table",
+        "visible_text": [
+          "Chaitra",
+          "(March 22 - April 20, 2025)",
+          "SUN MON TUE WED THU FRI SAT",
+          "रवि सोम मंगल वृध् गुरुः शुक्र शानि",
+          "1 23 3 24 4 25 5 26 6 27 7 28 8 29",
+          "9 30 10 31 11 12 2 13 3 14 4 15 5",
+          "16 6 17 8 18 7 19 9 20 10 21 11 22 12",
+          "23 13 24 15 25 14 26 16 27 17 28 18 29 19",
+          "30 20"
+        ],
+        "concepts": [
+          "calendar",
+          "solar system",
+          "seasons",
+          "environmental relationships",
+          "ecosystems",
+          "climate",
+          "human activities",
+          "climate change",
+          "scientific principles"
+        ],
+        "context_relation": "The calendar page is used to illustrate the passage about the complex relationships between living organisms and their environments.",
+        "limitations": [
+          "The calendar page is not a diagram, chart, or graph.",
+          "The visible text is a table with dates and names of planets, not a formula or equation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28608,9 +28640,25 @@
       "asset_path": "assets/18a00d65a4469e0be4a63c07af012b432363079d48f53381da8a99ab5b2a3dac.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand using a slotted spoon to lift a puri out of hot oil in a frying pan.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cooking",
+          "puri",
+          "oil",
+          "frying",
+          "cooking technique"
+        ],
+        "context_relation": "The image is related to the question about why one side of a puri is thinner than the other, as it shows a common cooking method used to make puri.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the scientific principles behind the cooking process.",
+          "The image does not show the entire cooking process, only the final step of lifting the puri out of the oil."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
