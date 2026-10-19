@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c3f40029daf896e99fbe7057fab6b9b235c519ec0cc3298dd0630b0e0c567f5d",
+  "raw_analysis_sha256": "04734f81274e46d0753df9f56ca06104c52d292207471c3a97c173cd63e342f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:28:32Z",
+      "checkpointed_at": "2026-10-19T18:32:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:29:13Z",
+      "checkpointed_at": "2026-10-19T18:33:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:30:05Z",
+      "checkpointed_at": "2026-10-19T18:34:26Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -54588,6 +54588,132 @@
         "context_relation": "instructions",
         "limitations": [
           "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dae6ef9db75e2e67e0223d20",
+      "asset_sha256": "3f3a93ac11c9e00ffa5f3b193393e3f9e57f4109529bb7ea12820ee345a0e4e9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/3f3a93ac11c9e00ffa5f3b193393e3f9e57f4109529bb7ea12820ee345a0e4e9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A torn piece of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a torn piece of paper with no visible text or content.",
+        "limitations": [
+          "The image is a torn piece of paper with no visible text or content.",
+          "The image does not provide any educational content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:35:25Z",
+      "effective_analysis": {
+        "visual_summary": "A torn piece of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a torn piece of paper with no visible text or content.",
+        "limitations": [
+          "The image is a torn piece of paper with no visible text or content.",
+          "The image does not provide any educational content or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f8db7308b83dd22a8185457",
+      "asset_sha256": "27be57dcceac6aff3797d60d6567b326808ef1de9934f8bd3e963804b89ccd2f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/27be57dcceac6aff3797d60d6567b326808ef1de9934f8bd3e963804b89ccd2f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of magnets and their magnetic poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet",
+          "S",
+          "N",
+          "N",
+          "S",
+          "N",
+          "S",
+          "N",
+          "S",
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "magnetic poles",
+          "magnetic fields",
+          "magnetic materials",
+          "magnetic properties",
+          "magnetic behavior"
+        ],
+        "context_relation": "The image illustrates the different shapes of magnets and their magnetic poles, which are essential for understanding the magnetic properties of materials.",
+        "limitations": [
+          "The image does not provide specific details about the strength or direction of the magnetic fields."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:36:06Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing different shapes of magnets and their magnetic poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet",
+          "S",
+          "N",
+          "N",
+          "S",
+          "N",
+          "S",
+          "N",
+          "S",
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "magnetic poles",
+          "magnetic fields",
+          "magnetic materials",
+          "magnetic properties",
+          "magnetic behavior"
+        ],
+        "context_relation": "The image illustrates the different shapes of magnets and their magnetic poles, which are essential for understanding the magnetic properties of materials.",
+        "limitations": [
+          "The image does not provide specific details about the strength or direction of the magnetic fields."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
