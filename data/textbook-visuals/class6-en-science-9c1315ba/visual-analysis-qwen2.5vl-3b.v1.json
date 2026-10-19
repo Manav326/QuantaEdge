@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 863,
+    "assets_selected": 864,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 859,
-    "assets_remaining": 1219,
-    "assets_completion_percent": 41.3,
+    "assets_analyzed": 860,
+    "assets_remaining": 1218,
+    "assets_completion_percent": 41.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 858,
+    "assets_skipped_from_checkpoint": 859,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:01:50Z"
+      "checkpointed_at": "2026-10-19T03:05:44Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:02:30Z"
+      "checkpointed_at": "2026-10-19T03:06:25Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:03:24Z"
+      "checkpointed_at": "2026-10-19T03:07:18Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:04:04Z"
+      "checkpointed_at": "2026-10-19T03:07:57Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27063,6 +27063,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T03:04:55Z"
+    },
+    {
+      "asset_id": "6e665ce966cebe4167f386d1",
+      "asset_sha256": "1ce863d743a97b2e55da3b711beaf70a43dfbf14458ce56d5651a53ccc81ebaf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/1ce863d743a97b2e55da3b711beaf70a43dfbf14458ce56d5651a53ccc81ebaf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two students are standing in front of a whiteboard, engaged in a conversation.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a classroom setting where students are discussing or presenting something related to the topic of healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the content of their discussion or the topic being presented."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:08:36Z"
     }
   ]
 }

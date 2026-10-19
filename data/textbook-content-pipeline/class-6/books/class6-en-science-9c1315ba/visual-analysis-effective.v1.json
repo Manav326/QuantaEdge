@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "73407036ce1c39d0de6c03910f266ad4e8daa58d78279471284e29302ff2aefb",
+  "raw_analysis_sha256": "96ace789d62f1907ec3998693a0557d1bc277b9c91d7e80adf8fa8cf42086de3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:01:50Z",
+      "checkpointed_at": "2026-10-19T03:05:44Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:02:30Z",
+      "checkpointed_at": "2026-10-19T03:06:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:03:24Z",
+      "checkpointed_at": "2026-10-19T03:07:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:04:04Z",
+      "checkpointed_at": "2026-10-19T03:07:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -40130,6 +40130,46 @@
         "context_relation": "The image is a visual representation of a quote or a passage from a book or text about mindful eating and healthy living.",
         "limitations": [
           "The image does not provide specific details about the content of the book or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e665ce966cebe4167f386d1",
+      "asset_sha256": "1ce863d743a97b2e55da3b711beaf70a43dfbf14458ce56d5651a53ccc81ebaf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/1ce863d743a97b2e55da3b711beaf70a43dfbf14458ce56d5651a53ccc81ebaf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two students are standing in front of a whiteboard, engaged in a conversation.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a classroom setting where students are discussing or presenting something related to the topic of healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the content of their discussion or the topic being presented."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:08:36Z",
+      "effective_analysis": {
+        "visual_summary": "Two students are standing in front of a whiteboard, engaged in a conversation.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a classroom setting where students are discussing or presenting something related to the topic of healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the content of their discussion or the topic being presented."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
