@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cbd096d6e70d0d60bfb175d7934a817b9cc9db3375383a500329c4588b66a3c2",
+  "raw_analysis_sha256": "9b1d4d2c59a6ec840bfe6837854927d44de7abf6d58088e2d04dc3f7036cadee",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:36:20Z",
+      "checkpointed_at": "2026-10-19T02:41:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:36:49Z",
+      "checkpointed_at": "2026-10-19T02:41:31Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -76513,6 +76513,126 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1f5c4d3f146b7d01bf31d042",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about connecting multiple cells to provide energy for a longer time and more energy.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "Connecting cells",
+          "Energy provision",
+          "Battery usage",
+          "Incandescent Lamp"
+        ],
+        "context_relation": "The page discusses the concept of connecting multiple cells to provide energy for a longer time and more energy, which is a fundamental concept in electricity and batteries.",
+        "limitations": [
+          "The page does not provide specific details about the physical appearance or function of the cells or the circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:41:59Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about connecting multiple cells to provide energy for a longer time and more energy.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "Connecting cells",
+          "Energy provision",
+          "Battery usage",
+          "Incandescent Lamp"
+        ],
+        "context_relation": "The page discusses the concept of connecting multiple cells to provide energy for a longer time and more energy, which is a fundamental concept in electricity and batteries.",
+        "limitations": [
+          "The page does not provide specific details about the physical appearance or function of the cells or the circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9c832ecc50808383e00bcb83",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:42:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6bfebd57a84171be20397ef8",
+      "asset_sha256": "0f61fa3e04797703c9d0f9a7febaa9fcffb69f4f898d56d07612f3e8e61dfa48",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "page-0046.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1301,
-    "successful_visual_analyses": 1284,
-    "missing_visual_analyses": 6187,
-    "failed_visual_analyses": 17,
+    "raw_analysis_result_rows": 1304,
+    "successful_visual_analyses": 1286,
+    "missing_visual_analyses": 6184,
+    "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6204,
+    "unresolved_count": 6202,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59285,9 +59285,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about connecting multiple cells to provide energy for a longer time and more energy.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "Connecting cells",
+          "Energy provision",
+          "Battery usage",
+          "Incandescent Lamp"
+        ],
+        "context_relation": "The page discusses the concept of connecting multiple cells to provide energy for a longer time and more energy, which is a fundamental concept in electricity and batteries.",
+        "limitations": [
+          "The page does not provide specific details about the physical appearance or function of the cells or the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59303,9 +59322,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59321,7 +59349,7 @@
       "asset_path": "page-0046.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
