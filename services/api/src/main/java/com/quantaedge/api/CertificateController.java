@@ -41,7 +41,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/v1")
 public class CertificateController {
   private static final String CERTIFICATE_COLUMNS = """
-      c.id,c.certificate_number,c.achievement_type,c.class_code,c.subject_id,c.program_id,
+      c.id,c.certificate_number,c.achievement_type,c.class_code,c.subject_id,c.program_id,c.program_id AS course_id,
       s.code AS subject_code,s.display_name AS subject_name,p.code AS course_code,p.display_name AS course_name,
       c.assessment_attempt_id,c.template_id,c.language,
       c.recipient_name,c.achievement_title,c.achievement_summary,c.status,c.issued_at,
@@ -91,18 +91,21 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates")
   public Map<String, Object> myCertificates(
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=? AND c.institution_id=?
+        WHERE c.student_id=? AND c.institution_id=? AND c.program_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, context.studentId(),institutionId);
-    return Map.of("items", items);
+        """, context.studentId(),institutionId,courseId);
+    return Map.of("courseId",courseId,"items", items);
   }
 
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
@@ -117,20 +120,20 @@ public class CertificateController {
     return publicCertificateById(certificateId, context.studentId(),institutionId);
   }
 
-  /** Active class and course subject tracks available for earned certificates. */
+  /** Subjects mapped to the selected enrolled course and eligible for course completion certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
-        SELECT CASE WHEN p.id IS NULL
-                    THEN 'CLASS:' || cc.code || ':' || s.code
-                    ELSE 'COURSE:' || p.id::text || ':' || s.code
-               END AS track_key,
-               cc.code AS class_code, s.code AS subject_code, s.display_name AS subject_name,
+        SELECT 'COURSE:' || p.id::text || ':' || s.code AS track_key,
+               s.code AS subject_code, s.display_name AS subject_name,
                p.id AS course_id, p.display_name AS course_name,
                COUNT(DISTINCT l.id) AS lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed,
@@ -138,40 +141,30 @@ public class CertificateController {
                    FILTER (WHERE progress.status='COMPLETED') / NULLIF(COUNT(DISTINCT l.id),0),1),0)
                    AS completion_percent
         FROM student st
-        JOIN student_track_enrollment ste
-          ON ste.student_id=st.id AND ste.institution_id=? AND ste.status='ACTIVE'
-        JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
+        JOIN institution_membership membership
+          ON membership.student_id=st.id AND membership.institution_id=? AND membership.status='ACTIVE'
+        JOIN student_program_enrollment enrollment
+          ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+             AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+        JOIN curriculum_program p ON p.id=enrollment.program_id AND p.status='ACTIVE' AND p.code<>'GENERAL'
+        JOIN institution_course_assignment assignment
+          ON assignment.institution_id=membership.institution_id AND assignment.status='ASSIGNED'
+        JOIN institution_course_release release
+          ON release.id=assignment.course_release_id AND release.program_id=p.id
+        JOIN curriculum_program_subject mapped ON mapped.program_id=p.id
+        JOIN curriculum_subject s ON s.id=mapped.subject_id AND s.class_id=mapped.class_id AND s.active=true
+          AND (s.program_id=p.id OR (s.program_id IS NULL AND p.class_id=s.class_id AND mapped.class_id=s.class_id))
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
-        LEFT JOIN curriculum_program p ON p.id=s.program_id
-          OR (s.program_id IS NULL AND p.class_id=cc.id
-            AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
-            AND EXISTS(select 1 from curriculum_program_subject mapped_subject
-              where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
-                and mapped_subject.subject_id=s.id))
         LEFT JOIN curriculum_chapter ch
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
         LEFT JOIN student_lesson_progress progress
-          ON progress.student_id=st.id AND progress.institution_id=ste.institution_id AND progress.lesson_id=l.id
+          ON progress.student_id=st.id AND progress.institution_id=membership.institution_id AND progress.lesson_id=l.id
         WHERE st.id=? AND st.active=true
-          AND (
-            (s.program_id IS NULL AND cc.code=st.class_code
-              AND (cc.code NOT IN ('6','7','8') OR (
-                p.id IS NOT NULL AND EXISTS (
-                  SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
-                )
-              )))
-            OR (s.program_id IS NOT NULL AND p.status='ACTIVE'
-                AND EXISTS (
-                  SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
-                ))
-          )
-        GROUP BY cc.code,cc.sort_order,s.code,s.display_name,s.program_id,p.id,p.code,p.display_name,s.sort_order
-        ORDER BY cc.sort_order,s.sort_order,s.code
-        """, institutionId,context.studentId());
-    return Map.of("items", items);
+        GROUP BY p.id,p.display_name,s.id,s.code,s.display_name,s.sort_order,mapped.sort_order
+        ORDER BY mapped.sort_order,s.sort_order,s.code
+        """, institutionId,courseId,context.studentId());
+    return Map.of("courseId",courseId,"items",items);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates")
@@ -236,11 +229,14 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
@@ -264,10 +260,26 @@ public class CertificateController {
           SELECT cert.id,cert.certificate_number,cert.status
           FROM student_certificate cert
           WHERE cert.student_id=att.student_id AND cert.institution_id=att.institution_id AND cert.assessment_attempt_id=att.id
-            AND cert.achievement_type='ASSESSMENT_PASS'
+            AND cert.program_id=? AND cert.achievement_type='ASSESSMENT_PASS'
           ORDER BY cert.issued_at DESC,cert.id DESC LIMIT 1
         ) existing ON true
         WHERE att.student_id=? AND att.institution_id=?
+          AND EXISTS (
+            SELECT 1
+            FROM student_program_enrollment selected_enrollment
+            JOIN institution_course_assignment selected_assignment
+              ON selected_assignment.institution_id=selected_enrollment.institution_id
+                 AND selected_assignment.status='ASSIGNED'
+            JOIN institution_course_release selected_release
+              ON selected_release.id=selected_assignment.course_release_id
+                 AND selected_release.program_id=selected_enrollment.program_id
+            JOIN curriculum_program_subject selected_subject
+              ON selected_subject.program_id=selected_enrollment.program_id
+                 AND selected_subject.subject_id=s.id AND selected_subject.class_id=s.class_id
+            WHERE selected_enrollment.student_id=st.id
+              AND selected_enrollment.institution_id=att.institution_id
+              AND selected_enrollment.program_id=? AND selected_enrollment.status='ACTIVE'
+          )
           AND (
             existing.id IS NOT NULL
             OR (
@@ -294,7 +306,7 @@ public class CertificateController {
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
-        """, context.studentId(),institutionId,minimumPassPercent);
+        """, courseId,context.studentId(),institutionId,courseId,minimumPassPercent);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
@@ -449,26 +461,10 @@ public class CertificateController {
     Map<String, Object> student = studentRows.get(0);
 
     Long courseId=request.courseId();
-    if(courseId!=null && courseId<1)throw new IllegalArgumentException("Choose a valid course ID.");
-    // Legacy clients may omit courseId. For Classes 6-8, resolve it to the learner's
-    // actively enrolled matching CLASS_N product instead of issuing a class-only certificate.
-    if(courseId==null && List.of("6","7","8").contains(String.valueOf(student.get("class_code")))) {
-      String ownClass=String.valueOf(student.get("class_code"));
-      List<Long> activeClassCourses=jdbc.queryForList("""
-        select p.id
-        from curriculum_program p
-        join curriculum_class c on c.id=p.class_id and c.code=?
-        join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-        where p.code='CLASS_' || c.code and p.curriculum_version='CURRENT'
-          and p.status='ACTIVE'
-        """,Long.class,ownClass,studentId,institutionId);
-      if(activeClassCourses.size()>1)
-        throw new SecurityException("Select the matching Class "+ownClass+" course before issuing a certificate.");
-      if(activeClassCourses.size()==1) courseId=activeClassCourses.getFirst();
-      // With no active course, continue so durable existing certificates can be returned.
-      // New Class 6-8 achievements are still rejected by their course-scoped eligibility query.
+    if(courseId==null || courseId<1) {
+      throw new IllegalArgumentException("Select an enrolled course before issuing a certificate.");
     }
+    requireActiveCourseEnrollment(studentId,courseId,institutionId);
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
     String profileLanguage = clean(student.get("language"));
@@ -1465,9 +1461,11 @@ public class CertificateController {
       join institution_membership m on m.student_id=spe.student_id
         and m.institution_id=spe.institution_id and m.status='ACTIVE'
       join institution_tenant t on t.id=spe.institution_id and t.status='ACTIVE'
-      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
       where spe.student_id=? and spe.institution_id=? and spe.program_id=?
-        and spe.status='ACTIVE' and p.code<>'GENERAL'
+        and spe.status='ACTIVE'
       """,Long.class,studentId,institutionId,courseId);
     if(active==null || active==0)throw new SecurityException("Active enrolment in this course is required in the selected institution.");
   }
