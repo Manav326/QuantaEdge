@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "49dcc895cc8d17a147465348d9599e7ac1f54d704af7dc71dea64042808f90bb",
+  "raw_analysis_sha256": "efc5a2ffeeed1303e5091d87daaadcd20803bc7bdeba8f63e498dd578fdeb400",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:52:25Z",
+      "checkpointed_at": "2026-10-19T19:55:28Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:53:06Z",
+      "checkpointed_at": "2026-10-19T19:56:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:54:00Z",
+      "checkpointed_at": "2026-10-19T19:57:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56326,7 +56326,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:54:33Z",
+      "checkpointed_at": "2026-10-19T19:57:37Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56498,6 +56498,82 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3594f9a874e5611c3604bcc1",
+      "asset_sha256": "c21c1783c3922cfb928b0f3be2f3aeff071f0d914fdabaeddd5668122309643a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 100,
+      "asset_path": "page-0100.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the history of measurement units in India, including Angula, dhanusa, and yojana.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "India has a rich history of measurement\nsystems dating back to ancient times. Angula\n(finger width), multiples of angula, dhanusa,\nand yojana are some of the units mentioned\nin ancient Indian literature, and used in\nmeasuring artefacts, architecture, and\ntown planning. The angula is still used by\ntr",
+          "5.2 Standard Units\nSeveral systems of units evolved with time in\ndifferent parts of the world. However, when\npeople started travelling from one place to\nanother, it created a lot of confusion. This led\nto the different countries coming together\nand adopting a set of standard units of\nmeasurement. Th",
+          "The SI unit of length is metre. Its symbol\nis m. A metre scale is shown in Fig. 5.2. One\nmetre (m) is divided into 100 equal divisions.\nEach division is called a centimetre (cm). You\nmay be familiar with a smaller part of the\nmetre scale, typically 15 cm long, shown in\nFig. 5.3.",
+          "Look carefully at the 15-cm scale. It has\nmarkings (in cm) from 0 to 15. The length\nof any section between two consecutive big\nmarks, such as between 1 and 2 or between\n5 and 6, is 1 cm. Observe that these sections",
+          "Fig. 5.2: A metre scale"
+        ],
+        "concepts": [
+          "measurement units",
+          "Angula",
+          "dhanusa",
+          "yojana",
+          "Harappan Civilisation",
+          "International System of Units",
+          "SI units",
+          "metre",
+          "centimetre",
+          "metrical scale"
+        ],
+        "context_relation": "The page discusses the history and usage of measurement units in India, including Angula, dhanusa, and yojana, and compares them to the International System of Units.",
+        "limitations": [
+          "The page does not provide specific examples or measurements for Angula, dhanusa, or yojana.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:59:30Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the history of measurement units in India, including Angula, dhanusa, and yojana.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "India has a rich history of measurement\nsystems dating back to ancient times. Angula\n(finger width), multiples of angula, dhanusa,\nand yojana are some of the units mentioned\nin ancient Indian literature, and used in\nmeasuring artefacts, architecture, and\ntown planning. The angula is still used by\ntr",
+          "5.2 Standard Units\nSeveral systems of units evolved with time in\ndifferent parts of the world. However, when\npeople started travelling from one place to\nanother, it created a lot of confusion. This led\nto the different countries coming together\nand adopting a set of standard units of\nmeasurement. Th",
+          "The SI unit of length is metre. Its symbol\nis m. A metre scale is shown in Fig. 5.2. One\nmetre (m) is divided into 100 equal divisions.\nEach division is called a centimetre (cm). You\nmay be familiar with a smaller part of the\nmetre scale, typically 15 cm long, shown in\nFig. 5.3.",
+          "Look carefully at the 15-cm scale. It has\nmarkings (in cm) from 0 to 15. The length\nof any section between two consecutive big\nmarks, such as between 1 and 2 or between\n5 and 6, is 1 cm. Observe that these sections",
+          "Fig. 5.2: A metre scale"
+        ],
+        "concepts": [
+          "measurement units",
+          "Angula",
+          "dhanusa",
+          "yojana",
+          "Harappan Civilisation",
+          "International System of Units",
+          "SI units",
+          "metre",
+          "centimetre",
+          "metrical scale"
+        ],
+        "context_relation": "The page discusses the history and usage of measurement units in India, including Angula, dhanusa, and yojana, and compares them to the International System of Units.",
+        "limitations": [
+          "The page does not provide specific examples or measurements for Angula, dhanusa, or yojana.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
