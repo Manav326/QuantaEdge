@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 961,
+    "assets_selected": 964,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 959,
-    "assets_remaining": 1119,
+    "assets_analyzed": 961,
+    "assets_remaining": 1117,
     "assets_completion_percent": 46.2,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 956,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 959,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:26:42Z"
+      "checkpointed_at": "2026-10-19T11:30:54Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:27:42Z"
+      "checkpointed_at": "2026-10-19T11:31:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -30819,6 +30819,94 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T11:29:42Z"
+    },
+    {
+      "asset_id": "aac4c1ba6661d83887d09dfc",
+      "asset_sha256": "5ae2c74392ad95132e33bc3a6bba867f2d8cc68aa1cc122ecf448109699a23e5",
+      "page_text_context_sha256": "7d68de83f85d96be150653f569c15c49e640818ac8a7a70b4078fb9a38cbfca9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 71,
+      "asset_path": "page-0071.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "41d4ac0a97d008c741cde6dd",
+      "asset_sha256": "f9cea0b0a7bd67782088f56ca07fbbe4c88327582b77522a6f26ec33fd6e7177",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/f9cea0b0a7bd67782088f56ca07fbbe4c88327582b77522a6f26ec33fd6e7177.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding wheat seeds next to a row of growing wheat plants.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "seeds",
+          "growing",
+          "farmer",
+          "food",
+          "process",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image illustrates the process of growing wheat from seeds to the point where it can be used to make chapati.",
+        "limitations": [
+          "The image does not show the entire process from farm to plate, only the initial step of growing wheat.",
+          "The image does not show the steps involved in the process, only the initial step."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:37:57Z"
+    },
+    {
+      "asset_id": "6040f0653081ea55bc735608",
+      "asset_sha256": "97ac2c1e023ca58e277860b20f5ff51cf267a3d64f1408f1b8f5194e20b609d2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/97ac2c1e023ca58e277860b20f5ff51cf267a3d64f1408f1b8f5194e20b609d2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three people working in a wheat field, with one person planting seeds and the other two walking through the field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat farming",
+          "agriculture",
+          "crop cultivation"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming, showing the initial step of planting seeds in a field.",
+        "limitations": [
+          "The image does not provide specific details about the farming process or the steps involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:39:36Z"
     }
   ]
 }
