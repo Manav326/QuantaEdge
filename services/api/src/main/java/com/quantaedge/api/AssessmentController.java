@@ -754,6 +754,7 @@ public class AssessmentController {
   @GetMapping("/learning/assessments/{assessmentId}/leaderboard")
   public Map<String, Object> assessmentLeaderboard(
       @PathVariable long assessmentId,
+      @RequestParam Long courseId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -761,10 +762,19 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
+    if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before opening this leaderboard.");
+    Long activeCourse=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=spe.student_id and m.institution_id=spe.institution_id and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+    """,Long.class,context.studentId(),institutionId,courseId);
+    if(activeCourse==null || activeCourse==0L) throw new SecurityException("Active enrolment in the selected course is required.");
 
-    // Keep the leaderboard behind the same class/subject enrollment and lesson-completion gate
-    // as the student test catalogue. Students with a saved attempt may still inspect its standings
-    // after the assessment is archived, consistent with the durable released-results history.
+    // Leaderboards are scoped to the selected course and its published assessments.
     Long eligible = jdbc.queryForObject("""
       with tenant_scope as (select ?::bigint as institution_id)
       select count(*)
@@ -772,18 +782,13 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id
-        and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and (a.status='PUBLISHED' or exists(
           select 1 from student_assessment_attempt resumable
           where resumable.assessment_id=a.id and resumable.student_id=st.id
@@ -799,7 +804,7 @@ public class AssessmentController {
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
           )
         )
-      """, Long.class, institutionId,context.studentId(), assessmentId);
+      """, Long.class, institutionId,context.studentId(),courseId,assessmentId);
     if (eligible == null || eligible == 0) {
       // Do not reveal whether another class's assessment exists.
       throw notFound("Assessment", assessmentId);
@@ -833,8 +838,15 @@ public class AssessmentController {
                  as time_taken_seconds,
                att.submitted_at
         from student_assessment_attempt att
-        join student st on st.id=att.student_id and st.active=true
-        where att.assessment_id=? and att.institution_id=(select institution_id from tenant_scope)
+         join student st on st.id=att.student_id and st.active=true
+         join student_program_enrollment spe on spe.student_id=att.student_id
+           and spe.institution_id=(select institution_id from tenant_scope)
+           and spe.program_id=? and spe.status='ACTIVE'
+         join institution_course_assignment course_assignment
+           on course_assignment.institution_id=spe.institution_id and course_assignment.status='ASSIGNED'
+         join institution_course_release course_release
+           on course_release.id=course_assignment.course_release_id and course_release.program_id=spe.program_id
+         where att.assessment_id=? and att.institution_id=(select institution_id from tenant_scope)
           and att.status='RELEASED'
           and att.final_score is not null
           and att.submitted_at is not null
@@ -867,7 +879,7 @@ public class AssessmentController {
       from ranked
       where leaderboard_rank<=20 or student_id=?
       order by leaderboard_rank
-      """, institutionId,assessmentId, context.studentId());
+      """, institutionId,courseId,assessmentId, context.studentId());
 
     List<Map<String, Object>> items = new ArrayList<>();
     Map<String, Object> currentStudent = null;
