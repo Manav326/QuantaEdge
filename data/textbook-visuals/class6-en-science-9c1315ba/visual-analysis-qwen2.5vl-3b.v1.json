@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1144,
+    "assets_selected": 1145,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1140,
-    "assets_remaining": 938,
+    "assets_analyzed": 1141,
+    "assets_remaining": 937,
     "assets_completion_percent": 54.9,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1139,
+    "assets_skipped_from_checkpoint": 1140,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:00:17Z"
+      "checkpointed_at": "2026-10-19T20:03:53Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:00:58Z"
+      "checkpointed_at": "2026-10-19T20:04:35Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:01:49Z"
+      "checkpointed_at": "2026-10-19T20:05:26Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37467,7 +37467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:02:21Z"
+      "checkpointed_at": "2026-10-19T20:05:58Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37681,6 +37681,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T20:03:04Z"
+    },
+    {
+      "asset_id": "5f8d2cd186cdc8d92eae3222",
+      "asset_sha256": "d3c145be8b464d8f4ff11916550c384579b90bcb90675f7824826274f0ebf6bb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 101,
+      "asset_path": "assets/d3c145be8b464d8f4ff11916550c384579b90bcb90675f7824826274f0ebf6bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular piece of paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of paper with a torn edge.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T20:06:32Z"
     }
   ]
 }
