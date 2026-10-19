@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8a2428c5a65e6dc6427d52184f972444e85898808f320da75fb9e070b40aa218",
+  "raw_analysis_sha256": "27a1e254d8411dbc11a8d07f528b1d39046e6dbb1eef408a04e57f1f85f4ba4b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:12:59Z",
+      "checkpointed_at": "2026-10-19T03:16:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:13:39Z",
+      "checkpointed_at": "2026-10-19T03:17:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:14:31Z",
+      "checkpointed_at": "2026-10-19T03:18:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:15:11Z",
+      "checkpointed_at": "2026-10-19T03:19:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -40294,6 +40294,66 @@
         "limitations": [
           "The image does not show any diagrams, charts, or equations.",
           "The visible text is in English and Hindi, indicating a bilingual approach to the content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4d86b6f8d67784d6766f859a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a white text that reads 'Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.",
+          "Wise saying"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The text is a quote from a book about mindful eating and its importance for a healthy body.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The text is a quote and does not provide any visual representation of the concepts mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:19:23Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with a white text that reads 'Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.",
+          "Wise saying"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The text is a quote from a book about mindful eating and its importance for a healthy body.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The text is a quote and does not provide any visual representation of the concepts mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

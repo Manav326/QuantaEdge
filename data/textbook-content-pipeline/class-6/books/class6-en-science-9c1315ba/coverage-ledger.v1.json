@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 877,
-    "successful_visual_analyses": 866,
-    "missing_visual_analyses": 1201,
+    "raw_analysis_result_rows": 878,
+    "successful_visual_analyses": 867,
+    "missing_visual_analyses": 1200,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1212,
+    "unresolved_count": 1211,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -34137,9 +34137,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a white text that reads 'Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.",
+          "Wise saying"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The text is a quote from a book about mindful eating and its importance for a healthy body.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The text is a quote and does not provide any visual representation of the concepts mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
