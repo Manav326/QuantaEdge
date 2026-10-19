@@ -99,8 +99,8 @@ public class LearningController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student_track_enrollment ste on ste.student_id=learner.id and ste.subject_id=s.id
-         and ste.institution_id=(select institution_id from tenant_scope) and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=? 
+         and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
       left join learning_objective o on o.id=l.objective_id
       left join lateral (
         select t.id,t.title,t.summary from lesson_translation t
@@ -188,7 +188,7 @@ public class LearningController {
         and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """.replace("__PROGRAM_SCOPE__",programScope);
-    return jdbc.queryForList(sql,context.studentId(),institutionId,language,language,language,language,
+    return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,language,language,language,language,
         subjectCode,courseId);
   }
 
@@ -205,7 +205,7 @@ public class LearningController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
-    state.startLesson(context.studentId(),lessonId,institutionId);
+    state.startLesson(context.studentId(),lessonId,institutionId,courseId);
     return Map.of("started",true,"lessonId",lessonId);
   }
 
@@ -236,8 +236,8 @@ public class LearningController {
              coalesce(p.status,'NOT_STARTED') as progress_status
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      join student_track_enrollment ste on ste.student_id=? and ste.institution_id=?
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
       left join learning_objective o on o.id=l.objective_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? and p.institution_id=?
       left join lateral (
@@ -279,7 +279,7 @@ public class LearningController {
             and (s.program_id=cps.program_id or
                  (s.program_id is null and selected_course.class_id=s.class_id))
         )
-      """,context.studentId(),institutionId,context.studentId(),institutionId,
+      """,courseId,context.studentId(),institutionId,
         language,language,language,language,language,lessonId,courseId);
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
@@ -398,10 +398,10 @@ public class LearningController {
     QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
     if(practiceSessionId==null) {
       state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct(),
-          null,"LESSON_INLINE",institutionId);
+          null,"LESSON_INLINE",institutionId,courseId);
     } else {
       state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct(),
-          practiceSessionId,"PRACTICE",institutionId);
+          practiceSessionId,"PRACTICE",institutionId,courseId);
     }
 
     var result=new LinkedHashMap<String,Object>();
