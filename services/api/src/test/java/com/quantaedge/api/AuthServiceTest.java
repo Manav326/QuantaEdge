@@ -201,7 +201,7 @@ class AuthServiceTest {
     List<String> catalog = List.of("AUDIT_VIEW", "CONTENT_REVIEW", "CONTENT_PUBLISH", "STAFF_MANAGE");
     when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 9L))
         .thenReturn("ADMIN");
-    when(jdbc.queryForList(contains("select permission_key from staff_permission_catalog")))
+    when(jdbc.queryForList(contains("select permission_key from staff_permission_catalog"), eq(String.class)))
         .thenReturn(catalog);
 
     assertIterableEquals(catalog, auth.permissionsForStaff(9L));
@@ -213,7 +213,7 @@ class AuthServiceTest {
     List<String> grants = List.of("CONTENT_VIEW", "CONTENT_EDIT");
     when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 12L))
         .thenReturn("CONTENT_AUTHOR");
-    when(jdbc.queryForList(contains("from staff_permission_grant")))
+    when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class), any(Object[].class)))
         .thenReturn(grants);
 
     assertIterableEquals(grants, auth.permissionsForStaff(12L));
