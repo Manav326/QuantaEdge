@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0059f1c87823799db2d6669f732226ed48b98c3db4ae62bf161cc091d453e341",
+  "raw_analysis_sha256": "3a32de993ac5c58af93fb8799fbd86cbdc4b7fe7407184d9fb4221af220eaf2e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:52:15Z",
+      "checkpointed_at": "2026-10-19T15:55:18Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:53:02Z",
+      "checkpointed_at": "2026-10-19T15:56:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:53:39Z",
+      "checkpointed_at": "2026-10-19T15:56:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -41666,6 +41666,166 @@
         "context_relation": "The page appears to be blank or contains no visible text or images.",
         "limitations": [
           "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7054720cb8883907b2945167",
+      "asset_sha256": "da2e018fa47bd9150a0a7b39f391966c4c5456803e1259a4af1021011f748a28",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "page-0048.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bulletin board displaying various health-related information and questions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "BULLETIN BOARD",
+          "11.4% of India’s population is diabetic",
+          "Air pollution is one of the leading risk factors for health",
+          "More than 100 million people in India are diabetic: ICMR report",
+          "Arrival of monsoon leads to increase in malaria and dengue cases",
+          "Yoga for the mind, body and soul",
+          "Fast food is one of the leading causes of diabetes",
+          "Yoga reduces anxiety and increases concentration",
+          "28.6% Indians are obese",
+          "Regular handwashing reduces infection by 50%",
+          "Excessive screen watching leads to dry eye disease in children",
+          "Safe drinking water reduces cases of water and vector-borne diseases",
+          "Increase in screen time in children leads to a rise in obesity, sleep disorders, and anxiety",
+          "Immersion into social media is spurring rise in loneliness",
+          "Air pollution is a public health emergency",
+          "Diet mantra: Reduce the amount of oil and sugar in diet",
+          "FIT INDIA MOVEMENT",
+          "How does your body respond to an infection such as common cold?",
+          "We rarely see cases of smallpox or polio these days, but diseases like diabetes and heart problems are more common. Why?",
+          "Could climate change lead to new types of diseases?",
+          "How do emotions like stress or worry affect us and make us sick?",
+          "Why do some groups of people get affected more than others during disease outbreaks?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Health",
+          "Diet",
+          "Air Pollution",
+          "Climate Change",
+          "Emotions",
+          "Social Media",
+          "Disease Outbreaks"
+        ],
+        "context_relation": "Health and lifestyle",
+        "limitations": [
+          "The image does not provide specific solutions or answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:00:55Z",
+      "effective_analysis": {
+        "visual_summary": "A bulletin board displaying various health-related information and questions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "BULLETIN BOARD",
+          "11.4% of India’s population is diabetic",
+          "Air pollution is one of the leading risk factors for health",
+          "More than 100 million people in India are diabetic: ICMR report",
+          "Arrival of monsoon leads to increase in malaria and dengue cases",
+          "Yoga for the mind, body and soul",
+          "Fast food is one of the leading causes of diabetes",
+          "Yoga reduces anxiety and increases concentration",
+          "28.6% Indians are obese",
+          "Regular handwashing reduces infection by 50%",
+          "Excessive screen watching leads to dry eye disease in children",
+          "Safe drinking water reduces cases of water and vector-borne diseases",
+          "Increase in screen time in children leads to a rise in obesity, sleep disorders, and anxiety",
+          "Immersion into social media is spurring rise in loneliness",
+          "Air pollution is a public health emergency",
+          "Diet mantra: Reduce the amount of oil and sugar in diet",
+          "FIT INDIA MOVEMENT",
+          "How does your body respond to an infection such as common cold?",
+          "We rarely see cases of smallpox or polio these days, but diseases like diabetes and heart problems are more common. Why?",
+          "Could climate change lead to new types of diseases?",
+          "How do emotions like stress or worry affect us and make us sick?",
+          "Why do some groups of people get affected more than others during disease outbreaks?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Health",
+          "Diet",
+          "Air Pollution",
+          "Climate Change",
+          "Emotions",
+          "Social Media",
+          "Disease Outbreaks"
+        ],
+        "context_relation": "Health and lifestyle",
+        "limitations": [
+          "The image does not provide specific solutions or answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dade5557610bdf5084fdd925",
+      "asset_sha256": "bb80cc33f394602a741e3ff10775823198f8d58ee45dd5e728f29c8839132791",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/bb80cc33f394602a741e3ff10775823198f8d58ee45dd5e728f29c8839132791.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "395606d6db3655c289a42c04cf5947d7fcba63339bdf11d4cffb93bd53e13ef3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl climbing a ladder to reach books on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "library",
+          "bookshelf",
+          "climbing",
+          "reaching",
+          "books",
+          "girl",
+          "ladder"
+        ],
+        "context_relation": "The image is related to the educational content about health and well-being, as it shows a girl in a library setting.",
+        "limitations": [
+          "The image does not provide specific information about the health content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:02:34Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl climbing a ladder to reach books on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "library",
+          "bookshelf",
+          "climbing",
+          "reaching",
+          "books",
+          "girl",
+          "ladder"
+        ],
+        "context_relation": "The image is related to the educational content about health and well-being, as it shows a girl in a library setting.",
+        "limitations": [
+          "The image does not provide specific information about the health content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

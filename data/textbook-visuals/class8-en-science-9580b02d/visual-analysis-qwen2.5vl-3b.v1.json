@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 890,
+    "assets_selected": 892,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 887,
-    "assets_remaining": 1404,
-    "assets_completion_percent": 38.7,
+    "assets_analyzed": 889,
+    "assets_remaining": 1402,
+    "assets_completion_percent": 38.8,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 885,
+    "assets_skipped_from_checkpoint": 887,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:52:15Z"
+      "checkpointed_at": "2026-10-19T15:55:18Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:53:02Z"
+      "checkpointed_at": "2026-10-19T15:56:05Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:53:39Z"
+      "checkpointed_at": "2026-10-19T15:56:42Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28040,6 +28040,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T15:54:10Z"
+    },
+    {
+      "asset_id": "7054720cb8883907b2945167",
+      "asset_sha256": "da2e018fa47bd9150a0a7b39f391966c4c5456803e1259a4af1021011f748a28",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "page-0048.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bulletin board displaying various health-related information and questions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "BULLETIN BOARD",
+          "11.4% of India’s population is diabetic",
+          "Air pollution is one of the leading risk factors for health",
+          "More than 100 million people in India are diabetic: ICMR report",
+          "Arrival of monsoon leads to increase in malaria and dengue cases",
+          "Yoga for the mind, body and soul",
+          "Fast food is one of the leading causes of diabetes",
+          "Yoga reduces anxiety and increases concentration",
+          "28.6% Indians are obese",
+          "Regular handwashing reduces infection by 50%",
+          "Excessive screen watching leads to dry eye disease in children",
+          "Safe drinking water reduces cases of water and vector-borne diseases",
+          "Increase in screen time in children leads to a rise in obesity, sleep disorders, and anxiety",
+          "Immersion into social media is spurring rise in loneliness",
+          "Air pollution is a public health emergency",
+          "Diet mantra: Reduce the amount of oil and sugar in diet",
+          "FIT INDIA MOVEMENT",
+          "How does your body respond to an infection such as common cold?",
+          "We rarely see cases of smallpox or polio these days, but diseases like diabetes and heart problems are more common. Why?",
+          "Could climate change lead to new types of diseases?",
+          "How do emotions like stress or worry affect us and make us sick?",
+          "Why do some groups of people get affected more than others during disease outbreaks?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Health",
+          "Diet",
+          "Air Pollution",
+          "Climate Change",
+          "Emotions",
+          "Social Media",
+          "Disease Outbreaks"
+        ],
+        "context_relation": "Health and lifestyle",
+        "limitations": [
+          "The image does not provide specific solutions or answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:00:55Z"
+    },
+    {
+      "asset_id": "dade5557610bdf5084fdd925",
+      "asset_sha256": "bb80cc33f394602a741e3ff10775823198f8d58ee45dd5e728f29c8839132791",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/bb80cc33f394602a741e3ff10775823198f8d58ee45dd5e728f29c8839132791.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "395606d6db3655c289a42c04cf5947d7fcba63339bdf11d4cffb93bd53e13ef3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl climbing a ladder to reach books on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "library",
+          "bookshelf",
+          "climbing",
+          "reaching",
+          "books",
+          "girl",
+          "ladder"
+        ],
+        "context_relation": "The image is related to the educational content about health and well-being, as it shows a girl in a library setting.",
+        "limitations": [
+          "The image does not provide specific information about the health content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:02:34Z"
     }
   ]
 }
