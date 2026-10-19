@@ -91,20 +91,30 @@ export function useAdminCourseScope(storageKey = 'qe:admin:activeCourseId'): Adm
         }];
       });
       setCourses(normalized);
-      setCourseId(current => {
-        const requested = new URLSearchParams(window.location.search).get('courseId') || '';
-        let remembered = '';
-        try { remembered = window.localStorage.getItem(storageKey) || ''; } catch { /* storage may be disabled */ }
-        const candidate = [requested, current, remembered].find(value =>
-          value && normalized.some(course => String(course.id) === value)
-        );
-        const next = candidate || String(normalized[0]?.id || '');
-        try {
-          if (next) window.localStorage.setItem(storageKey, next);
-          else window.localStorage.removeItem(storageKey);
-        } catch { /* server catalogue remains authoritative */ }
-        return next;
-      });
+      const requested = new URLSearchParams(window.location.search).get('courseId') || '';
+      if (requested && !normalized.some(course => String(course.id) === requested)) {
+        // An explicit deep-link is authoritative: never silently redirect it to
+        // the first/local-storage course. Leave the picker empty so staff must choose.
+        setCourseId('');
+        try { window.localStorage.removeItem(storageKey); } catch { /* storage may be disabled */ }
+        const url = new URL(window.location.href);
+        url.searchParams.delete('courseId');
+        window.history.replaceState({}, '', url.toString());
+      } else {
+        setCourseId(current => {
+          let remembered = '';
+          try { remembered = window.localStorage.getItem(storageKey) || ''; } catch { /* storage may be disabled */ }
+          const candidate = [requested, current, remembered].find(value =>
+            value && normalized.some(course => String(course.id) === value)
+          );
+          const next = candidate || String(normalized[0]?.id || '');
+          try {
+            if (next) window.localStorage.setItem(storageKey, next);
+            else window.localStorage.removeItem(storageKey);
+          } catch { /* server catalogue remains authoritative */ }
+          return next;
+        });
+      }
     } catch (error) {
       setCourses([]);
       setCourseId('');
@@ -126,6 +136,9 @@ export function useAdminCourseScope(storageKey = 'qe:admin:activeCourseId'): Adm
     if (!courses.some(course => String(course.id) === nextCourseId)) return false;
     setCourseId(nextCourseId);
     try { window.localStorage.setItem(storageKey, nextCourseId); } catch { /* optional convenience only */ }
+    const url = new URL(window.location.href);
+    url.searchParams.set('courseId', nextCourseId);
+    window.history.replaceState({}, '', url.toString());
     return true;
   }, [courses, storageKey]);
 
@@ -161,6 +174,8 @@ export function AdminCourseSelector({
           </option>
         ))}
       </select>
+      {!loading && courses.length > 0 && !courseId &&
+        <small role="status">The requested course is not assigned here. Select an assigned course.</small>}
     </label>
   );
 }
