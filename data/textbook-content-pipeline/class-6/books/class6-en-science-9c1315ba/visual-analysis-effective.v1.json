@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3d9ca1aef9b803e7660ef61ddf1aa70d23cf16cec9e7e557af9e3c18ac1590f6",
+  "raw_analysis_sha256": "600e1ea0f9ea92a82c2c577198e8f5e99337956ab4cbab9a1cc8ad89ee029eab",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:42:34Z",
+      "checkpointed_at": "2026-10-19T02:45:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:43:14Z",
+      "checkpointed_at": "2026-10-19T02:46:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:44:07Z",
+      "checkpointed_at": "2026-10-19T02:47:17Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:44:46Z",
+      "checkpointed_at": "2026-10-19T02:47:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39796,6 +39796,94 @@
         "context_relation": "No specific context or relation provided.",
         "limitations": [
           "No visible text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dda5583d416cfe83f77d9f8c",
+      "asset_sha256": "31dcdecaf6a86732a8503943af708112976d5013fcd966b0d53a60dc9895eace",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 51,
+      "asset_path": "page-0051.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a9a67501b2187d6cc5eea9bd4fbb6370435d19710f5b23017fab7a4a1a1dd821",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table comparing two groups of plants based on seed type and root type.",
+        "visual_type": "table",
+        "visible_text": [
+          "9. Based on the information in the table, find out examples of these plants for each group.",
+          "Group Type of seed Type of root Examples",
+          "A Dicot Taproot",
+          "B Monocot Fibrous roots",
+          "(a) What other similarities do plants of group A have?",
+          "(b) What other similarities do plants of group B have?",
+          "10. Observe the labelled part of a duck in the picture given below. What differences do you observe in the feet of the duck compared to the other birds? Which activity would the duck be able to perform using this part?"
+        ],
+        "concepts": [
+          "Seed type",
+          "Root type",
+          "Duck feet",
+          "Bird feet",
+          "Indian scientist",
+          "Wildlife biologist",
+          "Biodiversity",
+          "Divya Mudappa",
+          "Usha Lachungpa",
+          "Ghazala Shahabuddin",
+          "Nandini Velho",
+          "Vidya Athreya",
+          "Uma Ramakrishnan",
+          "Divya Karnad"
+        ],
+        "context_relation": "The table and questions are related to the information provided in the text.",
+        "limitations": [
+          "The table does not provide specific examples for each group.",
+          "The questions are open-ended and require interpretation of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:49:41Z",
+      "effective_analysis": {
+        "visual_summary": "Table comparing two groups of plants based on seed type and root type.",
+        "visual_type": "table",
+        "visible_text": [
+          "9. Based on the information in the table, find out examples of these plants for each group.",
+          "Group Type of seed Type of root Examples",
+          "A Dicot Taproot",
+          "B Monocot Fibrous roots",
+          "(a) What other similarities do plants of group A have?",
+          "(b) What other similarities do plants of group B have?",
+          "10. Observe the labelled part of a duck in the picture given below. What differences do you observe in the feet of the duck compared to the other birds? Which activity would the duck be able to perform using this part?"
+        ],
+        "concepts": [
+          "Seed type",
+          "Root type",
+          "Duck feet",
+          "Bird feet",
+          "Indian scientist",
+          "Wildlife biologist",
+          "Biodiversity",
+          "Divya Mudappa",
+          "Usha Lachungpa",
+          "Ghazala Shahabuddin",
+          "Nandini Velho",
+          "Vidya Athreya",
+          "Uma Ramakrishnan",
+          "Divya Karnad"
+        ],
+        "context_relation": "The table and questions are related to the information provided in the text.",
+        "limitations": [
+          "The table does not provide specific examples for each group.",
+          "The questions are open-ended and require interpretation of the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
