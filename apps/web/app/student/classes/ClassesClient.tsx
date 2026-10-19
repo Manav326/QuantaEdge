@@ -104,8 +104,8 @@ export default function StudentClassesClient(){
 
   useEffect(()=>()=>{
     const id=joinedSessionRef.current;
-    if(id)void fetch('/api/v1/learning/live-classes/'+id+'/leave',{method:'POST',credentials:'same-origin',keepalive:true}).catch(()=>undefined);
-  },[]);
+    if(id && activeCourseId!==null)void fetch('/api/v1/learning/live-classes/'+id+'/leave?courseId='+activeCourseId,{method:'POST',credentials:'same-origin',keepalive:true}).catch(()=>undefined);
+  },[activeCourseId]);
 
   async function joinClass(session:LiveClass){
     if(busy)return;
@@ -117,7 +117,7 @@ export default function StudentClassesClient(){
     }
     setBusy(true);setError('');setNotice('');
     try{
-      const result=await api('/api/v1/learning/live-classes/'+session.session_id+'/join',{method:'POST'});
+      const result=await api('/api/v1/learning/live-classes/'+session.session_id+'/join?courseId='+activeCourseId,{method:'POST'});
       joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);setActiveJoinUrl(String(result.joinUrl||''));setActiveVideoId(String(result.youtubeVideoId||'')||null);
       if(popup&&!popup.closed&&result.joinUrl){popup.location.replace(String(result.joinUrl));}
       setNotice(result.youtubeVideoId?translateUi(locale, 'legacy.web.attendance.is.saved.the.youtube.broadc.1ea76529'):popup&&!popup.closed
@@ -134,7 +134,7 @@ export default function StudentClassesClient(){
   async function openMeetingAgain(sessionId:number){
     setBusy(true);setError('');
     try{
-      const result=await api('/api/v1/learning/live-classes/'+sessionId+'/join',{method:'POST'});
+      const result=await api('/api/v1/learning/live-classes/'+sessionId+'/join?courseId='+activeCourseId,{method:'POST'});
       if(result.joinUrl)window.open(String(result.joinUrl),'_blank','noopener,noreferrer');
       joinedSessionRef.current=sessionId;setJoinedSessionId(sessionId);setActiveJoinUrl(String(result.joinUrl||''));setActiveVideoId(String(result.youtubeVideoId||'')||null);
       await load();
@@ -145,7 +145,7 @@ export default function StudentClassesClient(){
   async function leaveClass(sessionId:number){
     setBusy(true);setError('');setNotice('');
     try{
-      await api('/api/v1/learning/live-classes/'+sessionId+'/leave',{method:'POST'});
+      await api('/api/v1/learning/live-classes/'+sessionId+'/leave?courseId='+activeCourseId,{method:'POST'});
       joinedSessionRef.current=null;setJoinedSessionId(null);setActiveJoinUrl(null);setActiveVideoId(null);
       setNotice(translateUi(locale, 'legacy.web.you.left.the.class.your.attendance.dur.039507eb'));
       await load();
@@ -171,7 +171,7 @@ export default function StudentClassesClient(){
     const watchedSeconds=Math.max(0,Math.floor(watchRef.current.watchedSeconds));
     setSavingProgress(true);
     try{
-      const result=await api('/api/v1/learning/recorded-classes/'+recording.recorded_class_id+'/progress',{
+      const result=await api('/api/v1/learning/recorded-classes/'+recording.recorded_class_id+'/progress?courseId='+activeCourseId,{
         method:'PUT',body:JSON.stringify({
           positionSeconds:safePosition,
           watchedSeconds,
@@ -258,7 +258,7 @@ export default function StudentClassesClient(){
     {selectedRecording&&<div className={styles.playerBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)closeRecording();}}>
       <section className={styles.playerModal} role="dialog" aria-modal="true" aria-labelledby="class-video-title">
         <header><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.private.class.player.8257500f')}</span><h2 id="class-video-title">{selectedRecording.title}</h2><p>{selectedRecording.chapter_name||selectedRecording.session_title||selectedRecording.subject_name}</p></div><button type="button" aria-label={translateUi(locale, 'legacy.web.close.video.player.067f7815')} onClick={closeRecording}>×</button></header>
-        <div className={styles.videoFrame}><video ref={videoRef} key={selectedRecording.recorded_class_id} controls playsInline preload="metadata" controlsList="nodownload noplaybackrate" disablePictureInPicture src={'/api/v1/learning/recorded-classes/'+selectedRecording.recorded_class_id+'/stream'} onLoadedMetadata={e=>{const video=e.currentTarget;const start=Number(selectedRecording.last_position_seconds||0);if(start>0&&start<(video.duration||Infinity)){video.currentTime=start;}watchRef.current.lastMediaTime=video.currentTime;watchRef.current.lastSavedPosition=start;}} onTimeUpdate={handleTimeUpdate} onPause={e=>void persistPlayback(selectedRecording,e.currentTarget.currentTime,e.currentTarget.ended)} onEnded={e=>void persistPlayback(selectedRecording,e.currentTarget.currentTime,true)} onError={()=>setError(translateUi(locale, 'legacy.web.this.recording.could.not.be.played.try.5697bd4a'))}/></div>
+        <div className={styles.videoFrame}><video ref={videoRef} key={selectedRecording.recorded_class_id} controls playsInline preload="metadata" controlsList="nodownload noplaybackrate" disablePictureInPicture src={'/api/v1/learning/recorded-classes/'+selectedRecording.recorded_class_id+'/stream?courseId='+activeCourseId} onLoadedMetadata={e=>{const video=e.currentTarget;const start=Number(selectedRecording.last_position_seconds||0);if(start>0&&start<(video.duration||Infinity)){video.currentTime=start;}watchRef.current.lastMediaTime=video.currentTime;watchRef.current.lastSavedPosition=start;}} onTimeUpdate={handleTimeUpdate} onPause={e=>void persistPlayback(selectedRecording,e.currentTarget.currentTime,e.currentTarget.ended)} onEnded={e=>void persistPlayback(selectedRecording,e.currentTarget.currentTime,true)} onError={()=>setError(translateUi(locale, 'legacy.web.this.recording.could.not.be.played.try.5697bd4a'))}/></div>
         <footer><div><b>{savingProgress?translateUi(locale, 'legacy.web.saving.playback.progress.864a86b7'):selectedRecording.completed?translateUi(locale, 'legacy.web.completed.1a8e9ec4'):translateUi(locale, 'legacy.web.progress.is.saved.automatically.628acef7')}</b><small>{translateUi(locale, 'legacy.web.position.2d412552')}{durationText(Math.floor(selectedRecording.last_position_seconds||0))}{selectedRecording.duration_seconds?' '+translateUi(locale, 'legacy.web.of.ffc7a9ee')+' '+durationText(selectedRecording.duration_seconds):''}</small></div><button type="button" className={styles.secondaryButton} onClick={closeRecording}>{translateUi(locale, 'legacy.web.close.player.f56f02e7')}</button></footer>
       </section>
     </div>}
