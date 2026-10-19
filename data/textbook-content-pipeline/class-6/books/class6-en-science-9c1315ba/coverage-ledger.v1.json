@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 900,
-    "successful_visual_analyses": 887,
-    "missing_visual_analyses": 1178,
+    "raw_analysis_result_rows": 901,
+    "successful_visual_analyses": 888,
+    "missing_visual_analyses": 1177,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1191,
+    "unresolved_count": 1190,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -34940,9 +34940,31 @@
       "asset_path": "assets/a2446dbd51a4101a89672be208be53fc9b19f7a9667b13cdb9f13c6203ea4674.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of various fruits, vegetables, and grains.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Potato",
+          "Sugarcane",
+          "Banana",
+          "Grains",
+          "Corn",
+          "Vegetables"
+        ],
+        "concepts": [
+          "Fruits",
+          "Vegetables",
+          "Grains",
+          "Nutrition"
+        ],
+        "context_relation": "The image is related to the topic of nutrition and food diversity.",
+        "limitations": [
+          "The image does not provide specific nutritional information.",
+          "The image does not show the exact quantities of each food item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27d7e21baea26f42946c275a620bdcec94cab13b06862b85a6ad6f1a79b26cfb",
+  "raw_analysis_sha256": "dd5bd508faaf4f2c7e78462db7c030b5e77f20cd81fd9b10c340875224b83a26",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:42:59Z",
+      "checkpointed_at": "2026-10-19T04:46:41Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:43:43Z",
+      "checkpointed_at": "2026-10-19T04:47:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:44:37Z",
+      "checkpointed_at": "2026-10-19T04:48:15Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:45:15Z",
+      "checkpointed_at": "2026-10-19T04:48:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -41574,6 +41574,72 @@
         "limitations": [
           "The image does not provide any specific information or context about the food item.",
           "The image does not show any text or labels that could provide additional information about the food item."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2353a6f30d4ad02590a40cc8",
+      "asset_sha256": "a2446dbd51a4101a89672be208be53fc9b19f7a9667b13cdb9f13c6203ea4674",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/a2446dbd51a4101a89672be208be53fc9b19f7a9667b13cdb9f13c6203ea4674.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of various fruits, vegetables, and grains.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Potato",
+          "Sugarcane",
+          "Banana",
+          "Grains",
+          "Corn",
+          "Vegetables"
+        ],
+        "concepts": [
+          "Fruits",
+          "Vegetables",
+          "Grains",
+          "Nutrition"
+        ],
+        "context_relation": "The image is related to the topic of nutrition and food diversity.",
+        "limitations": [
+          "The image does not provide specific nutritional information.",
+          "The image does not show the exact quantities of each food item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:49:37Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of various fruits, vegetables, and grains.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Potato",
+          "Sugarcane",
+          "Banana",
+          "Grains",
+          "Corn",
+          "Vegetables"
+        ],
+        "concepts": [
+          "Fruits",
+          "Vegetables",
+          "Grains",
+          "Nutrition"
+        ],
+        "context_relation": "The image is related to the topic of nutrition and food diversity.",
+        "limitations": [
+          "The image does not provide specific nutritional information.",
+          "The image does not show the exact quantities of each food item."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
