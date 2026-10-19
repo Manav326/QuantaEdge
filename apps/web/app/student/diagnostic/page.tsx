@@ -5,7 +5,9 @@ import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
-import {useRouter} from 'next/navigation';
+import {useRouter,useSearchParams} from 'next/navigation';
+import {useStudentCourseScope} from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import AnswerFeedback from '../../components/AnswerFeedback';
 
 type Q={id:number;question_type:string;prompt:string;explanation?:string;options:string;answered?:boolean;lastCorrect?:boolean|null;selectedAnswer?:any};
@@ -19,6 +21,10 @@ async function readJson(response:Response):Promise<any>{
 
 export default function DiagnosticPage(){
   const router=useRouter();
+  const searchParams=useSearchParams();
+  const rawCourseId=searchParams.get('courseId')||'';
+  const requestedCourseId=/^\\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale}=useLocale();
   const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;
   const [qs,setQs]=useState<Q[]>([]);
@@ -37,7 +43,9 @@ export default function DiagnosticPage(){
     async function load(){
       setLoading(true);setError('');
       try{
-        const response=await fetch('/api/v1/diagnostic',{cache:'no-store'});
+        if(loadingCourses)return;
+        if(courseId===null){setQs([]);setAttemptId(null);setUnavailable(true);setError(courseError||tx('पहले एक enrolled course चुनें।','Choose an enrolled course first.'));return;}
+        const response=await fetch('/api/v1/diagnostic?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body:DiagnosticPayload=await readJson(response);
         if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.load.diagnostic.f6a469cb'));
@@ -51,7 +59,7 @@ export default function DiagnosticPage(){
         setIdx(firstUnanswered<0?Math.max(0,questions.length-1):firstUnanswered);
         if(firstUnanswered>=0)setValue(questions[firstUnanswered].selectedAnswer??'');
         if(firstUnanswered<0&&questions.length&&body.attemptId){
-          const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit',{method:'POST',cache:'no-store'});
+          const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit?courseId='+encodeURIComponent(String(courseId)),{method:'POST',cache:'no-store',credentials:'same-origin'});
           const submitBody=await readJson(submitted);
           if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
           if(live)router.replace('/student');
@@ -61,7 +69,7 @@ export default function DiagnosticPage(){
     }
     void load();
     return()=>{live=false;};
-  },[router,locale]);
+  },[router,locale,courseId,loadingCourses,courseError]);
 
   const q=qs[idx];
   const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:translateUi(locale, 'legacy.web.this.answer.was.checked.earlier.f93c0c7f')}:null);
@@ -72,7 +80,7 @@ export default function DiagnosticPage(){
     if(!q||!attemptId||saving||result)return;
     setSaving(true);setError('');
     try{
-      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/answers/'+q.id,{
+      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/answers/'+q.id+'?courseId='+encodeURIComponent(String(courseId||'')),{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:v})
       });
       const body=await readJson(response);
@@ -92,7 +100,7 @@ export default function DiagnosticPage(){
     }
     setSubmitting(true);setError('');
     try{
-      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit',{method:'POST'});
+      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit?courseId='+encodeURIComponent(String(courseId||'')),{method:'POST',credentials:'same-origin'});
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
       router.replace('/student');
@@ -101,12 +109,17 @@ export default function DiagnosticPage(){
   }
 
   if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.loading.your.saved.diagnostic.b2912d85" /></div></section></main>;
-  if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.diagnostic.f6a469cb" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><UiText message="legacy.web.try.again.c3572b4c" /></button><Link href="/student" className="text-link"><UiText message="legacy.web.back.97062f29" /></Link></div></section></main>;
-  if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.initial.diagnostic.6c007aef" /></div><h1><UiText message="legacy.web.diagnostic.is.not.available.yet.33d8f4ec" /></h1><p><UiText message="legacy.web.the.diagnostic.will.appear.when.enough.04469512" /></p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.15fbe96d" /></Link></section></main>;
+  if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.diagnostic.f6a469cb" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><UiText message="legacy.web.try.again.c3572b4c" /></button><Link href={courseId!==null?"/student?courseId="+encodeURIComponent(String(courseId)):"/student/courses"} className="text-link"><UiText message="legacy.web.back.97062f29" /></Link></div></section></main>;
+  if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.initial.diagnostic.6c007aef" /></div><h1><UiText message="legacy.web.diagnostic.is.not.available.yet.33d8f4ec" /></h1><p><UiText message="legacy.web.the.diagnostic.will.appear.when.enough.04469512" /></p><Link href={courseId!==null?"/student?courseId="+encodeURIComponent(String(courseId)):"/student/courses"} className="button button-dark"><UiText message="legacy.web.student.home.15fbe96d" /></Link></section></main>;
 
   return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><UiText message="legacy.web.today.1a73c870" /></Link><span><UiText message="legacy.web.initial.diagnostic.a2e9a619" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
+    <header className="lesson-header"><Link href={'/student'+(courseId!==null?'?courseId='+encodeURIComponent(String(courseId)):'')} className="back"><UiText message="legacy.web.today.1a73c870" /></Link><span><UiText message="legacy.web.initial.diagnostic.a2e9a619" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
+      <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+        onCourseChange={value=>{void selectCourse(value).then(()=>router.replace('/student/diagnostic?courseId='+encodeURIComponent(value)));}}
+        subjectCode="ALL" onSubjectChange={()=>{}}
+        showSubject={false} loading={loadingCourses} language={locale}
+        courseLabel={locale==='english'?'Course':'कोर्स'} />
       <div className="eyebrow"><UiText message="legacy.web.your.saved.diagnostic.b83de56d" /></div>
       <h1>{q.prompt}</h1>
       <p><UiText message="legacy.web.this.short.assessment.helps.create.you.4f499f99" /></p>
