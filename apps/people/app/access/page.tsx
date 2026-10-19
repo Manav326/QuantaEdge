@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge, PeopleButton } from '../components/PeopleUI';
+import PasswordField from '../components/PasswordField';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type Session = { staffId?: number; role?: string; displayName?: string; permissions?: string[]; workspace?: string };
@@ -269,7 +270,7 @@ export default function HrmsAccessPage() {
                       <input className="input" required minLength={3} maxLength={64} autoComplete="off" value={username} onChange={(event) => setUsername(event.target.value)} placeholder="employee.username" />
                     </label>
                     <label>Temporary password (at least 12 characters)
-                      <input className="input" required type="password" minLength={12} maxLength={128} autoComplete="new-password" value={initialPassword} onChange={(event) => setInitialPassword(event.target.value)} />
+                      <PasswordField className="input" required minLength={12} maxLength={128} autoComplete="new-password" value={initialPassword} onChange={(event) => setInitialPassword(event.target.value)} />
                     </label>
                     <PeopleButton variant="primary" disabled={saving || !username.trim() || initialPassword.length < 12}>{saving ? t('people.access.savingSecurely') : t('people.access.saveCredentialsAndRoles')}</PeopleButton>
                   </form>
