@@ -216,7 +216,6 @@ assert.ok(learnClient.includes("from '../structured-lessons/StructuredLessonsCli
 const coursesPage = read('../app/student/courses/page.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
-const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const parentPage = read('../app/parent/page.tsx');
 assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(courseId))") &&
   coursesPage.includes('Open structured course'), 'Course focus must open the exact selected course structured catalogue.');
