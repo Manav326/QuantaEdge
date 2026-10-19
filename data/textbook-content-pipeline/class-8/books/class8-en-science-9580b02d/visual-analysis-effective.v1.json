@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "645a7a72e0a51a554c652298a75d1b6c47ae968266e6a14976f59301b2cc140e",
+  "raw_analysis_sha256": "c0b608c95f0b8c9fee672d74f5523af841aadbd56faad531be0fa85ecb87c5c5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:05:14Z",
+      "checkpointed_at": "2026-10-19T11:13:21Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:06:33Z",
+      "checkpointed_at": "2026-10-19T11:14:39Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:07:25Z",
+      "checkpointed_at": "2026-10-19T11:15:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -38726,6 +38726,96 @@
         "limitations": [
           "The image does not contain any text or information related to the content of the text.",
           "The image is a cartoon illustration and may not accurately represent the content of the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2597f994768426e99dd122ab",
+      "asset_sha256": "9ae013d1d2b92c20bb86fb2e28c3723225d11fd227ff206b070c6a2a7269d8df",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/9ae013d1d2b92c20bb86fb2e28c3723225d11fd227ff206b070c6a2a7269d8df.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1d043a747a859b8f9f27c0e856772a4668133af1d7fa778e039a7a70e1b02d5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green backpack with a brown handle and a pen sticking out of it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "backpack",
+          "pen",
+          "green color",
+          "brown handle"
+        ],
+        "context_relation": "The image is unrelated to the text about cell structures.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:16:36Z",
+      "effective_analysis": {
+        "visual_summary": "A green backpack with a brown handle and a pen sticking out of it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "backpack",
+          "pen",
+          "green color",
+          "brown handle"
+        ],
+        "context_relation": "The image is unrelated to the text about cell structures.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b8e0eb65df1f51a9f8f59ae2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1d043a747a859b8f9f27c0e856772a4668133af1d7fa778e039a7a70e1b02d5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:16:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
