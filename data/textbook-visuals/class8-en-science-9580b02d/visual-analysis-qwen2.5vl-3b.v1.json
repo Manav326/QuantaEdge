@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 815,
+    "assets_selected": 816,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 811,
-    "assets_remaining": 1480,
-    "assets_completion_percent": 35.4,
-    "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 810,
+    "assets_analyzed": 813,
+    "assets_remaining": 1478,
+    "assets_completion_percent": 35.5,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 811,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:30:36Z"
+      "checkpointed_at": "2026-10-19T08:46:10Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:31:54Z"
+      "checkpointed_at": "2026-10-19T08:47:29Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20043,11 +20043,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_summary": "Acknowledgements page for a textbook.",
         "visual_type": "uncertain",
         "visible_text": [
           "Acknowledgements",
-          "The National Council of Educational Research and Training (NCERT)\nacknowledges the guidance and support of the esteemed Chairperson\nand members of the National Curriculum Framework Oversight\nCommittee for  their invaluable contributions in overseeing the\ntranslation of NCF-SE 2023 perspectives into ",
+          "The National Council of Educational Research and Training (NCERT)\nacknowledges the guidance and support of the esteemed Chairperson\nand members of the National Curriculum Framework Oversight\nCommittee for their invaluable contributions in overseeing the\ntranslation of NCF-SE 2023 perspectives into t",
+          "The Council gratefully acknowledges Sridhar Srivastava, Former\nJoint Director, NCERT; P.C. Agarwal, Joint Director, NCERT; Aman\nSharma, Secretary, NCERT and Joint Director, CIET, NCERT; Amarendra\nP. Behera, Professor and Head, PRD, CIET, NCERT; Ranjana Arora,\nProfessor and Head, DCS&D, NCERT; Sunita",
           "Special thanks are due to Aniket Sule, Associate Professor,\nHBCSE, TIFR, Mumbai, for his valuable inputs on tribal astronomy;\nRuchi Shukla, Assistant Professor, Department of Educational\nPsychology and Foundations of Education, NCERT, New Delhi, for her\ncontribution to Chapter 3; Linto Alappat, Assi",
           "NCERT appreciates the contributions of Suparna Diwakar, Educator\nand Chief Consultant, Programme Office, NSTC; M. Pramod Kumar,\nSenior Consultant; Vaishali Sukhija, Consultant; Yadunath Deshpande,\nMember; and other members of the Programme Office, NSTC, NCERT,\nNew Delhi, for their valuable inputs."
         ],
@@ -20055,14 +20056,18 @@
           "National Council of Educational Research and Training (NCERT)",
           "National Curriculum Framework Oversight Committee",
           "National Syllabus and Teaching Learning Material Committee",
-          "tribal astronomy",
-          "Educational Psychology and Foundations of Education",
+          "Sub-Group: Science",
+          "HBCSE, TIFR, Mumbai",
+          "Department of Educational Psychology and Foundations of Education",
           "Indian Space Research Organisation (ISRO)",
-          "high-resolution images of Indian postal stamps",
-          "migratory birds of India"
+          "Suparna Diwakar",
+          "M. Pramod Kumar",
+          "Vaishali Sukhija",
+          "Yadunath Deshpande"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20070,7 +20075,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:44:36Z"
+      "checkpointed_at": "2026-10-19T08:49:25Z"
     },
     {
       "asset_id": "b0358ff046707700e2112b5b",
@@ -20142,7 +20147,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20151,25 +20156,23 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Freelance Language Editor",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Acknowledgments",
+          "Book contributors",
+          "Editors",
+          "Support",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and editors.",
         "limitations": [
-          "The page does not contain any visual elements.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:41:48Z"
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T08:52:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20225,19 +20228,52 @@
     {
       "asset_id": "238e6b6798d653c84203774f",
       "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
-      "page_text_context_sha256": "0219832c6da1da4dcb501673ca3466c60d4aef3efa982229fcaa060c3646ed89",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 18,
       "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0219832c6da1da4dcb501673ca3466c60d4aef3efa982229fcaa060c3646ed89",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text describing the duties of citizens of India.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;",
+          "(c)  to uphold and protect the sovereignty, unity and integrity of India;",
+          "(d)  to defend the country and render national service when called upon to do so;",
+          "(e)  to promote harmony and the spirit of common brotherhood among the people;"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Fundamental Duties",
+          "Citizenship",
+          "National Flag",
+          "National Anthem",
+          "Sovereignty",
+          "Unity",
+          "Integrity",
+          "National Service",
+          "Harmony",
+          "Brotherhood"
+        ],
+        "context_relation": "The text describes the duties of citizens of India as outlined in the Constitution.",
+        "limitations": [
+          "The text is a direct quote from the Constitution of India."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T08:53:57Z"
     },
     {
       "asset_id": "d9939fa55cf2ac2b78b1058d",
