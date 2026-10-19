@@ -37,6 +37,8 @@
   "admin.assessments.chapterFilterOptional": "Chapter filter (optional)",
   "admin.assessments.checkingCertificateRecord": "Certificate record जाँचा जा रहा है…",
   "admin.assessments.chooseCurriculum": "Curriculum चुनें",
+  "admin.assessments.course": "कोर्स",
+  "admin.assessments.noCoursesAssigned": "इस संस्थान को कोई कोर्स असाइन नहीं है"
   "admin.assessments.chooseCurriculumDescription": "केवल published lessons के approved questions जोड़े जा सकते हैं। Test बनाते समय question snapshot freeze हो जाता है।",
   "admin.assessments.class": "Class",
   "admin.assessments.classValue": "Class {classCode}",
