@@ -580,7 +580,7 @@ export default function ContentStudio(){
   if(status==='REJECTED'&&!String(note||'').trim()){setError(t('admin.contentStudio.authorFeedbackRequired'));return;}
   setSaving(true);setError('');setNotice('');
   try{
-   await api('/api/v1/admin/content/lessons/'+selected.id+'/questions/'+questionId+'/review',{
+   await api('/api/v1/admin/content/lessons/'+selected.id+'/questions/'+questionId+'/review?courseId='+encodeURIComponent(programFilter),{
     method:'POST',body:JSON.stringify({status,reviewNotes:note||undefined})
    });
    await load();await open(selected);
