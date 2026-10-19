@@ -215,4 +215,62 @@ class AuthFilterTest {
     assertTrue(response.getContentAsString().contains("INSTITUTION_MEMBERSHIP_REQUIRED"));
     assertNull(chain.getRequest());
   }
+  @Test
+  void studentAccountSignupOtpIsAllowedInStudentWorkspace() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/auth/account-signup/request-otp");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
+  void parentPersonalLearningSessionIsAllowedInParentWorkspace() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/auth/my-learning-session");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "PARENT");
+    request.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
+  void parentPersonalLearningSessionCannotBeInvokedFromStudentWorkspace() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/auth/my-learning-session");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(403, response.getStatus());
+    assertTrue(response.getContentAsString().contains("AUTH_OPERATION_SCOPE_MISMATCH"));
+    assertNull(chain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
 }
