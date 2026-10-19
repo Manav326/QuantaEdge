@@ -1461,8 +1461,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             val id = lessonRow.longAny("id", "lesson_id")
             if (id <= 0L) throw IOException("यह पाठ पहचान में नहीं आया।")
-            ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start")
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?language=" + learningContentLanguage)
+            ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start?courseId=" + currentCourseId)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
             answers.clear()
             feedbacks.clear()
             lessonAnswerLocks.clear()
@@ -2525,7 +2525,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val id = question.longAny("id", "questionId", "question_id")
             if (id <= 0L) throw IOException("प्रश्न की पहचान नहीं मिली।")
             val result = ApiClient.postObject(
-                "/api/v1/learning/questions/" + id + "/answer?language=" + learningContentLanguage,
+                "/api/v1/learning/questions/" + id + "/answer?courseId=" + currentCourseId + "&language=" + learningContentLanguage,
                 JSONObject().put("answer", answer)
             )
             val feedback = result.textAny("feedback").ifBlank {
@@ -2542,7 +2542,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             feedbacks[answerKey] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + learningContentLanguage)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
         }
     }
 
@@ -2552,7 +2552,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val sessionId = practice.longAny("sessionId", "session_id")
             if (questionId <= 0L || sessionId <= 0L) throw IOException("Practice session की जानकारी अधूरी है।")
             val response = ApiClient.postObject(
-                "/api/v1/learning/questions/" + questionId + "/answer?language=" + learningContentLanguage,
+                "/api/v1/learning/questions/" + questionId + "/answer?courseId=" + currentCourseId + "&language=" + learningContentLanguage,
                 JSONObject().put("answer", answer).put("practiceSessionId", sessionId)
             )
             val feedback = response.textAny("feedback").ifBlank {
