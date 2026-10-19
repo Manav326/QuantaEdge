@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -35,6 +36,7 @@ fun ParentChildCreateScreen(
     var learningLanguage by rememberSaveable { mutableStateOf("hi") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var consent by rememberSaveable { mutableStateOf(false) }
     val institutionBrand = LocalInstitutionBrandIdentity.current
     val institutionContextPending = LocalInstitutionBrandResolutionPending.current
@@ -71,7 +73,10 @@ fun ParentChildCreateScreen(
                 label = { Text(localizedUiText("Login username (3–32 अक्षर)")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(value = password, onValueChange = { password = it },
                 label = { Text(localizedUiText("Login password (कम-से-कम 8 अक्षर)")) },
-                singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+                singleLine = true,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = { PasswordVisibilityToggle(passwordVisible, { passwordVisible = !passwordVisible }, if (passwordVisible) "Hide password" else "Show password") },
+                modifier = Modifier.fillMaxWidth())
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                 Checkbox(checked = consent, onCheckedChange = { consent = it }, enabled = !busy)
                 Text(localizedUiText("मैं अभिभावक हूँ और इस छात्र खाते के निर्माण व सीखने की प्रगति के लिए सहमति देता/देती हूँ।"))
