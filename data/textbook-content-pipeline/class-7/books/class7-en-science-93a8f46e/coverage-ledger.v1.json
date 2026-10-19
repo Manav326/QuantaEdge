@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1349,
-    "successful_visual_analyses": 1326,
-    "missing_visual_analyses": 6139,
+    "raw_analysis_result_rows": 1352,
+    "successful_visual_analyses": 1329,
+    "missing_visual_analyses": 6136,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6162,
+    "unresolved_count": 6159,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60838,9 +60838,28 @@
       "asset_path": "assets/7008ca235252d8d9c60b96c1bff45e5e889052f8d7613f018a898334ff6ab2c4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A partially visible page of a textbook with a diagram of a circuit and a lamp.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the concept of circuits and lamps.",
+        "limitations": [
+          "The image is blurry and partially visible, making some details difficult to discern."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60856,9 +60875,27 @@
       "asset_path": "assets/01171583232945adb4374051d24f3bb6afed0e6caafc230bd08ca236b97fa480.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a table titled 'Table 3.1: Trying to make the lamp glow' and a note indicating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The table is related to the concept of circuits and lamps, and the note provides additional context about the lamps not glowing in any circuit.",
+        "limitations": [
+          "The image does not show the actual setup or the glowing lamps."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60874,9 +60911,23 @@
       "asset_path": "assets/aff0f5be87d0bd669d5b829f67c0e38a3df5965f4ba49c8375518cba59316ce6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green pencil with a blue eraser at the top, lying diagonally on a light green background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamps"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

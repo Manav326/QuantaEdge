@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1326,
+    "assets_selected": 1329,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1324,
-    "assets_remaining": 6164,
+    "assets_analyzed": 1327,
+    "assets_remaining": 6161,
     "assets_completion_percent": 17.7,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1321,
+    "assets_skipped_from_checkpoint": 1324,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:55:33Z"
+      "checkpointed_at": "2026-10-19T04:00:19Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:56:01Z"
+      "checkpointed_at": "2026-10-19T04:00:48Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50252,6 +50252,114 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T03:59:25Z"
+    },
+    {
+      "asset_id": "9e409164109305fe48759afe",
+      "asset_sha256": "7008ca235252d8d9c60b96c1bff45e5e889052f8d7613f018a898334ff6ab2c4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/7008ca235252d8d9c60b96c1bff45e5e889052f8d7613f018a898334ff6ab2c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partially visible page of a textbook with a diagram of a circuit and a lamp.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the concept of circuits and lamps.",
+        "limitations": [
+          "The image is blurry and partially visible, making some details difficult to discern."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:02:00Z"
+    },
+    {
+      "asset_id": "03a4ed704afc1fc31fca6960",
+      "asset_sha256": "01171583232945adb4374051d24f3bb6afed0e6caafc230bd08ca236b97fa480",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/01171583232945adb4374051d24f3bb6afed0e6caafc230bd08ca236b97fa480.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a table titled 'Table 3.1: Trying to make the lamp glow' and a note indicating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The table is related to the concept of circuits and lamps, and the note provides additional context about the lamps not glowing in any circuit.",
+        "limitations": [
+          "The image does not show the actual setup or the glowing lamps."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:03:13Z"
+    },
+    {
+      "asset_id": "12056af724adb86b0d318fcb",
+      "asset_sha256": "aff0f5be87d0bd669d5b829f67c0e38a3df5965f4ba49c8375518cba59316ce6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/aff0f5be87d0bd669d5b829f67c0e38a3df5965f4ba49c8375518cba59316ce6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green pencil with a blue eraser at the top, lying diagonally on a light green background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamps"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:04:22Z"
     }
   ]
 }
