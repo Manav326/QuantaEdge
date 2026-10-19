@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 885,
+    "assets_selected": 886,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 881,
-    "assets_remaining": 1197,
+    "assets_analyzed": 882,
+    "assets_remaining": 1196,
     "assets_completion_percent": 42.4,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 880,
+    "assets_skipped_from_checkpoint": 881,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:28:56Z"
+      "checkpointed_at": "2026-10-19T04:33:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:29:39Z"
+      "checkpointed_at": "2026-10-19T04:34:45Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:30:35Z"
+      "checkpointed_at": "2026-10-19T04:35:46Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:31:16Z"
+      "checkpointed_at": "2026-10-19T04:36:31Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27916,6 +27916,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T04:33:05Z"
+    },
+    {
+      "asset_id": "e037ec00de7252177f7fcef1",
+      "asset_sha256": "295f762adda05b6f97ff8357059d2754b0213146c1ccae3b1faca557be0880aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/295f762adda05b6f97ff8357059d2754b0213146c1ccae3b1faca557be0880aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a person wearing a white shirt and blue pants, with one hand on their hip and the other touching their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not provide any specific context or relation to the text.",
+          "The image is a cartoon illustration and does not provide any specific context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:37:12Z"
     }
   ]
 }

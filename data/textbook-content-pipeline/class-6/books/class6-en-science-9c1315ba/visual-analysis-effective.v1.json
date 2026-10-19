@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "05774256e571d56421271f42faae2f21fe9298cc785466f3c7e1b264ee6f18bc",
+  "raw_analysis_sha256": "deb5e3e50bb05ee52b243fa13a006f6111f2ec3436c688eda25d0e7824107879",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:28:56Z",
+      "checkpointed_at": "2026-10-19T04:33:59Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:29:39Z",
+      "checkpointed_at": "2026-10-19T04:34:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:30:35Z",
+      "checkpointed_at": "2026-10-19T04:35:46Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:31:16Z",
+      "checkpointed_at": "2026-10-19T04:36:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -41470,6 +41470,48 @@
         "context_relation": "The image is a page from a textbook discussing changes in cooking practices over time, including the use of chulha, modern gas stoves, and electrical grinders.",
         "limitations": [
           "The image does not provide specific details about the interviews conducted or the findings from those interviews."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e037ec00de7252177f7fcef1",
+      "asset_sha256": "295f762adda05b6f97ff8357059d2754b0213146c1ccae3b1faca557be0880aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/295f762adda05b6f97ff8357059d2754b0213146c1ccae3b1faca557be0880aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a person wearing a white shirt and blue pants, with one hand on their hip and the other touching their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not provide any specific context or relation to the text.",
+          "The image is a cartoon illustration and does not provide any specific context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:37:12Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a person wearing a white shirt and blue pants, with one hand on their hip and the other touching their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not provide any specific context or relation to the text.",
+          "The image is a cartoon illustration and does not provide any specific context or relation to the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
