@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1444,
-    "successful_visual_analyses": 1423,
-    "missing_visual_analyses": 6044,
+    "raw_analysis_result_rows": 1447,
+    "successful_visual_analyses": 1426,
+    "missing_visual_analyses": 6041,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6065,
+    "unresolved_count": 6062,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -64424,9 +64424,32 @@
       "asset_path": "assets/b499a4db3aa7b25b423d86230d5682e2e37efef508910a0d306f8509cc1f4573.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery, emphasizing the negative terminal's orientation relative to the spring side of the holder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cell",
+          "Holder",
+          "Negative terminal",
+          "Spring side"
+        ],
+        "context_relation": "The image is a diagram used to explain the correct placement of cells in a holder with a battery, focusing on the orientation of the negative terminal.",
+        "limitations": [
+          "The image does not provide specific instructions on how to determine the positive terminal of the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -64442,9 +64465,32 @@
       "asset_path": "assets/f9c6a26669c2f73774b302170c7d02f70849f12fdf576fec42b8168611898e8a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cells",
+          "holder",
+          "negative terminal",
+          "positive terminal"
+        ],
+        "context_relation": "The image is related to the context of a physics or electrical engineering textbook, specifically discussing the placement of cells in a holder and the identification of battery terminals.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for identifying battery terminals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -64460,9 +64506,32 @@
       "asset_path": "assets/f3f02e47e7786170c9ce97f7f05b65bc78c79692fd0c95bf6db526c2f5f19adb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cells",
+          "holder",
+          "negative terminal",
+          "positive terminal"
+        ],
+        "context_relation": "The image is related to the concept of batteries and cells in a holder.",
+        "limitations": [
+          "The image does not provide specific instructions or diagrams for deciding the positive terminal of the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
