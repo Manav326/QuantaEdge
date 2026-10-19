@@ -68,7 +68,11 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
     if (!hasWorkspaceSessionHint(request, 'STUDENT')) {
-      return NextResponse.redirect(new URL('/login/student', request.url));
+      const url = request.nextUrl.clone();
+      url.pathname = hasWorkspaceSessionHint(request, 'PARENT')
+        ? '/parent/courses'
+        : '/login/student';
+      return NextResponse.redirect(url);
     }
   } else if (studentRoute && !hasWorkspaceSessionHint(request, 'STUDENT')) {
     return NextResponse.redirect(new URL('/login/student', request.url));
