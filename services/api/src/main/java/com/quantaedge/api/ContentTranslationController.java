@@ -68,6 +68,7 @@ public class ContentTranslationController {
 
   @GetMapping
   public Map<String, Object> list(
+      @RequestParam Long courseId,
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false, defaultValue = "en") String language,
@@ -75,8 +76,12 @@ public class ContentTranslationController {
       @RequestParam(required = false, defaultValue = "ALL") String entityType,
       @RequestParam(required = false, defaultValue = "100") Integer limit,
       @RequestParam(required = false, defaultValue = "0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireTranslationView(context);
+    long institutionId = requireInstitution(tenant);
+    requireAssignedCourse(courseId, institutionId);
     String normalizedLanguage = normalizeLanguageFilter(language);
     String normalizedStatus = normalizeStatusFilter(status);
     String normalizedEntity = normalizeEntityFilter(entityType);
@@ -93,6 +98,21 @@ public class ContentTranslationController {
         and (? = '' or class_code = ?)
         and (? = '' or subject_code = ?)
         and (? = 'ALL' or entity_type = ?)
+        and (
+          (entity_type='curriculum_program' and entity_id=?)
+          or (entity_type='curriculum_class' and exists(
+            select 1 from curriculum_program_subject cps
+            join curriculum_subject mapped_subject on mapped_subject.id=cps.subject_id and mapped_subject.class_id=cps.class_id
+            join curriculum_class mapped_class on mapped_class.id=mapped_subject.class_id
+            where cps.program_id=? and mapped_class.code=class_code))
+          or (entity_type='curriculum_subject' and exists(
+            select 1 from curriculum_program_subject cps where cps.program_id=? and cps.subject_id=entity_id))
+          or (subject_code is not null and exists(
+            select 1 from curriculum_program_subject cps
+            join curriculum_subject mapped_subject on mapped_subject.id=cps.subject_id and mapped_subject.class_id=cps.class_id
+            join curriculum_class mapped_class on mapped_class.id=mapped_subject.class_id
+            where cps.program_id=? and mapped_class.code=class_code and mapped_subject.code=subject_code))
+        )
       """;
     List<Object> filterArgs = new ArrayList<>();
     filterArgs.add(normalizedLanguage); filterArgs.add(normalizedLanguage);
@@ -100,6 +120,7 @@ public class ContentTranslationController {
     filterArgs.add(normalizedClass); filterArgs.add(normalizedClass);
     filterArgs.add(normalizedSubject); filterArgs.add(normalizedSubject);
     filterArgs.add(normalizedEntity); filterArgs.add(normalizedEntity);
+    filterArgs.add(courseId); filterArgs.add(courseId); filterArgs.add(courseId); filterArgs.add(courseId);
 
     List<Object> pageArgs = new ArrayList<>(filterArgs);
     pageArgs.add(rowLimit);
@@ -131,14 +152,19 @@ public class ContentTranslationController {
    */
   @GetMapping("/inventory")
   public Map<String, Object> inventory(
+      @RequestParam Long courseId,
       @RequestParam(required = false, defaultValue = "ALL") String classCode,
       @RequestParam(required = false, defaultValue = "ALL") String subjectCode,
       @RequestParam(required = false, defaultValue = "ALL") String language,
       @RequestParam(required = false, defaultValue = "ALL") String entityType,
       @RequestParam(required = false, defaultValue = "100") Integer limit,
       @RequestParam(required = false, defaultValue = "0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireTranslationView(context);
+    long institutionId = requireInstitution(tenant);
+    requireAssignedCourse(courseId, institutionId);
     String normalizedLanguage = normalizeLanguageFilter(language);
     String normalizedEntity = normalizeEntityFilter(entityType);
     String normalizedClass = classCode == null || "ALL".equalsIgnoreCase(classCode.trim()) ? "" : safeFilter(classCode, 30);
@@ -151,12 +177,28 @@ public class ContentTranslationController {
         and (? = '' or class_code = ?)
         and (? = '' or subject_code = ?)
         and (? = 'ALL' or entity_type = ?)
+        and (
+          (entity_type='curriculum_program' and entity_id=?)
+          or (entity_type='curriculum_class' and exists(
+            select 1 from curriculum_program_subject cps
+            join curriculum_subject mapped_subject on mapped_subject.id=cps.subject_id and mapped_subject.class_id=cps.class_id
+            join curriculum_class mapped_class on mapped_class.id=mapped_subject.class_id
+            where cps.program_id=? and mapped_class.code=class_code))
+          or (entity_type='curriculum_subject' and exists(
+            select 1 from curriculum_program_subject cps where cps.program_id=? and cps.subject_id=entity_id))
+          or (subject_code is not null and exists(
+            select 1 from curriculum_program_subject cps
+            join curriculum_subject mapped_subject on mapped_subject.id=cps.subject_id and mapped_subject.class_id=cps.class_id
+            join curriculum_class mapped_class on mapped_class.id=mapped_subject.class_id
+            where cps.program_id=? and mapped_class.code=class_code and mapped_subject.code=subject_code))
+        )
       """;
     List<Object> filterArgs = new ArrayList<>();
     filterArgs.add(normalizedLanguage); filterArgs.add(normalizedLanguage);
     filterArgs.add(normalizedClass); filterArgs.add(normalizedClass);
     filterArgs.add(normalizedSubject); filterArgs.add(normalizedSubject);
     filterArgs.add(normalizedEntity); filterArgs.add(normalizedEntity);
+    filterArgs.add(courseId); filterArgs.add(courseId); filterArgs.add(courseId); filterArgs.add(courseId);
     List<Object> pageArgs = new ArrayList<>(filterArgs);
     pageArgs.add(rowLimit); pageArgs.add(rowOffset);
     List<Map<String, Object>> items = jdbc.queryForList(
@@ -182,8 +224,11 @@ public class ContentTranslationController {
       @PathVariable String entityType,
       @PathVariable long entityId,
       @RequestParam(defaultValue = "en") String language,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     if (!authorization.hasPermission(context, "CONTENT_EDIT")
         && !authorization.hasPermission(context, "CONTENT_REVIEW")) {
@@ -191,6 +236,9 @@ public class ContentTranslationController {
     }
     String type = normalizeEntityType(entityType);
     TableSpec spec = tableSpec(type);
+    long institutionId = requireInstitution(tenant);
+    requireAssignedCourse(courseId, institutionId);
+    requireEntityInCourse(type, entityId, courseId);
     String targetLanguage = normalizeLanguage(language);
     SourceDescriptor source = currentSource(type, entityId);
     Object translatedRaw = body.get("translatedContent");
@@ -228,8 +276,11 @@ public class ContentTranslationController {
   public Map<String, Object> saveDraft(
       @PathVariable String entityType,
       @PathVariable long translationId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     if (!authorization.hasPermission(context, "CONTENT_EDIT")
         && !authorization.hasPermission(context, "CONTENT_REVIEW")) {
@@ -237,6 +288,8 @@ public class ContentTranslationController {
     }
     String type = normalizeEntityType(entityType);
     TableSpec spec = tableSpec(type);
+    long institutionId = requireInstitution(tenant);
+    requireAssignedCourse(courseId, institutionId);
     Map<String, Object> row = translationRow(spec, translationId, true);
     String currentStatus = String.valueOf(row.get("translation_status"));
     if ("SUPERSEDED".equals(currentStatus)) {
@@ -244,6 +297,7 @@ public class ContentTranslationController {
     }
 
     long entityId = ((Number) row.get("entity_id")).longValue();
+    requireEntityInCourse(type, entityId, courseId);
     SourceDescriptor source = currentSource(type, entityId);
     String storedHash = String.valueOf(row.get("source_hash")).trim();
     if (!storedHash.equals(source.hash())) {
@@ -311,11 +365,16 @@ public class ContentTranslationController {
   public Map<String, Object> changeStatus(
       @PathVariable String entityType,
       @PathVariable long translationId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     String type = normalizeEntityType(entityType);
     TableSpec spec = tableSpec(type);
+    long institutionId = requireInstitution(tenant);
+    requireAssignedCourse(courseId, institutionId);
     String next = requiredText(body.get("status"), 20).toUpperCase(Locale.ROOT);
     if (!TRANSLATION_STATUSES.contains(next) || "SUPERSEDED".equals(next)) {
       throw badRequest("Choose DRAFT, IN_REVIEW, APPROVED, REJECTED, or PUBLISHED.");
@@ -323,6 +382,7 @@ public class ContentTranslationController {
     Map<String, Object> row = translationRow(spec, translationId, true);
     String previous = String.valueOf(row.get("translation_status"));
     long entityId = ((Number) row.get("entity_id")).longValue();
+    requireEntityInCourse(type, entityId, courseId);
     String language = String.valueOf(row.get("language"));
     String sourceHash = String.valueOf(row.get("source_hash")).trim();
 
@@ -1018,6 +1078,98 @@ public class ContentTranslationController {
       out.add(matcher.group().replaceAll("\\s+", "").replace(",", "").replace('−', '-'));
     }
     return out;
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant==null || tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before managing translations.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Selected course is not assigned and released to this institution.");
+    }
+  }
+
+  private void requireEntityInCourse(String type,long entityId,long courseId) {
+    String sql=switch(type) {
+      case "curriculum_program" -> "select count(*) from curriculum_program where id=? and id=?";
+      case "curriculum_class" -> """
+        select count(*) from curriculum_class c where c.id=?
+          and exists(select 1 from curriculum_program_subject cps join curriculum_subject s
+            on s.id=cps.subject_id and s.class_id=cps.class_id
+            where cps.program_id=? and s.class_id=c.id)
+        """;
+      case "curriculum_subject" -> "select count(*) from curriculum_program_subject where program_id=? and subject_id=?";
+      case "curriculum_chapter" -> """
+        select count(*) from curriculum_chapter ch join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where ch.id=? and cps.program_id=?
+        """;
+      case "learning_objective" -> """
+        select count(*) from learning_objective o join curriculum_chapter ch on ch.id=o.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where o.id=? and cps.program_id=?
+        """;
+      case "lesson" -> """
+        select count(*) from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where l.id=? and cps.program_id=?
+        """;
+      case "lesson_block" -> """
+        select count(*) from lesson_block b join lesson l on l.id=b.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where b.id=? and cps.program_id=?
+        """;
+      case "question" -> """
+        select count(*) from question q join lesson l on l.id=q.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where q.id=? and cps.program_id=?
+        """;
+      case "assessment" -> """
+        select count(*) from assessment a join curriculum_subject s on s.id=a.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where a.id=? and cps.program_id=?
+        """;
+      case "assessment_question" -> """
+        select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id
+        join curriculum_subject s on s.id=a.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where aq.id=? and cps.program_id=?
+        """;
+      case "learning_class_session" -> """
+        select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where cs.id=? and cps.program_id=?
+        """;
+      case "recorded_class" -> """
+        select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+        where rc.id=? and cps.program_id=?
+        """;
+      default -> throw badRequest("Unsupported translation entity type.");
+    };
+    Object[] args=(type.equals("curriculum_program") || type.equals("curriculum_subject"))
+        ?new Object[]{courseId,entityId}:new Object[]{entityId,courseId};
+    Long allowed=jdbc.queryForObject(sql,Long.class,args);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "This translation entity is not part of the selected course.");
+    }
   }
 
   private void requireTranslationView(AuthContext context) {
