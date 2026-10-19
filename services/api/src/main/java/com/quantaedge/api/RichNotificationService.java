@@ -617,6 +617,16 @@ public class RichNotificationService {
     if("HRMS".equals(actor.workspace())) {
       sql="select id,public_id,scope,institution_id,course_id,title,summary,status,resolved_recipient_count,scheduled_at,dispatched_at,created_at from notification_campaign order by created_at desc,id desc limit ?";
       args=new Object[]{size};
+    } else if("INSTITUTION_ADMIN".equals(actor.workspace())) {
+      sql="""
+        select id,public_id,scope,institution_id,course_id,title,summary,status,resolved_recipient_count,
+          scheduled_at,dispatched_at,created_at
+        from notification_campaign
+        where institution_id=? or (scope='HRMS_PLATFORM'
+          and audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))
+        order by created_at desc,id desc limit ?
+        """;
+      args=new Object[]{actor.institutionId(),actor.institutionId(),size};
     } else {
       sql="select id,public_id,scope,institution_id,course_id,title,summary,status,resolved_recipient_count,scheduled_at,dispatched_at,created_at from notification_campaign where institution_id=? order by created_at desc,id desc limit ?";
       args=new Object[]{actor.institutionId(),size};
