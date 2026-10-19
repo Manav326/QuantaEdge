@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8e36215be9a02e67634e76682c3190de0bd9dc660255dbfc060374652e4be7bf",
+  "raw_analysis_sha256": "1a6f4ab66acc6cf200aaeb995b40eec11ec6e08629e281df97346e1733684ebb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:18:08Z",
+      "checkpointed_at": "2026-10-19T20:23:36Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:18:49Z",
+      "checkpointed_at": "2026-10-19T20:24:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:19:42Z",
+      "checkpointed_at": "2026-10-19T20:25:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56326,7 +56326,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:20:16Z",
+      "checkpointed_at": "2026-10-19T20:25:46Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56909,6 +56909,98 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "225391a6e4d7bde9de291fe2",
+      "asset_sha256": "29208c1f4138efb6c3ed7a30266d40a575f2a01ff5b05a677737c7c8151db54f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/29208c1f4138efb6c3ed7a30266d40a575f2a01ff5b05a677737c7c8151db54f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16a46680b925b8c8c6ef849c54829957269a9b86765457ceb6a61b83223bd2c4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A transparent ruler with measurements in centimeters and millimeters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0",
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "0",
+          "1 m",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "concepts": [
+          "measurement",
+          "ruler"
+        ],
+        "context_relation": "The ruler is used to measure length in centimeters and millimeters.",
+        "limitations": [
+          "The ruler is transparent and may not be suitable for all types of measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T20:26:28Z",
+      "effective_analysis": {
+        "visual_summary": "A transparent ruler with measurements in centimeters and millimeters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0",
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "0",
+          "1 m",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "concepts": [
+          "measurement",
+          "ruler"
+        ],
+        "context_relation": "The ruler is used to measure length in centimeters and millimeters.",
+        "limitations": [
+          "The ruler is transparent and may not be suitable for all types of measurements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
