@@ -82,11 +82,39 @@ class QaTestPackLifecycleIntegrationTest {
           () -> "Run B invariant checks failed: " + verifiedB.get("checks"));
 
       String tenantCodeA = codeFromCredential(installedA, "parentA");
-      assertEquals(2L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
-      assertEquals(2L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runA));
+      assertEquals(1L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=? and role='CONTENT_REVIEWER'", runA));
+      assertEquals(2L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runA));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runA));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_course_entitlement where qa_test_run_id=?", runA));
+      assertEquals(3L, count(jdbc, "select count(*) from student_program_enrollment where qa_test_run_id=?", runA));
+      assertEquals(1L, count(jdbc, """
+          select count(*) from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+          join institution_tenant target_tenant on target_tenant.id=a.institution_id
+          where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
+            and r.release_state='SHAREABLE' and right(source_tenant.tenant_code,1)='A'
+            and right(target_tenant.tenant_code,1)='B'
+          """, runA, runA));
+      assertEquals(0L, count(jdbc, """
+          select count(*) from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+          join institution_tenant target_tenant on target_tenant.id=a.institution_id
+          where a.qa_test_run_id=? and r.qa_test_run_id=?
+            and right(source_tenant.tenant_code,1)='A' and right(target_tenant.tenant_code,1)='C'
+          """, runA), "Institution C must not inherit Institution A's course release.");
+      assertEquals(3L, count(jdbc, "select count(*) from institution_user_membership where qa_test_run_id=?", runA));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_membership where qa_test_run_id=?", runA));
       assertEquals(1L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runA));
       assertEquals(1L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runA));
       assertEquals(2L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runA));
+      assertEquals(2L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from student_program_enrollment where qa_test_run_id=?", runB));
       assertEquals(1L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runB));
       assertEquals(1L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runB));
       assertEquals(2L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runB));
@@ -95,8 +123,18 @@ class QaTestPackLifecycleIntegrationTest {
       assertEquals("UNINSTALLED", removedA.get("state"), () -> "Run A cleanup failed: " + removedA.get("error_summary"));
       assertTrue(Boolean.TRUE.equals(((Map<?,?>) removedA.get("cleanup_report")).get("baselineCheckPassed")));
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
-      assertEquals(2L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB),
+      assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB),
           "Removing run A must preserve run B.");
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runA));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runA));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_entitlement where qa_test_run_id=?", runA));
+      assertEquals(0L, count(jdbc, "select count(*) from student_program_enrollment where qa_test_run_id=?", runA));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runA));
+      assertEquals(0L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=?", runA));
+      assertEquals(2L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runB),
+          "Removing run A must preserve run B's courses.");
+      assertEquals(3L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from student_program_enrollment where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runA));
@@ -107,12 +145,18 @@ class QaTestPackLifecycleIntegrationTest {
 
       Map<String,Object> replayUninstallA = qa.uninstall(runA, runA.toString(), null);
       assertTrue(Boolean.TRUE.equals(replayUninstallA.get("replayed")));
-      assertEquals(2L, count(jdbc, "select count(*) from institution_tenant where tenant_code like ? and qa_test_run_id=?", "QAT%", runB));
+      assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where tenant_code like ? and qa_test_run_id=?", "QAT%", runB));
 
       Map<String,Object> removedB = qa.uninstall(runB, runB.toString(), null);
       assertEquals("UNINSTALLED", removedB.get("state"), () -> "Run B cleanup failed: " + removedB.get("error_summary"));
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from institution_course_entitlement where qa_test_run_id=?", runB));
+      assertEquals(0L, count(jdbc, "select count(*) from student_program_enrollment where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runB));
