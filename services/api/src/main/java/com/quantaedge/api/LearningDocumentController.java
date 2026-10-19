@@ -538,19 +538,10 @@ public class LearningDocumentController {
           : "This course code is ambiguous; use its numeric course ID.");
       programId = ((Number)enrolledProgram.getFirst().get("id")).longValue();
     }
-    String programScope = programId == null ? """
-      exists(select 1 from curriculum_program_subject cps
-        join curriculum_program scope_program on scope_program.id=cps.program_id
-          and scope_program.status='ACTIVE' and scope_program.code<>'GENERAL'
-        join student_program_enrollment spe on spe.student_id=st.id
-          and spe.institution_id=m.institution_id and spe.program_id=scope_program.id and spe.status='ACTIVE'
-        join institution_course_assignment course_assignment
-          on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
-        join institution_course_release course_release on course_release.id=course_assignment.course_release_id
-          and course_release.program_id=scope_program.id
-        where cps.subject_id=s.id and cps.class_id=s.class_id
-          and (s.program_id=scope_program.id or (s.program_id is null and scope_program.class_id=s.class_id)))
-      """ : """
+    if (programId == null) {
+      throw badRequest("Select an active course in this institution before opening learning resources.");
+    }
+    String programScope = """
       exists(select 1 from curriculum_program_subject cps
         join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE'
         join student_program_enrollment spe on spe.student_id=st.id
@@ -559,10 +550,10 @@ public class LearningDocumentController {
           on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
         join institution_course_release course_release on course_release.id=course_assignment.course_release_id
           and course_release.program_id=scope_program.id
-        where cps.program_id=? and cps.subject_id=s.id
+        where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
           and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))
       """;
-    String learnerScope = programId == null ? "c.code=st.class_code" : "true";
+    String learnerScope = "true";
     String sql = """
       select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
@@ -579,8 +570,6 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join lateral (
         select t.id,t.display_name
@@ -601,9 +590,6 @@ public class LearningDocumentController {
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
       """.replace("__LEARNER_SCOPE__",learnerScope).replace("__PROGRAM_SCOPE__",programScope);
-    if (programId == null) {
-      return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter);
-    }
     return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
   }
 
@@ -620,12 +606,13 @@ public class LearningDocumentController {
   @GetMapping("/learning/documents/{documentId}")
   public Map<String, Object> studentDocument(
       @PathVariable long documentId,
+      @RequestParam(required = false) Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId);
+    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId,requireCourseId(courseId));
     int lastPage = 1;
     List<Map<String, Object>> progress = jdbc.queryForList("""
       select last_page from student_learning_document_progress
@@ -650,6 +637,7 @@ public class LearningDocumentController {
       @RequestParam(value = "startPage", defaultValue = "1") int startPage,
       @RequestParam(value = "limit", defaultValue = "10") int limit,
       @RequestParam(value = "rendition", defaultValue = "thumbnail") String rendition,
+      @RequestParam(required = false) Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -698,6 +686,7 @@ public class LearningDocumentController {
       @PathVariable long documentId,
       @PathVariable int pageNumber,
       @RequestParam(value = "rendition", defaultValue = "full") String rendition,
+      @RequestParam(required = false) Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -736,6 +725,7 @@ public class LearningDocumentController {
   @Transactional
   public Map<String, Object> saveDocumentProgress(
       @PathVariable long documentId,
+      @RequestParam(required = false) Long courseId,
       @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -758,7 +748,14 @@ public class LearningDocumentController {
     return result;
   }
 
-  private Map<String, Object> readableDocument(long documentId,long studentId,long institutionId) {
+  private long requireCourseId(Long courseId) {
+    if (courseId == null || courseId <= 0L) {
+      throw badRequest("Select an active course before opening this learning resource.");
+    }
+    return courseId;
+  }
+
+  private Map<String, Object> readableDocument(long documentId,long studentId,long institutionId,long courseId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.id as document_id,d.pdf_asset_id,a.sha256 as asset_sha256,
              a.file_size_bytes as asset_file_size_bytes,d.scope,d.book_part,d.title,d.edition,d.language,
@@ -772,8 +769,6 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
@@ -789,10 +784,10 @@ public class LearningDocumentController {
             on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
           join institution_course_release course_release on course_release.id=course_assignment.course_release_id
             and course_release.program_id=ep.id
-          where ep.status='ACTIVE' and ep.code<>'GENERAL'
+          where ep.id=? and ep.status='ACTIVE' and ep.code<>'GENERAL'
             and (s.program_id=ep.id or (s.program_id is null and ep.class_id=s.class_id))
         )
-      """,studentId,institutionId,documentId);
+      """,studentId,institutionId,documentId,courseId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
   }
