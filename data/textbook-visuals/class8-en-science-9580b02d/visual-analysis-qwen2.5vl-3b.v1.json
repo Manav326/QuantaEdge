@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 812,
+    "assets_selected": 815,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 810,
-    "assets_remaining": 1481,
+    "assets_analyzed": 811,
+    "assets_remaining": 1480,
     "assets_completion_percent": 35.4,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 807,
+    "assets_failed": 9,
+    "assets_skipped_from_checkpoint": 810,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1181,12 +1181,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity. It mentions that these questions are not just for facts but also for 'why' and 'how', and they help link different concepts and deepen curiosity. The page also discusses the importance of safety in activities and the inclusion of additional information and facts in the textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -1195,34 +1194,35 @@
           "open-ended questions",
           "critical thinking",
           "curiosity",
-          "why",
-          "how",
-          "linking concepts",
-          "science",
-          "higher grades",
           "teamwork",
           "inclusive nature",
-          "special needs",
+          "safety precautions",
           "peer interactions",
           "assessing understanding",
           "reflecting on ideas",
           "analyzing concepts",
-          "safety",
-          "precautions",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of boxes",
           "fascinating facts",
           "interesting observations",
-          "curiosity-driven questions"
+          "curiosity-driven questions",
+          "advanced concepts",
+          "scientific principles"
         ],
-        "context_relation": "The page discusses the benefits of open-ended questions in encouraging critical thinking and curiosity, and how these questions can be explored further in higher grades. It also mentions the importance of safety in activities and the inclusion of additional information and facts in the textbook.",
+        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities related to the open-ended questions or the safety precautions."
+          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:13:36Z"
+      "checkpointed_at": "2026-10-19T08:30:36Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1736,7 +1736,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
+        "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -1751,19 +1751,26 @@
           "Think like a scientist",
           "Be a scientist",
           "Snapshots",
-          "Keywords",
-          "Keep the curiosity alive"
+          "Keep the curiosity alive",
+          "Indian and international scientists",
+          "NEP 2020",
+          "keywords",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page is a continuation of the previous text discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "context_relation": "The page is part of a textbook designed for science education, focusing on the contributions of scientists, the scientific process, and the development of scientific temper.",
         "limitations": [
-          "The page does not provide specific examples or details about the institutions or personalities mentioned in the text."
+          "The page does not provide specific examples or details about the exercises or questions mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:16:56Z"
+      "checkpointed_at": "2026-10-19T08:31:54Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -19481,19 +19488,68 @@
     {
       "asset_id": "6d11337aa1f4784176df557e",
       "asset_sha256": "448975685bb3cf1d663d6a68ebfc32e5fd0b83103e69d1fafa0580335db2819d",
-      "page_text_context_sha256": "dc49c0ba3ebc11e6af03ffffef34f59f4fb845a903850d9f8b59f7bc3ea393e8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 11,
       "asset_path": "page-0011.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "dc49c0ba3ebc11e6af03ffffef34f59f4fb845a903850d9f8b59f7bc3ea393e8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science Education (HBCSE), Tata Institute of Fundamental Research (TIFR), Mumbai; Professor, Department of Condensed Matter Physics and Material Science, TIFR, Mumbai (Team Leader and Leader, Physics Sub-group)",
+          "Saroj Ghaskadbi, Former Senior Professor, Savitribai Phule Pune University, Pune (Leader, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Leader, Chemistry Sub-group)",
+          "R. Shankar, Adviser, International Geoscience Education Organisation, Coordinator, International Earth Science Olympiad and Former Professor, Mangalore University, Mangaluru (Leader, Earth Science Sub-group)",
+          "Abhay Kumar, Associate Professor, Central Institute of Educational Technology, NCERT, New Delhi",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Animesh Kumar Mohapatra, Former Professor, Department of Education in Science and Mathematics, RIE, Bhubaneswar",
+          "Arun Pratap Sikarwar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ashish Kumar Srivastava, Assistant Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "B.K. Tripathi, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram, Haryana",
+          "C.V. Shimray, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Dinesh Kumar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Faniendra Sharma, Educator and Consultant, Programme Office, NSTC, NCERT, New Delhi",
+          "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Saroj Ghaskadbi",
+          "Uday Maitra",
+          "R. Shankar",
+          "Abhay Kumar",
+          "Adithi Muralidhar",
+          "Anand Arya",
+          "Animesh Kumar Mohapatra",
+          "Arun Pratap Sikarwar",
+          "Ashish Kumar Srivastava",
+          "B.K. Tripathi",
+          "Charu Maini",
+          "C.V. Shimray",
+          "Dinesh Kumar",
+          "Faniendra Sharma",
+          "Gagan Gupta"
+        ],
+        "context_relation": "The image is a page from a textbook development team document.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T08:36:01Z"
     },
     {
       "asset_id": "75d4a907749c9e3ac08a5058",
@@ -19792,9 +19848,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
+      "run_id": "39219698568",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -19977,19 +20033,44 @@
     {
       "asset_id": "026d35fc07cd60641679f85e",
       "asset_sha256": "9349700228f8ad774a120c69126d236903f970f355cd328734aff9b0881c4aa5",
-      "page_text_context_sha256": "c340a9979d60c87ebb6b3cd733150792530db9db2dfa6050d6d1f8a32b7d1410",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 16,
       "asset_path": "page-0016.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c340a9979d60c87ebb6b3cd733150792530db9db2dfa6050d6d1f8a32b7d1410",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Acknowledgements",
+          "The National Council of Educational Research and Training (NCERT)\nacknowledges the guidance and support of the esteemed Chairperson\nand members of the National Curriculum Framework Oversight\nCommittee for  their invaluable contributions in overseeing the\ntranslation of NCF-SE 2023 perspectives into ",
+          "Special thanks are due to Aniket Sule, Associate Professor,\nHBCSE, TIFR, Mumbai, for his valuable inputs on tribal astronomy;\nRuchi Shukla, Assistant Professor, Department of Educational\nPsychology and Foundations of Education, NCERT, New Delhi, for her\ncontribution to Chapter 3; Linto Alappat, Assi",
+          "NCERT appreciates the contributions of Suparna Diwakar, Educator\nand Chief Consultant, Programme Office, NSTC; M. Pramod Kumar,\nSenior Consultant; Vaishali Sukhija, Consultant; Yadunath Deshpande,\nMember; and other members of the Programme Office, NSTC, NCERT,\nNew Delhi, for their valuable inputs."
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching Learning Material Committee",
+          "tribal astronomy",
+          "Educational Psychology and Foundations of Education",
+          "Indian Space Research Organisation (ISRO)",
+          "high-resolution images of Indian postal stamps",
+          "migratory birds of India"
+        ],
+        "context_relation": "acknowledgements",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T08:44:36Z"
     },
     {
       "asset_id": "b0358ff046707700e2112b5b",
