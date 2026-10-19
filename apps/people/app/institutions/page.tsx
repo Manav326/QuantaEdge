@@ -74,7 +74,7 @@ export default function InstitutionsAdminPage() {
   const [create,setCreate]=useState({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
   const [admin,setAdmin]=useState({username:'',displayName:'',initialPassword:''});
   const [profile,setProfile]=useState({displayName:'',legalName:''});
-  const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#C2410C'});
+  const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#0F766E'});
   const [themePresets,setThemePresets]=useState<ThemePreset[]>([]);
   const [themePreview,setThemePreview]=useState<ThemeTokens|null>(null);
   const [themePreviewLoading,setThemePreviewLoading]=useState(false);
