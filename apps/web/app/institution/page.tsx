@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import PasswordField from '../components/PasswordField';
 
 type Brand = {
   institutionCode?: string;
@@ -343,7 +344,7 @@ export default function InstitutionPortalPage() {
                   <input value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" required />
                 </label>
                 <label>Password
-                  <input value={password} onChange={e => setPassword(e.target.value)} type="password" autoComplete="current-password" required />
+                  <PasswordField value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required />
                 </label>
                 <button className="institution-primary-button" disabled={loading} type="submit">{loading ? 'Signing in…' : 'Sign in securely'}</button>
                 <p className="institution-small-note">Institution administrators cannot create accounts, add staff, or edit/publish course content.</p>
@@ -366,8 +367,8 @@ export default function InstitutionPortalPage() {
           <h1>Protect your administrator account.</h1>
           <p>Choose a password at least 12 characters long. Your initial password will stop working after it is changed.</p>
           <form onSubmit={changePassword}>
-            <label>Current password<input type="password" autoComplete="current-password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required /></label>
-            <label>New password<input type="password" autoComplete="new-password" minLength={12} value={nextPassword} onChange={e => setNextPassword(e.target.value)} required /></label>
+            <label>Current password<PasswordField autoComplete="current-password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required /></label>
+            <label>New password<PasswordField autoComplete="new-password" minLength={12} value={nextPassword} onChange={e => setNextPassword(e.target.value)} required /></label>
             <button className="institution-primary-button" disabled={loading} type="submit">Change password</button>
           </form>
         </section>
