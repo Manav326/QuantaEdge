@@ -1168,25 +1168,36 @@ public class CertificateController {
 
   @GetMapping("/admin/certificates/for-attempt/{attemptId}")
   public Map<String, Object> adminCertificateForAttempt(@PathVariable long attemptId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     Map<String, Object> row = queryOptional("""
         SELECT id FROM student_certificate
         WHERE assessment_attempt_id=? AND achievement_type='ASSESSMENT_PASS'
+          AND institution_id=? AND program_id=?
         ORDER BY id DESC LIMIT 1
-        """, attemptId);
-    if (row == null) return Map.of("issued", false);
-    return Map.of("issued", true,
-        "certificate", adminCertificateById(((Number) row.get("id")).longValue()));
+        """, attemptId,institutionId,courseId);
+    if (row == null) return Map.of("issued", false,"courseId",courseId);
+    return Map.of("issued", true,"courseId",courseId,
+        "certificate", adminCertificateById(((Number) row.get("id")).longValue(),institutionId));
   }
 
   @GetMapping("/admin/certificates")
-  public Map<String, Object> adminCertificates(@RequestParam(defaultValue = "ALL") String status,
+  public Map<String, Object> adminCertificates(@RequestParam Long courseId,
+      @RequestParam(defaultValue = "ALL") String status,
       @RequestParam(defaultValue = "ALL") String achievementType,
       @RequestParam(defaultValue = "ALL") String language,
       @RequestParam(defaultValue = "100") int limit, @RequestParam(defaultValue = "0") int offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String filter = clean(status).toUpperCase(Locale.ROOT);
     String typeFilter = clean(achievementType).toUpperCase(Locale.ROOT);
     String languageFilter = clean(language).toLowerCase(Locale.ROOT);
@@ -1200,8 +1211,8 @@ public class CertificateController {
     if (limit < 1 || limit > 500 || offset < 0 || offset > 2_000_000) {
       throw new IllegalArgumentException("Certificate page size or offset is outside the allowed range.");
     }
-    List<String> conditions = new ArrayList<>();
-    List<Object> filterArgs = new ArrayList<>();
+    List<String> conditions = new ArrayList<>(List.of("c.institution_id=?","c.program_id=?"));
+    List<Object> filterArgs = new ArrayList<>(List.of(institutionId,courseId));
     if (!"ALL".equals(filter)) { conditions.add("c.status=?"); filterArgs.add(filter); }
     if (!"ALL".equals(typeFilter)) { conditions.add("c.achievement_type=?"); filterArgs.add(typeFilter); }
     if (!"all".equals(languageFilter)) { conditions.add("c.language=?"); filterArgs.add(languageFilter); }
@@ -1211,12 +1222,15 @@ public class CertificateController {
     pageArgs.add(limit);
     pageArgs.add(offset);
     List<Map<String, Object>> items = jdbc.queryForList("""
-        SELECT c.id,c.certificate_number,c.student_id,st.display_name AS recipient_name,
-               c.achievement_type,c.class_code,s.code AS subject_code,s.display_name AS subject_name,
+        SELECT c.id,c.certificate_number,c.student_id,c.program_id AS course_id,
+               p.code AS course_code,p.display_name AS course_name,
+               st.display_name AS recipient_name,c.achievement_type,c.class_code,
+               s.code AS subject_code,s.display_name AS subject_name,
                c.achievement_title,c.template_id,c.language,c.status,c.issued_at,c.revoked_at,c.revocation_reason
         FROM student_certificate c
         JOIN student st ON st.id=c.student_id
         LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        LEFT JOIN curriculum_program p ON p.id=c.program_id
         """ + where + " ORDER BY c.issued_at DESC,c.id DESC LIMIT ? OFFSET ?",
         pageArgs.toArray());
     Long total = jdbc.queryForObject("SELECT count(*) FROM student_certificate c" + where, Long.class, args);
@@ -1234,15 +1248,21 @@ public class CertificateController {
   @GetMapping("/admin/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> adminDownloadCertificate(@PathVariable long certificateId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String normalizedFormat = format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
     }
-    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId, null);
-    if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
+    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId, null, institutionId);
+    if (certificate == null || number(certificate.get("program_id"))!=courseId)
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found in the selected institution course.");
     certificate = correctCertificateArtifact(certificate);
     boolean isPdf = "pdf".equals(normalizedFormat);
     String key = String.valueOf(certificate.get(isPdf ? "pdf_storage_key" : "png_storage_key"));
@@ -1261,9 +1281,15 @@ public class CertificateController {
 
   @GetMapping("/admin/certificates/{certificateId}/audit")
   public Map<String, Object> certificateAudit(@PathVariable long certificateId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     authorization.requireAdmin(context);
-    Long exists = jdbc.queryForObject("SELECT count(*) FROM student_certificate WHERE id=?", Long.class, certificateId);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    Long exists = jdbc.queryForObject("SELECT count(*) FROM student_certificate WHERE id=? AND institution_id=? AND program_id=?",
+        Long.class, certificateId,institutionId,courseId);
     if (exists == null || exists == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     List<Map<String, Object>> events = jdbc.queryForList("""
         SELECT id,actor_role,action,detail,occurred_at,
@@ -1278,21 +1304,27 @@ public class CertificateController {
   @PostMapping("/admin/certificates/{certificateId}/revoke")
   @Transactional
   public Map<String, Object> revokeCertificate(@PathVariable long certificateId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String reason = safeText(clean(body == null ? null : body.get("reason")), 500);
     if (reason.length() < 5) throw new IllegalArgumentException("Provide a revocation reason of at least 5 characters.");
     List<Map<String, Object>> rows = jdbc.queryForList(
-        "SELECT id,status FROM student_certificate WHERE id=? FOR UPDATE", certificateId);
+        "SELECT id,status FROM student_certificate WHERE id=? AND institution_id=? AND program_id=? FOR UPDATE",
+        certificateId,institutionId,courseId);
     if (rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
-    if ("REVOKED".equals(rows.get(0).get("status"))) return adminCertificateById(certificateId);
+    if ("REVOKED".equals(rows.get(0).get("status"))) return adminCertificateById(certificateId,institutionId);
 
     int changed = jdbc.update("""
         UPDATE student_certificate
         SET status='REVOKED',revoked_at=now(),revoked_by_staff_id=?,revocation_reason=?
-        WHERE id=? AND status='ISSUED'
-        """, context.staffId(), reason, certificateId);
+        WHERE id=? AND institution_id=? AND program_id=? AND status='ISSUED'
+        """, context.staffId(), reason, certificateId,institutionId,courseId);
     if (changed != 1) throw new IllegalStateException("Certificate status changed concurrently. Reload and retry.");
     Map<String, Object> detail = new LinkedHashMap<>();
     detail.put("reason", reason);
@@ -1300,7 +1332,7 @@ public class CertificateController {
         INSERT INTO certificate_audit_log(certificate_id,actor_staff_id,actor_role,action,detail)
         VALUES (?,?,'ADMIN','REVOKED',?::jsonb)
         """, certificateId, context.staffId(), json(detail));
-    return adminCertificateById(certificateId);
+    return adminCertificateById(certificateId,institutionId);
   }
 
   private Map<String, Object> subjectCompletionStats(long studentId,long subjectId,long courseId,long institutionId) {
@@ -1371,6 +1403,18 @@ public class CertificateController {
     return tenant.institutionId();
   }
 
+  private void requireAssignedCourse(Long courseId,long institutionId) {
+    if(courseId==null||courseId<1L)throw new IllegalArgumentException("Select a course assigned to this institution.");
+    Boolean assigned=jdbc.queryForObject("""
+      select exists(select 1 from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where a.institution_id=? and a.status='ASSIGNED')
+      """,Boolean.class,courseId,institutionId);
+    if(!Boolean.TRUE.equals(assigned))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The selected course is not assigned to the active institution.");
+  }
+
   private Map<String, Object> publicCertificateById(long id,long studentId) {
     Map<String, Object> row = queryOptional("SELECT " + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN
         + " WHERE c.id=? AND c.student_id=?",id,studentId);
@@ -1385,15 +1429,18 @@ public class CertificateController {
     return row;
   }
 
-  private Map<String, Object> adminCertificateById(long id) {
+  private Map<String, Object> adminCertificateById(long id,long institutionId) {
     Map<String, Object> row = queryOptional("""
         SELECT c.id,c.certificate_number,c.student_id,st.display_name AS recipient_name,
-               c.achievement_type,c.class_code,s.code AS subject_code,c.achievement_title,
+               c.achievement_type,c.class_code,c.program_id AS course_id,
+               p.code AS course_code,p.display_name AS course_name,
+               s.code AS subject_code,s.display_name AS subject_name,c.achievement_title,
                c.template_id,c.language,c.status,c.issued_at,c.revoked_at,c.revocation_reason
         FROM student_certificate c JOIN student st ON st.id=c.student_id
         LEFT JOIN curriculum_subject s ON s.id=c.subject_id
-        LEFT JOIN curriculum_program p ON p.id=c.program_id WHERE c.id=?
-        """, id);
+        LEFT JOIN curriculum_program p ON p.id=c.program_id
+        WHERE c.id=? AND c.institution_id=?
+        """, id,institutionId);
     if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     return row;
   }
