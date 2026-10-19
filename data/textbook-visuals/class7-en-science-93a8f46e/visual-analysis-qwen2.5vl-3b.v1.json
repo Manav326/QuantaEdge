@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1317,
+    "assets_selected": 1320,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1315,
-    "assets_remaining": 6173,
+    "assets_analyzed": 1318,
+    "assets_remaining": 6170,
     "assets_completion_percent": 17.6,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1312,
+    "assets_skipped_from_checkpoint": 1315,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:42:28Z"
+      "checkpointed_at": "2026-10-19T03:47:26Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:42:56Z"
+      "checkpointed_at": "2026-10-19T03:47:54Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -49921,6 +49921,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T03:46:31Z"
+    },
+    {
+      "asset_id": "b5292145f1a0c96fcd3a8136",
+      "asset_sha256": "0af9c5407dc6978b33c0a62e73e2110b17ae009952429b615d29f3e8641500cd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/0af9c5407dc6978b33c0a62e73e2110b17ae009952429b615d29f3e8641500cd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a blue object, possibly a part of a circuit or a lamp, with a blurred background.",
+        "limitations": [
+          "The image is a close-up and does not show the full context or the circuit setup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:49:07Z"
+    },
+    {
+      "asset_id": "11189d191d6a81c4370666ef",
+      "asset_sha256": "2f8ccc094e05f429aa84e41cc871581416f0b84ed49d5de40ad3fb51c5f29c42",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/2f8ccc094e05f429aa84e41cc871581416f0b84ed49d5de40ad3fb51c5f29c42.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a textbook page with a partially visible diagram and text.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a cropped figure from a textbook page discussing a circuit experiment.",
+        "limitations": [
+          "The image is blurry and partially obscured, making some details difficult to discern."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:50:20Z"
+    },
+    {
+      "asset_id": "661ccd364e30ed728a4a7440",
+      "asset_sha256": "820f9245914c5d42252b1e0c3575eb3a015cd37a65204a6a16d2086ad2dba17f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/820f9245914c5d42252b1e0c3575eb3a015cd37a65204a6a16d2086ad2dba17f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red lamp with a light bulb inside, partially obscured by a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "light bulb",
+          "lamp"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image is partially obscured and the text is not fully visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:51:33Z"
     }
   ]
 }

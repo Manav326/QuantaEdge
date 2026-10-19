@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1340,
-    "successful_visual_analyses": 1317,
-    "missing_visual_analyses": 6148,
+    "raw_analysis_result_rows": 1343,
+    "successful_visual_analyses": 1320,
+    "missing_visual_analyses": 6145,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6171,
+    "unresolved_count": 6168,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60516,9 +60516,31 @@
       "asset_path": "assets/0af9c5407dc6978b33c0a62e73e2110b17ae009952429b615d29f3e8641500cd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a blue object, possibly a part of a circuit or a lamp, with a blurred background.",
+        "limitations": [
+          "The image is a close-up and does not show the full context or the circuit setup."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60534,9 +60556,28 @@
       "asset_path": "assets/2f8ccc094e05f429aa84e41cc871581416f0b84ed49d5de40ad3fb51c5f29c42.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a textbook page with a partially visible diagram and text.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a cropped figure from a textbook page discussing a circuit experiment.",
+        "limitations": [
+          "The image is blurry and partially obscured, making some details difficult to discern."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60552,9 +60593,30 @@
       "asset_path": "assets/820f9245914c5d42252b1e0c3575eb3a015cd37a65204a6a16d2086ad2dba17f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red lamp with a light bulb inside, partially obscured by a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "light bulb",
+          "lamp"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image is partially obscured and the text is not fully visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
