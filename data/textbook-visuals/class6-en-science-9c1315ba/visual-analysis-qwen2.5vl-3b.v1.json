@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1063,
+    "assets_selected": 1065,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1060,
-    "assets_remaining": 1018,
-    "assets_completion_percent": 51.0,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1058,
+    "assets_analyzed": 1061,
+    "assets_remaining": 1017,
+    "assets_completion_percent": 51.1,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 1060,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:45:49Z"
+      "checkpointed_at": "2026-10-19T16:48:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:46:29Z"
+      "checkpointed_at": "2026-10-19T16:49:30Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:47:20Z"
+      "checkpointed_at": "2026-10-19T16:50:24Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34518,6 +34518,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T16:48:01Z"
+    },
+    {
+      "asset_id": "e175c9c1c81ca5efad4640d1",
+      "asset_sha256": "a39d863c854fab8dee2be61560c330c502217e45ef89059d1e6ea4d373c7aefa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "asset_path": "page-0086.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e769274f54486c8a8a697b041f9a467c231dac14b2df98be729697dad52c9996",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving bar magnets and pencils.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.4 Attraction and Repulsion between Magnets",
+          "Activity 4.5: Let us experiment",
+          "Take a pair of bar magnets on which North and South",
+          "poles have been marked. Mark the two bar magnets as",
+          "A and B.",
+          "Place the longer side of magnet A over 5–6 round shaped",
+          "pencils as shown in Fig. 4.8a.",
+          "Now bring one end of magnet B near the end of magnet",
+          "A placed on the pencils. Make sure that the two magnets",
+          "do not touch each other. Observe what happens.",
+          "Next, bring the other end of magnet B near the same end",
+          "of magnet A (Fig. 4.8b). Does the magnet A on the pencils",
+          "begin to move? Does it always move in the direction of",
+          "the approaching magnet? What do these observations",
+          "suggest?",
+          "(a)",
+          "(b)",
+          "Fig. 4.8: Interaction between two bar magnets",
+          "You will see that unlike poles of two magnets, that is, the",
+          "North pole of one magnet and the South pole of another",
+          "magnet, attract each other. The like poles, that is, either",
+          "the North poles or the South poles of both magnets, repel",
+          "each other."
+        ],
+        "concepts": [
+          "magnets",
+          "poles",
+          "interaction",
+          "attraction",
+          "repulsion"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "visual representation of the experiment",
+          "description of the experiment steps"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:52:08Z"
+    },
+    {
+      "asset_id": "01128e1da549b4881f224152",
+      "asset_sha256": "0b1cf9c03f9e0e5248d25c88f59435a8a24151937d29162b4227e4f26a449a7c",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/0b1cf9c03f9e0e5248d25c88f59435a8a24151937d29162b4227e4f26a449a7c.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
