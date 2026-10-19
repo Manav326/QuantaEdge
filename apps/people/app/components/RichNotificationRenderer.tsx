@@ -101,7 +101,7 @@ function blockPresentationStyle(block: Block): CSSProperties {
   if (Number.isFinite(radius) && radius >= 0 && radius <= 40) style.borderRadius = radius + 'px';
   const fontSize = Number(block.fontSize);
   if (Number.isFinite(fontSize) && fontSize >= 10 && fontSize <= 32) style.fontSize = fontSize + 'px';
-  if (accent) Object.assign(style, {'--qe-color-accent': accent} as CSSProperties);
+  if (accent) Object.assign(style, {'--qe-color-accent': accent});
   return style;
 }
 
