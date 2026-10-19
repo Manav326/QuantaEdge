@@ -43,6 +43,8 @@ class LearningDocumentControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningDocumentController(jdbc, authorization, staffAudit);
+    when(jdbc.queryForList(contains("from student_program_enrollment spe"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 71L)));
   }
 
   @Test
@@ -72,7 +74,7 @@ class LearningDocumentControllerTest {
     verify(jdbc).queryForList(
         contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
     verify(jdbc).queryForList(
-        contains("ste.status='ACTIVE'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("cps.program_id=?"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
     verify(jdbc).queryForList(
         contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
   }
