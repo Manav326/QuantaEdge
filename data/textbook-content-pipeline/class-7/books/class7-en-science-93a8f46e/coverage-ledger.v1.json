@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1639,
-    "successful_visual_analyses": 1617,
-    "missing_visual_analyses": 5849,
+    "raw_analysis_result_rows": 1642,
+    "successful_visual_analyses": 1620,
+    "missing_visual_analyses": 5846,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5871,
+    "unresolved_count": 5868,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -71230,9 +71230,27 @@
       "asset_path": "assets/7de5d247f8ab033521247a85b189e774ae20eeb16e03c4ab2915549bd75b8bcd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass easily through some materials but not through others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "conductors of electricity"
+        ],
+        "context_relation": "The text explains the difference between good conductors and insulators based on the behavior of a lamp.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71248,9 +71266,16 @@
       "asset_path": "assets/0b7c3bc50164a2b527e357fe9a24f977e3b74b66ff55faad2cd56e6939959396.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71266,9 +71291,26 @@
       "asset_path": "assets/06669ef3b1cca0ce4226be7e53778c3ed7e0b909048b4d74c4c0a4feb3ba2fcd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram showing a triangle with a line segment inside it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others. The materials through which electric current can flow easily are called good conductors, or conductors of electricity. The materials through which current cannot pa"
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the lamp glowing or the materials being tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

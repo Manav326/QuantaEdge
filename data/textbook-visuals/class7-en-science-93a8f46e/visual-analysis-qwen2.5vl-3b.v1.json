@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1617,
+    "assets_selected": 1620,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1615,
-    "assets_remaining": 5873,
+    "assets_analyzed": 1618,
+    "assets_remaining": 5870,
     "assets_completion_percent": 21.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1612,
+    "assets_skipped_from_checkpoint": 1615,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:32:07Z"
+      "checkpointed_at": "2026-10-19T12:34:40Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:32:28Z"
+      "checkpointed_at": "2026-10-19T12:35:01Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -60936,6 +60936,105 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:33:58Z"
+    },
+    {
+      "asset_id": "be017f25e74980e8299c3730",
+      "asset_sha256": "7de5d247f8ab033521247a85b189e774ae20eeb16e03c4ab2915549bd75b8bcd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/7de5d247f8ab033521247a85b189e774ae20eeb16e03c4ab2915549bd75b8bcd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass easily through some materials but not through others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "conductors of electricity"
+        ],
+        "context_relation": "The text explains the difference between good conductors and insulators based on the behavior of a lamp.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:35:43Z"
+    },
+    {
+      "asset_id": "772492e900758747f4a741ea",
+      "asset_sha256": "0b7c3bc50164a2b527e357fe9a24f977e3b74b66ff55faad2cd56e6939959396",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/0b7c3bc50164a2b527e357fe9a24f977e3b74b66ff55faad2cd56e6939959396.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:36:17Z"
+    },
+    {
+      "asset_id": "55895e95be1e05b605a6d21f",
+      "asset_sha256": "06669ef3b1cca0ce4226be7e53778c3ed7e0b909048b4d74c4c0a4feb3ba2fcd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/06669ef3b1cca0ce4226be7e53778c3ed7e0b909048b4d74c4c0a4feb3ba2fcd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram showing a triangle with a line segment inside it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others. The materials through which electric current can flow easily are called good conductors, or conductors of electricity. The materials through which current cannot pa"
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the lamp glowing or the materials being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:36:58Z"
     }
   ]
 }
