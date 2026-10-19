@@ -30,3 +30,5 @@
 .verifyCard strong{color:#803b12}.verifyCard p{color:#5e6674;line-height:1.5;margin:5px 0 0;font-size:13px}
 .verifyCard button,.stateCard button{background:#e87524;color:#fff;flex-shrink:0}
 @media(max-width:640px){.page{padding:16px 13px 30px}.hero{padding:19px;border-radius:17px}.verifyCard{align-items:stretch;flex-direction:column}.verifyCard button{width:100%}.grid{grid-template-columns:minmax(0,1fr)}}
+
+.requestStatus{font-size:12px;line-height:1.5;color:#7c451f;background:#fff8f2;border:1px solid #f0d5c0;border-radius:10px;padding:9px 11px;margin:0}
