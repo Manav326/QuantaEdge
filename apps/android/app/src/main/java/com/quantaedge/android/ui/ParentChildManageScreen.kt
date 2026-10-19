@@ -164,7 +164,7 @@ fun ParentChildManageScreen(
                 val subjects = course.optJSONArray("subjects")?.let { array ->
                     (0 until array.length()).mapNotNull { i ->
                         array.optJSONObject(i)?.let { subject ->
-                            subject.textAny("subject_name", "subject_code", "code").ifBlank { null }
+                            subject.textAny("subject_name", "subject_code", "code").takeIf { it.isNotBlank() }
                         }
                     }
                 }.orEmpty()
