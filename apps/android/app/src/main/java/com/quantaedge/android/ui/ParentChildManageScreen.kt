@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
@@ -54,6 +55,7 @@ fun ParentChildManageScreen(
     }
     var username by rememberSaveable(childId) { mutableStateOf(child.textAny("login_username")) }
     var password by remember(childId) { mutableStateOf("") }
+    var passwordVisible by rememberSaveable(childId) { mutableStateOf(false) }
     var confirmArchive by rememberSaveable(childId) { mutableStateOf(false) }
 
     if (confirmArchive) {
@@ -127,7 +129,9 @@ fun ParentChildManageScreen(
         OutlinedTextField(
             value = password, onValueChange = { password = it },
             label = { Text(t("New password (at least 8 characters)", "नया पासवर्ड (कम-से-कम 8 अक्षर)")) },
-            singleLine = true, enabled = !busy, visualTransformation = PasswordVisualTransformation(),
+            singleLine = true, enabled = !busy,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = { PasswordVisibilityToggle(passwordVisible, { passwordVisible = !passwordVisible }, t(if (passwordVisible) "Hide password" else "Show password", if (passwordVisible) "पासवर्ड छिपाएँ" else "पासवर्ड दिखाएँ")) },
             modifier = Modifier.fillMaxWidth()
         )
         Button(
