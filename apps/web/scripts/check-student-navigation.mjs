@@ -232,7 +232,7 @@ assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?cours
   'Parent reports must require explicit course selection for multi-course children.');
 
 const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
-assert.ok(textbooksClient.includes('textbookChapterTitle(item, learningLanguage)'), 'Textbook chapter titles must follow selected content language.');
+assert.ok(textbooksClient.includes('displayChapterTitle(item, learningLanguage === \'en\')'), 'Textbook chapter titles must follow selected content language.');
 const scopeComponent = read('../app/student/InstitutionCourseSubjectScope.tsx');
 assert.ok(scopeComponent.includes('useTenantBranding') && scopeComponent.includes('activeCourse?.subjects') && scopeComponent.includes('brand?.displayName'), 'Shared learner scope must display the validated institution and derive subjects from the selected course.');
 assert.ok(testsClient.includes('InstitutionCourseSubjectScope') && testsClient.includes('resultsParams.set(\'subjectCode\',subjectFilter)'), 'Tests and results must carry selected course and subject scope.');
