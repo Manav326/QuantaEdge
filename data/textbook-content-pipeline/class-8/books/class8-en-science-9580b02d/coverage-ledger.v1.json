@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 811,
-    "successful_visual_analyses": 798,
-    "missing_visual_analyses": 1480,
+    "raw_analysis_result_rows": 813,
+    "successful_visual_analyses": 800,
+    "missing_visual_analyses": 1478,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1493,
+    "unresolved_count": 1491,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31377,9 +31377,22 @@
       "asset_path": "assets/e04569e237b254d6e1fdb40f2534cd5bccff6ab3f7c1f5c4921d630e50094463.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three pink, wavy lines representing different types of fungi.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "fungi",
+          "soil",
+          "diagram"
+        ],
+        "context_relation": "The image is related to the description of fungi in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the fungi types or their characteristics."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31395,9 +31408,20 @@
       "asset_path": "assets/bf9a919a1f139bd7184502124442be95e6209056041c30f5022b73c19ea03019.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a green shirt, pointing upwards with one finger and holding their other hand near their ear, possibly listening.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any diagrams or tables related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

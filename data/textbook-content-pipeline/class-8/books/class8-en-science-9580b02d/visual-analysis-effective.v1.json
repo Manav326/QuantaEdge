@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2f612e70b86cc51d06d1907da17221f975343e9332c61464cfbb7e98a24052ed",
+  "raw_analysis_sha256": "dcf52d6fe5de7726c85aac9170b42dca0cad950de52c9bcecca2a2bd8cdf467f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:57:44Z",
+      "checkpointed_at": "2026-10-19T05:03:54Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:58:32Z",
+      "checkpointed_at": "2026-10-19T05:04:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:59:10Z",
+      "checkpointed_at": "2026-10-19T05:05:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -36276,6 +36276,98 @@
         "context_relation": "The image is related to the description of organisms present in soil suspension.",
         "limitations": [
           "The image does not provide specific details about the organisms' appearance or behavior."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f9deaf0946fd03b8b99ae1f",
+      "asset_sha256": "e04569e237b254d6e1fdb40f2534cd5bccff6ab3f7c1f5c4921d630e50094463",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/e04569e237b254d6e1fdb40f2534cd5bccff6ab3f7c1f5c4921d630e50094463.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three pink, wavy lines representing different types of fungi.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "fungi",
+          "soil",
+          "diagram"
+        ],
+        "context_relation": "The image is related to the description of fungi in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the fungi types or their characteristics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:06:54Z",
+      "effective_analysis": {
+        "visual_summary": "Three pink, wavy lines representing different types of fungi.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "fungi",
+          "soil",
+          "diagram"
+        ],
+        "context_relation": "The image is related to the description of fungi in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the fungi types or their characteristics."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1516f734ca902ce1d5f0ebfc",
+      "asset_sha256": "bf9a919a1f139bd7184502124442be95e6209056041c30f5022b73c19ea03019",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/bf9a919a1f139bd7184502124442be95e6209056041c30f5022b73c19ea03019.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a green shirt, pointing upwards with one finger and holding their other hand near their ear, possibly listening.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any diagrams or tables related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:08:30Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a green shirt, pointing upwards with one finger and holding their other hand near their ear, possibly listening.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any diagrams or tables related to the textbook content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
