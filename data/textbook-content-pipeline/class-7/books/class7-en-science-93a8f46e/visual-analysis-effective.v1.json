@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3ef9275a46a2950cf92d7ae79ba823cba9c51843f355e1224f9a311f393109a4",
+  "raw_analysis_sha256": "0b7a86249599ac745cb4bb1554f0a998228d238a7260b1243f75501380caac79",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:13:27Z",
+      "checkpointed_at": "2026-10-19T10:16:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:13:48Z",
+      "checkpointed_at": "2026-10-19T10:16:59Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -87983,6 +87983,148 @@
         "limitations": [
           "The image does not show the completed switch or its functionality."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "10f9b04d65556d68e73d6bf0",
+      "asset_sha256": "1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a switch mechanism, showing a pin and a spring.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "Let us first make a simple  on or off the torchlight?",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a paper clip), two wires, and a small piece of cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip."
+        ],
+        "concepts": [
+          "electric switch",
+          "pin mechanism",
+          "spring mechanism"
+        ],
+        "context_relation": "The image is related to the educational content of constructing an electric switch.",
+        "limitations": [
+          "The image does not provide specific details about the construction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:17:42Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a switch mechanism, showing a pin and a spring.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "Let us first make a simple  on or off the torchlight?",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a paper clip), two wires, and a small piece of cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip."
+        ],
+        "concepts": [
+          "electric switch",
+          "pin mechanism",
+          "spring mechanism"
+        ],
+        "context_relation": "The image is related to the educational content of constructing an electric switch.",
+        "limitations": [
+          "The image does not provide specific details about the construction process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d3cec0f353f39f5892fd7771",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:17:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ec4ac0bfb2f8653ff6875561",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:17:54Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
