@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "131e6f7c0540add2af13ef8c23ab8416f6e8a16af9cbc4301b94f93b541d9ce1",
+  "raw_analysis_sha256": "aac296afffd8d27e10d811013a9536b83bd393fa3d4a6e231a65868415dcee02",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:18:08Z",
+      "checkpointed_at": "2026-10-19T13:21:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:18:29Z",
+      "checkpointed_at": "2026-10-19T13:22:12Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -98157,6 +98157,156 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3d290e80d9226082846c9a03",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:22:19Z",
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "48cc0c39d063f4b69b40dfce",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram."
+        ],
+        "concepts": [
+          "Electrical diagram",
+          "Dashed circle",
+          "Curved lines"
+        ],
+        "context_relation": "The image is a visual representation of an electrical diagram, likely used to explain the concept of an electric cell.",
+        "limitations": [
+          "The image does not provide specific details about the components or functions of an electric cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:22:28Z",
+      "effective_analysis": {
+        "visual_summary": "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram."
+        ],
+        "concepts": [
+          "Electrical diagram",
+          "Dashed circle",
+          "Curved lines"
+        ],
+        "context_relation": "The image is a visual representation of an electrical diagram, likely used to explain the concept of an electric cell.",
+        "limitations": [
+          "The image does not provide specific details about the components or functions of an electric cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c43c14f03c84ec24a479ef7b",
+      "asset_sha256": "6f93007eaaf4c9ca5bede249cffe97727a84c25372c5187910651fde9ee58481",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/6f93007eaaf4c9ca5bede249cffe97727a84c25372c5187910651fde9ee58481.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals: positive (+ve) and negative (–ve).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:23:07Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals: positive (+ve) and negative (–ve).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1684,
-    "successful_visual_analyses": 1661,
-    "missing_visual_analyses": 5804,
+    "raw_analysis_result_rows": 1687,
+    "successful_visual_analyses": 1664,
+    "missing_visual_analyses": 5801,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5827,
+    "unresolved_count": 5824,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -72794,9 +72794,18 @@
       "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72812,9 +72821,24 @@
       "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A green, dashed circle with two curved lines extending from it, resembling a simple electrical diagram."
+        ],
+        "concepts": [
+          "Electrical diagram",
+          "Dashed circle",
+          "Curved lines"
+        ],
+        "context_relation": "The image is a visual representation of an electrical diagram, likely used to explain the concept of an electric cell.",
+        "limitations": [
+          "The image does not provide specific details about the components or functions of an electric cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72830,9 +72854,27 @@
       "asset_path": "assets/6f93007eaaf4c9ca5bede249cffe97727a84c25372c5187910651fde9ee58481.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals: positive (+ve) and negative (–ve).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
