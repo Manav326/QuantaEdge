@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 969,
+    "assets_selected": 972,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 967,
-    "assets_remaining": 1111,
-    "assets_completion_percent": 46.5,
+    "assets_analyzed": 970,
+    "assets_remaining": 1108,
+    "assets_completion_percent": 46.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 964,
+    "assets_skipped_from_checkpoint": 967,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:47:56Z"
+      "checkpointed_at": "2026-10-19T11:55:06Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:48:57Z"
+      "checkpointed_at": "2026-10-19T11:56:08Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -31113,6 +31113,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T11:53:49Z"
+    },
+    {
+      "asset_id": "6b9e09106b616f10f28acfb1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:56:23Z"
+    },
+    {
+      "asset_id": "95cf6d0b4c02b26af28e9958",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:56:37Z"
+    },
+    {
+      "asset_id": "0c95ebf757fca2c086141a0d",
+      "asset_sha256": "de8d33ff5406e438519058ca56b2fe8a780a61c95f7f5dfde054bdce6b085015",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "page-0072.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram illustrating the journey of wheat from farm to plate.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.6 Food Miles: From Farm to Our Plate",
+          "How does food reach from a farm to our plate? What are the steps involved in this process? Who are the people involved in this process? Do you know how much time and effort is required to get the wheat flour once seed grains germinate in the farm? Let us look at Fig. 3.10 to understand the entire pr",
+          "Farmer growing wheat",
+          "Threshing and winnowing of grains",
+          "Storage of grains",
+          "Grinding of grains and packing",
+          "Transport to retail shop",
+          "Food on our plate",
+          "STORY OF CHAPATI: FROM FARM TO PLATE",
+          "Fig. 3.10: From farm to plate"
+        ],
+        "concepts": [
+          "food miles",
+          "transport",
+          "storage",
+          "grinding",
+          "winnowing",
+          "threshing",
+          "wheat",
+          "chapati"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the entire process of making chapati."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:00:40Z"
     }
   ]
 }

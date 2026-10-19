@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 982,
-    "successful_visual_analyses": 969,
-    "missing_visual_analyses": 1096,
+    "raw_analysis_result_rows": 985,
+    "successful_visual_analyses": 972,
+    "missing_visual_analyses": 1093,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1109,
+    "unresolved_count": 1106,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37980,9 +37980,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37998,9 +38007,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38016,9 +38034,38 @@
       "asset_path": "page-0072.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram illustrating the journey of wheat from farm to plate.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.6 Food Miles: From Farm to Our Plate",
+          "How does food reach from a farm to our plate? What are the steps involved in this process? Who are the people involved in this process? Do you know how much time and effort is required to get the wheat flour once seed grains germinate in the farm? Let us look at Fig. 3.10 to understand the entire pr",
+          "Farmer growing wheat",
+          "Threshing and winnowing of grains",
+          "Storage of grains",
+          "Grinding of grains and packing",
+          "Transport to retail shop",
+          "Food on our plate",
+          "STORY OF CHAPATI: FROM FARM TO PLATE",
+          "Fig. 3.10: From farm to plate"
+        ],
+        "concepts": [
+          "food miles",
+          "transport",
+          "storage",
+          "grinding",
+          "winnowing",
+          "threshing",
+          "wheat",
+          "chapati"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the entire process of making chapati."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
