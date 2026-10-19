@@ -77,7 +77,7 @@ class LearningDocumentControllerTest {
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
+        contains("dca.status='PUBLISHED'"), eq(7L), eq(1L), eq(71L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
   }
 
   @Test
@@ -90,7 +90,7 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "english", null, 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("en"), eq("science"), eq("science"), eq(71L));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq(71L), eq("en"), eq("en"), eq("science"), eq("science"), eq(71L));
   }
 
   @Test
@@ -103,9 +103,9 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "hi", "en", 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq(71L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
     verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
-        eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
+        eq(7L), eq(1L), eq(71L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
   }
   @Test
   void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
@@ -161,8 +161,8 @@ class LearningDocumentControllerTest {
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
-        contains("where scope=? and subject_id=? and language=?"),
-        eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
+        contains("update learning_document_course_assignment other_assignment"),
+        eq(1L), eq(71L), eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
   }
 
   @Test
@@ -187,8 +187,8 @@ class LearningDocumentControllerTest {
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
-        contains("and (book_part is null or book_part=?)"),
-        eq("SUBJECT_BOOK"), eq(3L), eq("en"), isNull(), eq(88L), eq(1));
+        contains("and (other_document.book_part is null or other_document.book_part=?)"),
+        eq(1L), eq(71L), eq("SUBJECT_BOOK"), eq(3L), eq("en"), isNull(), eq(88L), eq(1));
   }
 
   @Test
@@ -230,7 +230,7 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where d.id=?"), any(Object[].class)))
         .thenReturn(List.of(metadata));
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
@@ -270,7 +270,7 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where d.id=?"), any(Object[].class)))
         .thenReturn(List.of(metadata));
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
