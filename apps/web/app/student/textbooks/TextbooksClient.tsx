@@ -8,7 +8,8 @@ import { useLocale } from '../../components/LanguageProvider';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
 import PremiumPagination from '../../components/PremiumPagination';
 import './textbooks.css';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type LearningDocument = {
   document_id: number;
@@ -236,13 +237,13 @@ export default function TextbooksClient() {
   };
   const rawReturnTo = searchParams.get('returnTo') || '';
   const returnTarget = rawReturnTo.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : '/student/textbooks';
-  const returnLabel = returnTarget.startsWith('/student/learn') ? translateUi(locale, 'legacy.web.back.to.subject.ffd3f558') : returnTarget === '/student' ? translateUi(locale, 'legacy.web.back.to.today.d7003bfb') : translateUi(locale, 'legacy.web.textbook.library.278aacb6');
+  const returnLabel = (returnTarget.startsWith('/student/learn') || returnTarget.startsWith('/student/structured-lessons')) ? translateUi(locale, 'legacy.web.back.to.subject.ffd3f558') : returnTarget === '/student' ? translateUi(locale, 'legacy.web.back.to.today.d7003bfb') : translateUi(locale, 'legacy.web.textbook.library.278aacb6');
 
   useEffect(() => {
     if (loading || subjectGroups.length === 0) return;
-    const classCode = String(subjectGroups[0]?.rows[0]?.class_code || 'default');
-    if (initializedLibraryScope.current === classCode) return;
-    const key = 'qe:student:textbooks:open:' + classCode;
+    const libraryStorageScope = activeCourseId === null ? 'no-course' : 'course-' + activeCourseId;
+    if (initializedLibraryScope.current === libraryStorageScope) return;
+    const key = 'qe:student:textbooks:open:' + libraryStorageScope;
     const requested = requestedSubjectCode;
     const remembered = localStorage.getItem(key);
     const initial = subjectGroups.find(group => group.code === requested)?.code
@@ -251,8 +252,8 @@ export default function TextbooksClient() {
       || '';
     setExpandedSubject(initial);
     if (initial) localStorage.setItem(key, initial);
-    initializedLibraryScope.current = classCode;
-  }, [loading, subjectGroups, requestedSubjectCode]);
+    initializedLibraryScope.current = libraryStorageScope;
+  }, [loading, subjectGroups, requestedSubjectCode, activeCourseId]);
 
   useEffect(() => {
     if (documentId) return;
@@ -260,9 +261,9 @@ export default function TextbooksClient() {
     if (!requested || !availableSubjects.some(subject => subject.code === requested)) return;
     setSubjectFilter(requested);
     setExpandedSubject(requested);
-    const classCode = String(documents.find(item => item.subject_code === requested)?.class_code || 'default');
-    localStorage.setItem('qe:student:textbooks:open:' + classCode, requested);
-  }, [documentId, requestedSubjectCode, availableSubjects, documents]);
+    const libraryStorageScope = activeCourseId === null ? 'no-course' : 'course-' + activeCourseId;
+    localStorage.setItem('qe:student:textbooks:open:' + libraryStorageScope, requested);
+  }, [documentId, requestedSubjectCode, availableSubjects, activeCourseId]);
 
   useEffect(() => {
     if (documentId || loading) return;
@@ -351,8 +352,8 @@ export default function TextbooksClient() {
     // Selecting one subject opens its assignments; returning to All subjects
     // deliberately collapses every book so the user can choose what to open.
     setExpandedSubject(code);
-    const classCode = String(group?.rows[0]?.class_code || documents[0]?.class_code || 'default');
-    const storageKey = 'qe:student:textbooks:open:' + classCode;
+    const libraryStorageScope = activeCourseId === null ? 'no-course' : 'course-' + activeCourseId;
+    const storageKey = 'qe:student:textbooks:open:' + libraryStorageScope;
     if (code) localStorage.setItem(storageKey, code);
     else localStorage.removeItem(storageKey);
 
@@ -387,19 +388,25 @@ export default function TextbooksClient() {
             <p>{translateUi(locale, 'legacy.web.browse.only.the.published.resources.av.80a34039')}</p>
           </div>
           <div className="qe-textbook-filter-wrap">
-            <PrimaryCoursePicker courses={courses} courseId={activeCourseId} onChange={selectCourse} loading={loadingCourses} label={locale === 'english' ? 'Primary course' : 'मुख्य कोर्स'} />
-            <label>{translateUi(locale, 'legacy.web.subject.scope.f130e513')}
-              <select aria-label={translateUi(locale, 'legacy.web.filter.textbook.assignments.by.subject.e0994ff3')} value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}>
-                <option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
-              </select>
-            </label>
+            <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={activeCourseId}
+              onCourseChange={async value => {
+                await selectCourse(value);
+                const params = new URLSearchParams(searchParams.toString());
+                params.set('courseId', value); params.delete('subjectCode'); params.delete('documentId'); params.delete('returnTo');
+                router.replace('/student/textbooks?' + params.toString(), { scroll: false });
+                setSubjectFilter('ALL'); setExpandedSubject(''); setChapterPageBySubject({});
+              }}
+              subjectCode={subjectFilter} onSubjectChange={changeSubjectFilter} loading={loadingCourses}
+              language={locale} courseLabel={locale === 'english' ? 'Course' : 'कोर्स'}
+              subjectLabel={locale === 'english' ? 'Subject' : 'विषय'}
+              allSubjectsLabel={translateUi(locale, 'legacy.web.all.subjects.7895d918')} />
             <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} {translateUi(locale, visibleDocuments.length === 1 ? 'legacy.web.resource.d42911fa' : 'web.count.resourcesPlural')} · {subjectGroups.length} {translateUi(locale, subjectGroups.length === 1 ? 'legacy.web.subject.e4481da7' : 'web.count.subjectsPlural')}</span>
           </div>
         </div>
       </section>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.loading.your.textbook.library.e562b86c')}</div>
-        : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>{translateUi(locale, 'legacy.web.no.published.pdfs.available.yet.6a520470')}</h3><p>{translateUi(locale, 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')}</p><Link href="/student/learn">{translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}</Link></div>
+        : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>{translateUi(locale, 'legacy.web.no.published.pdfs.available.yet.6a520470')}</h3><p>{translateUi(locale, 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')}</p><Link href={'/student/structured-lessons' + (activeCourseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourseId)) : '')}>{translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}</Link></div>
         : <div className="qe-textbook-resource-groups">
           {subjectGroups.map(({ code, name: rawName, rows }) => {
             const name = displaySubjectName(code, rawName);
@@ -446,8 +453,8 @@ export default function TextbooksClient() {
               const next = expanded ? '' : code;
               setExpandedSubject(next);
               if (next) setChapterPageBySubject(old => ({ ...old, [code]: 1 }));
-              const classCode = String(rows[0]?.class_code || 'default');
-              const storageKey = 'qe:student:textbooks:open:' + classCode;
+              const libraryStorageScope = activeCourseId === null ? 'no-course' : 'course-' + activeCourseId;
+              const storageKey = 'qe:student:textbooks:open:' + libraryStorageScope;
               if (next) localStorage.setItem(storageKey, next);
               else localStorage.removeItem(storageKey);
             };
@@ -458,7 +465,7 @@ export default function TextbooksClient() {
                   <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong>
                     <span className="qe-book-meta-tags">
                       {publisherLabel && <span className="qe-book-meta-tag qe-book-meta-tag--source">{publisherLabel}</span>}
-                      <span className="qe-book-meta-tag qe-book-meta-tag--class">{translateUi(locale, 'legacy.web.class.3f617911')}{rows[0]?.class_code}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--class">{locale === 'english' ? 'Course' : 'कोर्स'} · {activeCourse?.display_name || '—'}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--subject">{displayName}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--language">{bookLanguageLabel}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--type">{bookKindLabel}</span>
