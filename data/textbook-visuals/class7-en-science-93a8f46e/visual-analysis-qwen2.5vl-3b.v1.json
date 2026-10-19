@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1733,
+    "assets_selected": 1736,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1731,
-    "assets_remaining": 5757,
-    "assets_completion_percent": 23.1,
+    "assets_analyzed": 1736,
+    "assets_remaining": 5752,
+    "assets_completion_percent": 23.2,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1728,
+    "assets_skipped_from_checkpoint": 1731,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -64839,6 +64839,156 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "c5e402cbb1d71cd4f7afd81c",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, stylized illustration of a person with a dotted line above them, possibly representing a wave or sound wave.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:07:04Z"
+    },
+    {
+      "asset_id": "0fd23f33b819371d84e6feac",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the textbook content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:08:35Z"
+    },
+    {
+      "asset_id": "b8d376f8effb3289c24ca96a",
+      "asset_sha256": "e3ddccb4677a6adcaefc29222dadb3aa4577e11ba2d5abaf7512e0476bb8f684",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/e3ddccb4677a6adcaefc29222dadb3aa4577e11ba2d5abaf7512e0476bb8f684.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, a light bulb, and a safety pin connected to the bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.17",
+          "3. In Fig. 3.17, if the ﬁlament of one of the lamps is broken, will\nthe other glow? Justify your answer.",
+          "4. A student forgot to remove the insulator covering from the\nconnecting wires while making a circuit. If the lamp and the\nINNOVATION\ncell are working properly, will the lamp glow?",
+          "5. Draw a circuit diagram for a simple torch using symbols"
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Safety pin",
+          "Battery",
+          "Circuit diagram",
+          "Simple torch"
+        ],
+        "context_relation": "The image is a visual representation of a simple electrical circuit used to answer questions about the behavior of a circuit when a component is broken.",
+        "limitations": [
+          "The image does not show the actual behavior of the circuit when the filament is broken.",
+          "The image does not show the behavior of the circuit when the insulator is removed from the connecting wires."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:10:27Z"
+    },
+    {
+      "asset_id": "076d9737dbf27f512813f33e",
+      "asset_sha256": "c1f9664794b106672f6b4be48c5225028886eab8b0d37b2ca70fa256dedf2ff5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/c1f9664794b106672f6b4be48c5225028886eab8b0d37b2ca70fa256dedf2ff5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or question related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or labels that relate to the textbook content.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:12:02Z"
+    },
+    {
+      "asset_id": "084332706c51e422f77fa321",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images. The page is completely black and there are no visible elements to analyze. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish visible evidence from uncertainty. Use the"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:12:32Z"
     }
   ]
 }
