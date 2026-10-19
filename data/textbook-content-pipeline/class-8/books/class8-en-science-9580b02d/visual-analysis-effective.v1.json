@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c0b608c95f0b8c9fee672d74f5523af841aadbd56faad531be0fa85ecb87c5c5",
+  "raw_analysis_sha256": "32cc8588d8cf12dde024adfc6e41435d701ce65170069ecf5e96d46ad7eee827",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:13:21Z",
+      "checkpointed_at": "2026-10-19T11:18:28Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:14:39Z",
+      "checkpointed_at": "2026-10-19T11:19:46Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:15:31Z",
+      "checkpointed_at": "2026-10-19T11:20:38Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -38816,6 +38816,140 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0d4ab19c3259a8b65c9e07f6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1d043a747a859b8f9f27c0e856772a4668133af1d7fa778e039a7a70e1b02d5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:20:56Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "afbc816753ad124a9ee5e733",
+      "asset_sha256": "29f8da28aa929a90c13441772904a47189862042c7caf0236bd2d9f94daa9f21",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 44,
+      "asset_path": "page-0044.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a1d043a747a859b8f9f27c0e856772a4668133af1d7fa778e039a7a70e1b02d5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Cells of microorganisms are surrounded by a cell membrane, have a cell wall, and lack chloroplasts and a well-defined nucleus.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Like animal and plant cells, the cells of microorganisms are\nalso surrounded by a cell membrane. Cells of fungi additionally\nhave a cell wall, but they do not have chloroplasts, so they cannot\nmake their own food through photosynthesis. Bacteria do not\nhave a well-defined nucleus and a nuclear membr",
+          "We have only looked at a few basic cell structures here. The cell\nhas other components about which you will learn in higher classes.\nFor observing subcellular components, we need microscopes\nwith high magnification. An electron microscope magnifies the\ncell about 10,00,000 times, where we can see mo",
+          "By now, you must have understood that all living beings,\nincluding microorganisms, are made up of one or more cells.\nTheir cells differ in size, shape, and structure. Plant and animal\ncells also have some differences. Understanding these differences\nhelps us learn how these organisms function differ",
+          "In this chapter, we have learnt about the beneficial\nmicroorganisms. However, there are some microbes that cause\ndiseases in plants and animals including humans. We will learn\nabout some of the diseases caused by microbes in the next chapter."
+        ],
+        "concepts": [
+          "microorganisms",
+          "cell structures",
+          "cell membrane",
+          "cell wall",
+          "chloroplasts",
+          "nucleus",
+          "nuclear membrane",
+          "nucleoid",
+          "subcellular components",
+          "microscopes",
+          "electron microscope",
+          "magnification",
+          "plant cells",
+          "animal cells",
+          "differences in cells",
+          "function of cells",
+          "beneficial microorganisms",
+          "diseases caused by microbes",
+          "next chapter"
+        ],
+        "context_relation": "The text discusses the basic structure and components of cells in microorganisms, including fungi, bacteria, and other microorganisms, and how they differ from animal and plant cells.",
+        "limitations": [
+          "The text does not provide specific examples or details about the differences between microorganisms and other cells.",
+          "The text does not discuss the specific functions of the components mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:24:22Z",
+      "effective_analysis": {
+        "visual_summary": "Cells of microorganisms are surrounded by a cell membrane, have a cell wall, and lack chloroplasts and a well-defined nucleus.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Like animal and plant cells, the cells of microorganisms are\nalso surrounded by a cell membrane. Cells of fungi additionally\nhave a cell wall, but they do not have chloroplasts, so they cannot\nmake their own food through photosynthesis. Bacteria do not\nhave a well-defined nucleus and a nuclear membr",
+          "We have only looked at a few basic cell structures here. The cell\nhas other components about which you will learn in higher classes.\nFor observing subcellular components, we need microscopes\nwith high magnification. An electron microscope magnifies the\ncell about 10,00,000 times, where we can see mo",
+          "By now, you must have understood that all living beings,\nincluding microorganisms, are made up of one or more cells.\nTheir cells differ in size, shape, and structure. Plant and animal\ncells also have some differences. Understanding these differences\nhelps us learn how these organisms function differ",
+          "In this chapter, we have learnt about the beneficial\nmicroorganisms. However, there are some microbes that cause\ndiseases in plants and animals including humans. We will learn\nabout some of the diseases caused by microbes in the next chapter."
+        ],
+        "concepts": [
+          "microorganisms",
+          "cell structures",
+          "cell membrane",
+          "cell wall",
+          "chloroplasts",
+          "nucleus",
+          "nuclear membrane",
+          "nucleoid",
+          "subcellular components",
+          "microscopes",
+          "electron microscope",
+          "magnification",
+          "plant cells",
+          "animal cells",
+          "differences in cells",
+          "function of cells",
+          "beneficial microorganisms",
+          "diseases caused by microbes",
+          "next chapter"
+        ],
+        "context_relation": "The text discusses the basic structure and components of cells in microorganisms, including fungi, bacteria, and other microorganisms, and how they differ from animal and plant cells.",
+        "limitations": [
+          "The text does not provide specific examples or details about the differences between microorganisms and other cells.",
+          "The text does not discuss the specific functions of the components mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
