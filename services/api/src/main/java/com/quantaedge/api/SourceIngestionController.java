@@ -111,9 +111,13 @@ public class SourceIngestionController {
   @org.springframework.web.bind.annotation.PutMapping("/intake/{assetId}")
   @Transactional
   public Map<String, Object> classifyBookIntake(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String category = requiredText(body.get("category"), "category", 32).toUpperCase(Locale.ROOT);
     if (!List.of("MAIN_TEXTBOOK","PART","SUPPLEMENTARY","WORKBOOK","TEACHER_GUIDE","REFERENCE","OTHER").contains(category)) {
       throw badRequest("Choose a supported book category.");
@@ -122,26 +126,32 @@ public class SourceIngestionController {
     if (!List.of("hi","en").contains(language)) throw badRequest("Book language must be Hindi or English.");
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    List<Map<String,Object>> tracks = jdbc.queryForList("""
-      select c.id as class_id,s.id as subject_id from curriculum_class c
-      join curriculum_subject s on s.class_id=c.id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, classCode, subjectCode);
-    if (tracks.isEmpty()) throw badRequest("Choose a valid active class and subject combination.");
-    long classId = ((Number) tracks.getFirst().get("class_id")).longValue();
-    long subjectId = ((Number) tracks.getFirst().get("subject_id")).longValue();
+    Map<String,Object> selectedTrack=resolveCourseSubject(courseId,institutionId,classCode,subjectCode);
+    long classId=((Number)selectedTrack.get("class_id")).longValue();
+    long subjectId=((Number)selectedTrack.get("subject_id")).longValue();
+    List<Map<String,Object>> existingScope=jdbc.queryForList(
+        "select institution_id,course_id from learning_book_intake where pdf_asset_id=?",assetId);
+    if(!existingScope.isEmpty()) {
+      Map<String,Object> scope=existingScope.getFirst();
+      if(((Number)scope.get("institution_id")).longValue()!=institutionId
+          ||(scope.get("course_id")!=null&&((Number)scope.get("course_id")).longValue()!=courseId)) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+            "This uploaded book belongs to a different institution course.");
+      }
+    }
     List<Map<String,Object>> assets = jdbc.queryForList(
         "select id,sha256 from learning_pdf_asset where id=?", assetId);
     if (assets.isEmpty()) throw notFound("PDF asset", assetId);
     String partLabel = optionalText(body.get("partLabel"), 80);
     String notes = optionalText(body.get("reviewNotes"), 2000);
     jdbc.update("""
-      insert into learning_book_intake(pdf_asset_id,category,class_id,subject_id,language,part_label,
+      insert into learning_book_intake(pdf_asset_id,institution_id,course_id,category,class_id,subject_id,language,part_label,
         status,inventory,reconciliation,analysis_error,review_notes,created_by_staff_id,created_at,updated_at)
-      values(?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
+      values(?,?,?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
         '{"missing_from_book":[],"extra_in_book":[],"ambiguous":[],"page_boundary_warnings":[]}'::jsonb,
         null,?,?,now(),now())
-      on conflict(pdf_asset_id) do update set category=excluded.category,class_id=excluded.class_id,
+      on conflict(pdf_asset_id) do update set course_id=coalesce(learning_book_intake.course_id,excluded.course_id),
+        category=excluded.category,class_id=excluded.class_id,
         subject_id=excluded.subject_id,language=excluded.language,part_label=excluded.part_label,
         status=case when learning_book_intake.class_id<>excluded.class_id
           or learning_book_intake.subject_id<>excluded.subject_id
@@ -206,7 +216,7 @@ public class SourceIngestionController {
           or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
           then null else learning_book_intake.ranges_review_notes end,
         review_notes=excluded.review_notes,updated_at=now()
-      """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
+      """, assetId, institutionId, courseId, category, classId, subjectId, language, partLabel, notes, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
         "Classified uploaded complete-book PDF for inventory reconciliation.");
     return jdbc.queryForMap("""
