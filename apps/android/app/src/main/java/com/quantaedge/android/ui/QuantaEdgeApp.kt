@@ -1896,7 +1896,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun downloadRecordingOffline(item: JSONObject) {
         runTask {
             if (resourceOwner == "guest") throw IOException("Sign in before downloading a video for offline playback.")
-            OfflineLearningVideoDownloadWorker.enqueue(context.applicationContext, resourceOwner, item)
+            if (currentCourseId <= 0L) throw IOException("Select an active course before downloading a recording.")
+            val scopedItem = JSONObject(item.toString()).put("course_id", currentCourseId)
+            OfflineLearningVideoDownloadWorker.enqueue(context.applicationContext, resourceOwner, scopedItem)
             val id = item.longAny("recorded_class_id", "recordingId", "id")
             videoDownloadStates[id] = if (language == "hi") "डाउनलोड कतार में है" else "Queued for offline download"
             status = if (language == "hi") "वीडियो सुरक्षित डाउनलोड के लिए कतार में जुड़ गया।" else "Video queued for a protected offline download."
