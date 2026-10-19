@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 769,
-    "successful_visual_analyses": 759,
-    "missing_visual_analyses": 1522,
+    "raw_analysis_result_rows": 771,
+    "successful_visual_analyses": 761,
+    "missing_visual_analyses": 1520,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1532,
+    "unresolved_count": 1530,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29929,9 +29929,33 @@
       "asset_path": "assets/3532357bf8337a6b0c11f75dfe0a46444ab9e93ea4d2973b13742005fa177e32.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of cells under a microscope, showing nuclei and cytoplasm.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 2.3: Let us investigate",
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the mi"
+        ],
+        "concepts": [
+          "Microscopy",
+          "Cell structure",
+          "Methylene blue staining"
+        ],
+        "context_relation": "Educational content for a biology textbook",
+        "limitations": [
+          "The image does not show the actual cells under a microscope.",
+          "The image does not show the staining process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29947,9 +29971,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for collecting and staining cheek cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the microscope."
+        ],
+        "concepts": [
+          "collecting cheek cells",
+          "staining cells",
+          "microscope observation"
+        ],
+        "context_relation": "instructions for a biological experiment",
+        "limitations": [
+          "no specific image provided",
+          "instructions are textual, not visual"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3afda46f5dfd7247ddb3f8f53b41b36fca58d84b15b77a474ae40af99ad0d15e",
+  "raw_analysis_sha256": "687ea7182ebb616dd5cf5dd13f12e23f6b8f1ccbca7a874290f78b13fdd8dd0c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:50:24Z",
+      "checkpointed_at": "2026-10-19T02:57:52Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:51:12Z",
+      "checkpointed_at": "2026-10-19T02:58:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:51:51Z",
+      "checkpointed_at": "2026-10-19T02:59:19Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33974,6 +33974,144 @@
         "context_relation": "educational",
         "limitations": [
           "No specific limitations provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "da0c33f133addc51aed27a7c",
+      "asset_sha256": "3532357bf8337a6b0c11f75dfe0a46444ab9e93ea4d2973b13742005fa177e32",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/3532357bf8337a6b0c11f75dfe0a46444ab9e93ea4d2973b13742005fa177e32.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of cells under a microscope, showing nuclei and cytoplasm.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 2.3: Let us investigate",
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the mi"
+        ],
+        "concepts": [
+          "Microscopy",
+          "Cell structure",
+          "Methylene blue staining"
+        ],
+        "context_relation": "Educational content for a biology textbook",
+        "limitations": [
+          "The image does not show the actual cells under a microscope.",
+          "The image does not show the staining process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:01:03Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of cells under a microscope, showing nuclei and cytoplasm.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 2.3: Let us investigate",
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the mi"
+        ],
+        "concepts": [
+          "Microscopy",
+          "Cell structure",
+          "Methylene blue staining"
+        ],
+        "context_relation": "Educational content for a biology textbook",
+        "limitations": [
+          "The image does not show the actual cells under a microscope.",
+          "The image does not show the staining process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "18cecfb9408df0484683d47a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for collecting and staining cheek cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the microscope."
+        ],
+        "concepts": [
+          "collecting cheek cells",
+          "staining cells",
+          "microscope observation"
+        ],
+        "context_relation": "instructions for a biological experiment",
+        "limitations": [
+          "no specific image provided",
+          "instructions are textual, not visual"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:01:33Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for collecting and staining cheek cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the microscope."
+        ],
+        "concepts": [
+          "collecting cheek cells",
+          "staining cells",
+          "microscope observation"
+        ],
+        "context_relation": "instructions for a biological experiment",
+        "limitations": [
+          "no specific image provided",
+          "instructions are textual, not visual"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
