@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 847,
+    "assets_selected": 848,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 843,
-    "assets_remaining": 1235,
+    "assets_analyzed": 844,
+    "assets_remaining": 1234,
     "assets_completion_percent": 40.6,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 842,
+    "assets_skipped_from_checkpoint": 843,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:02:00Z"
+      "checkpointed_at": "2026-10-19T02:05:23Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:02:41Z"
+      "checkpointed_at": "2026-10-19T02:06:03Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:03:33Z"
+      "checkpointed_at": "2026-10-19T02:06:55Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:04:12Z"
+      "checkpointed_at": "2026-10-19T02:07:34Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26485,6 +26485,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T02:04:36Z"
+    },
+    {
+      "asset_id": "96ea0edb7e826ae499d26191",
+      "asset_sha256": "706c25ca9396d1e9788dced320a5722db88007a7f2a32a3d68835d68a3e94f7c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 49,
+      "asset_path": "page-0049.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9d90ed97bfa1d25890acde79236cc96efba506f8730826d353da3612d6a311a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about seeds and animals in habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. Here are two types of seeds. What differences do you find among the roots and leaf venation of their plants?",
+          "(a) Wheat",
+          "(b) Kidney beans",
+          "2. Names of some animals are given below. Group them based on their habitats. Write the names of aquatic animals in the area marked ‘A’ and terrestrial animals in the area marked ‘B’. Enter the names of animals living in both habitats in part ‘C’.",
+          "Horse, Dolphin, Frog, Sheep, Crocodile, Squirrel, Whale, Earthworm, Pigeon, Tortoise",
+          "3. Manu’s mother maintains a kitchen garden. One day, she was digging out radish from the soil. She told Manu that radish is a kind of root. Examine a radish and write what type of root it is. What type of venation would you observe in the leaves of radish plant?",
+          "4. Look at the image of a mountain goat and a goat found in the plains. Point out the similarities and differences between them. What are the reasons for these differences?"
+        ],
+        "concepts": [
+          "seeds",
+          "roots",
+          "leaf venation",
+          "animals",
+          "habitats",
+          "aquatic animals",
+          "terrestrial animals",
+          "radish",
+          "venation",
+          "mountain goat",
+          "goat",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:09:16Z"
     }
   ]
 }

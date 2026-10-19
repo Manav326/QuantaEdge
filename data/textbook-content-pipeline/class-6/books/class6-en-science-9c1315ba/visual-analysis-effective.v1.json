@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3080586e5f1bfb2fc73c4518300fec08f821f6f85783a02601a5791cd52e48f9",
+  "raw_analysis_sha256": "2f1245a00ecf16aa77cda7b749846a2d197bb063af24a28b9af8da4138399b32",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:02:00Z",
+      "checkpointed_at": "2026-10-19T02:05:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:02:41Z",
+      "checkpointed_at": "2026-10-19T02:06:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:03:33Z",
+      "checkpointed_at": "2026-10-19T02:06:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:04:12Z",
+      "checkpointed_at": "2026-10-19T02:07:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39230,6 +39230,94 @@
           "The image does not provide answers to the questions.",
           "The image does not show the differences between the roots and leaf venation of the plants.",
           "The image does not show the animals grouped based on their habitats."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "96ea0edb7e826ae499d26191",
+      "asset_sha256": "706c25ca9396d1e9788dced320a5722db88007a7f2a32a3d68835d68a3e94f7c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 49,
+      "asset_path": "page-0049.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9d90ed97bfa1d25890acde79236cc96efba506f8730826d353da3612d6a311a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about seeds and animals in habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. Here are two types of seeds. What differences do you find among the roots and leaf venation of their plants?",
+          "(a) Wheat",
+          "(b) Kidney beans",
+          "2. Names of some animals are given below. Group them based on their habitats. Write the names of aquatic animals in the area marked ‘A’ and terrestrial animals in the area marked ‘B’. Enter the names of animals living in both habitats in part ‘C’.",
+          "Horse, Dolphin, Frog, Sheep, Crocodile, Squirrel, Whale, Earthworm, Pigeon, Tortoise",
+          "3. Manu’s mother maintains a kitchen garden. One day, she was digging out radish from the soil. She told Manu that radish is a kind of root. Examine a radish and write what type of root it is. What type of venation would you observe in the leaves of radish plant?",
+          "4. Look at the image of a mountain goat and a goat found in the plains. Point out the similarities and differences between them. What are the reasons for these differences?"
+        ],
+        "concepts": [
+          "seeds",
+          "roots",
+          "leaf venation",
+          "animals",
+          "habitats",
+          "aquatic animals",
+          "terrestrial animals",
+          "radish",
+          "venation",
+          "mountain goat",
+          "goat",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:09:16Z",
+      "effective_analysis": {
+        "visual_summary": "Question about seeds and animals in habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. Here are two types of seeds. What differences do you find among the roots and leaf venation of their plants?",
+          "(a) Wheat",
+          "(b) Kidney beans",
+          "2. Names of some animals are given below. Group them based on their habitats. Write the names of aquatic animals in the area marked ‘A’ and terrestrial animals in the area marked ‘B’. Enter the names of animals living in both habitats in part ‘C’.",
+          "Horse, Dolphin, Frog, Sheep, Crocodile, Squirrel, Whale, Earthworm, Pigeon, Tortoise",
+          "3. Manu’s mother maintains a kitchen garden. One day, she was digging out radish from the soil. She told Manu that radish is a kind of root. Examine a radish and write what type of root it is. What type of venation would you observe in the leaves of radish plant?",
+          "4. Look at the image of a mountain goat and a goat found in the plains. Point out the similarities and differences between them. What are the reasons for these differences?"
+        ],
+        "concepts": [
+          "seeds",
+          "roots",
+          "leaf venation",
+          "animals",
+          "habitats",
+          "aquatic animals",
+          "terrestrial animals",
+          "radish",
+          "venation",
+          "mountain goat",
+          "goat",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
