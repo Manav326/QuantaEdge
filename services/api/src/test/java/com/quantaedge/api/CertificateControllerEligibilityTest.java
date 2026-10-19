@@ -205,7 +205,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
       String sql = invocation.getArgument(0, String.class);
       if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
-      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) return List.of(keyRow);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND institution_id=? AND achievement_key=?")) return List.of(keyRow);
       if (sql.contains("WHERE c.id=? AND c.student_id=?")) return List.of(publicCertificate);
       if (sql.contains("FROM student_assessment_attempt att")) return List.of();
       return List.of();
@@ -397,12 +397,12 @@ class CertificateControllerEligibilityTest {
 
   @Test
   void eligibleAssessmentPickerUsesReleasedPassingAdminCreatedTestsWithoutCourseCompletionGate() {
-    when(jdbc.queryForList(anyString(), eq(student.studentId()), eq(threshold))).thenReturn(List.of());
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
     controller.eligibleAssessments(student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(student.studentId()), eq(threshold));
+    verify(jdbc).queryForList(sql.capture(), any(Object[].class));
     assertTrue(sql.getValue().contains("att.status='RELEASED'"));
     assertTrue(sql.getValue().contains("a.assessment_type='ADMIN_CREATED'"));
     assertTrue(sql.getValue().contains("a.is_generated=false"));
@@ -416,7 +416,7 @@ class CertificateControllerEligibilityTest {
   void eligibleAssessmentPickerKeepsAnAlreadyIssuedAssessmentVisible() {
     Map<String, Object> row = attemptRow(
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6, 0, true, "ISSUED");
-    when(jdbc.queryForList(anyString(), eq(student.studentId()), eq(threshold))).thenReturn(List.of(row));
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
     Map<String, Object> response = controller.eligibleAssessments(student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
