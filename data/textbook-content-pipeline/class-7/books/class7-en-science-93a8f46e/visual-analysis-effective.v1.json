@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9b1d4d2c59a6ec840bfe6837854927d44de7abf6d58088e2d04dc3f7036cadee",
+  "raw_analysis_sha256": "52293b39118b96d356681c3bf3e41dee22441b811c245993d1bc926add036ffa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:41:03Z",
+      "checkpointed_at": "2026-10-19T02:47:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:41:31Z",
+      "checkpointed_at": "2026-10-19T02:47:43Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -76633,6 +76633,144 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6a054f7fb3aaf81607a34cf2",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:48:49Z",
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "989f26b94925c0ed0286abe5",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small waves emanating from it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp"
+        ],
+        "concepts": [
+          "LED lamp"
+        ],
+        "context_relation": "descriptive",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:49:53Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small waves emanating from it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp"
+        ],
+        "concepts": [
+          "LED lamp"
+        ],
+        "context_relation": "descriptive",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b05d3ed77ab4c587feeb6b34",
+      "asset_sha256": "08db08130676157b161b8f39a57da13f50d98a2232331f865037d634bece20b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/08db08130676157b161b8f39a57da13f50d98a2232331f865037d634bece20b7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "incandescent lamp",
+          "light emitting diode"
+        ],
+        "context_relation": "The image is related to the topic of lighting technology and the comparison between LED and incandescent lamps.",
+        "limitations": [
+          "The image does not provide specific details about the components of the LED lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:51:13Z",
+      "effective_analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "incandescent lamp",
+          "light emitting diode"
+        ],
+        "context_relation": "The image is related to the topic of lighting technology and the comparison between LED and incandescent lamps.",
+        "limitations": [
+          "The image does not provide specific details about the components of the LED lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],

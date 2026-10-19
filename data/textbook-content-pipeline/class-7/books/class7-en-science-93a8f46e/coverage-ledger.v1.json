@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1304,
-    "successful_visual_analyses": 1286,
-    "missing_visual_analyses": 6184,
+    "raw_analysis_result_rows": 1307,
+    "successful_visual_analyses": 1289,
+    "missing_visual_analyses": 6181,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6202,
+    "unresolved_count": 6199,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59367,9 +59367,18 @@
       "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context without additional information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59385,9 +59394,20 @@
       "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small waves emanating from it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp"
+        ],
+        "concepts": [
+          "LED lamp"
+        ],
+        "context_relation": "descriptive",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59403,9 +59423,25 @@
       "asset_path": "assets/08db08130676157b161b8f39a57da13f50d98a2232331f865037d634bece20b7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5. Components"
+        ],
+        "concepts": [
+          "LED lamp",
+          "incandescent lamp",
+          "light emitting diode"
+        ],
+        "context_relation": "The image is related to the topic of lighting technology and the comparison between LED and incandescent lamps.",
+        "limitations": [
+          "The image does not provide specific details about the components of the LED lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
