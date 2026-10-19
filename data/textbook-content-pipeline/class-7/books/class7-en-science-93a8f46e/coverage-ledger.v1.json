@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1292,
-    "successful_visual_analyses": 1275,
-    "missing_visual_analyses": 6196,
+    "raw_analysis_result_rows": 1295,
+    "successful_visual_analyses": 1278,
+    "missing_visual_analyses": 6193,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6213,
+    "unresolved_count": 6210,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58988,9 +58988,28 @@
       "asset_path": "assets/76ed237d0c0befebc1770f10a18830baaa3df850bd4ec047751992c65dc992af.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the connection of multiple cells to provide energy to a circuit for a longer time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "connection of cells",
+          "energy provision",
+          "circuit",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The text provides information about the connection of multiple cells to provide energy to a circuit for a longer time, which is a concept related to the topic of batteries and circuits.",
+        "limitations": [
+          "The text does not provide specific details about the types of cells or the circuit components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59006,9 +59025,29 @@
       "asset_path": "assets/2fec12202cef5f89bb6947340e14f8c6d55f7465417483259084237f87cc719f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green horizontal line at the top of a page with a light green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "electricity",
+          "cells",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a part of an educational page discussing the use of multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The text is not clear enough to determine the exact content of the figure mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59024,9 +59063,28 @@
       "asset_path": "assets/6173069e0c6f62dcd60894dbf5df853b90cfe73afa3a58f51f8c9bca461381b7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the connection of multiple cells to provide energy to a circuit for a longer time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "connection of cells",
+          "energy provision",
+          "circuit",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the concept of connecting multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show the physical appearance of the cells or the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

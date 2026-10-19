@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1275,
+    "assets_selected": 1278,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1273,
-    "assets_remaining": 6215,
+    "assets_analyzed": 1276,
+    "assets_remaining": 6212,
     "assets_completion_percent": 17.0,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1270,
+    "assets_skipped_from_checkpoint": 1273,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:21:01Z"
+      "checkpointed_at": "2026-10-19T02:26:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:21:29Z"
+      "checkpointed_at": "2026-10-19T02:26:35Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -48357,6 +48357,121 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T02:25:12Z"
+    },
+    {
+      "asset_id": "03ab7385ba460676a4664596",
+      "asset_sha256": "76ed237d0c0befebc1770f10a18830baaa3df850bd4ec047751992c65dc992af",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/76ed237d0c0befebc1770f10a18830baaa3df850bd4ec047751992c65dc992af.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the connection of multiple cells to provide energy to a circuit for a longer time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "connection of cells",
+          "energy provision",
+          "circuit",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The text provides information about the connection of multiple cells to provide energy to a circuit for a longer time, which is a concept related to the topic of batteries and circuits.",
+        "limitations": [
+          "The text does not provide specific details about the types of cells or the circuit components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:27:55Z"
+    },
+    {
+      "asset_id": "6fc560c1104c554324264897",
+      "asset_sha256": "2fec12202cef5f89bb6947340e14f8c6d55f7465417483259084237f87cc719f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/2fec12202cef5f89bb6947340e14f8c6d55f7465417483259084237f87cc719f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green horizontal line at the top of a page with a light green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "electricity",
+          "cells",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a part of an educational page discussing the use of multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The text is not clear enough to determine the exact content of the figure mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:29:12Z"
+    },
+    {
+      "asset_id": "cc428c91177f52fe68b2e1eb",
+      "asset_sha256": "6173069e0c6f62dcd60894dbf5df853b90cfe73afa3a58f51f8c9bca461381b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/6173069e0c6f62dcd60894dbf5df853b90cfe73afa3a58f51f8c9bca461381b7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the connection of multiple cells to provide energy to a circuit for a longer time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "connection of cells",
+          "energy provision",
+          "circuit",
+          "battery",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the concept of connecting multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show the physical appearance of the cells or the circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:30:31Z"
     }
   ]
 }
