@@ -606,7 +606,7 @@ public class RichNotificationService {
         c.institution_id as campaign_institution_id,c.course_id,c.expires_at
       from notification_recipient r join notification_campaign c on c.id=r.campaign_id
       where r.recipient_kind='INSTITUTION_ADMIN' and r.institution_admin_id=?
-        and r.institution_id=? and c.status='SENT'
+        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM')) and c.status='SENT'
         and (c.expires_at is null or c.expires_at>now())
         and (?=0 or r.id<?) and (?=false or r.state<>'READ')
       order by r.created_at desc,r.id desc limit ?
@@ -626,14 +626,18 @@ public class RichNotificationService {
       jdbc.update("""
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
-          and institution_id=? and state in ('CREATED','QUEUED')
+          and (institution_id=? or (institution_id is null and exists(
+            select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
+          and state in ('CREATED','QUEUED')
         """,adminId,institutionId);
       return true;
     }
     return jdbc.update("""
       update notification_recipient set state='READ',read_at=coalesce(read_at,now())
       where id=? and recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
-        and institution_id=? and state in ('CREATED','QUEUED')
+        and (institution_id=? or (institution_id is null and exists(
+          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
+        and state in ('CREATED','QUEUED')
       """,recipientId,adminId,institutionId)==1;
   }
 
@@ -649,7 +653,8 @@ public class RichNotificationService {
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind=? and case when ?='STUDENT' then student_id=?
           when ?='USER_ACCOUNT' then user_account_id=? when ?='STAFF_ACCOUNT' then staff_account_id=?
-          else false end and institution_id=? and state in ('CREATED','QUEUED')
+          else false end and (institution_id=? or (institution_id is null and exists(
+          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'))) and state in ('CREATED','QUEUED')
         """,kind,kind,id,kind,id,kind,id,institutionId);
       return true;
     }
@@ -658,7 +663,9 @@ public class RichNotificationService {
       where id=? and recipient_kind=? and
         case when ?='STUDENT' then student_id=? when ?='USER_ACCOUNT' then user_account_id=?
              when ?='STAFF_ACCOUNT' then staff_account_id=? else false end
-        and institution_id=? and state in ('CREATED','QUEUED')
+        and (institution_id=? or (institution_id is null and exists(
+          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
+        and state in ('CREATED','QUEUED')
       """,recipientId,kind,kind,id,kind,id,kind,id,institutionId);
     return changed==1;
   }
