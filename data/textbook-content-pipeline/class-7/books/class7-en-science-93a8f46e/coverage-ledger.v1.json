@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1588,
-    "successful_visual_analyses": 1566,
-    "missing_visual_analyses": 5900,
+    "raw_analysis_result_rows": 1591,
+    "successful_visual_analyses": 1569,
+    "missing_visual_analyses": 5897,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5922,
+    "unresolved_count": 5919,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -69596,9 +69596,30 @@
       "asset_path": "assets/d79a6b47624014f411053bfcf3fd0d0d4218fd3fc4785d2ab400b73670deb03d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a green background with a black square in the bottom left corner.",
+        "visual_type": "other",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page discussing circuit diagrams and their components.",
+        "limitations": [
+          "The image does not provide specific details about the components or symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69614,9 +69635,27 @@
       "asset_path": "assets/d9909400c5ccd4ac41ea37e531c366328375c8c283a40737d03e60425c9ddaf4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green background with a partial view of a building on the right side.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Representation of Components"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about circuit diagrams and their representation.",
+        "limitations": [
+          "The image does not show the actual textbook page or any specific content from it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69632,9 +69671,16 @@
       "asset_path": "assets/970f54bd9e42e059852bda06dd107469defdff048dde7f57bc2fd0dd1a3c55b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a safety pin with a red string attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
