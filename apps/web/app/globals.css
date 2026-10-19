@@ -1082,3 +1082,48 @@ html[data-qe-appearance] .qe-workspace-content [class*="Card"]:hover:not([class*
   html[data-qe-appearance] .qe-workspace-content [class*="Card"],
   html[data-qe-appearance] .qe-tenant-landing [class*="card"] { transition: none; }
 }
+
+
+/* Route-specific actions/states share the same semantic roles in both appearances. */
+html[data-qe-appearance] .qe-workspace-content :is(.student-profile-field, .parent-profile-field) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="primaryButton"], [class*="primaryLink"], [class*="certificateIssueButton"], [class*="chatSend"], [class*="openSecureLink"], [class*="verifyCard"], [class*="stateCard"]) button,
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="primaryButton"], [class*="primaryLink"], [class*="certificateIssueButton"], [class*="chatSend"], [class*="joinedActions"] button, [class*="openSecureLink"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="secondaryButton"], [class*="secondaryLink"], [class*="resultOpen"], [class*="backButton"], [class*="leaderboardButton"], [class*="leaderboardClose"], [class*="refreshButton"], [class*="chatAction"], [class*="playerModal"]) button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="price"], [class*="Price"], [class*="resultLink"], [class*="chapterOpen"], .text-link, .qe-textbook-chapter-open) {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusLIVE"], [class*="requestComplete"], [class*="joinedBanner"], [class*="notice"], [class*="is-success"], [class*="SuccessAlert"], [class*="valid"]) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="requestPending"], [class*="statusSCHEDULED"], [class*="languageNotice"], [class*="qe-textbook-notice"]) {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusCANCELLED"], [class*="statusRevoked"], [class*="parent-certificate-revoked"]) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusCOMPLETED"], [class*="requestOther"], [class*="disabledButton"], [class*="attemptState"]) {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="currentNumber"], [class*="optionSelected"], [class*="chatActive"], [class*="activeTab"], [class*="activeBadge"]) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
