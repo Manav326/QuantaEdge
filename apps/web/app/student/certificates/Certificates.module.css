@@ -17,3 +17,85 @@
 .formGridSingle{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:12px}
 .field select:focus-visible{outline:3px solid rgba(249,115,22,.18);border-color:#f97316}
 .field select:disabled{background:#f7f8fb;color:#667085;cursor:not-allowed}
+
+
+/* Certificate management surfaces are themed; generated certificate artwork remains a white document. */
+html[data-qe-appearance="dark"] .page { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .panel,
+html[data-qe-appearance="dark"] .templateCard {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .kicker,
+html[data-qe-appearance="dark"] .eyebrow,
+html[data-qe-appearance="dark"] .previewLink a,
+html[data-qe-appearance="dark"] .downloads a { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .header p,
+html[data-qe-appearance="dark"] .meta,
+html[data-qe-appearance="dark"] .templateDescription,
+html[data-qe-appearance="dark"] .help,
+html[data-qe-appearance="dark"] .empty,
+html[data-qe-appearance="dark"] .certificateInfo span,
+html[data-qe-appearance="dark"] .certificateInfo small,
+html[data-qe-appearance="dark"] .viewerLoading,
+html[data-qe-appearance="dark"] .groupTitle { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .selected,
+html[data-qe-appearance="dark"] .formatButtonActive {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .field select {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .field select:focus-visible {
+  outline-color: var(--qe-color-focus);
+  border-color: var(--qe-color-focus);
+}
+html[data-qe-appearance="dark"] .rule {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .rule strong,
+html[data-qe-appearance="dark"] .empty strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .error {
+  color: var(--qe-color-on-error-container);
+  background: var(--qe-color-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .notice,
+html[data-qe-appearance="dark"] .valid {
+  color: var(--qe-color-on-success-container);
+  background: var(--qe-color-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .revoked,
+html[data-qe-appearance="dark"] .downloads small {
+  color: var(--qe-color-on-error-container);
+  background: var(--qe-color-error-container);
+}
+html[data-qe-appearance="dark"] .certificateRow { border-color: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .certificateIcon {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .formatChoices {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .formatButton { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .certificatePdfPreview,
+html[data-qe-appearance="dark"] .certificateImageStage { border-color: var(--qe-color-border-subtle); }
+/* Preview images and PDF paper are certificate documents, not app chrome. */
+html[data-qe-appearance="dark"] .preview,
+html[data-qe-appearance="dark"] .certificateImagePreview { background: #FFFFFF; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance="dark"] .panel,
+  html[data-qe-appearance="dark"] .templateCard { transition: none; }
+}

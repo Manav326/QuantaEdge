@@ -33,8 +33,8 @@ data class QuantaEdgeSemanticColors(
 
 val LocalQuantaEdgeSemanticColors = staticCompositionLocalOf {
     QuantaEdgeSemanticColors(
-        primaryText = Color(0xFF9A3412),
-        accentText = Color(0xFF9A3412),
+        primaryText = Color(0xFFB0561C),
+        accentText = Color(0xFF0F766E),
         success = Color(0xFF166534),
         warning = Color(0xFF92400E),
         error = Color(0xFFB42318)
@@ -69,48 +69,48 @@ fun QuantaEdgeTheme(
     val colors = if (useDark) {
         darkColorScheme(
             primary = tokenColor(palette, "primary", Color(0xFFF97316)),
-            onPrimary = tokenColor(palette, "onPrimary", Color(0xFF291400)),
-            primaryContainer = tokenColor(palette, "primaryContainer", Color(0xFF48220D)),
-            onPrimaryContainer = tokenColor(palette, "onPrimaryContainer", Color(0xFFFFF0E5)),
-            secondary = tokenColor(palette, "accent", Color(0xFFC2410C)),
+            onPrimary = tokenColor(palette, "onPrimary", Color(0xFF111827)),
+            primaryContainer = tokenColor(palette, "primaryContainer", Color(0xFF362F33)),
+            onPrimaryContainer = tokenColor(palette, "onPrimaryContainer", Color(0xFFFFFFFF)),
+            secondary = tokenColor(palette, "accent", Color(0xFF0F766E)),
             onSecondary = tokenColor(palette, "onAccent", Color(0xFFFFFFFF)),
-            secondaryContainer = tokenColor(palette, "accentContainer", Color(0xFF3F2320)),
+            secondaryContainer = tokenColor(palette, "accentContainer", Color(0xFF1A303E)),
             onSecondaryContainer = tokenColor(palette, "onAccentContainer", Color(0xFFFFFFFF)),
             tertiary = tokenColor(palette, "success", Color(0xFF4ADE80)),
             onTertiary = tokenColor(palette, "onSuccess", Color(0xFF052E16)),
-            background = tokenColor(palette, "background", Color(0xFF0B1220)),
-            onBackground = tokenColor(palette, "onBackground", Color(0xFFF3F4F6)),
-            surface = tokenColor(palette, "surface", Color(0xFF111827)),
-            onSurface = tokenColor(palette, "onSurface", Color(0xFFF3F4F6)),
-            surfaceVariant = tokenColor(palette, "surfaceElevated", Color(0xFF182235)),
-            onSurfaceVariant = tokenColor(palette, "textMuted", Color(0xFFD1D5DB)),
-            outline = tokenColor(palette, "border", Color(0xFF6B7280)),
-            outlineVariant = tokenColor(palette, "borderSubtle", Color(0xFF4B5563)),
+            background = tokenColor(palette, "background", Color(0xFF121A28)),
+            onBackground = tokenColor(palette, "onBackground", Color(0xFFF4F7FB)),
+            surface = tokenColor(palette, "surface", Color(0xFF1B2637)),
+            onSurface = tokenColor(palette, "onSurface", Color(0xFFF4F7FB)),
+            surfaceVariant = tokenColor(palette, "surfaceElevated", Color(0xFF243247)),
+            onSurfaceVariant = tokenColor(palette, "textMuted", Color(0xFFB6C2D2)),
+            outline = tokenColor(palette, "border", Color(0xFF66758B)),
+            outlineVariant = tokenColor(palette, "borderSubtle", Color(0xFF354156)),
             error = tokenColor(palette, "error", Color(0xFFFDA4AF)),
             onError = tokenColor(palette, "onError", Color(0xFF450A0A)),
-            errorContainer = tokenColor(palette, "errorContainer", Color(0xFF7F1D1D)),
-            onErrorContainer = tokenColor(palette, "onErrorContainer", Color(0xFFFEE2E2)),
+            errorContainer = tokenColor(palette, "errorContainer", Color(0xFF451C28)),
+            onErrorContainer = tokenColor(palette, "onErrorContainer", Color(0xFFFFE1E8)),
         )
     } else {
         lightColorScheme(
             primary = tokenColor(palette, "primary", Color(0xFFF97316)),
             onPrimary = tokenColor(palette, "onPrimary", Color(0xFF291400)),
-            primaryContainer = tokenColor(palette, "primaryContainer", Color(0xFFFFF0E5)),
-            onPrimaryContainer = tokenColor(palette, "onPrimaryContainer", Color(0xFF7C2D12)),
-            secondary = tokenColor(palette, "accent", Color(0xFFC2410C)),
+            primaryContainer = tokenColor(palette, "primaryContainer", Color(0xFFFEF1E8)),
+            onPrimaryContainer = tokenColor(palette, "onPrimaryContainer", Color(0xFF111827)),
+            secondary = tokenColor(palette, "accent", Color(0xFF0F766E)),
             onSecondary = tokenColor(palette, "onAccent", Color(0xFFFFFFFF)),
-            secondaryContainer = tokenColor(palette, "accentContainer", Color(0xFFF9ECE7)),
+            secondaryContainer = tokenColor(palette, "accentContainer", Color(0xFFE7F1F0)),
             onSecondaryContainer = tokenColor(palette, "onAccentContainer", Color(0xFF111827)),
             tertiary = tokenColor(palette, "success", Color(0xFF166534)),
             onTertiary = tokenColor(palette, "onSuccess", Color(0xFFFFFFFF)),
-            background = tokenColor(palette, "background", Color(0xFFF8FAFC)),
+            background = tokenColor(palette, "background", Color(0xFFF5F7FB)),
             onBackground = tokenColor(palette, "onBackground", Color(0xFF172033)),
             surface = tokenColor(palette, "surface", Color(0xFFFFFFFF)),
             onSurface = tokenColor(palette, "onSurface", Color(0xFF172033)),
             surfaceVariant = tokenColor(palette, "surfaceElevated", Color(0xFFFFFFFF)),
-            onSurfaceVariant = tokenColor(palette, "textMuted", Color(0xFF475467)),
-            outline = tokenColor(palette, "border", Color(0xFF737D91)),
-            outlineVariant = tokenColor(palette, "borderSubtle", Color(0xFFD1D5DB)),
+            onSurfaceVariant = tokenColor(palette, "textMuted", Color(0xFF536176)),
+            outline = tokenColor(palette, "border", Color(0xFF7B8798)),
+            outlineVariant = tokenColor(palette, "borderSubtle", Color(0xFFD7DEE8)),
             error = tokenColor(palette, "error", Color(0xFFB42318)),
             onError = tokenColor(palette, "onError", Color(0xFFFFFFFF)),
             errorContainer = tokenColor(palette, "errorContainer", Color(0xFFFEE2E2)),
@@ -121,11 +121,11 @@ fun QuantaEdgeTheme(
     val semanticColors = QuantaEdgeSemanticColors(
         primaryText = tokenColor(
             palette, "primaryText",
-            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+            if (useDark) Color(0xFFF97316) else Color(0xFFB0561C)
         ),
         accentText = tokenColor(
             palette, "accentText",
-            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+            if (useDark) Color(0xFF5AA09B) else Color(0xFF0F766E)
         ),
         success = tokenColor(
             palette, "success",

@@ -25,6 +25,7 @@ public final class InstitutionThemeTokens {
       "primary", "accent", "background", "surface", "text",
       "brandPrimary", "brandAccent");
   private static final Map<String, Preset> PRESETS = createPresets();
+  private static final Map<String, Preset> PREVIOUS_PRESETS = createPreviousPresets();
 
   private InstitutionThemeTokens() {}
 
@@ -91,8 +92,17 @@ public final class InstitutionThemeTokens {
     String accentDefault = preset == null ? PRESETS.get(DEFAULT_PRESET).accent() : preset.accent();
     String primary = colorValue(firstPresent(input, "brandPrimary", "primary"), primaryDefault, "primary");
     String accent = colorValue(firstPresent(input, "brandAccent", "accent"), accentDefault, "accent");
+    // A saved v2 preset records the generated colours explicitly. When those values exactly
+    // match a previously curated preset, migrate them to the revised preset. Custom selections
+    // are labelled "custom" by HRMS and therefore remain untouched.
+    Preset previousPreset = PREVIOUS_PRESETS.get(presetId);
+    if (!legacy && preset != null && previousPreset != null
+        && primary.equals(previousPreset.primary()) && accent.equals(previousPreset.accent())) {
+      primary = preset.primary();
+      accent = preset.accent();
+    }
     String lightBackground = legacy && input.containsKey("background")
-        ? colorValue(input.get("background"), "#F7F8FC", "background") : "#F8FAFC";
+        ? colorValue(input.get("background"), "#F7F8FC", "background") : "#F5F7FB";
     String lightSurface = legacy && input.containsKey("surface")
         ? colorValue(input.get("surface"), "#FFFFFF", "surface") : "#FFFFFF";
     String lightText = legacy && input.containsKey("text")
@@ -134,15 +144,15 @@ public final class InstitutionThemeTokens {
   }
 
   private static Map<String, String> palette(String brandPrimary, String brandAccent, boolean darkMode) {
-    String background = darkMode ? "#0B1220" : "#F8FAFC";
-    String surface = darkMode ? "#111827" : "#FFFFFF";
-    String elevated = darkMode ? "#182235" : "#FFFFFF";
-    String text = darkMode ? "#F3F4F6" : "#172033";
-    String muted = darkMode ? "#D1D5DB" : "#475467";
-    String border = darkMode ? "#6B7280" : "#737D91";
-    String borderSubtle = darkMode ? "#4B5563" : "#D1D5DB";
-    String primaryContainer = mix(surface, brandPrimary, darkMode ? 0.28 : 0.10);
-    String accentContainer = mix(surface, brandAccent, darkMode ? 0.26 : 0.10);
+    String background = darkMode ? "#121A28" : "#F5F7FB";
+    String surface = darkMode ? "#1B2637" : "#FFFFFF";
+    String elevated = darkMode ? "#243247" : "#FFFFFF";
+    String text = darkMode ? "#F4F7FB" : "#172033";
+    String muted = darkMode ? "#B6C2D2" : "#536176";
+    String border = darkMode ? "#8190A5" : "#7B8798";
+    String borderSubtle = darkMode ? "#354156" : "#D7DEE8";
+    String primaryContainer = mix(surface, brandPrimary, darkMode ? 0.12 : 0.10);
+    String accentContainer = mix(surface, brandAccent, darkMode ? 0.12 : 0.10);
     // Text/accent roles appear on both neutral surfaces and their tinted containers. Check both
     // backgrounds rather than merely ensuring contrast on white/black, which can fail on a tint.
     String primaryText = ensureContrast(
@@ -154,12 +164,13 @@ public final class InstitutionThemeTokens {
     String error = darkMode ? "#FDA4AF" : "#B42318";
     String disabledBg = darkMode ? "#273244" : "#E5E7EB";
     String disabledText = darkMode ? "#9CA3AF" : "#4B5563";
-    String navBackground = ensureContrast(darken(brandPrimary, 0.22), "#FFFFFF", 4.5, true);
-    // Keep nav chrome intentionally dark even for light mode; its contents remain contrast-safe.
-    String navActiveBackground = brandPrimary;
-    String selectedBackground = mix(background, brandPrimary, darkMode ? 0.32 : 0.10);
-    String selectedText = ensureContrast(ensureContrast(brandPrimary, surface, 4.5, !darkMode),
-        selectedBackground, 4.5, !darkMode);
+    String navBackground = darkMode ? "#18243A" : "#F5F7FB";
+    String navText = darkMode ? "#F4F7FB" : "#334155";
+    // Navigation stays neutral in both appearances; only the active item receives a subtle brand tint.
+    String navActiveBackground = primaryContainer;
+    String navActiveText = bestContrastText(navActiveBackground);
+    String selectedBackground = primaryContainer;
+    String selectedText = bestContrastText(selectedBackground);
     String onPrimary = bestContrastText(brandPrimary);
     String onAccent = bestContrastText(brandAccent);
 
@@ -187,28 +198,49 @@ public final class InstitutionThemeTokens {
     c.put("focus", ensureContrast(brandPrimary, surface, 3.0, !darkMode));
     c.put("success", success);
     c.put("onSuccess", darkMode ? "#052E16" : "#FFFFFF");
-    c.put("successContainer", darkMode ? "#14532D" : "#DCFCE7");
-    c.put("onSuccessContainer", darkMode ? "#DCFCE7" : "#14532D");
+    c.put("successContainer", darkMode ? "#123B2A" : "#DCFCE7");
+    c.put("onSuccessContainer", darkMode ? "#C9F7D7" : "#14532D");
     c.put("warning", warning);
     c.put("onWarning", darkMode ? "#422006" : "#FFFFFF");
-    c.put("warningContainer", darkMode ? "#713F12" : "#FEF3C7");
-    c.put("onWarningContainer", darkMode ? "#FEF3C7" : "#78350F");
+    c.put("warningContainer", darkMode ? "#463515" : "#FEF3C7");
+    c.put("onWarningContainer", darkMode ? "#FDE68A" : "#78350F");
     c.put("error", error);
     c.put("onError", darkMode ? "#450A0A" : "#FFFFFF");
-    c.put("errorContainer", darkMode ? "#7F1D1D" : "#FEE2E2");
-    c.put("onErrorContainer", darkMode ? "#FEE2E2" : "#7F1D1D");
+    c.put("errorContainer", darkMode ? "#451C28" : "#FEE2E2");
+    c.put("onErrorContainer", darkMode ? "#FFE1E8" : "#7F1D1D");
     c.put("selectedBackground", selectedBackground);
     c.put("selectedText", selectedText);
     c.put("navBackground", navBackground);
-    c.put("navText", "#FFFFFF");
+    c.put("navText", navText);
     c.put("navActiveBackground", navActiveBackground);
-    c.put("navActiveText", onPrimary);
+    c.put("navActiveText", navActiveText);
     c.put("disabledBackground", disabledBg);
     c.put("disabledText", disabledText);
     return c;
   }
 
   private static Map<String, Preset> createPresets() {
+    Map<String, Preset> values = new LinkedHashMap<>();
+    add(values, "quantaedge-orange", "QuantaEdge Orange", "#F97316", "#0F766E");
+    add(values, "academic-blue", "Academic Blue", "#2563EB", "#F59E0B");
+    add(values, "forest-green", "Forest Green", "#15803D", "#D6A756");
+    add(values, "royal-violet", "Royal Violet", "#7C3AED", "#2DD4BF");
+    add(values, "teal", "Teal", "#0F766E", "#FB8B70");
+    add(values, "burgundy", "Burgundy", "#9F1239", "#D4B06A");
+    add(values, "navy-gold", "Navy & Gold", "#1E3A8A", "#D6B25E");
+    add(values, "graphite", "Graphite", "#374151", "#38BDF8");
+    add(values, "indigo", "Indigo", "#4338CA", "#67E8F9");
+    add(values, "emerald", "Emerald", "#047857", "#F5C56B");
+    add(values, "plum", "Plum", "#6B21A8", "#FDBA74");
+    add(values, "maroon", "Maroon", "#991B1B", "#E0B76A");
+    add(values, "raspberry", "Raspberry", "#BE185D", "#C4B5FD");
+    add(values, "cobalt", "Cobalt", "#1D4ED8", "#22D3EE");
+    add(values, "slate", "Slate", "#475569", "#7DD3FC");
+    add(values, "custom", "Custom colours", "#F97316", "#0F766E");
+    return values;
+  }
+
+  private static Map<String, Preset> createPreviousPresets() {
     Map<String, Preset> values = new LinkedHashMap<>();
     add(values, "quantaedge-orange", "QuantaEdge Orange", "#F97316", "#C2410C");
     add(values, "academic-blue", "Academic Blue", "#2563EB", "#1D4ED8");
@@ -225,7 +257,6 @@ public final class InstitutionThemeTokens {
     add(values, "raspberry", "Raspberry", "#BE185D", "#9D174D");
     add(values, "cobalt", "Cobalt", "#1D4ED8", "#1E40AF");
     add(values, "slate", "Slate", "#475569", "#334155");
-    add(values, "custom", "Custom colours", "#F97316", "#C2410C");
     return values;
   }
 

@@ -25,6 +25,19 @@ export type TenantBrand = {
 
 export type EnrollmentIssueKind = 'invalid' | 'rate-limited' | 'temporary' | 'mismatch';
 
+/** Validated primary brand colour for provider-hosted UI (for example, Razorpay's checkout accent). */
+export function tenantPrimaryColor(brand: Pick<TenantBrand, 'themeTokens'> | null | undefined): string {
+  const tokens = brand?.themeTokens;
+  const light = tokens && typeof tokens.light === 'object' && tokens.light !== null
+    ? tokens.light as Record<string, unknown>
+    : null;
+  const candidates = [light?.primary, tokens?.brandPrimary, tokens?.primary];
+  for (const value of candidates) {
+    if (typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value)) return value.toUpperCase();
+  }
+  return '#F97316';
+}
+
 type TenantBrandingValue = {
   brand: TenantBrand | null;
   isResolving: boolean;

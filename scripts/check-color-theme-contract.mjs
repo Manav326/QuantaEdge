@@ -26,6 +26,23 @@ const webRuntime = read('apps/web/app/components/ColorThemeProvider.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
 const webWorkspace = read('apps/web/app/components/WorkspaceLayout.tsx');
 const webCss = read('apps/web/app/globals.css');
+const webClassesCss = read('apps/web/app/student/classes/Classes.module.css');
+const webTestsCss = read('apps/web/app/student/tests/Tests.module.css');
+const webCertificatesCss = read('apps/web/app/student/certificates/Certificates.module.css');
+const webCoursesCss = read('apps/web/app/student/courses/courses.module.css');
+const webMarketplaceCss = read('apps/web/app/student/marketplace/marketplace.module.css');
+const webStructuredCss = read('apps/web/app/student/structured-lessons/structured-lessons.css');
+const webAssignedResourcesCss = read('apps/web/app/student/structured-lessons/AssignedLearningResources.module.css');
+const webVerifyCertificateCss = read('apps/web/app/certificate/verify/Verify.module.css');
+const webInstitutionScreen = read('apps/web/app/institution/page.tsx');
+const webStudentProfile = read('apps/web/app/student/profile/page.tsx');
+const webParentProfile = read('apps/web/app/parent/profile/page.tsx');
+
+const webTextbookCss = read('apps/web/app/student/textbooks/textbooks.css');
+const inlineTextbookReader = read('apps/web/app/student/learn/InlineTextbookReader.tsx');
+const studentMarketplace = read('apps/web/app/student/marketplace/page.tsx');
+const parentCourses = read('apps/web/app/parent/courses/page.tsx');
+
 const androidController = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeThemeController.kt');
 const androidTheme = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeTheme.kt');
 const androidApp = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
@@ -52,12 +69,14 @@ assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explic
 assert(apiTheme.includes('public static List<Map<String, Object>> presets()'), 'Server must expose a curated palette catalogue.');
 assert(apiTheme.includes('"quantaedge-orange"') && apiTheme.includes('"custom"'), 'QuantaEdge default and custom presets must be supported.');
 assert(apiTheme.includes('contrastRatio') && apiTheme.includes('ensureContrast'), 'Generated foregrounds must be contrast-aware.');
-assert(apiTheme.includes('ensureContrast(darken(brandPrimary, 0.22), "#FFFFFF", 4.5, true)'), 'Tenant navigation must enforce readable text contrast for arbitrary custom primary colours.');
+assert(apiTheme.includes('String navBackground = darkMode ? "#18243A" : "#F5F7FB";') && apiTheme.includes('String navActiveBackground = primaryContainer;'), 'Navigation must remain neutral and use a restrained active-state tint.');
 assert(apiTheme.includes('c.put("accentContainer", accentContainer)') && apiTheme.includes('c.put("onAccentContainer", bestContrastText(accentContainer))'), 'API must expose the accent container and readable foreground.');
 assert(platformApi.includes('"/theme-presets"') && platformApi.includes('InstitutionThemeTokens.presets()'), 'Preset API must remain owner-controlled.');
 assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
 assert(tenantApi.includes('InstitutionThemeTokens.normalize'), 'Public tenant API must return generated palettes.');
 assert(apiTests.includes('alreadyMaterializedThemeCanBeReadAndNormalizedAgain'), 'Theme round-trip regression test is required.');
+assert(apiTheme.includes('PREVIOUS_PRESETS') && apiTheme.includes('previously curated preset') && apiTests.includes('savedCuratedPresetsUpgradeButExplicitCustomColoursRemainUnchanged'), 'Previously saved preset palettes must upgrade while explicit custom colours remain unchanged.');
+
 assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'Palette contrast coverage must include curated presets.');
 assert(tintContrastTests.includes('primaryTextKeepsAccessibleContrastOnLightAndDarkTintedContainers'), 'Tinted-container contrast regression test must remain in CI.');
 assert(accentContrastTests.includes('accentTextAndForegroundsRemainReadableOnAccentContainersForEveryPreset'), 'Accent-container contrast regression test must remain in CI.');
@@ -76,6 +95,34 @@ for (const role of ['background', 'surface', 'text-muted', 'primary-container', 
   assert(webCss.includes('--qe-color-' + role), 'Web CSS is missing semantic role: ' + role);
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
+assert(webCss.includes('/* Shared light-mode parity for legacy route components.') && webCss.includes('html[data-qe-appearance="light"] .qe-workspace-content'), 'Light appearance must receive the tenant semantic palette across legacy page components.');
+assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');
+assert(webCss.includes('background-color:var(--qe-color-surface);') && !webCss.includes('background-color:var(--qe-color-error-container);'), 'Ordinary cards and panels must never use error-container background in dark mode.');
+assert(webCss.includes('.qe-language-switcher{display:inline-flex') && webCss.includes('background:var(--qe-color-surface);padding:6px 10px;color:var(--qe-color-text)'), 'The language switcher must use the active semantic surface in either appearance.');
+assert(webClassesCss.includes('html[data-qe-appearance="dark"] .shell') && webClassesCss.includes('html[data-qe-appearance="dark"] .chatPanel') && webClassesCss.includes('var(--qe-color-success-container)'), 'Class sessions, live chat and status states must be themed.');
+assert(webTestsCss.includes('html[data-qe-appearance="dark"] .leaderboardModal') && webTestsCss.includes('html[data-qe-appearance="dark"] .optionCorrect') && webTestsCss.includes('var(--qe-color-error-container)'), 'Tests, answers, results and leaderboard must use semantic dark states.');
+assert(webCertificatesCss.includes('html[data-qe-appearance="dark"] .certificateIcon') && webCertificatesCss.includes('certificateImagePreview') && webCertificatesCss.includes('background: #FFFFFF;'), 'Certificate UI must follow theme while document previews retain paper.');
+assert(webCoursesCss.includes('html[data-qe-appearance="dark"] .courseCard') && webCoursesCss.includes('var(--qe-color-primary)'), 'Owned courses cards and progress must consume semantic tokens.');
+assert(webMarketplaceCss.includes('html[data-qe-appearance="dark"] .courseCard') && webMarketplaceCss.includes('var(--qe-color-warning-container)'), 'Marketplace, verification, request history and state badges must be themed.');
+assert(webStructuredCss.includes('var(--qe-color-surface-elevated)') && webStructuredCss.includes('var(--qe-color-focus)') && webStructuredCss.includes('var(--qe-color-error-container)'), 'Structured lesson activity and lightbox controls must use shared tokens.');
+assert(webAssignedResourcesCss.includes('var(--qe-color-error-container)') && webAssignedResourcesCss.includes('var(--qe-color-success)'), 'Assigned learning resource states must be semantic.');
+assert(webVerifyCertificateCss.includes('html[data-qe-appearance="dark"] .card') && webVerifyCertificateCss.includes('var(--qe-color-border-subtle)'), 'Certificate verification must theme its page and form surfaces.');
+assert(webInstitutionScreen.includes('--institution-background:var(--qe-color-background)') && webInstitutionScreen.includes('var(--qe-color-border-subtle)'), 'Institution portal must consume the central palette rather than hard-coded page surfaces.');
+assert(webCss.includes('.student-profile-card{') && webCss.includes('.parent-profile-card{') && webCss.includes('background:var(--qe-color-surface)'), 'Student and parent profile pages must share neutral cards and inputs.');
+
+assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');
+assert(webCss.includes('background-color:var(--qe-color-surface);') && !webCss.includes('background-color:var(--qe-color-error-container);'), 'Ordinary cards and panels must never use error-container background in dark mode.');
+assert(webCss.includes('prefers-reduced-motion: reduce') && webCss.includes('html[data-qe-appearance="dark"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6)'), 'Dark page typography must be theme-aware and motion must respect reduced-motion preference.');
+assert(webTextbookCss.includes('html[data-qe-appearance="dark"] .qe-textbook-shell') && webTextbookCss.includes('html[data-qe-appearance="dark"] .qe-document-reader .qe-reader-workspace'), 'Textbook library and reader chrome must consume the shared dark palette.');
+assert(webTextbookCss.includes('html[data-qe-appearance="light"] .qe-textbook-shell') && webTextbookCss.includes('html[data-qe-appearance="light"] .qe-document-reader .qe-reader-workspace'), 'Textbook library and reader chrome must also consume the shared light palette.');
+assert(webCss.includes('/* One restrained elevation scale: cards gently lift from the canvas without looking pasted on. */') && webCss.includes('box-shadow: var(--qe-elevation-1);'), 'Page cards must share the restrained surface elevation and interaction system.');
+assert(webCss.includes('/* Route-specific actions/states share the same semantic roles in both appearances. */') && webCss.includes('[class*="statusSCHEDULED"]'), 'Route-specific primary actions and status badges must map to semantic theme roles.');
+
+assert(webTextbookCss.includes('html[data-qe-appearance="dark"] .qe-reader-page-image') && webTextbookCss.includes('background: #FFFFFF;'), 'Actual textbook pages must retain original document-paper colours rather than be recoloured.');
+assert(inlineTextbookReader.includes("background: 'var(--qe-color-surface)'") && !inlineTextbookReader.includes("background: '#fffaf6'"), 'Inline textbook reader controls must not retain fixed light-only surfaces.');
+assert(studentMarketplace.includes('tenantPrimaryColor(brand)') && !studentMarketplace.includes("theme: { color: '#E87524' }"), 'Student Razorpay checkout accent must follow the trusted institution theme.');
+assert(parentCourses.includes('tenantPrimaryColor(brand)') && !parentCourses.includes("theme: { color: '#E87524' }"), 'Parent Razorpay checkout accent must follow the trusted institution theme.');
+
 assert(webCss.includes('html[data-qe-appearance] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"])') && webCss.includes('border-color: var(--qe-color-border);'), 'Interactive controls must use the stronger contrast-tested border role in both modes.');
 assert(apiTests.includes('control border/background contrast') && apiTests.includes('control border/elevated-surface contrast'), 'API tests must cover non-text control-outline contrast.');
 assert(webCss.includes('/* Tenant semantic compatibility layer for the legacy tutor and parent controls.'), 'Legacy tutor and parent controls must have a semantic-token bridge.');

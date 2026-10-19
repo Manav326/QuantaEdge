@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
@@ -60,6 +61,7 @@ async function ensureRazorpayCheckout(): Promise<void> {
 
 export default function ParentCoursesPage() {
   const router = useRouter();
+  const { brand } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
   const [courses, setCourses] = useState<Course[]>([]);
@@ -151,10 +153,10 @@ export default function ParentCoursesPage() {
         key: body.keyId,
         amount: Number(body.amount),
         currency: body.currency,
-        name: 'QuantaEdge',
+        name: brand?.displayName || 'QuantaEdge',
         description: body.description || 'Course access',
         order_id: body.orderId,
-        theme: { color: '#E87524' },
+        theme: { color: tenantPrimaryColor(brand) },
         handler: (response: any) => {
           const draft: VerifyDraft = {
             courseId,

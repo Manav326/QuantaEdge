@@ -30,3 +30,60 @@
 .empty h2{font-size:18px;margin:0 0 7px}.empty p{color:#656d7b;line-height:1.6;margin:0 0 14px}
 .error{margin:16px 0;padding:12px 14px;border:1px solid #f1c4c4;background:#fff5f5;color:#8f2020;border-radius:12px;line-height:1.5}
 @media(max-width:640px){.page{padding:16px 13px 30px}.hero{padding:19px;border-radius:17px}.grid{grid-template-columns:minmax(0,1fr)}}
+
+
+/* Full dark-theme contract for the owned-courses page. The subject/course artwork remains brand-led. */
+html[data-qe-appearance="dark"] .page { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero {
+  background: radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--qe-color-primary) 12%, transparent), transparent 36%), var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .eyebrow,
+html[data-qe-appearance="dark"] .progressLabels strong,
+html[data-qe-appearance="dark"] .subjectLink:hover strong { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .hero h1,
+html[data-qe-appearance="dark"] .courseCard h2,
+html[data-qe-appearance="dark"] .subjectHeading,
+html[data-qe-appearance="dark"] .subjectLink { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero p,
+html[data-qe-appearance="dark"] .meta,
+html[data-qe-appearance="dark"] .progressLabels,
+html[data-qe-appearance="dark"] .subjectLink small,
+html[data-qe-appearance="dark"] .empty p { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .primaryLink {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .secondaryLink,
+html[data-qe-appearance="dark"] .secondaryButton {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .courseCard,
+html[data-qe-appearance="dark"] .empty {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .mark,
+html[data-qe-appearance="dark"] .activeBadge {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .enrolledBadge {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+html[data-qe-appearance="dark"] .progressTrack { background: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .progressTrack span { background: var(--qe-color-primary); }
+html[data-qe-appearance="dark"] .subjectList,
+html[data-qe-appearance="dark"] .subjectLink { border-color: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .error {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}

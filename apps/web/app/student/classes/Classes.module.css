@@ -112,3 +112,221 @@
 .chatHint { margin:6px 0 0; font-size:.76rem; color:var(--qe-muted-text,#666); }
 .chatError { margin:8px 0; padding:8px 10px; border-radius:9px; background:#fff1f0; color:#a61b1b; font-size:.82rem; }
 @media (max-width:520px) { .chatCompose { align-items:stretch; flex-direction:column; } .chatSend { width:100%; } }
+
+
+/* Tenant dark palette across live sessions, recordings, controls, and the lesson chat. */
+html[data-qe-appearance="dark"] .shell {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .header,
+html[data-qe-appearance="dark"] .tabs,
+html[data-qe-appearance="dark"] .sessionCard,
+html[data-qe-appearance="dark"] .recordingCard,
+html[data-qe-appearance="dark"] .empty,
+html[data-qe-appearance="dark"] .privacyNote {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .brand { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .brand small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .header nav a { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .header nav a:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .hero {
+  background:
+    radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--qe-color-primary) 13%, transparent), transparent 32%),
+    linear-gradient(118deg, #18243A 0%, #243247 100%);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .hero h1 { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero p { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .eyebrow { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .heroChips span {
+  background: color-mix(in srgb, var(--qe-color-surface) 72%, transparent);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .tabs button { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .tabs button span {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .tabs .activeTab,
+html[data-qe-appearance="dark"] .tabs .activeTab span {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .toolbar>label,
+html[data-qe-appearance="dark"] .sectionHeading p,
+html[data-qe-appearance="dark"] .sessionCard>p,
+html[data-qe-appearance="dark"] .description,
+html[data-qe-appearance="dark"] .recordingBody>p,
+html[data-qe-appearance="dark"] .recordingMeta,
+html[data-qe-appearance="dark"] .recordingProgress>div,
+html[data-qe-appearance="dark"] .privacyNote p,
+html[data-qe-appearance="dark"] .joinedBanner small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .toolbar select,
+html[data-qe-appearance="dark"] .refreshButton,
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .resultOpen,
+html[data-qe-appearance="dark"] .playerModal>header>button,
+html[data-qe-appearance="dark"] .playerModal>footer button,
+html[data-qe-appearance="dark"] .chatTabs button,
+html[data-qe-appearance="dark"] .chatAction {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .sectionHeading h2,
+html[data-qe-appearance="dark"] .sessionCard h3,
+html[data-qe-appearance="dark"] .recordingBody h3,
+html[data-qe-appearance="dark"] .sessionTime b,
+html[data-qe-appearance="dark"] .privacyNote b { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .sessionTime,
+html[data-qe-appearance="dark"] .sessionMeta span,
+html[data-qe-appearance="dark"] .subjectTag {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .liveSymbol,
+html[data-qe-appearance="dark"] .sessionTime span,
+html[data-qe-appearance="dark"] .recordingProgress>div b,
+html[data-qe-appearance="dark"] .textButton { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .sessionTime,
+html[data-qe-appearance="dark"] .sessionCard,
+html[data-qe-appearance="dark"] .recordingCard,
+html[data-qe-appearance="dark"] .refreshButton,
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .openSecureLink {
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+html[data-qe-appearance="dark"] .primaryButton,
+html[data-qe-appearance="dark"] .chatSend,
+html[data-qe-appearance="dark"] .joinedActions button {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .primaryButton:hover,
+html[data-qe-appearance="dark"] .chatSend:hover { filter: brightness(1.06); }
+html[data-qe-appearance="dark"] .statusSCHEDULED {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .statusLIVE,
+html[data-qe-appearance="dark"] .notice,
+html[data-qe-appearance="dark"] .joinedBanner {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .statusCOMPLETED,
+html[data-qe-appearance="dark"] .disabledButton {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .statusCANCELLED,
+html[data-qe-appearance="dark"] .error,
+html[data-qe-appearance="dark"] .leaveButton,
+html[data-qe-appearance="dark"] .chatError {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .joinedBanner>span { color: var(--qe-color-success); }
+html[data-qe-appearance="dark"] .joinedBanner b { color: var(--qe-color-on-success-container); }
+html[data-qe-appearance="dark"] .openSecureLink {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .liveSymbol,
+html[data-qe-appearance="dark"] .empty>span {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .recordingProgress>i { background: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .recordingProgress>i>b { background: linear-gradient(90deg, var(--qe-color-primary), var(--qe-color-accent)); }
+html[data-qe-appearance="dark"] .videoPoster { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .playerBackdrop { background: rgb(3 8 18 / .84); }
+html[data-qe-appearance="dark"] .playerModal,
+html[data-qe-appearance="dark"] .chatPanel {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance="dark"] .playerModal>header,
+html[data-qe-appearance="dark"] .playerModal>footer,
+html[data-qe-appearance="dark"] .chatHeader,
+html[data-qe-appearance="dark"] .chatCompose {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .playerModal>header h2,
+html[data-qe-appearance="dark"] .chatHeader strong,
+html[data-qe-appearance="dark"] .chatMessage p { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .playerModal>header p,
+html[data-qe-appearance="dark"] .playerModal>footer small,
+html[data-qe-appearance="dark"] .chatHint,
+html[data-qe-appearance="dark"] .chatMessageHead { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .chatTabs .chatActive {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .chatMessages { background: var(--qe-color-background); }
+html[data-qe-appearance="dark"] .chatMessage {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .chatCompose textarea {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance="dark"] .sessionCard,
+  html[data-qe-appearance="dark"] .recordingCard,
+  html[data-qe-appearance="dark"] .refreshButton,
+  html[data-qe-appearance="dark"] .secondaryButton,
+  html[data-qe-appearance="dark"] .openSecureLink { transition: none; }
+}
+
+/* Carry neutral theme tokens through the modal, live chat, and secondary session affordances. */
+html[data-qe-appearance="dark"] .brand>span { background: var(--qe-color-primary); color: var(--qe-color-on-primary); }
+html[data-qe-appearance="dark"] .chatToggle {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .chatHeader,
+html[data-qe-appearance="dark"] .playerModal>footer {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .playerModal>footer b { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .playerModal>footer small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .chatMessageHead { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .chatMessage p { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .chatCompose textarea {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .chatSend:disabled,
+html[data-qe-appearance="dark"] .chatAction:disabled,
+html[data-qe-appearance="dark"] .chatToggle:disabled {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}

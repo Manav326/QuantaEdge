@@ -79,7 +79,7 @@
 .qe-workspace-layout.is-collapsed .qe-workspace-link-label,
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>div{display:none}.qe-workspace-layout.is-collapsed .qe-workspace-collapse{top:72px;right:calc(50% - 12px)}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar nav{margin-top:31px}.qe-workspace-layout.is-collapsed .qe-workspace-link{justify-content:center;padding:9px 4px;gap:0}.qe-workspace-layout.is-collapsed .qe-workspace-icon{flex-basis:34px;width:34px;height:34px;font-size:17px}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot{justify-content:center;padding-left:0;padding-right:0}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>span{flex-basis:30px;width:30px;height:30px}/* Cover any browser back/forward cache snapshot until the session guard finishes. */
 body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€¦';position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:var(--paper,var(--qe-color-background));color:var(--ink,var(--qe-color-text));font:700 13px/1.6 'DM Sans','Noto Sans Devanagari',sans-serif;text-align:center;letter-spacing:0;}/* Accessible, persistent Hinglish / English language control */
-.qe-language-switcher{display:inline-flex;align-items:center;gap:7px;max-width:100%;border:1px solid rgba(116,130,151,.28);border-radius:999px;background:rgba(255,255,255,.94);padding:6px 10px;color:#263446;box-shadow:0 3px 12px rgba(29,42,61,.06);font:inherit}.qe-language-switcher>span:first-child{font-size:14px;line-height:1;color:#d65b35}.qe-language-switcher__label{font-size:11px;font-weight:650;white-space:nowrap}.qe-language-switcher select{max-width:150px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:650;outline-offset:3px;cursor:pointer}.qe-language-switcher.is-compact{padding:5px 8px;gap:5px}.qe-language-switcher.is-compact .qe-language-switcher__label{display:none}.qe-language-toolbar{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 22px 0;position:relative;z-index:4}.qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}.qe-language-switcher:focus-within{outline:2px solid var(--qe-color-focus);outline-offset:2px}.qe-account-language-settings{display:grid;gap:9px;margin:4px 0 10px;padding:0 2px}.qe-language-switcher--menu-setting{display:flex;flex-direction:column;align-items:stretch;gap:7px;width:100%;max-width:none;padding:10px 11px;border:1px solid var(--qe-color-border-subtle);border-radius:12px;background:var(--qe-color-background);box-shadow:none;white-space:normal}.qe-language-switcher--menu-setting>span:first-child{display:none}.qe-language-switcher--menu-setting .qe-language-switcher__label{display:block;white-space:normal;color:var(--qe-color-text);font-size:11px;font-weight:800;line-height:1.35}.qe-language-switcher--menu-setting select{display:block;width:100%;max-width:none;min-height:36px;padding:7px 9px;border:1px solid #e0e5ee;border-radius:9px;background:var(--qe-color-surface);color:var(--qe-color-text);font-size:12px;font-weight:650}.qe-language-switcher__help{display:block;margin:0;color:var(--qe-color-text-muted);font-size:10px;font-weight:500;line-height:1.5;white-space:normal}.student-account-menu__language-settings,.parent-account__language-settings{margin-bottom:9px}
+.qe-language-switcher{display:inline-flex;align-items:center;gap:7px;max-width:100%;border:1px solid var(--qe-color-border-subtle);border-radius:999px;background:var(--qe-color-surface);padding:6px 10px;color:var(--qe-color-text);box-shadow:var(--qe-elevation-1);font:inherit;transition:background-color 180ms ease,border-color 180ms ease,color 180ms ease}.qe-language-switcher>span:first-child{font-size:14px;line-height:1;color:var(--qe-color-primary-text)}.qe-language-switcher__label{font-size:11px;font-weight:650;white-space:nowrap}.qe-language-switcher select{max-width:150px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:650;outline-offset:3px;cursor:pointer}.qe-language-switcher.is-compact{padding:5px 8px;gap:5px}.qe-language-switcher.is-compact .qe-language-switcher__label{display:none}.qe-language-toolbar{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 22px 0;position:relative;z-index:4}.qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}.qe-language-switcher:focus-within{outline:2px solid var(--qe-color-focus);outline-offset:2px}.qe-account-language-settings{display:grid;gap:9px;margin:4px 0 10px;padding:0 2px}.qe-language-switcher--menu-setting{display:flex;flex-direction:column;align-items:stretch;gap:7px;width:100%;max-width:none;padding:10px 11px;border:1px solid var(--qe-color-border-subtle);border-radius:12px;background:var(--qe-color-background);box-shadow:none;white-space:normal}.qe-language-switcher--menu-setting>span:first-child{display:none}.qe-language-switcher--menu-setting .qe-language-switcher__label{display:block;white-space:normal;color:var(--qe-color-text);font-size:11px;font-weight:800;line-height:1.35}.qe-language-switcher--menu-setting select{display:block;width:100%;max-width:none;min-height:36px;padding:7px 9px;border:1px solid #e0e5ee;border-radius:9px;background:var(--qe-color-surface);color:var(--qe-color-text);font-size:12px;font-weight:650}.qe-language-switcher__help{display:block;margin:0;color:var(--qe-color-text-muted);font-size:10px;font-weight:500;line-height:1.5;white-space:normal}.student-account-menu__language-settings,.parent-account__language-settings{margin-bottom:9px}
 @media(max-width:640px){.qe-language-toolbar{padding:7px 12px 0;min-height:40px}.qe-language-auth-float{top:8px;right:8px}.qe-language-switcher{padding:5px 8px;gap:5px}.qe-language-switcher__label{display:none}.qe-language-switcher select{max-width:125px}}.qe-session-language{display:flex;justify-content:flex-end;margin:-8px -8px 16px;}/* Cohesive workspace header and complete persistent student/parent navigation. */
 .qe-workspace-topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:72px;padding:10px clamp(18px,3vw,38px);border-bottom:1px solid var(--line,var(--qe-color-border-subtle));background:rgba(255,255,255,.92);backdrop-filter:blur(16px);box-shadow:0 5px 22px rgba(21,32,56,.025)}.qe-workspace-topbar__context{display:flex;min-width:0;flex-direction:column;gap:4px}.qe-workspace-topbar__context>span{color:var(--qe-color-text-muted);font-size:8px;font-weight:800;letter-spacing:1.35px}.qe-workspace-topbar__context>strong{overflow:hidden;color:var(--ink,var(--qe-color-text));font-size:14px;font-weight:800;letter-spacing:-.2px;text-overflow:ellipsis;white-space:nowrap}.qe-workspace-topbar .qe-language-switcher{flex:0 0 auto}.qe-workspace-content>.app-shell,.qe-workspace-content>.parent-app{min-height:calc(100vh - 72px)}.qe-workspace-sidebar{overflow-x:hidden;overflow-y:auto}
 @media(max-width:900px){.qe-workspace-topbar{min-height:60px;padding:8px 13px;gap:9px}.qe-workspace-topbar__context{gap:3px;max-width:55%}.qe-workspace-topbar__context>span{font-size:7px;letter-spacing:.9px}.qe-workspace-topbar__context>strong{font-size:12px}.qe-workspace-topbar .qe-language-switcher{max-width:48%}
@@ -252,46 +252,57 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-brand__tenant-mark{width:36px;height:36px;flex:0 0 36px;border-radius:11px;display:inline-grid;place-items:center;background:var(--qe-color-primary);color:var(--qe-color-on-primary);font-weight:800;font-size:18px;line-height:1}.qe-brand--compact .qe-brand__tenant-mark{width:29px;height:29px;flex-basis:29px;border-radius:9px;font-size:14px}.qe-brand--footer .qe-brand__tenant-mark{width:31px;height:31px;flex-basis:31px}.qe-brand__tenant-logo{object-fit:contain;border-radius:8px}.qe-brand__tenant-name{color:var(--qe-color-text,var(--qe-color-text));font-weight:800;max-width:min(52vw,340px);overflow-wrap:anywhere}.tutor-q-mark:not(img){display:inline-grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:var(--qe-color-primary,var(--qe-brand-orange));color:var(--qe-color-on-primary);font-size:13px;font-weight:800}.qe-session-brand-mark:not(img){display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:var(--qe-color-primary);color:var(--qe-color-on-primary);font-size:22px;font-weight:800}.qe-tenant-landing .footer{gap:20px}
 
 
-/* Canonical semantic colour tokens. Components should consume these roles rather than own palette values. */
+/* Canonical semantic colour tokens. Tenant/API values override these safe standalone defaults. */
 :root {
-  --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #9A3412;
-  --qe-color-primary-container: #FFF0E5; --qe-color-on-primary-container: #7C2D12;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #9A3412; --qe-color-accent-container: #F9ECE7; --qe-color-on-accent-container: #111827;
-  --qe-color-background: #F8FAFC; --qe-color-on-background: #172033;
+  --qe-color-primary: #F97316; --qe-color-on-primary: #111827; --qe-color-primary-text: #B0561C;
+  --qe-color-primary-container: #FEF1E8; --qe-color-on-primary-container: #111827;
+  --qe-color-accent: #0F766E; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #0F766E;
+  --qe-color-accent-container: #E7F1F0; --qe-color-on-accent-container: #111827;
+  --qe-color-background: #F5F7FB; --qe-color-on-background: #172033;
   --qe-color-surface: #FFFFFF; --qe-color-on-surface: #172033;
   --qe-color-surface-elevated: #FFFFFF; --qe-color-on-surface-elevated: #172033;
-  --qe-color-text: #172033; --qe-color-text-muted: #475467;
-  --qe-color-border: #737D91; --qe-color-border-subtle: #D1D5DB; --qe-color-focus: #9A3412;
+  --qe-color-text: #172033; --qe-color-text-muted: #536176;
+  --qe-color-border: #7B8798; --qe-color-border-subtle: #D7DEE8; --qe-color-focus: #F06F17;
   --qe-color-success: #166534; --qe-color-on-success: #FFFFFF; --qe-color-success-container: #DCFCE7; --qe-color-on-success-container: #14532D;
   --qe-color-warning: #92400E; --qe-color-on-warning: #FFFFFF; --qe-color-warning-container: #FEF3C7; --qe-color-on-warning-container: #78350F;
   --qe-color-error: #B42318; --qe-color-on-error: #FFFFFF; --qe-color-error-container: #FEE2E2; --qe-color-on-error-container: #7F1D1D;
-  --qe-color-selected-background: #FFF0E5; --qe-color-selected-text: #9A3412;
-  --qe-color-nav-background: #361805; --qe-color-nav-text: #FFFFFF; --qe-color-nav-active-background: #F97316; --qe-color-nav-active-text: #291400;
+  --qe-color-selected-background: #FEF1E8; --qe-color-selected-text: #111827;
+  --qe-color-nav-background: #F5F7FB; --qe-color-nav-text: #334155; --qe-color-nav-active-background: #FEF1E8; --qe-color-nav-active-text: #111827;
   --qe-color-disabled-background: #E5E7EB; --qe-color-disabled-text: #4B5563;
-  --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
+  --ink: var(--qe-color-text); --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
   --card: var(--qe-color-surface); --line: var(--qe-color-border-subtle);
   --purple: var(--qe-color-primary-text); --purple-dark: var(--qe-color-accent-text); --purple-soft: var(--qe-color-primary-container);
+  --qe-elevation-1: 0 1px 2px rgb(20 32 54 / .04), 0 4px 14px rgb(20 32 54 / .045);
+  --qe-elevation-2: 0 10px 28px rgb(20 32 54 / .10), 0 2px 6px rgb(20 32 54 / .04);
+  --qe-elevation-3: 0 22px 54px rgb(20 32 54 / .16), 0 4px 12px rgb(20 32 54 / .06);
   color-scheme: light;
-}html[data-qe-appearance="light"]{ color-scheme: light; }html[data-qe-appearance="dark"]{
+}
+html[data-qe-appearance="light"] { color-scheme: light; }
+html[data-qe-appearance="dark"] {
   color-scheme: dark;
-  --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #FDBA74;
-  --qe-color-primary-container: #48220D; --qe-color-on-primary-container: #FFF0E5;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #FDBA74; --qe-color-accent-container: #3F2320; --qe-color-on-accent-container: #FFFFFF;
-  --qe-color-background: #0B1220; --qe-color-on-background: #F3F4F6;
-  --qe-color-surface: #111827; --qe-color-on-surface: #F3F4F6;
-  --qe-color-surface-elevated: #182235; --qe-color-on-surface-elevated: #F3F4F6;
-  --qe-color-text: #F3F4F6; --qe-color-text-muted: #D1D5DB;
-  --qe-color-border: #6B7280; --qe-color-border-subtle: #4B5563; --qe-color-focus: #FDBA74;
-  --qe-color-success: #4ADE80; --qe-color-on-success: #052E16; --qe-color-success-container: #14532D; --qe-color-on-success-container: #DCFCE7;
-  --qe-color-warning: #FCD34D; --qe-color-on-warning: #422006; --qe-color-warning-container: #713F12; --qe-color-on-warning-container: #FEF3C7;
-  --qe-color-error: #FDA4AF; --qe-color-on-error: #450A0A; --qe-color-error-container: #7F1D1D; --qe-color-on-error-container: #FEE2E2;
-  --qe-color-selected-background: #48220D; --qe-color-selected-text: #FDBA74;
-  --qe-color-nav-background: #180D05; --qe-color-nav-text: #FFFFFF; --qe-color-nav-active-background: #F97316; --qe-color-nav-active-text: #291400;
+  --qe-color-primary: #F97316; --qe-color-on-primary: #111827; --qe-color-primary-text: #F97316;
+  --qe-color-primary-container: #362F33; --qe-color-on-primary-container: #FFFFFF;
+  --qe-color-accent: #0F766E; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #5AA09B;
+  --qe-color-accent-container: #1A303E; --qe-color-on-accent-container: #FFFFFF;
+  --qe-color-background: #121A28; --qe-color-on-background: #F4F7FB;
+  --qe-color-surface: #1B2637; --qe-color-on-surface: #F4F7FB;
+  --qe-color-surface-elevated: #243247; --qe-color-on-surface-elevated: #F4F7FB;
+  --qe-color-text: #F4F7FB; --qe-color-text-muted: #B6C2D2;
+  --qe-color-border: #66758B; --qe-color-border-subtle: #354156; --qe-color-focus: #F97316;
+  --qe-color-success: #4ADE80; --qe-color-on-success: #052E16; --qe-color-success-container: #123B2A; --qe-color-on-success-container: #C9F7D7;
+  --qe-color-warning: #FCD34D; --qe-color-on-warning: #422006; --qe-color-warning-container: #463515; --qe-color-on-warning-container: #FDE68A;
+  --qe-color-error: #FDA4AF; --qe-color-on-error: #450A0A; --qe-color-error-container: #451C28; --qe-color-on-error-container: #FFE1E8;
+  --qe-color-selected-background: #362F33; --qe-color-selected-text: #FFFFFF;
+  --qe-color-nav-background: #18243A; --qe-color-nav-text: #F4F7FB; --qe-color-nav-active-background: #362F33; --qe-color-nav-active-text: #FFFFFF;
   --qe-color-disabled-background: #273244; --qe-color-disabled-text: #9CA3AF;
   --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
   --card: var(--qe-color-surface); --line: var(--qe-color-border-subtle);
   --purple: var(--qe-color-primary-text); --purple-dark: var(--qe-color-accent-text); --purple-soft: var(--qe-color-primary-container);
-}/* Dark-mode overrides intentionally target workspace chrome and neutral component surfaces.
+  --qe-elevation-1: 0 1px 2px rgb(0 0 0 / .16), 0 4px 14px rgb(0 0 0 / .12);
+  --qe-elevation-2: 0 10px 28px rgb(0 0 0 / .22), 0 2px 6px rgb(0 0 0 / .12);
+  --qe-elevation-3: 0 22px 54px rgb(0 0 0 / .30), 0 4px 12px rgb(0 0 0 / .16);
+}
+/* Dark-mode overrides intentionally target workspace chrome and neutral component surfaces.
    Correct/incorrect/success/error/warning states keep their semantic cues. */
 html[data-qe-appearance="dark"] body,
 html[data-qe-appearance="dark"] .qe-workspace-layout,
@@ -315,7 +326,7 @@ html[data-qe-appearance="dark"] .qe-workspace-content [class*="card"]:not([class
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="panel"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]),
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="dialog"],
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="popover"]{
-  background-color:var(--qe-color-error-container);
+  background-color:var(--qe-color-surface);
   border-color:var(--qe-color-border-subtle);
   color:var(--qe-color-text);
 }html[data-qe-appearance="dark"] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
@@ -679,4 +690,446 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
     width:auto;height:auto;max-height:none;min-height:0;
     border:1px solid #e6e9ef;border-radius:16px;
   }
+}
+
+/* Unified smooth surface system for the public, school-entry, learner and parent pages.
+   Shared learner shell selectors are intentional; embedded media, lesson artefacts and unrelated widgets
+   are not blanket-restyled. Brand tint is reserved for intentional selection/action states. */
+html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card) {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] .qe-workspace-content [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card, .login-panel),
+html[data-qe-appearance="dark"] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]),
+html[data-qe-appearance="dark"] .site :is(.student-card, .parent-card, .report-card, .subject-card, .strip, .section-soft, .promise) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] :is(.qe-workspace-topbar, .qe-workspace-mobile-nav, .qe-workspace-mobile-subnav, .qe-workspace-sidebar, .qe-workspace-sidebar nav) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.qe-modal, .qe-dropdown, .qe-popover, [class*="dialog"], [class*="Dialog"], [class*="popover"], [class*="Popover"], [class*="dropdown"], [class*="Dropdown"]),
+html[data-qe-appearance="dark"] :is(.auth-card [class*="dialog"], .site [class*="popover"], .qe-tenant-landing [class*="dialog"]) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
+html[data-qe-appearance="dark"] .qe-workspace-content select,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) select,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) textarea {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+  color-scheme: dark;
+}
+html[data-qe-appearance="dark"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea::placeholder,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) input::placeholder,
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content table,
+html[data-qe-appearance="dark"] .qe-workspace-content table thead,
+html[data-qe-appearance="dark"] .qe-workspace-content table tbody,
+html[data-qe-appearance="dark"] .qe-tenant-landing table {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(th, thead),
+html[data-qe-appearance="dark"] .qe-tenant-landing :is(th, thead) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(td, th),
+html[data-qe-appearance="dark"] .qe-tenant-landing :is(td, th) {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]),
+html[data-qe-appearance="dark"] :is(.auth-card, .login-card, .qe-school-entry, .qe-tenant-landing) :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]) {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock, .auth-card, .login-card) {
+    transition: none;
+  }
+}
+
+
+/* Page typography defaults for CSS-module routes. Component-specific semantic classes win where a state
+   needs success/warning/error/brand emphasis; ordinary headings and body copy follow the theme. */
+html[data-qe-appearance="dark"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(label, legend, dt, dd, th, td) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(hr, .divider, [class*="Divider"]) {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-light, .secondary-button, .secondaryButton, .outline-button, .outlineButton, .icon-button, .iconButton, .ghost-button, .ghostButton) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .qe-primary-action, [data-variant="primary"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .qe-primary-action, [data-variant="primary"]):hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+
+/* Keep the canonical QuantaEdge mark distinct from the theme's body-text token. */
+html[data-qe-appearance="dark"] .brand-mark {
+  background: #152038;
+  color: #FFFFFF;
+}
+
+
+/* Refined authentication and legal pages: every control belongs to the same quiet surface system. */
+html[data-qe-appearance="dark"] .auth-card h1,
+html[data-qe-appearance="dark"] .auth-card h2,
+html[data-qe-appearance="dark"] .auth-card label,
+html[data-qe-appearance="dark"] .auth-brand,
+html[data-qe-appearance="dark"] .auth-back-link,
+html[data-qe-appearance="dark"] .auth-card>.text-link {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .auth-card>p,
+html[data-qe-appearance="dark"] .auth-note,
+html[data-qe-appearance="dark"] .auth-separator,
+html[data-qe-appearance="dark"] .auth-dev-code,
+html[data-qe-appearance="dark"] .auth-mode-links button,
+html[data-qe-appearance="dark"] .auth-mode-links a,
+html[data-qe-appearance="dark"] .auth-secondary-action,
+html[data-qe-appearance="dark"] .auth-card .consent-row {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .auth-mode-links button:hover,
+html[data-qe-appearance="dark"] .auth-mode-links a:hover,
+html[data-qe-appearance="dark"] .auth-back-link:hover,
+html[data-qe-appearance="dark"] .auth-card>.text-link:hover {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="dark"] .auth-dev-code {
+  background: var(--qe-color-primary-container);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .auth-alt-link {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .auth-method-switch button.is-active {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .auth-separator:before,
+html[data-qe-appearance="dark"] .auth-separator:after {
+  background: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .legal-page {
+  max-width: 880px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 4vw, 38px) 72px;
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .legal-page {
+  transition: background-color 180ms ease, color 180ms ease;
+}
+.legal-page {
+  max-width: 880px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 4vw, 38px) 72px;
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+  line-height: 1.75;
+}
+.legal-page h1 { margin: 24px 0 16px; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.035em; }
+.legal-page p { max-width: 72ch; color: var(--qe-color-text-muted); line-height: 1.8; }
+html[data-qe-appearance] .auth-card,
+html[data-qe-appearance] .auth-alt-link,
+html[data-qe-appearance] .auth-method-switch {
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-language-switcher,
+  html[data-qe-appearance] .auth-card,
+  html[data-qe-appearance] .auth-alt-link,
+  html[data-qe-appearance] .auth-method-switch,
+  html[data-qe-appearance] .legal-page { transition: none; }
+}
+
+
+/* Calm reading/practice surfaces: brand colour is emphasis, never the default paragraph colour. */
+.qe-practice-intro h1 { color: var(--qe-color-text); }
+.qe-practice-intro>p { color: var(--qe-color-text-muted); }
+.qe-answer-option { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-practice-progress {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-practice-progress__meta,
+html[data-qe-appearance="dark"] .qe-practice-progress__meta i {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-practice-progress__meta strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-question-card {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-question-card__prompt,
+html[data-qe-appearance="dark"] .qe-question-card__prompt p {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-answer-option {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-answer-option:hover:not(:disabled) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-answer-option[aria-checked="true"],
+html[data-qe-appearance="dark"] .qe-answer-option.is-selected {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-practice-hint {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-practice-hint>span {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] :is(.student-profile-field, .parent-profile-field) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] :is(.student-profile-photo-editor__camera, .parent-profile-photo-editor__camera) {
+  color: var(--qe-color-on-primary);
+}
+html[data-qe-appearance="dark"] .student-profile-page__alert.is-success,
+html[data-qe-appearance="dark"] .parent-profile-page__alert.is-success {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+html[data-qe-appearance="dark"] .qe-language-switcher {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-language-switcher select { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-language-switcher--menu-setting select { border-color: var(--qe-color-border); }
+@media (prefers-reduced-motion: reduce) {
+  .qe-practice-progress,
+  .qe-question-card,
+  .qe-answer-option { transition: none; }
+}
+
+
+/* Shared light-mode parity for legacy route components.
+   This makes HRMS-selected primary/accent colours flow through every workspace page, not only dark mode. */
+html[data-qe-appearance="light"] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .auth-card, .login-card, .login-panel),
+html[data-qe-appearance="light"] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]),
+html[data-qe-appearance="light"] .site :is(.student-card, .parent-card, .report-card, .subject-card, .strip, .section-soft, .promise) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.hero, .qe-workspace-topbar, .qe-workspace-mobile-nav, .qe-workspace-mobile-subnav, .qe-workspace-sidebar) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero {
+  background:
+    radial-gradient(circle at 94% 0%, color-mix(in srgb, var(--qe-color-primary) 8%, transparent), transparent 38%),
+    var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero h1,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero h1,
+html[data-qe-appearance="light"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero p,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.eyebrow, [class*="eyebrow"], [class*="Eyebrow"], [class*="kicker"], [class*="Kicker"]) {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(label, legend, dt, dd, th, td) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]) {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]), select, textarea) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="light"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="light"] .qe-workspace-content textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-light, .secondary-button, .secondaryButton, .outline-button, .outlineButton, .icon-button, .iconButton, .ghost-button, .ghostButton, [class*="secondaryButton"], [class*="secondaryLink"]) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .primaryLink, .qe-primary-action, [data-variant="primary"], [class*="primaryButton"], [class*="primaryLink"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .primaryLink, .qe-primary-action, [data-variant="primary"], [class*="primaryButton"], [class*="primaryLink"]):hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.tabs .activeTab, .tabs .chatActive, .activeBadge, .qe-textbook-pagination>button[aria-current="page"], .qe-textbook-pagination>button[aria-pressed="true"]) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.error, .is-error, [class*="Alert"][class*="error"], [class*="alert"][class*="error"]) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.notice, .is-success, [class*="success-alert"], [class*="SuccessAlert"]) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(hr, .divider, [class*="Divider"]) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+
+/* Keep descriptive copy quieter than headings without bleaching educational content. */
+html[data-qe-appearance="dark"] .qe-workspace-content .hero p,
+html[data-qe-appearance="dark"] .qe-tenant-landing .hero p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.testCard, .sessionCard, .recordingCard, .courseCard, .resultCard, .empty) > p,
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.recordingBody, .sectionHeading, .toolbar, .attemptTitle) p {
+  color: var(--qe-color-text-muted);
+}
+
+
+/* One restrained elevation scale: cards gently lift from the canvas without looking pasted on. */
+html[data-qe-appearance] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]) {
+  box-shadow: var(--qe-elevation-1);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+html[data-qe-appearance] .qe-workspace-content [class*="card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-workspace-content [class*="Card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+  box-shadow: var(--qe-elevation-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-workspace-content [class*="card"],
+  html[data-qe-appearance] .qe-workspace-content [class*="Card"],
+  html[data-qe-appearance] .qe-tenant-landing [class*="card"] { transition: none; }
+}
+
+
+/* Route-specific actions/states share the same semantic roles in both appearances. */
+html[data-qe-appearance] .qe-workspace-content :is(.student-profile-field, .parent-profile-field) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="primaryButton"], [class*="primaryLink"], [class*="certificateIssueButton"], [class*="chatSend"], [class*="openSecureLink"], [class*="verifyCard"], [class*="stateCard"]) button,
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="primaryButton"], [class*="primaryLink"], [class*="certificateIssueButton"], [class*="chatSend"], [class*="joinedActions"] button, [class*="openSecureLink"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="secondaryButton"], [class*="secondaryLink"], [class*="resultOpen"], [class*="backButton"], [class*="leaderboardButton"], [class*="leaderboardClose"], [class*="refreshButton"], [class*="chatAction"], [class*="playerModal"]) button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="price"], [class*="Price"], [class*="resultLink"], [class*="chapterOpen"], .text-link, .qe-textbook-chapter-open) {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusLIVE"], [class*="requestComplete"], [class*="joinedBanner"], [class*="notice"], [class*="is-success"], [class*="SuccessAlert"], [class*="valid"]) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="requestPending"], [class*="qe-textbook-notice"]) {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusCANCELLED"], [class*="statusRevoked"], [class*="parent-certificate-revoked"]) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusCOMPLETED"], [class*="requestOther"], [class*="disabledButton"], [class*="attemptState"]) {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="currentNumber"], [class*="optionSelected"], [class*="chatActive"], [class*="activeTab"], [class*="activeBadge"], [class*="statusSCHEDULED"]) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="languageNotice"]) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
 }

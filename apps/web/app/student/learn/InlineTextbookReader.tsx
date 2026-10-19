@@ -57,10 +57,10 @@ export default function InlineTextbookReader({
     <section className="qe-inline-textbook" aria-label={heading} style={{
       margin: '14px 0 20px',
       overflow: 'hidden',
-      border: '1px solid #e5e7eb',
-      borderRadius: 14,
-      background: '#fff',
-      boxShadow: '0 5px 20px rgba(23, 35, 56, .05)',
+      border: '1px solid var(--qe-color-border-subtle)',
+      borderRadius: 16,
+      background: 'var(--qe-color-surface)',
+      boxShadow: 'var(--qe-elevation-1)',
     }}>
       <div style={{
         display: 'flex',
@@ -68,23 +68,23 @@ export default function InlineTextbookReader({
         justifyContent: 'space-between',
         gap: 12,
         padding: '13px 15px',
-        borderBottom: expanded ? '1px solid #edf0f4' : 'none',
-        background: '#fffaf6',
+        borderBottom: expanded ? '1px solid var(--qe-color-border-subtle)' : 'none',
+        background: 'var(--qe-color-primary-container)',
       }}>
         <div style={{ minWidth: 0 }}>
-          <div style={{ color: '#c2410c', fontSize: 10, fontWeight: 850, letterSpacing: '.08em', textTransform: 'uppercase' }}>{heading}</div>
-          <strong style={{ display: 'block', marginTop: 4, color: '#1f2937', fontSize: 13, overflowWrap: 'anywhere' }}>{item.title}</strong>
-          <small style={{ display: 'block', marginTop: 3, color: '#6b7280', fontSize: 11 }}>
+          <div style={{ color: 'var(--qe-color-primary-text)', fontSize: 10, fontWeight: 850, letterSpacing: '.08em', textTransform: 'uppercase' }}>{heading}</div>
+          <strong style={{ display: 'block', marginTop: 4, color: 'var(--qe-color-text)', fontSize: 13, overflowWrap: 'anywhere' }}>{item.title}</strong>
+          <small style={{ display: 'block', marginTop: 3, color: 'var(--qe-color-text-muted)', fontSize: 11 }}>
             {item.edition ? item.edition + ' · ' : ''}{t('web.textbookReader.pageCount', { count: pageCount })} · {t('web.textbookReader.secureOnline')}
           </small>
         </div>
         <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)} style={{
           flex: '0 0 auto',
-          border: '1px solid #f1d3bd',
+          border: '1px solid var(--qe-color-border-subtle)',
           borderRadius: 9,
           padding: '8px 10px',
-          background: '#fff',
-          color: '#9a3412',
+          background: 'var(--qe-color-surface)',
+          color: 'var(--qe-color-primary-text)',
           fontSize: 11,
           fontWeight: 800,
           cursor: 'pointer',
@@ -99,10 +99,10 @@ export default function InlineTextbookReader({
           justifyContent: 'space-between',
           gap: 10,
           padding: '10px 13px',
-          background: '#f8fafc',
-          borderBottom: '1px solid #e8edf3',
+          background: 'var(--qe-color-surface-elevated)',
+          borderBottom: '1px solid var(--qe-color-border-subtle)',
         }}>
-          <span style={{ color: '#667085', fontSize: 11 }}>{t('web.textbookReader.pageLabel')} <b style={{ color: '#293548' }}>{page}</b> {t('web.textbookReader.of')} {pageCount}</span>
+          <span style={{ color: 'var(--qe-color-text-muted)', fontSize: 11 }}>{t('web.textbookReader.pageLabel')} <b style={{ color: 'var(--qe-color-text)' }}>{page}</b> {t('web.textbookReader.of')} {pageCount}</span>
           <div style={{ display: 'flex', gap: 7 }}>
             <button type="button" disabled={page <= 1} onClick={() => setPage(value => Math.max(1, value - 1))} style={controlStyle(page <= 1)}>{t('web.textbookReader.previous')}</button>
             <button type="button" disabled={page >= pageCount} onClick={() => setPage(value => Math.min(pageCount, value + 1))} style={controlStyle(page >= pageCount)}>{t('web.textbookReader.next')}</button>
@@ -115,7 +115,7 @@ export default function InlineTextbookReader({
           justifyContent: 'center',
           alignItems: 'flex-start',
           padding: 12,
-          background: '#e9edf3',
+          background: 'var(--qe-color-background)',
         }}>
           {loading && <div role="status" style={{
             position: 'absolute',
@@ -124,8 +124,8 @@ export default function InlineTextbookReader({
             left: 22,
             padding: '8px 11px',
             borderRadius: 8,
-            background: '#fff',
-            color: '#667085',
+            background: 'var(--qe-color-surface)',
+            color: 'var(--qe-color-text-muted)',
             fontSize: 11,
             boxShadow: '0 2px 8px rgba(0,0,0,.08)',
           }}>{t('web.textbookReader.loadingPage', { page })}</div>}
@@ -146,7 +146,7 @@ export default function InlineTextbookReader({
               userSelect: 'none',
             }}
           />
-          {pageError && <div role="alert" style={{ padding: 24, textAlign: 'center', color: '#9b3325', fontSize: 12 }}>
+          {pageError && <div role="alert" style={{ padding: 24, textAlign: 'center', color: 'var(--qe-color-error)', fontSize: 12 }}>
             <p>{pageError}</p>
             <button type="button" onClick={() => { setPageError(''); setLoading(true); setRetryKey(value => value + 1); }} style={controlStyle(false)}>{t('web.textbookReader.retryPage')}</button>
           </div>}
@@ -158,11 +158,11 @@ export default function InlineTextbookReader({
 
 function controlStyle(disabled: boolean): CSSProperties {
   return {
-    border: '1px solid #dbe1e9',
+    border: '1px solid var(--qe-color-border-subtle)',
     borderRadius: 8,
     padding: '7px 9px',
-    background: disabled ? '#f1f3f6' : '#fff',
-    color: disabled ? '#9ca3af' : '#344054',
+    background: disabled ? 'var(--qe-color-disabled-background)' : 'var(--qe-color-surface)',
+    color: disabled ? 'var(--qe-color-disabled-text)' : 'var(--qe-color-text)',
     fontSize: 10,
     fontWeight: 750,
     cursor: disabled ? 'not-allowed' : 'pointer',

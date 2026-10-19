@@ -20,7 +20,7 @@ class InstitutionThemeTokensTest {
     assertEquals("quantaedge-orange", theme.get("presetId"));
     assertEquals("system", theme.get("appearance"));
     assertEquals("#F97316", theme.get("primary"));
-    assertEquals("#C2410C", theme.get("accent"));
+    assertEquals("#0F766E", theme.get("accent"));
 
     Map<?, ?> light = assertInstanceOf(Map.class, theme.get("light"));
     Map<?, ?> dark = assertInstanceOf(Map.class, theme.get("dark"));
@@ -31,8 +31,13 @@ class InstitutionThemeTokensTest {
       assertNotNull(light.get(token), "Missing light token " + token);
       assertNotNull(dark.get(token), "Missing dark token " + token);
     }
-    assertEquals("#0B1220", dark.get("background"));
-    assertEquals("#F8FAFC", light.get("background"));
+    assertEquals("#121A28", dark.get("background"));
+    assertEquals("#F5F7FB", light.get("background"));
+    assertEquals("#1B2637", dark.get("surface"));
+    assertEquals("#243247", dark.get("surfaceElevated"));
+    assertEquals("#18243A", dark.get("navBackground"));
+    assertEquals("#F5F7FB", light.get("navBackground"));
+    assertFalse(dark.get("navBackground").equals(dark.get("primary")));
   }
 
   @Test
@@ -103,6 +108,27 @@ class InstitutionThemeTokensTest {
     assertTrue(contrast((String) light.get("navText"), (String) light.get("navBackground")) >= 4.5);
     assertTrue(contrast((String) dark.get("navText"), (String) dark.get("navBackground")) >= 4.5);
     assertAccessible(theme, "custom yellow/purple");
+  }
+
+  @Test
+  void savedCuratedPresetsUpgradeButExplicitCustomColoursRemainUnchanged() {
+    Map<String, Object> savedPreset = InstitutionThemeTokens.normalize(Map.of(
+        "schemaVersion", 2,
+        "presetId", "quantaedge-orange",
+        "appearance", "dark",
+        "brandPrimary", "#F97316",
+        "brandAccent", "#C2410C"));
+    assertEquals("#F97316", savedPreset.get("brandPrimary"));
+    assertEquals("#0F766E", savedPreset.get("brandAccent"));
+
+    Map<String, Object> custom = InstitutionThemeTokens.normalize(Map.of(
+        "schemaVersion", 2,
+        "presetId", "custom",
+        "appearance", "dark",
+        "brandPrimary", "#F97316",
+        "brandAccent", "#C2410C"));
+    assertEquals("#F97316", custom.get("brandPrimary"));
+    assertEquals("#C2410C", custom.get("brandAccent"));
   }
 
   @Test

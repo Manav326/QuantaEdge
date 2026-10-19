@@ -32,7 +32,7 @@ The existing approved brand system in `docs/branding.md` remains authoritative. 
 | Muted text | `#667085` | Secondary metadata, after contrast verification |
 | Success / warning / error | Existing semantic tokens first | Status and validation meaning, never decorative branding |
 
-No new colour palette is approved. Existing CSS/design tokens and the orange-led identity are the source of truth; do not add blue palette tokens or shift primary actions from orange to blue. Reconcile any proposed neutral/semantic token adjustments against the actual code and contrast-test them. Keep logo, wordmark and tagline assets unchanged. Layout/placement changes may now be implemented within this approved plan; record unverified visual results separately from source implementation and CI.
+The canonical QuantaEdge platform identity remains orange-led: preserve the logo, wordmark, tagline, and platform/operator default. Institution white-label palettes are a controlled extension, not a platform rebrand: a tenant may select an approved primary plus complementary accent, while the application canvas, cards, navigation, text hierarchy, and semantic status roles remain generated from the shared neutral design tokens. Dark mode uses layered slate rather than black plus a saturated brand tint. Reconcile every token against actual rendering and contrast-test it. Do not recolour the logo or use the error palette as a decorative surface.
 
 ## 3. Visual and interaction foundations
 

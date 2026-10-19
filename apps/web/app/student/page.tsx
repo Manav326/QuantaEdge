@@ -245,8 +245,8 @@ export default function StudentHome(){
                 <span className="subject-book-copy">
                   <strong><LocaleText hinglish="इस कोर्स की प्रगति" english="Course learning progress" /></strong>
                   <small>{Number(stats.completed_lessons||0)} / {Number(stats.total_lessons||0)} <LocaleText hinglish="पाठ पूरे" english="lessons completed" /> · {Math.max(0,Math.min(100,Number(stats.completion_percent||0)))}%</small>
-                  <span className="qe-course-progress-track" style={{display:'block',height:'6px',background:'var(--border-color, #e5e7eb)',borderRadius:'999px',overflow:'hidden',marginTop:'8px'}}>
-                    <span style={{display:'block',height:'100%',width:Math.max(0,Math.min(100,Number(stats.completion_percent||0)))+'%',background:'var(--brand-primary, #e87524)',borderRadius:'999px'}} />
+                  <span className="qe-course-progress-track" style={{display:'block',height:'6px',background:'var(--qe-color-border-subtle)',borderRadius:'999px',overflow:'hidden',marginTop:'8px'}}>
+                    <span style={{display:'block',height:'100%',width:Math.max(0,Math.min(100,Number(stats.completion_percent||0)))+'%',background:'var(--qe-color-primary)',borderRadius:'999px'}} />
                   </span>
                 </span>
                 <span className="subject-book-open"><Link href={'/student/progress?courseId='+encodeURIComponent(String(activeCourse.id))}><LocaleText hinglish="पूरी प्रगति" english="Full progress" /></Link></span>
