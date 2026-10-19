@@ -738,6 +738,75 @@ public class RichNotificationService {
   }
 
   @Transactional
+  public boolean markUnread(AuthContext context,long institutionId,long recipientId) {
+    return updateRecipientState(context,institutionId,recipientId,"CREATED");
+  }
+
+  @Transactional
+  public boolean dismissNotification(AuthContext context,long institutionId,long recipientId) {
+    return updateRecipientState(context,institutionId,recipientId,"DISMISSED");
+  }
+
+  private boolean updateRecipientState(AuthContext context,long institutionId,long recipientId,String nextState) {
+    if(!Set.of("CREATED","READ","DISMISSED").contains(nextState)) {
+      throw new IllegalArgumentException("Unsupported notification state change.");
+    }
+    String kind; Long id;
+    if(context.studentId()!=null){kind="STUDENT";id=context.studentId();}
+    else if(context.isParent()&&context.userId()!=null){kind="USER_ACCOUNT";id=context.userId();}
+    else throw new SecurityException("A supported authenticated recipient identity is required.");
+    return jdbc.update("""
+      update notification_recipient set
+        state=?,
+        read_at=case when ? in ('READ','DISMISSED') then coalesce(read_at,now()) else null end,
+        dismissed_at=case when ?='DISMISSED' then now() else null end
+      where id=? and recipient_kind=? and
+        case when ?='STUDENT' then student_id=? when ?='USER_ACCOUNT' then user_account_id=? else false end
+        and state in ('CREATED','QUEUED','READ','DISMISSED')
+        and exists(
+          select 1 from notification_campaign c
+          where c.id=notification_recipient.campaign_id and c.status='SENT'
+            and (c.expires_at is null or c.expires_at>now())
+            and (notification_recipient.institution_id=? or (
+              notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+              and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+        )
+      """,nextState,nextState,nextState,recipientId,kind,kind,id,kind,id,institutionId,institutionId)==1;
+  }
+
+  @Transactional
+  public boolean markUnreadForInstitutionAdmin(long adminId,long institutionId,long recipientId) {
+    return updateInstitutionAdminNotificationState(adminId,institutionId,recipientId,"CREATED");
+  }
+
+  @Transactional
+  public boolean dismissForInstitutionAdmin(long adminId,long institutionId,long recipientId) {
+    return updateInstitutionAdminNotificationState(adminId,institutionId,recipientId,"DISMISSED");
+  }
+
+  private boolean updateInstitutionAdminNotificationState(long adminId,long institutionId,long recipientId,String nextState) {
+    if(!Set.of("CREATED","DISMISSED").contains(nextState)) {
+      throw new IllegalArgumentException("Unsupported notification state change.");
+    }
+    return jdbc.update("""
+      update notification_recipient set
+        state=?,
+        read_at=case when ?='DISMISSED' then coalesce(read_at,now()) else null end,
+        dismissed_at=case when ?='DISMISSED' then now() else null end
+      where id=? and recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
+        and state in ('CREATED','QUEUED','READ','DISMISSED')
+        and exists(
+          select 1 from notification_campaign c
+          where c.id=notification_recipient.campaign_id and c.status='SENT'
+            and (c.expires_at is null or c.expires_at>now())
+            and (notification_recipient.institution_id=? or (
+              notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+              and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+        )
+      """,nextState,nextState,nextState,recipientId,adminId,institutionId,institutionId)==1;
+  }
+
+  @Transactional
   public boolean markRead(AuthContext context,long institutionId,long recipientId,boolean all) {
     String kind; Long id;
     if(context.studentId()!=null){kind="STUDENT";id=context.studentId();}
