@@ -568,13 +568,35 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
                 {activeBlock ? <div className={styles.inspectorMove}><button type="button" onClick={()=>moveBlock(-1)} disabled={selectedBlock===0} aria-label="Move element up">↑</button><button type="button" onClick={()=>moveBlock(1)} disabled={selectedBlock===document.blocks.length-1} aria-label="Move element down">↓</button><button type="button" onClick={removeBlock} aria-label="Delete element">×</button></div>:null}
               </div>
               {activeBlock ? <div className={styles.fieldGrid}>
-                {Object.entries(activeBlock).filter(([key])=>key!=='type'&&key!=='assetId'&&key!=='decorative').map(([key,value])=>{
+                {Object.entries(activeBlock).filter(([key])=>!['type','assetId','decorative','fit','aspectRatio','focalPoint','backgroundColor','textColor','accentColor','alignment','padding','borderRadius','fontSize'].includes(key)).map(([key,value])=>{
                   const multiline=['text','subtitle','description','caption'].includes(key);
                   return <label key={key}>{key.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase())}
                     {multiline?<textarea rows={key==='text'?4:2} value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>
                       :<input value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>}
                   </label>;
                 })}
+                <div className={styles.appearanceControls}>
+                  <div className={styles.appearanceTitle}><strong>Appearance</strong><span>Style this element</span></div>
+                  <label>Alignment<select value={String(activeBlock.alignment??'left')} onChange={event=>updateBlock('alignment',event.target.value)}>
+                    <option value="left">Left</option><option value="center">Center</option><option value="right">Right</option><option value="justify">Justified</option>
+                  </select></label>
+                  <label>Base text size<select value={String(activeBlock.fontSize??'14')} onChange={event=>updateBlock('fontSize',event.target.value)}>
+                    {[12,14,16,18,20,24,28,32].map(size=><option key={size} value={size}>{size}px</option>)}
+                  </select></label>
+                  <label>Spacing<select value={String(activeBlock.padding??'12')} onChange={event=>updateBlock('padding',event.target.value)}>
+                    {[0,4,8,12,16,24,32,40,48].map(size=><option key={size} value={size}>{size}px</option>)}
+                  </select></label>
+                  <label>Corner radius<select value={String(activeBlock.borderRadius??'12')} onChange={event=>updateBlock('borderRadius',event.target.value)}>
+                    {[0,4,8,12,16,20,24,32,40].map(size=><option key={size} value={size}>{size}px</option>)}
+                  </select></label>
+                  <label>Surface colour<input type="color" value={String(activeBlock.backgroundColor??'#ffffff')} onChange={event=>updateBlock('backgroundColor',event.target.value)}/></label>
+                  <label>Text colour<input type="color" value={String(activeBlock.textColor??'#172637')} onChange={event=>updateBlock('textColor',event.target.value)}/></label>
+                  <label>Accent colour<input type="color" value={String(activeBlock.accentColor??'#c45c16')} onChange={event=>updateBlock('accentColor',event.target.value)}/></label>
+                  <p className={styles.helpText}>Colours are applied to this element only. Image fit and crop controls are available for media elements.</p>
+                  <button type="button" className={styles.ghostButton} onClick={()=>{
+                    ['backgroundColor','textColor','accentColor','alignment','padding','borderRadius','fontSize'].forEach(key=>updateBlock(key,''));
+                  }}>Reset appearance</button>
+                </div>
                 {['image','video','animation','hero'].includes(activeBlock.type) ? <div className={styles.mediaControl}>
                   <div><strong>{activeBlock.assetId?'Media attached':'Media & graphics'}</strong><small>{activeBlock.assetId?String(activeBlock.assetId):'Upload a graphic, animation or video.'}</small></div>
                   <label className={styles.uploadButton}>{uploading?'Uploading…':'Upload media'}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" onChange={event=>void uploadMedia(event)} disabled={uploading}/></label>
