@@ -68,11 +68,11 @@ class LearningDocumentControllerTest {
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("ste.status='ACTIVE'"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("ste.status='ACTIVE'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
   }
 
   @Test
@@ -83,7 +83,7 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "english", null, null, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("en"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("en"), eq("science"), eq("science"));
   }
 
   @Test
@@ -94,9 +94,9 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "hi", "en", null, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("hi"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"));
     verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
-        eq(7L), eq("en"), eq("hi"), eq("science"), eq("science"));
+        eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"));
   }
   @Test
   void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
