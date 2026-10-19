@@ -86,9 +86,9 @@ public class AuthController {
     boolean androidClient = isAndroidClient(clientHeader);
     ResponseEntity<Map<String,Object>> session =
         withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
-    Duration learningModeLifetime = androidClient
-        ? Duration.ofDays(auth.getLearningSessionDays())
-        : Duration.ofHours(auth.getSessionHours());
+    // This is a URL-routing hint, so keep it for the refresh token's absolute
+    // lifetime rather than only the shorter access-session lifetime.
+    Duration learningModeLifetime = Duration.ofDays(auth.getLearningSessionDays());
     ResponseCookie learningMode = ResponseCookie.from("QE_PARENT_PERSONAL_LEARNING", "1")
         .httpOnly(false).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(learningModeLifetime).build();
