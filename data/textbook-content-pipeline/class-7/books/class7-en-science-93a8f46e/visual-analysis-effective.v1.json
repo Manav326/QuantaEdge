@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5017b40a7cb743f7dc01edb669fdc00dbc320a4b251ed1d5543ed7a13cfa59d3",
+  "raw_analysis_sha256": "3ef9275a46a2950cf92d7ae79ba823cba9c51843f355e1224f9a311f393109a4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:10:11Z",
+      "checkpointed_at": "2026-10-19T10:13:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:10:32Z",
+      "checkpointed_at": "2026-10-19T10:13:48Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -87799,6 +87799,190 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e68d99e8182c0df40ced0298",
+      "asset_sha256": "bbbce09000718acbc201afe0eb6b7f3180cbe3f96a76c08ee5ac2b715ebfa69d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/bbbce09000718acbc201afe0eb6b7f3180cbe3f96a76c08ee5ac2b715ebfa69d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green speech bubble with a leaf-like tail, possibly representing a thought or idea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:14:24Z",
+      "effective_analysis": {
+        "visual_summary": "A green speech bubble with a leaf-like tail, possibly representing a thought or idea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eaeefe5bf50987b3583f60b0",
+      "asset_sha256": "f4ed84ec56e10c0cff8ddd69311c495d618b91f98648a0b35990a6d829ea202b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/f4ed84ec56e10c0cff8ddd69311c495d618b91f98648a0b35990a6d829ea202b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple on/off switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "Let us first make a simple on or off the torchlight?",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a paper clip), two wires, and a small piece of cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip, and the cardboard."
+        ],
+        "concepts": [
+          "Electric switch",
+          "On/off switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or the process of constructing it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:15:11Z",
+      "effective_analysis": {
+        "visual_summary": "A simple on/off switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "Let us first make a simple on or off the torchlight?",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a paper clip), two wires, and a small piece of cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip, and the cardboard."
+        ],
+        "concepts": [
+          "Electric switch",
+          "On/off switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or the process of constructing it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7be2521fce3820aa89227684",
+      "asset_sha256": "a3fa9c8a25b8c5bee0416d67f63415fbd45ce1e5328e2a77d508c3a9c00ca479",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/a3fa9c8a25b8c5bee0416d67f63415fbd45ce1e5328e2a77d508c3a9c00ca479.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "on or off the torchlight?",
+          "Let us first make a simple",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a",
+          "paper clip), two wires, and a small piece of",
+          "cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "safety pin."
+        ],
+        "concepts": [
+          "Electric switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or its functionality."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:15:55Z",
+      "effective_analysis": {
+        "visual_summary": "A simple electrical switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "on or off the torchlight?",
+          "Let us first make a simple",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a",
+          "paper clip), two wires, and a small piece of",
+          "cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "safety pin."
+        ],
+        "concepts": [
+          "Electric switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or its functionality."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

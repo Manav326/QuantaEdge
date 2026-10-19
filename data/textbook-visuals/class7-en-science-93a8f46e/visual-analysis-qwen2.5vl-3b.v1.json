@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1468,
+    "assets_selected": 1471,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1466,
-    "assets_remaining": 6022,
+    "assets_analyzed": 1469,
+    "assets_remaining": 6019,
     "assets_completion_percent": 19.6,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1463,
+    "assets_skipped_from_checkpoint": 1466,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:10:11Z"
+      "checkpointed_at": "2026-10-19T10:13:27Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:10:32Z"
+      "checkpointed_at": "2026-10-19T10:13:48Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -55807,6 +55807,122 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T10:12:43Z"
+    },
+    {
+      "asset_id": "e68d99e8182c0df40ced0298",
+      "asset_sha256": "bbbce09000718acbc201afe0eb6b7f3180cbe3f96a76c08ee5ac2b715ebfa69d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/bbbce09000718acbc201afe0eb6b7f3180cbe3f96a76c08ee5ac2b715ebfa69d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green speech bubble with a leaf-like tail, possibly representing a thought or idea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:14:24Z"
+    },
+    {
+      "asset_id": "eaeefe5bf50987b3583f60b0",
+      "asset_sha256": "f4ed84ec56e10c0cff8ddd69311c495d618b91f98648a0b35990a6d829ea202b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/f4ed84ec56e10c0cff8ddd69311c495d618b91f98648a0b35990a6d829ea202b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple on/off switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "Let us first make a simple on or off the torchlight?",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a paper clip), two wires, and a small piece of cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip, and the cardboard."
+        ],
+        "concepts": [
+          "Electric switch",
+          "On/off switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or the process of constructing it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:15:11Z"
+    },
+    {
+      "asset_id": "7be2521fce3820aa89227684",
+      "asset_sha256": "a3fa9c8a25b8c5bee0416d67f63415fbd45ce1e5328e2a77d508c3a9c00ca479",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/a3fa9c8a25b8c5bee0416d67f63415fbd45ce1e5328e2a77d508c3a9c00ca479.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical switch made from drawing pins, a safety pin, wires, and cardboard.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "on or off the torchlight?",
+          "Let us first make a simple",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a",
+          "paper clip), two wires, and a small piece of",
+          "cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "safety pin."
+        ],
+        "concepts": [
+          "Electric switch",
+          "Drawing pins",
+          "Safety pin",
+          "Wires",
+          "Cardboard"
+        ],
+        "context_relation": "The image is related to the educational content of making an electric switch using simple materials.",
+        "limitations": [
+          "The image does not show the completed switch or its functionality."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:15:55Z"
     }
   ]
 }
