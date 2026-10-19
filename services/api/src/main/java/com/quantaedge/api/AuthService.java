@@ -689,8 +689,19 @@ public class AuthService {
   public boolean hasParentPersonalLearningAccess(long parentUserId, long institutionId) {
     Boolean entitled = jdbc.queryForObject("""
       select exists(
-        select 1 from course_entitlement ce
+        select 1
+        from course_entitlement ce
+        join curriculum_program p on p.id=ce.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where ce.institution_id=? and ce.holder_user_id=?
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            join institution_tenant tenant_scope
+              on tenant_scope.id=assignment.institution_id and tenant_scope.status='ACTIVE'
+            where assignment.institution_id=ce.institution_id and assignment.status='ASSIGNED'
+          )
         union all
         select 1
         from student st
@@ -699,7 +710,17 @@ public class AuthService {
         join student_program_enrollment e on e.student_id=st.id
           and e.institution_id=m.institution_id
           and e.status in ('ACTIVE','PAUSED')
+        join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where st.user_account_id=? and st.active=true and st.environment='PRODUCTION'
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            join institution_tenant tenant_scope
+              on tenant_scope.id=assignment.institution_id and tenant_scope.status='ACTIVE'
+            where assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
+          )
       )
       """, Boolean.class, institutionId, parentUserId, institutionId, parentUserId);
     return Boolean.TRUE.equals(entitled);
