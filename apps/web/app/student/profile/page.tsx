@@ -2,6 +2,7 @@
 
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
+import PasswordField from '../../components/PasswordField';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -458,7 +459,7 @@ export default function StudentProfilePage() {
                       ) : (
                         <div className="student-profile-fields">
                           <label className="student-profile-field"><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" disabled={editingCard !== 'eligibility'} value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
-                          <label className="student-profile-field"><UiText message="legacy.web.new.password.32a2f216" /><input type="password" autoComplete="new-password" minLength={8} disabled={editingCard !== 'eligibility'} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
+                          <label className="student-profile-field"><UiText message="legacy.web.new.password.32a2f216" /><PasswordField autoComplete="new-password" minLength={8} disabled={editingCard !== 'eligibility'} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
                           <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={completeIndependentAccount}><UiText message="legacy.web.create.independent.account.7b195fde" /></button>
                         </div>
                       )}
