@@ -94,6 +94,9 @@ class AssessmentControllerTest {
   @Test
   void directAttemptStartCannotBypassLessonCompletionGate() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from student_program_enrollment spe"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 71L, "display_name", "Test course")));
+    when(jdbc.queryForObject(contains("from assessment a"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id from assessment a"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 19L)));
     when(jdbc.queryForList(contains("coalesce(max(at.title),a.title)"), any(Object[].class)))
@@ -102,7 +105,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("and a.status='PUBLISHED' and"), any(Object[].class))).thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.startOrResumeAttempt(19L, "hi", false, student, TEST_TENANT));
+        () -> controller.startOrResumeAttempt(19L, 71L, "hi", false, student, TEST_TENANT));
 
     assertEquals(409, error.getStatusCode().value());
   }
@@ -387,6 +390,7 @@ class AssessmentControllerTest {
   void leaderboardReturnsTopTwentyAndTheCurrentStudentsRankUsingReleasedBestAttempts() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("from assessment a"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "assessment_id", 20L,
@@ -417,7 +421,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("released_attempts as ("), any(Object[].class)))
         .thenReturn(rankingRows);
 
-    Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student, TEST_TENANT);
+    Map<String, Object> result = controller.assessmentLeaderboard(20L, 71L, "en", student, TEST_TENANT);
 
     @SuppressWarnings("unchecked")
     List<Map<String, Object>> items = (List<Map<String, Object>>) result.get("items");
@@ -437,10 +441,11 @@ class AssessmentControllerTest {
   @Test
   void leaderboardDoesNotRevealAssessmentsOutsideTheStudentsEnrolledCatalogue() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class), any(Object[].class))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("from student_program_enrollment spe"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("with tenant_scope as (select ?::bigint as institution_id)"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.assessmentLeaderboard(999L, "en", student, TEST_TENANT));
+        () -> controller.assessmentLeaderboard(999L, 71L, "en", student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).queryForList(contains("with released_attempts as"), any(Object[].class));
