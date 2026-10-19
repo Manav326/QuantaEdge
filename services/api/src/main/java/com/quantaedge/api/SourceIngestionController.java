@@ -70,13 +70,18 @@ public class SourceIngestionController {
    */
   @GetMapping("/intake")
   public Map<String,Object> listBookIntake(
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="10") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?10:limit,50));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
+      select i.pdf_asset_id,i.institution_id,i.course_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
              a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
              c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
              i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.chapter_ranges,
@@ -86,17 +91,19 @@ public class SourceIngestionController {
       join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id
       join curriculum_subject s on s.id=i.subject_id
+      where i.institution_id=? and i.course_id=?
       order by i.updated_at desc,i.pdf_asset_id desc limit ? offset ?
-      """,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from learning_book_intake",Long.class);
+      """,institutionId,courseId,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from learning_book_intake where institution_id=? and course_id=?",
+        Long.class,institutionId,courseId);
     Map<String,Object> summary=jdbc.queryForMap("""
       select count(*) as total,
              count(*) filter(where upper(coalesce(status,''))='PENDING') as pending,
              count(*) filter(where upper(coalesce(status,''))='REVIEW') as in_review,
              count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
              count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
-      from learning_book_intake
-      """);
+      from learning_book_intake where institution_id=? and course_id=?
+      """,institutionId,courseId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
