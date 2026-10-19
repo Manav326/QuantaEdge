@@ -22,7 +22,7 @@ export default function PracticeClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawCourseId = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\d+$/.test(rawCourseId) && Number(rawCourseId) > 0 ? Number(rawCourseId) : null;
+  const requestedCourseId = rawCourseId || null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const { locale, learningLanguage } = useLocale();
   const requestedSubject = searchParams.get('subjectCode') || 'ALL';
@@ -42,7 +42,7 @@ export default function PracticeClient() {
       return;
     }
     try {
-      const query = new URLSearchParams({ courseId: String(courseId), language: learningLanguage });
+      const query = new URLSearchParams({ courseId: String(activeCourse?.public_id || courseId), language: learningLanguage });
       if (subjectCode !== 'ALL') query.set('subjectCode', subjectCode);
       const response = await fetch('/api/v1/learning/structured-lessons?' + query.toString(), {
         credentials: 'same-origin',
@@ -61,7 +61,7 @@ export default function PracticeClient() {
     } finally {
       setBusy(false);
     }
-  }, [courseId, loadingCourses, courseError, learningLanguage, locale, router, subjectCode]);
+  }, [courseId, activeCourse?.public_id, loadingCourses, courseError, learningLanguage, locale, router, subjectCode]);
 
   useEffect(() => { void loadTopics(); }, [loadTopics]);
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function PracticeClient() {
   async function changeCourse(value: string) {
     await selectCourse(value);
     const params = new URLSearchParams();
-    params.set('courseId', value);
+    params.set('courseId', courses.find(course => Number(course.id) === Number(value))?.public_id || value);
     window.history.replaceState(null, '', '/student/practice?' + params.toString());
     setSubjectCode('ALL');
   }
@@ -81,7 +81,7 @@ export default function PracticeClient() {
   function changeSubject(value: string) {
     setSubjectCode(value);
     const params = new URLSearchParams();
-    if (courseId !== null) params.set('courseId', String(courseId));
+    if (courseId !== null) params.set('courseId', String(activeCourse?.public_id || courseId));
     if (value !== 'ALL') params.set('subjectCode', value);
     window.history.replaceState(null, '', '/student/practice' + (params.size ? '?' + params.toString() : ''));
   }
@@ -120,7 +120,7 @@ export default function PracticeClient() {
           <p>{tx('Chapter', 'अध्याय')} {item.chapterNumber}: {item.chapterTitle} · {tx('Topic', 'विषय')} {item.topicNumber}</p>
           {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {tx('min', 'मिनट')}</small>}
         </div>
-        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{tx('Open lesson and practice', 'पाठ और अभ्यास खोलें')}</Link>
+        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{tx('Open lesson and practice', 'पाठ और अभ्यास खोलें')}</Link>
       </article>)}</div>}
   </section></div></main>;
 }
