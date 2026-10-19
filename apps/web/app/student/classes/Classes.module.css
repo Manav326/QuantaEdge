@@ -302,3 +302,31 @@ html[data-qe-appearance="dark"] .chatCompose textarea {
   html[data-qe-appearance="dark"] .secondaryButton,
   html[data-qe-appearance="dark"] .openSecureLink { transition: none; }
 }
+
+/* Carry neutral theme tokens through the modal, live chat, and secondary session affordances. */
+html[data-qe-appearance="dark"] .brand>span { background: var(--qe-color-primary); color: var(--qe-color-on-primary); }
+html[data-qe-appearance="dark"] .chatToggle {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .chatHeader,
+html[data-qe-appearance="dark"] .playerModal>footer {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .playerModal>footer b { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .playerModal>footer small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .chatMessageHead { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .chatMessage p { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .chatCompose textarea {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .chatSend:disabled,
+html[data-qe-appearance="dark"] .chatAction:disabled,
+html[data-qe-appearance="dark"] .chatToggle:disabled {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
