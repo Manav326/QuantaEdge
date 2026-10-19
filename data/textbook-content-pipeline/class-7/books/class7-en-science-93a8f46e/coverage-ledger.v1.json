@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1708,
-    "successful_visual_analyses": 1685,
-    "missing_visual_analyses": 5780,
+    "raw_analysis_result_rows": 1711,
+    "successful_visual_analyses": 1688,
+    "missing_visual_analyses": 5777,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5803,
+    "unresolved_count": 5800,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -73588,9 +73588,21 @@
       "asset_path": "assets/6e8006cbce2793b8d2771182e23126bc2bac08151ff631ae3175c6b3496ab5a6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "coiled rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a coiled rope with a blue ring attached to one end.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the coiled rope and the blue ring."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73606,9 +73618,27 @@
       "asset_path": "assets/c35f53413acdbffd5af903c291e51ecd55661fbca31e964d588501aa61a1baff.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Electrical energy",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No visual elements are present in the image.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73624,9 +73654,18 @@
       "asset_path": "assets/ca33158144d716295942c4dcedcbc62e6a0af060b2fed3499ea9fc349fea6d75.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not clearly visible or identifiable. The text provided does not mention the image, and the image itself is not described in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

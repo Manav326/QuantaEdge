@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a7db5b1706eeeebe434b516d0a7809eb5041741b5b53d9e5447037e63825494e",
+  "raw_analysis_sha256": "9cfded6266cef23488230dd8ca65db2a5abcbde3c3a2da2b3ef3420245fe7def",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:41:42Z",
+      "checkpointed_at": "2026-10-19T13:44:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:42:04Z",
+      "checkpointed_at": "2026-10-19T13:45:06Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -99406,6 +99406,150 @@
         "context_relation": "The image is a visual representation of a twisted rope with a blue ring, which is not directly related to the text about electric cells.",
         "limitations": [
           "The image does not provide information about electric cells or their components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d0bac5ff4a24809f53aecd33",
+      "asset_sha256": "6e8006cbce2793b8d2771182e23126bc2bac08151ff631ae3175c6b3496ab5a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/6e8006cbce2793b8d2771182e23126bc2bac08151ff631ae3175c6b3496ab5a6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "coiled rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a coiled rope with a blue ring attached to one end.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the coiled rope and the blue ring."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:45:44Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "coiled rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a coiled rope with a blue ring attached to one end.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the coiled rope and the blue ring."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d4fc63c8a37e19740d2b1db0",
+      "asset_sha256": "c35f53413acdbffd5af903c291e51ecd55661fbca31e964d588501aa61a1baff",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/c35f53413acdbffd5af903c291e51ecd55661fbca31e964d588501aa61a1baff.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Electrical energy",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No visual elements are present in the image.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:46:26Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Electrical energy",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No visual elements are present in the image.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cf9725d4e005148a601365ae",
+      "asset_sha256": "ca33158144d716295942c4dcedcbc62e6a0af060b2fed3499ea9fc349fea6d75",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/ca33158144d716295942c4dcedcbc62e6a0af060b2fed3499ea9fc349fea6d75.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not clearly visible or identifiable. The text provided does not mention the image, and the image itself is not described in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:47:03Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not clearly visible or identifiable. The text provided does not mention the image, and the image itself is not described in detail."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
