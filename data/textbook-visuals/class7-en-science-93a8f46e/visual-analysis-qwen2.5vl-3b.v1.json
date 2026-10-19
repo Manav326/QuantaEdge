@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1278,
+    "assets_selected": 1281,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1276,
-    "assets_remaining": 6212,
-    "assets_completion_percent": 17.0,
+    "assets_analyzed": 1279,
+    "assets_remaining": 6209,
+    "assets_completion_percent": 17.1,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1273,
+    "assets_skipped_from_checkpoint": 1276,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:26:07Z"
+      "checkpointed_at": "2026-10-19T02:31:25Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:26:35Z"
+      "checkpointed_at": "2026-10-19T02:31:53Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -48472,6 +48472,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T02:30:31Z"
+    },
+    {
+      "asset_id": "9de31314c89b6c06852d5d8e",
+      "asset_sha256": "947867df9072038b6e0825c53ee8f3cc0bfebe0be144560b3da9535c3e32cfe5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/947867df9072038b6e0825c53ee8f3cc0bfebe0be144560b3da9535c3e32cfe5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular shape with a curved corner, possibly representing a battery or a cell.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of batteries and cells, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the battery or cell, only its shape and color are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:33:01Z"
+    },
+    {
+      "asset_id": "2cf8810bb0f14042a012b843",
+      "asset_sha256": "56422718638509e62908cf7498ce3c170024b3be6120fc56399b4bfbec4adc40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/56422718638509e62908cf7498ce3c170024b3be6120fc56399b4bfbec4adc40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green page with a green border, possibly a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So,"
+        ],
+        "concepts": [
+          "cells",
+          "energy",
+          "circuit"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear specific content",
+          "text not fully visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:34:09Z"
+    },
+    {
+      "asset_id": "6d747933a6eb4edd1371253e",
+      "asset_sha256": "215c721431d21a012f1c37205b3a66ee7b86a173329d311f6f1a80585087f045",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/215c721431d21a012f1c37205b3a66ee7b86a173329d311f6f1a80585087f045.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green and white background with a green horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "electricity",
+          "cells",
+          "battery",
+          "circuit",
+          "energy",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the use of multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The image does not provide any specific information about the physical appearance or function of the cells."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:35:27Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1295,
-    "successful_visual_analyses": 1278,
-    "missing_visual_analyses": 6193,
+    "raw_analysis_result_rows": 1298,
+    "successful_visual_analyses": 1281,
+    "missing_visual_analyses": 6190,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6210,
+    "unresolved_count": 6207,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59100,9 +59100,18 @@
       "asset_path": "assets/947867df9072038b6e0825c53ee8f3cc0bfebe0be144560b3da9535c3e32cfe5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular shape with a curved corner, possibly representing a battery or a cell.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of batteries and cells, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the battery or cell, only its shape and color are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59118,9 +59127,25 @@
       "asset_path": "assets/56422718638509e62908cf7498ce3c170024b3be6120fc56399b4bfbec4adc40.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green page with a green border, possibly a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So,"
+        ],
+        "concepts": [
+          "cells",
+          "energy",
+          "circuit"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear specific content",
+          "text not fully visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59136,9 +59161,31 @@
       "asset_path": "assets/215c721431d21a012f1c37205b3a66ee7b86a173329d311f6f1a80585087f045.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white background with a green horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So, we connect two or more cells together as shown in Fig. 3.3.",
+          "Connecting more than one cell provides energy to the circuit for a longer time and/or more energy.",
+          "FASCINATING FACTS",
+          "The term battery is also used for a single cell. We use the term battery even for the single cell that powers our mobile phones."
+        ],
+        "concepts": [
+          "electricity",
+          "cells",
+          "battery",
+          "circuit",
+          "energy",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the use of multiple cells to provide energy to a circuit.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The image does not provide any specific information about the physical appearance or function of the cells."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
