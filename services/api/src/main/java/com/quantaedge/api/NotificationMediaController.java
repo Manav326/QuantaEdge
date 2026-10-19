@@ -17,6 +17,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +44,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class NotificationMediaController {
   private static final long MAX_IMAGE_BYTES=12L*1024*1024;
   private static final long MAX_VIDEO_BYTES=100L*1024*1024;
-  private static final long MAX_IMAGE_PIXELS=40000000L;
+  private static final long MAX_IMAGE_PIXELS=16000000L;
 
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -83,11 +86,22 @@ public class NotificationMediaController {
       try {
         // The JDK has no built-in WebP decoder. Other accepted raster formats must decode successfully.
         if(!"image/webp".equals(info.contentType())) {
-          BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
-          if(image==null) throw new IllegalArgumentException("The selected image is corrupt or unsupported.");
-          width=image.getWidth();height=image.getHeight();
-          if(width<1||height<1||(long)width*height>MAX_IMAGE_PIXELS) {
-            throw new IllegalArgumentException("Image dimensions exceed the safe rendering limit.");
+          try (ImageInputStream imageInput=ImageIO.createImageInputStream(new ByteArrayInputStream(bytes))) {
+            if(imageInput==null)throw new IllegalArgumentException("The selected image could not be inspected.");
+            Iterator<ImageReader> readers=ImageIO.getImageReaders(imageInput);
+            if(!readers.hasNext())throw new IllegalArgumentException("The selected image is corrupt or unsupported.");
+            ImageReader reader=readers.next();
+            try {
+              reader.setInput(imageInput,true,true);
+              width=reader.getWidth(0);height=reader.getHeight(0);
+              if(width<1||height<1||(long)width*height>MAX_IMAGE_PIXELS) {
+                throw new IllegalArgumentException("Image dimensions exceed the safe rendering limit.");
+              }
+              BufferedImage image=reader.read(0);
+              if(image==null)throw new IllegalArgumentException("The selected image is corrupt or unsupported.");
+            } finally {
+              reader.dispose();
+            }
           }
         }
       } catch(OutOfMemoryError unsafeImage) {
