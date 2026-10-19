@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 913,
+    "assets_selected": 916,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 911,
-    "assets_remaining": 1167,
-    "assets_completion_percent": 43.8,
+    "assets_analyzed": 914,
+    "assets_remaining": 1164,
+    "assets_completion_percent": 44.0,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 908,
+    "assets_skipped_from_checkpoint": 911,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:21:57Z"
+      "checkpointed_at": "2026-10-19T09:32:06Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:22:58Z"
+      "checkpointed_at": "2026-10-19T09:33:06Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -28918,6 +28918,99 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T09:30:53Z"
+    },
+    {
+      "asset_id": "fe85771b9e5ed360d0a49380",
+      "asset_sha256": "b883475fcb17bfea3997820a0c84539337337808a64eceed9d6800b7cbc39589",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/b883475fcb17bfea3997820a0c84539337337808a64eceed9d6800b7cbc39589.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9bfe5646cd7f48b6cb972e7cd354eea4d0eb2b98c8c678336521249699bd215b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person standing on a salt pan, using a long tool to spread salt.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "traditional practice",
+          "extreme heat",
+          "salt pan",
+          "tool for spreading salt"
+        ],
+        "context_relation": "The image illustrates the traditional practice of salt farming by the Agariyas community in Gujarat, emphasizing the harsh conditions and the tools used in this practice.",
+        "limitations": [
+          "The image does not provide specific details about the iodine content in the salt."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:34:47Z"
+    },
+    {
+      "asset_id": "2bb1b52bf7df485d8ff9faa2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9bfe5646cd7f48b6cb972e7cd354eea4d0eb2b98c8c678336521249699bd215b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:35:00Z"
+    },
+    {
+      "asset_id": "d4f15bf373c15796ca4262d7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9bfe5646cd7f48b6cb972e7cd354eea4d0eb2b98c8c678336521249699bd215b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:35:14Z"
     }
   ]
 }
