@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 836,
+    "assets_selected": 838,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 833,
-    "assets_remaining": 1458,
+    "assets_analyzed": 835,
+    "assets_remaining": 1456,
     "assets_completion_percent": 36.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 831,
+    "assets_skipped_from_checkpoint": 833,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:53:03Z"
+      "checkpointed_at": "2026-10-19T10:59:34Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:54:23Z"
+      "checkpointed_at": "2026-10-19T11:00:55Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:55:15Z"
+      "checkpointed_at": "2026-10-19T11:01:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26003,6 +26003,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T10:57:54Z"
+    },
+    {
+      "asset_id": "6f8cb1044e4938dfe67844e8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the health benefits and cultivation of Spirulina, a microalga.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "23",
+          "Ever heard of...",
+          "Spirulina, a microalga, is called a superfood",
+          "because of its health benefits. Spirulina is also",
+          "a good source of vitamin B12, which is essential",
+          "for our body. It is rich in protein—more than",
+          "60 per cent of its body weight—and only a",
+          "small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood",
+          "opportunity. You can grow Spirulina easily by following these steps:",
+          "1. Set a clear glass tank in a bright place away from direc",
+          "2. Fill the tank with water and add a small amount of",
+          "3. Add a small amount of Spirulina powder to the water",
+          "4. Place the tank in a warm place and keep it in a",
+          "5. Check the water regularly and add more Spirulina",
+          "6. Harvest the Spirulina when it is ready to be used",
+          "7. Store the Spirulina in a cool, dry place",
+          "8. Enjoy the benefits of Spirulina in your diet"
+        ],
+        "concepts": [
+          "Spirulina",
+          "Microalga",
+          "Superfood",
+          "Vitamin B12",
+          "Protein",
+          "Fat",
+          "Sugar",
+          "Farming",
+          "Health benefits",
+          "Cultivation",
+          "Glass tank",
+          "Water",
+          "Spirulina powder",
+          "Warm place",
+          "Cool, dry place",
+          "Diet"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the health benefits and cultivation of Spirulina, a microalga.",
+        "limitations": [
+          "The image does not show any visual representation of Spirulina or the cultivation process.",
+          "The image does not provide any visual evidence of the health benefits of Spirulina."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:03:22Z"
+    },
+    {
+      "asset_id": "4454bb02a65f019bf6aded2f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:03:37Z"
     }
   ]
 }
