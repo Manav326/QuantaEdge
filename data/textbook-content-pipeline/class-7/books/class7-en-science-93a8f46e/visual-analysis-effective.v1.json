@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f6fe21ab5ba28cad3e2e5d7280195b7c2ee31552360fd3eaa278e4d0908726b6",
+  "raw_analysis_sha256": "ec3dc3fde8d58938838ee1675bea5fe2edb6be4ba1a652d0c2b0d0bbad94bb1c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:01:31Z",
+      "checkpointed_at": "2026-10-19T02:06:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:02:00Z",
+      "checkpointed_at": "2026-10-19T02:06:51Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -75478,6 +75478,126 @@
         "context_relation": "The image is likely a part of an educational document discussing the concept of batteries and their usage in devices.",
         "limitations": [
           "The image does not provide specific details about the battery or its usage in devices."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e33accd2d64ec44e594517e",
+      "asset_sha256": "9b311b8dbbccad5767cf5cdf78cc6ba16ae4fe3b3b61efe4807bd856783c6603",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/9b311b8dbbccad5767cf5cdf78cc6ba16ae4fe3b3b61efe4807bd856783c6603.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a scroll with a pen at the end, possibly representing a historical or educational document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to the educational content about batteries and electric lamps.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:07:57Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a scroll with a pen at the end, possibly representing a historical or educational document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to the educational content about batteries and electric lamps.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f541a309d7831f45086ff530",
+      "asset_sha256": "9af19f6ba5a5f30e6249304658b3e5254ad20971a1c2240ad3a4f287c717afaf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/9af19f6ba5a5f30e6249304658b3e5254ad20971a1c2240ad3a4f287c717afaf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a white circular object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image does not provide any additional information beyond what is visible.",
+          "The image does not show any specific objects or elements from the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:09:07Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a white circular object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image does not provide any additional information beyond what is visible.",
+          "The image does not show any specific objects or elements from the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a057e12036209aa89eeb3c20",
+      "asset_sha256": "7a60381fb3ac3ef52107042a79ea15d901034d7bdfd99506ece257eb55b77b2b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/7a60381fb3ac3ef52107042a79ea15d901034d7bdfd99506ece257eb55b77b2b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular frame with a white border.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a green frame with a white border, likely used as a placeholder or a design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for educational content. It is a simple design element without any specific content or context related to the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:10:16Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular frame with a white border.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a green frame with a white border, likely used as a placeholder or a design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for educational content. It is a simple design element without any specific content or context related to the textbook's content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
