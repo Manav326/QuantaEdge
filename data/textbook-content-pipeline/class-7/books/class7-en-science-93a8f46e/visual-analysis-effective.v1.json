@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6f18b9f2afcc2fe1ecab7f2705299d1e8119a2b95758116e88d71b4a3b8e672c",
+  "raw_analysis_sha256": "0cf4c34826ed662457a754780be92defa85522f89ba70169bc602b6db133770b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:32:24Z",
+      "checkpointed_at": "2026-10-19T03:37:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:32:52Z",
+      "checkpointed_at": "2026-10-19T03:38:05Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -78092,6 +78092,152 @@
         "context_relation": "The image is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in a circuit.",
         "limitations": [
           "The image does not show the actual circuit or the glowing lamp, only a symbol or a diagram of a circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bda50e9772e9e4b42c40f7fa",
+      "asset_sha256": "bb2e64953e5705e9a64a80c7a89faef5f306132d466605ab7f0c602036aadc6d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/bb2e64953e5705e9a64a80c7a89faef5f306132d466605ab7f0c602036aadc6d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red wire or cable against a light green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:39:13Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red wire or cable against a light green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "364ab3e627f274fe84f8f0e2",
+      "asset_sha256": "7b721f23ea8385c948dbde87b284099e805df63295470de887377e17fa4149a8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/7b721f23ea8385c948dbde87b284099e805df63295470de887377e17fa4149a8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red wire is shown extending from a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit diagram",
+          "red wire",
+          "lamp"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing a circuit diagram and its components.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp in the circuit.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:40:26Z",
+      "effective_analysis": {
+        "visual_summary": "A red wire is shown extending from a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit diagram",
+          "red wire",
+          "lamp"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing a circuit diagram and its components.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp in the circuit.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97d693dc99f1bbe3b347ad57",
+      "asset_sha256": "16c585ce19aa94b6b67738e38faf9026d6294e0979bf2f0559bbb5a4708c00cc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/16c585ce19aa94b6b67738e38faf9026d6294e0979bf2f0559bbb5a4708c00cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green line with a curved arrow pointing downwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of a physics or electrical engineering textbook discussing circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or the prediction and observation related to the lamp glowing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:41:33Z",
+      "effective_analysis": {
+        "visual_summary": "A green line with a curved arrow pointing downwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of a physics or electrical engineering textbook discussing circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or the prediction and observation related to the lamp glowing."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
