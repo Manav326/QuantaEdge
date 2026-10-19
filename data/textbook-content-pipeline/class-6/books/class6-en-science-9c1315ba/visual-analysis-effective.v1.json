@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7ada7bb8eb5d0fbd41c0d04984bca67d205a6c05fd6c9f71f971964c780abbf3",
+  "raw_analysis_sha256": "674e032ec343bdc288483e811836e8db2d54dc6cd69f2f56412bc53f9c9aab83",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:24:47Z",
+      "checkpointed_at": "2026-10-19T19:29:35Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:25:27Z",
+      "checkpointed_at": "2026-10-19T19:30:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:26:21Z",
+      "checkpointed_at": "2026-10-19T19:31:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -55908,6 +55908,118 @@
         "context_relation": "The image illustrates a method of measuring length using a wooden surface.",
         "limitations": [
           "The image does not provide specific details about the measurement technique."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cf251e3cf6dbd983f178f2bb",
+      "asset_sha256": "66604c453ff2a6fd0d2bd84ce942e8968d5948b7195a11cbf8ac6681d98a0d65",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/66604c453ff2a6fd0d2bd84ce942e8968d5948b7195a11cbf8ac6681d98a0d65.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0fa03c2225be4bf4e54a4bb60a5764e0b1b6df0fc9ccadb98abfbbb76c165f16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Five people are standing and talking to each other.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish",
+          "Hardeep",
+          "Padma",
+          "Deepa",
+          "Tasneem",
+          "Hardeep says, \"I have seen my grandmother measuring cloth by the length of her arm.\"",
+          "\"Have you ever seen how a farmer measures length to divide his field into beds? He walks and counts the number of his strides,\"",
+          "\"Oh, not just the length of the strides—sometimes they also use the length of their",
+          "5.1 How do we Measure?"
+        ],
+        "concepts": [
+          "Measurement",
+          "Cloth",
+          "Farmer",
+          "Strides"
+        ],
+        "context_relation": "The image is related to the text discussing how to measure length.",
+        "limitations": [
+          "The image does not provide specific details about the measurement methods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:31:58Z",
+      "effective_analysis": {
+        "visual_summary": "Five people are standing and talking to each other.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish",
+          "Hardeep",
+          "Padma",
+          "Deepa",
+          "Tasneem",
+          "Hardeep says, \"I have seen my grandmother measuring cloth by the length of her arm.\"",
+          "\"Have you ever seen how a farmer measures length to divide his field into beds? He walks and counts the number of his strides,\"",
+          "\"Oh, not just the length of the strides—sometimes they also use the length of their",
+          "5.1 How do we Measure?"
+        ],
+        "concepts": [
+          "Measurement",
+          "Cloth",
+          "Farmer",
+          "Strides"
+        ],
+        "context_relation": "The image is related to the text discussing how to measure length.",
+        "limitations": [
+          "The image does not provide specific details about the measurement methods."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ea897f6894b0d3fdd9ee0ba0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0fa03c2225be4bf4e54a4bb60a5764e0b1b6df0fc9ccadb98abfbbb76c165f16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:32:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

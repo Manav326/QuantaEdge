@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1155,
-    "successful_visual_analyses": 1133,
-    "missing_visual_analyses": 923,
+    "raw_analysis_result_rows": 1157,
+    "successful_visual_analyses": 1135,
+    "missing_visual_analyses": 921,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 945,
+    "unresolved_count": 943,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43901,9 +43901,33 @@
       "asset_path": "assets/66604c453ff2a6fd0d2bd84ce942e8968d5948b7195a11cbf8ac6681d98a0d65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Five people are standing and talking to each other.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish",
+          "Hardeep",
+          "Padma",
+          "Deepa",
+          "Tasneem",
+          "Hardeep says, \"I have seen my grandmother measuring cloth by the length of her arm.\"",
+          "\"Have you ever seen how a farmer measures length to divide his field into beds? He walks and counts the number of his strides,\"",
+          "\"Oh, not just the length of the strides—sometimes they also use the length of their",
+          "5.1 How do we Measure?"
+        ],
+        "concepts": [
+          "Measurement",
+          "Cloth",
+          "Farmer",
+          "Strides"
+        ],
+        "context_relation": "The image is related to the text discussing how to measure length.",
+        "limitations": [
+          "The image does not provide specific details about the measurement methods."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43919,9 +43943,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
