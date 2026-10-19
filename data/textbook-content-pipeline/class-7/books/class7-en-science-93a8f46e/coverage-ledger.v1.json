@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1310,
-    "successful_visual_analyses": 1292,
-    "missing_visual_analyses": 6178,
+    "raw_analysis_result_rows": 1313,
+    "successful_visual_analyses": 1295,
+    "missing_visual_analyses": 6175,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6196,
+    "unresolved_count": 6193,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59555,9 +59555,28 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of an LED lamp, showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode",
+          "Incandescent lamp",
+          "Components of an LED lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an LED lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the LED lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59573,9 +59592,28 @@
       "asset_path": "assets/d8e6ef82be524427c4a4c4d78d7fa6b7613358edf8f4ff06a3a6cf8e6993373a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Six different colored light-emitting diodes (LEDs) arranged in a row.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp,",
+          "instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp",
+          "LED lamp in torches"
+        ],
+        "context_relation": "The image is related to the text discussing the use of LED lamps in torches.",
+        "limitations": [
+          "The image does not provide specific details about the colors or types of LEDs."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59591,9 +59629,22 @@
       "asset_path": "assets/b72963af31ef4829571849bf8bbc806bdc54ff963ed7c525a7988892e7fa5c6f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red LED flashlight with a black lanyard attached.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "LED lamp",
+          "torch",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image shows a modern LED flashlight, which is a replacement for traditional incandescent torches.",
+        "limitations": [
+          "The image does not provide specific details about the components or features of the LED lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
