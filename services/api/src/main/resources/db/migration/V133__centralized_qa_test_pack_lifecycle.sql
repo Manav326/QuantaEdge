@@ -38,7 +38,7 @@ CREATE TABLE qa_test_run_resource (
   resource_kind varchar(48) NOT NULL CHECK (resource_kind IN (
     'INSTITUTION','INSTITUTION_BRANDING','INSTITUTION_ADMIN_ACCOUNT','STAFF_ACCOUNT','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
     'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
-    'COURSE','COURSE_SUBJECT','PROGRAM_SUBJECT_MAP','COURSE_CHAPTER','MARKETPLACE_OFFER','STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT','COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
+    'INSTITUTION_ADMIN','COURSE','COURSE_SUBJECT','PROGRAM_SUBJECT_MAP','COURSE_CHAPTER','MARKETPLACE_OFFER','STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT','COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
   )),
   resource_id varchar(160) NOT NULL,
   resource_ref jsonb NOT NULL DEFAULT '{}'::jsonb CHECK (jsonb_typeof(resource_ref)='object'),
@@ -106,6 +106,9 @@ ALTER TABLE institution_admin_account
 ALTER TABLE staff_account
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 
+ALTER TABLE institution_admin_account
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+
 ALTER TABLE institution_tenant
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 ALTER TABLE institution_branding
@@ -147,6 +150,7 @@ CREATE INDEX idx_qa_question_run ON question(qa_test_run_id) WHERE qa_test_run_i
 CREATE INDEX idx_qa_question_option_run ON question_option(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_institution_admin_run ON institution_admin_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_staff_account_run ON staff_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_institution_admin_run ON institution_admin_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_tenant_run ON institution_tenant(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_user_run ON user_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_student_run ON student(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
