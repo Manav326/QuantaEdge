@@ -71,6 +71,8 @@ class SourceIngestionControllerTest {
   void verifiedEditionCannotBeUnverifiedBeforeDatabaseUpdate() {
     when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
     InstitutionTenantContext tenant = new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge");
+    when(jdbc.queryForObject(contains("select count(*) from curriculum_program p"), eq(Long.class), eq(1L), eq(100L)))
+        .thenReturn(1L);
     when(jdbc.queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L)))
         .thenReturn(1L);
 
@@ -120,12 +122,15 @@ class SourceIngestionControllerTest {
   @Test
   void chapterMappingsAreReadFromExistingSourceRelationshipsAndRelatedPdfAssignments() {
     when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
-    when(jdbc.queryForList(contains("from chapter_source cs"), eq(77L))).thenReturn(List.of());
+    when(jdbc.queryForObject(contains("select count(*) from curriculum_program p"), eq(Long.class), eq(1L), eq(100L)))
+        .thenReturn(1L);
+    when(jdbc.queryForList(contains("from chapter_source cs"), eq(77L), eq(100L))).thenReturn(List.of());
 
-    List<Map<String, Object>> rows = controller.listExistingChapterMappings(77L, reviewer);
+    List<Map<String, Object>> rows = controller.listExistingChapterMappings(
+        77L, 100L, reviewer, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge"));
 
     assertEquals(0, rows.size());
     verify(jdbc).queryForList(
-        contains("a.source_content_id=src.id"), eq(77L));
+        contains("a.source_content_id=src.id"), eq(77L), eq(100L));
   }
 }
