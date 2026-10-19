@@ -121,3 +121,22 @@ The authoritative inventory is the CSV; this table is a migration worklist rathe
 - [ ] Confirm data returned for two courses sharing the same subject code is still isolated by `courseId`; never infer scope from `class_code` or a subject code alone.
 - [ ] Review course certificates and child/parent flows for class-root subject tracks; certificate eligibility, progress, Books, assessments, live/recorded classes and family entitlement must carry the selected course and institution.
 - [ ] Update `docs/qa/ui-screen-inventory.csv` status/evidence only after the relevant runtime scenario is executed, not when code merely exists.
+
+## Admin web second-pass audit — 2026-10-19
+
+This pass explicitly includes the admin workspace. Course scope is resolved from the active institution's assigned/released course catalogue; class codes remain descriptive metadata within a course, not the top-level authorization or content filter.
+
+### Source-reviewed admin routes
+
+- `/` dashboard, `/content`, `/questions`, `/assessments`, `/resources`, `/source-ingestion`, `/classes`, `/translations`, `/certificates`, and `/students` expose a course selection or an equivalent validated selected-course state and send `courseId` to their course-sensitive APIs.
+- `/learning-resources` maintains a course selection for chapter/lesson/artifact targets. A second-pass defect was found in its assignment list/create/status/reorder operations: those operations previously relied on resource/assignment IDs and could list or mutate placements without checking the selected course. The API now requires the assigned course plus institution context, validates that the target chapter belongs to that course, filters assignment rows by mapped subjects, and the UI passes `courseId` on each operation.
+- The legacy `PUT /api/v1/admin/lessons/{lessonId}/status` operation previously updated by lesson ID alone. It now requires `courseId`, validates the course is assigned to the authenticated institution and that the lesson is mapped to it, and delegates publish/review transitions to the tenant-aware content controller.
+- The admin live-class and recording cards now type their optional course labels explicitly; CI had caught the missing TypeScript fields.
+- Resource-upload class/subject defaults now follow the selected course's mapped classes/subjects instead of retaining the old Class 6 / Maths defaults when the course changes.
+- User-facing admin translations now prefer **Course structure**, **Course content**, **Course chapter**, or **Textbook source** rather than the ambiguous term **Curriculum**. Internal schema/table/API identifiers are intentionally unchanged in this UI wording pass to avoid breaking contracts.
+
+### Admin items that remain explicitly open
+
+- The reusable learning-resource catalogue itself is currently a shared catalogue endpoint and is not filtered by `courseId`; only its placements are course-filtered. Confirm the intended ownership model for catalogue records (shared platform resource versus institution-owned resource) before claiming full tenant isolation for that library.
+- The parent directory is institution-scoped and lists each parent's linked children/course names; it is an account directory, not a selected-course progress report. Any child-progress/report view must still select a course when the child has multiple active enrollments.
+- CI and runtime acceptance are not complete merely because source contracts pass. Re-check the newest branch run, then execute admin course-switch, unmapped-subject, cross-institution, and direct-ID tampering scenarios before merging.
