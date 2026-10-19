@@ -107,6 +107,10 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const visibleStudentNavGroups = navigationGroupsForWorkspace.map(group => group.id === 'practice'
     ? { ...group, children: group.children?.filter(item => item.href !== (parentLearningRoute ? '/parent/learning/diagnostic' : '/student/diagnostic') || diagnosticAvailable) }
     : group);
+  const visibleParentLearningNavGroups = parentLearningNavGroups.map(group => group.id === 'practice'
+    ? { ...group, children: group.children?.filter(item =>
+        item.href !== '/parent/learning/diagnostic' || diagnosticAvailable || (role === 'parent' && hasPersonalCourse)) }
+    : group);
 
   useEffect(() => {
     if (!role) return;
@@ -378,7 +382,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                   <span className="qe-workspace-group-chevron" aria-hidden="true">⌄</span>
                 </button>
                 <div className="qe-workspace-subnav" id="qe-parent-personal-learning-group" hidden={!expandedParentLearning}>
-                  {visibleStudentNavGroups.length ? visibleStudentNavGroups.map(group => group.href ? (
+                  {visibleParentLearningNavGroups.length ? visibleParentLearningNavGroups.map(group => group.href ? (
                     <Link key={group.id} href={group.href} title={collapsed ? itemLabel(group) : undefined}
                       onClick={event => { event.preventDefault(); void openParentLearning(group.href); }}
                       className="qe-workspace-link">
