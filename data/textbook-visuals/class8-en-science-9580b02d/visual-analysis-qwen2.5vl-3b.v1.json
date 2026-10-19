@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 900,
+    "assets_selected": 902,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 897,
-    "assets_remaining": 1394,
+    "assets_analyzed": 899,
+    "assets_remaining": 1392,
     "assets_completion_percent": 39.2,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 895,
+    "assets_skipped_from_checkpoint": 897,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:21:09Z"
+      "checkpointed_at": "2026-10-19T16:26:44Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:21:55Z"
+      "checkpointed_at": "2026-10-19T16:27:30Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:22:32Z"
+      "checkpointed_at": "2026-10-19T16:28:06Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28395,6 +28395,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T16:25:37Z"
+    },
+    {
+      "asset_id": "891d572b1e2e9cb89b2355a5",
+      "asset_sha256": "6704edfaf3a76d87439cf4e4d322b56025821463d16173cd5a240553934bdade",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/6704edfaf3a76d87439cf4e4d322b56025821463d16173cd5a240553934bdade.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character eating a meal at a table with a book beside them.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of healthy eating habits.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:29:37Z"
+    },
+    {
+      "asset_id": "4c49c5b3919902666ce6b0a2",
+      "asset_sha256": "fb2c9129789eafe81d57a877e73a681aaf35ca203df90abdaf702fb10b74f376",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/fb2c9129789eafe81d57a877e73a681aaf35ca203df90abdaf702fb10b74f376.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person jogging on grass.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of physical activity and health.",
+        "limitations": [
+          "The image does not provide specific information about the habits listed in the text.",
+          "The image does not show the person's face or any other identifying features.",
+          "The image does not include any text or labels that could provide additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:31:10Z"
     }
   ]
 }
