@@ -30,6 +30,7 @@ export function NotificationBell({ role }: { role: Role | null }) {
   const [available, setAvailable] = useState(true);
   const english = locale === 'english';
   const loadCount = useCallback(async () => {
+    if (!role) return;
     try {
       const response = await apiFetch('/api/v1/notifications?limit=100&unreadOnly=true', { cache: 'no-store' });
       if (!response.ok) { setAvailable(false); return; }
@@ -37,15 +38,16 @@ export function NotificationBell({ role }: { role: Role | null }) {
       setCount(Array.isArray(data.items) ? data.items.length : 0);
       setAvailable(true);
     } catch { setAvailable(false); }
-  }, []);
+  }, [role]);
 
   useEffect(() => {
+    if (!role) return;
     void loadCount();
     const timer = window.setInterval(() => void loadCount(), 60000);
     const onFocus = () => void loadCount();
     window.addEventListener('focus', onFocus);
     return () => { window.clearInterval(timer); window.removeEventListener('focus', onFocus); };
-  }, [loadCount]);
+  }, [loadCount, role]);
 
   if (!role || !available) return null;
   return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : '/parent/notifications'}
