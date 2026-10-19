@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1377,
+    "assets_selected": 1380,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1375,
-    "assets_remaining": 6113,
+    "assets_analyzed": 1378,
+    "assets_remaining": 6110,
     "assets_completion_percent": 18.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1372,
+    "assets_skipped_from_checkpoint": 1375,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:18:34Z"
+      "checkpointed_at": "2026-10-19T05:23:35Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:19:02Z"
+      "checkpointed_at": "2026-10-19T05:24:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -52094,6 +52094,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T05:22:40Z"
+    },
+    {
+      "asset_id": "f4ca4820be6905d365d3525b",
+      "asset_sha256": "1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a cricket jumping over a leaf.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cricket",
+          "jumping",
+          "leaf"
+        ],
+        "context_relation": "The image is unrelated to the text about electrical circuits.",
+        "limitations": [
+          "The image does not provide any information about electrical circuits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:25:12Z"
+    },
+    {
+      "asset_id": "9cee562dfb6e70739184b25d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:25:22Z"
+    },
+    {
+      "asset_id": "b029dffe80f8081958ef244f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:25:32Z"
     }
   ]
 }
