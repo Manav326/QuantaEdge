@@ -308,14 +308,6 @@ public class LearningMetricsService {
     return jdbc.queryForMap(tenantSql(courseSql, institutionId), tenantArgs(institutionId, scopedArgs));
   }
 
-  Map<String,Object> sessionStatsFor(long studentId) {
-    return sessionStatsForUnscoped(studentId, null);
-  }
-
-  Map<String,Object> sessionStatsFor(long studentId, Long institutionId) {
-    return sessionStatsForUnscoped(studentId, institutionId);
-  }
-
   private Map<String,Object> sessionStatsForUnscoped(long studentId, Long institutionId) {
     String sql = """
       select
