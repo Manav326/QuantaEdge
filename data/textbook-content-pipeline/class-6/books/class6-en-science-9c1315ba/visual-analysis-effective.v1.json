@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "db593273a18448cc4838f80666f1906d34c571ce30e2e3224ed89c1d5bd1bd97",
+  "raw_analysis_sha256": "a71092763dcfa2c16580304664e85a2f4ecb93d090d4ca3fff74b536a492f799",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:15:42Z",
+      "checkpointed_at": "2026-10-19T12:23:48Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:16:45Z",
+      "checkpointed_at": "2026-10-19T12:24:49Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -47231,6 +47231,172 @@
         "limitations": [
           "The page does not provide specific questions or exercises.",
           "The page does not include images or diagrams.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "76375be993382a925ae16b09",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db3ac1af7a54e4ecc910e218b4f201b7e7df323394b4e8e8ea88c22995703712",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:25:06Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c0789f6abd8f48766d4d7fb3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db3ac1af7a54e4ecc910e218b4f201b7e7df323394b4e8e8ea88c22995703712",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:25:19Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4947680e42fc59e45909e257",
+      "asset_sha256": "21665b93692a6cbb45f639e3fec1649b8edd4c9f78d95d8e01f24724a53dfe8f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 75,
+      "asset_path": "page-0075.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "db3ac1af7a54e4ecc910e218b4f201b7e7df323394b4e8e8ea88c22995703712",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about food and health.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. Discuss traditional versus modern culinary practices in\nIndia.",
+          "3. A teacher says that good food may act as medicine. Ravi is\ncurious about this statement and has some questions for his\nteacher. List at least two questions that he can ask.",
+          "4. Not all delicious foods are necessarily healthy, while not all\nnutritious foods are always enjoyable. Share your thoughts\nalong with a few examples.",
+          "5. Medu does not eat vegetables but enjoys biscuits, noodles and\nwhite bread. He often has stomach ache and constipation.\nWhat changes should he make in his diet to get rid of these\nproblems? Explain your answer.",
+          "6. Reshma had trouble seeing things in dim light. The doctor\ntested her eyesight and prescribed a particular vitamin\nsupplement. He also advised her to include a few food items\nin her diet.",
+          "(i) Which deficiency disease is she suffering from?\n(ii) Which food component may be lacking in her diet?\n(iii) Suggest some food items that she should include in\nher diet to overcome this problem (any four).",
+          "7. You are provided the following:\n(i) Canned fruit juice\n(ii) Fresh fruit juice\n(iii) Fresh fruit",
+          "Which one would you prefer and why?",
+          "8. Gourav got a fracture in his leg. His doctor aligned the bones\nand put on a plaster. The doctor also gave him calcium tablets.\nOn the second visit, the doctor gave him Vitamin D syrup\nalong with calcium tablets. Refer to Fig. 3.5 and answer the\nfollowing questions:\n(i) Why did the doctor give cal"
+        ],
+        "concepts": [
+          "traditional versus modern culinary practices",
+          "good food as medicine",
+          "Ravi's curiosity",
+          "nutritious foods",
+          "constipation",
+          "vitamin supplement",
+          "deficiency disease",
+          "food items",
+          "calcium tablets",
+          "Vitamin D syrup",
+          "fracture",
+          "plaster",
+          "choices made by the doctor"
+        ],
+        "context_relation": "questions about food and health",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:29:47Z",
+      "effective_analysis": {
+        "visual_summary": "Questions about food and health.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. Discuss traditional versus modern culinary practices in\nIndia.",
+          "3. A teacher says that good food may act as medicine. Ravi is\ncurious about this statement and has some questions for his\nteacher. List at least two questions that he can ask.",
+          "4. Not all delicious foods are necessarily healthy, while not all\nnutritious foods are always enjoyable. Share your thoughts\nalong with a few examples.",
+          "5. Medu does not eat vegetables but enjoys biscuits, noodles and\nwhite bread. He often has stomach ache and constipation.\nWhat changes should he make in his diet to get rid of these\nproblems? Explain your answer.",
+          "6. Reshma had trouble seeing things in dim light. The doctor\ntested her eyesight and prescribed a particular vitamin\nsupplement. He also advised her to include a few food items\nin her diet.",
+          "(i) Which deficiency disease is she suffering from?\n(ii) Which food component may be lacking in her diet?\n(iii) Suggest some food items that she should include in\nher diet to overcome this problem (any four).",
+          "7. You are provided the following:\n(i) Canned fruit juice\n(ii) Fresh fruit juice\n(iii) Fresh fruit",
+          "Which one would you prefer and why?",
+          "8. Gourav got a fracture in his leg. His doctor aligned the bones\nand put on a plaster. The doctor also gave him calcium tablets.\nOn the second visit, the doctor gave him Vitamin D syrup\nalong with calcium tablets. Refer to Fig. 3.5 and answer the\nfollowing questions:\n(i) Why did the doctor give cal"
+        ],
+        "concepts": [
+          "traditional versus modern culinary practices",
+          "good food as medicine",
+          "Ravi's curiosity",
+          "nutritious foods",
+          "constipation",
+          "vitamin supplement",
+          "deficiency disease",
+          "food items",
+          "calcium tablets",
+          "Vitamin D syrup",
+          "fracture",
+          "plaster",
+          "choices made by the doctor"
+        ],
+        "context_relation": "questions about food and health",
+        "limitations": [
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
