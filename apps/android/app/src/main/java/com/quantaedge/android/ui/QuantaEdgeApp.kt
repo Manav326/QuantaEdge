@@ -4122,6 +4122,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
+                        courseId = currentCourseId,
                         certificateLanguage = certificateLanguage,
                         onCertificateLanguageChange = { next ->
                             if (next == "hi" || next == "en") {
