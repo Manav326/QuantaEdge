@@ -10,6 +10,7 @@ import styles from './Classes.module.css';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import StaffLearningChatPanel from './StaffLearningChatPanel';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type Chapter = {chapter_id:number;chapter_code:string;chapter_name:string};
 type Staff = {staff_id:number;display_name:string;role:string};
@@ -61,11 +62,11 @@ function durationText(seconds?:number|null,t?:TranslateFn){
 export default function ClassesPage(){
   const t=useUiTranslation();
   const {locale:uiLocale}=useContext(AdminWorkspaceContext);
+  const { courses, courseId, activeCourse, subjects, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
   const tRef=useRef(t);
   useEffect(()=>{tRef.current=t;},[t]);
   const [tab,setTab]=useState<'live'|'recorded'>('live');
-  const [classCode,setClassCode]=useState('6');
-  const [subjectCode,setSubjectCode]=useState('maths');
+  const [subjectCode,setSubjectCode]=useState('');
   const [statusFilter,setStatusFilter]=useState('ALL');
   const [sessions,setSessions]=useState<LiveSession[]>([]);
   const [sessionPage,setSessionPage]=useState(0); const [sessionsTotal,setSessionsTotal]=useState(0); const [sessionPageSize,setSessionPageSize]=useState(10);
@@ -107,18 +108,23 @@ export default function ClassesPage(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
 
+  useEffect(()=>{
+    if(!subjects.some(subject=>subject.subject_code===subjectCode))setSubjectCode(subjects[0]?.subject_code||'');
+  },[courseId,subjects,subjectCode]);
+
   const load=useCallback(async()=>{
+    if(!courseId){setSessions([]);setSessionsTotal(0);setRecordings([]);setRecordingsTotal(0);setChapters([]);setLoading(loadingCourses);setError(loadingCourses?'':courseError||'Select a course assigned to this institution.');return;}
     setLoading(true);setError('');
     try{
       const sessionStatus=['SCHEDULED','LIVE','COMPLETED','CANCELLED'].includes(statusFilter)?statusFilter:'ALL';
       const recordingStatus=['DRAFT','PUBLISHED','ARCHIVED'].includes(statusFilter)?statusFilter:'ALL';
-      const sessionParams=new URLSearchParams({classCode,subjectCode,status:sessionStatus,limit:String(sessionPageSize),offset:String(sessionPage*sessionPageSize)});
-      const recordingParams=new URLSearchParams({classCode,subjectCode,status:recordingStatus,limit:String(recordingPageSize),offset:String(recordingPage*recordingPageSize)});
-      const chapterParams=new URLSearchParams({classCode,subjectCode});
+      const sessionParams=new URLSearchParams({courseId,subjectCode,status:sessionStatus,limit:String(sessionPageSize),offset:String(sessionPage*sessionPageSize)});
+      const recordingParams=new URLSearchParams({courseId,subjectCode,status:recordingStatus,limit:String(recordingPageSize),offset:String(recordingPage*recordingPageSize)});
+      const chapterParams=new URLSearchParams({courseId,subjectCode});
       const [sessionRows,recordingRows,contentRows,staffRows]=await Promise.all([
         api('/api/v1/admin/live-classes?'+sessionParams.toString()),
         api('/api/v1/admin/recorded-classes?'+recordingParams.toString()),
-        api('/api/v1/admin/class-chapters?'+chapterParams.toString()),
+        subjectCode ? api('/api/v1/admin/course-chapters?'+chapterParams.toString()) : Promise.resolve([]),
         api('/api/v1/admin/class-staff')
       ]);
       setSessions(Array.isArray(sessionRows?.items)?sessionRows.items:(Array.isArray(sessionRows)?sessionRows:[]));
@@ -136,12 +142,12 @@ export default function ClassesPage(){
       setRecordingChapterId(value=>value&&chapterMap.has(Number(value))?value:'');
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.classes.loadFailed'));}
     finally{setLoading(false);}
-  },[classCode,subjectCode,statusFilter,sessionPage,recordingPage,sessionPageSize,recordingPageSize]);
+  },[courseId,subjectCode,statusFilter,sessionPage,recordingPage,sessionPageSize,recordingPageSize,loadingCourses,courseError]);
   useEffect(()=>{void load();},[load]);
 
   const loadApprovedAssignments=useCallback(async()=>{
-    if(!startAt){setTeachingAssignments([]);return;}
-    const params=new URLSearchParams({classCode,subjectCode,onDate:indiaDate(startAt)});
+    if(!courseId||!subjectCode||!startAt){setTeachingAssignments([]);setTeachingAssignmentId('');return;}
+    const params=new URLSearchParams({courseId,subjectCode,onDate:indiaDate(startAt)});
     try{
       const rows=await api('/api/v1/admin/approved-teaching-assignments?'+params.toString());
       const list=Array.isArray(rows)?rows:[];
@@ -151,10 +157,11 @@ export default function ClassesPage(){
       setTeachingAssignments([]);
       setTeachingAssignmentId('');
     }
-  },[classCode,subjectCode,startAt]);
+  },[courseId,subjectCode,startAt]);
   useEffect(()=>{void loadApprovedAssignments();},[loadApprovedAssignments]);
 
   async function createSession(){
+    if(!courseId||!subjects.some(subject=>subject.subject_code===subjectCode)){setError('Select a course and one of its mapped subjects.');return;}
     if(!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||!startAt||!endAt){setError(provider==='GOOGLE_MEET'?tRef.current('admin.classes.scheduleMeetMissingFields'):provider==='YOUTUBE_LIVE'?tRef.current('admin.classes.scheduleYoutubeMissingFields'):tRef.current('admin.classes.scheduleSecureMissingFields'));return;}
     if(!teachingAssignmentId){setError(tRef.current('admin.classes.approvedAssignmentRequired'));return;}
     if(new Date(endAt).getTime()<=new Date(startAt).getTime()){setError(tRef.current('admin.classes.endAfterStart'));return;}
@@ -163,7 +170,7 @@ export default function ClassesPage(){
     setBusy(true);setError('');setNotice('');
     try{
       const result=await api('/api/v1/admin/live-classes',{method:'POST',body:JSON.stringify({
-        title:title.trim(),description:description.trim(),classCode,subjectCode,
+        title:title.trim(),description:description.trim(),courseId:Number(courseId),subjectCode,
         chapterId:chapterId?Number(chapterId):null,provider,joinUrl:(provider==='GOOGLE_MEET'||provider==='YOUTUBE_LIVE')?null:joinUrl.trim(),broadcastUrl:provider==='YOUTUBE_LIVE'?joinUrl.trim():null,
         teachingAssignmentId:teachingAssignmentId?Number(teachingAssignmentId):null,
         startsAt:new Date(startAt).toISOString(),endsAt:new Date(endAt).toISOString(),
@@ -254,7 +261,7 @@ export default function ClassesPage(){
     if(teacherChangeSession===session.session_id){setTeacherChangeSession(null);return;}
     setTeacherChangeSession(session.session_id);setError('');setNotice('');
     try{
-      const params=new URLSearchParams({classCode:session.class_code,subjectCode:session.subject_code,onDate:indiaDate(session.starts_at)});
+      const params=new URLSearchParams({courseId,subjectCode:session.subject_code,onDate:indiaDate(session.starts_at)});
       const result=await api('/api/v1/admin/approved-teaching-assignments?'+params.toString());
       const options=Array.isArray(result)?result:[];
       setTeacherChangeOptions(old=>({...old,[session.session_id]:options}));
@@ -302,6 +309,7 @@ export default function ClassesPage(){
   }
 
   async function uploadRecording(){
+    if(!courseId||!subjects.some(subject=>subject.subject_code===subjectCode)){setError('Select a course and one of its mapped subjects.');return;}
     if(!file){setError(tRef.current('admin.classes.recordingFileRequired'));return;}
     if(!recordingTitle.trim()){setError(tRef.current('admin.classes.recordingTitleRequired'));return;}
     setBusy(true);setError('');setNotice('');
@@ -310,7 +318,7 @@ export default function ClassesPage(){
       const uploadKey=recordingUploadKey||crypto.randomUUID();
       if(!recordingUploadKey)setRecordingUploadKey(uploadKey);
       form.append('file',file);form.append('title',recordingTitle.trim());
-      form.append('classCode',classCode);form.append('subjectCode',subjectCode);
+      form.append('courseId',courseId);form.append('subjectCode',subjectCode);
       if(recordingDescription.trim())form.append('description',recordingDescription.trim());
       if(recordingChapterId)form.append('chapterId',recordingChapterId);
       if(classSessionId)form.append('classSessionId',classSessionId);
@@ -333,7 +341,7 @@ export default function ClassesPage(){
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.classes.recordingStatusChangeFailed'));}
     finally{setBusy(false);}
   }
-  const subjectLabel=t(subjectCode==='maths'?'admin.classes.mathematics':'admin.classes.science');
+  const subjectLabel=subjects.find(subject=>subject.subject_code===subjectCode)?.subject_name || subjectCode || t('admin.assessments.subject');
   const liveCount=sessions.filter(s=>s.status==='LIVE').length;
   const upcomingCount=sessions.filter(s=>s.status==='SCHEDULED').length;
   const reviewCount=recordings.filter(r=>r.status==='DRAFT').length;
@@ -345,8 +353,11 @@ export default function ClassesPage(){
       <section className={styles.hero}><div className={styles.heroIcon}>◷</div><div><span>{t('admin.classes.heroEyebrow')}</span><h2>{t('admin.classes.heroTitle')}</h2><p>{t('admin.classes.heroDescription')}</p></div><div className={styles.heroStats}><strong>{liveCount}</strong><small>{t('admin.classes.liveNow')}</small><strong>{upcomingCount}</strong><small>{t('admin.classes.upcoming')}</small><strong>{reviewCount}</strong><small>{t('admin.classes.draftRecordings')}</small></div></section>
       {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.success} role="status">{notice}</div>}
       <div className={styles.trackFilters}>
-        <label>{t('admin.classes.classLabel')}<select value={classCode} onChange={e=>{setClassCode(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="6">{t("admin.classes.classValue",{classCode:6})}</option><option value="7">{t("admin.classes.classValue",{classCode:7})}</option><option value="8">{t("admin.classes.classValue",{classCode:8})}</option></select></label>
-        <label>{t('admin.classes.subjectLabel')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="maths">{t("admin.classes.mathematics")}</option><option value="science">{t("admin.classes.science")}</option></select></label>
+        <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+          label={t('admin.assessments.course')} placeholder={t('admin.assessments.chooseCurriculum')}
+          onChange={value=>{selectCourse(value);setSubjectCode('');setChapterId('');setRecordingChapterId('');setTeachingAssignments([]);setTeachingAssignmentId('');setSessionPage(0);setRecordingPage(0);}} />
+        <label>{t('admin.classes.subjectLabel')}<select value={subjectCode} disabled={!subjects.length||loadingCourses} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setRecordingChapterId('');setTeachingAssignments([]);setTeachingAssignmentId('');setSessionPage(0);setRecordingPage(0)}}>{subjects.map(subject=><option key={subject.subject_code} value={subject.subject_code}>{subject.subject_name}</option>)}</select></label>
+        {courseError&&!loadingCourses&&<p role="alert">{courseError}</p>}
         <label>{t('admin.classes.statusView')}<select value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="ALL">{t("admin.classes.allStatuses")}</option><option value="SCHEDULED">{t("admin.classes.scheduled")}</option><option value="LIVE">{t("admin.classes.liveStatus")}</option><option value="COMPLETED">{t("admin.classes.completed")}</option><option value="CANCELLED">{t("admin.classes.cancelled")}</option><option value="DRAFT">{t("admin.classes.draftRecordingsStatus")}</option><option value="PUBLISHED">{t("admin.classes.publishedRecordingsStatus")}</option><option value="ARCHIVED">{t("admin.classes.archivedRecordingsStatus")}</option></select></label>
       </div>
       <div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{t('admin.classes.liveSessions')} <span>{sessionsTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{t('admin.classes.recordings')} <span>{recordingsTotal}</span></button></div>
@@ -367,7 +378,7 @@ export default function ClassesPage(){
             <label>{t("admin.classes.chapterOptional")}<select value={chapterId} onChange={e=>setChapterId(e.target.value)}><option value="">{t("admin.classes.wholeSubject")}</option>{chapters.map(ch=><option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}</select></label>
             <label className={styles.wide}>{t("admin.classes.studentFacingDetails")}<textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder={t("admin.classes.studentFacingPlaceholder")}/></label>
           </div>
-          <div className={styles.submitBar}><p>{t("admin.classes.classSubmitSummary",{classCode,subject:subjectLabel})}</p><button type="button" className={styles.primaryButton} disabled={busy||!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||(!teachingAssignmentId)} onClick={()=>void createSession()}>{busy?t('admin.classes.saving'):t('admin.classes.scheduleClass')}</button></div>
+          <div className={styles.submitBar}><p>{activeCourse?.display_name || t('admin.assessments.course')} · {subjectLabel}</p><button type="button" className={styles.primaryButton} disabled={busy||!courseId||!subjectCode||!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||(!teachingAssignmentId)} onClick={()=>void createSession()}>{busy?t('admin.classes.saving'):t('admin.classes.scheduleClass')}</button></div>
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.classes.sessionManagement')}</span><h2>{t('admin.classes.scheduledCompletedClasses')}</h2><p>{t("admin.classes.sessionLifecycleHelp")}</p></div></div>
@@ -382,7 +393,7 @@ export default function ClassesPage(){
           <div className={styles.fields}>
             <label className={styles.wide}>{t('admin.classes.recordingTitle')}<input value={recordingTitle} onChange={e=>setRecordingTitle(e.target.value)} placeholder={t("admin.classes.recordingTitlePlaceholder")}/></label>
             <label>Chapter (optional)<select value={recordingChapterId} onChange={e=>setRecordingChapterId(e.target.value)}><option value="">{t("admin.classes.wholeSubject")}</option>{chapters.map(ch=><option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}</select></label>
-            <label>{t("admin.classes.linkLiveSession")}<select value={classSessionId} onChange={e=>setClassSessionId(e.target.value)}><option value="">{t("admin.classes.noLinkedLiveSession")}</option>{sessions.filter(s=>s.status!=='CANCELLED'&&s.class_code===classCode&&s.subject_code===subjectCode).map(s=><option key={s.session_id} value={s.session_id}>{dateText(s.starts_at,uiLocale)} · {s.title}</option>)}</select></label>
+            <label>{t("admin.classes.linkLiveSession")}<select value={classSessionId} onChange={e=>setClassSessionId(e.target.value)}><option value="">{t("admin.classes.noLinkedLiveSession")}</option>{sessions.filter(s=>s.status!=='CANCELLED'&&(!subjectCode||s.subject_code===subjectCode)).map(s=><option key={s.session_id} value={s.session_id}>{dateText(s.starts_at,uiLocale)} · {s.title}</option>)}</select></label>
             <label>{t("admin.classes.recordingDurationOptional")}<input type="number" min="1" max="86400" value={durationSeconds} onChange={e=>setDurationSeconds(e.target.value)} placeholder={t("admin.classes.durationPlaceholder")}/></label>
             <label className={styles.wide}>{t("admin.classes.descriptionLabel")}<textarea rows={3} value={recordingDescription} onChange={e=>setRecordingDescription(e.target.value)} placeholder={t("admin.classes.recordingDescriptionPlaceholder")}/></label>
             <label className={styles.fileInput} htmlFor="qe-recorded-class-file"><span>{t("admin.classes.chooseRecording")}</span><input id="qe-recorded-class-file" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={e=>{setFile(e.target.files?.[0]||null);setRecordingUploadKey('');}}/><small>{file?file.name+' · '+formatSize(file.size):t('admin.classes.noFileSelected')}</small></label>
