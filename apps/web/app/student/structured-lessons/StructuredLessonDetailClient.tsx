@@ -18,7 +18,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseText = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
+  const requestedCourseId = courseText || null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const subjectCode = searchParams.get('subjectCode') || ''; 
   const { locale, learningLanguage } = useLocale();
@@ -39,7 +39,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     (async () => {
       try {
         const base = '/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId);
-        const scopedQuery = '?courseId=' + encodeURIComponent(String(courseId)) + '&language=' + learningLanguage;
+        const scopedQuery = '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) + '&language=' + learningLanguage;
         const [lessonResponse, savedResponse] = await Promise.all([
           fetch(base + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
           fetch(base + '/responses' + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
@@ -55,10 +55,10 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       } finally { if (active) setBusy(false); }
     })();
     return () => { active = false; };
-  }, [artifactId, learningLanguage, locale, router, courseId, loadingCourses, courseError]);
+  }, [artifactId, learningLanguage, locale, router, courseId, activeCourse?.public_id, loadingCourses, courseError]);
   async function submitQuestion(question: StructuredQuestion, response: QuestionResponse): Promise<QuestionResult> {
     const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(courseId || '')) + '&language=' + learningLanguage, {
+      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&language=' + learningLanguage, {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response }),
       });
@@ -69,7 +69,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   }
   async function saveActivity(blockId: string, value: string): Promise<void> {
     const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(String(courseId || '')), {
+      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')),  {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response: value }),
       });
@@ -89,12 +89,12 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
         onCourseChange={async value => {
           await selectCourse(value);
-          router.push('/student/structured-lessons?courseId=' + encodeURIComponent(value));
+          router.push('/student/structured-lessons?courseId=' + encodeURIComponent(courses.find(course => Number(course.id) === Number(value))?.public_id || value));
         }}
         subjectCode={subjectCode || 'ALL'}
         onSubjectChange={value => {
           const params = new URLSearchParams();
-          if (courseId !== null) params.set('courseId', String(courseId));
+          if (courseId !== null) params.set('courseId', String(activeCourse?.public_id || courseId));
           if (value && value !== 'ALL') params.set('subjectCode', value);
           router.push('/student/structured-lessons?' + params.toString());
         }}
@@ -102,7 +102,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         courseLabel={locale === 'english' ? 'Course' : 'कोर्स'}
         subjectLabel={locale === 'english' ? 'Subject' : 'विषय'}
         allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} />
-      <Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
+      <Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')} className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}
     </header>
     {error ? <><p role="alert" className="error-message">{error}</p><Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
