@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2f1245a00ecf16aa77cda7b749846a2d197bb063af24a28b9af8da4138399b32",
+  "raw_analysis_sha256": "388e5f3c63463c898a1e1c9ac7969d4680b605af6a5c9ec5e3108d8287f64a31",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:05:23Z",
+      "checkpointed_at": "2026-10-19T02:10:05Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:06:03Z",
+      "checkpointed_at": "2026-10-19T02:10:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:06:55Z",
+      "checkpointed_at": "2026-10-19T02:11:39Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:07:34Z",
+      "checkpointed_at": "2026-10-19T02:12:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39318,6 +39318,54 @@
         "limitations": [
           "No specific limitations provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a305cc18e5da53e90b06bdae",
+      "asset_sha256": "9202b9dd092ef6d895044ecfa3c55021d48324f0f607299f3b928f25685a6743",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/9202b9dd092ef6d895044ecfa3c55021d48324f0f607299f3b928f25685a6743.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91b96ef4d02b2ce2780b8f3ed2895a4ce1c8e19ee65f7423d6bd972378766866",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A goat standing on a wooden platform.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "goat",
+          "wooden platform",
+          "standing"
+        ],
+        "context_relation": "The image shows a goat standing on a wooden platform, which is likely part of an educational content about animals or their habitats.",
+        "limitations": [
+          "The image does not provide information about the goat's species or habitat."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:12:57Z",
+      "effective_analysis": {
+        "visual_summary": "A goat standing on a wooden platform.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "goat",
+          "wooden platform",
+          "standing"
+        ],
+        "context_relation": "The image shows a goat standing on a wooden platform, which is likely part of an educational content about animals or their habitats.",
+        "limitations": [
+          "The image does not provide information about the goat's species or habitat."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

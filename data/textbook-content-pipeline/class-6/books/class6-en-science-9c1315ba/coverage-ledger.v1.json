@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 859,
-    "successful_visual_analyses": 848,
-    "missing_visual_analyses": 1219,
+    "raw_analysis_result_rows": 860,
+    "successful_visual_analyses": 849,
+    "missing_visual_analyses": 1218,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1230,
+    "unresolved_count": 1229,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33523,9 +33523,22 @@
       "asset_path": "assets/9202b9dd092ef6d895044ecfa3c55021d48324f0f607299f3b928f25685a6743.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A goat standing on a wooden platform.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "goat",
+          "wooden platform",
+          "standing"
+        ],
+        "context_relation": "The image shows a goat standing on a wooden platform, which is likely part of an educational content about animals or their habitats.",
+        "limitations": [
+          "The image does not provide information about the goat's species or habitat."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
