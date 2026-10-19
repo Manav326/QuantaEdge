@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 891,
+    "assets_selected": 892,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 887,
-    "assets_remaining": 1191,
+    "assets_analyzed": 888,
+    "assets_remaining": 1190,
     "assets_completion_percent": 42.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 886,
+    "assets_skipped_from_checkpoint": 887,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:56:41Z"
+      "checkpointed_at": "2026-10-19T05:01:38Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:57:22Z"
+      "checkpointed_at": "2026-10-19T05:02:19Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:58:16Z"
+      "checkpointed_at": "2026-10-19T05:03:12Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:58:56Z"
+      "checkpointed_at": "2026-10-19T05:03:52Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28144,6 +28144,77 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:00:48Z"
+    },
+    {
+      "asset_id": "67552c049ce1a09af90a31df",
+      "asset_sha256": "f999cb3a7d8f6a1b3aeeef34670e058290b3d379334f0cdaa42726642fa5da44",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/f999cb3a7d8f6a1b3aeeef34670e058290b3d379334f0cdaa42726642fa5da44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of various food items and oils.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "SUNFLOWER",
+          "OIL",
+          "MUSTARD",
+          "OIL",
+          "SOYBEAN",
+          "OIL",
+          "COCONUT",
+          "OIL",
+          "ghee",
+          "Butter",
+          "Pistachios",
+          "Sunflower",
+          "seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing",
+          "various activ"
+        ],
+        "concepts": [
+          "Fats",
+          "Oils",
+          "Nuts",
+          "Seeds",
+          "Butter",
+          "Sunflower",
+          "Soybean",
+          "Coconut",
+          "Cashew",
+          "Groundnut",
+          "Sesame",
+          "Soya",
+          "Fig. 3.3",
+          "Carbohydrates",
+          "Energy",
+          "Performing",
+          "Activ"
+        ],
+        "context_relation": "The image is related to the topic of food sources and their nutritional benefits.",
+        "limitations": [
+          "The image does not provide specific nutritional information for each item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:04:41Z"
     }
   ]
 }
