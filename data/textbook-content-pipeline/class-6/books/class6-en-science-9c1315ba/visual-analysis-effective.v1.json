@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a9e20d4877c4deac41e80b19a83c995d9c01099755ec23d83a08f9c392a936ce",
+  "raw_analysis_sha256": "7dabfb294bf94feb1d502f7afc2066849224272fda12a87424aeb8511c7a5ab4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:13:29Z",
+      "checkpointed_at": "2026-10-19T01:17:12Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:14:11Z",
+      "checkpointed_at": "2026-10-19T01:17:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:15:06Z",
+      "checkpointed_at": "2026-10-19T01:18:48Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:15:46Z",
+      "checkpointed_at": "2026-10-19T01:19:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -38391,6 +38391,70 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "62528e8abab9ae2e2cb8956a",
+      "asset_sha256": "e121998e4519427465b0293ac1d9a8cc7f664cef3184cf74394d95d528324400",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/e121998e4519427465b0293ac1d9a8cc7f664cef3184cf74394d95d528324400.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c24143064d71d7b1ca6796b21b879cc40cb029872425518a40f99ef120a9585e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A dense forest with twisted vines and moss-covered rocks.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "forest",
+          "twisted vines",
+          "moss-covered rocks",
+          "undisturbed patches",
+          "Sacred Groves",
+          "medicinal plants",
+          "local community",
+          "animals",
+          "trees",
+          "harm",
+          "disturbance"
+        ],
+        "context_relation": "The image represents a Sacred Grove, which is an undisturbed patch of forest in India.",
+        "limitations": [
+          "The image does not provide specific details about the size or location of the Sacred Grove."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:20:10Z",
+      "effective_analysis": {
+        "visual_summary": "A dense forest with twisted vines and moss-covered rocks.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "forest",
+          "twisted vines",
+          "moss-covered rocks",
+          "undisturbed patches",
+          "Sacred Groves",
+          "medicinal plants",
+          "local community",
+          "animals",
+          "trees",
+          "harm",
+          "disturbance"
+        ],
+        "context_relation": "The image represents a Sacred Grove, which is an undisturbed patch of forest in India.",
+        "limitations": [
+          "The image does not provide specific details about the size or location of the Sacred Grove."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
