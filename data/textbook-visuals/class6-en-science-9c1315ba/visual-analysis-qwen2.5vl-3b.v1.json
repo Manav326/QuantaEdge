@@ -11,8 +11,8 @@
     "assets_selected": 1122,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1117,
-    "assets_remaining": 961,
+    "assets_analyzed": 1119,
+    "assets_remaining": 959,
     "assets_completion_percent": 53.8,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1117,
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:44:27Z"
+      "checkpointed_at": "2026-10-19T18:49:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:45:09Z"
+      "checkpointed_at": "2026-10-19T18:50:41Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:46:04Z"
+      "checkpointed_at": "2026-10-19T18:51:35Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36624,6 +36624,82 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "bffbdb20ddcb433a662644a6",
+      "asset_sha256": "1402e0573c8f9c5279af6913865b1698ef0a58c9b4c1b6c31bffe06a0a5fd909",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/1402e0573c8f9c5279af6913865b1698ef0a58c9b4c1b6c31bffe06a0a5fd909.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of magnets with their corresponding poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnet shapes",
+          "Magnet poles",
+          "Pair of poles"
+        ],
+        "context_relation": "The image illustrates the different shapes of magnets and their corresponding poles, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the poles' positions or the strength of the magnets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:52:15Z"
+    },
+    {
+      "asset_id": "9a9cc50d71b258e5bdbc02a9",
+      "asset_sha256": "c11cb511ff0aef0a151252a9950a8b08a373266350ff46aac7bf8862cfc07616",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/c11cb511ff0aef0a151252a9950a8b08a373266350ff46aac7bf8862cfc07616.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of bar magnets.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnet shapes",
+          "Magnet poles",
+          "Magnet pairs"
+        ],
+        "context_relation": "The image illustrates the different shapes of bar magnets and their poles.",
+        "limitations": [
+          "The image does not provide specific details about the poles' positions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:52:54Z"
     }
   ]
 }
