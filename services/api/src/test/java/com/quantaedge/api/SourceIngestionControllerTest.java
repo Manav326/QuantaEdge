@@ -79,7 +79,7 @@ class SourceIngestionControllerTest {
             "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
             "edition", "UNVERIFIED"), reviewer, tenant));
     verify(jdbc).queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L));
-    verify(jdbc, org.mockito.Mockito.never()).update(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.any());
+    verify(jdbc, org.mockito.Mockito.never()).update(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.<Object[]>any());
   }
 
   @Test
