@@ -67,15 +67,23 @@ public class AdminContentController {
   @GetMapping("/programs")
   public List<Map<String,Object>> programs(
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_VIEW");
+    long institutionId = requireInstitution(tenant);
     return jdbc.queryForList("""
-      select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,p.curriculum_version,c.code as curriculum_class_code
+      select distinct p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
+             p.curriculum_version,c.code as curriculum_class_code
       from curriculum_program p
       left join curriculum_class c on c.id=p.class_id and c.active=true
+      join institution_course_release release on release.program_id=p.id
+      join institution_course_assignment assignment
+        on assignment.course_release_id=release.id and assignment.institution_id=?
+           and assignment.status='ASSIGNED'
       where p.status='ACTIVE' and p.code<>'GENERAL'
       order by p.display_name,p.id
-      """);
+      """, institutionId);
   }
 
   @GetMapping
@@ -1827,6 +1835,13 @@ public class AdminContentController {
         || edition == null || edition.isBlank() || pages == null || pages.isBlank()) {
       throw badRequest("Verified " + type + " source requires an official HTTPS URL, exact edition/session and page range.");
     }
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1L) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "An active institution context is required.");
+    }
+    return tenant.institutionId();
   }
 
   private void authorize(String suppliedToken, AuthContext context, String permission) {
