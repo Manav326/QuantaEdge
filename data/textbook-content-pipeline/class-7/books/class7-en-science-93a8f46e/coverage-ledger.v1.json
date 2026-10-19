@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1253,
-    "successful_visual_analyses": 1238,
-    "missing_visual_analyses": 6235,
+    "raw_analysis_result_rows": 1256,
+    "successful_visual_analyses": 1241,
+    "missing_visual_analyses": 6232,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6250,
+    "unresolved_count": 6247,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57726,9 +57726,33 @@
       "asset_path": "assets/4b58b4eb5ad39c0eb65ec3cb0ddf418e383ea1befc988524331c3c942a39d607.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular box with a white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep   Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity",
+          "negative"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the components of a torch and an activity related to an electric cell.",
+        "limitations": [
+          "The image does not provide any visual representation of the components or the activity.",
+          "The text is incomplete, missing the details of the components and the activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57744,9 +57768,16 @@
       "asset_path": "assets/2712c4473851a2ceadf1ebea5e45b7b9d8b1fdace27980740d324d3fa82ecec7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular shape with rounded corners.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57762,9 +57793,31 @@
       "asset_path": "assets/c4285639d6e0399510ba66bc7ccc6397c60e3bff8fb7c424846bd555ffdf6b9d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, including an electrical circuit and a simple cell.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical circuit",
+          "torch components"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and the electric cell.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The text is in English and does not include any visual aids."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
