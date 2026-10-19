@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1009,
-    "successful_visual_analyses": 996,
-    "missing_visual_analyses": 1069,
+    "raw_analysis_result_rows": 1012,
+    "successful_visual_analyses": 999,
+    "missing_visual_analyses": 1066,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1082,
+    "unresolved_count": 1079,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38899,9 +38899,30 @@
       "asset_path": "assets/99e38e1d092e584a991420f09377740c5103a677acb9ecc74c4d573ac8838b93.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A ship sailing through rough seas with stormy clouds in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "ship",
+          "stormy weather",
+          "sailing",
+          "sea",
+          "sailors",
+          "stars",
+          "trade",
+          "coastal town",
+          "Kerala",
+          "short stories",
+          "60th birthday"
+        ],
+        "context_relation": "The image is related to the story of a ship carrying spices from Kerala for trade in the olden days, which Reshma is writing for her grandmother's 60th birthday.",
+        "limitations": [
+          "The image does not show the actual ship or the characters in the story."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38917,9 +38938,30 @@
       "asset_path": "assets/b8bc11d64adcc6ebf47db74e6984c11afbd20e908ce279e4d66dad22c34a0707.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A compass with cardinal directions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "E",
+          "S",
+          "W",
+          "NW",
+          "NE",
+          "SE",
+          "SW"
+        ],
+        "concepts": [
+          "compass",
+          "directions"
+        ],
+        "context_relation": "The compass is used to find directions in the story about a ship carrying spices.",
+        "limitations": [
+          "The compass is not functional and cannot be used to navigate."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38935,9 +38977,20 @@
       "asset_path": "assets/b65e1080270b27a418787417026e9282ee18482a95b0363a27b4f457273a76b6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH04' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH04"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the book or a specific chapter.",
+        "limitations": [
+          "The QR code does not provide specific information about the content of the book or chapter 4."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

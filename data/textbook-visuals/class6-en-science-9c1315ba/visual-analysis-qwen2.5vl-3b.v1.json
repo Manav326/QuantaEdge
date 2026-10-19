@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 996,
+    "assets_selected": 999,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 994,
-    "assets_remaining": 1084,
-    "assets_completion_percent": 47.8,
+    "assets_analyzed": 997,
+    "assets_remaining": 1081,
+    "assets_completion_percent": 48.0,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 991,
+    "assets_skipped_from_checkpoint": 994,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:49:13Z"
+      "checkpointed_at": "2026-10-19T12:58:25Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:50:14Z"
+      "checkpointed_at": "2026-10-19T12:59:26Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32059,6 +32059,116 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T12:57:08Z"
+    },
+    {
+      "asset_id": "4962613ee7e019f5bb2dc599",
+      "asset_sha256": "99e38e1d092e584a991420f09377740c5103a677acb9ecc74c4d573ac8838b93",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/99e38e1d092e584a991420f09377740c5103a677acb9ecc74c4d573ac8838b93.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A ship sailing through rough seas with stormy clouds in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "ship",
+          "stormy weather",
+          "sailing",
+          "sea",
+          "sailors",
+          "stars",
+          "trade",
+          "coastal town",
+          "Kerala",
+          "short stories",
+          "60th birthday"
+        ],
+        "context_relation": "The image is related to the story of a ship carrying spices from Kerala for trade in the olden days, which Reshma is writing for her grandmother's 60th birthday.",
+        "limitations": [
+          "The image does not show the actual ship or the characters in the story."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:01:08Z"
+    },
+    {
+      "asset_id": "29f867a00aac67249a1d0351",
+      "asset_sha256": "b8bc11d64adcc6ebf47db74e6984c11afbd20e908ce279e4d66dad22c34a0707",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/b8bc11d64adcc6ebf47db74e6984c11afbd20e908ce279e4d66dad22c34a0707.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass with cardinal directions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "E",
+          "S",
+          "W",
+          "NW",
+          "NE",
+          "SE",
+          "SW"
+        ],
+        "concepts": [
+          "compass",
+          "directions"
+        ],
+        "context_relation": "The compass is used to find directions in the story about a ship carrying spices.",
+        "limitations": [
+          "The compass is not functional and cannot be used to navigate."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:02:45Z"
+    },
+    {
+      "asset_id": "3c061f34753270cef1372fd2",
+      "asset_sha256": "b65e1080270b27a418787417026e9282ee18482a95b0363a27b4f457273a76b6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/b65e1080270b27a418787417026e9282ee18482a95b0363a27b4f457273a76b6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH04' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH04"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the book or a specific chapter.",
+        "limitations": [
+          "The QR code does not provide specific information about the content of the book or chapter 4."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:04:23Z"
     }
   ]
 }
