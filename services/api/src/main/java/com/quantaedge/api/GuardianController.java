@@ -492,8 +492,8 @@ public class GuardianController {
     return Map.of("saved",true,"studentId",studentId);
   }
 
+  /** Subject-only track editing is retired; access is granted through institution courses. */
   @PutMapping("/children/{studentId}/tracks")
-  @Transactional
   public Map<String,Object> updateChildTracks(@PathVariable long studentId,
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
@@ -501,21 +501,10 @@ public class GuardianController {
           InstitutionTenantContext tenant){
     context=authorization.requireParent(context);
     long institutionId=requireInstitution(tenant);
+    requireFullGuardianChildAccess(context.userId(),studentId);
     requireChildInstitutionMembership(studentId,institutionId);
-    Boolean allowed=jdbc.queryForObject("""
-      select exists(select 1 from guardian_student gs join student st on st.id=gs.student_id
-        where gs.guardian_user_id=? and gs.student_id=? and gs.active=true and gs.consent_status='CONSENTED'
-          and st.active=true and st.environment='PRODUCTION')
-      """,Boolean.class,context.userId(),studentId);
-    if(!allowed) throw new SecurityException("Child access denied");
-    List<String> tracks=body.get("trackCodes") instanceof List<?> values
-        ? values.stream().map(String::valueOf).toList() : List.of();
-    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks,institutionId);
-    auth.auditChildEvent(context.userId(),studentId,"TRACKS_UPDATED",
-        "{\"trackCodes\":\""+String.join(",",activeTracks)+"\"}");
-    return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
+    throw new IllegalArgumentException("Subject-only enrollment is no longer supported. Assign an institution course instead.");
   }
-
 
 
   /** Independent courses are assigned to a child separately from class/subject selection. */
