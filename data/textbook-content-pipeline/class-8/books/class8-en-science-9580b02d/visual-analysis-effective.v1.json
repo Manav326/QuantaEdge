@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "acd009248307c19f527e85d37b4fd9d28c3ddcb8977b321b259c1d339199b726",
+  "raw_analysis_sha256": "6d1a04be391e8e2502fffd169d7f778940c746237cf42b43a5ffea0d0b0c2f79",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:15:04Z",
+      "checkpointed_at": "2026-10-19T02:22:24Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:15:53Z",
+      "checkpointed_at": "2026-10-19T02:23:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:16:31Z",
+      "checkpointed_at": "2026-10-19T02:23:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33334,6 +33334,108 @@
         "context_relation": "The image is a page from a textbook discussing the history of microscopes and the concept of cells.",
         "limitations": [
           "The image does not provide specific details about the content of the textbook or the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9fb9db1d78b2be4f3c21d3b0",
+      "asset_sha256": "9a581df2cfe53bc6a6d9d71a608ccfdae10eaf86f6c79ff569e1ac7dc3da198e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/9a581df2cfe53bc6a6d9d71a608ccfdae10eaf86f6c79ff569e1ac7dc3da198e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a forceps and removing a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Teacher demonstration activity for studying a cell",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:25:26Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a forceps and removing a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Teacher demonstration activity for studying a cell",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9f849cd73c8c5015c7cbc497",
+      "asset_sha256": "9ff61a0e7b6c642b98f254cd885dc3443a3dcd3ab8a80bc22c5ce2909c5aaac8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/9ff61a0e7b6c642b98f254cd885dc3443a3dcd3ab8a80bc22c5ce2909c5aaac8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Sliced onion pieces",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "z Take an onion bulb from your kitchen or garden and wash it",
+          "z Cut the onion bulb vertically into pieces.",
+          "z Take one piece of onion and pull out the thin, transparent",
+          "layer from its inner surface with the help of forceps. This",
+          "layer is called the onion peel.",
+          "z Place the peel in a petri dish containing a few drops of"
+        ],
+        "concepts": [
+          "Onion bulb",
+          "Peeling",
+          "Petri dish",
+          "Transparent layer"
+        ],
+        "context_relation": "Teaching activity",
+        "limitations": [
+          "The image does not show the actual onion bulb or the peeled layers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:27:09Z",
+      "effective_analysis": {
+        "visual_summary": "Sliced onion pieces",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "z Take an onion bulb from your kitchen or garden and wash it",
+          "z Cut the onion bulb vertically into pieces.",
+          "z Take one piece of onion and pull out the thin, transparent",
+          "layer from its inner surface with the help of forceps. This",
+          "layer is called the onion peel.",
+          "z Place the peel in a petri dish containing a few drops of"
+        ],
+        "concepts": [
+          "Onion bulb",
+          "Peeling",
+          "Petri dish",
+          "Transparent layer"
+        ],
+        "context_relation": "Teaching activity",
+        "limitations": [
+          "The image does not show the actual onion bulb or the peeled layers."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

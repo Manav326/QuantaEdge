@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 747,
+    "assets_selected": 749,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 744,
-    "assets_remaining": 1547,
-    "assets_completion_percent": 32.5,
+    "assets_analyzed": 746,
+    "assets_remaining": 1545,
+    "assets_completion_percent": 32.6,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 742,
+    "assets_skipped_from_checkpoint": 744,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:15:04Z"
+      "checkpointed_at": "2026-10-19T02:22:24Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:15:53Z"
+      "checkpointed_at": "2026-10-19T02:23:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:16:31Z"
+      "checkpointed_at": "2026-10-19T02:23:52Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22730,6 +22730,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T02:21:15Z"
+    },
+    {
+      "asset_id": "9fb9db1d78b2be4f3c21d3b0",
+      "asset_sha256": "9a581df2cfe53bc6a6d9d71a608ccfdae10eaf86f6c79ff569e1ac7dc3da198e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/9a581df2cfe53bc6a6d9d71a608ccfdae10eaf86f6c79ff569e1ac7dc3da198e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a forceps and removing a thin, transparent layer from an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Teacher demonstration activity for studying a cell",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:25:26Z"
+    },
+    {
+      "asset_id": "9f849cd73c8c5015c7cbc497",
+      "asset_sha256": "9ff61a0e7b6c642b98f254cd885dc3443a3dcd3ab8a80bc22c5ce2909c5aaac8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/9ff61a0e7b6c642b98f254cd885dc3443a3dcd3ab8a80bc22c5ce2909c5aaac8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Sliced onion pieces",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "z Take an onion bulb from your kitchen or garden and wash it",
+          "z Cut the onion bulb vertically into pieces.",
+          "z Take one piece of onion and pull out the thin, transparent",
+          "layer from its inner surface with the help of forceps. This",
+          "layer is called the onion peel.",
+          "z Place the peel in a petri dish containing a few drops of"
+        ],
+        "concepts": [
+          "Onion bulb",
+          "Peeling",
+          "Petri dish",
+          "Transparent layer"
+        ],
+        "context_relation": "Teaching activity",
+        "limitations": [
+          "The image does not show the actual onion bulb or the peeled layers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:27:09Z"
     }
   ]
 }
