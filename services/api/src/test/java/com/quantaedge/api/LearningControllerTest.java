@@ -56,7 +56,7 @@ class LearningControllerTest {
     controller.questions(42L, "hi", student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq(42L));
+    verify(jdbc).queryForList(sql.capture(), eq(1L), eq(7L), eq("hi"), eq(42L));
     assertTrue(sql.getValue().contains("as attempted"));
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
@@ -88,7 +88,7 @@ class LearningControllerTest {
     assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
     assertEquals(80, rows.getFirst().get("practice_best_percent"));
     org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("7"), eq("maths"));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("maths"), eq(91L));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));
@@ -151,7 +151,7 @@ class LearningControllerTest {
     assertEquals("Subtract four from both sides.", result.get("explanation"));
     assertFalse(result.containsKey("answer_payload"));
     assertFalse(result.containsKey("correctAnswer"));
-    verify(state).recordAttempt(7L, 42L, 9L, "B", true, true);
+    verify(state).recordAttempt(7L, 42L, 9L, "B", true, true, null, "LESSON_INLINE", 1L);
   }
 
   @Test
@@ -166,7 +166,7 @@ class LearningControllerTest {
     assertThrows(SecurityException.class,
         () -> controller.answer(42L, "hi", Map.of("answer", "Z"), student, TEST_TENANT));
     verify(state, never()).recordAttempt(eq(7L), eq(42L), eq(9L),
-        anyString(), anyBoolean(), any());
+        anyString(), anyBoolean(), any(), any(), anyString(), eq(1L));
   }
 
   @Test
@@ -186,7 +186,7 @@ class LearningControllerTest {
     Map<String, Object> result = controller.answer(42L, "hi", body, student, TEST_TENANT);
 
     assertEquals(42L, result.get("questionId"));
-    verify(state).recordAttempt(eq(7L), eq(42L), eq(9L), eq(""), eq(false), isNull());
+    verify(state).recordAttempt(7L, 42L, 9L, "", false, null, null, "LESSON_INLINE", 1L);
   }
 
   @Test
@@ -206,8 +206,8 @@ class LearningControllerTest {
         Map.of("answer", "A", "practiceSessionId", 5L), student, TEST_TENANT);
 
     assertEquals(true, result.get("correct"));
-    verify(jdbc).queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L));
-    verify(state).recordAttempt(7L, 42L, 9L, "A", true, true, 5L);
+    verify(jdbc).queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(1L), eq(42L));
+    verify(state).recordAttempt(7L, 42L, 9L, "A", true, true, 5L, "PRACTICE", 1L);
   }
 
   @Test
@@ -231,7 +231,7 @@ class LearningControllerTest {
 
     assertEquals(true, result.get("correct"));
     verify(answerService).serializeForPersistence(eq(submitted));
-    verify(state).recordAttempt(7L, 42L, 9L, "[\"A\",\"B\"]", true, true, 5L);
+    verify(state).recordAttempt(7L, 42L, 9L, "[\"A\",\"B\"]", true, true, 5L, "PRACTICE", 1L);
   }
 
   @Test
