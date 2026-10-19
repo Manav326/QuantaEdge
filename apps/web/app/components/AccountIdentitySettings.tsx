@@ -5,6 +5,7 @@ import Link from 'next/link';
 import GoogleSignInButton from './GoogleSignInButton';
 import { useLocale } from './LanguageProvider';
 import { UI_LOCALE_OPTIONS, resolveUiLocale, translateUi } from '../i18n/catalog';
+import PasswordField from './PasswordField';
 
 type AccountProfile = {
   displayName?: string | null;
@@ -273,15 +274,15 @@ export default function AccountIdentitySettings() {
           <form className="qe-account-identity-settings__form" onSubmit={savePassword}>
             <div className="qe-account-identity-settings__form-heading"><h3>{profile.passwordSet ? (english ? 'Change password' : 'पासवर्ड बदलें') : (english ? 'Set a password' : 'पासवर्ड सेट करें')}</h3>{editingCard === 'password' ? <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editPassword')} disabled={editingCard !== null} onClick={() => beginEditing('password')}>✎</button>}</div>
             {profile.passwordSet && <label>{english ? 'Current password' : 'मौजूदा पासवर्ड'}
-              <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
+              <PasswordField value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
                 autoComplete="current-password" required disabled={editingCard !== 'password'} />
             </label>}
             <label>{english ? 'New password' : 'नया पासवर्ड'}
-              <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)}
+              <PasswordField value={newPassword} onChange={e => setNewPassword(e.target.value)}
                 minLength={8} autoComplete="new-password" required disabled={editingCard !== 'password'} />
             </label>
             <label>{english ? 'Confirm new password' : 'नए पासवर्ड की पुष्टि करें'}
-              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+              <PasswordField value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
                 minLength={8} autoComplete="new-password" required disabled={editingCard !== 'password'} />
             </label>
             {editingCard === 'password' && <div className="qe-account-identity-settings__form-actions"><button type="button" className="button button-light button-small" onClick={cancelEditing} disabled={busy !== ''}>{translateUi(locale, 'legacy.web.cancel.843e86d4')}</button><button type="submit" className="button button-dark button-small" disabled={busy !== '' || newPassword.length < 8 || newPassword !== confirmPassword || (profile.passwordSet === true && !currentPassword)}>{busy === 'password' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save password' : 'पासवर्ड सुरक्षित करें')}</button></div>}
