@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1fcab2ee03f1501585f20c89fadca11f757ceb0f17577592365fde325340e9e3",
+  "raw_analysis_sha256": "baf70bc47a5f5dda0aa9ee419332e0e60386f827158a3bc8558ffd1b3b071540",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:10:09Z",
+      "checkpointed_at": "2026-10-19T04:13:24Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:10:51Z",
+      "checkpointed_at": "2026-10-19T04:14:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:11:46Z",
+      "checkpointed_at": "2026-10-19T04:15:02Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:12:27Z",
+      "checkpointed_at": "2026-10-19T04:15:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -41170,6 +41170,92 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6555130d2147637e3687acbf",
+      "asset_sha256": "0da8d6dc327984179243da68d390df711ce704ad3302819cf1bf4c9d5cade09e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 56,
+      "asset_path": "page-0056.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d13f98c679357936a084cd6c3533cfdbe15ba242702a84c930f40da13477f830",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an activity involving elderly people to gather information about their food habits and cooking practices.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.1.2 How have cooking practices changed over time?",
+          "You have learnt that food habits vary across states. Our food choices as well as practices of food preparation may differ from one another. Have our food habits and cooking practices changed over time?",
+          "Activity 3.3: Let us interact and find out",
+          "Prepare a list of questions for gathering information from elderly people about their food habits and cooking practices. Following are some of the sample questions:",
+          "- What kind of food do you still eat and what is new?",
+          "- What are the changes in cooking practices over time?",
+          "- What has caused these changes?",
+          "Conduct interviews with some elderly people based on the questions prepared.",
+          "(a) Chulha (Traditional stove)",
+          "(b) Modern gas stove",
+          "(c) Sil-batta (Stone grinder)",
+          "(d) Electrical grinder",
+          "Fig. 3.1: Change in cooking tools over time"
+        ],
+        "concepts": [
+          "cooking practices",
+          "food habits",
+          "elderly people",
+          "cooking tools",
+          "traditional stove",
+          "modern gas stove",
+          "stone grinder",
+          "electrical grinder"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text does not provide specific questions for the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:17:28Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for an activity involving elderly people to gather information about their food habits and cooking practices.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.1.2 How have cooking practices changed over time?",
+          "You have learnt that food habits vary across states. Our food choices as well as practices of food preparation may differ from one another. Have our food habits and cooking practices changed over time?",
+          "Activity 3.3: Let us interact and find out",
+          "Prepare a list of questions for gathering information from elderly people about their food habits and cooking practices. Following are some of the sample questions:",
+          "- What kind of food do you still eat and what is new?",
+          "- What are the changes in cooking practices over time?",
+          "- What has caused these changes?",
+          "Conduct interviews with some elderly people based on the questions prepared.",
+          "(a) Chulha (Traditional stove)",
+          "(b) Modern gas stove",
+          "(c) Sil-batta (Stone grinder)",
+          "(d) Electrical grinder",
+          "Fig. 3.1: Change in cooking tools over time"
+        ],
+        "concepts": [
+          "cooking practices",
+          "food habits",
+          "elderly people",
+          "cooking tools",
+          "traditional stove",
+          "modern gas stove",
+          "stone grinder",
+          "electrical grinder"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text does not provide specific questions for the activity."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
