@@ -419,6 +419,18 @@ public class RichNotificationService {
     List<Recipient> recipients=resolveAudience(normalizedScope,institutionId,courseId,filter==null?Map.of():filter);
     if(recipients.isEmpty()) throw new IllegalArgumentException("No eligible recipients match this notification audience.");
     if(scheduledAt!=null) {
+      Map<String,Object> scheduledFilter=new LinkedHashMap<>(filter==null?Map.of():filter);
+      // Freeze the institution set for a future HRMS send; re-resolve eligibility within
+      // these institutions at dispatch rather than accidentally adding newly onboarded tenants.
+      if("HRMS_PLATFORM".equals(normalizedScope)) {
+        scheduledFilter.put("allActiveInstitutions",false);
+        scheduledFilter.put("institutionIds",targetInstitutionIds(normalizedScope,scheduledFilter,recipients));
+      }
+      Map<String,Object> scheduledSnapshot=new LinkedHashMap<>();
+      scheduledSnapshot.put("recipientCount",recipients.size());
+      scheduledSnapshot.put("recipientCounts",countByKind(recipients));
+      scheduledSnapshot.put("resolvedAt",Instant.now().toString());
+      scheduledSnapshot.put("institutionIds",targetInstitutionIds(normalizedScope,scheduledFilter,recipients));
       Long id=jdbc.queryForObject("""
         insert into notification_campaign(
           scope,institution_id,course_id,template_id,template_version,title,summary,content_document,
@@ -427,14 +439,46 @@ public class RichNotificationService {
         values (?,?,?,?,?,?,?,?::jsonb,?::jsonb,?::jsonb,?,?,?,?,'SCHEDULED',?,?,?)
         returning id
         """,Long.class,normalizedScope,institutionId,courseId,templateId,templateVersion,checkedTitle,checkedSummary,
-        writeJson(document),audienceJson,"{}",actor.workspace(),actor.staffId(),actor.institutionAdminId(),key,
-        scheduledAt,expiresAt,recipients.size());
+        writeJson(document),writeJson(scheduledFilter),writeJson(scheduledSnapshot),actor.workspace(),
+        actor.staffId(),actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
       audit(actor,institutionId,id,templateId,"CAMPAIGN_SCHEDULED",
-          Map.of("scope",normalizedScope,"recipientCount",recipients.size(),"scheduledAt",scheduledAt.toString()));
+          Map.of("scope",normalizedScope,"recipientCount",recipients.size(),"scheduledAt",scheduledAt.toString(),
+              "institutionIds",scheduledSnapshot.get("institutionIds")));
       return campaignResult(id,false);
     }
     return dispatchNewCampaign(actor,normalizedScope,institutionId,courseId,filter==null?Map.of():filter,
         checkedTitle,checkedSummary,document,templateId,templateVersion,key,scheduledAt,expiresAt,recipients);
+  }
+
+  @Transactional
+  public Map<String,Object> cancelCampaign(Actor actor,long campaignId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,sender_workspace,sender_staff_id,sender_institution_admin_id,institution_id,status
+      from notification_campaign where id=? for update
+      """,campaignId);
+    if(rows.isEmpty())throw new IllegalArgumentException("Notification campaign was not found.");
+    Map<String,Object> row=rows.getFirst();
+    String senderWorkspace=String.valueOf(row.get("sender_workspace"));
+    Long senderStaff=row.get("sender_staff_id") instanceof Number n?n.longValue():null;
+    Long senderAdmin=row.get("sender_institution_admin_id") instanceof Number n?n.longValue():null;
+    Long institution=row.get("institution_id") instanceof Number n?n.longValue():null;
+    boolean owner="HRMS".equals(actor.workspace())
+        ? "HRMS".equals(senderWorkspace)
+        : "INSTITUTION_ADMIN".equals(actor.workspace())
+            ? "INSTITUTION_ADMIN".equals(senderWorkspace) && java.util.Objects.equals(senderAdmin,actor.institutionAdminId())
+                && java.util.Objects.equals(institution,actor.institutionId())
+            : "EDUCATION_ADMIN".equals(senderWorkspace) && java.util.Objects.equals(institution,actor.institutionId())
+                && (java.util.Objects.equals(senderStaff,actor.staffId()) || actor.staffId()!=null
+                    && Boolean.TRUE.equals(jdbc.queryForObject(
+                        "select exists(select 1 from staff_account where id=? and role='ADMIN' and active=true)",
+                        Boolean.class,actor.staffId())));
+    if(!owner)throw new SecurityException("Only the campaign owner or authorized platform owner can cancel this campaign.");
+    if(!"SCHEDULED".equals(String.valueOf(row.get("status")))) {
+      throw new IllegalArgumentException("Only scheduled notifications can be cancelled before delivery.");
+    }
+    jdbc.update("update notification_campaign set status='CANCELLED',updated_at=now() where id=? and status='SCHEDULED'",campaignId);
+    audit(actor,institution,campaignId,null,"CAMPAIGN_CANCELLED",Map.of("previousStatus","SCHEDULED"));
+    return campaignResult(campaignId,false);
   }
 
   @Transactional
