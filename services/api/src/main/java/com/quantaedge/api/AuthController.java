@@ -53,6 +53,19 @@ public class AuthController {
         .body(Map.of("configured", !clientId.isBlank(), "clientId", clientId));
   }
 
+  /** Current institution-scoped eligibility for the parent's own learner workspace. */
+  @GetMapping("/my-learning-access")
+  public Map<String,Object> parentPersonalLearningAccess(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    if (context == null || !context.isParent() || context.userId() == null) {
+      throw new SecurityException("An authenticated parent account is required to check personal learning access.");
+    }
+    InstitutionTenantContext tenant = requireTenant(institutionCode);
+    requireMembershipService().requireExistingMembership(context, tenant);
+    return Map.of("available", auth.hasParentPersonalLearningAccess(context.userId(), tenant.institutionId()));
+  }
+
   @PostMapping("/my-learning-session")
   @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> openPersonalLearningSession(
@@ -64,11 +77,29 @@ public class AuthController {
     }
     InstitutionTenantContext tenant=requireTenant(institutionCode);
     requireMembershipService().requireExistingMembership(context,tenant);
+    if (!auth.hasParentPersonalLearningAccess(context.userId(), tenant.institutionId())) {
+      throw new SecurityException("Purchase or enroll in a course for your own account before opening My Learning.");
+    }
     AuthContext learner = auth.openParentLearningContext(context.userId());
     requireMembershipService().ensureStudentMembership(learner.studentId(),tenant.institutionId(),
         "PARENT_PERSONAL_LEARNING",context.userId());
     boolean androidClient = isAndroidClient(clientHeader);
-    return withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+    ResponseEntity<Map<String,Object>> session =
+        withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+    // Match the actual refresh-cookie lifetime for this client: browser sessions use
+    // the configured session-hours limit; Android learner sessions use absolute days.
+    Duration learningModeLifetime = androidClient
+        ? Duration.ofDays(auth.getLearningSessionDays())
+        : Duration.ofHours(auth.getSessionHours());
+    ResponseCookie learningMode = ResponseCookie.from("QE_PARENT_PERSONAL_LEARNING", "1")
+        .httpOnly(false).secure(secureCookies).sameSite("Strict").path("/")
+        .maxAge(learningModeLifetime).build();
+    return ResponseEntity.status(session.getStatusCode())
+        .headers(headers -> {
+          headers.addAll(session.getHeaders());
+          headers.add("Set-Cookie", learningMode.toString());
+        })
+        .body(session.getBody());
   }
 
   @PostMapping("/google/link")
@@ -424,6 +455,7 @@ public class AuthController {
       // revocation checks have been attempted. Other application cookies remain untouched.
       result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_COOKIE).toString());
       result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_REFRESH_COOKIE).toString());
+      result.header("Set-Cookie", expiredCookie("QE_PARENT_PERSONAL_LEARNING").toString());
     }
     return result.body(Map.of("loggedOut", true));
   }

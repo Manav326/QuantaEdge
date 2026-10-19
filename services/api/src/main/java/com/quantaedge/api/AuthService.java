@@ -681,6 +681,75 @@ public class AuthService {
         passwordAttemptKey(authType,identifier),authType);
   }
 
+  /**
+   * A parent may enter their own learner workspace only when they hold an active
+   * entitlement or an active/paused enrollment in this institution. Child-owned
+   * entitlements do not satisfy this check.
+   */
+  public boolean hasParentPersonalLearningAccess(long parentUserId, long institutionId) {
+    Boolean entitled = jdbc.queryForObject("""
+      select exists(
+        select 1
+        from course_entitlement ce
+        join curriculum_program p on p.id=ce.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where ce.institution_id=? and ce.holder_user_id=?
+          and (ce.holder_student_id is null or exists(
+            select 1 from student holder_profile
+            where holder_profile.id=ce.holder_student_id
+              and holder_profile.user_account_id=ce.holder_user_id
+              and holder_profile.active=true and holder_profile.environment='PRODUCTION'
+          ))
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            join institution_tenant tenant_scope
+              on tenant_scope.id=assignment.institution_id and tenant_scope.status='ACTIVE'
+            where assignment.institution_id=ce.institution_id and assignment.status='ASSIGNED'
+          )
+        union all
+        select 1
+        from student st
+        join institution_membership m on m.student_id=st.id
+          and m.institution_id=? and m.status='ACTIVE'
+        join student_program_enrollment e on e.student_id=st.id
+          and e.institution_id=m.institution_id
+          and e.status in ('ACTIVE','PAUSED')
+        join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where st.user_account_id=? and st.active=true and st.environment='PRODUCTION'
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            join institution_tenant tenant_scope
+              on tenant_scope.id=assignment.institution_id and tenant_scope.status='ACTIVE'
+            where assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
+          )
+        union all
+        select 1
+        from course_purchase purchase
+        join student st on st.id=purchase.student_id and st.active=true
+          and st.environment='PRODUCTION' and st.user_account_id=?
+        join institution_membership m on m.student_id=st.id
+          and m.institution_id=purchase.institution_id and m.status='ACTIVE'
+        join institution_tenant tenant_scope on tenant_scope.id=m.institution_id and tenant_scope.status='ACTIVE'
+        join curriculum_program p on p.id=purchase.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where purchase.institution_id=?
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            where assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
+          )
+      )
+      """, Boolean.class, institutionId, parentUserId, institutionId, parentUserId,
+          parentUserId, institutionId);
+    return Boolean.TRUE.equals(entitled);
+  }
+
   /** Open a separate learner-scoped session for a parent who wants to use their own courses. */
   @Transactional
   public AuthContext openParentLearningContext(long parentUserId) {

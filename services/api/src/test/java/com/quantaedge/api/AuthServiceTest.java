@@ -500,4 +500,36 @@ class AuthServiceTest {
         contains("environment='LOCAL_PREVIEW' and active=true order by id limit 1"), eq(Long.class));
   }
 
+  @Test
+  void parentPersonalLearningAccessIsCheckedAgainstExactInstitutionAndParentOwner() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
+
+    assertTrue(auth.hasParentPersonalLearningAccess(501L, 31L));
+
+    org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
+    org.mockito.ArgumentCaptor<Object[]> parameters = org.mockito.ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForObject(sql.capture(), eq(Boolean.class), parameters.capture());
+    assertTrue(sql.getValue().contains("ce.institution_id=? and ce.holder_user_id=?"));
+    assertTrue(sql.getValue().contains("holder_profile.user_account_id=ce.holder_user_id"));
+    assertTrue(sql.getValue().contains("st.user_account_id=?"));
+    assertTrue(sql.getValue().contains("e.status in ('ACTIVE','PAUSED')"));
+    assertTrue(sql.getValue().contains("assignment.status='ASSIGNED'"));
+    assertTrue(sql.getValue().contains("tenant_scope.status='ACTIVE'"));
+    assertTrue(sql.getValue().contains("p.status='ACTIVE' and p.code<>'GENERAL'"));
+    assertTrue(sql.getValue().contains("from course_purchase purchase"));
+    assertTrue(sql.getValue().contains("st.user_account_id=?"));
+    assertIterableEquals(List.of(31L, 501L, 31L, 501L, 501L, 31L), List.of(parameters.getValue()));
+  }
+
+  @Test
+  void parentPersonalLearningAccessFailsClosedWhenThereIsNoOwnCourseInInstitution() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(false);
+
+    assertFalse(auth.hasParentPersonalLearningAccess(501L, 32L));
+  }
+
 }

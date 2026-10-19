@@ -74,7 +74,8 @@ public class AuthFilter extends OncePerRequestFilter {
     if (uri.equals("/api/v1/auth/google/link")) {
       return Set.of("STUDENT", "PARENT", "LEARNING").contains(workspace);
     }
-    if (uri.equals("/api/v1/auth/my-learning-session")) {
+    if (uri.equals("/api/v1/auth/my-learning-session")
+        || uri.equals("/api/v1/auth/my-learning-access")) {
       return "PARENT".equals(workspace);
     }
     if (uri.equals("/api/v1/auth/request-otp") || uri.equals("/api/v1/auth/verify-otp")) {

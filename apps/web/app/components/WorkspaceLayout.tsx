@@ -54,7 +54,10 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const { locale } = useLocale();
   const { brand, enrollmentIssue, clearEnrollmentIssue, retryEnrollment } = useTenantBranding();
   const t = (key: string) => translateUi(locale, key);
-  const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
+  const parentLearningRoute = pathname === '/parent/learning' || pathname.startsWith('/parent/learning/');
+  const role = pathname.startsWith('/student') || parentLearningRoute
+    ? 'student'
+    : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
   const itemLabel = (item: { message: string }) => t(item.message);
   const enrollmentIssueText = enrollmentIssue === 'invalid'
@@ -86,14 +89,63 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const [expandedStudentGroup, setExpandedStudentGroup] = useState<string | null>(null);
   const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null);
   const [diagnosticAvailable, setDiagnosticAvailable] = useState(false);
-  const visibleStudentNavGroups = studentNavGroups.map(group => group.id === 'practice'
-    ? { ...group, children: group.children?.filter(item => item.href !== '/student/diagnostic' || diagnosticAvailable) }
+  const [hasPersonalCourse, setHasPersonalCourse] = useState(false);
+  const [expandedParentLearning, setExpandedParentLearning] = useState(false);
+  const [expandedParentLearningGroup, setExpandedParentLearningGroup] = useState<string | null>(null);
+  const [openingParentLearning, setOpeningParentLearning] = useState(false);
+  const [personalLearningError, setPersonalLearningError] = useState('');
+
+  const parentLearningNavGroups = studentNavGroups.map(group => ({
+    ...group,
+    href: group.href ? group.href.replace(/^\/student(?=\/|$)/, '/parent/learning') : undefined,
+    children: group.children?.map(item => ({
+      ...item,
+      href: item.href.replace(/^\/student(?=\/|$)/, '/parent/learning'),
+    })),
+  }));
+  const navigationGroupsForWorkspace = parentLearningRoute ? parentLearningNavGroups : studentNavGroups;
+  const visibleStudentNavGroups = navigationGroupsForWorkspace.map(group => group.id === 'practice'
+    ? { ...group, children: group.children?.filter(item => item.href !== (parentLearningRoute ? '/parent/learning/diagnostic' : '/student/diagnostic') || diagnosticAvailable) }
+    : group);
+  const visibleParentLearningNavGroups = parentLearningNavGroups.map(group => group.id === 'practice'
+    ? { ...group, children: group.children?.filter(item =>
+        item.href !== '/parent/learning/diagnostic' || diagnosticAvailable || (role === 'parent' && hasPersonalCourse)) }
     : group);
 
   useEffect(() => {
     if (!role) return;
     try { setCollapsed(window.localStorage.getItem('qe-' + role + '-sidebar-collapsed') === 'true'); } catch {}
   }, [role]);
+
+  // Only expose the parent's personal learner navigation when this institution confirms
+  // an active entitlement/enrollment for the parent's own learning account.
+  useEffect(() => {
+    let active = true;
+    if (role !== 'parent') {
+      setHasPersonalCourse(false);
+      setExpandedParentLearning(false);
+      setExpandedParentLearningGroup(null);
+      return () => { active = false; };
+    }
+    const loadPersonalLearningAccess = async () => {
+      try {
+        const response = await fetch('/api/v1/auth/my-learning-access', {
+          credentials: 'same-origin', cache: 'no-store',
+          headers: { 'X-QE-Workspace': 'PARENT' },
+        });
+        const body = response.ok ? await response.json() : null;
+        if (active) setHasPersonalCourse(body?.available === true);
+      } catch {
+        if (active) setHasPersonalCourse(false);
+      }
+    };
+    void loadPersonalLearningAccess();
+    window.addEventListener('qe:parent-courses-updated', loadPersonalLearningAccess);
+    return () => {
+      active = false;
+      window.removeEventListener('qe:parent-courses-updated', loadPersonalLearningAccess);
+    };
+  }, [role, pathname]);
 
   // Keep the one-time diagnostic in navigation only when the recommendation service says it is due.
   useEffect(() => {
@@ -130,12 +182,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       setMobileOpenGroup(null);
       return;
     }
-    const currentGroup = studentNavGroups.find(group => group.children?.some(item =>
+    const currentGroup = visibleStudentNavGroups.find(group => group.children?.some(item =>
       pathname === item.href || pathname.startsWith(item.href + '/')
     ));
     if (currentGroup) setExpandedStudentGroup(currentGroup.id);
     setMobileOpenGroup(null);
-  }, [pathname, role]);
+  }, [pathname, role, parentLearningRoute]);
 
   useEffect(() => {
     if (!mobileOpenGroup) return;
@@ -199,24 +251,67 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   }
 
   function routeActive(href: string) {
-    if (href === '/student' || href === '/parent') return pathname === href;
+    if (href === '/student' || href === '/parent' || href === '/parent/learning') return pathname === href;
     return pathname === href || pathname.startsWith(href + '/');
   }
 
   function studentGroupActive(group: StudentNavGroup) {
-    const fullGroup = studentNavGroups.find(item => item.id === group.id) ?? group;
+    const fullGroup = visibleStudentNavGroups.find(item => item.id === group.id) ?? group;
     if (fullGroup.href && routeActive(fullGroup.href)) return true;
     return Boolean(fullGroup.children?.some(item => routeActive(item.href)));
   }
 
+  async function openParentLearning(href = '/parent/learning') {
+    if (!hasPersonalCourse || openingParentLearning) return;
+    setOpeningParentLearning(true);
+    setPersonalLearningError('');
+    try {
+      const response = await fetch('/api/v1/auth/my-learning-session', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'PARENT' },
+        body: '{}',
+        cache: 'no-store',
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.message || body.detail || 'My Learning could not be opened.');
+      if (body.role !== 'STUDENT' || body.workspace !== 'STUDENT' || Number(body.studentId) <= 0) {
+        throw new Error('Your personal learning session could not be confirmed.');
+      }
+      window.location.assign(href);
+    } catch (error) {
+      setPersonalLearningError(error instanceof Error ? error.message : 'My Learning could not be opened.');
+      setOpeningParentLearning(false);
+    }
+  }
+
   async function logout() {
     setLoggingOut(true);
+    const personalLearningActive = parentLearningRoute
+      || (typeof document !== 'undefined' && document.cookie.split(';')
+        .some(part => part.trim() === 'QE_PARENT_PERSONAL_LEARNING=1'));
     try {
-      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      // A parent's learner profile uses a separate STUDENT session. When signing
+      // out from either side of that paired workspace, revoke both scoped sessions.
+      if (personalLearningActive) {
+        await fetch('/api/v1/auth/logout', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+        });
+      }
+      await fetch('/api/v1/auth/logout', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'X-QE-Workspace': parentLearningRoute ? 'PARENT' : role === 'student' ? 'STUDENT' : 'PARENT' },
+        cache: 'no-store',
+      });
     } catch {
       // Always leave the workspace after the logout request, even if the network fails.
     } finally {
-      router.replace(role === 'student' ? '/login/student' : '/login');
+      if (personalLearningActive && typeof document !== 'undefined') {
+        document.cookie = 'QE_PARENT_PERSONAL_LEARNING=; Max-Age=0; Path=/; SameSite=Strict'
+          + (window.location.protocol === 'https:' ? '; Secure' : '');
+      }
+      router.replace(role === 'student' && !parentLearningRoute ? '/login/student' : '/login');
       router.refresh();
       setLoggingOut(false);
     }
@@ -229,7 +324,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     : pathname === item.href || pathname.startsWith(item.href + '/');
  return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
     <aside className="qe-workspace-sidebar">
-      <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
+      <QuantaEdgeBrand href={parentLearningRoute ? '/parent/learning' : role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
       <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')} aria-expanded={!collapsed} title={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}>{collapsed ? '»' : '«'}</button>
       <div className="qe-workspace-nav-scroll">
         <p className="qe-workspace-label">{t(role === 'student' ? 'web.navigation.student.yourLearning' : 'web.navigation.parent.yourFamily')}</p>
@@ -272,6 +367,52 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         ) : (
           <nav aria-label={t('web.navigation.parent.label')}>
             {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} onClick={event => { if (active(item)) event.preventDefault(); }} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
+            {hasPersonalCourse ? (
+              <div className="qe-workspace-nav-group qe-parent-learning-nav-group">
+                <button type="button"
+                  className={'qe-workspace-link qe-workspace-group-button' + (pathname.startsWith('/parent/learning') ? ' is-active' : '') + (expandedParentLearning ? ' is-expanded' : '')}
+                  title={collapsed ? (locale === 'english' ? 'My Learning' : 'मेरी पढ़ाई') : undefined}
+                  aria-expanded={expandedParentLearning}
+                  aria-controls="qe-parent-personal-learning-group"
+                  onClick={() => setExpandedParentLearning(value => !value)}
+                  disabled={openingParentLearning}>
+                  <span className="qe-workspace-icon" aria-hidden="true">▤</span>
+                  <span className="qe-workspace-link-label">{locale === 'english' ? 'My Learning' : locale === 'hinglish' ? 'My Learning' : 'मेरी पढ़ाई'}</span>
+                  <span className="qe-workspace-group-chevron" aria-hidden="true">⌄</span>
+                </button>
+                <div className="qe-workspace-subnav" id="qe-parent-personal-learning-group" hidden={!expandedParentLearning}>
+                  {visibleParentLearningNavGroups.length ? visibleParentLearningNavGroups.map(group => group.href ? (
+                    <Link key={group.id} href={group.href} title={collapsed ? itemLabel(group) : undefined}
+                      onClick={event => { event.preventDefault(); void openParentLearning(group.href); }}
+                      className="qe-workspace-link">
+                      <span className="qe-workspace-link-label">{itemLabel(group)}</span>
+                    </Link>
+                  ) : (
+                    <div className="qe-workspace-nav-group" key={group.id}>
+                      <button type="button"
+                        className={'qe-workspace-link qe-workspace-group-button' + (expandedParentLearningGroup === group.id ? ' is-expanded' : '')}
+                        aria-expanded={expandedParentLearningGroup === group.id}
+                        aria-controls={'qe-parent-learning-' + group.id}
+                        onClick={() => setExpandedParentLearningGroup(current => current === group.id ? null : group.id)}>
+                        <span className="qe-workspace-link-label">{itemLabel(group)}</span>
+                        <span className="qe-workspace-group-chevron" aria-hidden="true">⌄</span>
+                      </button>
+                      <div className="qe-workspace-subnav" id={'qe-parent-learning-' + group.id} hidden={expandedParentLearningGroup !== group.id}>
+                        {group.children?.map(item => (
+                          <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined}
+                            onClick={event => { event.preventDefault(); void openParentLearning(item.href); }}
+                            className="qe-workspace-link">
+                            <span className="qe-workspace-link-label">{itemLabel(item)}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )) : null}
+                </div>
+                {personalLearningError ? <p className="qe-workspace-inline-error" role="alert">{personalLearningError}</p> : null}
+                {openingParentLearning ? <p className="qe-workspace-inline-status" role="status">{locale === 'english' ? 'Opening My Learning…' : locale === 'hinglish' ? 'My Learning khul raha hai…' : 'मेरी पढ़ाई खोली जा रही है…'}</p> : null}
+              </div>
+            ) : null}
           </nav>
         )}
       </div>
@@ -283,8 +424,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     </aside>
     <div className="qe-workspace-content">
       <header className="qe-workspace-topbar">
-        <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
+        <QuantaEdgeBrand href={parentLearningRoute ? '/parent/learning' : role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
         <div className="qe-workspace-topbar-actions">
+          {parentLearningRoute ? (
+            <button type="button" className="qe-parent-learning-return" onClick={() => router.push('/parent')}
+              aria-label={locale === 'english' ? 'Return to parent workspace' : locale === 'hinglish' ? 'Parent workspace par wapas jaayein' : 'अभिभावक कार्यक्षेत्र में वापस जाएँ'}>
+              <span aria-hidden="true">←</span>
+              <span>{locale === 'english' ? 'Parent workspace' : locale === 'hinglish' ? 'Parent workspace' : 'अभिभावक कार्यक्षेत्र'}</span>
+            </button>
+          ) : null}
           <AppearanceModeButton />
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || t('web.workspace.studentFallbackName')} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
@@ -360,6 +508,14 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         {items.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''} title={itemLabel(item)}>
           <span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small>
         </Link>)}
+        {hasPersonalCourse ? (
+          <button type="button" title={locale === 'english' ? 'My Learning' : 'मेरी पढ़ाई'}
+            onClick={() => void openParentLearning('/parent/learning')} disabled={openingParentLearning}
+            className={openingParentLearning ? 'is-loading' : ''}>
+            <span aria-hidden="true">▤</span>
+            <small>{locale === 'english' ? 'My Learning' : locale === 'hinglish' ? 'My Learning' : 'मेरी पढ़ाई'}</small>
+          </button>
+        ) : null}
       </nav>
     )}
   </div>;

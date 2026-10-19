@@ -36,11 +36,45 @@ function hasWorkspaceSessionHint(request: NextRequest, workspace: 'PARENT' | 'ST
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const studentRoute = path === '/student' || path.startsWith('/student/');
-  const parentRoute = path === '/parent' || path.startsWith('/parent/');
+  const parentLearningRoute = path === '/parent/learning' || path.startsWith('/parent/learning/');
+  const parentLearningMode = request.cookies.get('QE_PARENT_PERSONAL_LEARNING')?.value === '1';
+  const parentRoute = (path === '/parent' || path.startsWith('/parent/')) && !parentLearningRoute;
 
-  // Protect each workspace with its own session-cookie family. An active
-  // parent session must not be mistaken for a student session, or vice versa.
-  if (studentRoute && !hasWorkspaceSessionHint(request, 'STUDENT')) {
+  // Keep legacy internal /student links canonical in the parent's URL space once
+  // personal learning has been opened. Preserve query parameters for filters and attempts.
+  if (studentRoute && parentLearningMode) {
+    const url = request.nextUrl.clone();
+    url.pathname = path === '/student'
+      ? '/parent/learning'
+      : '/parent/learning' + path.slice('/student'.length);
+    return NextResponse.redirect(url);
+  }
+
+  // /parent/learning is an alias of the learner pages, not the parent API workspace.
+  // Both its route marker and the student-scoped cookie are required; neither alone
+  // grants access to a learner identity.
+  if (parentLearningRoute) {
+    if (!parentLearningMode) {
+      const url = request.nextUrl.clone();
+      // A parent following an expired/stale learning link should land back in
+      // their family workspace rather than being bounced into the student login.
+      if (hasWorkspaceSessionHint(request, 'PARENT')) {
+        url.pathname = '/parent/courses';
+      } else {
+        url.pathname = path === '/parent/learning'
+          ? '/student'
+          : '/student' + path.slice('/parent/learning'.length);
+      }
+      return NextResponse.redirect(url);
+    }
+    if (!hasWorkspaceSessionHint(request, 'STUDENT')) {
+      const url = request.nextUrl.clone();
+      url.pathname = hasWorkspaceSessionHint(request, 'PARENT')
+        ? '/parent/courses'
+        : '/login/student';
+      return NextResponse.redirect(url);
+    }
+  } else if (studentRoute && !hasWorkspaceSessionHint(request, 'STUDENT')) {
     return NextResponse.redirect(new URL('/login/student', request.url));
   }
   if (parentRoute && !hasWorkspaceSessionHint(request, 'PARENT')) {

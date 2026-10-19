@@ -65,6 +65,7 @@ export default function ParentCoursesPage() {
   const { locale } = useLocale();
   const english = locale === 'english';
   const [courses, setCourses] = useState<Course[]>([]);
+  const [personalLearningAvailable, setPersonalLearningAvailable] = useState(false);
   const [children, setChildren] = useState<Child[]>([]);
   const [requests, setRequests] = useState<PurchaseRequest[]>([]);
   const [entitlements, setEntitlements] = useState<Entitlement[]>([]);
@@ -85,6 +86,10 @@ export default function ParentCoursesPage() {
         router.replace('/login');
         return;
       }
+      const personalAccessCheck = fetch('/api/v1/auth/my-learning-access', {
+        credentials: 'same-origin', cache: 'no-store',
+      }).then(readJson).then(body => setPersonalLearningAvailable(body.available === true))
+        .catch(() => setPersonalLearningAvailable(false));
       const responses = await Promise.all([
         fetch('/api/v1/marketplace/family/courses', { credentials: 'same-origin', cache: 'no-store' }),
         fetch('/api/v1/guardians/children', { credentials: 'same-origin', cache: 'no-store' }),
@@ -92,7 +97,9 @@ export default function ParentCoursesPage() {
         fetch('/api/v1/marketplace/family/entitlements', { credentials: 'same-origin', cache: 'no-store' }),
       ]);
       const results = await Promise.all(responses.map(response => readJson(response)));
+      await personalAccessCheck;
       setCourses(Array.isArray(results[0]) ? results[0] : []);
+      window.dispatchEvent(new Event('qe:parent-courses-updated'));
       setChildren(Array.isArray(results[1]) ? results[1] : []);
       setRequests(Array.isArray(results[2]) ? results[2] : []);
       setEntitlements(Array.isArray(results[3]) ? results[3] : []);
@@ -249,7 +256,7 @@ export default function ParentCoursesPage() {
       if (body.role !== 'STUDENT' || body.workspace !== 'STUDENT' || Number(body.studentId) <= 0) {
         throw new Error('Your personal learning session could not be confirmed.');
       }
-      window.location.assign('/student');
+      window.location.assign('/parent/learning');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not open personal learning.');
       setBusy('');
@@ -266,9 +273,11 @@ export default function ParentCoursesPage() {
             <p><LocaleText hinglish="खरीद से पहले प्राप्तकर्ता चुनें। अपने लिए खरीदा कोर्स बाद में बच्चे को स्थायी रूप से ट्रांसफर किया जा सकता है।" english="Choose the recipient before checkout. A course purchased for yourself can later be permanently transferred to a linked child." /></p>
           </div>
           <div className="parent-courses-page__heading-actions">
-            <button className="button button-dark" type="button" disabled={busy !== ''} onClick={() => void openMyLearning()}>
-              <LocaleText hinglish="मेरी पढ़ाई खोलें" english="My learning" />
-            </button>
+            {personalLearningAvailable ? (
+              <button className="button button-dark" type="button" disabled={busy !== ''} onClick={() => void openMyLearning()}>
+                <LocaleText hinglish="मेरी पढ़ाई खोलें" english="My learning" />
+              </button>
+            ) : null}
             <Link className="button button-light" href="/parent/children"><LocaleText hinglish="बच्चों के खाते" english="Child accounts" /></Link>
           </div>
         </div>

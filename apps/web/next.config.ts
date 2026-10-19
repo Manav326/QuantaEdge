@@ -13,10 +13,16 @@ const nextConfig: NextConfig = {
       ? 'http://localhost:8080'
       : 'http://api:8080';
     const backendUrl = process.env.BACKEND_INTERNAL_URL ?? defaultBackendUrl;
-    return [{
-      source: '/api/:path*',
-      destination: `${backendUrl}/api/:path*`,
-    }];
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${backendUrl}/api/:path*`,
+      },
+      // Parent-owned My Learning reuses the mature learner pages while preserving
+      // the parent URL namespace and workspace navigation in the browser.
+      { source: '/parent/learning', destination: '/student' },
+      { source: '/parent/learning/:path*', destination: '/student/:path*' },
+    ];
   },
 };
 

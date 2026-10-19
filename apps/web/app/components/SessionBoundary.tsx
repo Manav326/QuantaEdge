@@ -73,6 +73,8 @@ function institutionCodeForRequest(): string | null {
 
   const routeCookies = [
     { path: '/login/student', name: 'qe-tenant-login-student' },
+    { path: '/parent/learning', name: 'qe-tenant-parent' },
+    { path: '/parent', name: 'qe-tenant-parent' },
     { path: '/student', name: 'qe-tenant-student' },
     { path: '/signup', name: 'qe-tenant-signup' },
     { path: '/session', name: 'qe-tenant-session' },
@@ -114,6 +116,7 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
     ? 'INSTITUTION'
     : path.startsWith('/admin') ? 'EDUCATION_ADMIN'
     : path.startsWith('/hrms') ? 'HRMS'
+    : path === '/parent/learning' || path.startsWith('/parent/learning/') ? 'STUDENT'
     : path.startsWith('/student') || path === '/login/student' || path === '/signup' ? 'STUDENT'
     : path.startsWith('/parent') || path === '/login/parent' ? 'PARENT'
     : explicitWorkspace || 'LEARNING';
@@ -190,6 +193,11 @@ function workspaceRole(home: string | null): WorkspaceRole | null {
   if (home?.startsWith('/parent')) return 'parent';
   return null;
 }
+
+function hasParentPersonalLearningMode(): boolean {
+  return typeof document !== 'undefined'
+    && document.cookie.split(';').some(part => part.trim() === 'QE_PARENT_PERSONAL_LEARNING=1');
+}
 if (typeof window !== 'undefined') installRefreshRecovery();
 
 export default function SessionBoundary({ children }: { children: React.ReactNode }) {
@@ -198,7 +206,10 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
   const { brand, institutionContextRequested } = useTenantBranding();
   const [ready, setReady] = useState(false);
   const isPublicEntry = pathname === '/' || pathname === '/login' || pathname === '/login/student';
-  const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
+  const parentLearningRoute = pathname === '/parent/learning' || pathname.startsWith('/parent/learning/');
+  const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') || parentLearningRoute
+    ? 'student'
+    : pathname.startsWith('/parent') ? 'parent' : null;
   const isProtected = protectedWorkspace !== null;
   const requiresCheck = isPublicEntry || isProtected;
 
@@ -212,11 +223,40 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       return () => { alive = false; };
     }
 
+    // A parent personal-learning session is separate from the parent account session.
+    // If the learner session expires, prefer the still-valid parent workspace before
+    // sending the user to a student login screen.
+    const recoverParentWorkspace = async () => {
+      if (!parentLearningRoute) return false;
+      try {
+        const parentResponse = await fetch('/api/v1/auth/me', {
+          headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
+        });
+        if (!parentResponse.ok) return false;
+        const parentSession = await parentResponse.json() as Session;
+        if (roleHome(parentSession) !== '/parent') return false;
+        if (alive) {
+          verifiedWorkspace = 'parent';
+          navigateWithFallback(router, '/parent');
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
     // Validate sign-in at workspace entry. On intra-workspace navigation, reuse
     // the verified role: API routes still enforce authentication and the shared
     // refresh interceptor handles expired access sessions without blanking the UI.
     const check = async (force = false) => {
       if (isPublicEntry) verifiedWorkspace = null;
+      if (parentLearningRoute && !hasParentPersonalLearningMode()) {
+        verifiedWorkspace = null;
+        // Never strand a parent under /student when this routing hint expires.
+        // The parent route's own SessionBoundary check will verify their session.
+        navigateWithFallback(router, '/parent');
+        return;
+      }
       if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
         setReady(true);
         return;
@@ -238,8 +278,9 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         })());
         if (!alive) return;
         if (!response.ok) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -252,16 +293,19 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
           navigateWithFallback(router, home);
           return;
         }
-        if (protectedWorkspace && home && !pathname.startsWith(home)) {
+        const matchesHome = Boolean(home && pathname.startsWith(home))
+          || Boolean(parentLearningRoute && hasParentPersonalLearningMode() && home === '/student');
+        if (protectedWorkspace && home && !matchesHome) {
           verifiedWorkspace = homeWorkspace;
           navigateWithFallback(router, home);
           return;
         }
         if ((isPublicEntry || isProtected) && !home) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
           // A staff/legacy session must not block the learning site. Let the
           // appropriate public entry render or send a protected route to login.
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -269,8 +313,9 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         setReady(true);
       } catch {
         if (alive) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
         }
       }
@@ -297,7 +342,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       window.removeEventListener('pagehide', onPageHide);
       document.body.classList.remove('qe-session-bfcache-guard');
     };
-  }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected]);
+  }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected, parentLearningRoute]);
 
 
   useEffect(() => {
@@ -319,7 +364,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const onSessionExpired = () => {
-      if (isProtected) window.location.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+      if (isProtected) window.location.replace((pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
     };
     window.addEventListener('qe:session-expired', onSessionExpired);
     return () => window.removeEventListener('qe:session-expired', onSessionExpired);
