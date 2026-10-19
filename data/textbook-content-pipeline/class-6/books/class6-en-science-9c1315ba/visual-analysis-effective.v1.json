@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0ed2a0986b7526fa77972eeef441635d3f34949ef2f652d27f6acf16366074e2",
+  "raw_analysis_sha256": "1160afccc911beccdb84a6dcc393d0a91912f755e27d170795130535f167d34a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:21:04Z",
+      "checkpointed_at": "2026-10-19T17:25:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:21:45Z",
+      "checkpointed_at": "2026-10-19T17:26:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:22:38Z",
+      "checkpointed_at": "2026-10-19T17:27:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -52793,6 +52793,82 @@
         "limitations": [
           "The image does not provide specific details about the educational content or the experiment being described."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e3943271c350fe3b9feedf73",
+      "asset_sha256": "ed4743354436494731f2f728727531a075bb545005a4e679a97852da79eb36cc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/ed4743354436494731f2f728727531a075bb545005a4e679a97852da79eb36cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A toy car made from cardboard, with a red roof, black body, and two wheels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about magnetic properties and their applications.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the experiment being described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:27:53Z",
+      "effective_analysis": {
+        "visual_summary": "A toy car made from cardboard, with a red roof, black body, and two wheels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about magnetic properties and their applications.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the experiment being described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1a2c47705ecf527a7791c361",
+      "asset_sha256": "e980cabc422c7a1ab3ff4a496f41776f310f841f6bdc94a983be28bb993f86f8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/e980cabc422c7a1ab3ff4a496f41776f310f841f6bdc94a983be28bb993f86f8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:28:29Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

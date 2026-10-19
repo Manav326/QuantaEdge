@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1079,
+    "assets_selected": 1081,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1076,
-    "assets_remaining": 1002,
-    "assets_completion_percent": 51.8,
+    "assets_analyzed": 1078,
+    "assets_remaining": 1000,
+    "assets_completion_percent": 51.9,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1074,
+    "assets_skipped_from_checkpoint": 1076,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:21:04Z"
+      "checkpointed_at": "2026-10-19T17:25:43Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:21:45Z"
+      "checkpointed_at": "2026-10-19T17:26:24Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:22:38Z"
+      "checkpointed_at": "2026-10-19T17:27:16Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35143,6 +35143,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:24:55Z"
+    },
+    {
+      "asset_id": "e3943271c350fe3b9feedf73",
+      "asset_sha256": "ed4743354436494731f2f728727531a075bb545005a4e679a97852da79eb36cc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/ed4743354436494731f2f728727531a075bb545005a4e679a97852da79eb36cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A toy car made from cardboard, with a red roof, black body, and two wheels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about magnetic properties and their applications.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the experiment being described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:27:53Z"
+    },
+    {
+      "asset_id": "1a2c47705ecf527a7791c361",
+      "asset_sha256": "e980cabc422c7a1ab3ff4a496f41776f310f841f6bdc94a983be28bb993f86f8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/e980cabc422c7a1ab3ff4a496f41776f310f841f6bdc94a983be28bb993f86f8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:28:29Z"
     }
   ]
 }
