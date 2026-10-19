@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1105,
+    "assets_selected": 1107,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1102,
-    "assets_remaining": 976,
-    "assets_completion_percent": 53.0,
+    "assets_analyzed": 1104,
+    "assets_remaining": 974,
+    "assets_completion_percent": 53.1,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1100,
+    "assets_skipped_from_checkpoint": 1102,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:08:27Z"
+      "checkpointed_at": "2026-10-19T18:13:09Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:09:09Z"
+      "checkpointed_at": "2026-10-19T18:13:55Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:10:02Z"
+      "checkpointed_at": "2026-10-19T18:14:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36009,6 +36009,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T18:12:19Z"
+    },
+    {
+      "asset_id": "6bbdcd856b7a8af3379e8809",
+      "asset_sha256": "279c4573da67cca44f82b88b4e9e78002407f2fbdd8ab96962deb51a4b93fc94",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/279c4573da67cca44f82b88b4e9e78002407f2fbdd8ab96962deb51a4b93fc94.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cylindrical object with a wooden top and a metallic base.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:15:25Z"
+    },
+    {
+      "asset_id": "3ec297fae52ca486bedcc540",
+      "asset_sha256": "fd1a1de0af627095a08795447eb61e2d4a55713bfb821aaf7b836b88f1db1c66",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/fd1a1de0af627095a08795447eb61e2d4a55713bfb821aaf7b836b88f1db1c66.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red L-shaped object, possibly a metal frame or a piece of machinery.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically the section about magnets and their properties.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the question it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:16:03Z"
     }
   ]
 }
