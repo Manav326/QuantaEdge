@@ -244,9 +244,16 @@ public class RichNotificationService {
           where st.id=? and st.active=true)
           """,Boolean.class,institutionId,id));
         case "USER_ACCOUNT" -> Boolean.TRUE.equals(jdbc.queryForObject("""
-          select exists(select 1 from user_account u
-            join institution_user_membership m on m.user_id=u.id and m.institution_id=? and m.status='ACTIVE'
-            join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+          select exists(
+            select 1 from user_account u
+            join institution_user_membership um on um.user_id=u.id
+              and um.institution_id=? and um.status='ACTIVE'
+            join institution_tenant t on t.id=um.institution_id and t.status='ACTIVE'
+            join guardian_student gs on gs.guardian_user_id=u.id and gs.active=true
+              and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+            join student st on st.id=gs.student_id and st.active=true
+            join institution_membership sm on sm.student_id=st.id
+              and sm.institution_id=um.institution_id and sm.status='ACTIVE'
             where u.id=? and u.active=true)
           """,Boolean.class,institutionId,id));
         case "INSTITUTION_ADMIN" -> Boolean.TRUE.equals(jdbc.queryForObject("""
