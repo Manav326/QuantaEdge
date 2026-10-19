@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1380,
+    "assets_selected": 1383,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1378,
-    "assets_remaining": 6110,
+    "assets_analyzed": 1381,
+    "assets_remaining": 6107,
     "assets_completion_percent": 18.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1375,
+    "assets_skipped_from_checkpoint": 1378,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:23:35Z"
+      "checkpointed_at": "2026-10-19T05:26:27Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:24:04Z"
+      "checkpointed_at": "2026-10-19T05:26:55Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -52180,6 +52180,137 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T05:25:32Z"
+    },
+    {
+      "asset_id": "d67a0f47bfd129ecb301b0b1",
+      "asset_sha256": "6e738cd29d98785fd5a413225fea85db727e8853b78dad6ea43a240255dc15a2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "page-0050.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electrical circuit diagram showing a lamp connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows in the arrangements at S.No. 1 and 6 and does not glow in the remaining arrangements. Now, carefully look at the arrangements in which the lamp glows. Compare these with those in which the lamp does not glow. Can you find the reason for the difference?",
+          "3.2.5 An electrical circuit",
+          "The lamp glows when one terminal of the lamp is connected to one terminal of the electric cell and the other terminal of the lamp to the other terminal of the cell as shown in Fig. 3.9. This setup forms an electrical circuit, which provides a complete path for electric current to flow through the la",
+          "The direction of electric current in an electrical circuit is taken to be from the positive to the negative terminal of the electric cell. When the terminals of the lamp are connected with those of the electric cell by wires, the current passes through the filament of the incandescent lamp and makes",
+          "FASCINATING FACTS",
+          "Sometimes, an incandescent lamp does not glow even when connected to a cell. We say the lamp has 'fused' usually due to a broken filament. A broken filament stops the flow of current, preventing the lamp from glowing.",
+          "Let us now try to make an LED glow.",
+          "Activity 3.7: Let us experiment",
+          "Take two electric cells, an LED of any colour, a cell holder that can fit two cells (Fig. 3.10a), and two lengths of electric wire.",
+          "Remove about 1 cm of the plastic covering from both ends of each wire to expose the metal.",
+          "Connect the two wires to the cell holder as shown in Fig. 3.10a."
+        ],
+        "concepts": [
+          "electrical circuit",
+          "incandescent lamp",
+          "LED",
+          "electric current",
+          "positive terminal",
+          "negative terminal",
+          "filament",
+          "fused",
+          "broken filament",
+          "current flow",
+          "LED glow",
+          "electric cell",
+          "cell holder",
+          "electric wire",
+          "metal",
+          "plastic covering",
+          "arrangements",
+          "reason",
+          "difference"
+        ],
+        "context_relation": "The image is a diagram showing an electrical circuit with a lamp connected to a battery.",
+        "limitations": [
+          "The image does not provide specific details about the arrangement of the lamp and the battery.",
+          "The image does not show the specific steps for making an LED glow."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:30:34Z"
+    },
+    {
+      "asset_id": "61f45ac4ddd5950a4700e479",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying to the right.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, likely used to illustrate a concept or idea related to flight or movement.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine the exact context or message."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:30:43Z"
+    },
+    {
+      "asset_id": "b4d021c446fcc0a11294cb2e",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a circuit diagram or a conceptual illustration.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "positive terminal",
+          "negative terminal",
+          "battery",
+          "holder"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a full circuit diagram or a detailed explanation of the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:31:01Z"
     }
   ]
 }
