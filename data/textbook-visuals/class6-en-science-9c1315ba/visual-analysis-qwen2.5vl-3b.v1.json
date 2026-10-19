@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 975,
+    "assets_selected": 978,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 973,
-    "assets_remaining": 1105,
-    "assets_completion_percent": 46.8,
+    "assets_analyzed": 976,
+    "assets_remaining": 1102,
+    "assets_completion_percent": 47.0,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 970,
+    "assets_skipped_from_checkpoint": 973,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:01:54Z"
+      "checkpointed_at": "2026-10-19T12:07:36Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:02:55Z"
+      "checkpointed_at": "2026-10-19T12:08:37Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -31307,6 +31307,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T12:06:22Z"
+    },
+    {
+      "asset_id": "9f0288d288b809d5eefddd97",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d91b90ad79dfb1ee9a34b1f819fc46b70fa2a0c71d49bf024c9400950d0af6bb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "none",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:08:49Z"
+    },
+    {
+      "asset_id": "620193679c5a8fca7a0e7020",
+      "asset_sha256": "49748f76d80647315dc9b9ad4025a6060e04c018a9f5f85f29ba78b8caf07a13",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 73,
+      "asset_path": "page-0073.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d91b90ad79dfb1ee9a34b1f819fc46b70fa2a0c71d49bf024c9400950d0af6bb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table with keywords and their corresponding concepts.",
+        "visual_type": "table",
+        "visible_text": [
+          "Carbohydrate",
+          "Millets",
+          "Analyse",
+          "Culinary practices",
+          "Minerals",
+          "Compare",
+          "Deficiency diseases",
+          "Nutrients",
+          "Infer",
+          "Fats",
+          "Proteins",
+          "Interpret",
+          "Food components",
+          "Rickets",
+          "Investigate",
+          "Food miles",
+          "Roughage",
+          "Observe",
+          "Iodized salt",
+          "Scurvy",
+          "Prediction",
+          "Vitamins",
+          "Survey"
+        ],
+        "concepts": [
+          "Analyse",
+          "Compare",
+          "Infer",
+          "Interpret",
+          "Investigate",
+          "Observe",
+          "Prediction",
+          "Survey"
+        ],
+        "context_relation": "The table is related to the text about food waste and its reduction.",
+        "limitations": [
+          "The table does not provide information about the specific foods or their nutritional values."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:12:50Z"
+    },
+    {
+      "asset_id": "e8fa29d44759f69ee35625a8",
+      "asset_sha256": "8ca0e62b8d19376cfb3c590fba76339ce6389f725dc3e3df7a4c2d01c5f5d0fc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/8ca0e62b8d19376cfb3c590fba76339ce6389f725dc3e3df7a4c2d01c5f5d0fc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e6881d66ebef833ca881d5ab1455213619c6d14b535f0edee916578eb995cdba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A light bulb with a purple background, possibly representing an idea or concept.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "light bulb",
+          "purple background",
+          "idea"
+        ],
+        "context_relation": "The light bulb is likely representing an idea or concept related to the text about food and its nutrients.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:14:25Z"
     }
   ]
 }
