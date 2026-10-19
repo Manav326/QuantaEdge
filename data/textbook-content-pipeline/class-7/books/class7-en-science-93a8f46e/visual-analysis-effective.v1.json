@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "780fe49d1a8835f78abc2103153b605b0a09824eb0ad22e002405c5015e8851c",
+  "raw_analysis_sha256": "a260d24bcd071f519fef54779f9824cba9c8766a04e5903b3f7cfa5aa7ec77fe",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:50:39Z",
+      "checkpointed_at": "2026-10-19T11:53:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:51:00Z",
+      "checkpointed_at": "2026-10-19T11:53:53Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -93263,6 +93263,180 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "23d5478655f2bbda22f903a0",
+      "asset_sha256": "b904cdcafdbc38c74ef17b255018c3c69fd087ceda7d38abf173fce0b9314e90",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/b904cdcafdbc38c74ef17b255018c3c69fd087ceda7d38abf173fce0b9314e90.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in the circuit diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:54:32Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in the circuit diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79fd77f0000e7b20499f9800",
+      "asset_sha256": "506d0fb23bb7a7ec65f3b5b8b6a39604a06e64f56b684a71a2ded89a2fd07c7c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/506d0fb23bb7a7ec65f3b5b8b6a39604a06e64f56b684a71a2ded89a2fd07c7c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a circuit diagram with a yellow wire and a grey component.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "simpler representation"
+        ],
+        "context_relation": "The image is a visual representation of a circuit diagram, likely used to explain the concept of simplifying circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in the circuit diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:55:10Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a circuit diagram with a yellow wire and a grey component.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "simpler representation"
+        ],
+        "context_relation": "The image is a visual representation of a circuit diagram, likely used to explain the concept of simplifying circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in the circuit diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58718c26b461e31f12d4c6e6",
+      "asset_sha256": "3c440d8eedfd382dd51d476fcde59c882481da4049751afa46abdfe1b15e98ed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/3c440d8eedfd382dd51d476fcde59c882481da4049751afa46abdfe1b15e98ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow wire connected to a metallic terminal on a dark surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent the circuits in a simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams"
+        ],
+        "context_relation": "The image is a close-up of a wire and terminal, likely used to illustrate a concept related to electrical components and circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement, only a general concept is implied."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:55:48Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow wire connected to a metallic terminal on a dark surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent the circuits in a simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams"
+        ],
+        "context_relation": "The image is a close-up of a wire and terminal, likely used to illustrate a concept related to electrical components and circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement, only a general concept is implied."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
