@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "59ae6a0f50be20d2ff7af25e9320740e661b4d4279678f6bdda56ed730453963",
+  "raw_analysis_sha256": "36a4fcd54ccb670fa77485691646726c258c6427c02f2893715ba00daafac1e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:30:54Z",
+      "checkpointed_at": "2026-10-19T11:40:49Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:31:54Z",
+      "checkpointed_at": "2026-10-19T11:41:49Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -46190,6 +46190,170 @@
         "context_relation": "The image illustrates the process of wheat farming, showing the initial step of planting seeds in a field.",
         "limitations": [
           "The image does not provide specific details about the farming process or the steps involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "272c2d8ff10aaf97ad7c400c",
+      "asset_sha256": "9fb2021ac2954802f07108b913f9ddf55138f1689b55dbde4cd635b1546f3fce",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/9fb2021ac2954802f07108b913f9ddf55138f1689b55dbde4cd635b1546f3fce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a wheat farm and a machine processing wheat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Farmer growing wheat",
+          "Food on"
+        ],
+        "concepts": [
+          "Wheat farming",
+          "Wheat processing"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming and processing, which is related to the topic of food miles and the steps involved in getting wheat flour from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the machinery or the exact steps involved in the process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:43:26Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a wheat farm and a machine processing wheat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Farmer growing wheat",
+          "Food on"
+        ],
+        "concepts": [
+          "Wheat farming",
+          "Wheat processing"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming and processing, which is related to the topic of food miles and the steps involved in getting wheat flour from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the machinery or the exact steps involved in the process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3eb94813d5cb9897d7fc063c",
+      "asset_sha256": "7a816d0a8a68d248b78b67135b23f8fafebae31e0479c4a68f1c07f8f8cede67",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/7a816d0a8a68d248b78b67135b23f8fafebae31e0479c4a68f1c07f8f8cede67.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a sack filled with wheat grains.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "sack",
+          "grains",
+          "farmer",
+          "food",
+          "process",
+          "steps",
+          "people",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image is related to the educational content about the process of making chapati from wheat grains.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in the process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:45:05Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a sack filled with wheat grains.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "sack",
+          "grains",
+          "farmer",
+          "food",
+          "process",
+          "steps",
+          "people",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image is related to the educational content about the process of making chapati from wheat grains.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in the process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bd84c690fbe53a13085b02ec",
+      "asset_sha256": "b30597f1e334348c5855c93f33543b6b0265e90ae37d70f24b8ac139cdd18c65",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/b30597f1e334348c5855c93f33543b6b0265e90ae37d70f24b8ac139cdd18c65.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful grocery store shelf with various products.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "grocery store",
+          "shelf",
+          "products"
+        ],
+        "context_relation": "The image represents a grocery store shelf with various products, which is related to the topic of food production and distribution.",
+        "limitations": [
+          "The image does not provide specific details about the products or their origin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:46:43Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful grocery store shelf with various products.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "grocery store",
+          "shelf",
+          "products"
+        ],
+        "context_relation": "The image represents a grocery store shelf with various products, which is related to the topic of food production and distribution.",
+        "limitations": [
+          "The image does not provide specific details about the products or their origin."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 976,
-    "successful_visual_analyses": 963,
-    "missing_visual_analyses": 1102,
+    "raw_analysis_result_rows": 979,
+    "successful_visual_analyses": 966,
+    "missing_visual_analyses": 1099,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1115,
+    "unresolved_count": 1112,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37780,9 +37780,24 @@
       "asset_path": "assets/9fb2021ac2954802f07108b913f9ddf55138f1689b55dbde4cd635b1546f3fce.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a wheat farm and a machine processing wheat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Farmer growing wheat",
+          "Food on"
+        ],
+        "concepts": [
+          "Wheat farming",
+          "Wheat processing"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming and processing, which is related to the topic of food miles and the steps involved in getting wheat flour from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the machinery or the exact steps involved in the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37798,9 +37813,30 @@
       "asset_path": "assets/7a816d0a8a68d248b78b67135b23f8fafebae31e0479c4a68f1c07f8f8cede67.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a sack filled with wheat grains.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "sack",
+          "grains",
+          "farmer",
+          "food",
+          "process",
+          "steps",
+          "people",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image is related to the educational content about the process of making chapati from wheat grains.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37816,9 +37852,22 @@
       "asset_path": "assets/b30597f1e334348c5855c93f33543b6b0265e90ae37d70f24b8ac139cdd18c65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful grocery store shelf with various products.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "grocery store",
+          "shelf",
+          "products"
+        ],
+        "context_relation": "The image represents a grocery store shelf with various products, which is related to the topic of food production and distribution.",
+        "limitations": [
+          "The image does not provide specific details about the products or their origin."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
