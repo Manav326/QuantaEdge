@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "494a41e9522ccbf2a7f63b6dadf793f16bbc139bed44271dc4b82cfeddaf73bc",
+  "raw_analysis_sha256": "230de2a4ff6695eec012c50aff511ce8d965da7ac415f6c8da4b031e1efbea39",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:12:37Z",
+      "checkpointed_at": "2026-10-19T05:16:12Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:13:16Z",
+      "checkpointed_at": "2026-10-19T05:16:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:14:07Z",
+      "checkpointed_at": "2026-10-19T05:17:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:14:45Z",
+      "checkpointed_at": "2026-10-19T05:18:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -42084,6 +42084,82 @@
         "limitations": [
           "The image does not provide specific information about the nutritional content of each seed or nut.",
           "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8fcb97a71aef5d815fcdf7c",
+      "asset_sha256": "d34acb9d5c66efad2e54e9292a193c0d53dda5b6f42935b083b2cc59faa6395a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/d34acb9d5c66efad2e54e9292a193c0d53dda5b6f42935b083b2cc59faa6395a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a plate with various food items including fish, eggs, tofu, and a bottle of milk.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Butter",
+          "Pistachios",
+          "Sunflower seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing"
+        ],
+        "concepts": [
+          "food items",
+          "sources of fats",
+          "energy"
+        ],
+        "context_relation": "The image is related to the topic of food sources and their nutritional benefits.",
+        "limitations": [
+          "The image does not provide specific nutritional information for each item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:19:01Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a plate with various food items including fish, eggs, tofu, and a bottle of milk.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Butter",
+          "Pistachios",
+          "Sunflower seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing"
+        ],
+        "concepts": [
+          "food items",
+          "sources of fats",
+          "energy"
+        ],
+        "context_relation": "The image is related to the topic of food sources and their nutritional benefits.",
+        "limitations": [
+          "The image does not provide specific nutritional information for each item."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
