@@ -485,91 +485,51 @@ public class CertificateController {
 
   private Map<String, Object> issueSubjectCompletion(long studentId, Map<String, Object> student,
       String subjectCode, Long courseId, String template, String language, String institutionCode,long institutionId) {
+    if(courseId==null || courseId<1L) throw new IllegalArgumentException("Select an enrolled course before issuing a certificate.");
+    requireActiveCourseEnrollment(studentId,courseId,institutionId);
     String classCode = String.valueOf(student.get("class_code"));
-    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId,institutionId);
-    String key = courseId==null
-        ? "SUBJECT_COMPLETION:" + classCode + ":" + subjectCode
-        : "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
+    String key = "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
     Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
-    if (existing == null) existing = existingSubjectCompletionCertificate(studentId,classCode,subjectCode,courseId,institutionId);
-    if (existing != null) return existingOrRejectRevoked(existing);
+    if (existing != null) {
+      if (number(existing.get("course_id")) != courseId) throw new SecurityException("Certificate belongs to another course.");
+      return existingOrRejectRevoked(existing);
+    }
 
-    String courseScope = courseId == null
-        ? """
-          s.program_id is null
-          and cc.code=st.class_code
-          and (
-            cc.code not in ('6','7','8')
-            or exists (
-              select 1
-              from curriculum_program mapped_course
-              join curriculum_program_subject mapped_subject
-                on mapped_subject.program_id=mapped_course.id
-               and mapped_subject.class_id=s.class_id
-               and mapped_subject.subject_id=s.id
-              join student_program_enrollment mapped_enrollment
-                on mapped_enrollment.program_id=mapped_course.id
-               and mapped_enrollment.student_id=st.id
-               and mapped_enrollment.institution_id=ste.institution_id
-               and mapped_enrollment.status='ACTIVE'
-              where mapped_course.code='CLASS_' || cc.code
-                and mapped_course.curriculum_version='CURRENT'
-                and mapped_course.status='ACTIVE'
-            )
-          )
-          """
-        : """
-          exists (
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map
-              on scope_map.program_id=scope_course.id
-             and scope_map.subject_id=s.id
-             and scope_map.class_id=s.class_id
-            join student_program_enrollment spe
-              on spe.program_id=scope_course.id
-             and spe.student_id=st.id
-             and spe.institution_id=ste.institution_id
-             and spe.status='ACTIVE'
-            where scope_course.id=?
-              and scope_course.status='ACTIVE'
-              and scope_course.code<>'GENERAL'
-              and (s.program_id=scope_course.id or s.program_id is null)
-          )
-          """;
     String sql="""
         SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
-               s.id AS subject_id,s.program_id,p.display_name AS course_name,
+               s.id AS subject_id,selected_course.id AS program_id,selected_course.display_name AS course_name,
                s.code AS subject_code,s.display_name AS subject_name,
                COUNT(DISTINCT l.id) AS total_lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed_lessons
         FROM student st
-        JOIN student_track_enrollment ste ON ste.student_id=st.id AND ste.institution_id=? AND ste.status='ACTIVE'
-        JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
+        JOIN institution_membership membership
+          ON membership.student_id=st.id AND membership.institution_id=? AND membership.status='ACTIVE'
+        JOIN student_program_enrollment enrollment
+          ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+             AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+        JOIN curriculum_program selected_course
+          ON selected_course.id=enrollment.program_id AND selected_course.status='ACTIVE' AND selected_course.code<>'GENERAL'
+        JOIN institution_course_assignment assignment
+          ON assignment.institution_id=membership.institution_id AND assignment.status='ASSIGNED'
+        JOIN institution_course_release release
+          ON release.id=assignment.course_release_id AND release.program_id=selected_course.id
+        JOIN curriculum_program_subject mapped ON mapped.program_id=selected_course.id
+        JOIN curriculum_subject s ON s.id=mapped.subject_id AND s.class_id=mapped.class_id AND s.active=true
+          AND (s.program_id=selected_course.id OR
+               (s.program_id IS NULL AND selected_course.class_id=s.class_id AND mapped.class_id=s.class_id))
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
-        LEFT JOIN curriculum_program p ON p.id=s.program_id
         LEFT JOIN curriculum_chapter ch ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-        LEFT JOIN student_lesson_progress progress ON progress.student_id=st.id AND progress.institution_id=ste.institution_id AND progress.lesson_id=l.id
-        WHERE st.id=? AND st.active=true AND lower(s.code)=lower(?) AND __COURSE_SCOPE__
-        GROUP BY st.display_name,st.class_code,cc.code,s.id,s.program_id,p.display_name,s.code,s.display_name
-        """.replace("__COURSE_SCOPE__",courseScope);
-    List<Object> args=new ArrayList<>(List.of(institutionId,studentId,subjectCode));
-    if(courseId!=null)args.add(courseId);
-    Map<String, Object> achievement=queryOptional(sql,args.toArray());
-    if (achievement != null && courseId != null) {
-      achievement.put("course_name", jdbc.queryForObject(
-          "select display_name from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'",
-          String.class, courseId));
-    }
+        LEFT JOIN student_lesson_progress progress
+          ON progress.student_id=st.id AND progress.institution_id=membership.institution_id AND progress.lesson_id=l.id
+        WHERE st.id=? AND st.active=true AND lower(s.code)=lower(?)
+        GROUP BY st.display_name,st.class_code,cc.code,s.id,selected_course.id,selected_course.display_name,s.code,s.display_name
+        """;
+    Map<String, Object> achievement=queryOptional(sql,institutionId,courseId,studentId,subjectCode);
     if (achievement == null) {
       throw certificateConflict(language,
-          courseId==null
-              ? "This subject is not an active learning track for your current class."
-              : "This subject is not an active learning track in your enrolled course.",
-          courseId==null
-              ? "यह विषय आपकी वर्तमान कक्षा का सक्रिय अध्ययन ट्रैक नहीं है।"
-              : "यह विषय आपके नामांकित कोर्स का सक्रिय अध्ययन ट्रैक नहीं है।");
+          "This subject is not mapped to your enrolled course.",
+          "यह विषय आपके नामांकित कोर्स में नहीं है।");
     }
     long total = number(achievement.get("total_lessons"));
     long completed = number(achievement.get("completed_lessons"));
@@ -588,9 +548,7 @@ public class CertificateController {
     String subjectName = subjectNameAsStored(subjectCode, achievement.get("subject_name"));
     String courseName=clean(achievement.get("course_name"));
     String sourceClassCode=clean(achievement.get("source_class_code"));
-    String title=courseId==null
-        ? (hindi ? "कक्षा " : "Class ") + sourceClassCode + " · " + subjectName
-        : safeText(courseName+" · "+subjectName,240);
+    String title=safeText(courseName+" · "+subjectName,240);
     String summary = hindi
         ? "इस विषय में प्रकाशित सभी " + total + " पाठ सफलतापूर्वक पूरे किए।"
         : "Completed all " + total + " currently published lessons in this subject track.";
@@ -669,12 +627,10 @@ public class CertificateController {
     }
 
     Map<String, Object> progress = subjectCompletionStats(studentId,
-        ((Number) achievement.get("subject_id")).longValue(),institutionId);
+        ((Number) achievement.get("subject_id")).longValue(),courseId,institutionId);
     if (!Boolean.TRUE.equals(progress.get("active_subject_track"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          courseId==null
-              ? "Certificate requires an active enrollment in this subject for your current class."
-              : "Certificate requires an active enrollment in this course subject.");
+          "Certificate requires an active enrollment in this course subject.");
     }
     BigDecimal finalScore = decimal(achievement.get("final_score"));
     BigDecimal maxScore = decimal(achievement.get("max_score"));
@@ -1329,23 +1285,23 @@ public class CertificateController {
     return adminCertificateById(certificateId);
   }
 
-  private Map<String, Object> subjectCompletionStats(long studentId,long subjectId,long institutionId) {
+  private Map<String, Object> subjectCompletionStats(long studentId,long subjectId,long courseId,long institutionId) {
     return jdbc.queryForMap("""
         SELECT EXISTS (
                  SELECT 1
                  FROM student st
-                 JOIN student_track_enrollment ste
-                   ON ste.student_id=st.id AND ste.institution_id=? AND ste.subject_id=s.id AND ste.status='ACTIVE'
-                 JOIN curriculum_class cc
-                   ON cc.id=s.class_id AND cc.active=true
+                 JOIN institution_membership membership
+                   ON membership.student_id=st.id AND membership.institution_id=? AND membership.status='ACTIVE'
+                 JOIN student_program_enrollment enrollment
+                   ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+                      AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+                 JOIN curriculum_program selected_course
+                   ON selected_course.id=enrollment.program_id AND selected_course.status='ACTIVE'
+                 JOIN curriculum_program_subject mapped ON mapped.program_id=selected_course.id
+                   AND mapped.subject_id=s.id AND mapped.class_id=s.class_id
                  WHERE st.id=? AND st.active=true AND s.active=true
-                   AND ((s.program_id is null and cc.code=st.class_code)
-                     or (s.program_id is not null and exists(
-                       select 1 from student_program_enrollment spe
-                       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-                       where spe.student_id=st.id and spe.institution_id=ste.institution_id
-                         and spe.program_id=s.program_id and spe.status='ACTIVE'
-                     )))
+                   AND (s.program_id=selected_course.id OR
+                        (s.program_id IS NULL AND selected_course.class_id=s.class_id))
                ) AS active_subject_track,
                COUNT(DISTINCT l.id) AS total_lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed_lessons
@@ -1353,10 +1309,11 @@ public class CertificateController {
         LEFT JOIN curriculum_chapter ch
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-        LEFT JOIN student_lesson_progress progress ON progress.student_id=? AND progress.institution_id=? AND progress.lesson_id=l.id
+        LEFT JOIN student_lesson_progress progress
+          ON progress.student_id=? AND progress.institution_id=? AND progress.lesson_id=l.id
         WHERE s.id=?
         GROUP BY s.id
-        """,institutionId,studentId,studentId,institutionId,subjectId);
+        """,institutionId,courseId,studentId,studentId,institutionId,subjectId);
   }
 
   private ResponseStatusException certificateConflict(String language, String english, String hindi) {
@@ -1369,27 +1326,6 @@ public class CertificateController {
         studentId,institutionId,key);
     if(row==null)return null;
     return publicCertificateById(((Number)row.get("id")).longValue(),studentId,institutionId);
-  }
-
-  /** Resolve legacy subject completion by identity if its stored achievement_key used an older format. */
-  private Map<String, Object> existingSubjectCompletionCertificate(long studentId,String classCode,
-      String subjectCode,Long courseId,long institutionId) {
-    String sql;
-    Object[] args;
-    if(courseId==null) {
-      sql="SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id "+
-          "WHERE c.student_id=? AND c.institution_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.class_code=? "+
-          "AND c.program_id IS NULL AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
-      args=new Object[]{studentId,institutionId,classCode,subjectCode};
-    } else {
-      sql="SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id "+
-          "WHERE c.student_id=? AND c.institution_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.program_id=? "+
-          "AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
-      args=new Object[]{studentId,institutionId,courseId,subjectCode};
-    }
-    Map<String,Object> row=queryOptional(sql,args);
-    if(row==null)return null;
-    return publicCertificateById(number(row.get("id")),studentId,institutionId);
   }
 
   /** Resolve legacy assessment records by student + attempt identity rather than achievement_key spelling. */
