@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1365,
+    "assets_selected": 1368,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1363,
-    "assets_remaining": 6125,
+    "assets_analyzed": 1366,
+    "assets_remaining": 6122,
     "assets_completion_percent": 18.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1360,
+    "assets_skipped_from_checkpoint": 1363,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:58:49Z"
+      "checkpointed_at": "2026-10-19T05:03:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:59:18Z"
+      "checkpointed_at": "2026-10-19T05:04:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -51688,6 +51688,112 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T05:03:04Z"
+    },
+    {
+      "asset_id": "8cea6eccbccb8d10c67eb8f6",
+      "asset_sha256": "d8f918cd80d5cb44a0245486a29fc9de4e4123cd67ff7ac8f5cfee71028ee5c4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/d8f918cd80d5cb44a0245486a29fc9de4e4123cd67ff7ac8f5cfee71028ee5c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Table 3.1: Trying to make the lamp glow' with a note indicating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The table is related to the experiment of making a lamp glow in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:05:41Z"
+    },
+    {
+      "asset_id": "d87a0ab2d1ec2bcc37a428b1",
+      "asset_sha256": "d0704aee7d3c0984eb50c7e1ad369c44ac64c00fbf1ff1e64b1f7e4246b82562",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/d0704aee7d3c0984eb50c7e1ad369c44ac64c00fbf1ff1e64b1f7e4246b82562.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red shotgun shell with a white plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any information related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:06:48Z"
+    },
+    {
+      "asset_id": "cbee2d43450d102b3e976887",
+      "asset_sha256": "3900338aebffd51ed41a3435a28b58c1563f3a06baa1572ba62b4ea8b0ad278d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/3900338aebffd51ed41a3435a28b58c1563f3a06baa1572ba62b4ea8b0ad278d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue lamp with a yellow wire attached to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Cell",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a lamp with a yellow wire, which is part of the experiment described in Table 3.1.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp.",
+          "The image does not show the arrangement of the cell and lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:08:03Z"
     }
   ]
 }

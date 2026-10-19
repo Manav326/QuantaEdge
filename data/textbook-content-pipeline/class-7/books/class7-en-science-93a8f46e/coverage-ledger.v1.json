@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1388,
-    "successful_visual_analyses": 1365,
-    "missing_visual_analyses": 6100,
+    "raw_analysis_result_rows": 1391,
+    "successful_visual_analyses": 1368,
+    "missing_visual_analyses": 6097,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6123,
+    "unresolved_count": 6120,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -62235,9 +62235,27 @@
       "asset_path": "assets/d8f918cd80d5cb44a0245486a29fc9de4e4123cd67ff7ac8f5cfee71028ee5c4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table titled 'Table 3.1: Trying to make the lamp glow' with a note indicating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The table is related to the experiment of making a lamp glow in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62253,9 +62271,18 @@
       "asset_path": "assets/d0704aee7d3c0984eb50c7e1ad369c44ac64c00fbf1ff1e64b1f7e4246b82562.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red shotgun shell with a white plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any information related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62271,9 +62298,31 @@
       "asset_path": "assets/3900338aebffd51ed41a3435a28b58c1563f3a06baa1572ba62b4ea8b0ad278d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue lamp with a yellow wire attached to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Cell",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a lamp with a yellow wire, which is part of the experiment described in Table 3.1.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp.",
+          "The image does not show the arrangement of the cell and lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
