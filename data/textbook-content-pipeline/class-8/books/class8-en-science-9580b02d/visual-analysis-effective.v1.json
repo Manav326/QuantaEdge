@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0f07b77f2baf049165b6506cdffdc438deed3fa9a9b0a1ea26a82aaae85ecec6",
+  "raw_analysis_sha256": "c96ffa019e532e38ef040de6729ec10f8e708743eb0f86e850ae109ce0db2524",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:39:24Z",
+      "checkpointed_at": "2026-10-19T17:43:51Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:40:10Z",
+      "checkpointed_at": "2026-10-19T17:44:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:40:47Z",
+      "checkpointed_at": "2026-10-19T17:45:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -43514,6 +43514,138 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5c46066b16481db5d088cc2d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91b9b904b3214e11619915d4525daafd1a397a12b157efa200697b7f92e3f90d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:45:26Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "610ede492d29ffe2e358e5d1",
+      "asset_sha256": "3b5944b03fe81ac54acd309dc51857cc4c330519a36d4bb09e95f58452d56edd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 53,
+      "asset_path": "page-0053.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "91b9b904b3214e11619915d4525daafd1a397a12b157efa200697b7f92e3f90d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing common communicable diseases, their causal agents, symptoms, and preventive measures.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Some common communicable diseases affecting humans",
+          "Diseases",
+          "Causal agent",
+          "Site of infection",
+          "Symptoms",
+          "Preventive measures",
+          "Diseases spread through the air",
+          "Common cold and influenza",
+          "Virus",
+          "Respiratory tract",
+          "Nasal congestion and discharge, sore throat, fever, cough, body ache",
+          "Washing hands frequently, not sharing personal items, covering the mouth and nose using a mask",
+          "Chickenpox",
+          "Virus",
+          "Respiratory tract, skin",
+          "Mild fever, itchy skin, rashes, blisters",
+          "Complete isolation of the patient, covering the mouth and nose, vaccination",
+          "Measles",
+          "Virus",
+          "Skin, respiratory tract",
+          "Fever, sore throat, and reddish rashes on the neck, ears, and other parts of the skin",
+          "Isolation of the patient, covering the mouth and nose, maintaining good hygiene, vaccination"
+        ],
+        "concepts": [
+          "Communicable diseases",
+          "Causal agents",
+          "Symptoms",
+          "Preventive measures"
+        ],
+        "context_relation": "The table provides information on common communicable diseases, their causes, symptoms, and preventive measures.",
+        "limitations": [
+          "The table does not include information on how diseases spread through contaminated drinking water or food."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:49:34Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing common communicable diseases, their causal agents, symptoms, and preventive measures.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Some common communicable diseases affecting humans",
+          "Diseases",
+          "Causal agent",
+          "Site of infection",
+          "Symptoms",
+          "Preventive measures",
+          "Diseases spread through the air",
+          "Common cold and influenza",
+          "Virus",
+          "Respiratory tract",
+          "Nasal congestion and discharge, sore throat, fever, cough, body ache",
+          "Washing hands frequently, not sharing personal items, covering the mouth and nose using a mask",
+          "Chickenpox",
+          "Virus",
+          "Respiratory tract, skin",
+          "Mild fever, itchy skin, rashes, blisters",
+          "Complete isolation of the patient, covering the mouth and nose, vaccination",
+          "Measles",
+          "Virus",
+          "Skin, respiratory tract",
+          "Fever, sore throat, and reddish rashes on the neck, ears, and other parts of the skin",
+          "Isolation of the patient, covering the mouth and nose, maintaining good hygiene, vaccination"
+        ],
+        "concepts": [
+          "Communicable diseases",
+          "Causal agents",
+          "Symptoms",
+          "Preventive measures"
+        ],
+        "context_relation": "The table provides information on common communicable diseases, their causes, symptoms, and preventive measures.",
+        "limitations": [
+          "The table does not include information on how diseases spread through contaminated drinking water or food."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
