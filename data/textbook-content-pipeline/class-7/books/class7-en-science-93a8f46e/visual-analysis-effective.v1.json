@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a6d4b5c737ff44ed468bbc4176b0155013c59913bccbafbb9d06e77c939724a7",
+  "raw_analysis_sha256": "9204f20dbef1247d804466571625d7d59d8d7169d0541cae72377122cb7f91ec",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:06:02Z",
+      "checkpointed_at": "2026-10-19T09:09:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:06:24Z",
+      "checkpointed_at": "2026-10-19T09:09:30Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -83542,6 +83542,216 @@
         "limitations": [
           "The image does not provide a diagram or chart.",
           "The image does not show the actual setup of the holder and battery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "41a2ac44f5a6f20a442df60c",
+      "asset_sha256": "b2e239dd6d89afabe196c017652e0bb1b7a0a7186aefe87ff0993c932863ab27",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/b2e239dd6d89afabe196c017652e0bb1b7a0a7186aefe87ff0993c932863ab27.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three batteries connected in series with wires and labels.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "series connection",
+          "positive and negative terminals"
+        ],
+        "context_relation": "The image is related to the text about connecting batteries in series.",
+        "limitations": [
+          "The image does not show the actual batteries or the holder."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:10:11Z",
+      "effective_analysis": {
+        "visual_summary": "Three batteries connected in series with wires and labels.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "series connection",
+          "positive and negative terminals"
+        ],
+        "context_relation": "The image is related to the text about connecting batteries in series.",
+        "limitations": [
+          "The image does not show the actual batteries or the holder."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f36362e97b05d5978acd9a7",
+      "asset_sha256": "6917f6dfa6adfc8b651e96a712dadc206c334ecbbf4651d0e332c60626e3ecfd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/6917f6dfa6adfc8b651e96a712dadc206c334ecbbf4651d0e332c60626e3ecfd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red cylindrical object with a yellow wire attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "positive terminal",
+          "negative terminal",
+          "holder",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of inserting cells in a holder or the battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:10:54Z",
+      "effective_analysis": {
+        "visual_summary": "A red cylindrical object with a yellow wire attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "positive terminal",
+          "negative terminal",
+          "holder",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of inserting cells in a holder or the battery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22eb98a2b579651b54b54a2f",
+      "asset_sha256": "244f7acef69c0836b616824ba03863ef6fc21be1f83a758d8da3691acdaf1368",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/244f7acef69c0836b616824ba03863ef6fc21be1f83a758d8da3691acdaf1368.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A battery with wires and a yellow light attached to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "wires",
+          "yellow light",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:11:37Z",
+      "effective_analysis": {
+        "visual_summary": "A battery with wires and a yellow light attached to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "wires",
+          "yellow light",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

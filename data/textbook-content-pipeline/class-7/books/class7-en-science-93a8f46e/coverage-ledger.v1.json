@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1426,
-    "successful_visual_analyses": 1405,
-    "missing_visual_analyses": 6062,
+    "raw_analysis_result_rows": 1429,
+    "successful_visual_analyses": 1408,
+    "missing_visual_analyses": 6059,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6083,
+    "unresolved_count": 6080,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -63680,9 +63680,30 @@
       "asset_path": "assets/b2e239dd6d89afabe196c017652e0bb1b7a0a7186aefe87ff0993c932863ab27.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three batteries connected in series with wires and labels.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "batteries",
+          "series connection",
+          "positive and negative terminals"
+        ],
+        "context_relation": "The image is related to the text about connecting batteries in series.",
+        "limitations": [
+          "The image does not show the actual batteries or the holder."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -63698,9 +63719,34 @@
       "asset_path": "assets/6917f6dfa6adfc8b651e96a712dadc206c334ecbbf4651d0e332c60626e3ecfd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red cylindrical object with a yellow wire attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+        –   How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "cell",
+          "positive terminal",
+          "negative terminal",
+          "holder",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show the actual setup of inserting cells in a holder or the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -63716,9 +63762,35 @@
       "asset_path": "assets/244f7acef69c0836b616824ba03863ef6fc21be1f83a758d8da3691acdaf1368.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A battery with wires and a yellow light attached to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "battery",
+          "wires",
+          "yellow light",
+          "cell",
+          "holder",
+          "positive terminal",
+          "negative terminal",
+          "spring side"
+        ],
+        "context_relation": "The image is related to the text about inserting cells in a holder and deciding the positive terminal of a battery.",
+        "limitations": [
+          "The image does not provide a diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
