@@ -11,9 +11,9 @@
     "assets_selected": 887,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 882,
-    "assets_remaining": 1196,
-    "assets_completion_percent": 42.4,
+    "assets_analyzed": 883,
+    "assets_remaining": 1195,
+    "assets_completion_percent": 42.5,
     "assets_failed": 13,
     "assets_skipped_from_checkpoint": 882,
     "batch_limit": 5,
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:38:05Z"
+      "checkpointed_at": "2026-10-19T04:42:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:38:51Z"
+      "checkpointed_at": "2026-10-19T04:43:43Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:39:48Z"
+      "checkpointed_at": "2026-10-19T04:44:37Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:40:30Z"
+      "checkpointed_at": "2026-10-19T04:45:15Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27962,6 +27962,35 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "6d485e123bc0c93c69b55bce",
+      "asset_sha256": "929e227dd388c405d5dede0cc4241c4b547632956681a75ac704e159e60e9f85",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/929e227dd388c405d5dede0cc4241c4b547632956681a75ac704e159e60e9f85.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pile of fried food items on a white plate.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a food item, but does not provide context or information about it.",
+        "limitations": [
+          "The image does not provide any specific information or context about the food item.",
+          "The image does not show any text or labels that could provide additional information about the food item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:45:52Z"
     }
   ]
 }
