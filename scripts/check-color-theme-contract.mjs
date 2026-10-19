@@ -52,7 +52,7 @@ assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explic
 assert(apiTheme.includes('public static List<Map<String, Object>> presets()'), 'Server must expose a curated palette catalogue.');
 assert(apiTheme.includes('"quantaedge-orange"') && apiTheme.includes('"custom"'), 'QuantaEdge default and custom presets must be supported.');
 assert(apiTheme.includes('contrastRatio') && apiTheme.includes('ensureContrast'), 'Generated foregrounds must be contrast-aware.');
-assert(apiTheme.includes('ensureContrast(darken(brandPrimary, 0.22), "#FFFFFF", 4.5, true)'), 'Tenant navigation must enforce readable text contrast for arbitrary custom primary colours.');
+assert(apiTheme.includes('String navBackground = darkMode ? "#18243A" : "#F5F7FB";') && apiTheme.includes('String navActiveBackground = primaryContainer;'), 'Navigation must remain neutral and use a restrained active-state tint.');
 assert(apiTheme.includes('c.put("accentContainer", accentContainer)') && apiTheme.includes('c.put("onAccentContainer", bestContrastText(accentContainer))'), 'API must expose the accent container and readable foreground.');
 assert(platformApi.includes('"/theme-presets"') && platformApi.includes('InstitutionThemeTokens.presets()'), 'Preset API must remain owner-controlled.');
 assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
