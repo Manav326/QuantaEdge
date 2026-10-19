@@ -393,7 +393,7 @@ public class RichNotificationService {
           scope,institution_id,course_id,template_id,template_version,title,summary,content_document,
           audience_filter,audience_snapshot,sender_workspace,sender_staff_id,sender_institution_admin_id,
           idempotency_key,status,scheduled_at,expires_at,resolved_recipient_count)
-        values (?,?,?,?,?,?,?,?::jsonb,?::jsonb,?::jsonb,?,?,?,?,?,'SCHEDULED',?,?,?)
+        values (?,?,?,?,?,?,?,?::jsonb,?::jsonb,?::jsonb,?,?,?,?,'SCHEDULED',?,?,?)
         returning id
         """,Long.class,normalizedScope,institutionId,courseId,templateId,templateVersion,checkedTitle,checkedSummary,
         writeJson(document),audienceJson,"{}",actor.workspace(),actor.staffId(),actor.institutionAdminId(),key,
