@@ -160,7 +160,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
         .thenReturn(0L);
 
     assertThrows(SecurityException.class,
@@ -175,7 +175,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate("{}", "")).thenReturn(
         new QuestionAnswerService.Evaluation(false, null, ""));
@@ -197,7 +197,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate("{}", "A")).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
@@ -220,7 +220,7 @@ class LearningControllerTest {
             "id", 42L, "lesson_id", 9L, "question_type", "ORDER",
             "explanation", "Put the steps in order.",
             "answer_payload", "{\"kind\":\"ORDER\",\"value\":[\"A\",\"B\"]}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.serializeForPersistence(eq(submitted))).thenReturn("[\"A\",\"B\"]");
     when(answerService.evaluate(anyString(), eq(submitted))).thenReturn(
