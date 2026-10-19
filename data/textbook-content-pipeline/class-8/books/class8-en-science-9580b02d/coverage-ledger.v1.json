@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 952,
-    "successful_visual_analyses": 938,
-    "missing_visual_analyses": 1339,
+    "raw_analysis_result_rows": 954,
+    "successful_visual_analyses": 940,
+    "missing_visual_analyses": 1337,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1353,
+    "unresolved_count": 1351,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36383,9 +36383,25 @@
       "asset_path": "assets/76614fa5fadd44e3aceef5903fa693a3f98530085f61ef39348ff5a735a8d3d1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with a braided hairstyle, wearing a pink shirt, and pointing with one finger while holding their chin with the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "person",
+          "braided hairstyle",
+          "pink shirt",
+          "pointing",
+          "holding chin"
+        ],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific information about the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36401,9 +36417,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

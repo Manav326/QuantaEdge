@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 938,
+    "assets_selected": 940,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 935,
-    "assets_remaining": 1356,
-    "assets_completion_percent": 40.8,
+    "assets_analyzed": 937,
+    "assets_remaining": 1354,
+    "assets_completion_percent": 40.9,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 933,
+    "assets_skipped_from_checkpoint": 935,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:23:50Z"
+      "checkpointed_at": "2026-10-19T18:30:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:24:35Z"
+      "checkpointed_at": "2026-10-19T18:31:12Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:25:11Z"
+      "checkpointed_at": "2026-10-19T18:31:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29775,6 +29775,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T18:29:18Z"
+    },
+    {
+      "asset_id": "3bcc68a71a08e7d1da4fe968",
+      "asset_sha256": "76614fa5fadd44e3aceef5903fa693a3f98530085f61ef39348ff5a735a8d3d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/76614fa5fadd44e3aceef5903fa693a3f98530085f61ef39348ff5a735a8d3d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with a braided hairstyle, wearing a pink shirt, and pointing with one finger while holding their chin with the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "person",
+          "braided hairstyle",
+          "pink shirt",
+          "pointing",
+          "holding chin"
+        ],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific information about the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:33:24Z"
+    },
+    {
+      "asset_id": "0039622bdedc6d2d628f7a63",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:33:38Z"
     }
   ]
 }
