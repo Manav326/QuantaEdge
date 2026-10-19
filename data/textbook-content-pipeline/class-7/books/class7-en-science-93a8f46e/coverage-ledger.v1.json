@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1379,
-    "successful_visual_analyses": 1356,
-    "missing_visual_analyses": 6109,
+    "raw_analysis_result_rows": 1382,
+    "successful_visual_analyses": 1359,
+    "missing_visual_analyses": 6106,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6132,
+    "unresolved_count": 6129,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61911,9 +61911,32 @@
       "asset_path": "assets/51219da674fa842b647b769f02970a56d39047921452518406c9222342d9f718.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is a close-up of a red object, possibly a part of a circuit or a lamp, with a note indicating that the lamps are not glowing in any circuit.",
+        "limitations": [
+          "The image is blurry and the details are not clear.",
+          "The text is partially visible and incomplete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61929,9 +61952,31 @@
       "asset_path": "assets/84496761a160469d7c6e70977ffe73d0d5aea008d9bae8858442ab11b0314f87.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A partially visible red object on a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamps",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is related to the educational content about making lamps glow in an electric circuit.",
+        "limitations": [
+          "The image is blurry and partially obscured, making it difficult to identify the exact object and its details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61947,9 +61992,18 @@
       "asset_path": "assets/5eb6e96a215893a6f7e88b9b38ff9000828ea721662d498f800ec633c347d814.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red battery with a plus sign on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the context of a physics or science textbook discussing electrical circuits and batteries.",
+        "limitations": [
+          "The image does not show the actual setup of the circuit or the glowing lamp, which is a key aspect of the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
