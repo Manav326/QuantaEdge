@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1741,
+    "assets_selected": 1746,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1741,
-    "assets_remaining": 5747,
+    "assets_analyzed": 1746,
+    "assets_remaining": 5742,
     "assets_completion_percent": 23.3,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1736,
+    "assets_skipped_from_checkpoint": 1741,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -65154,6 +65154,145 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
       "checkpointed_at": "2026-10-19T17:21:53Z"
+    },
+    {
+      "asset_id": "558a8e748e0f075a6eb53af0",
+      "asset_sha256": "0aba15c869c90f0ab7c076aeb4bf2bad5f1324880228487b7f3eaf7cee2c8f7b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/0aba15c869c90f0ab7c076aeb4bf2bad5f1324880228487b7f3eaf7cee2c8f7b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:23:32Z"
+    },
+    {
+      "asset_id": "6557881d18cc69e7b7980f34",
+      "asset_sha256": "4d76130d152afaf0704c04b3826f4491bf237900ea2aa13f346daad161e4184a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/4d76130d152afaf0704c04b3826f4491bf237900ea2aa13f346daad161e4184a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A series of interconnected yellow objects forming a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "(a)",
+          "(b)"
+        ],
+        "concepts": [
+          "series",
+          "interconnected",
+          "spiral"
+        ],
+        "context_relation": "The image is a visual representation of a series of interconnected objects forming a spiral pattern.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their arrangement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:25:08Z"
+    },
+    {
+      "asset_id": "a812f8500f64c587a6aaba8a",
+      "asset_sha256": "a5a6ef1dedfd95981b5149e31072709469e10c90a9ff70672d4cf38239c329c9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/a5a6ef1dedfd95981b5149e31072709469e10c90a9ff70672d4cf38239c329c9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:26:37Z"
+    },
+    {
+      "asset_id": "d575c945120935fbb89edac8",
+      "asset_sha256": "b13ca19fdc80c01dbe07f63040d268dea08f231908439a34e573ec66186e3cbd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/b13ca19fdc80c01dbe07f63040d268dea08f231908439a34e573ec66186e3cbd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a rope ladder with blue rings.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a diagram related to the rope ladder.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:28:09Z"
+    },
+    {
+      "asset_id": "cfebd91e59a1ff45b09583f5",
+      "asset_sha256": "d193efa16d9c169e30be753e24b7a3e618d917a7117e37d4a448843055bafcc7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/d193efa16d9c169e30be753e24b7a3e618d917a7117e37d4a448843055bafcc7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying towards a circular object with a dotted line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane flying towards a circular object, possibly representing a target or goal.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:29:42Z"
     }
   ]
 }
