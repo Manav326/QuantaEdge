@@ -37,8 +37,6 @@
   "admin.assessments.chapterFilterOptional": "Chapter filter (optional)",
   "admin.assessments.checkingCertificateRecord": "Checking certificate record…",
   "admin.assessments.chooseCurriculum": "Choose the curriculum",
-  "admin.assessments.course": "Course",
-  "admin.assessments.noCoursesAssigned": "No courses are assigned to this institution",
   "admin.assessments.chooseCurriculumDescription": "Only approved questions from published lessons can be added. A question snapshot is frozen when the test is created.",
   "admin.assessments.class": "Class",
   "admin.assessments.classValue": "Class {classCode}",
