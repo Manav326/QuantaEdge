@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5094dd89542e464e17c320b02fa1ec0b6ef9a01e038710c2c4b51be85183698e",
+  "raw_analysis_sha256": "dee4faa073a4acd6ba4cbd7111c4247d9553761f93f49ee36c1a3864b1041e35",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:19:29Z",
+      "checkpointed_at": "2026-10-19T18:24:49Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:20:07Z",
+      "checkpointed_at": "2026-10-19T18:25:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:20:58Z",
+      "checkpointed_at": "2026-10-19T18:26:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -54344,6 +54344,126 @@
         "context_relation": "The image is a visual representation of a scientific experiment involving a frog and a scale, likely used to demonstrate the concept of magnetic levitation.",
         "limitations": [
           "The image does not provide specific measurements or details about the frog's size or the scale's markings."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fac2740acc992854a5828339",
+      "asset_sha256": "24b5584f4f6d06cf1f774f36baa80af8f18682910904e324697389d018ec683e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/24b5584f4f6d06cf1f774f36baa80af8f18682910904e324697389d018ec683e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f1615607119b448f9a8c36e07dd2782e4d5a9d499e005df09fbffa11bf804cea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a plastic strip with a cut-out frog, showing the frog's movement over a ruler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "scale",
+          "frog",
+          "ruler",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a science experiment involving a frog and a scale, with a focus on the movement of the frog over the scale.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the Maglev Train model being made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:27:20Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a plastic strip with a cut-out frog, showing the frog's movement over a ruler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "scale",
+          "frog",
+          "ruler",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a science experiment involving a frog and a scale, with a focus on the movement of the frog over the scale.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the Maglev Train model being made."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d022d3ff872a33ddae72826",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f1615607119b448f9a8c36e07dd2782e4d5a9d499e005df09fbffa11bf804cea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A frog model with a ring magnet and a transparent plastic strip attached to it, used to demonstrate the concept of a Maglev train model.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "Maglev train model",
+          "Frog model",
+          "Transparent plastic strip",
+          "Ring magnet",
+          "Scale"
+        ],
+        "context_relation": "The image is a visual representation of a concept related to the Maglev train model, specifically how a frog model can be used to demonstrate the concept.",
+        "limitations": [
+          "The image does not show the actual Maglev train model being made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:27:43Z",
+      "effective_analysis": {
+        "visual_summary": "A frog model with a ring magnet and a transparent plastic strip attached to it, used to demonstrate the concept of a Maglev train model.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "Maglev train model",
+          "Frog model",
+          "Transparent plastic strip",
+          "Ring magnet",
+          "Scale"
+        ],
+        "context_relation": "The image is a visual representation of a concept related to the Maglev train model, specifically how a frog model can be used to demonstrate the concept.",
+        "limitations": [
+          "The image does not show the actual Maglev train model being made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

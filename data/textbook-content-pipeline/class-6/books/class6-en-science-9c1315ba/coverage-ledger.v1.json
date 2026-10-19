@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1125,
-    "successful_visual_analyses": 1110,
-    "missing_visual_analyses": 953,
+    "raw_analysis_result_rows": 1127,
+    "successful_visual_analyses": 1112,
+    "missing_visual_analyses": 951,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 968,
+    "unresolved_count": 966,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42902,9 +42902,28 @@
       "asset_path": "assets/24b5584f4f6d06cf1f774f36baa80af8f18682910904e324697389d018ec683e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a plastic strip with a cut-out frog, showing the frog's movement over a ruler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "scale",
+          "frog",
+          "ruler",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a science experiment involving a frog and a scale, with a focus on the movement of the frog over the scale.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the Maglev Train model being made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42920,9 +42939,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A frog model with a ring magnet and a transparent plastic strip attached to it, used to demonstrate the concept of a Maglev train model.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "Maglev train model",
+          "Frog model",
+          "Transparent plastic strip",
+          "Ring magnet",
+          "Scale"
+        ],
+        "context_relation": "The image is a visual representation of a concept related to the Maglev train model, specifically how a frog model can be used to demonstrate the concept.",
+        "limitations": [
+          "The image does not show the actual Maglev train model being made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
