@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1087,
+    "assets_selected": 1089,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1084,
-    "assets_remaining": 994,
-    "assets_completion_percent": 52.2,
+    "assets_analyzed": 1086,
+    "assets_remaining": 992,
+    "assets_completion_percent": 52.3,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1082,
+    "assets_skipped_from_checkpoint": 1084,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:35:18Z"
+      "checkpointed_at": "2026-10-19T17:39:53Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:35:58Z"
+      "checkpointed_at": "2026-10-19T17:40:33Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:36:50Z"
+      "checkpointed_at": "2026-10-19T17:41:24Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35380,6 +35380,67 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:39:05Z"
+    },
+    {
+      "asset_id": "42469dabd7011998b1e5874c",
+      "asset_sha256": "ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A torn piece of yellow paper with a rough edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a torn piece of yellow paper, not related to the text about magnets.",
+        "limitations": [
+          "The image does not provide any information about magnets or their safe storage."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:42:01Z"
+    },
+    {
+      "asset_id": "c78b9de48bdec0c968ad90dd",
+      "asset_sha256": "c37f3fa0ef12dbae45116835f3cfc2158966b6bb8a176caac53cb9f2c3e533ae",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/c37f3fa0ef12dbae45116835f3cfc2158966b6bb8a176caac53cb9f2c3e533ae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangle with a white exclamation mark inside.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "!"
+        ],
+        "concepts": [
+          "exclamation mark",
+          "triangle"
+        ],
+        "context_relation": "The image is a part of a page about keeping magnets safe.",
+        "limitations": [
+          "The image does not provide specific instructions or details about keeping magnets safe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:42:36Z"
     }
   ]
 }
