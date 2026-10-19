@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b159b672e9149d9940f9ac802537914236ceb6cb7e663f14efdb04c196ee9a73",
+  "raw_analysis_sha256": "1710dc4762d2a45fd678ac3717db30683e10a954a49b0aee542384599cbd7c6e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -89942,21 +89942,37 @@
     {
       "asset_id": "37cd7e021b5dad1659dfdf0e",
       "asset_sha256": "7e1ff58e2334dded1d1886b5b37559e64aff9d0a15802390b2d0e0ac48f959f2",
-      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 53,
       "asset_path": "assets/7e1ff58e2334dded1d1886b5b37559e64aff9d0a15802390b2d0e0ac48f959f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a checkered shirt with red cuffs, extending one arm outwards and the other hand on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the text about circuit diagrams.",
+        "limitations": []
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:11:08Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a checkered shirt with red cuffs, extending one arm outwards and the other hand on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the text about circuit diagrams.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -98350,9 +98366,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
+      "run_id": "39270473891",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -100190,21 +100206,73 @@
     {
       "asset_id": "a7c57abe82ee09212cdb2c8a",
       "asset_sha256": "d31ded7c6d1319c098c360a4e80b27477ac4c0c18925f91c623dff9337dedb4f",
-      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 57,
       "asset_path": "assets/d31ded7c6d1319c098c360a4e80b27477ac4c0c18925f91c623dff9337dedb4f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of an incandescent electric lamp with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "In an incandescent electric lamp, there",
+          "is a bulb that glows when electricity flows through it.",
+          "The bulb is made of a material that can conduct electricity.",
+          "The bulb is connected to a power source, such as a battery.",
+          "The bulb glows because the electricity causes the material to heat up.",
+          "The heat causes the material to emit light.",
+          "The light is visible to the eye.",
+          "The bulb can be used to light up a room or provide power for other devices."
+        ],
+        "concepts": [
+          "Electricity",
+          "Incandescent lamp",
+          "Conduction",
+          "Heat",
+          "Light emission"
+        ],
+        "context_relation": "The image is a close-up of an incandescent electric lamp, which is part of the description in the text.",
+        "limitations": [
+          "The image is blurred, making some details difficult to see.",
+          "The image does not show the entire lamp or its components."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:17:56Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of an incandescent electric lamp with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "In an incandescent electric lamp, there",
+          "is a bulb that glows when electricity flows through it.",
+          "The bulb is made of a material that can conduct electricity.",
+          "The bulb is connected to a power source, such as a battery.",
+          "The bulb glows because the electricity causes the material to heat up.",
+          "The heat causes the material to emit light.",
+          "The light is visible to the eye.",
+          "The bulb can be used to light up a room or provide power for other devices."
+        ],
+        "concepts": [
+          "Electricity",
+          "Incandescent lamp",
+          "Conduction",
+          "Heat",
+          "Light emission"
+        ],
+        "context_relation": "The image is a close-up of an incandescent electric lamp, which is part of the description in the text.",
+        "limitations": [
+          "The image is blurred, making some details difficult to see.",
+          "The image does not show the entire lamp or its components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -100239,6 +100307,112 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44f6dfe726458d5fe04abcbd",
+      "asset_sha256": "489d5c84dac2e5a8b16624387ea8851df2c39a5731058628168811fc586b16f4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/489d5c84dac2e5a8b16624387ea8851df2c39a5731058628168811fc586b16f4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:19:27Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e34b9662c0b8fc68ce720ae8",
+      "asset_sha256": "79b76caa29d09c76d3c20a4e838b1b07f40a1f3f7955d16f636ee0c016c2318e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/79b76caa29d09c76d3c20a4e838b1b07f40a1f3f7955d16f636ee0c016c2318e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an electric cell.",
+        "limitations": [
+          "The image does not show the full text of the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:21:09Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an electric cell.",
+        "limitations": [
+          "The image does not show the full text of the textbook page."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

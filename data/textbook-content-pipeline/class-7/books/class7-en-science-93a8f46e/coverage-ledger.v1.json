@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1723,
-    "successful_visual_analyses": 1704,
-    "missing_visual_analyses": 5765,
-    "failed_visual_analyses": 19,
+    "raw_analysis_result_rows": 1725,
+    "successful_visual_analyses": 1708,
+    "missing_visual_analyses": 5763,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5784,
+    "unresolved_count": 5780,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -67557,9 +67557,16 @@
       "asset_path": "assets/7e1ff58e2334dded1d1886b5b37559e64aff9d0a15802390b2d0e0ac48f959f2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a checkered shirt with red cuffs, extending one arm outwards and the other hand on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the text about circuit diagrams.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74062,9 +74069,34 @@
       "asset_path": "assets/d31ded7c6d1319c098c360a4e80b27477ac4c0c18925f91c623dff9337dedb4f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of an incandescent electric lamp with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "In an incandescent electric lamp, there",
+          "is a bulb that glows when electricity flows through it.",
+          "The bulb is made of a material that can conduct electricity.",
+          "The bulb is connected to a power source, such as a battery.",
+          "The bulb glows because the electricity causes the material to heat up.",
+          "The heat causes the material to emit light.",
+          "The light is visible to the eye.",
+          "The bulb can be used to light up a room or provide power for other devices."
+        ],
+        "concepts": [
+          "Electricity",
+          "Incandescent lamp",
+          "Conduction",
+          "Heat",
+          "Light emission"
+        ],
+        "context_relation": "The image is a close-up of an incandescent electric lamp, which is part of the description in the text.",
+        "limitations": [
+          "The image is blurred, making some details difficult to see.",
+          "The image does not show the entire lamp or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74105,9 +74137,19 @@
       "asset_path": "assets/489d5c84dac2e5a8b16624387ea8851df2c39a5731058628168811fc586b16f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74123,9 +74165,30 @@
       "asset_path": "assets/79b76caa29d09c76d3c20a4e838b1b07f40a1f3f7955d16f636ee0c016c2318e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a diagram explaining the components of an electric cell.",
+        "limitations": [
+          "The image does not show the full text of the textbook page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
