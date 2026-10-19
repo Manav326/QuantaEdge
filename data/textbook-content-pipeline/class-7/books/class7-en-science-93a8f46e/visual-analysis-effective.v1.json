@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0cf4c34826ed662457a754780be92defa85522f89ba70169bc602b6db133770b",
+  "raw_analysis_sha256": "c6e149c8751c87ee4b88cb8129f9002e68d9f59d8e414e7379177425d4f7e7bb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:37:37Z",
+      "checkpointed_at": "2026-10-19T03:42:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:38:05Z",
+      "checkpointed_at": "2026-10-19T03:42:56Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -78238,6 +78238,182 @@
         "context_relation": "The image is a part of a physics or electrical engineering textbook discussing circuit diagrams.",
         "limitations": [
           "The image does not provide specific details about the circuit or the prediction and observation related to the lamp glowing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e01c8001aa57c60c17095687",
+      "asset_sha256": "00e118fcc622e976506437d5064a981374368c2aa2dbbf77f38dcfe5bdcd4c6e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/00e118fcc622e976506437d5064a981374368c2aa2dbbf77f38dcfe5bdcd4c6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a lamp and a battery, with a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electricity",
+          "circuit",
+          "lamp",
+          "battery"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow using a battery.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit.",
+          "The text is incomplete and does not provide specific details about the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:44:09Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp and a battery, with a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electricity",
+          "circuit",
+          "lamp",
+          "battery"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow using a battery.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit.",
+          "The text is incomplete and does not provide specific details about the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bf61caef929c7631fac176f6",
+      "asset_sha256": "ceca3f9ad28cdd236f3ef64cd116bcff1487b2b68bb71a1f8f93061785ac4492",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/ceca3f9ad28cdd236f3ef64cd116bcff1487b2b68bb71a1f8f93061785ac4492.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "+",
+          "29"
+        ],
+        "concepts": [
+          "red object",
+          "plus sign"
+        ],
+        "context_relation": "The image is a close-up of a red object with a plus sign on it.",
+        "limitations": [
+          "The image is a close-up and does not provide context for the object or its significance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:45:18Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "+",
+          "29"
+        ],
+        "concepts": [
+          "red object",
+          "plus sign"
+        ],
+        "context_relation": "The image is a close-up of a red object with a plus sign on it.",
+        "limitations": [
+          "The image is a close-up and does not provide context for the object or its significance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "adc373a050554c7da5dde889",
+      "asset_sha256": "3b3c258741517664169a37e611fa361637100ec4a6cb9b5ce31620b360fbf9af",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/3b3c258741517664169a37e611fa361637100ec4a6cb9b5ce31620b360fbf9af.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of making a lamp glow in a circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The page is discussing a table that shows different arrangements of cells and lamps to predict and observe the behavior of the lamp in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:46:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of making a lamp glow in a circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The page is discussing a table that shows different arrangements of cells and lamps to predict and observe the behavior of the lamp in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1337,
-    "successful_visual_analyses": 1314,
-    "missing_visual_analyses": 6151,
+    "raw_analysis_result_rows": 1340,
+    "successful_visual_analyses": 1317,
+    "missing_visual_analyses": 6148,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6174,
+    "unresolved_count": 6171,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60407,9 +60407,31 @@
       "asset_path": "assets/00e118fcc622e976506437d5064a981374368c2aa2dbbf77f38dcfe5bdcd4c6e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp and a battery, with a green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electricity",
+          "circuit",
+          "lamp",
+          "battery"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow using a battery.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit.",
+          "The text is incomplete and does not provide specific details about the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60425,9 +60447,24 @@
       "asset_path": "assets/ceca3f9ad28cdd236f3ef64cd116bcff1487b2b68bb71a1f8f93061785ac4492.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "+",
+          "29"
+        ],
+        "concepts": [
+          "red object",
+          "plus sign"
+        ],
+        "context_relation": "The image is a close-up of a red object with a plus sign on it.",
+        "limitations": [
+          "The image is a close-up and does not provide context for the object or its significance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60443,9 +60480,27 @@
       "asset_path": "assets/3b3c258741517664169a37e611fa361637100ec4a6cb9b5ce31620b360fbf9af.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of making a lamp glow in a circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The page is discussing a table that shows different arrangements of cells and lamps to predict and observe the behavior of the lamp in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
