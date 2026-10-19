@@ -381,7 +381,7 @@ export default function StudentProfilePage() {
               <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.friendly.photo.for.your.learning.spa.436cd565" /></p></div></div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
-                  <img src={profileImageUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
+                  <AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/student-avatar.svg" alt="Student profile preview" width={144} height={144} />
                   <span className="student-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="student-profile-photo-editor__copy">
