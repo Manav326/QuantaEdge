@@ -14,7 +14,6 @@ type Child = {
   class_code:string;
   board:string;
   language:string;
-  track_codes?:string;
   login_username?:string|null;
 };
 type ChildProfileDraft = {displayName:string;classCode:string;language:string};
