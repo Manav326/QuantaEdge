@@ -51,9 +51,10 @@ const webLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 assert.ok(webLayout.includes('<NotificationBell role={role} />'),
   'The learner/parent workspace header must include the persistent notification bell.');
 const androidShell = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
-assert.ok(androidShell.includes('NotificationBellButton(') &&
-  androidShell.includes('onNavigate = ::navigateNotificationTarget'),
-  'Android signed-in shell must expose the notification inbox and route actions.');
+assert.ok(androidShell.includes('NotificationBellButton(language = language)') &&
+  androidShell.includes('"/student/classes" -> openClasses(currentSubject)') &&
+  androidShell.includes('"/parent/children"'),
+  'Android signed-in shell must expose the notification inbox and map notification actions to native routes.');
 const boundary = read('apps/web/app/components/SessionBoundary.tsx');
 assert.ok(boundary.includes('X-QE-Institution-Code') && boundary.includes('institutionCodeForRequest()'),
   'Learner inbox requests must preserve the selected institution context.');
