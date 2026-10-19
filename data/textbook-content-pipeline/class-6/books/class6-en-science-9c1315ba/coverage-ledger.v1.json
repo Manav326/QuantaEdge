@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1123,
-    "successful_visual_analyses": 1109,
-    "missing_visual_analyses": 955,
-    "failed_visual_analyses": 14,
+    "raw_analysis_result_rows": 1125,
+    "successful_visual_analyses": 1110,
+    "missing_visual_analyses": 953,
+    "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 969,
+    "unresolved_count": 968,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42847,7 +42847,7 @@
       "asset_path": "page-0094.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -42865,9 +42865,28 @@
       "asset_path": "assets/5c1f8dd596addb9d1b8cb79f76482964030109f6e22266e034349b7f22f30711.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A frog is depicted on a white plastic strip, with a ruler next to it showing its length.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "frog",
+          "ring magnet",
+          "transparent, flexible plastic strip",
+          "scale",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a scientific experiment involving a frog and a scale, likely used to demonstrate the concept of magnetic levitation.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the frog's size or the scale's markings."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

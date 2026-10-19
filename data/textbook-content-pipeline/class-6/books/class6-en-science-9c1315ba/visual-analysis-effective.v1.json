@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c84fb6ef76a52190ff2de1c155bc7faca64f70e5e65ecb97dd3fb8a9c90c9aef",
+  "raw_analysis_sha256": "5094dd89542e464e17c320b02fa1ec0b6ef9a01e038710c2c4b51be85183698e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:16:53Z",
+      "checkpointed_at": "2026-10-19T18:19:29Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:17:34Z",
+      "checkpointed_at": "2026-10-19T18:20:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:18:27Z",
+      "checkpointed_at": "2026-10-19T18:20:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -54264,6 +54264,86 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0aed53ccf9ac59e876721adf",
+      "asset_sha256": "ed9930066b957f62486826a5633d6186f533c4b00bf7f4f354255ce7ffbdf00a",
+      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 94,
+      "asset_path": "page-0094.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e69b8aff980687ac2e236f4",
+      "asset_sha256": "5c1f8dd596addb9d1b8cb79f76482964030109f6e22266e034349b7f22f30711",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/5c1f8dd596addb9d1b8cb79f76482964030109f6e22266e034349b7f22f30711.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f1615607119b448f9a8c36e07dd2782e4d5a9d499e005df09fbffa11bf804cea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A frog is depicted on a white plastic strip, with a ruler next to it showing its length.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "frog",
+          "ring magnet",
+          "transparent, flexible plastic strip",
+          "scale",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a scientific experiment involving a frog and a scale, likely used to demonstrate the concept of magnetic levitation.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the frog's size or the scale's markings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:24:01Z",
+      "effective_analysis": {
+        "visual_summary": "A frog is depicted on a white plastic strip, with a ruler next to it showing its length.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "frog",
+          "ring magnet",
+          "transparent, flexible plastic strip",
+          "scale",
+          "Maglev Train"
+        ],
+        "context_relation": "The image is a visual representation of a scientific experiment involving a frog and a scale, likely used to demonstrate the concept of magnetic levitation.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the frog's size or the scale's markings."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
