@@ -369,18 +369,26 @@ public class AdminContentController {
   @GetMapping("/chapters/{chapterId}")
   public Map<String, Object> chapter(
       @PathVariable long chapterId,
+      @RequestParam Long courseId,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_VIEW");
+    requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
     return chapterById(chapterId);
   }
 
   @GetMapping("/lessons/{lessonId}")
   public Map<String, Object> lesson(
       @PathVariable long lessonId,
+      @RequestParam Long courseId,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_VIEW");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     return lessonById(lessonId);
   }
 
@@ -389,8 +397,14 @@ public class AdminContentController {
   public Map<String, Object> createChapter(
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_CREATE");
+    long institutionId = requireInstitution(tenant);
+    Long requestedCourseId = optionalLong(body.get("courseId"), "courseId");
+    if (requestedCourseId == null) throw badRequest("Select an institution-assigned course before creating a chapter.");
+    requireAssignedCourse(requestedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), 30);
     String subjectCode = requiredText(body.get("subjectCode"), 40);
     String code = requiredText(body.get("code"), 60).toLowerCase();
@@ -409,33 +423,15 @@ public class AdminContentController {
       throw badRequest("Create chapters as draft; use the separate publication action after source and lesson checks pass.");
     }
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
-    Long courseId = optionalLong(body.get("courseId"), "courseId");
-    String programCode = optionalText(body.get("programCode"), 60);
-    List<Map<String, Object>> subjects;
-    if (courseId != null) {
-      subjects = jdbc.queryForList("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
-        """, courseId, classCode, subjectCode);
-    } else if (programCode == null || programCode.isBlank()) {
-      subjects = jdbc.queryForList("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
-        """, classCode, subjectCode);
-    } else {
-      subjects = jdbc.queryForList("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where c.code=? and s.code=? and upper(p.code)=upper(?)
-          and c.active=true and s.active=true
-        """, classCode, subjectCode, programCode);
-    }
+    List<Map<String, Object>> subjects = jdbc.queryForList("""
+      select s.id from curriculum_subject s
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join curriculum_program_subject ps on ps.program_id=p.id
+        and ps.class_id=s.class_id and ps.subject_id=s.id
+      where c.code=? and s.code=? and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """, requestedCourseId, classCode, subjectCode);
     if (subjects.isEmpty()) throw badRequest("The selected class, course, and subject track does not exist or is inactive.");
     long subjectId = ((Number) subjects.getFirst().get("id")).longValue();
     Long chapterId = jdbc.queryForObject("""
@@ -456,9 +452,15 @@ public class AdminContentController {
   public Map<String, Object> createLesson(
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_CREATE");
+    long institutionId = requireInstitution(tenant);
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null) throw badRequest("Select an institution-assigned course before creating a micro-topic.");
     long chapterId = longValue(body.get("chapterId"), "chapterId");
+    requireChapterInCourse(chapterId, courseId, institutionId);
     chapterById(chapterId);
     String code = requiredText(body.get("code"), 100).toLowerCase();
     if (!code.matches("[a-z0-9]+(?:-[a-z0-9]+)*")) {
@@ -496,8 +498,13 @@ public class AdminContentController {
       @PathVariable long chapterId,
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requireAuth(context);
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null) throw badRequest("Select a course before saving this chapter.");
+    requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
     Map<String,Object> current = chapterById(chapterId);
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
@@ -580,48 +587,62 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> publishChapter(
       @PathVariable long chapterId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
+    requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     Map<String,Object> body=new LinkedHashMap<>();
     body.put("displayName",current.get("chapter_name"));
     body.put("description",current.get("chapter_description"));
     body.put("status","PUBLISHED");
+    body.put("courseId", courseId);
     body.put("sortOrder",((Number)current.get("chapter_sort_order")).intValue());
     body.put("curriculumSource",current.get("curriculum_source"));
     body.put("curriculumSourceUrl",current.get("curriculum_source_url"));
     body.put("curriculumSourceEdition",current.get("curriculum_source_edition"));
     body.put("curriculumSourcePages",current.get("curriculum_source_pages"));
     body.put("curriculumSourceVerified",Boolean.TRUE.equals(current.get("curriculum_source_verified")));
-    return updateChapter(chapterId,body,null,context);
+    return updateChapter(chapterId,body,null,context,tenant);
   }
 
   @PostMapping("/chapters/{chapterId}/unpublish")
   @Transactional
   public Map<String,Object> unpublishChapter(
       @PathVariable long chapterId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
+    requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     Map<String,Object> body=new LinkedHashMap<>();
     body.put("displayName",current.get("chapter_name"));
     body.put("description",current.get("chapter_description"));
     body.put("status","DRAFT");
+    body.put("courseId", courseId);
     body.put("sortOrder",((Number)current.get("chapter_sort_order")).intValue());
     body.put("curriculumSource",current.get("curriculum_source"));
     body.put("curriculumSourceUrl",current.get("curriculum_source_url"));
     body.put("curriculumSourceEdition",current.get("curriculum_source_edition"));
     body.put("curriculumSourcePages",current.get("curriculum_source_pages"));
     body.put("curriculumSourceVerified",Boolean.TRUE.equals(current.get("curriculum_source_verified")));
-    return updateChapter(chapterId,body,null,context);
+    return updateChapter(chapterId,body,null,context,tenant);
   }
 
   @PostMapping("/chapters/{chapterId}/verify-source")
   @Transactional
   public Map<String,Object> verifyChapterSource(
       @PathVariable long chapterId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_REVIEW");
+    requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     requireCompleteSourceReference(
         current.get("curriculum_source")==null?null:String.valueOf(current.get("curriculum_source")),
@@ -639,8 +660,12 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> verifyLessonSource(
       @PathVariable long lessonId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_REVIEW");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     requireCompleteSourceReference(
         current.get("alignment_source_title")==null?null:String.valueOf(current.get("alignment_source_title")),
@@ -659,8 +684,13 @@ public class AdminContentController {
   public Map<String,Object> markLessonPreviewChecked(
       @PathVariable long lessonId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_SUBMIT");
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null) throw badRequest("Select a course before confirming this lesson preview.");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     long expectedRevision=longValue(body.get("contentRevision"),"contentRevision");
     Long currentRevision;
     try {
@@ -692,8 +722,12 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> submitLessonForReview(
       @PathVariable long lessonId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_SUBMIT");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     String currentStatus=String.valueOf(current.get("lesson_status"));
     if ("PUBLISHED".equals(currentStatus)||"ARCHIVED".equals(currentStatus)) {
@@ -728,8 +762,12 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> publishLesson(
       @PathVariable long lessonId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     String currentStatus=String.valueOf(current.get("lesson_status"));
     if (!"REVIEW".equals(currentStatus) && !"ARCHIVED".equals(currentStatus)) {
@@ -747,8 +785,12 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> unpublishLesson(
       @PathVariable long lessonId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     lessonById(lessonId);
     jdbc.update("update lesson set status='DRAFT', active=true where id=?",lessonId);
     Map<String,Object> result=lessonById(lessonId);
@@ -832,9 +874,13 @@ public class AdminContentController {
   @Transactional
   public Map<String,Object> appendDraftQuestions(
       @PathVariable long lessonId,
+      @RequestParam Long courseId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     Map<String,Object> lesson=lessonById(lessonId);
     String lessonStatus=String.valueOf(lesson.get("lesson_status")).toUpperCase(Locale.ROOT);
     if ("ARCHIVED".equals(lessonStatus)
@@ -1003,8 +1049,13 @@ public class AdminContentController {
       @PathVariable long lessonId,
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorization.requireAuth(context);
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null) throw badRequest("Select a course before saving this lesson.");
+    requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
     Map<String,Object> current = lessonById(lessonId);
     String title = requiredText(body.get("title"), 240);
     String summary = optionalText(body.get("summary"), 800);
@@ -1937,6 +1988,43 @@ public class AdminContentController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "An active institution context is required.");
     }
     return tenant.institutionId();
+  }
+
+  private void requireChapterInCourse(long chapterId, long courseId, long institutionId) {
+    requireAssignedCourse(courseId, institutionId);
+    Boolean inCourse = jdbc.queryForObject("""
+      select exists(
+        select 1
+        from curriculum_chapter ch
+        join curriculum_subject s on s.id=ch.subject_id and s.active=true
+        join curriculum_program_subject mapping
+          on mapping.program_id=? and mapping.subject_id=s.id and mapping.class_id=s.class_id
+        join curriculum_program p on p.id=mapping.program_id
+          and p.status='ACTIVE' and p.code<>'GENERAL'
+        where ch.id=? and (s.program_id=p.id
+          or (s.program_id is null and p.class_id=s.class_id))
+      )
+      """, Boolean.class, courseId, chapterId);
+    if (!Boolean.TRUE.equals(inCourse)) throw notFound("Chapter", chapterId);
+  }
+
+  private void requireLessonInCourse(long lessonId, long courseId, long institutionId) {
+    requireAssignedCourse(courseId, institutionId);
+    Boolean inCourse = jdbc.queryForObject("""
+      select exists(
+        select 1
+        from lesson l
+        join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id and s.active=true
+        join curriculum_program_subject mapping
+          on mapping.program_id=? and mapping.subject_id=s.id and mapping.class_id=s.class_id
+        join curriculum_program p on p.id=mapping.program_id
+          and p.status='ACTIVE' and p.code<>'GENERAL'
+        where l.id=? and (s.program_id=p.id
+          or (s.program_id is null and p.class_id=s.class_id))
+      )
+      """, Boolean.class, courseId, lessonId);
+    if (!Boolean.TRUE.equals(inCourse)) throw notFound("Lesson", lessonId);
   }
 
   private void requireAssignedCourse(long courseId,long institutionId) {
