@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "461537a52024c6182281f7db6da45b21a58c30b26e1a1c8d9acaa7cc90017618",
+  "raw_analysis_sha256": "8e8e033eb48b6599a0391c967c54815a82e1f376ab2eeffc5986b3ff7ece60fa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:04:37Z",
+      "checkpointed_at": "2026-10-19T01:12:30Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:05:26Z",
+      "checkpointed_at": "2026-10-19T01:13:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:06:04Z",
+      "checkpointed_at": "2026-10-19T01:13:56Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -32142,6 +32142,102 @@
         "context_relation": "The page is a blank page with no visible content.",
         "limitations": [
           "No visible text or images present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fc9bf8570be0146c486b743c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "431fdcdd15a7d5d14fefe3e1ee168f03594db41815a4f09f324c18d59a717d41",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:14:11Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7daecbb87263fd76f96e26b4",
+      "asset_sha256": "a08adcf246c64cb1ddec87e943c7b9b674d46c070b993186aabdd3f207299da3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 27,
+      "asset_path": "page-0027.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "431fdcdd15a7d5d14fefe3e1ee168f03594db41815a4f09f324c18d59a717d41",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing scientific experiments and observations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "use circles of dough of the same thickness, and drop them in the\nsame way. It is also a good idea to keep notes of everything that\nyou see and sense when doing an experiment. Did the oil splatter,\nsmell, or smoke? And after doing one round of experiments, you\nmay think of more questions. Do puris pu",
+          "Chapter 1 — Exploring the Investigative World of Science      7"
+        ],
+        "concepts": [
+          "scientific experiments",
+          "systematic investigation",
+          "careful observations",
+          "investigate world of science"
+        ],
+        "context_relation": "exploring the investigative world of science",
+        "limitations": [
+          "The text does not provide specific instructions or methods for conducting experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:18:21Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing scientific experiments and observations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "use circles of dough of the same thickness, and drop them in the\nsame way. It is also a good idea to keep notes of everything that\nyou see and sense when doing an experiment. Did the oil splatter,\nsmell, or smoke? And after doing one round of experiments, you\nmay think of more questions. Do puris pu",
+          "Chapter 1 — Exploring the Investigative World of Science      7"
+        ],
+        "concepts": [
+          "scientific experiments",
+          "systematic investigation",
+          "careful observations",
+          "investigate world of science"
+        ],
+        "context_relation": "exploring the investigative world of science",
+        "limitations": [
+          "The text does not provide specific instructions or methods for conducting experiments."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
