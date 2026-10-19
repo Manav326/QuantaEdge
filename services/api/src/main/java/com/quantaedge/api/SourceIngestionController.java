@@ -232,9 +232,12 @@ public class SourceIngestionController {
   @PatchMapping("/intake/{assetId}/review")
   @Transactional
   public Map<String, Object> reviewBookIntake(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
     List<Map<String,Object>> rows = jdbc.queryForList(
         "select status,reconciliation from learning_book_intake where pdf_asset_id=?", assetId);
     if (rows.isEmpty()) throw notFound("Classified book intake", assetId);
@@ -281,9 +284,12 @@ public class SourceIngestionController {
   @PatchMapping("/intake/{assetId}/chapter-ranges")
   @Transactional
   public Map<String, Object> saveIntakeChapterRanges(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.subject_id,a.page_count,i.status
       from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
@@ -348,10 +354,13 @@ public class SourceIngestionController {
   @PostMapping("/intake/{assetId}/draft-resources")
   @Transactional
   public Map<String, Object> createDraftResourcesFromReviewedRanges(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
     context = authorization.requirePermission(context, "CONTENT_EDIT");
+    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
 
     String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
     String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
@@ -482,22 +491,27 @@ public class SourceIngestionController {
 
   @PostMapping("/intake/{assetId}/analyze")
   public Map<String, Object> analyzeBookIntake(
-      @PathVariable long assetId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return runBookIntakeAnalysis(assetId, context, false);
+      @PathVariable long assetId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    return runBookIntakeAnalysis(assetId, courseId, requireInstitution(tenant), context, false);
   }
 
   /** OCR-assisted analysis is an explicit admin action; extracted text remains a review candidate. */
   @PostMapping("/intake/{assetId}/analyze-ocr")
   public Map<String, Object> analyzeBookIntakeWithOcr(
-      @PathVariable long assetId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return runBookIntakeAnalysis(assetId, context, true);
+      @PathVariable long assetId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    return runBookIntakeAnalysis(assetId, courseId, requireInstitution(tenant), context, true);
   }
 
   private Map<String, Object> runBookIntakeAnalysis(
-      long assetId, AuthContext context, boolean useOcr) {
+      long assetId, long courseId, long institutionId, AuthContext context, boolean useOcr) {
     context = requireReviewer(context);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.*,a.pdf_bytes,a.page_count,a.sha256 from learning_book_intake i
       join learning_pdf_asset a on a.id=i.pdf_asset_id where i.pdf_asset_id=?
@@ -1648,6 +1662,18 @@ public class SourceIngestionController {
           400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing source ingestion.");
     }
     return tenant.institutionId();
+  }
+
+  private void requireBookIntakeCourse(long assetId,long courseId,long institutionId) {
+    requireAssignedCourse(courseId,institutionId);
+    Boolean inScope=jdbc.queryForObject("""
+      select exists(select 1 from learning_book_intake i
+        where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?)
+      """,Boolean.class,assetId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(inScope)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Uploaded-book intake is not available in the selected institution course.");
+    }
   }
 
   private void requireAssignedCourse(long courseId,long institutionId) {
