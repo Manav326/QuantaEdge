@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6d1a04be391e8e2502fffd169d7f778940c746237cf42b43a5ffea0d0b0c2f79",
+  "raw_analysis_sha256": "176ff459b97ca1d673e2daf9462519c27f8aa1fbd3c90820d3e496263d533b9e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:22:24Z",
+      "checkpointed_at": "2026-10-19T02:28:18Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:23:13Z",
+      "checkpointed_at": "2026-10-19T02:29:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:23:52Z",
+      "checkpointed_at": "2026-10-19T02:29:44Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33437,6 +33437,98 @@
         "limitations": [
           "The image does not show the actual onion bulb or the peeled layers."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b81336a4c64686e3ef4a82eb",
+      "asset_sha256": "0031c1308993cc2ffbae4c3a4a5c5da3dabe672090afa4a2dc6ebecc3b6b26d6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/0031c1308993cc2ffbae4c3a4a5c5da3dabe672090afa4a2dc6ebecc3b6b26d6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A sequence of steps for preparing a cell sample using an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take an onion bulb from your kitchen or garden and wash it thoroughly with water.",
+          "Cut the onion bulb vertically into pieces.",
+          "Take one piece of onion and pull out the thin, transparent layer from its inner surface with the help of forceps. This layer is called the onion peel.",
+          "Place the peel in a petri dish containing a few drops of water."
+        ],
+        "concepts": [
+          "Preparation of cell samples",
+          "Observation under a microscope"
+        ],
+        "context_relation": "The image illustrates the first step in the activity described in the textbook.",
+        "limitations": [
+          "The image does not show the entire process of preparing the cell sample."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:31:30Z",
+      "effective_analysis": {
+        "visual_summary": "A sequence of steps for preparing a cell sample using an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take an onion bulb from your kitchen or garden and wash it thoroughly with water.",
+          "Cut the onion bulb vertically into pieces.",
+          "Take one piece of onion and pull out the thin, transparent layer from its inner surface with the help of forceps. This layer is called the onion peel.",
+          "Place the peel in a petri dish containing a few drops of water."
+        ],
+        "concepts": [
+          "Preparation of cell samples",
+          "Observation under a microscope"
+        ],
+        "context_relation": "The image illustrates the first step in the activity described in the textbook.",
+        "limitations": [
+          "The image does not show the entire process of preparing the cell sample."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb174921eb3a781756dcec43",
+      "asset_sha256": "c7615ace72a69511cb21006aef643695980af6d81297a39c876119da77eacd1e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/c7615ace72a69511cb21006aef643695980af6d81297a39c876119da77eacd1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red brick wall with a pattern of horizontal and vertical lines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:33:02Z",
+      "effective_analysis": {
+        "visual_summary": "A red brick wall with a pattern of horizontal and vertical lines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

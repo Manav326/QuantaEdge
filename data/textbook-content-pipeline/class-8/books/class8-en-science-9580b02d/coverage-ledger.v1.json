@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 759,
-    "successful_visual_analyses": 749,
-    "missing_visual_analyses": 1532,
+    "raw_analysis_result_rows": 761,
+    "successful_visual_analyses": 751,
+    "missing_visual_analyses": 1530,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1542,
+    "unresolved_count": 1540,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29590,9 +29590,26 @@
       "asset_path": "assets/0031c1308993cc2ffbae4c3a4a5c5da3dabe672090afa4a2dc6ebecc3b6b26d6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sequence of steps for preparing a cell sample using an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take an onion bulb from your kitchen or garden and wash it thoroughly with water.",
+          "Cut the onion bulb vertically into pieces.",
+          "Take one piece of onion and pull out the thin, transparent layer from its inner surface with the help of forceps. This layer is called the onion peel.",
+          "Place the peel in a petri dish containing a few drops of water."
+        ],
+        "concepts": [
+          "Preparation of cell samples",
+          "Observation under a microscope"
+        ],
+        "context_relation": "The image illustrates the first step in the activity described in the textbook.",
+        "limitations": [
+          "The image does not show the entire process of preparing the cell sample."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29608,9 +29625,16 @@
       "asset_path": "assets/c7615ace72a69511cb21006aef643695980af6d81297a39c876119da77eacd1e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red brick wall with a pattern of horizontal and vertical lines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 749,
+    "assets_selected": 751,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 746,
-    "assets_remaining": 1545,
+    "assets_analyzed": 748,
+    "assets_remaining": 1543,
     "assets_completion_percent": 32.6,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 744,
+    "assets_skipped_from_checkpoint": 746,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:22:24Z"
+      "checkpointed_at": "2026-10-19T02:28:18Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:23:13Z"
+      "checkpointed_at": "2026-10-19T02:29:06Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:23:52Z"
+      "checkpointed_at": "2026-10-19T02:29:44Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22797,6 +22797,68 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T02:27:09Z"
+    },
+    {
+      "asset_id": "b81336a4c64686e3ef4a82eb",
+      "asset_sha256": "0031c1308993cc2ffbae4c3a4a5c5da3dabe672090afa4a2dc6ebecc3b6b26d6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/0031c1308993cc2ffbae4c3a4a5c5da3dabe672090afa4a2dc6ebecc3b6b26d6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A sequence of steps for preparing a cell sample using an onion peel.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take an onion bulb from your kitchen or garden and wash it thoroughly with water.",
+          "Cut the onion bulb vertically into pieces.",
+          "Take one piece of onion and pull out the thin, transparent layer from its inner surface with the help of forceps. This layer is called the onion peel.",
+          "Place the peel in a petri dish containing a few drops of water."
+        ],
+        "concepts": [
+          "Preparation of cell samples",
+          "Observation under a microscope"
+        ],
+        "context_relation": "The image illustrates the first step in the activity described in the textbook.",
+        "limitations": [
+          "The image does not show the entire process of preparing the cell sample."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:31:30Z"
+    },
+    {
+      "asset_id": "cb174921eb3a781756dcec43",
+      "asset_sha256": "c7615ace72a69511cb21006aef643695980af6d81297a39c876119da77eacd1e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/c7615ace72a69511cb21006aef643695980af6d81297a39c876119da77eacd1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red brick wall with a pattern of horizontal and vertical lines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:33:02Z"
     }
   ]
 }
