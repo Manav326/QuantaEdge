@@ -41,7 +41,7 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
   const hasRequestedCourse = requestedText.length > 0;
   const matchesRequestedCourse = useCallback((course: EnrolledCourse) => {
     if (!hasRequestedCourse) return false;
-    if (/^\\d+$/.test(requestedText)) return Number(course.id || course.course_id) === Number(requestedText);
+    if (/^\d+$/.test(requestedText)) return Number(course.id || course.course_id) === Number(requestedText);
     return String(course.public_id || '').toUpperCase() === requestedText.toUpperCase();
   }, [hasRequestedCourse, requestedText]);
 
@@ -91,8 +91,8 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
       }
       if (!response.ok) throw new Error(body.detail || body.message || body.error || 'Your courses could not be loaded.');
       const rows: EnrolledCourse[] = Array.isArray(body) ? body : [];
-      // Normalize the course identity once. Every downstream route and API call uses
-      // the numeric course ID, never a class code or subject-derived guess.
+      // Keep the stable numeric row ID for internal APIs and DB-bound operations. The
+      // fixed-width public_id is the external identity used in learner-facing URLs.
       const normalized = rows.map(course => ({
         ...course,
         id: Number(course.id || course.course_id),
