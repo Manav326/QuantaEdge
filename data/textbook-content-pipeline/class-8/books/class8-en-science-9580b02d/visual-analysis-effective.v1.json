@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4ae4679849e97e87774bd30dff0b1196a413d37d04e5f6772f108265a539ea3e",
+  "raw_analysis_sha256": "da75a5d8b7dea1597ebbc3cc38e8fa6b98bf7faa2a52fc28ddf7aca5e61f9430",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:28:27Z",
+      "checkpointed_at": "2026-10-19T03:31:57Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:29:16Z",
+      "checkpointed_at": "2026-10-19T03:32:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:29:54Z",
+      "checkpointed_at": "2026-10-19T03:33:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34636,6 +34636,82 @@
         "context_relation": "The page is a blank page with no visible content.",
         "limitations": [
           "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d21a63b7b08e6cf94eb43cfb",
+      "asset_sha256": "49a00b7586850458ba6638341e528608150f1a8c5bf48a635019de7ea8374b80",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "page-0033.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "64250f7510e46c085035cb41",
+      "asset_sha256": "a5cc7caa59a236e5cd16d0b101ef58dba284cd8b76fb7db5be2d25333d7e2e33",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/a5cc7caa59a236e5cd16d0b101ef58dba284cd8b76fb7db5be2d25333d7e2e33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful, cartoonish depiction of a cell with a red center and various colorful elements around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "cell functions",
+          "neurons",
+          "protective lining",
+          "cell elongated shape",
+          "cell branched structure"
+        ],
+        "context_relation": "The image is an illustration that complements the text about cell functions and structures.",
+        "limitations": [
+          "The image does not provide specific details about the cell's functions or structure.",
+          "The image is a cartoon illustration and may not accurately represent real cells."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:39:12Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful, cartoonish depiction of a cell with a red center and various colorful elements around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "cell functions",
+          "neurons",
+          "protective lining",
+          "cell elongated shape",
+          "cell branched structure"
+        ],
+        "context_relation": "The image is an illustration that complements the text about cell functions and structures.",
+        "limitations": [
+          "The image does not provide specific details about the cell's functions or structure.",
+          "The image is a cartoon illustration and may not accurately represent real cells."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

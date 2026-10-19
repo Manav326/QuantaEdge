@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 770,
+    "assets_selected": 772,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 767,
-    "assets_remaining": 1524,
+    "assets_analyzed": 768,
+    "assets_remaining": 1523,
     "assets_completion_percent": 33.5,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 765,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 767,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:28:27Z"
+      "checkpointed_at": "2026-10-19T03:31:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:29:16Z"
+      "checkpointed_at": "2026-10-19T03:32:46Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:29:54Z"
+      "checkpointed_at": "2026-10-19T03:33:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -23572,6 +23572,59 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T03:30:48Z"
+    },
+    {
+      "asset_id": "d21a63b7b08e6cf94eb43cfb",
+      "asset_sha256": "49a00b7586850458ba6638341e528608150f1a8c5bf48a635019de7ea8374b80",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "page-0033.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "64250f7510e46c085035cb41",
+      "asset_sha256": "a5cc7caa59a236e5cd16d0b101ef58dba284cd8b76fb7db5be2d25333d7e2e33",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/a5cc7caa59a236e5cd16d0b101ef58dba284cd8b76fb7db5be2d25333d7e2e33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful, cartoonish depiction of a cell with a red center and various colorful elements around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell structure",
+          "cell functions",
+          "neurons",
+          "protective lining",
+          "cell elongated shape",
+          "cell branched structure"
+        ],
+        "context_relation": "The image is an illustration that complements the text about cell functions and structures.",
+        "limitations": [
+          "The image does not provide specific details about the cell's functions or structure.",
+          "The image is a cartoon illustration and may not accurately represent real cells."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:39:12Z"
     }
   ]
 }
