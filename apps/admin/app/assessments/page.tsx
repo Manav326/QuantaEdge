@@ -176,14 +176,14 @@ export default function AssessmentsPage(){
   }
   async function changeStatus(row:Assessment,status:'PUBLISHED'|'ARCHIVED'|'DRAFT'){
     setBusy(true);setError('');setNotice('');
-    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice(tRef.current('admin.assessments.statusUpdated',{title:row.title,status:statusText(status,tRef.current)}));await loadAssessments();}
+    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/status?courseId='+encodeURIComponent(courseId),{method:'PATCH',body:JSON.stringify({status})});setNotice(tRef.current('admin.assessments.statusUpdated',{title:row.title,status:statusText(status,tRef.current)}));await loadAssessments();}
     catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.statusUpdateFailed'));}
     finally{setBusy(false);}
   }
   async function changeOfflinePolicy(row:Assessment,offlineEnabled:boolean){
     setBusy(true);setError('');setNotice('');
     try{
-      await api('/api/v1/admin/assessments/'+row.assessment_id+'/offline-policy',{
+      await api('/api/v1/admin/assessments/'+row.assessment_id+'/offline-policy?courseId='+encodeURIComponent(courseId),{
         method:'PATCH',body:JSON.stringify({offlineEnabled})
       });
       setNotice(tRef.current(offlineEnabled?'admin.assessments.offlineEnabledNotice':'admin.assessments.offlineDisabledNotice',{title:row.title}));
@@ -195,7 +195,7 @@ export default function AssessmentsPage(){
     const staffId=Number(graderByAssessment[row.assessment_id]||0);
     if(!staffId){setError(tRef.current('admin.assessments.graderRequired'));return;}
     setBusy(true);setError('');setNotice('');
-    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/graders',{method:'POST',body:JSON.stringify({staffId})});setNotice(tRef.current('admin.assessments.graderAssigned',{title:row.title}));await loadAssessments();}
+    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/graders?courseId='+encodeURIComponent(courseId),{method:'POST',body:JSON.stringify({staffId})});setNotice(tRef.current('admin.assessments.graderAssigned',{title:row.title}));await loadAssessments();}
     catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.graderAssignmentFailed'));}
     finally{setBusy(false);}
   }
@@ -214,7 +214,7 @@ export default function AssessmentsPage(){
   async function openReview(attemptId:number){
     setBusy(true);setError('');setNotice('');setReviewCertificate(null);
     try{
-      const data=await api('/api/v1/admin/assessment-attempts/'+attemptId);
+      const data=await api('/api/v1/admin/assessment-attempts/'+attemptId+'?courseId='+encodeURIComponent(courseId));
       setReview(data);
       const nextMarks:Record<number,string>={},nextFeedback:Record<number,string>={};
       (data.questions||[]).forEach((q:ReviewQuestion)=>{if(q.manualReviewRequired){nextMarks[q.answerId]=q.awardedMarks===null||q.awardedMarks===undefined?'':String(q.awardedMarks);nextFeedback[q.answerId]=q.teacherFeedback||'';}});
@@ -236,7 +236,7 @@ export default function AssessmentsPage(){
     }
     setBusy(true);setError('');setNotice('');
     try{
-      const data=await api('/api/v1/admin/assessment-attempts/'+review.attempt_id+'/grade',{
+      const data=await api('/api/v1/admin/assessment-attempts/'+review.attempt_id+'/grade?courseId='+encodeURIComponent(courseId),{
         method:'POST',body:JSON.stringify({answers,overallNote:overallNote.trim(),releaseResult:true})
       });
       setReview(data);
@@ -325,10 +325,10 @@ export default function AssessmentsPage(){
                   {reviewCertificate.status==='ISSUED'?t('admin.assessments.statusIssuedValid'):t('admin.assessments.statusRevokedAudit')}
                 </span>
                 <small>{reviewCertificate.certificate_number}</small>
-                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=pdf'}>
+                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?courseId='+encodeURIComponent(courseId)+'&format=pdf'}>
                   {reviewCertificate.status==='ISSUED'?t('admin.assessments.viewDownloadPdf'):t('admin.assessments.auditCopyPdf')}
                 </a>
-                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=png'}>
+                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?courseId='+encodeURIComponent(courseId)+'&format=png'}>
                   {reviewCertificate.status==='ISSUED'?t('admin.assessments.downloadPng'):t('admin.assessments.auditCopyPng')}
                 </a>
                 <button type="button" className={styles.secondaryButton}
