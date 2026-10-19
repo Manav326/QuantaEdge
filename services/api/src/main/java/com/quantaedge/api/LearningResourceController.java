@@ -494,10 +494,12 @@ public class LearningResourceController {
         coalesce(progress.last_position_seconds,0) as last_position_seconds,
         coalesce(progress.watched_seconds,0) as watched_seconds,coalesce(progress.completed,false) as completed,
         rc.status as recording_status,rc.media_type as recording_media_type,rc.file_size_bytes as recording_file_size_bytes,
-        ld.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status,ca.url as content_asset_url
+        ldca.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status,ca.url as content_asset_url
       from learning_resource_assignment a join learning_resource r on r.id=a.resource_id
       left join recorded_class rc on rc.id=r.recorded_class_id and rc.institution_id=?
       left join learning_document ld on ld.id=r.learning_document_id
+      left join learning_document_course_assignment ldca
+        on ldca.learning_document_id=ld.id and ldca.institution_id=? and ldca.course_id=?
       left join learning_pdf_asset pa on pa.id=ld.pdf_asset_id
       left join content_asset ca on ca.id=r.content_asset_id
       left join student_learning_resource_progress progress on progress.resource_id=r.id and progress.student_id=? and progress.institution_id=?
@@ -509,12 +511,12 @@ public class LearningResourceController {
         )
         and (
           (r.source_kind='RECORDED_CLASS' and rc.status='PUBLISHED')
-          or (r.source_kind='LEARNING_DOCUMENT' and ld.status='PUBLISHED' and pa.review_status='APPROVED')
+          or (r.source_kind='LEARNING_DOCUMENT' and ldca.status='PUBLISHED' and pa.review_status='APPROVED')
           or (r.source_kind='CONTENT_ASSET' and ca.status='PUBLISHED')
           or r.source_kind in ('PRIVATE_UPLOAD','EXTERNAL_URL')
         )
       order by case when a.target_kind='CHAPTER' then 0 else 1 end,a.sort_order,a.id
-      """,institutionId,context.studentId(),institutionId,canonicalChapter,locale,lessonId,lessonId,requestedArtifact,requestedArtifact);
+      """,institutionId,institutionId,courseId,context.studentId(),institutionId,canonicalChapter,locale,lessonId,lessonId,requestedArtifact,requestedArtifact);
     List<Map<String,Object>> result=new ArrayList<>();
     for(Map<String,Object> raw:rows) {
       Map<String,Object> item=new LinkedHashMap<>();
