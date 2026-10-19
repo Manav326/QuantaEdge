@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a46bf34ed6a5de6d6264b5b41f9edd307a5ba85be22379384bd024f750513b7c",
+  "raw_analysis_sha256": "56e85b310bba7754ad554aa578c0d6b6ec98ef93848cbf9232c94bc50ae823e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:50:42Z",
+      "checkpointed_at": "2026-10-19T17:56:20Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:51:27Z",
+      "checkpointed_at": "2026-10-19T17:57:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:52:03Z",
+      "checkpointed_at": "2026-10-19T17:57:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -43762,6 +43762,66 @@
         "context_relation": "The image is related to the topic of tuberculosis, showing symptoms and prevention measures.",
         "limitations": [
           "The image does not provide specific details about the symptoms or prevention measures for tuberculosis."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f33c51ce68aeb7c0b7061fbd",
+      "asset_sha256": "6e139284c6445954e003a50e000aa69bc3621fd95e5625962aebc5c302251544",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/6e139284c6445954e003a50e000aa69bc3621fd95e5625962aebc5c302251544.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "27356aaf67bc596e50d61bc4",
+      "asset_sha256": "fb4d1dec027946b2437470c87efe1e9d4a00589ae5f220cf1fd9cadb0bc09a22",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/fb4d1dec027946b2437470c87efe1e9d4a00589ae5f220cf1fd9cadb0bc09a22.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding their stomach, possibly indicating discomfort or nausea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not provide any specific context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:01:58Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding their stomach, possibly indicating discomfort or nausea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not provide any specific context or relation to the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
