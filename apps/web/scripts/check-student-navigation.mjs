@@ -230,6 +230,36 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
   parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
   'Parent reports must require explicit course selection for multi-course children.');
+// Re-audited parent-child lifecycle must use course entitlements, not legacy subject tracks.
+const parentChildrenPage = read('../app/parent/children/page.tsx');
+const androidChildCreate = read('../../android/app/src/main/java/com/quantaedge/android/ui/ParentChildCreateScreen.kt');
+const androidChildManage = read('../../android/app/src/main/java/com/quantaedge/android/ui/ParentChildManageScreen.kt');
+const guardianApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
+const tenantContextService = read('../../../services/api/src/main/java/com/quantaedge/api/InstitutionTenantContextService.java');
+const authFilter = read('../../../services/api/src/main/java/com/quantaedge/api/AuthFilter.java');
+const authService = read('../../../services/api/src/main/java/com/quantaedge/api/AuthService.java');
+assert.ok(parentPage.includes('/certificates?courseId=') && parentPage.includes('/view?courseId=') && parentPage.includes('/download?courseId='),
+  'Parent certificate history, preview and downloads must be scoped to the selected child course.');
+assert.ok(androidApp.includes('/certificates?courseId=\" + courseId') && androidApp.includes('/view?courseId=\" + courseId') && androidApp.includes('/download?courseId=\" + courseId'),
+  'Android parent certificate history and artifacts must use the selected child course.');
+assert.ok(parentChildrenPage.includes('course.free_offer') && parentChildrenPage.includes('/parent/courses'),
+  'Web child management must directly assign only free institution courses and route paid offers to Family Marketplace.');
+assert.ok(androidApp.includes('onAssignCourse = ::assignCourseToChild') && androidApp.includes('courses = selectedChildCourses'),
+  'Android child management must pass the child course catalogue to its course-assignment UI.');
+assert.ok(androidChildCreate.includes('onCreate: (String, String, String, String, String, Boolean) -> Unit') && !androidChildCreate.includes('trackCodes'),
+  'Child creation must not require legacy subject-only access selection.');
+assert.ok(androidChildManage.includes('free_offer') && androidChildManage.includes('onAssignCourse') && androidChildManage.includes('Family Marketplace') && !androidChildManage.includes('onSaveTracks') && !androidChildManage.includes('trackCodes'),
+  'Android child management must assign institution courses rather than edit Maths/Science tracks.');
+assert.ok(guardianApi.includes('as course_names') && !guardianApi.includes('as track_codes'),
+  'Parent child summaries must expose assigned course names, not legacy subject-track summaries.');
+assert.ok(authFilter.includes('assertArchivedGuardianChildMembership') && authFilter.includes('restoringArchivedChild') &&
+  tenantContextService.includes('gs.active=false') && tenantContextService.includes('assertArchivedGuardianChildMembership'),
+  'Archived-child restoration must have its own selected-tenant authorization path without weakening active-child routes.');
+assert.ok(authService.includes('LEARNER_ACCOUNT_CONVERSION') && authService.includes('ON CONFLICT(institution_id,user_id) DO NOTHING'),
+  'Independent learner conversion must mirror active institution memberships without reactivating removed memberships.');
+assert.ok(androidApp.includes('Course data could not be refreshed. Your selected course is preserved; please retry.') &&
+  androidApp.includes('if (studentProgramsLoadFailed) {'),
+  'Android startup must preserve primary course focus during a temporary course-catalogue outage.');
 
 const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
 assert.ok(textbooksClient.includes('displayChapterTitle(item, learningLanguage === \'en\')'), 'Textbook chapter titles must follow selected content language.');
