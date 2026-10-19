@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b27a8d96c2ba581b9bf7db75b3ccc5b7ac1d32a8a000efde41cb62e4045f0034",
+  "raw_analysis_sha256": "3c5b172fa8dbe5de5993e988e2556840f5283777b485e9697aac5c6e3a899499",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:03:38Z",
+      "checkpointed_at": "2026-10-19T11:12:33Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:04:39Z",
+      "checkpointed_at": "2026-10-19T11:13:33Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -45534,6 +45534,220 @@
         "context_relation": "Comparison of nutritional information",
         "limitations": [
           "No specific nutritional values are provided for the potato wafers and roasted chana."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "76ded6c549239a4230b76614",
+      "asset_sha256": "32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bag of roasted chana, a snack.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information between potato wafers and roasted chana",
+        "limitations": [
+          "No specific details about the nutritional content of potato wafers are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:15:16Z",
+      "effective_analysis": {
+        "visual_summary": "A bag of roasted chana, a snack.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information between potato wafers and roasted chana",
+        "limitations": [
+          "No specific details about the nutritional content of potato wafers are provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "003626c21c3532495175bd58",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Energy",
+          "Comparison"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:15:43Z",
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Energy",
+          "Comparison"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d88cad7f0f583443923180ca",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "per 100 g",
+          "355 kcal",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Comparison",
+          "Energy",
+          "Per 100 g"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific nutritional values are provided for the roasted chana packet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:16:11Z",
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "per 100 g",
+          "355 kcal",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Comparison",
+          "Energy",
+          "Per 100 g"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific nutritional values are provided for the roasted chana packet."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

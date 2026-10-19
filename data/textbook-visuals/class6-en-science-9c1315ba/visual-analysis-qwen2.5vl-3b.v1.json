@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 952,
+    "assets_selected": 955,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 950,
-    "assets_remaining": 1128,
-    "assets_completion_percent": 45.7,
+    "assets_analyzed": 953,
+    "assets_remaining": 1125,
+    "assets_completion_percent": 45.9,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 947,
+    "assets_skipped_from_checkpoint": 950,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:03:38Z"
+      "checkpointed_at": "2026-10-19T11:12:33Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:04:39Z"
+      "checkpointed_at": "2026-10-19T11:13:33Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -30484,6 +30484,137 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T11:11:19Z"
+    },
+    {
+      "asset_id": "76ded6c549239a4230b76614",
+      "asset_sha256": "32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bag of roasted chana, a snack.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information between potato wafers and roasted chana",
+        "limitations": [
+          "No specific details about the nutritional content of potato wafers are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:15:16Z"
+    },
+    {
+      "asset_id": "003626c21c3532495175bd58",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Energy",
+          "Comparison"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:15:43Z"
+    },
+    {
+      "asset_id": "d88cad7f0f583443923180ca",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "per 100 g",
+          "355 kcal",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Comparison",
+          "Energy",
+          "Per 100 g"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific nutritional values are provided for the roasted chana packet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:16:11Z"
     }
   ]
 }

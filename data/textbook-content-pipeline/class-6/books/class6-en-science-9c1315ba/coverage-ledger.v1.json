@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 964,
-    "successful_visual_analyses": 952,
-    "missing_visual_analyses": 1114,
+    "raw_analysis_result_rows": 967,
+    "successful_visual_analyses": 955,
+    "missing_visual_analyses": 1111,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1126,
+    "unresolved_count": 1123,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37367,9 +37367,34 @@
       "asset_path": "assets/32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bag of roasted chana, a snack.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information between potato wafers and roasted chana",
+        "limitations": [
+          "No specific details about the nutritional content of potato wafers are provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37385,9 +37410,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Energy",
+          "Comparison"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37403,9 +37452,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "per 100 g",
+          "355 kcal",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Comparison",
+          "Energy",
+          "Per 100 g"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific nutritional values are provided for the roasted chana packet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
