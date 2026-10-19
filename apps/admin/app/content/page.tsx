@@ -405,7 +405,10 @@ export default function ContentStudio(){
   const programRows=await api('/api/v1/admin/content/programs');
   const availablePrograms=Array.isArray(programRows)?programRows:[];
   setPrograms(availablePrograms);
-  const selectedProgram=nextProgram||programFilter||String(availablePrograms[0]?.id||'');
+  const requestedFromUrl=typeof window!=='undefined'?(new URLSearchParams(window.location.search).get('courseId')||''): '';
+   const requestedProgram=nextProgram||programFilter||requestedFromUrl;
+   const selectedProgram=availablePrograms.some((p:any)=>String(p.id||p.course_id)===String(requestedProgram))
+    ? String(requestedProgram) : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
   if(!selectedProgram){
    setProgramFilter('');setRows([]);setQuestionSummary({});setSelected(null);setDetail(null);
    setError('No courses are assigned to this institution. Assign a course before managing content.');
@@ -485,7 +488,7 @@ export default function ContentStudio(){
   setSaving(true);setError('');setNotice('');
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+'/preview-check',{
-    method:'POST',body:JSON.stringify({contentRevision:revision})
+    method:'POST',body:JSON.stringify({contentRevision:revision,courseId:Number(programFilter)})
    });
    await load();await open(selected);
    setNotice(t('admin.contentStudio.previewConfirmed',{revision}));
@@ -496,7 +499,7 @@ export default function ContentStudio(){
  async function open(item:Selection){
   setSelected(item);setDetail(null);setError('');setNotice('');setCreateType(null);setActiveBlock(0);setShowAdvancedQuestions(false);
   try{
-   const data=await api('/api/v1/admin/content/'+(item.type==='chapter'?'chapters':'lessons')+'/'+item.id);
+   const data=await api('/api/v1/admin/content/'+(item.type==='chapter'?'chapters':'lessons')+'/'+item.id+'?courseId='+encodeURIComponent(programFilter));
    setDetail(data);
    const nextForm=item.type==='chapter'?{...EMPTY,displayName:data.chapter_name||'',description:data.chapter_description||'',chapterStatus:data.chapter_status||'DRAFT',chapterSortOrder:Number(data.chapter_sort_order||1),curriculumSource:data.curriculum_source||'',curriculumSourceUrl:data.curriculum_source_url||'',curriculumSourceEdition:data.curriculum_source_edition||'',curriculumSourcePages:data.curriculum_source_pages||'',curriculumSourceVerified:Boolean(data.curriculum_source_verified)}:{...EMPTY,title:data.lesson_title||'',summary:data.lesson_summary||'',estimatedMinutes:Number(data.estimated_minutes||10),lessonStatus:data.lesson_status||'DRAFT',sortOrder:Number(data.lesson_sort_order||1),alignmentSourceTitle:data.alignment_source_title||'',alignmentSourceUrl:data.alignment_source_url||'',alignmentSourceEdition:data.alignment_source_edition||'',alignmentPageRange:data.alignment_page_range||'',alignmentSourceVerified:Boolean(data.alignment_source_verified)};
    setForm(nextForm);
@@ -515,7 +518,8 @@ export default function ContentStudio(){
  async function create(){
   if(!createType)return;setSaving(true);setError('');setNotice('');
   try{
-   const result=createType==='chapter'?await api('/api/v1/admin/content/chapters',{method:'POST',body:JSON.stringify({classCode:createForm.classCode,subjectCode:createForm.subjectCode,courseId:Number(createForm.courseId||programFilter)||undefined,code:createForm.code,displayName:createForm.displayName,description:createForm.description,curriculumSource:createForm.curriculumSource,curriculumSourceUrl:createForm.curriculumSourceUrl,curriculumSourceEdition:createForm.curriculumSourceEdition,curriculumSourcePages:createForm.curriculumSourcePages,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})}):await api('/api/v1/admin/content/lessons',{method:'POST',body:JSON.stringify({chapterId:Number(createForm.chapterId),code:createForm.code,title:createForm.title,summary:createForm.summary,estimatedMinutes:Number(createForm.estimatedMinutes),alignmentSourceTitle:createForm.alignmentSourceTitle,alignmentSourceUrl:createForm.alignmentSourceUrl,alignmentSourceEdition:createForm.alignmentSourceEdition,alignmentPageRange:createForm.alignmentPageRange,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})});
+   if(!programFilter||!createForm.subjectCode||!createForm.classCode)throw new Error('Select a mapped subject in the selected course before creating a chapter.');
+   const result=createType==='chapter'?await api('/api/v1/admin/content/chapters',{method:'POST',body:JSON.stringify({classCode:createForm.classCode,subjectCode:createForm.subjectCode,courseId:Number(programFilter),code:createForm.code,displayName:createForm.displayName,description:createForm.description,curriculumSource:createForm.curriculumSource,curriculumSourceUrl:createForm.curriculumSourceUrl,curriculumSourceEdition:createForm.curriculumSourceEdition,curriculumSourcePages:createForm.curriculumSourcePages,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})}):await api('/api/v1/admin/content/lessons',{method:'POST',body:JSON.stringify({courseId:Number(programFilter),chapterId:Number(createForm.chapterId),code:createForm.code,title:createForm.title,summary:createForm.summary,estimatedMinutes:Number(createForm.estimatedMinutes),alignmentSourceTitle:createForm.alignmentSourceTitle,alignmentSourceUrl:createForm.alignmentSourceUrl,alignmentSourceEdition:createForm.alignmentSourceEdition,alignmentPageRange:createForm.alignmentPageRange,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})});
    const id=Number(createType==='chapter'?result.chapter_id:result.lesson_id);const kind=createType;setCreateType(null);await load();await open({type:kind,id});setNotice(t('admin.contentStudio.draftCreated',{kind:t(kind==='chapter'?'admin.contentStudio.chapter':'admin.contentStudio.microTopic')}));
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.createFailed'))}finally{setSaving(false)}
  }
@@ -523,7 +527,7 @@ export default function ContentStudio(){
    if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canReview||!chapterSourceDetailsComplete||form.curriculumSourceVerified)return;
    setSaving(true);setError('');setNotice('');
    try{
-    await api('/api/v1/admin/content/chapters/'+selected.id+'/verify-source',{method:'POST'});
+    await api('/api/v1/admin/content/chapters/'+selected.id+'/verify-source?courseId='+encodeURIComponent(programFilter),{method:'POST'});
     await load();await open(selected);
     setNotice(t('admin.contentStudio.curriculumVerified'));
    }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.curriculumVerifyFailed'))}finally{setSaving(false)}
@@ -532,7 +536,7 @@ export default function ContentStudio(){
    if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!lessonSourceDetailsComplete||form.alignmentSourceVerified)return;
    setSaving(true);setError('');setNotice('');
    try{
-    await api('/api/v1/admin/content/lessons/'+selected.id+'/verify-source',{method:'POST'});
+    await api('/api/v1/admin/content/lessons/'+selected.id+'/verify-source?courseId='+encodeURIComponent(programFilter),{method:'POST'});
     await load();await open(selected);
     setNotice(t('admin.contentStudio.textbookMappingVerified'));
    }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.textbookVerifyFailed'))}finally{setSaving(false)}
@@ -541,7 +545,7 @@ export default function ContentStudio(){
   if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canPublishPermission)return;
   setSaving(true);setError('');setNotice('');
   try{
-   await api('/api/v1/admin/content/chapters/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
+   await api('/api/v1/admin/content/chapters/'+selected.id+(publish?'/publish':'/unpublish')+'?courseId='+encodeURIComponent(programFilter),{method:'POST'});
    await load();await open(selected);
    setNotice(publish?t('admin.contentStudio.chapterPublished'):t('admin.contentStudio.chapterUnpublished'));
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.chapterPublicationFailed'))}finally{setSaving(false)}
@@ -550,7 +554,7 @@ export default function ContentStudio(){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canPublishPermission)return;
   setSaving(true);setError('');setNotice('');
   try{
-   await api('/api/v1/admin/content/lessons/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
+   await api('/api/v1/admin/content/lessons/'+selected.id+(publish?'/publish':'/unpublish')+'?courseId='+encodeURIComponent(programFilter),{method:'POST'});
    await load();await open(selected);
    setNotice(publish?t('admin.contentStudio.microTopicPublished'):t('admin.contentStudio.microTopicUnpublished'));
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.publicationFailed'))}finally{setSaving(false)}
@@ -559,7 +563,7 @@ export default function ContentStudio(){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canSubmit)return;
   setSaving(true);setError('');setNotice('');
   try{
-   await api('/api/v1/admin/content/lessons/'+selected.id+'/submit',{method:'POST'});
+   await api('/api/v1/admin/content/lessons/'+selected.id+'/submit?courseId='+encodeURIComponent(programFilter),{method:'POST'});
    await load();await open(selected);
    setNotice(t('admin.contentStudio.submittedToReview'));
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.submitReviewFailed'))}finally{setSaving(false)}
@@ -581,7 +585,7 @@ export default function ContentStudio(){
  }
  async function saveChapter(nextStatus?:string){
   if(!selected||selected.type!=='chapter')return;setSaving(true);setError('');setNotice('');
-  try{await api('/api/v1/admin/content/chapters/'+selected.id,{method:'PATCH',body:JSON.stringify({displayName:form.displayName,description:form.description,curriculumSource:form.curriculumSource,curriculumSourceUrl:form.curriculumSourceUrl,curriculumSourceEdition:form.curriculumSourceEdition,curriculumSourcePages:form.curriculumSourcePages,curriculumSourceVerified:Boolean(form.curriculumSourceVerified),status:nextStatus||form.chapterStatus,sortOrder:Number(form.chapterSortOrder)})});await load();await open(selected);setNotice(nextStatus==='PUBLISHED'?'Publish request completed. Review the resulting state.':'Chapter details saved.')}
+  try{await api('/api/v1/admin/content/chapters/'+selected.id,{method:'PATCH',body:JSON.stringify({courseId:Number(programFilter),displayName:form.displayName,description:form.description,curriculumSource:form.curriculumSource,curriculumSourceUrl:form.curriculumSourceUrl,curriculumSourceEdition:form.curriculumSourceEdition,curriculumSourcePages:form.curriculumSourcePages,curriculumSourceVerified:Boolean(form.curriculumSourceVerified),status:nextStatus||form.chapterStatus,sortOrder:Number(form.chapterSortOrder)})});await load();await open(selected);setNotice(nextStatus==='PUBLISHED'?'Publish request completed. Review the resulting state.':'Chapter details saved.')}
   catch(e){setError(e instanceof Error?e.message:'Chapter could not be saved.')}finally{setSaving(false)}
  }
  function addBlock(type:string){
@@ -676,7 +680,7 @@ export default function ContentStudio(){
    const nextBlocks=blocks.map((b,i)=>({sequence_no:i+1,block_type:b.block_type,content:normalizeBlock(b).content,active:b.active!==false}));
    if(!nextBlocks.length)throw new Error(t('admin.contentStudio.atLeastOneTeachingBlock'));
    const nextQuestions=showAdvancedQuestions?JSON.parse(questionJson):questions;if(!Array.isArray(nextQuestions))throw new Error(t('admin.contentStudio.assessmentQuestionsMustList'));
-   await api('/api/v1/admin/content/lessons/'+selected.id,{method:'PATCH',body:JSON.stringify({title:form.title,summary:form.summary,estimatedMinutes:Number(form.estimatedMinutes),alignmentSourceTitle:form.alignmentSourceTitle,alignmentSourceUrl:form.alignmentSourceUrl,alignmentSourceEdition:form.alignmentSourceEdition,alignmentPageRange:form.alignmentPageRange,alignmentSourceVerified:Boolean(form.alignmentSourceVerified),status:nextStatus||form.lessonStatus,sortOrder:Number(form.sortOrder),blocks:nextBlocks,questions:nextQuestions})});
+   await api('/api/v1/admin/content/lessons/'+selected.id,{method:'PATCH',body:JSON.stringify({courseId:Number(programFilter),title:form.title,summary:form.summary,estimatedMinutes:Number(form.estimatedMinutes),alignmentSourceTitle:form.alignmentSourceTitle,alignmentSourceUrl:form.alignmentSourceUrl,alignmentSourceEdition:form.alignmentSourceEdition,alignmentPageRange:form.alignmentPageRange,alignmentSourceVerified:Boolean(form.alignmentSourceVerified),status:nextStatus||form.lessonStatus,sortOrder:Number(form.sortOrder),blocks:nextBlocks,questions:nextQuestions})});
    await load();await open(selected);setNotice(nextStatus==='REVIEW'?t('admin.contentStudio.lessonSavedForReview'):nextStatus==='PUBLISHED'?t('admin.contentStudio.publishRequestComplete'):['REVIEW','PUBLISHED','ARCHIVED'].includes(previousStatus)?t('admin.contentStudio.changesSavedAsDraft'):t('admin.contentStudio.lessonAndBlocksSaved'));
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.lessonSaveFailed'))}finally{setSaving(false)}
  }
@@ -782,7 +786,7 @@ export default function ContentStudio(){
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
    <section className="qe-stats-grid">
-    <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.curriculumClasses')}</small><strong>{classOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
+    <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.courseSubjects')}</small><strong>{subjectOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
     <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.chaptersTopics')}</small><strong>{uniqueChapters}</strong><span>{t('admin.contentStudio.publishedUnpublished')}</span></div></article>
     <article><span className="qe-stat-icon green">▤</span><div><small>{t('admin.contentStudio.publishedLessons')}</small><strong>{publishedLessons}</strong><span>{t('admin.contentStudio.availableToEnrolled')}</span></div></article>
     <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.lessonsNeedingAuthoring')}</small><strong>{draftLessons}</strong><span>{t('admin.contentStudio.draftOrReviewTopics')}</span></div></article>
@@ -790,9 +794,9 @@ export default function ContentStudio(){
    </section>
    <section className="qe-library-panel" id="content-library">
     <div className="qe-section-head"><div><span className="admin-kicker">{t('admin.contentStudio.curriculumMap')}</span><h2>{t('admin.contentStudio.findChapterOrTopic')}</h2><p>{t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div></div>
-    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);void load(value)}}>{programs.map((p:any)=><option value={String(p.id)} key={p.id}>{p.display_name} · {p.curriculum_version}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
+    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id)} key={p.id}>{p.display_name} · {p.curriculum_version}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
     <div className="qe-curriculum-map">
-     {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:groups.map(group=>{const chapter=group.chapter;const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;const publishedCount=group.rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED').length;return <article className="qe-chapter-group" key={group.id}><button type="button" className={'qe-chapter-row '+(selected?.type==='chapter'&&selected.id===group.id?'selected':'')} onClick={()=>void open({type:'chapter',id:group.id})}><span className="qe-chapter-glyph">▤</span><span className="qe-chapter-title"><small>CLASS {chapter.class_code} <i>·</i> {chapter.program_name?chapter.program_name+' · ':''}{chapter.subject_name}</small><strong>{chapter.chapter_name||t('admin.contentStudio.untitledChapter')}</strong><em>{chapter.chapter_description||t('admin.contentStudio.chapterDescriptionMissing')}</em></span><span className="qe-chapter-count">{t('admin.contentStudio.topicCount',{count:totalLessons})} <small>{t('admin.contentStudio.publishedCount',{count:publishedCount})}</small></span><span className={'qe-status-pill '+String(chapter.chapter_status||'DRAFT').toLowerCase()}>{statusLabel(chapter.chapter_status)}</span><span className="qe-row-arrow">→</span></button>{(group.lessons.length?group.lessons:statusFilter==='ALL'?group.rows.filter(r=>r.lesson_id!==null):[]).map(lesson=><button type="button" key={lesson.lesson_id} className={'qe-topic-row '+(selected?.type==='lesson'&&selected.id===lesson.lesson_id?'selected':'')} onClick={()=>void open({type:'lesson',id:Number(lesson.lesson_id)})}><span className="qe-topic-stem">↳</span><span className="qe-topic-icon">✎</span><span className="qe-topic-title"><strong>{lesson.lesson_title||'Untitled micro-topic'}</strong><small>{lesson.estimated_minutes||10} min <i>·</i> {lesson.block_count||0} blocks <i>·</i> {lesson.question_count||0} questions</small></span><span className={'qe-status-pill '+String(lesson.lesson_status||'DRAFT').toLowerCase()}>{statusLabel(lesson.lesson_status)}</span><span className="qe-row-arrow">→</span></button>)}{!totalLessons&&<div className="qe-topic-empty">{t('admin.contentStudio.noMicroTopics')} {t('admin.contentStudio.createFirstTopic')}</div>}</article>})}
+     {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:groups.map(group=>{const chapter=group.chapter;const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;const publishedCount=group.rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED').length;return <article className="qe-chapter-group" key={group.id}><button type="button" className={'qe-chapter-row '+(selected?.type==='chapter'&&selected.id===group.id?'selected':'')} onClick={()=>void open({type:'chapter',id:group.id})}><span className="qe-chapter-glyph">▤</span><span className="qe-chapter-title"><small>{programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter))?.display_name||chapter.program_name||t('admin.contentStudio.course')} <i>·</i> {chapter.subject_name}</small><strong>{chapter.chapter_name||t('admin.contentStudio.untitledChapter')}</strong><em>{chapter.chapter_description||t('admin.contentStudio.chapterDescriptionMissing')}</em></span><span className="qe-chapter-count">{t('admin.contentStudio.topicCount',{count:totalLessons})} <small>{t('admin.contentStudio.publishedCount',{count:publishedCount})}</small></span><span className={'qe-status-pill '+String(chapter.chapter_status||'DRAFT').toLowerCase()}>{statusLabel(chapter.chapter_status)}</span><span className="qe-row-arrow">→</span></button>{(group.lessons.length?group.lessons:statusFilter==='ALL'?group.rows.filter(r=>r.lesson_id!==null):[]).map(lesson=><button type="button" key={lesson.lesson_id} className={'qe-topic-row '+(selected?.type==='lesson'&&selected.id===lesson.lesson_id?'selected':'')} onClick={()=>void open({type:'lesson',id:Number(lesson.lesson_id)})}><span className="qe-topic-stem">↳</span><span className="qe-topic-icon">✎</span><span className="qe-topic-title"><strong>{lesson.lesson_title||'Untitled micro-topic'}</strong><small>{lesson.estimated_minutes||10} min <i>·</i> {lesson.block_count||0} blocks <i>·</i> {lesson.question_count||0} questions</small></span><span className={'qe-status-pill '+String(lesson.lesson_status||'DRAFT').toLowerCase()}>{statusLabel(lesson.lesson_status)}</span><span className="qe-row-arrow">→</span></button>)}{!totalLessons&&<div className="qe-topic-empty">{t('admin.contentStudio.noMicroTopics')} {t('admin.contentStudio.createFirstTopic')}</div>}</article>})}
     </div><div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
    </section>
    {(createType||selected)&&<section className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
