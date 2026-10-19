@@ -3496,6 +3496,42 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     QuantaEdgeBrand(modifier = Modifier, compact = true)
                     Spacer(modifier = Modifier.weight(1f))
                     if (signedIn) {
+                        NotificationBellButton(language = language) { target ->
+                            error = ""
+                            if (target.startsWith("https://", ignoreCase = true)) {
+                                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(target))) }
+                                    .onFailure { error = if (language == "hi") "यह लिंक अभी नहीं खुल सका।" else "This link could not be opened." }
+                            } else when (target) {
+                                "/student", "/student/courses", "/student/marketplace" -> {
+                                    if (parentRole) {
+                                        parentSection = "family"
+                                        route = AppRoute.PARENT_HOME
+                                    } else if (target == "/student") {
+                                        route = AppRoute.STUDENT_HOME
+                                    } else if (target == "/student/marketplace") {
+                                        openMarketplace()
+                                    } else {
+                                        openAllCourses()
+                                    }
+                                }
+                                "/student/learn", "/student/structured-lessons" -> {
+                                    if (parentRole) {
+                                        parentSection = "family"
+                                        route = AppRoute.PARENT_HOME
+                                    } else openSubject(currentSubject)
+                                }
+                                "/student/classes" -> openClasses(currentSubject)
+                                "/student/progress" -> openProgress()
+                                "/student/practice", "/student/tests" -> openAssessments("ALL")
+                                "/parent", "/parent/courses", "/parent/children" -> {
+                                    parentSection = if (target == "/parent/children") "children" else "family"
+                                    route = AppRoute.PARENT_HOME
+                                }
+                                else -> status = if (language == "hi")
+                                    "सूचना का लिंक ऐप में उपलब्ध नहीं है। इसे वेब पर खोलें।"
+                                else "This notification link is not available in this app. Open it on the web."
+                            }
+                        }
                         Box {
                             Surface(
                                 modifier = Modifier.size(38.dp).clickable(enabled = !busy) {
