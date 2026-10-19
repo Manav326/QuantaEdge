@@ -11,8 +11,8 @@
     "assets_selected": 827,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 822,
-    "assets_remaining": 1256,
+    "assets_analyzed": 823,
+    "assets_remaining": 1255,
     "assets_completion_percent": 39.6,
     "assets_failed": 10,
     "assets_skipped_from_checkpoint": 822,
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:34:16Z"
+      "checkpointed_at": "2026-10-19T00:38:55Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:34:57Z"
+      "checkpointed_at": "2026-10-19T00:39:35Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:35:50Z"
+      "checkpointed_at": "2026-10-19T00:40:27Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25643,7 +25643,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
         "visible_text": [
           "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
@@ -25657,17 +25657,11 @@
           "Salim Ali",
           "Keoladeo National Park",
           "Ranganathittu Bird Sanctuary",
-          "Padma Vibhushan",
-          "terrestrial habitats",
-          "terrestrial",
-          "forest",
-          "desert",
-          "grassland",
-          "mountain"
+          "Padma Vibhushan"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
         "limitations": [
-          "The page does not provide specific examples of adaptations for each region or habitat.",
+          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -25675,7 +25669,46 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:38:08Z"
+      "checkpointed_at": "2026-10-19T00:41:05Z"
+    },
+    {
+      "asset_id": "2c18e633fa3c8cc15c56decc",
+      "asset_sha256": "670670bcd717cac2b785532bbb7a9be2820973896bcb804695f8429e25c5a731",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/670670bcd717cac2b785532bbb7a9be2820973896bcb804695f8429e25c5a731.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "57826b7c50430393a7093ace4baf66d71d240eba2f192defcbaac2b7bf548080",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular frame with a torn edge, possibly representing a page from a book.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The plants and animals that live in water are said to live in aquatic habitats. Some examples of aquatic habitats are ponds, lakes, rivers, and oceans.",
+          "Some animals, such as frogs, can live in water as well as on land. These are called amphibians.",
+          "What would happen if the habitat of a plant or an animal is damaged? What would happen if a goat does not get grass to eat? Can a fish survive without water?",
+          "Check with your parents, grandparents, and neighbours"
+        ],
+        "concepts": [
+          "aquatic habitats",
+          "amphibians",
+          "habitat damage",
+          "food source",
+          "water survival"
+        ],
+        "context_relation": "The image is a visual representation of a question from a textbook, likely related to the topic of aquatic habitats and the impact of habitat damage on animals.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T00:41:49Z"
     }
   ]
 }
