@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1126,
+    "assets_selected": 1127,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1122,
-    "assets_remaining": 956,
-    "assets_completion_percent": 54.0,
+    "assets_analyzed": 1124,
+    "assets_remaining": 954,
+    "assets_completion_percent": 54.1,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1121,
+    "assets_skipped_from_checkpoint": 1122,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:02:31Z"
+      "checkpointed_at": "2026-10-19T19:08:18Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:03:15Z"
+      "checkpointed_at": "2026-10-19T19:09:02Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:04:13Z"
+      "checkpointed_at": "2026-10-19T19:10:00Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36862,6 +36862,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:07:26Z"
+    },
+    {
+      "asset_id": "3ccede0b25684538f1f7f0c8",
+      "asset_sha256": "339844ee26cfca2967a6d230b0c5100d6ecc86297c47ae3819df0d902d6556e1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/339844ee26cfca2967a6d230b0c5100d6ecc86297c47ae3819df0d902d6556e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal measuring rod used for measuring length.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "length measurement",
+          "metal measuring rod",
+          "school uniform",
+          "cloth shop",
+          "flexible measuring tape",
+          "tailor",
+          "measurement of height"
+        ],
+        "context_relation": "The image is related to the educational content about measurement of length and height.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the uniform or the shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:10:39Z"
+    },
+    {
+      "asset_id": "824b65b9abfec04a0f352a94",
+      "asset_sha256": "e4c75f311cbeb8d45cff15b30232745f9279983bac1923bb3aaeb7d67137c3f6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/e4c75f311cbeb8d45cff15b30232745f9279983bac1923bb3aaeb7d67137c3f6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a red shirt and white pants, standing with one hand on her hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a girl in a school uniform, possibly related to the measurement of length and motion in Chapter 5 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the measurement of length or motion.",
+          "The image does not show any measurements or calculations.",
+          "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:11:20Z"
     }
   ]
 }
