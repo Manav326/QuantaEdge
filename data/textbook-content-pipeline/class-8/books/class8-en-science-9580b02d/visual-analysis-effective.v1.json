@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d7083d8eb6f6e6f8d0cd5a0e4dbead2f7a52e2aed4330a9e9d73934ffc16305e",
+  "raw_analysis_sha256": "d1e9b0fa4a078d95c6f2a8ce001dbd9a3fddfa123e16c20d879e1c1c5e40c04a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1806,32 +1806,21 @@
           "teamwork",
           "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of boxes",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:21:06Z",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:42:10Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -1849,24 +1838,13 @@
           "teamwork",
           "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of boxes",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -2628,7 +2606,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2644,27 +2622,28 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "Indian and international scientists",
+          "Keywords",
           "NEP 2020",
-          "keywords",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page is part of a textbook designed for science education, focusing on the contributions of scientists, the scientific process, and the development of scientific temper.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions mentioned."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:22:23Z",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:46:50Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2680,18 +2659,19 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "Indian and international scientists",
+          "Keywords",
           "NEP 2020",
-          "keywords",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page is part of a textbook designed for science education, focusing on the contributions of scientists, the scientific process, and the development of scientific temper.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions mentioned."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -28886,9 +28866,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
+      "run_id": "39260167363",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -29350,7 +29330,7 @@
         ],
         "concepts": [
           "Acknowledgments",
-          "Book contributors",
+          "Contributors",
           "Editors",
           "Support",
           "Publication process"
@@ -29364,8 +29344,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:23:14Z",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:56:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -29377,7 +29357,7 @@
         ],
         "concepts": [
           "Acknowledgments",
-          "Book contributors",
+          "Contributors",
           "Editors",
           "Support",
           "Publication process"
@@ -32414,9 +32394,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
+      "run_id": "39260167363",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 863,
+    "assets_selected": 865,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 860,
     "assets_remaining": 1431,
     "assets_completion_percent": 37.5,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 858,
+    "assets_skipped_from_checkpoint": 860,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1197,32 +1197,21 @@
           "teamwork",
           "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of boxes",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:21:06Z"
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:42:10Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1736,7 +1725,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -1752,25 +1741,26 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "Indian and international scientists",
+          "Keywords",
           "NEP 2020",
-          "keywords",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page is part of a textbook designed for science education, focusing on the contributions of scientists, the scientific process, and the development of scientific temper.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions mentioned."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:22:23Z"
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:46:50Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -19848,9 +19838,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
+      "run_id": "39260167363",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -20157,7 +20147,7 @@
         ],
         "concepts": [
           "Acknowledgments",
-          "Book contributors",
+          "Contributors",
           "Editors",
           "Support",
           "Publication process"
@@ -20171,8 +20161,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:23:14Z"
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T13:56:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22091,9 +22081,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
+      "run_id": "39260167363",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
