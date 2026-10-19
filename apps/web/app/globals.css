@@ -79,7 +79,7 @@
 .qe-workspace-layout.is-collapsed .qe-workspace-link-label,
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>div{display:none}.qe-workspace-layout.is-collapsed .qe-workspace-collapse{top:72px;right:calc(50% - 12px)}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar nav{margin-top:31px}.qe-workspace-layout.is-collapsed .qe-workspace-link{justify-content:center;padding:9px 4px;gap:0}.qe-workspace-layout.is-collapsed .qe-workspace-icon{flex-basis:34px;width:34px;height:34px;font-size:17px}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot{justify-content:center;padding-left:0;padding-right:0}.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>span{flex-basis:30px;width:30px;height:30px}/* Cover any browser back/forward cache snapshot until the session guard finishes. */
 body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha hai…';position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:var(--paper,var(--qe-color-background));color:var(--ink,var(--qe-color-text));font:700 13px/1.6 'DM Sans','Noto Sans Devanagari',sans-serif;text-align:center;letter-spacing:0;}/* Accessible, persistent Hinglish / English language control */
-.qe-language-switcher{display:inline-flex;align-items:center;gap:7px;max-width:100%;border:1px solid rgba(116,130,151,.28);border-radius:999px;background:rgba(255,255,255,.94);padding:6px 10px;color:#263446;box-shadow:0 3px 12px rgba(29,42,61,.06);font:inherit}.qe-language-switcher>span:first-child{font-size:14px;line-height:1;color:#d65b35}.qe-language-switcher__label{font-size:11px;font-weight:650;white-space:nowrap}.qe-language-switcher select{max-width:150px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:650;outline-offset:3px;cursor:pointer}.qe-language-switcher.is-compact{padding:5px 8px;gap:5px}.qe-language-switcher.is-compact .qe-language-switcher__label{display:none}.qe-language-toolbar{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 22px 0;position:relative;z-index:4}.qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}.qe-language-switcher:focus-within{outline:2px solid var(--qe-color-focus);outline-offset:2px}.qe-account-language-settings{display:grid;gap:9px;margin:4px 0 10px;padding:0 2px}.qe-language-switcher--menu-setting{display:flex;flex-direction:column;align-items:stretch;gap:7px;width:100%;max-width:none;padding:10px 11px;border:1px solid var(--qe-color-border-subtle);border-radius:12px;background:var(--qe-color-background);box-shadow:none;white-space:normal}.qe-language-switcher--menu-setting>span:first-child{display:none}.qe-language-switcher--menu-setting .qe-language-switcher__label{display:block;white-space:normal;color:var(--qe-color-text);font-size:11px;font-weight:800;line-height:1.35}.qe-language-switcher--menu-setting select{display:block;width:100%;max-width:none;min-height:36px;padding:7px 9px;border:1px solid #e0e5ee;border-radius:9px;background:var(--qe-color-surface);color:var(--qe-color-text);font-size:12px;font-weight:650}.qe-language-switcher__help{display:block;margin:0;color:var(--qe-color-text-muted);font-size:10px;font-weight:500;line-height:1.5;white-space:normal}.student-account-menu__language-settings,.parent-account__language-settings{margin-bottom:9px}
+.qe-language-switcher{display:inline-flex;align-items:center;gap:7px;max-width:100%;border:1px solid var(--qe-color-border-subtle);border-radius:999px;background:var(--qe-color-surface);padding:6px 10px;color:var(--qe-color-text);box-shadow:var(--qe-elevation-1);font:inherit;transition:background-color 180ms ease,border-color 180ms ease,color 180ms ease}.qe-language-switcher>span:first-child{font-size:14px;line-height:1;color:var(--qe-color-primary-text)}.qe-language-switcher__label{font-size:11px;font-weight:650;white-space:nowrap}.qe-language-switcher select{max-width:150px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:650;outline-offset:3px;cursor:pointer}.qe-language-switcher.is-compact{padding:5px 8px;gap:5px}.qe-language-switcher.is-compact .qe-language-switcher__label{display:none}.qe-language-toolbar{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 22px 0;position:relative;z-index:4}.qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}.qe-language-switcher:focus-within{outline:2px solid var(--qe-color-focus);outline-offset:2px}.qe-account-language-settings{display:grid;gap:9px;margin:4px 0 10px;padding:0 2px}.qe-language-switcher--menu-setting{display:flex;flex-direction:column;align-items:stretch;gap:7px;width:100%;max-width:none;padding:10px 11px;border:1px solid var(--qe-color-border-subtle);border-radius:12px;background:var(--qe-color-background);box-shadow:none;white-space:normal}.qe-language-switcher--menu-setting>span:first-child{display:none}.qe-language-switcher--menu-setting .qe-language-switcher__label{display:block;white-space:normal;color:var(--qe-color-text);font-size:11px;font-weight:800;line-height:1.35}.qe-language-switcher--menu-setting select{display:block;width:100%;max-width:none;min-height:36px;padding:7px 9px;border:1px solid #e0e5ee;border-radius:9px;background:var(--qe-color-surface);color:var(--qe-color-text);font-size:12px;font-weight:650}.qe-language-switcher__help{display:block;margin:0;color:var(--qe-color-text-muted);font-size:10px;font-weight:500;line-height:1.5;white-space:normal}.student-account-menu__language-settings,.parent-account__language-settings{margin-bottom:9px}
 @media(max-width:640px){.qe-language-toolbar{padding:7px 12px 0;min-height:40px}.qe-language-auth-float{top:8px;right:8px}.qe-language-switcher{padding:5px 8px;gap:5px}.qe-language-switcher__label{display:none}.qe-language-switcher select{max-width:125px}}.qe-session-language{display:flex;justify-content:flex-end;margin:-8px -8px 16px;}/* Cohesive workspace header and complete persistent student/parent navigation. */
 .qe-workspace-topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:72px;padding:10px clamp(18px,3vw,38px);border-bottom:1px solid var(--line,var(--qe-color-border-subtle));background:rgba(255,255,255,.92);backdrop-filter:blur(16px);box-shadow:0 5px 22px rgba(21,32,56,.025)}.qe-workspace-topbar__context{display:flex;min-width:0;flex-direction:column;gap:4px}.qe-workspace-topbar__context>span{color:var(--qe-color-text-muted);font-size:8px;font-weight:800;letter-spacing:1.35px}.qe-workspace-topbar__context>strong{overflow:hidden;color:var(--ink,var(--qe-color-text));font-size:14px;font-weight:800;letter-spacing:-.2px;text-overflow:ellipsis;white-space:nowrap}.qe-workspace-topbar .qe-language-switcher{flex:0 0 auto}.qe-workspace-content>.app-shell,.qe-workspace-content>.parent-app{min-height:calc(100vh - 72px)}.qe-workspace-sidebar{overflow-x:hidden;overflow-y:auto}
 @media(max-width:900px){.qe-workspace-topbar{min-height:60px;padding:8px 13px;gap:9px}.qe-workspace-topbar__context{gap:3px;max-width:55%}.qe-workspace-topbar__context>span{font-size:7px;letter-spacing:.9px}.qe-workspace-topbar__context>strong{font-size:12px}.qe-workspace-topbar .qe-language-switcher{max-width:48%}
@@ -808,4 +808,85 @@ html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .butt
 html[data-qe-appearance="dark"] .brand-mark {
   background: #152038;
   color: #FFFFFF;
+}
+
+
+/* Refined authentication and legal pages: every control belongs to the same quiet surface system. */
+html[data-qe-appearance="dark"] .auth-card h1,
+html[data-qe-appearance="dark"] .auth-card h2,
+html[data-qe-appearance="dark"] .auth-card label,
+html[data-qe-appearance="dark"] .auth-brand,
+html[data-qe-appearance="dark"] .auth-back-link,
+html[data-qe-appearance="dark"] .auth-card>.text-link {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .auth-card>p,
+html[data-qe-appearance="dark"] .auth-note,
+html[data-qe-appearance="dark"] .auth-separator,
+html[data-qe-appearance="dark"] .auth-dev-code,
+html[data-qe-appearance="dark"] .auth-mode-links button,
+html[data-qe-appearance="dark"] .auth-mode-links a,
+html[data-qe-appearance="dark"] .auth-secondary-action,
+html[data-qe-appearance="dark"] .auth-card .consent-row {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .auth-mode-links button:hover,
+html[data-qe-appearance="dark"] .auth-mode-links a:hover,
+html[data-qe-appearance="dark"] .auth-back-link:hover,
+html[data-qe-appearance="dark"] .auth-card>.text-link:hover {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="dark"] .auth-dev-code {
+  background: var(--qe-color-primary-container);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .auth-alt-link {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .auth-method-switch button.is-active {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .auth-separator:before,
+html[data-qe-appearance="dark"] .auth-separator:after {
+  background: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .legal-page {
+  max-width: 880px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 4vw, 38px) 72px;
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .legal-page {
+  transition: background-color 180ms ease, color 180ms ease;
+}
+.legal-page {
+  max-width: 880px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px clamp(18px, 4vw, 38px) 72px;
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+  line-height: 1.75;
+}
+.legal-page h1 { margin: 24px 0 16px; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.035em; }
+.legal-page p { max-width: 72ch; color: var(--qe-color-text-muted); line-height: 1.8; }
+html[data-qe-appearance] .auth-card,
+html[data-qe-appearance] .auth-alt-link,
+html[data-qe-appearance] .auth-method-switch {
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-language-switcher,
+  html[data-qe-appearance] .auth-card,
+  html[data-qe-appearance] .auth-alt-link,
+  html[data-qe-appearance] .auth-method-switch,
+  html[data-qe-appearance] .legal-page { transition: none; }
 }
