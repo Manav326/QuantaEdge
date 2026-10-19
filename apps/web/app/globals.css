@@ -1216,3 +1216,16 @@ html[data-qe-appearance="dark"] .parent-account__icon {
  .qe-active-course-section .qe-active-course-badge{grid-column:2;justify-self:start}
  .student-profile-card__topline{gap:8px}
 }
+
+
+/* Parent profile cards remain display-only until their own edit control is selected. */
+.parent-profile-card__topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0;margin-bottom:22px}
+.parent-profile-card__topline .parent-profile-card__intro{flex:1;min-width:0;margin-bottom:0}
+.parent-profile-card__edit-button{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:1px solid var(--qe-color-border-subtle);border-radius:11px;background:var(--qe-color-surface);color:var(--qe-color-text-muted);font-size:21px;line-height:1;cursor:pointer}
+.parent-profile-card__edit-button:hover:not(:disabled){background:var(--qe-color-primary-container);border-color:var(--qe-color-focus);color:var(--qe-color-primary-text)}
+.parent-profile-card__edit-button:focus-visible{outline:3px solid color-mix(in srgb,var(--qe-color-focus) 30%,transparent);outline-offset:2px}
+.parent-profile-card__edit-button:disabled{opacity:.45;cursor:not-allowed}
+.parent-profile-field input:disabled,.parent-profile-field select:disabled{background:var(--qe-color-disabled-background);color:var(--qe-color-disabled-text);border-color:var(--qe-color-border-subtle);cursor:not-allowed;opacity:1}
+.parent-profile-card__actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:18px}
+.parent-profile-card__actions .button{min-height:38px;padding:9px 13px}
+@media(max-width:430px){.parent-profile-card__topline{gap:8px}.parent-profile-card__edit-button{flex-basis:34px;width:34px;height:34px}}
