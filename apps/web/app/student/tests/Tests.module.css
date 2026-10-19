@@ -613,3 +613,68 @@ html[data-qe-appearance="dark"] .certificateEligibilityHint { color: var(--qe-co
   html[data-qe-appearance="dark"] .questionPanel,
   html[data-qe-appearance="dark"] .resultAttemptButton { transition: none; }
 }
+
+/* Finish text, option-key, language, and score states within released assessment results. */
+html[data-qe-appearance="dark"] .brand>span { background: var(--qe-color-primary); color: var(--qe-color-on-primary); }
+html[data-qe-appearance="dark"] .resultScorePrimary,
+html[data-qe-appearance="dark"] .resultDetails,
+html[data-qe-appearance="dark"] .resultQuestionNav,
+html[data-qe-appearance="dark"] .languageNotice {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .resultScorePrimary>small,
+html[data-qe-appearance="dark"] .resultScorePrimary>strong span,
+html[data-qe-appearance="dark"] .resultScorePrimary>p,
+html[data-qe-appearance="dark"] .resultMetric span,
+html[data-qe-appearance="dark"] .resultQuestionInfo>small,
+html[data-qe-appearance="dark"] .resultQuestionRow>strong small,
+html[data-qe-appearance="dark"] .score>b small,
+html[data-qe-appearance="dark"] .leaderboardPodiumScore small,
+html[data-qe-appearance="dark"] .leaderboardMetrics>div>b i,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>div>span,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>div>b small,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>strong small,
+html[data-qe-appearance="dark"] .leaderboardEmpty p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .score>span { color: var(--qe-color-success); }
+html[data-qe-appearance="dark"] .optionKey {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .optionSelected .optionKey {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .optionCorrect .optionKey {
+  background: var(--qe-color-success);
+  color: var(--qe-color-on-success);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .optionIncorrect .optionKey {
+  background: var(--qe-color-error);
+  color: var(--qe-color-on-error);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .optionText,
+html[data-qe-appearance="dark"] .optionOutcome { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .optionText>small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .optionHintCorrect,
+html[data-qe-appearance="dark"] .reviewCorrect { color: var(--qe-color-success); }
+html[data-qe-appearance="dark"] .optionHintIncorrect,
+html[data-qe-appearance="dark"] .reviewIncorrect { color: var(--qe-color-error); }
+html[data-qe-appearance="dark"] .optionHintNeutral,
+html[data-qe-appearance="dark"] .reviewNeutral { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .leaderboardYou,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>strong,
+html[data-qe-appearance="dark"] .resultScorePrimary>b {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="dark"] .leaderboardStudentCell>b,
+html[data-qe-appearance="dark"] .leaderboardRankNumber { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .leaderboardTable tbody tr:last-child td { border-color: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .leaderboardEyebrow { color: var(--qe-color-primary-text); }
