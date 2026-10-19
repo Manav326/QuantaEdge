@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1ef8d83fb886589bc14e7a822fec88553f61520e442a39b8c08ba8807f18d427",
+  "raw_analysis_sha256": "50fba61ec480c51fa6eb7a7d947796dbab209afbd569df7c33329808ae972d6e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:32:11Z",
+      "checkpointed_at": "2026-10-19T02:35:51Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:32:51Z",
+      "checkpointed_at": "2026-10-19T02:36:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:33:44Z",
+      "checkpointed_at": "2026-10-19T02:37:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:34:24Z",
+      "checkpointed_at": "2026-10-19T02:38:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39668,6 +39668,54 @@
         "context_relation": "The image is a close-up of a pigeon, focusing on its colorful plumage and feet.",
         "limitations": [
           "The image does not provide any information about the pigeon's behavior or habitat."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5ac6c7c6fc434b4da1c0c9e6",
+      "asset_sha256": "7317032151dfa1b60e13cabc21823b6179484a81e6dbab1976bb6604eb695433",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/7317032151dfa1b60e13cabc21823b6179484a81e6dbab1976bb6604eb695433.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9a67501b2187d6cc5eea9bd4fbb6370435d19710f5b23017fab7a4a1a1dd821",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A duck with a green head, white body, and orange feet.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "duck",
+          "feet",
+          "orange feet"
+        ],
+        "context_relation": "Observation of a duck's feet",
+        "limitations": [
+          "No specific questions or tasks are provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:38:42Z",
+      "effective_analysis": {
+        "visual_summary": "A duck with a green head, white body, and orange feet.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "duck",
+          "feet",
+          "orange feet"
+        ],
+        "context_relation": "Observation of a duck's feet",
+        "limitations": [
+          "No specific questions or tasks are provided in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 855,
+    "assets_selected": 856,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 851,
-    "assets_remaining": 1227,
+    "assets_analyzed": 852,
+    "assets_remaining": 1226,
     "assets_completion_percent": 41.0,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 850,
+    "assets_skipped_from_checkpoint": 851,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:32:11Z"
+      "checkpointed_at": "2026-10-19T02:35:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:32:51Z"
+      "checkpointed_at": "2026-10-19T02:36:32Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:33:44Z"
+      "checkpointed_at": "2026-10-19T02:37:25Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:34:24Z"
+      "checkpointed_at": "2026-10-19T02:38:05Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26768,6 +26768,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T02:35:03Z"
+    },
+    {
+      "asset_id": "5ac6c7c6fc434b4da1c0c9e6",
+      "asset_sha256": "7317032151dfa1b60e13cabc21823b6179484a81e6dbab1976bb6604eb695433",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/7317032151dfa1b60e13cabc21823b6179484a81e6dbab1976bb6604eb695433.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9a67501b2187d6cc5eea9bd4fbb6370435d19710f5b23017fab7a4a1a1dd821",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A duck with a green head, white body, and orange feet.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "duck",
+          "feet",
+          "orange feet"
+        ],
+        "context_relation": "Observation of a duck's feet",
+        "limitations": [
+          "No specific questions or tasks are provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:38:42Z"
     }
   ]
 }
