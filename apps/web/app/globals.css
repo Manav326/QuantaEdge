@@ -774,7 +774,7 @@ html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not(
 html[data-qe-appearance="dark"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6) {
   color: var(--qe-color-text);
 }
-html[data-qe-appearance="dark"] .qe-workspace-content :is(p, li, label, legend, dt, dd, th, td) {
+html[data-qe-appearance="dark"] .qe-workspace-content :is(label, legend, dt, dd, th, td) {
   color: var(--qe-color-text);
 }
 html[data-qe-appearance="dark"] .qe-workspace-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea) {
@@ -1007,7 +1007,7 @@ html[data-qe-appearance="light"] .qe-tenant-landing .hero p {
 html[data-qe-appearance="light"] .qe-workspace-content :is(.eyebrow, [class*="eyebrow"], [class*="Eyebrow"], [class*="kicker"], [class*="Kicker"]) {
   color: var(--qe-color-primary-text);
 }
-html[data-qe-appearance="light"] .qe-workspace-content :is(p, li, label, legend, dt, dd, th, td) {
+html[data-qe-appearance="light"] .qe-workspace-content :is(label, legend, dt, dd, th, td) {
   color: var(--qe-color-text);
 }
 html[data-qe-appearance="light"] .qe-workspace-content :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]) {
@@ -1052,4 +1052,15 @@ html[data-qe-appearance="light"] .qe-workspace-content :is(.notice, .is-success,
 }
 html[data-qe-appearance="light"] .qe-workspace-content :is(hr, .divider, [class*="Divider"]) {
   border-color: var(--qe-color-border-subtle);
+}
+
+
+/* Keep descriptive copy quieter than headings without bleaching educational content. */
+html[data-qe-appearance="dark"] .qe-workspace-content .hero p,
+html[data-qe-appearance="dark"] .qe-tenant-landing .hero p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.testCard, .sessionCard, .recordingCard, .courseCard, .resultCard, .empty) > p,
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.recordingBody, .sectionHeading, .toolbar, .attemptTitle) p {
+  color: var(--qe-color-text-muted);
 }
