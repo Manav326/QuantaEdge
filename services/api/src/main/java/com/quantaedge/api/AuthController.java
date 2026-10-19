@@ -53,6 +53,19 @@ public class AuthController {
         .body(Map.of("configured", !clientId.isBlank(), "clientId", clientId));
   }
 
+  /** Current institution-scoped eligibility for the parent's own learner workspace. */
+  @GetMapping("/my-learning-access")
+  public Map<String,Object> parentPersonalLearningAccess(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    if (context == null || !context.isParent() || context.userId() == null) {
+      throw new SecurityException("An authenticated parent account is required to check personal learning access.");
+    }
+    InstitutionTenantContext tenant = requireTenant(institutionCode);
+    requireMembershipService().requireExistingMembership(context, tenant);
+    return Map.of("available", auth.hasParentPersonalLearningAccess(context.userId(), tenant.institutionId()));
+  }
+
   @PostMapping("/my-learning-session")
   @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> openPersonalLearningSession(
