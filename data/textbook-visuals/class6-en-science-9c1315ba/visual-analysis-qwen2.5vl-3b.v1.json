@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 876,
+    "assets_selected": 877,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 872,
-    "assets_remaining": 1206,
+    "assets_analyzed": 873,
+    "assets_remaining": 1205,
     "assets_completion_percent": 42.0,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 871,
+    "assets_skipped_from_checkpoint": 872,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:55:21Z"
+      "checkpointed_at": "2026-10-19T03:59:10Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:56:03Z"
+      "checkpointed_at": "2026-10-19T03:59:53Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:56:58Z"
+      "checkpointed_at": "2026-10-19T04:00:49Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:57:40Z"
+      "checkpointed_at": "2026-10-19T04:01:31Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27616,6 +27616,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T03:58:18Z"
+    },
+    {
+      "asset_id": "776b701f8f52ea10a5b5a7b7",
+      "asset_sha256": "34950674beb80f26de98157005827e01e06b35b9fc701ea88e89ca4598fa8a10",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/34950674beb80f26de98157005827e01e06b35b9fc701ea88e89ca4598fa8a10.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d13f98c679357936a084cd6c3533cfdbe15ba242702a84c930f40da13477f830",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a hand holding a block of dark-colored substance over a pile of white powder.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a part of an educational activity related to food habits and cooking practices.",
+        "limitations": [
+          "The image does not provide specific details about the substance or its context, making it difficult to determine the exact educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:02:09Z"
     }
   ]
 }
