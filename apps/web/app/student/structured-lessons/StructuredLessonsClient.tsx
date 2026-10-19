@@ -16,7 +16,7 @@ export default function StructuredLessonsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedCourseText = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\d+$/.test(requestedCourseText) && Number(requestedCourseText) > 0 ? Number(requestedCourseText) : null;
+  const requestedCourseId = requestedCourseText || null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const requestedSubjectCode = searchParams.get('subjectCode') || 'ALL';
   const [subjectCode, setSubjectCode] = useState(requestedSubjectCode);
@@ -34,7 +34,7 @@ export default function StructuredLessonsClient() {
       return;
     }
     try {
-      const query = new URLSearchParams({ language: learningLanguage, courseId: String(courseId) });
+      const query = new URLSearchParams({ language: learningLanguage, courseId: String(activeCourse?.public_id || courseId) });
       if (subjectCode !== 'ALL') query.set('subjectCode', subjectCode);
       const response = await fetch('/api/v1/learning/structured-lessons?' + query.toString(),
         { credentials: 'same-origin', cache: 'no-store' });
@@ -45,7 +45,7 @@ export default function StructuredLessonsClient() {
     } catch (error) {
       setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
     } finally { setBusy(false); }
-  }, [learningLanguage, locale, router, courseId, subjectCode, loadingCourses, courseError]);
+  }, [learningLanguage, locale, router, courseId, activeCourse?.public_id, subjectCode, loadingCourses, courseError]);
   useEffect(() => { void loadCatalogue(); }, [loadCatalogue]);
   useEffect(() => {
     if (subjectCode === 'ALL') return;
@@ -55,7 +55,7 @@ export default function StructuredLessonsClient() {
   async function changeCourse(value: string) {
     await selectCourse(value);
     const params = new URLSearchParams(searchParams.toString());
-    params.set('courseId', value);
+    params.set('courseId', courses.find(course => Number(course.id) === Number(value))?.public_id || value);
     params.delete('subjectCode');
     window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
     setSubjectCode('ALL');
@@ -63,7 +63,7 @@ export default function StructuredLessonsClient() {
   function changeSubject(value: string) {
     setSubjectCode(value);
     const params = new URLSearchParams(searchParams.toString());
-    if (courseId !== null) params.set('courseId', String(courseId));
+    if (courseId !== null) params.set('courseId', String(activeCourse?.public_id || courseId));
     if (value === 'ALL') params.delete('subjectCode'); else params.set('subjectCode', value);
     window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
   }
@@ -85,7 +85,7 @@ export default function StructuredLessonsClient() {
         <div><span className="qe-course-subject-context">{activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')} · {(activeCourse?.subjects || []).find(subject => String(subject.subject_code || subject.code || '') === item.subjectCode)?.subject_name || item.subjectCode}</span>
           <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
           {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>}</div>
-        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
+        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
       </article>)}</div>}
   </section></div></main>;
 }
