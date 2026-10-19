@@ -212,6 +212,25 @@ assert.ok(testsClient.includes('const language=learningLanguage;') && testsClien
 assert.ok(testsClient.includes("const uiLanguage=locale==='english'?'en':'hi';") && testsClient.includes('certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)'), 'Test-result labels must follow app language independently of content language.');
 assert.ok(practiceClient.includes('InstitutionCourseSubjectScope') && practiceClient.includes('/api/v1/learning/structured-lessons?') && practiceClient.includes('courseId'), 'Practice entry must be institution/course scoped and open published structured lessons, not a class/program fallback.');
 assert.ok(learnClient.includes("from '../structured-lessons/StructuredLessonsClient'") && !learnClient.includes('classCode=') && !learnClient.includes('programCode='), 'Learning entry must route to the course-scoped structured lesson catalogue.');
+
+const coursesPage = read('../app/student/courses/page.tsx');
+const courseScope = read('../app/student/CourseScope.tsx');
+const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
+const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const parentPage = read('../app/parent/page.tsx');
+assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(courseId))") &&
+  coursesPage.includes('Open structured course'), 'Course focus must open the exact selected course structured catalogue.');
+assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
+  courseScope.includes('This course is not enrolled in your current institution account.') &&
+  courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
+assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
+  androidApp.includes('Selected structured course opened.') &&
+  androidApp.includes('"/api/v1/learning/structured-lessons?courseId=" + courseId'),
+  'Android course cards must route into the structured catalogue bound to that course ID.');
+assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
+  parentPage.includes('childCourses.length>1') && parentPage.includes('Choose an enrolled course'),
+  'Parent reports must require explicit course selection for multi-course children.');
+
 const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
 assert.ok(textbooksClient.includes('textbookChapterTitle(item, learningLanguage)'), 'Textbook chapter titles must follow selected content language.');
 const scopeComponent = read('../app/student/InstitutionCourseSubjectScope.tsx');
