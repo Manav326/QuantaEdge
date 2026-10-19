@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 810,
+    "assets_selected": 811,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 806,
-    "assets_remaining": 1485,
+    "assets_analyzed": 807,
+    "assets_remaining": 1484,
     "assets_completion_percent": 35.2,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 805,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 806,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:32:20Z"
+      "checkpointed_at": "2026-10-19T05:40:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:33:07Z"
+      "checkpointed_at": "2026-10-19T05:41:09Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:33:45Z"
+      "checkpointed_at": "2026-10-19T05:41:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25032,67 +25032,53 @@
     {
       "asset_id": "c119ea9ad5c7c3ccb0b89f67",
       "asset_sha256": "03b9909fcc729b399fb1e549153478ae3c0b29c3a16265e48914128fa4b6a2fd",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 38,
       "asset_path": "page-0038.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "b9218a9e80aed29f7567fccd",
+      "asset_sha256": "a28bbaea43d6c109a2c124ab3734193be30c94cdff6fbace8b5726653200725d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/a28bbaea43d6c109a2c124ab3734193be30c94cdff6fbace8b5726653200725d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the connection between microorganisms and their presence in various environments, including fruits and vegetables.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "2.4 How Are We Connected to Microbes?",
-          "Can we find microorganisms in other places, too?",
-          "Let us have a discussion:",
-          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes. But where did these microbes come from? How did th",
-          "This happens because microorganisms can be found everywhere, be it in water, soil, air, or even in some food items.",
-          "But why do microorganisms not infect the pickles and murabbas?",
-          "This is because you add many spices with salt or sugar to it which act as preservatives. High concentration of salt or sugar do not allow these organisms to grow on them.",
-          "You can use a microscope to explore surfaces of leaves, stems, roots, or any other part to see them. Like plants and animals, microorganisms also show great diversity. Some of them can even be found in extreme climatic conditions, such as hot water springs and snow cold zones as well as at moderate ",
-          "How does the diversity of microorganisms play a role in our daily life? How do they help clean the environment?",
-          "2.4.1 Key players in cleaning the environment",
-          "Let us attempt to understand this by doing an activity.",
-          "Activity 2.7: Let us do",
-          "Take an empty container and fill it halfway with garden soil.",
-          "Add some fruit and vegetable peels to the container. Thereafter, put a layer of soil on it and leave it aside."
-        ],
+        "visual_summary": "A cartoon character is climbing a ladder to reach a bookshelf filled with books.",
+        "visual_type": "cartoon",
+        "visible_text": [],
         "concepts": [
-          "microorganisms",
-          "environment",
-          "microbes",
-          "lemon",
-          "tomato",
-          "orange",
-          "food items",
-          "water",
-          "soil",
-          "air",
-          "microscope",
-          "surfaces",
-          "leaves",
-          "stems",
-          "roots",
-          "plants",
-          "animals",
-          "diversity",
-          "extreme climatic conditions",
-          "hot water springs"
+          "cartoon",
+          "climbing",
+          "ladder",
+          "bookshelf",
+          "books"
         ],
-        "context_relation": "textbook",
+        "context_relation": "The image is related to the theme of reading and learning, as it shows a character engaging in an activity that involves books.",
         "limitations": [
-          "The image does not provide specific details about the textbook or its page number.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the books or the character's actions."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:39:10Z"
+      "checkpointed_at": "2026-10-19T05:45:15Z"
     }
   ]
 }
