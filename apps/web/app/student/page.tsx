@@ -53,11 +53,25 @@ export default function StudentHome(){
   const [dashboardClassesRefreshToken,setDashboardClassesRefreshToken]=useState(0);
 
   useEffect(()=>{(async()=>{try{
-    const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login/student');return}
-    const b=await r.json(); if(!r.ok) throw new Error(b.message||'Unable to load student');
+    const r=await fetch('/api/v1/students/me/profile',{credentials:'same-origin',cache:'no-store'});
+    if(r.status===401||r.status===403){router.replace('/login/student');return}
+    const b=await r.json(); if(!r.ok) throw new Error(b.message||b.detail||'Unable to load student profile');
     setData(b);
-    const rr=await fetch('/api/v1/recommendations/next'); if(rr.ok) setRec(await rr.json());
-  }catch(e:any){setError(e.message||'Student data unavailable')}})()},[router]);
+  }catch(e:any){setError(e.message||'Student profile unavailable')}})()},[router]);
+
+  useEffect(()=>{
+    if(!courseCatalogReady||activeCourseId===null||activeCourseId<=0){setRec(null);return;}
+    let active=true;
+    fetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(activeCourseId)),{
+      credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
+    }).then(async response=>{
+      const body=await response.json().catch(()=>({}));
+      if(response.status===401||response.status===403){router.replace('/login/student');return;}
+      if(!response.ok)throw new Error(body.message||body.detail||'Course recommendation unavailable.');
+      if(active)setRec(body);
+    }).catch(()=>{if(active)setRec(null);});
+    return()=>{active=false;};
+  },[activeCourseId,courseCatalogReady,router]);
 
   useEffect(()=>{
     let active=true;
