@@ -13,8 +13,9 @@ public class NotificationContentValidator {
       "hero", "richText", "image", "video", "animation", "courseCard", "eventCard",
       "highlight", "badge", "icon", "divider", "spacer", "cta", "footer", "container",
       "carousel");
+  private static final int MAX_DOCUMENT_NODES = 800;
   private static final Set<String> UNSAFE_KEYS = Set.of(
-      "html", "rawHtml", "script", "javascript", "onClick", "onError", "srcDoc", "iframe");
+      "html", "rawhtml", "script", "javascript", "onclick", "onerror", "srcdoc", "iframe");
 
   private final ObjectMapper mapper;
 
@@ -34,7 +35,7 @@ public class NotificationContentValidator {
     if (!blocks.isArray() || blocks.isEmpty() || blocks.size() > 40) {
       throw new IllegalArgumentException("Add between 1 and 40 content blocks.");
     }
-    validateTree(document, 0);
+    validateTree(document, 0, new int[] {0});
     int index = 0;
     for (JsonNode block : blocks) {
       index++;
@@ -68,16 +69,24 @@ public class NotificationContentValidator {
     return document;
   }
 
-  private void validateTree(JsonNode node, int depth) {
+  private void validateTree(JsonNode node, int depth, int[] nodeCount) {
     if (depth > 12) throw new IllegalArgumentException("Notification content nesting is too deep.");
+    nodeCount[0]++;
+    if (nodeCount[0] > MAX_DOCUMENT_NODES) {
+      throw new IllegalArgumentException("Notification content contains too many nested elements.");
+    }
     if (node.isObject()) {
       Iterator<String> names = node.fieldNames();
       while (names.hasNext()) {
         String name = names.next();
-        if (UNSAFE_KEYS.contains(name)) {
+        String normalizedName = name.toLowerCase(java.util.Locale.ROOT);
+        if (UNSAFE_KEYS.contains(normalizedName)) {
           throw new IllegalArgumentException("Executable HTML and script properties are not allowed in notification content.");
         }
         JsonNode value = node.get(name);
+        if (name.equals("type") && value.isTextual() && !BLOCK_TYPES.contains(value.asText())) {
+          throw new IllegalArgumentException("Unsupported notification block type: " + value.asText());
+        }
         if (value.isTextual()) {
           String text = value.asText();
           if (text.length() > 5000) throw new IllegalArgumentException("A notification text field exceeds 5000 characters.");
@@ -88,11 +97,11 @@ public class NotificationContentValidator {
           }
           if (name.equals("url") || name.equals("href") || name.equals("target")) validateTarget(text);
         } else {
-          validateTree(value, depth + 1);
+          validateTree(value, depth + 1, nodeCount);
         }
       }
     } else if (node.isArray()) {
-      for (JsonNode child : node) validateTree(child, depth + 1);
+      for (JsonNode child : node) validateTree(child, depth + 1, nodeCount);
     }
   }
 
