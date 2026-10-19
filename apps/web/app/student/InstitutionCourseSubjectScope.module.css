@@ -85,3 +85,14 @@
   .scope { grid-template-columns: minmax(0, 1fr); }
   .institution { grid-column: auto; }
 }
+
+.scopeNoSubject {
+  grid-template-columns: minmax(150px, .8fr) minmax(190px, 1fr);
+  min-width: min(100%, 520px);
+}
+@media (max-width: 720px) {
+  .scopeNoSubject { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .scopeNoSubject { grid-template-columns: minmax(0, 1fr); }
+}
