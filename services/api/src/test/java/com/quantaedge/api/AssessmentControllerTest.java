@@ -357,7 +357,7 @@ class AssessmentControllerTest {
           {"attempt_id":101,"attempt_number":1,"status":"RELEASED","final_score":6.0,"max_score":10.0}
         ]
         """);
-    when(jdbc.queryForList(contains("with ranked as"), any(Object[].class))).thenReturn(List.of(row));
+    when(jdbc.queryForList(contains("ranked as ("), any(Object[].class))).thenReturn(List.of(row));
     when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
 
@@ -408,7 +408,7 @@ class AssessmentControllerTest {
         "max_score", new BigDecimal("20.00"),
         "time_taken_seconds", 1600L,
         "submitted_at", OffsetDateTime.now()));
-    when(jdbc.queryForList(contains("with released_attempts as"), any(Object[].class)))
+    when(jdbc.queryForList(contains("released_attempts as ("), any(Object[].class)))
         .thenReturn(rankingRows);
 
     Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student, TEST_TENANT);
