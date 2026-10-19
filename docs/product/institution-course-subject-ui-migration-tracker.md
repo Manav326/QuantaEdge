@@ -1,6 +1,6 @@
 # Institution → Course → Subject UI Migration Tracker
 
-**Branch:** `feat/institution-course-subject-ui-migration`  
+**Merged branch:** `feat/institution-course-subject-ui-migration` → `main`  
 **Source of route inventory:** `docs/qa/ui-screen-inventory.csv`  
 **Target contract:** all authenticated learner and staff learning interactions are scoped by the resolved institution, then the selected/assigned course, then a subject that belongs to that course. No student-facing class-root or legacy subject-track fallback is accepted. An institution label comes from the trusted tenant context; it is not a user-supplied authorization value.
 
@@ -8,7 +8,7 @@
 
 - **Merged into `main`:** PR [#84](https://github.com/Manav326/QuantaEdge/pull/84), squash commit `d6dc124c295985875ff2798a8b3c20ce800c7136`.
 - **Hierarchy retained:** Institutions → Course → Subject → published structured lesson.
-- **Current verification:** the latest post-cleanup GitHub Actions build for `main` is queued/running under [run #39247906171](https://github.com/Manav326/QuantaEdge/actions/runs/39247906171); its final result has not yet been verified.
+- **Current verification:** post-merge CI has not yet been verified green. Check the [GitHub Actions runs](https://github.com/Manav326/QuantaEdge/actions) for the newest `QuantaEdge Build and Publish` run on `main`; pushes made while updating this tracker can cancel superseded runs.
 - **Deferred by explicit instruction:** pre-merge API verification had 13 failing tests and 4 errors out of 429 tests. These test cases were not treated as a merge blocker and must be revisited after the merged code is available for runtime validation. This does **not** mean the tests passed.
 - The route-by-route and runtime QA checkboxes below remain open until their actual scenarios are executed.
 
