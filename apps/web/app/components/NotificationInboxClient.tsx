@@ -65,7 +65,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
   const english = locale === 'english';
   const [items, setItems] = useState<NotificationItem[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
-  const [filter, setFilter] = useState<'ALL' | 'UNREAD'>('ALL');
+  const [filter, setFilter] = useState<'ALL' | 'UNREAD' | 'ARCHIVED'>('ALL');
   const [category, setCategory] = useState('ALL');
   const [expanded, setExpanded] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,6 +112,35 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
     }
   }
 
+  async function markUnread(item: NotificationItem) {
+    try {
+      const response = await apiFetch('/api/v1/notifications/' + item.recipient_id + '/unread', {
+        method: 'POST', cache: 'no-store',
+      });
+      if (!response.ok) throw new Error(t('Notification could not be restored as unread.', 'Notification ko unread nahi kar sake.'));
+      setItems(current => current.map(row => row.recipient_id === item.recipient_id
+        ? { ...row, state: 'CREATED', read_at: null, dismissed_at: null, unread: true } : row));
+      setError('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('Notification could not be restored.', 'Notification restore nahi ho saka.'));
+    }
+  }
+
+  async function dismissNotification(item: NotificationItem) {
+    try {
+      const response = await apiFetch('/api/v1/notifications/' + item.recipient_id + '/dismiss', {
+        method: 'POST', cache: 'no-store',
+      });
+      if (!response.ok) throw new Error(t('Notification could not be archived.', 'Notification archive nahi ho saka.'));
+      setItems(current => current.map(row => row.recipient_id === item.recipient_id
+        ? { ...row, state: 'DISMISSED', read_at: row.read_at || new Date().toISOString(), dismissed_at: new Date().toISOString(), unread: false } : row));
+      setExpanded(null);
+      setError('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('Notification could not be archived.', 'Notification archive nahi ho saka.'));
+    }
+  }
+
   async function markAllRead() {
     setSaving(true); setError('');
     try {
@@ -125,7 +154,11 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
 
   const visible = items.filter(item => {
     const scope = String(item.scope || '').toUpperCase();
-    const matchesFilter = filter === 'ALL' || (item.unread ?? item.state !== 'READ') && item.state !== 'DISMISSED';
+    const matchesFilter = filter === 'ARCHIVED'
+      ? item.state === 'DISMISSED'
+      : filter === 'UNREAD'
+        ? (item.unread ?? item.state !== 'READ') && item.state !== 'READ' && item.state !== 'DISMISSED'
+        : item.state !== 'DISMISSED';
     const matchesCategory = category === 'ALL' || scope === category;
     return matchesFilter && matchesCategory;
   });
@@ -150,6 +183,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
       <div className={styles.segmented}>
         <button type="button" aria-pressed={filter === 'ALL'} className={filter === 'ALL' ? styles.selected : ''} onClick={() => setFilter('ALL')}>{t('All', 'All')}</button>
         <button type="button" aria-pressed={filter === 'UNREAD'} className={filter === 'UNREAD' ? styles.selected : ''} onClick={() => setFilter('UNREAD')}>{t('Unread', 'Unread')}</button>
+        <button type="button" aria-pressed={filter === 'ARCHIVED'} className={filter === 'ARCHIVED' ? styles.selected : ''} onClick={() => setFilter('ARCHIVED')}>{t('Archived', 'Archived')}</button>
       </div>
       <label className={styles.categoryLabel}>
         <span>{t('Category', 'Category')}</span>
@@ -184,7 +218,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
             <button type="button" className={styles.itemHeader} aria-expanded={isOpen}
               onClick={() => {
                 setExpanded(isOpen ? null : item.recipient_id);
-                if (!isOpen) void markRead(item);
+                if (!isOpen && item.state !== 'DISMISSED') void markRead(item);
               }}>
               <span className={styles.scopeIcon} aria-hidden="true">{scope === 'HRMS_PLATFORM' ? '✦' : scope === 'INSTITUTION' ? '▦' : scope === 'COURSE' ? '▤' : '◉'}</span>
               <span className={styles.itemCopy}>
@@ -198,6 +232,14 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
             {isOpen ? <div className={styles.itemBody}>
               <RichNotificationRenderer contentDocument={item.contentDocument} surface="user" />
               {item.expires_at ? <p className={styles.expiry}>{t('Available until', 'Available until')} {formatUserTimestamp(item.expires_at)}</p> : null}
+              <div className={styles.itemActions}>
+                {item.state === 'DISMISSED'
+                  ? <button type="button" className={styles.secondaryButton} onClick={() => void markUnread(item)}>{t('Restore to inbox', 'Inbox mein wapas')}</button>
+                  : <>
+                    {item.state === 'READ' ? <button type="button" className={styles.secondaryButton} onClick={() => void markUnread(item)}>{t('Mark unread', 'Unread karein')}</button> : null}
+                    <button type="button" className={styles.secondaryButton} onClick={() => void dismissNotification(item)}>{t('Archive', 'Archive')}</button>
+                  </>}
+              </div>
               {item.state === 'READ' ? <span className={styles.readLabel}>{t('Read', 'Read')}</span> : null}
             </div> : null}
           </article>;
