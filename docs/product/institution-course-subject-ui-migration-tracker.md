@@ -13,6 +13,14 @@
 5. Remove class-first routes, `classCode`/legacy `programCode` learning fallbacks, and `LEGACY_CLASS_ENROLLMENT` entitlement fallbacks. No unpublished/draft lesson may become visible to bypass a scope mismatch.
 6. Route and component changes are not marked complete until the build passes and the QA scenario is executed on both web and Android. Static/source checks are supporting evidence, not runtime acceptance.
 
+## Primary/focused course and structured routing contract
+
+- The primary/focused course is a **reporting and navigation selection**, not an enrollment status. A learner can retain multiple concurrent course enrollments; changing focus must not pause, revoke, or rewrite other courses.
+- `/student/courses` must read the saved primary course, render each real enrolled course, and provide an **Open structured course** action. That action sets the primary course and opens `/student/structured-lessons?courseId=<id>`.
+- Subject shortcuts must preserve the exact pair `courseId + subjectCode`. The catalogue, detail, saved responses, activity responses, documents, assessments/results, progress and certificates must not fall back to a class code or a different saved course when an explicit course ID is invalid.
+- API authorization checks tenant membership, assigned/released course, enrollment, mapped subject, publication state and artifact-to-course access. UI selection alone is never authorization.
+- Parent reports first select the child, then select a course when the child has more than one enrolled course. The report endpoint rejects an unscoped multi-course request and returns the selected `courseId/courseName` with only that course's subject/lesson metrics.
+
 ## Current implementation slices
 
 | Area | Current source change | Verification state |
