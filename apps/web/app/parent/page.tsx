@@ -7,7 +7,7 @@ import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
-type ChildRow={id:number;display_name:string;class_code?:string;board?:string};
+type ChildRow={id:number;display_name:string;board?:string};
 type ChildCourseRow={id:number;course_id?:number;display_name?:string;course_name?:string;code?:string;enrolled?:boolean;paused?:boolean};
 type ParentReport=Record<string,any>;
 
@@ -161,7 +161,7 @@ export default function ParentPage(){
         <div className="parent-report-switcher__intro"><span className="eyebrow"><UiText message="legacy.web.family.account.82aa2c57" /></span><h2><UiText message="legacy.web.each.child.has.their.own.progress.0cce94cd" /></h2><p><UiText message="legacy.web.select.a.child.below.to.view.their.les.22ac4c22" /></p></div>
         <div className="parent-report-switcher__profiles">{children.map(c=><button key={c.id} type="button" className={Number(selected.id)===c.id?'parent-report-switcher__profile is-current':'parent-report-switcher__profile'} aria-pressed={Number(selected.id)===c.id} disabled={switchingChild} onClick={()=>void load(c.id)}>
           <span className="parent-report-switcher__avatar">{(c.display_name||'S').trim().slice(0,1)||'S'}</span>
-          <span className="parent-report-switcher__copy"><strong>{c.display_name}</strong><small><UiText message="legacy.web.class.9c9232e5" /> {c.class_code||'—'}{c.board?' · '+c.board:''}</small><small>{Number(selected.id)===c.id?<UiText message="legacy.web.currently.viewing.this.report.f032823e" />:<UiText message="legacy.web.view.this.child.s.report.1a70cdbc" />}</small></span>
+          <span className="parent-report-switcher__copy"><strong>{c.display_name}</strong><small>{c.board ? 'Board · '+c.board : 'Linked student profile'}</small><small>{Number(selected.id)===c.id?<UiText message="legacy.web.currently.viewing.this.report.f032823e" />:<UiText message="legacy.web.view.this.child.s.report.1a70cdbc" />}</small></span>
           <span className="parent-report-switcher__arrow">{Number(selected.id)===c.id?'✓':'→'}</span>
         </button>)}</div>
         {switchingChild&&<p className="parent-report-switcher__status" role="status"><UiText message="legacy.web.loading.the.selected.child.s.report.2520e7b9" /></p>}
