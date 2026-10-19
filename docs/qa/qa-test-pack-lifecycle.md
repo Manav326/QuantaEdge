@@ -67,12 +67,12 @@ Do not store arbitrary executable SQL in the pack definition. A versioned allow-
 
 The first full cross-platform pack must use synthetic, linked personas rather than unrelated rows:
 
-- two institutions to exercise tenant boundaries;
+- **at least three institutions in every QA run**: Institution A originates and owns a course release, Institution B receives that release only through an HRMS assignment after origin approval, and Institution C owns a separate release but must not inherit Institution A's release;
 - platform-owner operations remain the real operator identity, not a seeded backdoor;
 - institution-admin test identities for their own institution;
 - adult learner, parent/guardian and minor child identities with real guardian/consent relationships;
 - normal student and child login pathways with unique accounts and session isolation;
-- institution membership and course access; shared curriculum is referenced read-only, while the starter pack creates a clearly labelled, run-owned synthetic Class 7 lesson, question and options for progress/answer fixtures. Those curriculum rows are individually manifested and removed by exact ID; they are never seeded into product migrations.
+- all login identities and learner profiles belong to their institution; every course release has a source institution, every assignment has an owning destination institution, and every student course enrollment matches that student's institutional membership and an active institution assignment; shared curriculum is referenced read-only, while the starter pack creates a clearly labelled, run-owned synthetic Class 7 lesson, question and options for progress/answer fixtures. Those curriculum rows are individually manifested and removed by exact ID; they are never seeded into product migrations.
 - varied learning progress, practice answers, assessment attempts/results and certificates created through supported domain flows;
 - teacher/HR employee records, assignments, attendance, leave and payroll in a synthetic organization, with no real payout or statutory side effect;
 - live/recorded class references, messaging, resource and file fixtures using fake/sandbox services;
@@ -90,7 +90,7 @@ The existing workflow register IDs remain the primary acceptance contract:
 | **QA-002 Idempotency** | Same key/retry/concurrent request cannot create duplicates; each distinct run stays isolated. |
 | **QA-003 Inspect/report** | Authorized operator sees personas, status and coverage; ordinary users cannot access the QA Center or another run. |
 | **QA-004 Uninstall** | Preview is accurate; cleanup follows dependency order; only the selected run's owned resources are removed/reversed. |
-| **QA-005 Cross-run/baseline safety** | Install runs A and B, uninstall A, and prove B plus preview student, QuantaEdge tenant, pre-existing users, shared curriculum and existing business data remain unchanged. |
+| **QA-005 Cross-run/baseline safety** | Install runs A and B, each with at least three synthetic institutions; prove approved A→B course assignment, deny A→C assignment, and then uninstall run A while proving run B plus preview student, QuantaEdge tenant, pre-existing users, shared curriculum and existing business data remain unchanged. |
 | **QA-006 External safety** | No real charge, payout, SMS/email, public broadcast or unowned storage/provider object; sandbox IDs are recorded and exact cleanup is verified. |
 | **QA-007 Environment gate** | Operations are rejected with zero writes if flags are absent, target database is production/unknown, or profile/environment evidence conflicts. |
 
@@ -99,7 +99,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 7. CI and evidence rules
 
 - API unit tests cover authorization, state machine, idempotency, environment gate, ownership-manifest validation and cleanup ordering.
-- `QaTestPackLifecycleIntegrationTest` now targets the dedicated `quantaedge_qa` database, applies the actual Flyway migrations, installs two distinct runs against a fresh migrated QA database without relying on pre-published lesson content, checks idempotent replay and starter-pack invariants (including run-owned synthetic lesson/question/options), uninstalls run A while proving run B and its curriculum fixture remain, checks shared protected-baseline fingerprints, and then cleans run B including the run-owned curriculum rows. CI provisions this database and opts into the test. The test remains `NOT_EXECUTED` until that exact-head CI job finishes successfully.
+- `QaTestPackLifecycleIntegrationTest` targets the dedicated `quantaedge_qa` database and applies the actual Flyway migrations. Each of two isolated runs creates three institutions, three institution admins, institution-linked login/student identities, an origin-approved course release, a cross-institution assignment created by HRMS, a third institution that does not receive that release, institution-scoped course enrollments, and run-owned synthetic lesson/question/options. It checks idempotent replay, relationship ownership and denial boundaries, uninstalls run A while proving run B and its course/curriculum fixtures remain, checks protected-baseline fingerprints, and then cleans run B. CI provisions this database and opts into the test. Runtime status is only `PASS` after that exact-head CI job finishes successfully.
 - Web E2E must exercise QA Center permissions, install confirmation, persona list, scenario runner, dry-run preview, confirmation phrase/run-ID match, interrupted cleanup and report download.
 - Android E2E must use the same installed synthetic personas to exercise the agreed critical learner/parent flows and compare their API-visible state.
 - External adapters run in deterministic fake mode in CI; a test fails if a live credential/environment is detected.
@@ -109,7 +109,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 8. Current implementation ledger
 
 - QA route inventory, 72 workflow scenarios, 94 UI/state inventory rows, 443 source-derived API mapping rows and role/data cleanup documentation exist. Endpoints remain source-derived and not fully reviewed.
-- The feature branch now implements a self-contained tenant/learner starter pack, run/resource/event/check manifest, exact run ownership for its synthetic Class 7 lesson/question/options, default-off gate requiring an exact server-configured database target and explicit fixture secret, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. A separate PostgreSQL integration test and CI database-provisioning step are added; they remain unverified until CI passes. This is not yet the full HRMS/payroll/media/provider pack or browser/device scenario runner.
+- The feature branch now implements a self-contained three-institution starter pack, run/resource/event/check manifest, institution-linked admins/users/students, institution-owned shareable course releases, HRMS-controlled cross-institution assignment, tenant-scoped enrollments, exact run ownership for its synthetic Class 7 lesson/question/options, default-off gate requiring an exact server-configured database target and explicit fixture secret, relationship/boundary checks, manifest-based uninstall, and an HRMS QA Center UI/API. A separate PostgreSQL integration test and CI database-provisioning step are added; they remain unverified until CI passes. This is not yet the full HRMS/payroll/media/provider pack or browser/device scenario runner.
 - QA-001, QA-002, QA-004, QA-005 and QA-007 have starter-slice code but remain NOT_EXECUTED; QA-003 scenario runner/coverage report and QA-006 external-provider sandbox isolation remain NOT_IMPLEMENTED.
 - The local-preview isolation fix with regression tests is included on this feature branch. Draft PR #78 still exists separately and had a failing API run because of broader institution-context/mocking failures; do not describe either candidate as merged or passing without exact-head CI evidence.
 - The current-main API run [#39151812977](https://github.com/Manav326/QuantaEdge/actions/runs/39151812977) failed before this feature branch. Keep that baseline regression separate from the new branch's results.
