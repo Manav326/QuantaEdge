@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 801,
-    "successful_visual_analyses": 788,
-    "missing_visual_analyses": 1490,
+    "raw_analysis_result_rows": 803,
+    "successful_visual_analyses": 790,
+    "missing_visual_analyses": 1488,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1503,
+    "unresolved_count": 1501,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30984,9 +30984,37 @@
       "asset_path": "assets/e39f9baed632d402dccfa16493bc101f831ff57009dcac85fdf79ea7366144a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A beaker filled with a yellow liquid, likely soil suspension, with a droplet of liquid on a microscope slide.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Pour some water into the beaker and stir it with a glass rod.",
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer.",
+          "Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small",
+          "particles",
+          "of",
+          "soil",
+          "in",
+          "the",
+          "liquid."
+        ],
+        "concepts": [
+          "soil suspension",
+          "microscope",
+          "dropper",
+          "coverslip",
+          "particles"
+        ],
+        "context_relation": "The image illustrates the process of observing soil particles in a liquid using a microscope.",
+        "limitations": [
+          "The image does not show the actual observation of soil particles under a microscope."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31002,9 +31030,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A step-by-step procedure for observing soil suspension under a microscope.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Pour some water into the beaker and stir it with a glass rod.",
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer.",
+          "Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small particles of soil suspended in the water."
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Microscope observation",
+          "Dropper",
+          "Coverslip",
+          "Top layer of water"
+        ],
+        "context_relation": "Observing soil suspension under a microscope",
+        "limitations": [
+          "The image does not show the actual microscope or the observed particles."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
