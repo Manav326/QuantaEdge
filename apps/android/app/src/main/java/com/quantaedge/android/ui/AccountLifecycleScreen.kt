@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
@@ -74,6 +75,7 @@ fun AccountLifecycleScreen(
     var mobile by rememberSaveable { mutableStateOf("") }
     var otp by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var devCode by rememberSaveable { mutableStateOf("") }
     var otpRequested by rememberSaveable { mutableStateOf(false) }
     var confirmTransition by rememberSaveable { mutableStateOf(false) }
@@ -167,7 +169,9 @@ fun AccountLifecycleScreen(
                     enabled = !busy, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(value = password, onValueChange = { password = it },
                     label = { Text(t("New password (8+ characters)", "नया password (8+ अक्षर)")) },
-                    singleLine = true, enabled = !busy, visualTransformation = PasswordVisualTransformation(),
+                    singleLine = true, enabled = !busy,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = { PasswordVisibilityToggle(passwordVisible, { passwordVisible = !passwordVisible }, t(if (passwordVisible) "Hide password" else "Show password", if (passwordVisible) "पासवर्ड छिपाएँ" else "पासवर्ड दिखाएँ")) },
                     modifier = Modifier.fillMaxWidth())
                 Button(onClick = { onCompleteConversion(mobile, otp, password) },
                     enabled = !busy && consent && otp.length == 6 && password.length >= 8,
