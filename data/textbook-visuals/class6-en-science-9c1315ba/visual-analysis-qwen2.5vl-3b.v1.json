@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 890,
+    "assets_selected": 891,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 886,
-    "assets_remaining": 1192,
-    "assets_completion_percent": 42.6,
+    "assets_analyzed": 887,
+    "assets_remaining": 1191,
+    "assets_completion_percent": 42.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 885,
+    "assets_skipped_from_checkpoint": 886,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:53:32Z"
+      "checkpointed_at": "2026-10-19T04:56:41Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:54:12Z"
+      "checkpointed_at": "2026-10-19T04:57:22Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:55:07Z"
+      "checkpointed_at": "2026-10-19T04:58:16Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:55:46Z"
+      "checkpointed_at": "2026-10-19T04:58:56Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28088,6 +28088,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T04:55:52Z"
+    },
+    {
+      "asset_id": "f9d5126539df8182f3033750",
+      "asset_sha256": "3bf78ab334365055837f4fec82d22a3df223d2ea55529d7f69c3b86d104a2b55",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 58,
+      "asset_path": "page-0058.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0c7aece86b75391fb3b4ced42477349e3ee7491b7d97b58d18db38766e89df9a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing carbohydrates and fats.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Let us understand what Dr Poshita means by this statement.",
+          "Have you ever missed a meal? How do you feel when you miss a meal?",
+          "We feel tired and less energetic when we do not eat for some time. Why do you think a marathon runner drinks glucose water during and after a race?",
+          "Glucose provides instant energy. Glucose is an example of a carbohydrate. Carbohydrates are one of the primary sources of energy in our diet. Cereals like wheat, rice, and maize, vegetables like potato and sweet potato, and fruits like banana, pineapple, and mango are some sources of carbohydrates (",
+          "Do you know that common sugar is also a type of carbohydrate?",
+          "Why do you think we prefer to have laddoos as a part of our traditional diet in winters?",
+          "Besan or wheat flour (ataa) and ghee are among the main ingredients of laddoos along with goond (edible gum), nuts, and seeds. Ghee and various kinds of oils are grouped under another kind of food component, which is called fat.",
+          "Sources of fats can be from plants or animals (Fig. 3.3). Nuts, such as groundnuts, walnuts, coconuts, and almonds, and seeds, such as pumpkin seeds and sunflower seeds, are some sources of fat. Fat is a source of stored energy."
+        ],
+        "concepts": [
+          "carbohydrates",
+          "glucose",
+          "sugarcane",
+          "banana",
+          "wheat",
+          "rice",
+          "maize",
+          "potato",
+          "sugar",
+          "laddoos",
+          "fat",
+          "nuts",
+          "oils",
+          "energy",
+          "sources",
+          "diet",
+          "sources of energy",
+          "sources of fat"
+        ],
+        "context_relation": "The page discusses the sources of carbohydrates and fats in the diet, including their effects on energy levels and the body.",
+        "limitations": [
+          "The page does not provide specific examples or measurements of the amounts of carbohydrates and fats in common foods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:00:48Z"
     }
   ]
 }
