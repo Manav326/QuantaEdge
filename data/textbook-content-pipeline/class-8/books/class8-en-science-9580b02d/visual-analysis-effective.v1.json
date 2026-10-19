@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a94b8cf0c605b21a9b7ae55890df67b0383262598a0aa6378a8be49833c4532c",
+  "raw_analysis_sha256": "1b16e175080226fee90e2cf850f81230556885de70405c2253d91e7f3727b1d2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:19:58Z",
+      "checkpointed_at": "2026-10-19T10:27:10Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:21:17Z",
+      "checkpointed_at": "2026-10-19T10:28:30Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:22:09Z",
+      "checkpointed_at": "2026-10-19T10:29:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -38131,6 +38131,74 @@
       "run_id": "39219698568",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d92564ca795761fb02ce73c1",
+      "asset_sha256": "f9ccf89734bf40ab8c87b15789a7d0369f7ee857a442cb0778ba9c9841e2715a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/f9ccf89734bf40ab8c87b15789a7d0369f7ee857a442cb0778ba9c9841e2715a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "roots",
+          "leaves"
+        ],
+        "context_relation": "The image is an illustration of a plant, focusing on its roots and leaves.",
+        "limitations": [
+          "The image does not provide any specific information about the plant's species or the environment it is in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:30:32Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "roots",
+          "leaves"
+        ],
+        "context_relation": "The image is an illustration of a plant, focusing on its roots and leaves.",
+        "limitations": [
+          "The image does not provide any specific information about the plant's species or the environment it is in."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0037fd56b1a6a076dd9cad41",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,

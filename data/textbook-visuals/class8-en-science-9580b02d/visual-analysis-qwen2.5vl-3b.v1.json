@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 832,
+    "assets_selected": 833,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 828,
-    "assets_remaining": 1463,
-    "assets_completion_percent": 36.1,
-    "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 827,
+    "assets_analyzed": 829,
+    "assets_remaining": 1462,
+    "assets_completion_percent": 36.2,
+    "assets_failed": 9,
+    "assets_skipped_from_checkpoint": 828,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:19:58Z"
+      "checkpointed_at": "2026-10-19T10:27:10Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:21:17Z"
+      "checkpointed_at": "2026-10-19T10:28:30Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:22:09Z"
+      "checkpointed_at": "2026-10-19T10:29:23Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25785,6 +25785,55 @@
       "run_id": "39219698568",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d92564ca795761fb02ce73c1",
+      "asset_sha256": "f9ccf89734bf40ab8c87b15789a7d0369f7ee857a442cb0778ba9c9841e2715a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/f9ccf89734bf40ab8c87b15789a7d0369f7ee857a442cb0778ba9c9841e2715a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "roots",
+          "leaves"
+        ],
+        "context_relation": "The image is an illustration of a plant, focusing on its roots and leaves.",
+        "limitations": [
+          "The image does not provide any specific information about the plant's species or the environment it is in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:30:32Z"
+    },
+    {
+      "asset_id": "0037fd56b1a6a076dd9cad41",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     }
