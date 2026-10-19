@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1725,
-    "successful_visual_analyses": 1708,
-    "missing_visual_analyses": 5763,
+    "raw_analysis_result_rows": 1730,
+    "successful_visual_analyses": 1713,
+    "missing_visual_analyses": 5758,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5780,
+    "unresolved_count": 5775,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -74204,9 +74204,18 @@
       "asset_path": "assets/d195eaef0ae46047e18a79d765abc36174a1f1c3f58ed04730963b3cc4469aaa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green and yellow flag with a logo on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear details of the flag and its logo"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74222,9 +74231,27 @@
       "asset_path": "assets/b224e1578a4b9359f2caba1b1289d709e351f3dc4f11e09b6992df10beedc96d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "No visual elements are present.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74240,9 +74267,27 @@
       "asset_path": "assets/b224e1578a4b9359f2caba1b1289d709e351f3dc4f11e09b6992df10beedc96d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74258,9 +74303,30 @@
       "asset_path": "assets/b273be80a4d4c7add6c65be1c06d22e320cd13a307f9401b22dfa3cec0f05be8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative, and a green stick-like object.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the components of an electric cell.",
+        "limitations": [
+          "The image does not provide a full view of the textbook page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74276,9 +74342,31 @@
       "asset_path": "assets/2e276d701d68c6cbc155d8dd9bded3249478a26c3c13cad5f69819f1fe6f1cf6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a close-up of a textbook page, focusing on the text about electric cells and their components.",
+        "limitations": [
+          "The image is a close-up, making it difficult to see the full page or other elements.",
+          "The text is partially obscured, making some words and phrases unclear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
