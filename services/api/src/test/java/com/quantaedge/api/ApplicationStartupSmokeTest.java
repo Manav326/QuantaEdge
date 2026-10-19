@@ -38,17 +38,34 @@ class ApplicationStartupSmokeTest {
       where tenant_code='QUANTA-EDGE' and status='ACTIVE'
       """, Long.class);
 
-    // A fresh phone signup has a linked student identity but no separate actor user ID
-    // in its AuthContext yet. Exercise the real PostgreSQL jsonb_build_object call.
-    Long studentId = jdbc.queryForObject("""
-      insert into student(public_id,display_name,class_code,board,language,environment,active)
-      values(gen_random_uuid(),'Signup audit null-actor regression','6','Bihar Board','hi','PRODUCTION',true)
+    // Mirror the identity shape created by AuthService.verifyOtp(ACCOUNT_SIGNUP):
+    // a verified LEARNER user_account linked to a newly inserted production student,
+    // while the signup request's AuthContext still has a null userId for audit purposes.
+    Long userId = jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role,mobile_verified_at)
+      values(gen_random_uuid(), '+919'||lpad((floor(random()*1000000000))::bigint::text,9,'0'),
+        'Signup audit null-actor regression','LEARNER',now())
       returning id
       """, Long.class);
+    Long studentId = jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active,user_account_id)
+      values(gen_random_uuid(),'Signup audit null-actor regression','6','Bihar Board','hi','PRODUCTION',true,?)
+      returning id
+      """, Long.class, userId);
 
     institutionMembershipService.ensureStudentMembership(
         studentId, institutionId, "PHONE_SIGNUP", null);
 
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from institution_membership
+        where institution_id=? and student_id=? and status='ACTIVE')
+      """, Boolean.class, institutionId, studentId),
+      "Signup must establish the student membership for the selected institution.");
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from institution_user_membership
+        where institution_id=? and user_id=? and status='ACTIVE')
+      """, Boolean.class, institutionId, userId),
+      "Signup must establish the linked user-account membership in the same institution.");
     assertTrue(jdbc.queryForObject("""
       select jsonb_exists(details, 'actorUserId') and details->>'actorUserId' is null
       from institution_membership_event
