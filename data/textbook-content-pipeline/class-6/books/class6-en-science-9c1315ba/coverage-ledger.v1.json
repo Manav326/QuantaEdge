@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1113,
-    "successful_visual_analyses": 1099,
-    "missing_visual_analyses": 965,
+    "raw_analysis_result_rows": 1115,
+    "successful_visual_analyses": 1101,
+    "missing_visual_analyses": 963,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 979,
+    "unresolved_count": 977,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42524,9 +42524,34 @@
       "asset_path": "page-0092.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Summary of magnet properties and behavior.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary",
+          "A magnet has two poles—the North pole and the South pole.",
+          "The poles of a magnet always exist in pairs. A single North pole or a single South pole cannot exist.",
+          "Magnetic materials are the materials that are attracted towards a magnet.",
+          "Non-magnetic materials are the materials that are not attracted towards a magnet.",
+          "A freely suspended magnet rests along the north-south direction.",
+          "The needle of a magnet compass indicates the north-south direction.",
+          "When two magnets are brought close to each other, like poles (North-North, South-South) repel each other while unlike poles (North-South) attract each other."
+        ],
+        "concepts": [
+          "magnet poles",
+          "magnetic materials",
+          "non-magnetic materials",
+          "magnet compass",
+          "magnet behavior"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42542,9 +42567,26 @@
       "asset_path": "assets/dcd4764240560e2de872629a96ce03ec9e4956e56a1e7a643b3f59461623fe02.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bar magnet labeled 'N' and 'S' next to a pile of colorful paper clips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N – N",
+          "N – S",
+          "S – N",
+          "– S"
+        ],
+        "concepts": [
+          "magnetic poles",
+          "magnetic interaction"
+        ],
+        "context_relation": "The image is related to the concept of magnetic poles and their interaction with each other.",
+        "limitations": [
+          "The image does not provide specific details about the interaction between the bar magnet and the paper clips, only the positions of the poles are shown."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
