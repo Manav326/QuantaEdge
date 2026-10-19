@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1053,
-    "successful_visual_analyses": 1042,
-    "missing_visual_analyses": 1025,
+    "raw_analysis_result_rows": 1055,
+    "successful_visual_analyses": 1044,
+    "missing_visual_analyses": 1023,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1036,
+    "unresolved_count": 1034,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40514,9 +40514,27 @@
       "asset_path": "assets/3629f70557f43f27a50959f964959fcfc2624e09bfa3d357a914046adc101756.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table with a stack of books and a magnet hanging from it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A table with a stack of books and a magnet hanging from it."
+        ],
+        "concepts": [
+          "magnet",
+          "pole",
+          "North pole",
+          "South pole",
+          "iron filings",
+          "magnetism"
+        ],
+        "context_relation": "The image shows a magnet hanging from a table, which is related to the concept of magnetism.",
+        "limitations": [
+          "The image does not provide specific details about the magnet's properties or the behavior of the iron filings."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40532,9 +40550,18 @@
       "asset_path": "assets/90cba14d7f96ec34c1807722df97eee1c05b92de3ae5aa97312c8b9d05c7cf58.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair, wearing a blue shirt and a blue vest, with her hand on her chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl thinking or contemplating, possibly related to the educational content about magnets and their poles.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the educational content. The focus is on the visual of the girl and her thoughtful pose."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

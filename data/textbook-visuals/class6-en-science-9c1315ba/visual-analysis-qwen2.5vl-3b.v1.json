@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1043,
+    "assets_selected": 1044,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1039,
-    "assets_remaining": 1039,
-    "assets_completion_percent": 50.0,
+    "assets_analyzed": 1041,
+    "assets_remaining": 1037,
+    "assets_completion_percent": 50.1,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1038,
+    "assets_skipped_from_checkpoint": 1039,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:02:42Z"
+      "checkpointed_at": "2026-10-19T16:06:55Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:03:22Z"
+      "checkpointed_at": "2026-10-19T16:07:34Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:04:14Z"
+      "checkpointed_at": "2026-10-19T16:08:27Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -33722,6 +33722,71 @@
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "99fe8a49c1884b424178d2ab",
+      "asset_sha256": "3629f70557f43f27a50959f964959fcfc2624e09bfa3d357a914046adc101756",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/3629f70557f43f27a50959f964959fcfc2624e09bfa3d357a914046adc101756.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c10271283b217f33ebdae5d84fe19bfb023939cee7b7d8dc8f1391b49a7ace13",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table with a stack of books and a magnet hanging from it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A table with a stack of books and a magnet hanging from it."
+        ],
+        "concepts": [
+          "magnet",
+          "pole",
+          "North pole",
+          "South pole",
+          "iron filings",
+          "magnetism"
+        ],
+        "context_relation": "The image shows a magnet hanging from a table, which is related to the concept of magnetism.",
+        "limitations": [
+          "The image does not provide specific details about the magnet's properties or the behavior of the iron filings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:09:05Z"
+    },
+    {
+      "asset_id": "180ab262b45d6091cf5b5599",
+      "asset_sha256": "90cba14d7f96ec34c1807722df97eee1c05b92de3ae5aa97312c8b9d05c7cf58",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/90cba14d7f96ec34c1807722df97eee1c05b92de3ae5aa97312c8b9d05c7cf58.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c10271283b217f33ebdae5d84fe19bfb023939cee7b7d8dc8f1391b49a7ace13",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair, wearing a blue shirt and a blue vest, with her hand on her chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl thinking or contemplating, possibly related to the educational content about magnets and their poles.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the educational content. The focus is on the visual of the girl and her thoughtful pose."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:09:43Z"
     }
   ]
 }
