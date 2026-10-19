@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 833,
+    "assets_selected": 834,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 829,
-    "assets_remaining": 1249,
+    "assets_analyzed": 830,
+    "assets_remaining": 1248,
     "assets_completion_percent": 39.9,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 828,
+    "assets_skipped_from_checkpoint": 829,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:09:37Z"
+      "checkpointed_at": "2026-10-19T01:13:29Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:10:18Z"
+      "checkpointed_at": "2026-10-19T01:14:11Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:11:12Z"
+      "checkpointed_at": "2026-10-19T01:15:06Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:11:53Z"
+      "checkpointed_at": "2026-10-19T01:15:46Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -25935,6 +25935,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T01:12:40Z"
+    },
+    {
+      "asset_id": "2d5e8a1b28a4aafaacbedfb7",
+      "asset_sha256": "5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c24143064d71d7b1ca6796b21b879cc40cb029872425518a40f99ef120a9585e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:16:22Z"
     }
   ]
 }
