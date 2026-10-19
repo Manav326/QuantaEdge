@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7426caf5e2d10af46ead4ad233cfefa03716d47919ded3e4d17636f073f544c3",
+  "raw_analysis_sha256": "9b16fb831b700991da5efdedbf69de9505093285d2f940d94189591d4b3952c4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:33:58Z",
+      "checkpointed_at": "2026-10-19T15:37:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:34:38Z",
+      "checkpointed_at": "2026-10-19T15:38:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:35:32Z",
+      "checkpointed_at": "2026-10-19T15:39:10Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -49674,6 +49674,136 @@
         "context_relation": "The image is not directly related to the content of the textbook.",
         "limitations": [
           "The image does not provide specific details about the textbook content or the materials being identified by a magnet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "26a48dd7709e1832ff39db91",
+      "asset_sha256": "4c9f575f1b463a0cdd11ebbb1d9c180390d17530258b2403d58ab0757c24d844",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/4c9f575f1b463a0cdd11ebbb1d9c180390d17530258b2403d58ab0757c24d844.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pencil and an eraser are shown, with the pencil being made of wood and the eraser being made of rubber.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Pencil",
+          "Eraser",
+          "Wood",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials",
+          "Magnetism",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the observation of materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the magnet or the observation process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:39:49Z",
+      "effective_analysis": {
+        "visual_summary": "A pencil and an eraser are shown, with the pencil being made of wood and the eraser being made of rubber.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Pencil",
+          "Eraser",
+          "Wood",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials",
+          "Magnetism",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the observation of materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the magnet or the observation process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c5ec4d48141497395796e2b3",
+      "asset_sha256": "63c7d4b2dac8995e26e370751db38e51b196275b961f874b36a281b6603d12f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/63c7d4b2dac8995e26e370751db38e51b196275b961f874b36a281b6603d12f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a paperclip.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is related to the educational content of identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not provide specific details about the materials or their attraction by a magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:40:31Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a paperclip.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is related to the educational content of identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not provide specific details about the materials or their attraction by a magnet."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

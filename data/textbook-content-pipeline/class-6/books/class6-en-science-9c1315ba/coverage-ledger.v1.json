@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1037,
-    "successful_visual_analyses": 1027,
-    "missing_visual_analyses": 1041,
+    "raw_analysis_result_rows": 1039,
+    "successful_visual_analyses": 1029,
+    "missing_visual_analyses": 1039,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1051,
+    "unresolved_count": 1049,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39946,9 +39946,27 @@
       "asset_path": "assets/4c9f575f1b463a0cdd11ebbb1d9c180390d17530258b2403d58ab0757c24d844.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pencil and an eraser are shown, with the pencil being made of wood and the eraser being made of rubber.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Pencil",
+          "Eraser",
+          "Wood",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials",
+          "Magnetism",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the observation of materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the magnet or the observation process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39964,9 +39982,34 @@
       "asset_path": "assets/63c7d4b2dac8995e26e370751db38e51b196275b961f874b36a281b6603d12f2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a paperclip.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is related to the educational content of identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not provide specific details about the materials or their attraction by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
