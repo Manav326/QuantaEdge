@@ -38,6 +38,7 @@ public class AdminController {
           InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
     long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=query==null?"":query.trim();
@@ -193,6 +194,7 @@ public class AdminController {
 
   @GetMapping("/students")
   public Map<String,Object> students(
+      @RequestParam Long courseId,
       @RequestParam(required=false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
@@ -207,24 +209,18 @@ public class AdminController {
     if(term.length()>120)term=term.substring(0,120);
     String pattern="%"+term+"%";
     String tenantSearch="""
-      and (?='' or coalesce(st.display_name,'') ilike ? or st.public_id::text ilike ?
-        or exists(select 1 from student_program_enrollment spe
-          join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
-          join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
-          join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
-          where spe.student_id=st.id and spe.institution_id=? and spe.status='ACTIVE'
-            and cp.display_name ilike ?))
+      and (?='' or coalesce(st.display_name,'') ilike ? or st.public_id::text ilike ?)
       """;
     List<Map<String,Object>> items=jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.board,st.language,st.environment,
              ((im.status='ACTIVE') and st.active) as active,st.active as student_account_active,
              im.status as membership_status,st.created_at,
-             coalesce((select string_agg(distinct cp.display_name,' · ' order by cp.display_name)
-               from student_program_enrollment spe
+             coalesce((select cp.display_name from student_program_enrollment spe
                join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
                join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
                join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
-               where spe.student_id=st.id and spe.institution_id=im.institution_id and spe.status='ACTIVE'),'') as course_names,
+               where spe.student_id=st.id and spe.institution_id=im.institution_id
+                 and spe.program_id=? and spe.status='ACTIVE' limit 1),'') as course_names,
              coalesce((select count(distinct l.id) from student_program_enrollment spe
                join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
                join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
@@ -237,20 +233,27 @@ public class AdminController {
                join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
                join student_lesson_progress lp on lp.lesson_id=l.id and lp.student_id=st.id
                  and lp.institution_id=spe.institution_id and lp.status='COMPLETED'
-               where spe.student_id=st.id and spe.institution_id=im.institution_id and spe.status='ACTIVE'),0) as completed_lessons
+               where spe.student_id=st.id and spe.institution_id=im.institution_id
+                 and spe.program_id=? and spe.status='ACTIVE'),0) as completed_lessons
       from student st
       join institution_membership im on im.student_id=st.id and im.institution_id=?
         and im.status in ('ACTIVE','SUSPENDED')
       where st.environment='PRODUCTION'
+        and exists(select 1 from student_program_enrollment selected
+          where selected.student_id=st.id and selected.institution_id=im.institution_id
+            and selected.program_id=? and selected.status='ACTIVE')
       """+tenantSearch+"""
       order by st.created_at desc,st.id desc limit ? offset ?
-      """,institutionId,term,pattern,pattern,institutionId,pattern,rowLimit,rowOffset);
+      """,courseId,courseId,institutionId,courseId,term,pattern,pattern,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from student st
       join institution_membership im on im.student_id=st.id and im.institution_id=?
         and im.status in ('ACTIVE','SUSPENDED')
       where st.environment='PRODUCTION'
-      """+tenantSearch,Long.class,institutionId,term,pattern,pattern,institutionId,pattern);
+        and exists(select 1 from student_program_enrollment selected
+          where selected.student_id=st.id and selected.institution_id=im.institution_id
+            and selected.program_id=? and selected.status='ACTIVE')
+      """+tenantSearch,Long.class,institutionId,courseId,term,pattern,pattern);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,
         "institutionId",institutionId);
   }
