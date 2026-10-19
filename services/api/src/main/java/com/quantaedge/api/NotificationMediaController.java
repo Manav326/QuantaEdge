@@ -81,8 +81,10 @@ public class NotificationMediaController {
     int width=0,height=0;
     if(info.contentType().startsWith("image/")) {
       try {
-        BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
-        if(image!=null) {
+        // The JDK has no built-in WebP decoder. Other accepted raster formats must decode successfully.
+        if(!"image/webp".equals(info.contentType())) {
+          BufferedImage image=ImageIO.read(new ByteArrayInputStream(bytes));
+          if(image==null) throw new IllegalArgumentException("The selected image is corrupt or unsupported.");
           width=image.getWidth();height=image.getHeight();
           if(width<1||height<1||(long)width*height>MAX_IMAGE_PIXELS) {
             throw new IllegalArgumentException("Image dimensions exceed the safe rendering limit.");
@@ -99,7 +101,7 @@ public class NotificationMediaController {
     Path destination=folder.resolve(publicId+"."+extension).normalize();
     Path temporary=folder.resolve(publicId+".part").normalize();
     if(!destination.startsWith(folder)||!temporary.startsWith(folder))throw new SecurityException("Invalid media storage path.");
-    String relativeKey="notifications/"+publicId+"."+extension;
+    String relativeKey=publicId+"."+extension;
     try {
       Files.write(temporary,bytes);
       try {Files.move(temporary,destination,StandardCopyOption.ATOMIC_MOVE);}
