@@ -26,6 +26,18 @@ const webRuntime = read('apps/web/app/components/ColorThemeProvider.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
 const webWorkspace = read('apps/web/app/components/WorkspaceLayout.tsx');
 const webCss = read('apps/web/app/globals.css');
+const webClassesCss = read('apps/web/app/student/classes/Classes.module.css');
+const webTestsCss = read('apps/web/app/student/tests/Tests.module.css');
+const webCertificatesCss = read('apps/web/app/student/certificates/Certificates.module.css');
+const webCoursesCss = read('apps/web/app/student/courses/courses.module.css');
+const webMarketplaceCss = read('apps/web/app/student/marketplace/marketplace.module.css');
+const webStructuredCss = read('apps/web/app/student/structured-lessons/structured-lessons.css');
+const webAssignedResourcesCss = read('apps/web/app/student/structured-lessons/AssignedLearningResources.module.css');
+const webVerifyCertificateCss = read('apps/web/app/certificate/verify/Verify.module.css');
+const webInstitutionScreen = read('apps/web/app/institution/page.tsx');
+const webStudentProfile = read('apps/web/app/student/profile/page.tsx');
+const webParentProfile = read('apps/web/app/parent/profile/page.tsx');
+
 const webTextbookCss = read('apps/web/app/student/textbooks/textbooks.css');
 const inlineTextbookReader = read('apps/web/app/student/learn/InlineTextbookReader.tsx');
 const studentMarketplace = read('apps/web/app/student/marketplace/page.tsx');
@@ -83,6 +95,21 @@ for (const role of ['background', 'surface', 'text-muted', 'primary-container', 
   assert(webCss.includes('--qe-color-' + role), 'Web CSS is missing semantic role: ' + role);
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
+assert(webCss.includes('/* Shared light-mode parity for legacy route components.') && webCss.includes('html[data-qe-appearance="light"] .qe-workspace-content'), 'Light appearance must receive the tenant semantic palette across legacy page components.');
+assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');
+assert(webCss.includes('background-color:var(--qe-color-surface);') && !webCss.includes('background-color:var(--qe-color-error-container);'), 'Ordinary cards and panels must never use error-container background in dark mode.');
+assert(webCss.includes('.qe-language-switcher{display:inline-flex') && webCss.includes('background:var(--qe-color-surface);padding:6px 10px;color:var(--qe-color-text)'), 'The language switcher must use the active semantic surface in either appearance.');
+assert(webClassesCss.includes('html[data-qe-appearance="dark"] .shell') && webClassesCss.includes('html[data-qe-appearance="dark"] .chatPanel') && webClassesCss.includes('var(--qe-color-success-container)'), 'Class sessions, live chat and status states must be themed.');
+assert(webTestsCss.includes('html[data-qe-appearance="dark"] .leaderboardModal') && webTestsCss.includes('html[data-qe-appearance="dark"] .optionCorrect') && webTestsCss.includes('var(--qe-color-error-container)'), 'Tests, answers, results and leaderboard must use semantic dark states.');
+assert(webCertificatesCss.includes('html[data-qe-appearance="dark"] .certificateIcon') && webCertificatesCss.includes('certificateImagePreview') && webCertificatesCss.includes('background: #FFFFFF;'), 'Certificate UI must follow theme while document previews retain paper.');
+assert(webCoursesCss.includes('html[data-qe-appearance="dark"] .courseCard') && webCoursesCss.includes('var(--qe-color-primary)'), 'Owned courses cards and progress must consume semantic tokens.');
+assert(webMarketplaceCss.includes('html[data-qe-appearance="dark"] .courseCard') && webMarketplaceCss.includes('var(--qe-color-warning-container)'), 'Marketplace, verification, request history and state badges must be themed.');
+assert(webStructuredCss.includes('var(--qe-color-surface-elevated)') && webStructuredCss.includes('var(--qe-color-focus)') && webStructuredCss.includes('var(--qe-color-error-container)'), 'Structured lesson activity and lightbox controls must use shared tokens.');
+assert(webAssignedResourcesCss.includes('var(--qe-color-error-container)') && webAssignedResourcesCss.includes('var(--qe-color-success)'), 'Assigned learning resource states must be semantic.');
+assert(webVerifyCertificateCss.includes('html[data-qe-appearance="dark"] .card') && webVerifyCertificateCss.includes('var(--qe-color-border-subtle)'), 'Certificate verification must theme its page and form surfaces.');
+assert(webInstitutionScreen.includes('--institution-background:var(--qe-color-background)') && webInstitutionScreen.includes('var(--qe-color-border-subtle)'), 'Institution portal must consume the central palette rather than hard-coded page surfaces.');
+assert(webStudentProfile.includes('var(--qe-color-surface)') && webParentProfile.includes('var(--qe-color-surface)'), 'Student and parent profile pages must share neutral cards and inputs.');
+
 assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');
 assert(webCss.includes('background-color:var(--qe-color-surface);') && !webCss.includes('background-color:var(--qe-color-error-container);'), 'Ordinary cards and panels must never use error-container background in dark mode.');
 assert(webCss.includes('prefers-reduced-motion: reduce') && webCss.includes('html[data-qe-appearance="dark"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6)'), 'Dark page typography must be theme-aware and motion must respect reduced-motion preference.');
