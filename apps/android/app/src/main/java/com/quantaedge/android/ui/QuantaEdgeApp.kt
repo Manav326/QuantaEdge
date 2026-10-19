@@ -1713,7 +1713,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (attemptIds.isNotEmpty()) {
             runCatching {
                 ApiClient.getObject(
-                    "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" +
+                    "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" +
                         attemptIds.joinToString(",")
                 ).optJSONArray("items").objectItems()
             }.getOrDefault(emptyList()).forEach { item ->
@@ -1723,7 +1723,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
         // The issued-certificate catalogue is authoritative for the existing View/PDF/PNG actions.
         runCatching {
-            ApiClient.getObject("/api/v1/students/me/certificates")
+            ApiClient.getObject("/api/v1/students/me/certificates?courseId=" + currentCourseId)
                 .optJSONArray("items").objectItems()
         }.getOrDefault(emptyList()).forEach { certificate ->
             val attemptId = certificate.longAny("assessment_attempt_id", "assessmentAttemptId", "attempt_id", "attemptId")
@@ -1846,7 +1846,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
             val bytes = withContext(Dispatchers.IO) {
-                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/view?format=pdf")
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/view?courseId=" + currentCourseId + "&format=pdf")
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
@@ -1867,7 +1867,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
             if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
             val bytes = withContext(Dispatchers.IO) {
-                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?format=" + format)
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?courseId=" + currentCourseId + "&format=" + format)
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val certificateNumber = assessmentCertificateEligibility.values
