@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 958,
-    "successful_visual_analyses": 946,
-    "missing_visual_analyses": 1120,
+    "raw_analysis_result_rows": 961,
+    "successful_visual_analyses": 949,
+    "missing_visual_analyses": 1117,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1132,
+    "unresolved_count": 1129,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37082,9 +37082,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a chemical experiment involving adding water, copper sulfate, and caustic soda to test tubes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Add 2–3 teaspoons of water to each test tube and shake them well.",
+          "Add two drops of copper sulfate solution to each test tube using a dropper.",
+          "Now, take another dropper and add 10 drops of caustic soda solution to each tube (Fig. 3.8).",
+          "Shake well and leave the test tubes undisturbed for a few minutes."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Test tubes",
+          "Copper sulfate",
+          "Caustic soda",
+          "Shaking",
+          "Leaving undisturbed"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37100,9 +37121,39 @@
       "asset_path": "page-0068.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the steps for testing for the presence of protein in various food items.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.8: Testing for the presence of protein in various food items",
+          "What did you observe? Did the content of some test tubes",
+          "turn violet? This violet colour indicates the presence",
+          "of proteins in the food item. Write your observations in",
+          "Table 3.3.",
+          "What conclusions can you draw from Table 3.3? Which",
+          "food items show the presence of more than one nutrient?",
+          "Which food items show the presence of both proteins and",
+          "fats? Peanuts show the presence of both proteins and fats.",
+          "This indicates that any food which we eat may contain",
+          "multiple nutrients. Is there a food item that lacks any of",
+          "these nutrients? Which of these foods do you consume",
+          "daily? Try to find out other foods that are good sources of",
+          "starch, fats, and proteins."
+        ],
+        "concepts": [
+          "protein testing",
+          "food items",
+          "violet color",
+          "multiple nutrients",
+          "good sources of starch, fats, and proteins"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear if the image is a cropped figure or a full page"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37118,9 +37169,37 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing the nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of the nutrient present",
+          "Colour of the food item",
+          "Oily patch for fat test",
+          "Colour of the food item",
+          "Test for protein",
+          "(Yes/No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food item",
+          "Oily patch test",
+          "Protein test"
+        ],
+        "context_relation": "The table provides information on the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not provide specific examples or details about the food items."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

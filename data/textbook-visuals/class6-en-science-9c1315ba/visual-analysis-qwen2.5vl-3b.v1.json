@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 946,
+    "assets_selected": 949,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 944,
-    "assets_remaining": 1134,
-    "assets_completion_percent": 45.4,
+    "assets_analyzed": 947,
+    "assets_remaining": 1131,
+    "assets_completion_percent": 45.6,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 941,
+    "assets_skipped_from_checkpoint": 944,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:47:26Z"
+      "checkpointed_at": "2026-10-19T10:56:17Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:48:25Z"
+      "checkpointed_at": "2026-10-19T10:57:18Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -30193,6 +30193,142 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T10:55:04Z"
+    },
+    {
+      "asset_id": "b5e7f2d77f524c4d64b3e3ba",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cc41495a4ad82f25a03b12942b8603bcb1da58d6ce063e32e1b8693822dbb132",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a chemical experiment involving adding water, copper sulfate, and caustic soda to test tubes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Add 2–3 teaspoons of water to each test tube and shake them well.",
+          "Add two drops of copper sulfate solution to each test tube using a dropper.",
+          "Now, take another dropper and add 10 drops of caustic soda solution to each tube (Fig. 3.8).",
+          "Shake well and leave the test tubes undisturbed for a few minutes."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Test tubes",
+          "Copper sulfate",
+          "Caustic soda",
+          "Shaking",
+          "Leaving undisturbed"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:57:50Z"
+    },
+    {
+      "asset_id": "75a368712831c81ee4a5ca31",
+      "asset_sha256": "9b38fecf78021e105373c062e30142fdc66e0cdf525f3402d8e85e6304889d6d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 68,
+      "asset_path": "page-0068.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "cc41495a4ad82f25a03b12942b8603bcb1da58d6ce063e32e1b8693822dbb132",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the steps for testing for the presence of protein in various food items.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.8: Testing for the presence of protein in various food items",
+          "What did you observe? Did the content of some test tubes",
+          "turn violet? This violet colour indicates the presence",
+          "of proteins in the food item. Write your observations in",
+          "Table 3.3.",
+          "What conclusions can you draw from Table 3.3? Which",
+          "food items show the presence of more than one nutrient?",
+          "Which food items show the presence of both proteins and",
+          "fats? Peanuts show the presence of both proteins and fats.",
+          "This indicates that any food which we eat may contain",
+          "multiple nutrients. Is there a food item that lacks any of",
+          "these nutrients? Which of these foods do you consume",
+          "daily? Try to find out other foods that are good sources of",
+          "starch, fats, and proteins."
+        ],
+        "concepts": [
+          "protein testing",
+          "food items",
+          "violet color",
+          "multiple nutrients",
+          "good sources of starch, fats, and proteins"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear if the image is a cropped figure or a full page"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:01:55Z"
+    },
+    {
+      "asset_id": "c2ae46137a9dfb74a41faf8f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c3a358d4a1a1446eeaa186c25e7af24520c691c5429e9cb593ae48b005c76b29",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing the nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of the nutrient present",
+          "Colour of the food item",
+          "Oily patch for fat test",
+          "Colour of the food item",
+          "Test for protein",
+          "(Yes/No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food item",
+          "Oily patch test",
+          "Protein test"
+        ],
+        "context_relation": "The table provides information on the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not provide specific examples or details about the food items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:02:24Z"
     }
   ]
 }
