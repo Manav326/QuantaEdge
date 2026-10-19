@@ -206,7 +206,8 @@ public class AdminController {
       """;
     List<Map<String,Object>> items=jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.board,st.language,st.environment,
-             st.active,st.created_at,
+             ((im.status='ACTIVE') and st.active) as active,st.active as student_account_active,
+             im.status as membership_status,st.created_at,
              coalesce((select string_agg(distinct cp.display_name,' · ' order by cp.display_name)
                from student_program_enrollment spe
                join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
@@ -219,6 +220,7 @@ public class AdminController {
                join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
                join curriculum_program_subject cps on cps.program_id=cp.id
                join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+                 and (s.program_id=cp.id or (s.program_id is null and cp.class_id=s.class_id))
                join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
                  and ch.content_status='PUBLISHED'
                join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
