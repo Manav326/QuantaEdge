@@ -58,7 +58,7 @@ export default function LearningResourcesPage(){
  const artifacts=useMemo(()=>targets.structuredArtifacts.filter(x=>subjectFilter==='ALL'||x.subject_code===subjectFilter),[targets,subjectFilter]);
  const subjectCodes=[...new Set(targets.chapters.map(x=>x.subject_code))].sort();
 
- const loadAssignments=useCallback(async(id:string)=>{if(!id){setAssignments([]);return;}try{const d=await api('/api/v1/admin/learning-resource-assignments?'+new URLSearchParams({resourceId:id,limit:'200',offset:'0'}));setAssignments(Array.isArray(d?.items)?d.items:[]);}catch(e:any){setError(e.message||'Assignments could not be loaded.');}},[]);
+ const loadAssignments=useCallback(async(id:string)=>{if(!id||!courseId){setAssignments([]);return;}try{const d=await api('/api/v1/admin/learning-resource-assignments?'+new URLSearchParams({resourceId:id,courseId,limit:'200',offset:'0'}));setAssignments(Array.isArray(d?.items)?d.items:[]);}catch(e:any){setError(e.message||'Assignments could not be loaded.');}},[courseId]);
  useEffect(()=>{void loadAssignments(selectedId);},[selectedId,loadAssignments]);
 
  async function createResource(){
@@ -99,7 +99,7 @@ export default function LearningResourcesPage(){
   catch(e:any){setError(e.message||'Download policy could not be changed.');}finally{setBusy(false);}
  }
  async function createAssignment(){
-  if(!selected){setError('Select a resource first.');return;}const body:any={resourceId:selected.resource_id,targetKind,sortOrder:Math.max(0,Number(sortOrder)||0)};
+  if(!selected){setError('Select a resource first.');return;}if(!courseId){setError('Select a course first.');return;}const body:any={resourceId:selected.resource_id,courseId:Number(courseId),targetKind,sortOrder:Math.max(0,Number(sortOrder)||0)};
   if(targetKind==='CHAPTER'){if(!Number(chapterId)){setError('Choose a chapter.');return;}body.chapterId=Number(chapterId);}
   else if(targetKind==='LESSON'){const l=targets.lessons.find(x=>String(x.lesson_id)===lessonId);if(!l){setError('Choose a lesson.');return;}body.lessonId=l.lesson_id;body.chapterId=l.chapter_id;}
   else {const a=targets.structuredArtifacts.find(x=>x.artifact_id===artifactId);if(!a){setError('Choose a published structured lesson.');return;}body.artifactId=a.artifact_id;body.chapterId=Number(a.mapped_chapter_id)||Number(chapterId);if(!body.chapterId){setError('Select the canonical chapter mapping.');return;}}
@@ -109,11 +109,11 @@ export default function LearningResourcesPage(){
  }
  async function setAssignmentStatus(a:Assignment,next:string){
   setBusy(true);setError('');setNotice('');
-  try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/status',{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Placement status changed to '+next+'.');await loadAssignments(String(a.resource_id));}
+  try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/status?courseId='+encodeURIComponent(courseId),{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Placement status changed to '+next+'.');await loadAssignments(String(a.resource_id));}
   catch(e:any){setError(e.message||'Placement status could not be changed.');}finally{setBusy(false);}
  }
  async function reorder(a:Assignment,n:number){
-  setBusy(true);setError('');try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/order',{method:'PUT',body:JSON.stringify({sortOrder:Math.max(0,n)})});await loadAssignments(String(a.resource_id));}
+  setBusy(true);setError('');try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/order?courseId='+encodeURIComponent(courseId),{method:'PUT',body:JSON.stringify({sortOrder:Math.max(0,n)})});await loadAssignments(String(a.resource_id));}
   catch(e:any){setError(e.message||'Placement order could not be changed.');}finally{setBusy(false);}
  }
  return <main className="admin-shell"><AdminSidebar active="resources" variant="content"/><section className={'admin-main '+styles.page}>
