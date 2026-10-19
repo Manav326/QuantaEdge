@@ -212,8 +212,33 @@ export default function SourceIngestionPage() {
     setLanguage(item.language || 'hi');
     setPreviewPage('1');
     setPreviewChapterRow('');
-    const rows = await api('/api/v1/admin/content?classCode=' + encodeURIComponent(item.class_code)
-      + '&subjectCode=' + encodeURIComponent(item.subject_code));
+    // Curriculum browsing is now institution/course scoped. A source-ingestion job
+    // may retain canonical class/subject metadata, so resolve it only through the
+    // authenticated institution's assigned course catalogue before loading chapters.
+    const courseRows = await api('/api/v1/admin/content/programs');
+    const candidates = (Array.isArray(courseRows) ? courseRows : []).flatMap((course: any) => {
+      const courseId = Number(course?.course_id || course?.id);
+      const subjects = Array.isArray(course?.subjects) ? course.subjects : [];
+      return subjects
+        .filter((subject: any) =>
+          String(subject?.subject_code || '').toLowerCase() === String(item.subject_code || '').toLowerCase()
+          && String(subject?.curriculum_class_code || course?.curriculum_class_code || '').toLowerCase()
+            === String(item.class_code || '').toLowerCase())
+        .map((subject: any) => ({
+          courseId,
+          subjectId: Number(subject?.subject_id || subject?.id) || 0,
+        }));
+    }).filter((candidate: any) => Number.isSafeInteger(candidate.courseId) && candidate.courseId > 0);
+    const subjectIds = [...new Set(candidates.map((candidate: any) => candidate.subjectId).filter((id: number) => id > 0))];
+    if (!candidates.length || subjectIds.length !== 1) {
+      throw new Error('This source job does not map to one unambiguous subject in the courses assigned to this institution. Select or assign the correct course before reviewing chapter mappings.');
+    }
+    const courseId = candidates[0].courseId;
+    const rows = await api('/api/v1/admin/content?'+new URLSearchParams({
+      courseId: String(courseId),
+      classCode: String(item.class_code),
+      subjectCode: String(item.subject_code),
+    }).toString());
     const distinct = new Map<number, Chapter>();
     (Array.isArray(rows) ? rows : []).forEach((r: any) => {
       const chapterId = Number(r.chapter_id);
