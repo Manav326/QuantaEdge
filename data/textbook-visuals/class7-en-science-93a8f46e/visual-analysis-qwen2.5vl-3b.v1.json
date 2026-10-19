@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1771,
+    "assets_selected": 1775,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1770,
-    "assets_remaining": 5718,
-    "assets_completion_percent": 23.6,
+    "assets_analyzed": 1775,
+    "assets_remaining": 5713,
+    "assets_completion_percent": 23.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1766,
+    "assets_skipped_from_checkpoint": 1770,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -66138,6 +66138,170 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
       "checkpointed_at": "2026-10-19T18:10:26Z"
+    },
+    {
+      "asset_id": "1611058dd00154118630c998",
+      "asset_sha256": "13268abba38afd29a5e8a7af8c29153ca9d0d2c33c424e5a98161abb6d93bac8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/13268abba38afd29a5e8a7af8c29153ca9d0d2c33c424e5a98161abb6d93bac8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a blue cylindrical battery with a plus sign on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "cylinder",
+          "plus sign"
+        ],
+        "context_relation": "The image is related to the topic of batteries and electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's type or brand."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:12:10Z"
+    },
+    {
+      "asset_id": "1366bc0a48ee49426b3ed5af",
+      "asset_sha256": "dffe09581a68433e132c28ee5ebeed09946ee598c6a6f528f1d2e9e8c77d721d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/dffe09581a68433e132c28ee5ebeed09946ee598c6a6f528f1d2e9e8c77d721d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) and a toy fan (Fig. 3.22b) connected in a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
+          "Fig. 3.22",
+          "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available."
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit",
+          "electrical items shop",
+          "various types of cells"
+        ],
+        "context_relation": "The image is a visual representation of a circuit diagram for a toy fan powered by a solar panel.",
+        "limitations": [
+          "The image does not show the actual circuit setup.",
+          "The image does not show the types of cells available in an electrical items shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:14:00Z"
+    },
+    {
+      "asset_id": "4dccdc08fae302239f65c120",
+      "asset_sha256": "dd9c0421c70c00e315c50e3def11a6e33723dbaba1131468b3615388cd08ea75",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/dd9c0421c70c00e315c50e3def11a6e33723dbaba1131468b3615388cd08ea75.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow cylindrical battery with a plus sign on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of batteries and electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's type or specifications."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:15:34Z"
+    },
+    {
+      "asset_id": "23d4e430aabdcde8d36516a3",
+      "asset_sha256": "d99cd73adf7f9d29294ea36e33219baa7605c5cd84faf9372e95af0f0986678a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/d99cd73adf7f9d29294ea36e33219baa7605c5cd84faf9372e95af0f0986678a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cylindrical yellow battery with a positive and negative terminal.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "cylinder",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is related to the educational content about batteries and circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's capacity or voltage."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:17:11Z"
+    },
+    {
+      "asset_id": "06513b121a48c3f5e43aa481",
+      "asset_sha256": "5174e5f9cb74ecf3b0b3242e0dd9bb39f60e239f2ee18ea409b728b71b6fc941",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/5174e5f9cb74ecf3b0b3242e0dd9bb39f60e239f2ee18ea409b728b71b6fc941.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two circular objects, one larger and one smaller, possibly representing different types of cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the educational content about using a solar panel to power a toy fan.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells or their characteristics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:18:45Z"
     }
   ]
 }

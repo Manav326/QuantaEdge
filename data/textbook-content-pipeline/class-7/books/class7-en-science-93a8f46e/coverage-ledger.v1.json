@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1790,
-    "successful_visual_analyses": 1770,
-    "missing_visual_analyses": 5698,
+    "raw_analysis_result_rows": 1795,
+    "successful_visual_analyses": 1775,
+    "missing_visual_analyses": 5693,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5718,
+    "unresolved_count": 5713,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -76277,9 +76277,22 @@
       "asset_path": "assets/13268abba38afd29a5e8a7af8c29153ca9d0d2c33c424e5a98161abb6d93bac8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a blue cylindrical battery with a plus sign on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "cylinder",
+          "plus sign"
+        ],
+        "context_relation": "The image is related to the topic of batteries and electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's type or brand."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -76295,9 +76308,29 @@
       "asset_path": "assets/dffe09581a68433e132c28ee5ebeed09946ee598c6a6f528f1d2e9e8c77d721d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) and a toy fan (Fig. 3.22b) connected in a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
+          "Fig. 3.22",
+          "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available."
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit",
+          "electrical items shop",
+          "various types of cells"
+        ],
+        "context_relation": "The image is a visual representation of a circuit diagram for a toy fan powered by a solar panel.",
+        "limitations": [
+          "The image does not show the actual circuit setup.",
+          "The image does not show the types of cells available in an electrical items shop."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -76313,9 +76346,18 @@
       "asset_path": "assets/dd9c0421c70c00e315c50e3def11a6e33723dbaba1131468b3615388cd08ea75.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow cylindrical battery with a plus sign on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of batteries and electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's type or specifications."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -76331,9 +76373,23 @@
       "asset_path": "assets/d99cd73adf7f9d29294ea36e33219baa7605c5cd84faf9372e95af0f0986678a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cylindrical yellow battery with a positive and negative terminal.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "cylinder",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is related to the educational content about batteries and circuits.",
+        "limitations": [
+          "The image does not provide specific details about the battery's capacity or voltage."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -76349,9 +76405,22 @@
       "asset_path": "assets/5174e5f9cb74ecf3b0b3242e0dd9bb39f60e239f2ee18ea409b728b71b6fc941.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two circular objects, one larger and one smaller, possibly representing different types of cells.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the educational content about using a solar panel to power a toy fan.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells or their characteristics."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
