@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1129,
+    "assets_selected": 1130,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1125,
-    "assets_remaining": 953,
-    "assets_completion_percent": 54.1,
+    "assets_analyzed": 1127,
+    "assets_remaining": 951,
+    "assets_completion_percent": 54.2,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1124,
+    "assets_skipped_from_checkpoint": 1125,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:12:13Z"
+      "checkpointed_at": "2026-10-19T19:17:07Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:12:57Z"
+      "checkpointed_at": "2026-10-19T19:17:51Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:13:54Z"
+      "checkpointed_at": "2026-10-19T19:18:49Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36992,6 +36992,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:16:13Z"
+    },
+    {
+      "asset_id": "f47ac2b733ed08704eac607f",
+      "asset_sha256": "9da6a9c4e0b999400d8b35f7dc40a591820f64f19fe8f651ee91e080995b43ee",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/9da6a9c4e0b999400d8b35f7dc40a591820f64f19fe8f651ee91e080995b43ee.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a red shirt and a skirt, with her hand on her chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'Measurement of Length' in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the measurement of length or the tailor's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:19:28Z"
+    },
+    {
+      "asset_id": "7ddbbce1d02a233602da74f5",
+      "asset_sha256": "d1f170978801a361bb8fcd8564b805ecc41cb99f1b340eca0c974eda93dad40f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/d1f170978801a361bb8fcd8564b805ecc41cb99f1b340eca0c974eda93dad40f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH05' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH05"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically the measurement of length and motion in Chapter 5.",
+        "limitations": [
+          "The image does not provide any visual content related to the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:20:07Z"
     }
   ]
 }

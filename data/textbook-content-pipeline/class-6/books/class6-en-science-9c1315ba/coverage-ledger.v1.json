@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1149,
-    "successful_visual_analyses": 1128,
-    "missing_visual_analyses": 929,
+    "raw_analysis_result_rows": 1151,
+    "successful_visual_analyses": 1130,
+    "missing_visual_analyses": 927,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 950,
+    "unresolved_count": 948,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43708,9 +43708,18 @@
       "asset_path": "assets/9da6a9c4e0b999400d8b35f7dc40a591820f64f19fe8f651ee91e080995b43ee.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl wearing a red shirt and a skirt, with her hand on her chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'Measurement of Length' in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the measurement of length or the tailor's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43726,9 +43735,20 @@
       "asset_path": "assets/d1f170978801a361bb8fcd8564b805ecc41cb99f1b340eca0c974eda93dad40f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH05' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH05"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically the measurement of length and motion in Chapter 5.",
+        "limitations": [
+          "The image does not provide any visual content related to the textbook's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
