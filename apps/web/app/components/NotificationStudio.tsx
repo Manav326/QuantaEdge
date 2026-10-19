@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 import { apiFetch } from './apiClient';
 import RichNotificationRenderer from './RichNotificationRenderer';
 import styles from './NotificationStudio.module.css';
@@ -87,7 +87,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [summary, setSummary] = useState('A new learning update is available.');
   const [scope, setScope] = useState<Scope>(surface === 'hrms' ? 'HRMS_PLATFORM' : 'COURSE');
   const [courseId, setCourseId] = useState('');
-  const [institutionId, setInstitutionId] = useState('');
+  const [selectedInstitutionIds, setSelectedInstitutionIds] = useState<string[]>([]);
   const [allInstitutions, setAllInstitutions] = useState(false);
   const [recipientTypes, setRecipientTypes] = useState<string[]>(['STUDENT']);
   const [includeParents, setIncludeParents] = useState(false);
@@ -112,7 +112,6 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
   const activeBlock = document.blocks[selectedBlock] ?? null;
   const isPlatform = surface === 'hrms';
-  const currentTemplate = useMemo(() => templates.find(t => Number(t.id) === Number(templateId)) ?? null, [templates, templateId]);
 
   const loadBase = useCallback(async () => {
     setLoading(true); setError('');
@@ -244,10 +243,10 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     if (scope === 'USER') return { recipients: directRecipients.map(r => ({ kind: r.recipient_kind, id: r.recipient_id })) };
     if (scope === 'HRMS_PLATFORM') return {
       allActiveInstitutions: allInstitutions,
-      institutionIds: allInstitutions ? [] : (institutionId ? [Number(institutionId)] : []),
+      institutionIds: allInstitutions ? [] : selectedInstitutionIds.map(Number),
       recipientTypes
     };
-    return { recipientTypes: [...recipientTypes], includeParents };
+    return { recipientTypes: [...new Set([...recipientTypes, ...(includeParents ? ['PARENT'] : [])])], includeParents };
   }
 
   function requestBody(includeSchedule: boolean) {
@@ -268,12 +267,25 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     };
   }
 
-  function validateLocally(): string | null {
+  function validateContent(): string | null {
     if (!title.trim() || !summary.trim()) return 'A title and short summary are required.';
+    if (!templateName.trim()) return 'A template name is required.';
+    if (!document.blocks.length || document.blocks.length > 40) return 'Use between 1 and 40 content blocks.';
+    for (const block of document.blocks) {
+      if (block.type === 'richText' && !String(block.text ?? '').trim()) return 'Rich-text blocks cannot be empty.';
+      if (block.type === 'cta' && (!String(block.label ?? '').trim() || !String(block.target ?? '').trim())) return 'Every button needs a label and destination.';
+      if (block.type === 'image' && !Boolean(block.decorative) && !String(block.alt ?? '').trim()) return 'Meaningful images need alternative text.';
+    }
+    return null;
+  }
+
+  function validateLocally(): string | null {
+    const contentIssue = validateContent();
+    if (contentIssue) return contentIssue;
     if (!document.blocks.length || document.blocks.length > 40) return 'Use between 1 and 40 content blocks.';
     if (scope === 'COURSE' && !courseId) return 'Select an assigned course first.';
     if (scope === 'USER' && directRecipients.length === 0) return 'Select at least one individual recipient.';
-    if (scope === 'HRMS_PLATFORM' && !allInstitutions && !institutionId) return 'Select at least one institution.';
+    if (scope === 'HRMS_PLATFORM' && !allInstitutions && selectedInstitutionIds.length === 0) return 'Select at least one institution.';
     if (!isPlatform && !['USER','COURSE','INSTITUTION'].includes(scope)) return 'This workspace cannot send platform notifications.';
     for (const block of document.blocks) {
       if (block.type === 'cta' && (!String(block.label ?? '').trim() || !String(block.target ?? '').trim())) return 'Every button needs a label and destination.';
@@ -301,8 +313,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }
 
   async function saveTemplate() {
-    const issue = validateLocally();
-    if (issue && scope !== 'HRMS_PLATFORM') { setError(issue); return; }
+    const issue = validateContent();
+    if (issue) { setError(issue); return; }
     setSaving(true); setError(''); setNotice('');
     try {
       const current = templateId ? templates.find(t => String(t.id) === templateId) : null;
@@ -390,9 +402,14 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
           </div>
           {scope==='HRMS_PLATFORM' ? <div className={styles.audienceBox}>
             <label className={styles.check}><input type="checkbox" checked={allInstitutions} onChange={event=>{setAllInstitutions(event.target.checked);setPreviewed(false);}}/> All active institutions</label>
-            {!allInstitutions ? <label>Target institution<select value={institutionId} onChange={event=>{setInstitutionId(event.target.value);setPreviewed(false);}}>
-              <option value="">Select an institution…</option>{institutions.map(item=><option key={item.id} value={item.id}>{item.display_name} ({item.tenant_code ?? item.institution_code})</option>)}
-            </select></label> : null}
+            {!allInstitutions ? <div className={styles.institutionPicker}>
+              <strong>Select institutions</strong>
+              <div className={styles.institutionList}>{institutions.map(item=><label key={item.id} className={styles.check}>
+                <input type="checkbox" checked={selectedInstitutionIds.includes(String(item.id))} onChange={event=>{setSelectedInstitutionIds(current=>event.target.checked?[...new Set([...current,String(item.id)])]:current.filter(id=>id!==String(item.id)));setPreviewed(false);}}/>
+                <span>{item.display_name} <small>{item.tenant_code ?? item.institution_code}</small></span>
+              </label>)}</div>
+              <p className={styles.helpText}>{selectedInstitutionIds.length} institutions selected.</p>
+            </div> : <p className={styles.helpText}>The audience will be resolved across every currently active institution when sent.</p>}
           </div> : null}
           {scope==='USER' ? <div className={styles.audienceBox}>
             <div className={styles.formGrid}><label>Recipient type<select value={directKind} onChange={event=>{setDirectKind(event.target.value);setRecipientOptions([]);}}>
