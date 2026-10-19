@@ -15,6 +15,7 @@ import kotlinx.coroutines.CancellationException
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.remember
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.heightIn
@@ -91,7 +92,8 @@ internal fun isLiveClassWaitingForJoinWindow(
 
 @Composable
 fun LearningClassesScreen(
-    subject: String,
+    subjects: List<JSONObject>,
+    selectedSubjectCode: String,
     liveItems: List<JSONObject>,
     recordedItems: List<JSONObject>,
     busy: Boolean,
@@ -118,11 +120,25 @@ fun LearningClassesScreen(
     var tab by rememberSaveable { mutableStateOf("LIVE") }
     Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
         Text(localizedUiText("Live classes और recordings"), style = MaterialTheme.typography.headlineSmall)
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
+        ) {
+            if (selectedSubjectCode.isBlank()) Button(onClick = { onSubject("") }, enabled = !busy) {
+                Text(t("All subjects", "सभी विषय"))
+            } else TextButton(onClick = { onSubject("") }, enabled = !busy) {
+                Text(t("All subjects", "सभी विषय"))
+            }
+            subjects.forEach { subject ->
+                val code = subject.textAny("subject_code", "code")
+                if (code.isBlank()) return@forEach
+                val name = subject.textAny("subject_name", "display_name").ifBlank { code }
+                if (code == selectedSubjectCode) Button(onClick = { onSubject(code) }, enabled = !busy) {
+                    Text(name)
+                } else TextButton(onClick = { onSubject(code) }, enabled = !busy) {
+                    Text(name)
+                }
+            }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
