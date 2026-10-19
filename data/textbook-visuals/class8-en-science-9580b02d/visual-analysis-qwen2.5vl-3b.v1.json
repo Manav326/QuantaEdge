@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 880,
+    "assets_selected": 882,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 877,
-    "assets_remaining": 1414,
-    "assets_completion_percent": 38.3,
+    "assets_analyzed": 879,
+    "assets_remaining": 1412,
+    "assets_completion_percent": 38.4,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 875,
+    "assets_skipped_from_checkpoint": 877,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:32:05Z"
+      "checkpointed_at": "2026-10-19T15:35:04Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:32:53Z"
+      "checkpointed_at": "2026-10-19T15:35:51Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:33:31Z"
+      "checkpointed_at": "2026-10-19T15:36:28Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -27701,6 +27701,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T15:33:55Z"
+    },
+    {
+      "asset_id": "7111abf887b19e64cce41280",
+      "asset_sha256": "cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:36:40Z"
+    },
+    {
+      "asset_id": "7b25e1eafd20ca9e71013140",
+      "asset_sha256": "cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:36:53Z"
     }
   ]
 }
