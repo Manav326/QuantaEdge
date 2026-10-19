@@ -39,6 +39,7 @@ function activeSection(pathname: string): AdminSection {
   if (pathname.startsWith('/employees')) return 'staff';
   if (pathname.startsWith('/certificates')) return 'certificates';
   if (pathname.startsWith('/marketplace')) return 'marketplace';
+  if (pathname.startsWith('/notifications')) return 'notifications';
   return 'overview';
 }
 
