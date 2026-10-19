@@ -613,7 +613,7 @@ export default function TestsClient(){
             return <section className={styles.certificateResultPanel} aria-live="polite">
               <div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.certificate.ea04cb7f')}</span><h3>{translateUi(locale, 'legacy.web.certificate.for.this.result.3136e16b')}</h3>
                 <p>{translateUi(locale, 'legacy.web.test.certificates.require.an.admin.cre.07390e4d')}</p>
-                {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {uiLanguage === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
+                {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र कोर्स:' : 'Certificate course:'} {cert.course_name || activeCourse?.display_name || (uiLanguage === 'hi' ? 'चुना गया कोर्स' : 'Selected course')} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
