@@ -42,7 +42,7 @@ fun ParentChildCreateScreen(
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(localizedUiText("छात्र प्रोफ़ाइल बनाएँ"), style = MaterialTheme.typography.headlineSmall)
-        Text(localizedUiText("Create the student profile, then assign institution courses. Guardian consent is required."),
+        Text(localizedUiText("Choose the learning language. Guardian consent is required."),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         if (remainingSlots <= 0) {
             EmptyState(
