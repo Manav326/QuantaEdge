@@ -20,6 +20,7 @@ export type EnrolledCourse = {
   display_name: string;
   curriculum_version?: string;
   is_enrolled: boolean;
+  enrolled?: boolean;
   paused?: boolean;
   purchased?: boolean;
   has_access?: boolean;
