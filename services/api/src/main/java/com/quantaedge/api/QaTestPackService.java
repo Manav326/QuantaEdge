@@ -499,7 +499,7 @@ public class QaTestPackService {
         or not exists(select 1 from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
           where a.institution_id=e.institution_id and a.status='ASSIGNED'
-            and a.qa_test_run_id=? and r.program_id=e.program_id and r.release_state in ('SHAREABLE','DRAFT','QUALITY_APPROVED','LEGACY_MIGRATED'))
+            and a.qa_test_run_id=? and r.program_id=e.program_id and r.release_state='SHAREABLE')
       )
       """, runId, runId, runId);
     addCheck(runId, checks, "LEARNER_COURSE_ENROLLMENTS_MATCH_TENANT_ASSIGNMENTS",
@@ -769,8 +769,9 @@ public class QaTestPackService {
     credentials.put("childA", Map.of("institutionCode", "QAT" + slug + "A", "parentMobile", parentAMobile, "username", childAUsername, "password", fixturePassword));
     credentials.put("childB", Map.of("institutionCode", "QAT" + slug + "B", "parentMobile", parentBMobile, "username", childBUsername, "password", fixturePassword));
     credentials.put("independentLearner", Map.of("institutionCode", "QAT" + slug + "C", "mobile", learnerMobile, "username", learnerUsername, "password", fixturePassword));
-    credentials.put("hrmsCourseReviewer", Map.of("username", "qa_reviewer_" + lowerSlug,
-        "scope", "HRMS course-release review fixture", "institutionCode", "HRMS"));
+    credentials.put("hrmsCourseReviewer", Map.of("role", "CONTENT_REVIEWER",
+        "scope", "Synthetic HRMS course-review audit identity; not a login", "notLoginEnabled", true,
+        "institutionCode", "HRMS"));
 
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("credentials", credentials);
@@ -828,9 +829,12 @@ public class QaTestPackService {
     Long releaseC = jdbc.queryForObject("""
       insert into institution_course_release(
         source_institution_id,program_id,release_version,release_state,content_fingerprint,
-        legacy_migration,qa_test_run_id
-      ) values(?,?,1,'DRAFT',?,false,?) returning id
-      """, Long.class, tenantC, programId, fingerprint, runId);
+        submitted_by_institution_admin_id,submitted_at,quality_reviewed_by_staff_id,quality_reviewed_at,
+        quality_review_notes,origin_approved_by_admin_id,origin_approved_at,shareable_at,legacy_migration,qa_test_run_id
+      ) values(?,?,1,'SHAREABLE',?,?,now(),?,now(),?,?,now(),now(),false,?) returning id
+      """, Long.class, tenantC, programId, fingerprint, adminC, reviewerId,
+      "Approved by the synthetic HRMS QA content reviewer for Institution C's own course.",
+      adminC, runId);
     addResource(runId, "course-release-institution-c", "COURSE_RELEASE", releaseC, 46,
         List.of("institution-QAT" + slug + "C", "institution-admin-c"), "institution_course_release");
 
