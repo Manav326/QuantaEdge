@@ -53,6 +53,12 @@ public class AssessmentCatalogService {
     String title=t(row.get("lesson_title"));
     String chapter=t(row.get("chapter_name"));
     String subject=t(row.get("subject_name"));
+    List<Long> courseIds=courseIdsForSubject(subjectId);
+    if(courseIds.isEmpty()) {
+      archiveCurrent("TOPIC_END","lesson_id",lessonId);
+      archiveCurrent("CHAPTER_END","chapter_id",chapterId);
+      return;
+    }
     boolean lessonEligible=Boolean.TRUE.equals(row.get("lesson_active"))
         && "PUBLISHED".equalsIgnoreCase(t(row.get("lesson_status")))
         && Boolean.TRUE.equals(row.get("chapter_active"))
@@ -65,9 +71,11 @@ public class AssessmentCatalogService {
       if(topicIds.size()<TOPIC_MINIMUM) {
         archiveCurrent("TOPIC_END","lesson_id",lessonId);
       } else {
-        materialize("TOPIC_END",subjectId,chapterId,lessonId,"Topic-end test · "+title,
-            "A saved end-of-topic assessment for "+title+".",10,3,topicIds,fingerprint(title,topicIds),
-            "Topic-end test · "+title+" · "+chapter+" · "+subject);
+        for(Long courseId:courseIds) {
+          materialize(courseId,"TOPIC_END",subjectId,chapterId,lessonId,"Topic-end test · "+title,
+              "A saved end-of-topic assessment for "+title+".",10,3,topicIds,fingerprint(title,topicIds),
+              "Topic-end test · "+title+" · "+chapter+" · "+subject);
+        }
       }
     } else {
       archiveCurrent("TOPIC_END","lesson_id",lessonId);
@@ -81,9 +89,11 @@ public class AssessmentCatalogService {
       if(chapterIds.size()<CHAPTER_MINIMUM) {
         archiveCurrent("CHAPTER_END","chapter_id",chapterId);
       } else {
-        materialize("CHAPTER_END",subjectId,chapterId,null,"Chapter-end test · "+chapter,
-            "A cumulative end-of-chapter assessment for "+chapter+".",30,2,chapterIds,
-            fingerprint(chapter,chapterIds),"Chapter-end test · "+chapter+" · "+subject);
+        for(Long courseId:courseIds) {
+          materialize(courseId,"CHAPTER_END",subjectId,chapterId,null,"Chapter-end test · "+chapter,
+              "A cumulative end-of-chapter assessment for "+chapter+".",30,2,chapterIds,
+              fingerprint(chapter,chapterIds),"Chapter-end test · "+chapter+" · "+subject);
+        }
       }
     } else {
       archiveCurrent("CHAPTER_END","chapter_id",chapterId);
@@ -110,36 +120,27 @@ public class AssessmentCatalogService {
   public void ensureGeneratedAssessmentsForClass(String classCode) {
     String normalized=classCode==null?"":classCode.trim();
     if(normalized.isEmpty()) return;
-    List<Map<String,Object>> topics=jdbc.queryForList("""
-      select l.id as lesson_id,l.title as lesson_title,l.chapter_id,ch.display_name as chapter_name,
-             s.id as subject_id,s.display_name as subject_name
+    List<Long> lessonIds=jdbc.queryForList("""
+      select l.id
       from curriculum_class c
-      join curriculum_subject s on s.class_id=c.id and s.active=true and s.program_id is null
+      join curriculum_subject s on s.class_id=c.id and s.active=true
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       where c.code=? and c.active=true
       order by s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,normalized);
-    for(Map<String,Object> topic:topics) {
-      long lessonId=n(topic.get("lesson_id")),chapterId=n(topic.get("chapter_id")),subjectId=n(topic.get("subject_id"));
-      String title=t(topic.get("lesson_title")),chapter=t(topic.get("chapter_name")),subject=t(topic.get("subject_name"));
-      List<Long> ids=topicQuestionIds(lessonId);
-      if(ids.size()<TOPIC_MINIMUM){archiveCurrent("TOPIC_END","lesson_id",lessonId);continue;}
-      materialize("TOPIC_END",subjectId,chapterId,lessonId,"Topic-end test · "+title,
-          "A saved end-of-topic assessment for "+title+".",10,3,ids,fingerprint(title,ids),
-          "Topic-end test · "+title+" · "+chapter+" · "+subject);
-    }
-    Map<Long,Map<String,Object>> chapters=new LinkedHashMap<>();
-    for(Map<String,Object> topic:topics) chapters.putIfAbsent(n(topic.get("chapter_id")),topic);
-    for(Map.Entry<Long,Map<String,Object>> entry:chapters.entrySet()) {
-      long chapterId=entry.getKey();Map<String,Object> row=entry.getValue();
-      String name=t(row.get("chapter_name")),subject=t(row.get("subject_name"));
-      List<Long> ids=chapterQuestionIds(chapterId);
-      if(ids.size()<CHAPTER_MINIMUM){archiveCurrent("CHAPTER_END","chapter_id",chapterId);continue;}
-      materialize("CHAPTER_END",n(row.get("subject_id")),chapterId,null,"Chapter-end test · "+name,
-          "A cumulative end-of-chapter assessment for "+name+".",30,2,ids,fingerprint(name,ids),
-          "Chapter-end test · "+name+" · "+subject);
-    }
+      """,Long.class,normalized);
+    for(Long lessonId:lessonIds) refreshGeneratedAssessmentsForLesson(lessonId);
+  }
+
+  private List<Long> courseIdsForSubject(long subjectId) {
+    return jdbc.queryForList("""
+      select distinct p.id
+      from curriculum_subject s
+      join curriculum_program_subject mapped on mapped.subject_id=s.id and mapped.class_id=s.class_id
+      join curriculum_program p on p.id=mapped.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where s.id=? and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      order by p.id
+      """,Long.class,subjectId);
   }
 
   private List<Long> topicQuestionIds(long lessonId) {
@@ -167,26 +168,24 @@ public class AssessmentCatalogService {
       """,Long.class,chapterId,CHAPTER_MAXIMUM);
   }
 
-  private void materialize(String type,long subjectId,long chapterId,Long lessonId,String title,
+  private void materialize(long courseId,String type,long subjectId,long chapterId,Long lessonId,String title,
       String description,int duration,int maxAttempts,List<Long> ids,String fingerprint,String note) {
     String column="TOPIC_END".equals(type)?"lesson_id":"chapter_id";
     long scope=lessonId==null?chapterId:lessonId;
-    // Lock the scope row even when no assessment currently exists, avoiding concurrent
-    // requests creating duplicate current versions for the same topic or chapter.
     String scopeTable="TOPIC_END".equals(type)?"lesson":"curriculum_chapter";
     List<Map<String,Object>> lockedScope=jdbc.queryForList(
         "select id from "+scopeTable+" where id=? for update",scope);
     if(lockedScope.isEmpty()) return;
     List<Map<String,Object>> current=jdbc.queryForList(
-        "select id,generation_version,content_fingerprint from assessment where assessment_type=? and is_generated=true and is_current=true and "+column+"=? for update",
-        type,scope);
+        "select id,generation_version,content_fingerprint from assessment "+
+        "where assessment_type=? and is_generated=true and is_current=true and course_id=? and "+column+"=? for update",
+        type,courseId,scope);
     if(!current.isEmpty()) {
       Map<String,Object> active=current.getFirst();long id=n(active.get("id"));
       boolean sameFingerprint=fingerprint.equals(t(active.get("content_fingerprint")));
       String currentStatus=t(active.get("status"));
       if(sameFingerprint&&"PUBLISHED".equals(currentStatus)) return;
       if("ARCHIVED".equals(currentStatus)) {
-        // Respect an explicit archive. A later regeneration will create a new version.
         jdbc.update("update assessment set is_current=false where id=?",id);
       } else {
         Integer attempts=jdbc.queryForObject("select count(*) from student_assessment_attempt where assessment_id=?",Integer.class,id);
@@ -194,9 +193,8 @@ public class AssessmentCatalogService {
         if(attempts!=null&&attempts>0) {
           jdbc.update("update assessment set is_current=false,status='ARCHIVED',updated_at=now() where id=?",id);
           audit(id,"PUBLISHED","ARCHIVED","Superseded content; historical attempts remain unchanged.");
-          insert(type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,version+1,fingerprint,ids,note);
+          insert(courseId,type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,version+1,fingerprint,ids,note);
         } else {
-          jdbc.update("delete from assessment_question where assessment_id=?",id);
           jdbc.update("""
             update assessment set title=?,description=?,duration_minutes=?,max_attempts=?,generation_version=?,
               content_fingerprint=?,status='PUBLISHED',is_current=true,published_at=now(),updated_at=now()
@@ -208,18 +206,20 @@ public class AssessmentCatalogService {
       }
     }
     Integer latest=jdbc.queryForObject(
-        "select coalesce(max(generation_version),0) from assessment where assessment_type=? and is_generated=true and "+column+"=?",
-        Integer.class,type,scope);
-    insert(type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,(latest==null?0:latest)+1,fingerprint,ids,note);
+        "select coalesce(max(generation_version),0) from assessment "+
+        "where assessment_type=? and is_generated=true and course_id=? and "+column+"=?",
+        Integer.class,type,courseId,scope);
+    insert(courseId,type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,
+        (latest==null?0:latest)+1,fingerprint,ids,note);
   }
 
-  private void insert(String type,long subjectId,long chapterId,Long lessonId,String title,String description,
+  private void insert(long courseId,String type,long subjectId,long chapterId,Long lessonId,String title,String description,
       int duration,int maxAttempts,int version,String fingerprint,List<Long> ids,String note) {
     Long id=jdbc.queryForObject("""
-      insert into assessment(title,description,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
+      insert into assessment(course_id,title,description,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
         assessment_type,is_generated,is_current,generation_version,content_fingerprint,published_at)
-      values(?,?,?,?,?,?,?,'PUBLISHED',?,true,true,?,?,now()) returning id
-      """,Long.class,title,description,subjectId,chapterId,lessonId,duration,maxAttempts,type,version,fingerprint);
+      values(?,?,?,?,?,?,?,?,'PUBLISHED',?,true,true,?,?,now()) returning id
+      """,Long.class,courseId,title,description,subjectId,chapterId,lessonId,duration,maxAttempts,type,version,fingerprint);
     if(id==null)throw new IllegalStateException("Generated assessment was not persisted.");
     insertSnapshots(id,ids);audit(id,null,"PUBLISHED",note);
   }
