@@ -183,7 +183,7 @@ class LearningDocumentControllerTest {
         )
     ));
 
-    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
+    Map<String, Object> result = controller.setAssignmentStatus(88L, 71L, Map.of("status", "PUBLISHED"), author, TEST_TENANT);
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
