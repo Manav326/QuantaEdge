@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 783,
-    "successful_visual_analyses": 771,
-    "missing_visual_analyses": 1508,
+    "raw_analysis_result_rows": 785,
+    "successful_visual_analyses": 773,
+    "missing_visual_analyses": 1506,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1520,
+    "unresolved_count": 1518,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30398,9 +30398,23 @@
       "asset_path": "assets/aff4ec76c1af131484aa12dd5abdf5e9862de5cc2aab7399ff2e2c0331e9041e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of the digestive system, including the esophagus, stomach, and intestines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "digestive system",
+          "esophagus",
+          "stomach",
+          "intestines"
+        ],
+        "context_relation": "The image is related to the digestive system and its components.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each part."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30416,9 +30430,39 @@
       "asset_path": "assets/9f97b15bfe7b30cc38bf536efda6be613deb3735a4bf946421c79bf105697f1a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a cross-sectional view of a tissue, showing different layers and cell types.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them",
+          "carry out their specific functions. But how do these cells help in",
+          "performing various functions in the body?",
+          "You observed in Activity 2.3 that inner cheek cells are thin",
+          "and flat. They form a protective lining on the inner surface of the",
+          "cheek. Nerve cells also known as neurons carry messages in our",
+          "body. The elongated shape and branched structure help them",
+          "connect and transmit information throughout the body.",
+          "The tissue in the image shows different layers and cell types",
+          "including epithelial cells, connective tissue cells, and muscle cells.",
+          "Each type of cell has a specific function that contributes to the",
+          "overall function of the tissue."
+        ],
+        "concepts": [
+          "Cell structure",
+          "Cell function",
+          "Tissue structure",
+          "Cell types",
+          "Body functions"
+        ],
+        "context_relation": "The image illustrates how different cell types and their structures contribute to the body's functions.",
+        "limitations": [
+          "The image does not provide specific details about the exact types of cells or their functions.",
+          "The image does not show the entire body or all the tissues.",
+          "The image does not include information about the specific roles of each cell type."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

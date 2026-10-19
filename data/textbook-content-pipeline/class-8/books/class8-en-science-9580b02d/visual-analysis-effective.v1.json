@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "da75a5d8b7dea1597ebbc3cc38e8fa6b98bf7faa2a52fc28ddf7aca5e61f9430",
+  "raw_analysis_sha256": "1d2b5d030338e2625fdf2698aaedba3b37d1d29b2aa099e1c90ae3584e33ab47",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:31:57Z",
+      "checkpointed_at": "2026-10-19T03:40:22Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:32:46Z",
+      "checkpointed_at": "2026-10-19T03:41:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:33:25Z",
+      "checkpointed_at": "2026-10-19T03:41:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34712,6 +34712,138 @@
         "limitations": [
           "The image does not provide specific details about the cell's functions or structure.",
           "The image is a cartoon illustration and may not accurately represent real cells."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c9ba7e9cfb3867a77c0a300",
+      "asset_sha256": "aff4ec76c1af131484aa12dd5abdf5e9862de5cc2aab7399ff2e2c0331e9041e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/aff4ec76c1af131484aa12dd5abdf5e9862de5cc2aab7399ff2e2c0331e9041e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of the digestive system, including the esophagus, stomach, and intestines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "digestive system",
+          "esophagus",
+          "stomach",
+          "intestines"
+        ],
+        "context_relation": "The image is related to the digestive system and its components.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each part."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:43:28Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of the digestive system, including the esophagus, stomach, and intestines.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "digestive system",
+          "esophagus",
+          "stomach",
+          "intestines"
+        ],
+        "context_relation": "The image is related to the digestive system and its components.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each part."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b58db86b8c9ce3e9b889fff6",
+      "asset_sha256": "9f97b15bfe7b30cc38bf536efda6be613deb3735a4bf946421c79bf105697f1a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/9f97b15bfe7b30cc38bf536efda6be613deb3735a4bf946421c79bf105697f1a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a cross-sectional view of a tissue, showing different layers and cell types.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them",
+          "carry out their specific functions. But how do these cells help in",
+          "performing various functions in the body?",
+          "You observed in Activity 2.3 that inner cheek cells are thin",
+          "and flat. They form a protective lining on the inner surface of the",
+          "cheek. Nerve cells also known as neurons carry messages in our",
+          "body. The elongated shape and branched structure help them",
+          "connect and transmit information throughout the body.",
+          "The tissue in the image shows different layers and cell types",
+          "including epithelial cells, connective tissue cells, and muscle cells.",
+          "Each type of cell has a specific function that contributes to the",
+          "overall function of the tissue."
+        ],
+        "concepts": [
+          "Cell structure",
+          "Cell function",
+          "Tissue structure",
+          "Cell types",
+          "Body functions"
+        ],
+        "context_relation": "The image illustrates how different cell types and their structures contribute to the body's functions.",
+        "limitations": [
+          "The image does not provide specific details about the exact types of cells or their functions.",
+          "The image does not show the entire body or all the tissues.",
+          "The image does not include information about the specific roles of each cell type."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:45:24Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a cross-sectional view of a tissue, showing different layers and cell types.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them",
+          "carry out their specific functions. But how do these cells help in",
+          "performing various functions in the body?",
+          "You observed in Activity 2.3 that inner cheek cells are thin",
+          "and flat. They form a protective lining on the inner surface of the",
+          "cheek. Nerve cells also known as neurons carry messages in our",
+          "body. The elongated shape and branched structure help them",
+          "connect and transmit information throughout the body.",
+          "The tissue in the image shows different layers and cell types",
+          "including epithelial cells, connective tissue cells, and muscle cells.",
+          "Each type of cell has a specific function that contributes to the",
+          "overall function of the tissue."
+        ],
+        "concepts": [
+          "Cell structure",
+          "Cell function",
+          "Tissue structure",
+          "Cell types",
+          "Body functions"
+        ],
+        "context_relation": "The image illustrates how different cell types and their structures contribute to the body's functions.",
+        "limitations": [
+          "The image does not provide specific details about the exact types of cells or their functions.",
+          "The image does not show the entire body or all the tissues.",
+          "The image does not include information about the specific roles of each cell type."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
