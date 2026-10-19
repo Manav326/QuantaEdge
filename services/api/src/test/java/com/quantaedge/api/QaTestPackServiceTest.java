@@ -93,6 +93,8 @@ class QaTestPackServiceTest {
     assertFalse(Boolean.TRUE.equals(packs.getFirst().get("requiresPublishedClass7Question")));
     assertEquals(3, packs.getFirst().get("minimumInstitutions"));
     assertEquals(4, ((java.util.List<?>) packs.getFirst().get("institutionCourseCoverage")).size());
+    assertTrue(String.valueOf(packs.getFirst().get("summary")).contains("QuantaEdge remains the owner"));
+    assertEquals(java.util.List.of("CLASS_6", "CLASS_7", "CLASS_8"), packs.getFirst().get("preservesQuantaEdgeClassCourses"));
   }
 
   static final class MapAssert {
