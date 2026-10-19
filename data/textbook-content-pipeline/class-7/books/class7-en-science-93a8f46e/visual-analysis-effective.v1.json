@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6f877588df71747c32232e240b91e3bc1d9ebd9579d15cbe7ba50b3fb2a0ad32",
+  "raw_analysis_sha256": "f52a70fb04cb520947470b7bf915ba460371ff31393673f5820273dd7cfdc8ef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:59:31Z",
+      "checkpointed_at": "2026-10-19T12:01:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:59:52Z",
+      "checkpointed_at": "2026-10-19T12:01:39Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -93735,6 +93735,180 @@
         "concepts": [],
         "context_relation": "empty",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ebc653481fbfd47c6c156e7",
+      "asset_sha256": "67d7e69e2514a297fddaa44711a5c0e75b981f557ab5c077f32ffffbdde31d66",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "page-0053.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table displaying electrical components and their symbols.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Electrical components and their symbols",
+          "S.No.",
+          "1. Electric cell",
+          "2. Battery",
+          "3. Electric lamp",
+          "4. Light Emitting Diode (LED)",
+          "5. Switch in 'ON' position",
+          "6. Switch in 'OFF' position",
+          "7. Wire"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Symbols",
+          "Electric cell",
+          "Battery",
+          "Electric lamp",
+          "Light Emitting Diode (LED)",
+          "Switch",
+          "Wire"
+        ],
+        "context_relation": "Table",
+        "limitations": [
+          "The image does not provide a diagram or illustration of the circuit components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:03:06Z",
+      "effective_analysis": {
+        "visual_summary": "Table displaying electrical components and their symbols.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Electrical components and their symbols",
+          "S.No.",
+          "1. Electric cell",
+          "2. Battery",
+          "3. Electric lamp",
+          "4. Light Emitting Diode (LED)",
+          "5. Switch in 'ON' position",
+          "6. Switch in 'OFF' position",
+          "7. Wire"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Symbols",
+          "Electric cell",
+          "Battery",
+          "Electric lamp",
+          "Light Emitting Diode (LED)",
+          "Switch",
+          "Wire"
+        ],
+        "context_relation": "Table",
+        "limitations": [
+          "The image does not provide a diagram or illustration of the circuit components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "006385a64e5958d231076253",
+      "asset_sha256": "7d01c8df5efe0422f10957fe7fcb2b18d1d3fbb11655f7b845d4ba46edbb6614",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/7d01c8df5efe0422f10957fe7fcb2b18d1d3fbb11655f7b845d4ba46edbb6614.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long scroll with two decorative ends, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The visible text is not readable or relevant to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:03:42Z",
+      "effective_analysis": {
+        "visual_summary": "A long scroll with two decorative ends, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The visible text is not readable or relevant to the image content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22524f1fe590c9adc5b540d6",
+      "asset_sha256": "7e063467c2de2879ea7c56df07729b3f8c9e9c13c9abe90f6bf619d1e2f5a712",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/7e063467c2de2879ea7c56df07729b3f8c9e9c13c9abe90f6bf619d1e2f5a712.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the direction of current flow in an LED and the arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Electrical components"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the full text of the source text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:04:22Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the direction of current flow in an LED and the arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Electrical components"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the full text of the source text."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

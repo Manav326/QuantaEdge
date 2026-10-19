@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1600,
-    "successful_visual_analyses": 1578,
-    "missing_visual_analyses": 5888,
+    "raw_analysis_result_rows": 1603,
+    "successful_visual_analyses": 1581,
+    "missing_visual_analyses": 5885,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5910,
+    "unresolved_count": 5907,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -69995,9 +69995,37 @@
       "asset_path": "page-0053.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table displaying electrical components and their symbols.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Electrical components and their symbols",
+          "S.No.",
+          "1. Electric cell",
+          "2. Battery",
+          "3. Electric lamp",
+          "4. Light Emitting Diode (LED)",
+          "5. Switch in 'ON' position",
+          "6. Switch in 'OFF' position",
+          "7. Wire"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Symbols",
+          "Electric cell",
+          "Battery",
+          "Electric lamp",
+          "Light Emitting Diode (LED)",
+          "Switch",
+          "Wire"
+        ],
+        "context_relation": "Table",
+        "limitations": [
+          "The image does not provide a diagram or illustration of the circuit components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70013,9 +70041,18 @@
       "asset_path": "assets/7d01c8df5efe0422f10957fe7fcb2b18d1d3fbb11655f7b845d4ba46edbb6614.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long scroll with two decorative ends, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The visible text is not readable or relevant to the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70031,9 +70068,26 @@
       "asset_path": "assets/7e063467c2de2879ea7c56df07729b3f8c9e9c13c9abe90f6bf619d1e2f5a712.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the direction of current flow in an LED and the arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Electrical components"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the full text of the source text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
