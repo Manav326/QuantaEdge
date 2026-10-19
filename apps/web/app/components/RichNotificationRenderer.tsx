@@ -63,9 +63,10 @@ function Asset({ id, alt, kind, surface }: {
     : <img className={styles.image} src={url} alt={alt || ''} loading="lazy" />;
 }
 
-function Destination({ target, label, surface }: { target: unknown; label: string; surface: Surface }) {
+function Destination({ target, label, surface, editMode = false }: { target: unknown; label: string; surface: Surface; editMode?: boolean }) {
   const href = safeTarget(target);
   if (!href || !label.trim()) return null;
+  if (editMode) return <span className={styles.cta}>{label}</span>;
   const external = /^https:\/\//i.test(href);
   const className = styles.cta;
   return external
@@ -73,7 +74,7 @@ function Destination({ target, label, surface }: { target: unknown; label: strin
     : <Link className={className} href={href}>{label}</Link>;
 }
 
-function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
+function renderBlock(block: Block, index: number, surface: Surface, editMode = false): ReactNode {
   const type = String(block.type || '');
   const text = (key: string, fallback = '') => typeof block[key] === 'string' ? String(block[key]) : fallback;
   const assetId = block.assetId;
@@ -109,7 +110,7 @@ function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
         <div className={styles.cardKicker}>COURSE</div>
         <h4>{text('courseName', text('title', 'Course update'))}</h4>
         {text('description') ? <p>{text('description')}</p> : null}
-        <Destination target={block.target} label={text('buttonLabel', 'Open course')} surface={surface} />
+        <Destination target={block.target} label={text('buttonLabel', 'Open course')} surface={surface} editMode={editMode} />
       </section>;
     case 'eventCard':
       return <section className={styles.dataCard} key={index}>
@@ -117,7 +118,7 @@ function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
         <h4>{text('title', 'Upcoming event')}</h4>
         {text('dateLabel') ? <p className={styles.eventDate}>{text('dateLabel')}</p> : null}
         {text('description') ? <p>{text('description')}</p> : null}
-        <Destination target={block.target} label={text('buttonLabel', 'View details')} surface={surface} />
+        <Destination target={block.target} label={text('buttonLabel', 'View details')} surface={surface} editMode={editMode} />
       </section>;
     case 'highlight':
       return <section className={styles.highlight} key={index}>
@@ -134,7 +135,7 @@ function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
       return <div className={styles.spacer} key={index} aria-hidden="true" />;
     case 'cta':
       return <div className={styles.ctaRow} key={index}>
-        <Destination target={block.target} label={text('label', 'Open')} surface={surface} />
+        <Destination target={block.target} label={text('label', 'Open')} surface={surface} editMode={editMode} />
       </div>;
     case 'footer':
       return <footer className={styles.footer} key={index}>{text('text')}</footer>;
@@ -143,7 +144,7 @@ function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
       const children = Array.isArray(block.children) ? block.children : Array.isArray(block.items) ? block.items : [];
       return <div className={type === 'carousel' ? styles.carousel : styles.container} key={index}>
         {children.map((child, childIndex) => child && typeof child === 'object'
-          ? renderBlock(child as Block, childIndex, surface) : null)}
+          ? renderBlock(child as Block, childIndex, surface, editMode) : null)}
       </div>;
     }
     default:
@@ -152,15 +153,54 @@ function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
 }
 
 export default function RichNotificationRenderer({
-  contentDocument, surface = 'user',
-}: { contentDocument: unknown; surface?: Surface }) {
+  contentDocument, surface = 'user', editMode = false, selectedBlockIndex = -1,
+  onSelectBlock, onReorderBlocks,
+}: {
+  contentDocument: unknown;
+  surface?: Surface;
+  editMode?: boolean;
+  selectedBlockIndex?: number;
+  onSelectBlock?: (index: number) => void;
+  onReorderBlocks?: (fromIndex: number, toIndex: number) => void;
+}) {
   const document = contentDocument && typeof contentDocument === 'object'
     ? contentDocument as RichDocument : null;
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dropIndex, setDropIndex] = useState<number | null>(null);
   if (!document || document.version !== 1 || !Array.isArray(document.blocks)) {
     return <div className={styles.invalid}>This notification uses a format this app cannot display.</div>;
   }
-  return <div className={styles.document}>
-    {document.blocks.map((block, index) => block && typeof block === 'object'
-      ? renderBlock(block, index, surface) : null)}
+  return <div className={styles.document + (editMode ? ' ' + styles.canvasDocument : '')}>
+    {document.blocks.map((block, index) => {
+      if (!block || typeof block !== 'object') return null;
+      if (!editMode) return <div key={index}>{renderBlock(block, index, surface, false)}</div>;
+      const selected = selectedBlockIndex === index;
+      const over = dropIndex === index && dragIndex !== index;
+      return <div key={index}
+        className={styles.editorBlock + (selected ? ' ' + styles.selectedEditorBlock : '') + (over ? ' ' + styles.dropEditorBlock : '')}
+        draggable
+        tabIndex={0}
+        role="group"
+        aria-label={'Content block ' + (index + 1) + ': ' + String(block.type || 'content') + '. Click to select or drag to reorder.'}
+        onClick={event => { event.stopPropagation(); onSelectBlock?.(index); }}
+        onKeyDown={event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault(); event.stopPropagation(); onSelectBlock?.(index);
+          }
+        }}
+        onDragStart={event => { setDragIndex(index); event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', String(index)); }}
+        onDragOver={event => { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; setDropIndex(index); }}
+        onDragLeave={() => setDropIndex(current => current === index ? null : current)}
+        onDrop={event => {
+          event.preventDefault();
+          const from = Number(event.dataTransfer.getData('text/plain'));
+          if (Number.isInteger(from) && from >= 0 && from < document.blocks!.length && from !== index) onReorderBlocks?.(from, index);
+          setDragIndex(null); setDropIndex(null);
+        }}
+        onDragEnd={() => { setDragIndex(null); setDropIndex(null); }}>
+        {renderBlock(block, index, surface, true)}
+        <span className={styles.editorBlockHandle} aria-hidden="true">⠿ {index + 1}</span>
+      </div>;
+    })}
   </div>;
 }
