@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "21b5592d938cd4d10dd8ec55ba2dc1ec66f74949c0b53794259604c097f4c61e",
+  "raw_analysis_sha256": "ccfadeb21a38deb768037f4373208da0a7cad892b491711c1663d07d0d6e1e72",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:09:05Z",
+      "checkpointed_at": "2026-10-19T03:14:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:09:33Z",
+      "checkpointed_at": "2026-10-19T03:14:36Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77562,6 +77562,160 @@
         "context_relation": "The image is related to the concept of potential energy in physics, specifically in the context of a spring.",
         "limitations": [
           "The image does not provide specific details about the spring's properties or the potential energy it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "56c91951778266c5e0c33f6b",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about an electric cell holder and its components.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the context it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:14:45Z",
+      "effective_analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about an electric cell holder and its components.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the context it is related to."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0fc05b56f4352a5c3730e111",
+      "asset_sha256": "fbb696b6a30e40bcefd0412cc36f24e7ee2ae9180d00da458b3cd612cd841e1f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/fbb696b6a30e40bcefd0412cc36f24e7ee2ae9180d00da458b3cd612cd841e1f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black rectangular battery holder with two wires attached, one red and one black, connected to an electric cell.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "battery holder",
+          "wires",
+          "electric cell",
+          "negative terminal",
+          "positive terminal"
+        ],
+        "context_relation": "The image is a close-up of a battery holder with attached wires, likely used in an educational context to demonstrate the connection between a battery and a cell.",
+        "limitations": [
+          "The image does not show the entire battery or the cell inside the holder."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:15:56Z",
+      "effective_analysis": {
+        "visual_summary": "A black rectangular battery holder with two wires attached, one red and one black, connected to an electric cell.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "battery holder",
+          "wires",
+          "electric cell",
+          "negative terminal",
+          "positive terminal"
+        ],
+        "context_relation": "The image is a close-up of a battery holder with attached wires, likely used in an educational context to demonstrate the connection between a battery and a cell.",
+        "limitations": [
+          "The image does not show the entire battery or the cell inside the holder."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c2df401121b3f522d64e37dc",
+      "asset_sha256": "12db3cee4d89eaf9a02a59d249d48d0811c3a99bdd9525b1b06461daf3ce9db8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/12db3cee4d89eaf9a02a59d249d48d0811c3a99bdd9525b1b06461daf3ce9db8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red electric cell holder with two wires attached.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Spring",
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is no"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Spring",
+          "Electric cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is related to the text discussing the setup of an electric cell in a holder.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell in the holder."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:17:14Z",
+      "effective_analysis": {
+        "visual_summary": "A red electric cell holder with two wires attached.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Spring",
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is no"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Spring",
+          "Electric cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is related to the text discussing the setup of an electric cell in a holder.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell in the holder."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

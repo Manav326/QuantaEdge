@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1322,
-    "successful_visual_analyses": 1304,
-    "missing_visual_analyses": 6166,
+    "raw_analysis_result_rows": 1325,
+    "successful_visual_analyses": 1307,
+    "missing_visual_analyses": 6163,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6184,
+    "unresolved_count": 6181,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59959,9 +59959,18 @@
       "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about an electric cell holder and its components.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the context it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59977,9 +59986,24 @@
       "asset_path": "assets/fbb696b6a30e40bcefd0412cc36f24e7ee2ae9180d00da458b3cd612cd841e1f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black rectangular battery holder with two wires attached, one red and one black, connected to an electric cell.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "battery holder",
+          "wires",
+          "electric cell",
+          "negative terminal",
+          "positive terminal"
+        ],
+        "context_relation": "The image is a close-up of a battery holder with attached wires, likely used in an educational context to demonstrate the connection between a battery and a cell.",
+        "limitations": [
+          "The image does not show the entire battery or the cell inside the holder."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59995,9 +60019,29 @@
       "asset_path": "assets/12db3cee4d89eaf9a02a59d249d48d0811c3a99bdd9525b1b06461daf3ce9db8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red electric cell holder with two wires attached.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Spring",
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is no"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Spring",
+          "Electric cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is related to the text discussing the setup of an electric cell in a holder.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell in the holder."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
