@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "41762e489c38a469994f400d454cc5bda58a3e538f4dc3b21e56a7eca89aacb1",
+  "raw_analysis_sha256": "ab5fa48502d5b40eb945684ae83f8183dc520f0f4bcb0bf8b35006ad6d05325a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:00:03Z",
+      "checkpointed_at": "2026-10-19T03:04:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:00:32Z",
+      "checkpointed_at": "2026-10-19T03:05:21Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77236,6 +77236,158 @@
         "context_relation": "The image is a diagram explaining the components of an LED lamp.",
         "limitations": [
           "The image does not provide specific details about the components' functions or how they work."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "71966cef99bee722c72eb75d",
+      "asset_sha256": "ff5c3919a88d9421d64d8d737554d6f9adf943cb2d32cdc9002c9ca836eb09bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/ff5c3919a88d9421d64d8d737554d6f9adf943cb2d32cdc9002c9ca836eb09bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a decorative top and a handle at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a scroll with a decorative top and a handle at the bottom.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:06:26Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a decorative top and a handle at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a scroll with a decorative top and a handle at the bottom.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e41a20c24a97c4a93d444c9",
+      "asset_sha256": "16e1a42c7d64de570f5973fbe25e3a5ad19a9c66d9b7a7f222ad47b95d5b69aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/16e1a42c7d64de570f5973fbe25e3a5ad19a9c66d9b7a7f222ad47b95d5b69aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp, labeled 'LED Lamp', with a caption 'Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.'",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a visual representation of an LED lamp used in torches, providing information about its use and comparison with incandescent lamps.",
+        "limitations": [
+          "The image does not show the components of the LED lamp.",
+          "The image does not provide detailed information about the LED lamp's characteristics or benefits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:07:50Z",
+      "effective_analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp, labeled 'LED Lamp', with a caption 'Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.'",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a visual representation of an LED lamp used in torches, providing information about its use and comparison with incandescent lamps.",
+        "limitations": [
+          "The image does not show the components of the LED lamp.",
+          "The image does not provide detailed information about the LED lamp's characteristics or benefits."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8b4ae52bfd7b9a41098d3ac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing LED lamps and their components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode",
+          "Incandescent lamp",
+          "Components of an LED lamp"
+        ],
+        "context_relation": "The page is discussing the use of LED lamps in torches and their components.",
+        "limitations": [
+          "The page does not provide specific details about the components of an LED lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:08:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing LED lamps and their components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode",
+          "Incandescent lamp",
+          "Components of an LED lamp"
+        ],
+        "context_relation": "The page is discussing the use of LED lamps in torches and their components.",
+        "limitations": [
+          "The page does not provide specific details about the components of an LED lamp."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

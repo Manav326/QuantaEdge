@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1316,
-    "successful_visual_analyses": 1298,
-    "missing_visual_analyses": 6172,
+    "raw_analysis_result_rows": 1319,
+    "successful_visual_analyses": 1301,
+    "missing_visual_analyses": 6169,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6190,
+    "unresolved_count": 6187,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59754,9 +59754,16 @@
       "asset_path": "assets/ff5c3919a88d9421d64d8d737554d6f9adf943cb2d32cdc9002c9ca836eb09bd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a decorative top and a handle at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a scroll with a decorative top and a handle at the bottom.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59772,9 +59779,26 @@
       "asset_path": "assets/16e1a42c7d64de570f5973fbe25e3a5ad19a9c66d9b7a7f222ad47b95d5b69aa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp, labeled 'LED Lamp', with a caption 'Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.'",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a visual representation of an LED lamp used in torches, providing information about its use and comparison with incandescent lamps.",
+        "limitations": [
+          "The image does not show the components of the LED lamp.",
+          "The image does not provide detailed information about the LED lamp's characteristics or benefits."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59790,9 +59814,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing LED lamps and their components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode",
+          "Incandescent lamp",
+          "Components of an LED lamp"
+        ],
+        "context_relation": "The page is discussing the use of LED lamps in torches and their components.",
+        "limitations": [
+          "The page does not provide specific details about the components of an LED lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1298,
+    "assets_selected": 1301,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1296,
-    "assets_remaining": 6192,
+    "assets_analyzed": 1299,
+    "assets_remaining": 6189,
     "assets_completion_percent": 17.3,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1293,
+    "assets_skipped_from_checkpoint": 1296,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:00:03Z"
+      "checkpointed_at": "2026-10-19T03:04:53Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:00:32Z"
+      "checkpointed_at": "2026-10-19T03:05:21Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -49145,6 +49145,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T03:03:58Z"
+    },
+    {
+      "asset_id": "71966cef99bee722c72eb75d",
+      "asset_sha256": "ff5c3919a88d9421d64d8d737554d6f9adf943cb2d32cdc9002c9ca836eb09bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/ff5c3919a88d9421d64d8d737554d6f9adf943cb2d32cdc9002c9ca836eb09bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a decorative top and a handle at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a scroll with a decorative top and a handle at the bottom.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:06:26Z"
+    },
+    {
+      "asset_id": "6e41a20c24a97c4a93d444c9",
+      "asset_sha256": "16e1a42c7d64de570f5973fbe25e3a5ad19a9c66d9b7a7f222ad47b95d5b69aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/16e1a42c7d64de570f5973fbe25e3a5ad19a9c66d9b7a7f222ad47b95d5b69aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a light emitting diode (LED) lamp, labeled 'LED Lamp', with a caption 'Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.'",
+        "visual_type": "photo",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "incandescent lamp"
+        ],
+        "context_relation": "The image is a visual representation of an LED lamp used in torches, providing information about its use and comparison with incandescent lamps.",
+        "limitations": [
+          "The image does not show the components of the LED lamp.",
+          "The image does not provide detailed information about the LED lamp's characteristics or benefits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:07:50Z"
+    },
+    {
+      "asset_id": "c8b4ae52bfd7b9a41098d3ac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing LED lamps and their components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Components",
+          "LED lamp"
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode",
+          "Incandescent lamp",
+          "Components of an LED lamp"
+        ],
+        "context_relation": "The page is discussing the use of LED lamps in torches and their components.",
+        "limitations": [
+          "The page does not provide specific details about the components of an LED lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:08:11Z"
     }
   ]
 }
