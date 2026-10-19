@@ -85,6 +85,38 @@ public class NotificationController {
     return Map.of("read",true,"recipientId",recipientId);
   }
 
+  @PostMapping("/notifications/{recipientId}/unread")
+  public Map<String,Object> markUnread(
+      @PathVariable long recipientId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    context=authorization.requireAuth(context);
+    if(!context.isStudent()&&!context.isParent())throw new SecurityException("Only a notification recipient can update read state.");
+    InstitutionTenantContext selected=tenant!=null?tenant:tenantContexts.requireSelector(institutionCode);
+    tenantContexts.assertActiveMembership(context,selected);
+    boolean updated=notifications.markUnread(context,selected.institutionId(),recipientId);
+    if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("unread",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/notifications/{recipientId}/dismiss")
+  public Map<String,Object> dismissNotification(
+      @PathVariable long recipientId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    context=authorization.requireAuth(context);
+    if(!context.isStudent()&&!context.isParent())throw new SecurityException("Only a notification recipient can dismiss a notification.");
+    InstitutionTenantContext selected=tenant!=null?tenant:tenantContexts.requireSelector(institutionCode);
+    tenantContexts.assertActiveMembership(context,selected);
+    boolean updated=notifications.dismissNotification(context,selected.institutionId(),recipientId);
+    if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("dismissed",true,"recipientId",recipientId);
+  }
+
   @PostMapping("/notifications/read-all")
   public Map<String,Object> markAllRead(
       @RequestAttribute(value="authContext",required=false) AuthContext context,
@@ -208,6 +240,24 @@ public class NotificationController {
       principal.adminId(),principal.institutionId(),recipientId,false);
     if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
     return Map.of("read",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/institution/notifications/{recipientId}/unread")
+  public Map<String,Object> markInstitutionUnread(HttpServletRequest request,@PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    InstitutionAuthService.InstitutionPrincipal principal=institutionPrincipal(request);
+    boolean updated=notifications.markUnreadForInstitutionAdmin(principal.adminId(),principal.institutionId(),recipientId);
+    if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("unread",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/institution/notifications/{recipientId}/dismiss")
+  public Map<String,Object> dismissInstitutionNotification(HttpServletRequest request,@PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    InstitutionAuthService.InstitutionPrincipal principal=institutionPrincipal(request);
+    boolean updated=notifications.dismissForInstitutionAdmin(principal.adminId(),principal.institutionId(),recipientId);
+    if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("dismissed",true,"recipientId",recipientId);
   }
 
   @PostMapping("/institution/notifications/read-all")
