@@ -1842,6 +1842,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openClasses(subjectCode: String = currentSubject) {
+        if (currentCourseId <= 0L) {
+            error = if (language == "hi") "पहले अपना कोर्स चुनें।" else "Select a primary course first."
+            route = AppRoute.CLASSES
+            liveClasses = emptyList()
+            recordedClasses = emptyList()
+            return
+        }
         liveBroadcastVideoId = ""
         liveBroadcastTitle = ""
         liveBroadcastSessionId = 0L
@@ -1851,7 +1858,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
         route = AppRoute.CLASSES
         runTask {
-            val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
+            val courseQuery = "&courseId=" + currentCourseId
             liveClasses = ApiClient.getObject(
                 "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
             ).optJSONArray("items").objectItems()
@@ -1863,7 +1870,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             recordedClasses = (onlineRows + localRows).distinctBy {
                 it.longAny("recorded_class_id", "recordingId", "id")
             }.map { item ->
-                val copy = JSONObject(item.toString())
+                val copy = JSONObject(item.toString()).put("course_id", currentCourseId)
                 val id = item.longAny("recorded_class_id", "recordingId", "id")
                 val local = localById[id]
                 if (local != null) {
@@ -1880,7 +1887,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             for (pending in offlineVideoStore.pendingProgressUploads()) {
                 val id = pending.longAny("recorded_class_id")
                 try {
-                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress?courseId=" + pending.optLongAny("course_id", "courseId"),
                         JSONObject().put("positionSeconds", pending.optLong("last_position_seconds"))
                             .put("watchedSeconds", pending.optLong("watched_seconds"))
                             .put("completed", pending.optBoolean("completed")))
@@ -1922,7 +1929,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun joinLiveClass(item: JSONObject) {
         runTask {
             val sessionId = item.longAny("session_id", "sessionId")
-            val joined = ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/join")
+            val joined = ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/join?courseId=" + currentCourseId)
             val provider = joined.textAny("provider").ifBlank { item.textAny("provider") }
             val joinUrl = joined.textAny("joinUrl", "join_url")
             val youtubeVideoId = joined.textAny("youtubeVideoId", "youtube_video_id")
@@ -1959,7 +1966,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun leaveLiveClassById(sessionId: Long) {
         if (sessionId <= 0L) return
         runTask {
-            ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/leave")
+            ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/leave?courseId=" + currentCourseId)
             liveClasses = liveClasses.map { row ->
                 if (row.longAny("session_id", "sessionId") == sessionId)
                     JSONObject(row.toString()).put("currently_joined", false)
@@ -2256,7 +2263,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 route = AppRoute.RECORDING_PLAYER
                 return@runTask
             }
-            val details = ApiClient.getObject("/api/v1/learning/recorded-classes/" + id)
+            val details = ApiClient.getObject("/api/v1/learning/recorded-classes/" + id + "?courseId=" + currentCourseId)
             for (key in listOf("download_resource_id", "download_assignment_id", "download_allowed",
                 "download_sha256", "media_type", "file_size_bytes")) {
                 if (item.has(key) && !item.isNull(key)) details.put(key, item.opt(key))
@@ -2277,7 +2284,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }
             scope.launch {
                 try {
-                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress?courseId=" + currentCourseId,
                         JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
                             .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
                     offlineVideoStore.markProgressSynced(id)
@@ -2334,7 +2341,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             val local = resourceStore.downloadedDocuments()
             val online = runCatching {
-                val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
+                if (currentCourseId <= 0L) throw IOException("Select a primary course first.")
+                val courseQuery = "&courseId=" + currentCourseId
                 ApiClient.getArray("/api/v1/learning/documents?language=" + learningContentLanguage + courseQuery).objectItems()
             }.getOrElse {
                 status = "ऑफ़लाइन: केवल इस डिवाइस पर पहले डाउनलोड की गई सामग्री दिखाई जा रही है।"
