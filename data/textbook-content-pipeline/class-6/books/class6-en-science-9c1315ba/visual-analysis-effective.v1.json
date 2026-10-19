@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1160afccc911beccdb84a6dcc393d0a91912f755e27d170795130535f167d34a",
+  "raw_analysis_sha256": "598a5c609a60d6ffdd9731a7d2ab1898cfff6fd37b9bad10a28bac38b3ef4345",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:25:43Z",
+      "checkpointed_at": "2026-10-19T17:29:16Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:26:24Z",
+      "checkpointed_at": "2026-10-19T17:29:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:27:16Z",
+      "checkpointed_at": "2026-10-19T17:30:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -52869,6 +52869,98 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "54133e8820b2a23ab1ba0661",
+      "asset_sha256": "4087d734d48808e5c5103c38e444116d1b32a922296a5ec8ff486d4a596cd883",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/4087d734d48808e5c5103c38e444116d1b32a922296a5ec8ff486d4a596cd883.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a magnet near a glass of water, with a small piece of paperclip floating on the surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "water",
+          "paperclip",
+          "floating"
+        ],
+        "context_relation": "The image is related to the question about picking out a paperclip from water using a magnet.",
+        "limitations": [
+          "The image does not show the paperclip being lifted out of the water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:31:24Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a magnet near a glass of water, with a small piece of paperclip floating on the surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "water",
+          "paperclip",
+          "floating"
+        ],
+        "context_relation": "The image is related to the question about picking out a paperclip from water using a magnet.",
+        "limitations": [
+          "The image does not show the paperclip being lifted out of the water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68c213e8cd783eac022362ae",
+      "asset_sha256": "f8af7aa63305c6979f2872f747720d81ad1276c01559c383a3118d0b9e8542ec",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/f8af7aa63305c6979f2872f747720d81ad1276c01559c383a3118d0b9e8542ec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A maze with various shapes and sizes of purple bars.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of magnetic attraction and the ability to move objects using magnets.",
+        "limitations": [
+          "The image does not provide specific details about the shapes or sizes of the bars in the maze.",
+          "The image does not show the outcome of the experiment with the steel balls or the paperclip in water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:32:00Z",
+      "effective_analysis": {
+        "visual_summary": "A maze with various shapes and sizes of purple bars.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of magnetic attraction and the ability to move objects using magnets.",
+        "limitations": [
+          "The image does not provide specific details about the shapes or sizes of the bars in the maze.",
+          "The image does not show the outcome of the experiment with the steel balls or the paperclip in water."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
