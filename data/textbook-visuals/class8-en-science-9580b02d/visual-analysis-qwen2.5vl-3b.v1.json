@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 915,
+    "assets_selected": 917,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 912,
-    "assets_remaining": 1379,
-    "assets_completion_percent": 39.8,
+    "assets_analyzed": 914,
+    "assets_remaining": 1377,
+    "assets_completion_percent": 39.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 910,
+    "assets_skipped_from_checkpoint": 912,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:17:03Z"
+      "checkpointed_at": "2026-10-19T17:22:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:17:48Z"
+      "checkpointed_at": "2026-10-19T17:23:18Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:18:24Z"
+      "checkpointed_at": "2026-10-19T17:23:54Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28983,6 +28983,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T17:21:26Z"
+    },
+    {
+      "asset_id": "8461c6876a6c37e87191cd83",
+      "asset_sha256": "d3369960bfe767b491ee40f5faff24e6622b950e13e3e39f0dd2d6be1c94e84e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/d3369960bfe767b491ee40f5faff24e6622b950e13e3e39f0dd2d6be1c94e84e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a mosquito, possibly for educational purposes.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mosquito",
+          "disease",
+          "germs",
+          "pathogens",
+          "nutrition",
+          "unhealthy lifestyle"
+        ],
+        "context_relation": "The image is likely used to illustrate the concept of disease-causing organisms in the context of the text.",
+        "limitations": [
+          "The image does not provide specific details about the types of diseases or their causes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:25:31Z"
+    },
+    {
+      "asset_id": "7a7435cdf6b812452047a0e9",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:25:46Z"
     }
   ]
 }
