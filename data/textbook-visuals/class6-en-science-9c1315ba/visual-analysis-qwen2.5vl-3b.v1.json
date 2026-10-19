@@ -11,10 +11,10 @@
     "assets_selected": 905,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 900,
-    "assets_remaining": 1178,
-    "assets_completion_percent": 43.3,
-    "assets_failed": 14,
+    "assets_analyzed": 902,
+    "assets_remaining": 1176,
+    "assets_completion_percent": 43.4,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 900,
     "batch_limit": 5,
     "publication_allowed": false
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T08:48:43Z"
+      "checkpointed_at": "2026-10-19T09:03:07Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T08:51:31Z"
+      "checkpointed_at": "2026-10-19T09:04:07Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -24493,19 +24493,48 @@
     {
       "asset_id": "fcb1e4be54ff19cd99b091bb",
       "asset_sha256": "5e8c141a1427a81a4c3be46d6322074364a9279fe484f63d3880b4286b877cc2",
-      "page_text_context_sha256": "ca00bc3d37caf97470a32e8b51bd3bfb0263da5a0bf731f2466f1393764e7617",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 39,
       "asset_path": "assets/5e8c141a1427a81a4c3be46d6322074364a9279fe484f63d3880b4286b877cc2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ca00bc3d37caf97470a32e8b51bd3bfb0263da5a0bf731f2466f1393764e7617",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of various animals and their movement patterns.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ant",
+          "Butterfly",
+          "Cockroach",
+          "Cow",
+          "Frog",
+          "Fish",
+          "Grasshopper",
+          "Hare",
+          "Insect",
+          "Moth",
+          "Snake",
+          "Turtle",
+          "Worm",
+          "Yak"
+        ],
+        "concepts": [
+          "Animal Movement",
+          "Variety of Animals"
+        ],
+        "context_relation": "Observing and recording animal movement patterns",
+        "limitations": [
+          "No specific question or task is provided in the image."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:05:47Z"
     },
     {
       "asset_id": "f19d12c76633145eb6f75c16",
@@ -25398,7 +25427,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
+      "run_id": "39219692476",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -25407,19 +25436,28 @@
     {
       "asset_id": "1b6dd2be916d0f2957d56770",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 44,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:06:35Z"
     },
     {
       "asset_id": "93971e0f1e980f0367559e6e",
