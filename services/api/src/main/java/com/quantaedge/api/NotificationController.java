@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map;\nimport java.util.ArrayList;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -96,6 +96,95 @@ public class NotificationController {
     tenantContexts.assertActiveMembership(context,selected);
     notifications.markRead(context,selected.institutionId(),0L,true);
     return Map.of("readAll",true);
+  }
+
+  @GetMapping({
+    "/admin/notifications/options",
+    "/hrms/notifications/options",
+    "/institution/notifications/options"
+  })
+  public Map<String,Object> options(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_TEMPLATE_MANAGE");
+    Map<String,Object> result=new LinkedHashMap<>();
+    if("HRMS".equals(actor.workspace())) {
+      result.put("institutions",jdbc.queryForList("""
+        select id,tenant_code as institution_code,display_name,status
+        from institution_tenant where status='ACTIVE' order by lower(display_name),id limit 1000
+        """));
+      result.put("courses",List.of());
+      result.put("recipientKinds",List.of("STUDENT","PARENT","INSTITUTION_ADMINS"));
+    } else {
+      result.put("institutions",List.of(Map.of(
+        "id",actor.institutionId(),"institution_code","INSTITUTION","display_name",
+        "INSTITUTION_ADMIN".equals(actor.workspace())?"Current institution":"QuantaEdge","status","ACTIVE")));
+      result.put("courses",jdbc.queryForList("""
+        select distinct p.id as course_id,p.code as course_code,p.display_name as course_name,
+          c.code as class_code
+        from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join curriculum_class c on c.id=p.class_id
+        where a.institution_id=? and a.status='ASSIGNED'
+        order by p.code,p.id
+        """,actor.institutionId()));
+      result.put("recipientKinds",List.of("STUDENT","PARENT","INSTITUTION_ADMINS"));
+    }
+    result.put("maxRecipients",10000);
+    result.put("supportsRichBlocks",true);
+    result.put("supportsScheduledSend",true);
+    return result;
+  }
+
+  @GetMapping({
+    "/admin/notifications/recipients",
+    "/institution/notifications/recipients"
+  })
+  public Map<String,Object> recipientOptions(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @RequestParam(required=false,defaultValue="") String query,
+      @RequestParam(required=false,defaultValue="STUDENT") String kind) {
+    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_TEMPLATE_MANAGE");
+    String normalized=kind==null?"STUDENT":kind.trim().toUpperCase(java.util.Locale.ROOT);
+    String needle=query==null?"":query.trim();
+    if(needle.length()>80)throw new IllegalArgumentException("Recipient search text is too long.");
+    List<Map<String,Object>> rows;
+    if("STUDENT".equals(normalized)) {
+      rows=jdbc.queryForList("""
+        select distinct st.id as recipient_id,'STUDENT' as recipient_kind,
+          st.display_name as recipient_name,st.class_code
+        from student st join institution_membership m on m.student_id=st.id
+          and m.institution_id=? and m.status='ACTIVE'
+        where st.active=true and (?='' or st.display_name ilike '%'||?||'%')
+        order by lower(st.display_name),st.id limit 50
+        """,actor.institutionId(),needle,needle);
+    } else if("USER_ACCOUNT".equals(normalized)) {
+      rows=jdbc.queryForList("""
+        select distinct u.id as recipient_id,'USER_ACCOUNT' as recipient_kind,
+          u.display_name as recipient_name,null::varchar as class_code
+        from user_account u
+        join institution_user_membership um on um.user_id=u.id and um.institution_id=? and um.status='ACTIVE'
+        join guardian_student gs on gs.guardian_user_id=u.id and gs.active=true
+          and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+        join student st on st.id=gs.student_id and st.active=true
+        join institution_membership m on m.student_id=st.id and m.institution_id=um.institution_id and m.status='ACTIVE'
+        where u.active=true and (?='' or u.display_name ilike '%'||?||'%')
+        order by lower(u.display_name),u.id limit 50
+        """,actor.institutionId(),needle,needle);
+    } else if("INSTITUTION_ADMIN".equals(normalized)) {
+      rows=jdbc.queryForList("""
+        select id as recipient_id,'INSTITUTION_ADMIN' as recipient_kind,
+          display_name as recipient_name,null::varchar as class_code
+        from institution_admin_account where institution_id=? and active=true
+          and (?='' or display_name ilike '%'||?||'%')
+        order by lower(display_name),id limit 50
+        """,actor.institutionId(),needle,needle);
+    } else {
+      throw new IllegalArgumentException("Choose Student, Parent/Guardian or Institution Admin.");
+    }
+    return Map.of("recipients",rows,"limit",50);
   }
 
   @GetMapping({
