@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 852,
+    "assets_selected": 854,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 849,
-    "assets_remaining": 1442,
+    "assets_analyzed": 851,
+    "assets_remaining": 1440,
     "assets_completion_percent": 37.1,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 847,
+    "assets_skipped_from_checkpoint": 849,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:46:56Z"
+      "checkpointed_at": "2026-10-19T11:52:58Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:48:15Z"
+      "checkpointed_at": "2026-10-19T11:54:14Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:49:08Z"
+      "checkpointed_at": "2026-10-19T11:55:06Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26666,6 +26666,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T11:51:21Z"
+    },
+    {
+      "asset_id": "ff9958926731830d0e93552c",
+      "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, with a student in a wheelchair beside her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Classroom setting",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:56:06Z"
+    },
+    {
+      "asset_id": "0837d322e6ce02f535cbadd0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:56:20Z"
     }
   ]
 }
