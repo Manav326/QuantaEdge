@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "527da1fdc85713ee81d5857f6dc4c41d40fb74f203ab061621bd43a252f664c6",
+  "raw_analysis_sha256": "5c4be39322b17aaa6aa1ed110db02bb9e9e84158de8b3e37c5d1589ba89bccd3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:32:01Z",
+      "checkpointed_at": "2026-10-19T10:35:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:32:22Z",
+      "checkpointed_at": "2026-10-19T10:35:28Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -88974,6 +88974,152 @@
         "limitations": [
           "The image does not show any diagrams or symbols.",
           "The page does not provide any specific examples or explanations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "392bc1d683fec58bcef728bb",
+      "asset_sha256": "268825bf8a3074154cd732374433c145b80f7f10730dfd0fb48a0b4d77de65e5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/268825bf8a3074154cd732374433c145b80f7f10730dfd0fb48a0b4d77de65e5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Four yellow objects arranged in a row.",
+        "visual_type": "photo",
+        "visible_text": [
+          "4"
+        ],
+        "concepts": [
+          "yellow objects",
+          "row"
+        ],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify the objects' details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:36:03Z",
+      "effective_analysis": {
+        "visual_summary": "Four yellow objects arranged in a row.",
+        "visual_type": "photo",
+        "visible_text": [
+          "4"
+        ],
+        "concepts": [
+          "yellow objects",
+          "row"
+        ],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify the objects' details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aac7306c20421f0e17782565",
+      "asset_sha256": "280e6544c0137100e3d3811f5a30a5f455bb4b2230ee27669737440f5ed7ffb5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/280e6544c0137100e3d3811f5a30a5f455bb4b2230ee27669737440f5ed7ffb5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and does not include all components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:36:41Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and does not include all components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68374a42753c40218c727e0a",
+      "asset_sha256": "f5a80f71ee010ed966c7c0d3a5e19cc7b1b11a8a81148dd49da832bf683f6e02",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/f5a80f71ee010ed966c7c0d3a5e19cc7b1b11a8a81148dd49da832bf683f6e02.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table is incomplete and does not provide specific details about each component."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:37:18Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table is incomplete and does not provide specific details about each component."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
