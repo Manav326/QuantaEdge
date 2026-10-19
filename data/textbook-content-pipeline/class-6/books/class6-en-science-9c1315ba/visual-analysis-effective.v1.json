@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5667f72af8ea0224250f18446e723907e45ab1c58e91818ba5022b851c7ddf27",
+  "raw_analysis_sha256": "5320d7415b4a03a8ab5ced8c2443b23ea642870f1513aad275f80da7d386d6cc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:10:31Z",
+      "checkpointed_at": "2026-10-19T16:13:11Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:11:11Z",
+      "checkpointed_at": "2026-10-19T16:13:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:12:04Z",
+      "checkpointed_at": "2026-10-19T16:14:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -50777,6 +50777,134 @@
         "limitations": [
           "No visible text or images to analyze."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b57bf02ae2398b104d23ddb",
+      "asset_sha256": "b7667e97a0381b46571b414e58d5e69a886a4378d72a524a58a74c8e631c291d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 83,
+      "asset_path": "page-0083.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c10271283b217f33ebdae5d84fe19bfb023939cee7b7d8dc8f1391b49a7ace13",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, specifically focusing on the poles and poles of a magnet.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "These ends of the magnet are called the two poles of the magnet—the North pole and the South pole. Most of the iron filings stick to the poles of a magnet of any shape.",
+          "It is not possible to obtain a magnet with a single pole. If a magnet is broken into smaller pieces, North and South poles always exist in pairs even in the smallest piece of the magnet. A single North pole or a South pole cannot exist.",
+          "Activity 4.3: Let us experiment",
+          "Suspend a bar magnet with a thread tied to the middle of the magnet as shown in Fig. 4.5. You may need to adjust the position of the string till the magnet is balanced horizontally.",
+          "Now rotate the magnet gently in the horizontal direction and let it come to rest.",
+          "Mark the position corresponding to the ends of the magnet on the ground (or on a piece of paper stuck to the ground). Join these two points on the ground with a line. This line indicates the direction along which the magnet comes to rest.",
+          "Now again rotate the magnet by giving a gentle push at its one end and wait till it comes to rest. Does the magnet rest along the same line?",
+          "What direction does this line indicate along which the magnet rests? How can we find it out?",
+          "If we have noticed the direction where the Sun rises or sets, we have an approximate idea of where East or West is. Hence, we can locate the direction along which the magnet rests."
+        ],
+        "concepts": [
+          "magnet",
+          "pole",
+          "North pole",
+          "South pole",
+          "iron filings",
+          "magnetism",
+          "direction",
+          "rotation",
+          "balance",
+          "ground",
+          "paper",
+          "Sun",
+          "East",
+          "West"
+        ],
+        "context_relation": "exploring magnets",
+        "limitations": [
+          "The page does not provide a diagram or illustration of the magnet.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:16:35Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, specifically focusing on the poles and poles of a magnet.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "These ends of the magnet are called the two poles of the magnet—the North pole and the South pole. Most of the iron filings stick to the poles of a magnet of any shape.",
+          "It is not possible to obtain a magnet with a single pole. If a magnet is broken into smaller pieces, North and South poles always exist in pairs even in the smallest piece of the magnet. A single North pole or a South pole cannot exist.",
+          "Activity 4.3: Let us experiment",
+          "Suspend a bar magnet with a thread tied to the middle of the magnet as shown in Fig. 4.5. You may need to adjust the position of the string till the magnet is balanced horizontally.",
+          "Now rotate the magnet gently in the horizontal direction and let it come to rest.",
+          "Mark the position corresponding to the ends of the magnet on the ground (or on a piece of paper stuck to the ground). Join these two points on the ground with a line. This line indicates the direction along which the magnet comes to rest.",
+          "Now again rotate the magnet by giving a gentle push at its one end and wait till it comes to rest. Does the magnet rest along the same line?",
+          "What direction does this line indicate along which the magnet rests? How can we find it out?",
+          "If we have noticed the direction where the Sun rises or sets, we have an approximate idea of where East or West is. Hence, we can locate the direction along which the magnet rests."
+        ],
+        "concepts": [
+          "magnet",
+          "pole",
+          "North pole",
+          "South pole",
+          "iron filings",
+          "magnetism",
+          "direction",
+          "rotation",
+          "balance",
+          "ground",
+          "paper",
+          "Sun",
+          "East",
+          "West"
+        ],
+        "context_relation": "exploring magnets",
+        "limitations": [
+          "The page does not provide a diagram or illustration of the magnet.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a6d01592440077cd08700c50",
+      "asset_sha256": "f73ecc9dae02151218686afb0036e5e66434887f85bb846d3678fc29d0e4f9af",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/f73ecc9dae02151218686afb0036e5e66434887f85bb846d3678fc29d0e4f9af.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:17:09Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
