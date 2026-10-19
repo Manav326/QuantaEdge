@@ -83,7 +83,9 @@ public class CourseMarketplaceController {
           exists(select 1 from course_purchase cp
             where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id) as purchased,
           exists(select 1 from student_login_credential c
-            where c.student_id=? and c.active=true) as parent_managed
+            where c.student_id=? and c.active=true) as parent_managed,
+          parent_request.status as parent_request_status,
+          parent_request.requested_at as parent_request_requested_at
         from institution_marketplace_offer o
         join institution_course_assignment assignment
           on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id
@@ -93,10 +95,16 @@ public class CourseMarketplaceController {
         join institution_tenant tenant_scope
           on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join lateral (
+          select r.status,r.requested_at
+          from parent_course_purchase_request r
+          where r.student_id=? and r.institution_id=o.institution_id and r.course_id=p.id
+          order by r.requested_at desc,r.id desc limit 1
+        ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
         order by p.display_name,p.id
         """, institutionId, context.studentId(), institutionId, context.studentId(),
-        institutionId, context.studentId(), context.studentId(), institutionId);
+        institutionId, context.studentId(), context.studentId(), context.studentId(), institutionId);
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
