@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 905,
+    "assets_selected": 907,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 902,
-    "assets_remaining": 1176,
-    "assets_completion_percent": 43.4,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 900,
+    "assets_analyzed": 905,
+    "assets_remaining": 1173,
+    "assets_completion_percent": 43.6,
+    "assets_failed": 10,
+    "assets_skipped_from_checkpoint": 902,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:03:07Z"
+      "checkpointed_at": "2026-10-19T09:07:47Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:04:07Z"
+      "checkpointed_at": "2026-10-19T09:08:46Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -25655,9 +25655,11 @@
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
-          "Salim Ali (1896–1987) travelled across India\n    to observe diversity in birds. He prepared a list\n    of birds and documented their travel routes\n    and habitats. He recorded the regions with\n    high diversity of birds and took measures to\n    conserve these regions. Keoladeo National Park\n    in",
-          "What are the different ways in which you can group\n    plants and animals based on their habitats? One way is to\n    group them into those 'that live on land' and those 'that live\n    in water'.\n    The plants and animals that live on land are said to live in\n    terrestrial habitats. Some examples "
+          "We have learnt that the plants and animals living in a particular region have special features that make them fit to survive there. The special features that enable plants and animals to survive in a particular region are called adaptations.",
+          "The shape of the deodar tree and the height of the rhododendron are adaptations that enable them to survive in the mountainous regions.",
+          "The place where plants and animals live is called their habitat. For example, the habitat of sea turtles is the sea or the ocean. The habitat of a camel is the hot or the cold desert, and the habitat of a rhododendron is the mountains. The habitat of plants and animals provides them food, water, air",
+          "Salim Ali (1896–1987) travelled across India to observe diversity in birds. He prepared a list of birds and documented their travel routes and habitats. He recorded the regions with high diversity of birds and took measures to conserve these regions. Keoladeo National Park in Bharatpur, Rajasthan an",
+          "What are the different ways in which you can group plants and animals based on their habitats? One way is to group them into those 'that live on land' and those 'that live in water'. The plants and animals that live on land are said to live in terrestrial habitats. Some examples of terrestrial habit"
         ],
         "concepts": [
           "adaptations",
@@ -25668,17 +25670,17 @@
           "Ranganathittu Bird Sanctuary",
           "Padma Vibhushan"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
+        "context_relation": "The text discusses the adaptations of plants and animals in different regions and their habitats, providing examples and information about a specific scientist, Salim Ali.",
         "limitations": [
-          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
+          "The text does not provide specific details about the adaptations of the deodar tree or the rhododendron.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:47:46Z"
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:13:18Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -25722,19 +25724,37 @@
     {
       "asset_id": "d17d0ab2672f6f69a560cac5",
       "asset_sha256": "ef5ffbf0e1d7b1fcaf6a5aebc4463d4683009d4f0cf8828511e435a627fb5994",
-      "page_text_context_sha256": "57826b7c50430393a7093ace4baf66d71d240eba2f192defcbaac2b7bf548080",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 46,
       "asset_path": "assets/ef5ffbf0e1d7b1fcaf6a5aebc4463d4683009d4f0cf8828511e435a627fb5994.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "57826b7c50430393a7093ace4baf66d71d240eba2f192defcbaac2b7bf548080",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tiger lying on the ground in a grassy area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tiger",
+          "grass",
+          "ground",
+          "habitat"
+        ],
+        "context_relation": "The image shows a tiger in its natural habitat, which is a grassy area.",
+        "limitations": [
+          "The image does not provide specific information about the habitat of the tiger.",
+          "The image does not show any other animals or plants.",
+          "The image does not show any signs of habitat damage or lack of food for the tiger."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:14:58Z"
     },
     {
       "asset_id": "af00977ad253caa8fe25e25f",
@@ -27580,19 +27600,36 @@
     {
       "asset_id": "e09b4c4272178523c9cc1974",
       "asset_sha256": "3bc09b73571298b0d6d282c3ef299b3d7b5f91aa43ba7f63be622d93a469edf0",
-      "page_text_context_sha256": "d13f98c679357936a084cd6c3533cfdbe15ba242702a84c930f40da13477f830",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 56,
       "asset_path": "assets/3bc09b73571298b0d6d282c3ef299b3d7b5f91aa43ba7f63be622d93a469edf0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d13f98c679357936a084cd6c3533cfdbe15ba242702a84c930f40da13477f830",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178082336",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "limitations must be a list of strings.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a flatbread over a fire in a traditional cooking setup.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cooking practices",
+          "traditional cooking",
+          "fire",
+          "flatbread",
+          "fire setup"
+        ],
+        "context_relation": "The image shows a traditional cooking method, likely from a rural or historical context, which may be relevant to the discussion of how cooking practices have changed over time.",
+        "limitations": [
+          "The image does not provide specific details about the region or time period."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:16:34Z"
     },
     {
       "asset_id": "fbd21fb7cd7051e49d8f4686",
