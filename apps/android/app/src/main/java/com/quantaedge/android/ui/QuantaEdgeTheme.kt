@@ -33,8 +33,8 @@ data class QuantaEdgeSemanticColors(
 
 val LocalQuantaEdgeSemanticColors = staticCompositionLocalOf {
     QuantaEdgeSemanticColors(
-        primaryText = Color(0xFF9A3412),
-        accentText = Color(0xFF9A3412),
+        primaryText = Color(0xFFB0561C),
+        accentText = Color(0xFF0F766E),
         success = Color(0xFF166534),
         warning = Color(0xFF92400E),
         error = Color(0xFFB42318)
@@ -69,7 +69,7 @@ fun QuantaEdgeTheme(
     val colors = if (useDark) {
         darkColorScheme(
             primary = tokenColor(palette, "primary", Color(0xFFF97316)),
-            onPrimary = tokenColor(palette, "onPrimary", Color(0xFF291400)),
+            onPrimary = tokenColor(palette, "onPrimary", Color(0xFF111827)),
             primaryContainer = tokenColor(palette, "primaryContainer", Color(0xFF362F33)),
             onPrimaryContainer = tokenColor(palette, "onPrimaryContainer", Color(0xFFFFFFFF)),
             secondary = tokenColor(palette, "accent", Color(0xFF0F766E)),
@@ -121,11 +121,11 @@ fun QuantaEdgeTheme(
     val semanticColors = QuantaEdgeSemanticColors(
         primaryText = tokenColor(
             palette, "primaryText",
-            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+            if (useDark) Color(0xFFF97316) else Color(0xFFB0561C)
         ),
         accentText = tokenColor(
             palette, "accentText",
-            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+            if (useDark) Color(0xFF5AA09B) else Color(0xFF0F766E)
         ),
         success = tokenColor(
             palette, "success",
