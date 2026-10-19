@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1705,
-    "successful_visual_analyses": 1682,
-    "missing_visual_analyses": 5783,
+    "raw_analysis_result_rows": 1708,
+    "successful_visual_analyses": 1685,
+    "missing_visual_analyses": 5780,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5806,
+    "unresolved_count": 5803,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -73494,9 +73494,25 @@
       "asset_path": "assets/f5a11ae03eef0efe586bafea710bf0c017c898ff8fa4772892f2db239468b9a7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "The image is a visual representation of the description provided in the text.",
+        "limitations": [
+          "The image does not show the components of an electric cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73512,9 +73528,19 @@
       "asset_path": "assets/ac2de481837d78fa10cf467f11d78c7bf53bfb0b3ac7a91fb79bb33e1065858e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not represent any complex concept or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73530,9 +73556,23 @@
       "asset_path": "assets/8372b15ab0684b4d4f5cf5b48a2da5ffb451ea133715b4a1511d1a0490c9ab1d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A twisted rope with a blue ring at one end."
+        ],
+        "concepts": [
+          "twisted rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a twisted rope with a blue ring, which is not directly related to the text about electric cells.",
+        "limitations": [
+          "The image does not provide information about electric cells or their components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

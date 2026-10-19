@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2b179971d38b7c83bf3b1a0222b4a67f8e0af13d725c0648e466f98c792280c1",
+  "raw_analysis_sha256": "a7db5b1706eeeebe434b516d0a7809eb5041741b5b53d9e5447037e63825494e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:38:43Z",
+      "checkpointed_at": "2026-10-19T13:41:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:39:06Z",
+      "checkpointed_at": "2026-10-19T13:42:04Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -99261,6 +99261,152 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "891b07b1588a3bf6896193a7",
+      "asset_sha256": "f5a11ae03eef0efe586bafea710bf0c017c898ff8fa4772892f2db239468b9a7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/f5a11ae03eef0efe586bafea710bf0c017c898ff8fa4772892f2db239468b9a7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "The image is a visual representation of the description provided in the text.",
+        "limitations": [
+          "The image does not show the components of an electric cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:42:44Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "The image is a visual representation of the description provided in the text.",
+        "limitations": [
+          "The image does not show the components of an electric cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8caa9970f20c680149cb2507",
+      "asset_sha256": "ac2de481837d78fa10cf467f11d78c7bf53bfb0b3ac7a91fb79bb33e1065858e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/ac2de481837d78fa10cf467f11d78c7bf53bfb0b3ac7a91fb79bb33e1065858e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not represent any complex concept or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:43:22Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not represent any complex concept or data."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6474fbb8de6575be7d078655",
+      "asset_sha256": "8372b15ab0684b4d4f5cf5b48a2da5ffb451ea133715b4a1511d1a0490c9ab1d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/8372b15ab0684b4d4f5cf5b48a2da5ffb451ea133715b4a1511d1a0490c9ab1d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A twisted rope with a blue ring at one end."
+        ],
+        "concepts": [
+          "twisted rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a twisted rope with a blue ring, which is not directly related to the text about electric cells.",
+        "limitations": [
+          "The image does not provide information about electric cells or their components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:44:01Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A twisted rope with a blue ring at one end."
+        ],
+        "concepts": [
+          "twisted rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is a visual representation of a twisted rope with a blue ring, which is not directly related to the text about electric cells.",
+        "limitations": [
+          "The image does not provide information about electric cells or their components."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
