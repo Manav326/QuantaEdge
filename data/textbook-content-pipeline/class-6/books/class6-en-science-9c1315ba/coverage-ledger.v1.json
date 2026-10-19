@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1085,
-    "successful_visual_analyses": 1071,
-    "missing_visual_analyses": 993,
+    "raw_analysis_result_rows": 1087,
+    "successful_visual_analyses": 1073,
+    "missing_visual_analyses": 991,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1007,
+    "unresolved_count": 1005,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41596,9 +41596,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the deflection of a compass needle when a magnet is brought close to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass?"
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "North pole",
+          "South pole"
+        ],
+        "context_relation": "The image is a diagram explaining the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The image does not show the actual deflection of the compass needle."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41614,9 +41632,41 @@
       "asset_path": "page-0088.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a compass needle and a magnet, with a piece of wood between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass needle?",
+          "Activity 4.7: Let us investigate",
+          "Fig. 4.10: Compass needle and a magnet with a piece of wood in between",
+          "Repeat the first or second part of Activity 4.6.",
+          "Without disturbing the bar magnet and magnetic compass, place a piece of wood between them, perpendicular to the table as shown in Fig. 4.10. Observe the compass needle carefully.",
+          "Is there any effect on the deflection of compass needle due to the piece of wood? Record your observation in Table 4.2.",
+          "Repeat the process by replacing the piece of wood with a cardboard sheet, thin plastic sheet, and a thin glass sheet."
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "wood",
+          "magnetic compass",
+          "bar magnet",
+          "table",
+          "piece of wood",
+          "cardboard sheet",
+          "thin plastic sheet",
+          "thin glass sheet",
+          "Activity 4.6",
+          "Activity 4.7"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the actual experiment being described in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

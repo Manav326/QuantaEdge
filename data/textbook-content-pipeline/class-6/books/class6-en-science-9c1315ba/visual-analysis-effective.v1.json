@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "48ac3734dcf798ad5deaba799c0cd86cd97359cc0922734f4d62eec05122477a",
+  "raw_analysis_sha256": "124ed1ac02cd1c29a20be551a06ea632da178b53a83549b7513e21a3cb756220",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:05:41Z",
+      "checkpointed_at": "2026-10-19T17:09:50Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:06:22Z",
+      "checkpointed_at": "2026-10-19T17:10:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:07:13Z",
+      "checkpointed_at": "2026-10-19T17:11:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -52294,6 +52294,150 @@
         "limitations": [
           "The image does not show the actual deflection of the compass needle.",
           "The image does not show the effect of placing a piece of wood between the magnet and the compass needle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fedfa5430f54c785afdc8013",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the deflection of a compass needle when a magnet is brought close to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass?"
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "North pole",
+          "South pole"
+        ],
+        "context_relation": "The image is a diagram explaining the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The image does not show the actual deflection of the compass needle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:11:43Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the deflection of a compass needle when a magnet is brought close to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass?"
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "North pole",
+          "South pole"
+        ],
+        "context_relation": "The image is a diagram explaining the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The image does not show the actual deflection of the compass needle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "652296630e22d52d60fdef8f",
+      "asset_sha256": "d838cd14eecc85f3f89f1d76fcae628180cef71395eba460b87a9a22ff7d895e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "asset_path": "page-0088.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a compass needle and a magnet, with a piece of wood between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass needle?",
+          "Activity 4.7: Let us investigate",
+          "Fig. 4.10: Compass needle and a magnet with a piece of wood in between",
+          "Repeat the first or second part of Activity 4.6.",
+          "Without disturbing the bar magnet and magnetic compass, place a piece of wood between them, perpendicular to the table as shown in Fig. 4.10. Observe the compass needle carefully.",
+          "Is there any effect on the deflection of compass needle due to the piece of wood? Record your observation in Table 4.2.",
+          "Repeat the process by replacing the piece of wood with a cardboard sheet, thin plastic sheet, and a thin glass sheet."
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "wood",
+          "magnetic compass",
+          "bar magnet",
+          "table",
+          "piece of wood",
+          "cardboard sheet",
+          "thin plastic sheet",
+          "thin glass sheet",
+          "Activity 4.6",
+          "Activity 4.7"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the actual experiment being described in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:13:30Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a compass needle and a magnet, with a piece of wood between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass needle?",
+          "Activity 4.7: Let us investigate",
+          "Fig. 4.10: Compass needle and a magnet with a piece of wood in between",
+          "Repeat the first or second part of Activity 4.6.",
+          "Without disturbing the bar magnet and magnetic compass, place a piece of wood between them, perpendicular to the table as shown in Fig. 4.10. Observe the compass needle carefully.",
+          "Is there any effect on the deflection of compass needle due to the piece of wood? Record your observation in Table 4.2.",
+          "Repeat the process by replacing the piece of wood with a cardboard sheet, thin plastic sheet, and a thin glass sheet."
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "wood",
+          "magnetic compass",
+          "bar magnet",
+          "table",
+          "piece of wood",
+          "cardboard sheet",
+          "thin plastic sheet",
+          "thin glass sheet",
+          "Activity 4.6",
+          "Activity 4.7"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the actual experiment being described in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
