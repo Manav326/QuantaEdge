@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e081a7909d6e2228e3afeb7dca87a6a2b78dddd1a60049c59e35b27ef03c3f61",
+  "raw_analysis_sha256": "7d7591312d2a65a6f572148514d8a1def1c1f82412c06b708ebef97c1261ea8a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:52:17Z",
+      "checkpointed_at": "2026-10-19T00:57:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:52:45Z",
+      "checkpointed_at": "2026-10-19T00:57:43Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -73578,6 +73578,148 @@
         "context_relation": "The image is related to the text discussing the components of a torch and the concept of an electrical circuit.",
         "limitations": [
           "The image does not provide specific details about the components or the electrical circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "db4ac403939a525cef802b84",
+      "asset_sha256": "58cb7f19b69da33f3e381ba6b4e8dd655d103ce58187c0520ebfb2fdabdffd47",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/58cb7f19b69da33f3e381ba6b4e8dd655d103ce58187c0520ebfb2fdabdffd47.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity"
+        ],
+        "context_relation": "The image is related to the content of the textbook about the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image is a close-up of a red object with a blurred background, making it difficult to identify the object."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T00:58:55Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity"
+        ],
+        "context_relation": "The image is related to the content of the textbook about the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image is a close-up of a red object with a blurred background, making it difficult to identify the object."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5a002789b81693ff435cfd0a",
+      "asset_sha256": "6ec1a527e8f53bc9402ec1b8732faebf41c03815eec6aef529227dd1373eea34",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/6ec1a527e8f53bc9402ec1b8732faebf41c03815eec6aef529227dd1373eea34.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red background with a blurred, abstract pattern.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T00:59:58Z",
+      "effective_analysis": {
+        "visual_summary": "A red background with a blurred, abstract pattern.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "30c02c9052864af90974aefb",
+      "asset_sha256": "e80b0bd47d417ce3fb3f03ad4f01dad0a9e343fbabd5d5504616bce802b64c17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/e80b0bd47d417ce3fb3f03ad4f01dad0a9e343fbabd5d5504616bce802b64c17.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red background with a blurred, possibly abstract pattern.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for educational content.",
+        "limitations": [
+          "The image is too blurred to identify specific details or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:01:03Z",
+      "effective_analysis": {
+        "visual_summary": "A red background with a blurred, possibly abstract pattern.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for educational content.",
+        "limitations": [
+          "The image is too blurred to identify specific details or text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
