@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2e91b4d0d28e3400eff6330e71d9ffc8012c1cfcac2fc01307ec3441f8efbb05",
+  "raw_analysis_sha256": "bb569365725bb2454280390ac50f9823344032a67f9d0f438fea033631fedb28",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -102350,6 +102350,248 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is a visual representation of a paper airplane flying towards a circular object, possibly representing a target or goal.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2836221a8d4f58f7f3a5b3e0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:30:03Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a7beee6d0274a9887b5d4aa2",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:30:15Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8808886d63fcde1d925a3834",
+      "asset_sha256": "a44cc1066a0dc61b4f9a7889c93353d2f38760b4891a655cebc6e6c68075b48d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "page-0059.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Electrical circuit diagrams and questions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8. In Fig. 3.20, in which case(s) the lamp/LED will not glow when\nthe switch is closed?",
+          "(a)",
+          "(b)",
+          "(c)",
+          "(d)",
+          "Fig. 3.20",
+          "9. Suppose the ‘+’ and ‘-’ symbols cannot be read on a battery.\nSuggest a method to identify the two terminals of this battery.",
+          "10. You are given six cells marked A, B, C, D, E, and F. Some of\nthese are working and some are not. Design an activity to\nidentify which of them are working.",
+          "(i) List the items that you require.",
+          "(ii) Write the procedure that you will follow.",
+          "(iii) With the items, carry out the activity to identify the cells\nthat are working.",
+          "11. Using an LED that requires two cells in series to glow, Tanya\nmade the circuit as shown in Fig. 3.21. Will the lamp glow? If\nnot, draw the wires for correct connections.",
+          "Fig. 3.21",
+          "Exploratory Projects",
+          "Suppose that due to some problem, the power supply is\ninterrupted in your area for two days. List out which actions\nfrom your daily life you would not be able to do."
+        ],
+        "concepts": [
+          "Electrical circuits",
+          "LEDs",
+          "Battery terminals",
+          "Identifying battery terminals",
+          "Identifying working cells",
+          "Connecting LEDs in series",
+          "Impact of power supply interruption on daily life"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:34:23Z",
+      "effective_analysis": {
+        "visual_summary": "Electrical circuit diagrams and questions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8. In Fig. 3.20, in which case(s) the lamp/LED will not glow when\nthe switch is closed?",
+          "(a)",
+          "(b)",
+          "(c)",
+          "(d)",
+          "Fig. 3.20",
+          "9. Suppose the ‘+’ and ‘-’ symbols cannot be read on a battery.\nSuggest a method to identify the two terminals of this battery.",
+          "10. You are given six cells marked A, B, C, D, E, and F. Some of\nthese are working and some are not. Design an activity to\nidentify which of them are working.",
+          "(i) List the items that you require.",
+          "(ii) Write the procedure that you will follow.",
+          "(iii) With the items, carry out the activity to identify the cells\nthat are working.",
+          "11. Using an LED that requires two cells in series to glow, Tanya\nmade the circuit as shown in Fig. 3.21. Will the lamp glow? If\nnot, draw the wires for correct connections.",
+          "Fig. 3.21",
+          "Exploratory Projects",
+          "Suppose that due to some problem, the power supply is\ninterrupted in your area for two days. List out which actions\nfrom your daily life you would not be able to do."
+        ],
+        "concepts": [
+          "Electrical circuits",
+          "LEDs",
+          "Battery terminals",
+          "Identifying battery terminals",
+          "Identifying working cells",
+          "Connecting LEDs in series",
+          "Impact of power supply interruption on daily life"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cadd35a9372519edd6bccfb2",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, stylized illustration of a person holding a circular object with a dotted line extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:34:35Z",
+      "effective_analysis": {
+        "visual_summary": "A green, stylized illustration of a person holding a circular object with a dotted line extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58ba7279281cfb7a13064f7a",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:34:45Z",
+      "effective_analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
