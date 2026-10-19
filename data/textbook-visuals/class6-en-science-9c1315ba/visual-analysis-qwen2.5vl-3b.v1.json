@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1127,
+    "assets_selected": 1129,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1124,
-    "assets_remaining": 954,
+    "assets_analyzed": 1125,
+    "assets_remaining": 953,
     "assets_completion_percent": 54.1,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1122,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 1124,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:08:18Z"
+      "checkpointed_at": "2026-10-19T19:12:13Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:09:02Z"
+      "checkpointed_at": "2026-10-19T19:12:57Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:10:00Z"
+      "checkpointed_at": "2026-10-19T19:13:54Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36928,6 +36928,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:11:20Z"
+    },
+    {
+      "asset_id": "c0dfde5e80bfd4c601fe47f2",
+      "asset_sha256": "a65e862ea8ab807acaa9eeede5430ca5d30979882c5bf7769846a147bc3b496d",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/a65e862ea8ab807acaa9eeede5430ca5d30979882c5bf7769846a147bc3b496d.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "b2a06839178c0ad5860e0b3d",
+      "asset_sha256": "02dfaaa3bc3f721a7efbe48c9fe3540efb6ef661995897559544486ea5b11226",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/02dfaaa3bc3f721a7efbe48c9fe3540efb6ef661995897559544486ea5b11226.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow ruler with black markings and numbers indicating centimeters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15"
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Centimeters"
+        ],
+        "context_relation": "The ruler is used to measure the length of the cloth piece requested by Deepa.",
+        "limitations": [
+          "The ruler is only showing the measurement in centimeters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:16:13Z"
     }
   ]
 }
