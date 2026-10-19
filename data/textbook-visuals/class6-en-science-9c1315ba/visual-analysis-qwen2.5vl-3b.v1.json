@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1068,
+    "assets_selected": 1070,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1065,
-    "assets_remaining": 1013,
+    "assets_analyzed": 1067,
+    "assets_remaining": 1011,
     "assets_completion_percent": 51.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1063,
+    "assets_skipped_from_checkpoint": 1065,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:58:26Z"
+      "checkpointed_at": "2026-10-19T17:01:06Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:59:08Z"
+      "checkpointed_at": "2026-10-19T17:01:46Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:00:02Z"
+      "checkpointed_at": "2026-10-19T17:02:39Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34705,6 +34705,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:00:16Z"
+    },
+    {
+      "asset_id": "28e6e9d5db70d3f175328dce",
+      "asset_sha256": "7e9949d2e141b1c0590053d9df0a57fce01c3bc8ebbb3926c3b5317a6d7f6f6b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "page-0087.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity involving a compass and a bar magnet, demonstrating magnetic properties and repulsion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Repeat the activity by using an iron bar in place of one\nof the magnets. What do you observe this time?\nYou will find that both the ends of the iron bar will be\nattracted by both the North and South poles of the magnet.\nFrom this activity, we find that a magnet can be identified\nby its property of r",
+          "Activity 4.6: Let us experiment",
+          "Take a magnetic compass and a bar\nmagnet.",
+          "Place the magnetic compass over\na horizontal surface and wait\nfor its needle to come to rest.",
+          "Now slowly bring North pole of\nthe bar magnet close to the North\npole of the compass needle as shown in\nFig. 4.9a. Observe the compass needle carefully.\nWhat do you observe? Does the needle deflect? If yes, in\nwhich direction?",
+          "Now repeat the above step with the South pole of the\nbar magnet. Do you observe any difference this time?",
+          "(a)",
+          "(b)",
+          "Fig. 4.9: A compass needle and a magnet"
+        ],
+        "concepts": [
+          "magnetic compass",
+          "magnet",
+          "North pole",
+          "South pole",
+          "magnetic repulsion"
+        ],
+        "context_relation": "exploring magnetic properties",
+        "limitations": [
+          "The image does not show the actual experiment, only the steps and observations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:04:18Z"
+    },
+    {
+      "asset_id": "d350ec908d7a9c4ddbc51be8",
+      "asset_sha256": "35c8bc6fc9991a3254016ae236d96dc2af1202c73f0125e811cf789567b14b14",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/35c8bc6fc9991a3254016ae236d96dc2af1202c73f0125e811cf789567b14b14.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a blue shirt, extending her hand towards the viewer.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:04:53Z"
     }
   ]
 }
