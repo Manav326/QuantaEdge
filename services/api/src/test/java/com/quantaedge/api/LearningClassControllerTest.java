@@ -76,6 +76,8 @@ class LearningClassControllerTest {
   @Test
   void studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
     when(jdbc.queryForList(contains("select cs.id as session_id"), any(Object[].class))).thenReturn(List.of());
     when(jdbc.queryForObject(contains("select count(*) from learning_class_session"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
@@ -85,9 +87,9 @@ class LearningClassControllerTest {
     ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(itemSql.capture(),
-        eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+        eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
+        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
@@ -302,6 +304,8 @@ class LearningClassControllerTest {
   @Test
   void outOfScopeStudentCannotFetchPrivateRecordingBytes() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
     when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of());
 
@@ -315,6 +319,8 @@ class LearningClassControllerTest {
   @Test
   void recordedListingCarriesPublishedDownloadReferenceOnlyWhenCatalogueAllowsIt() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
     when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "title", "Fractions revision", "subject_name", "Mathematics",
@@ -330,13 +336,15 @@ class LearningClassControllerTest {
     assertEquals(501L, row.get("download_resource_id"));
     assertEquals(700L, row.get("download_assignment_id"));
     assertEquals(true, row.get("download_allowed"));
-    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verifyNoInteractions(staffAudit, mediaStorage);
   }
 
   @Test
   void malformedRangeHeaderIsRejectedWithoutOpeningTheMediaFile() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
     when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "storage_key", "afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4",
