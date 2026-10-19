@@ -206,7 +206,7 @@ class AssessmentLifecycleIntegrationTest {
     Long courseId = jdbc.queryForObject("""
       insert into curriculum_program(
         class_id,code,display_name,curriculum_version,status,notes,public_id_prefix)
-      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','CRS')
+      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS')
       returning id
       """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT));
     jdbc.update("""
