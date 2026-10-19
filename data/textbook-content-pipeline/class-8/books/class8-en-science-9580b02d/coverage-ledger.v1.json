@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 942,
-    "successful_visual_analyses": 928,
-    "missing_visual_analyses": 1349,
+    "raw_analysis_result_rows": 944,
+    "successful_visual_analyses": 930,
+    "missing_visual_analyses": 1347,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1363,
+    "unresolved_count": 1361,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36068,9 +36068,22 @@
       "asset_path": "assets/a2ec6d7216540e8e790d2672c0b7ca38c3c5293f6417b3776340e0d1cb8079f9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person vomiting, with vomit spilling onto the ground.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "vomiting",
+          "spillage",
+          "ground"
+        ],
+        "context_relation": "The image is related to the topic of vomiting, which is a symptom of illness.",
+        "limitations": [
+          "The image does not provide specific details about the cause of the vomiting."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36086,9 +36099,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

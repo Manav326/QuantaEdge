@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 929,
+    "assets_selected": 930,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 925,
-    "assets_remaining": 1366,
-    "assets_completion_percent": 40.4,
+    "assets_analyzed": 927,
+    "assets_remaining": 1364,
+    "assets_completion_percent": 40.5,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 924,
+    "assets_skipped_from_checkpoint": 925,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:56:20Z"
+      "checkpointed_at": "2026-10-19T18:03:06Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:57:06Z"
+      "checkpointed_at": "2026-10-19T18:03:51Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:57:42Z"
+      "checkpointed_at": "2026-10-19T18:04:27Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29450,6 +29450,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T18:01:58Z"
+    },
+    {
+      "asset_id": "1161845cd8c1bad6df212f75",
+      "asset_sha256": "a2ec6d7216540e8e790d2672c0b7ca38c3c5293f6417b3776340e0d1cb8079f9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/a2ec6d7216540e8e790d2672c0b7ca38c3c5293f6417b3776340e0d1cb8079f9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person vomiting, with vomit spilling onto the ground.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "vomiting",
+          "spillage",
+          "ground"
+        ],
+        "context_relation": "The image is related to the topic of vomiting, which is a symptom of illness.",
+        "limitations": [
+          "The image does not provide specific details about the cause of the vomiting."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:05:59Z"
+    },
+    {
+      "asset_id": "525e725b158c2523e8ab31b6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:06:12Z"
     }
   ]
 }
