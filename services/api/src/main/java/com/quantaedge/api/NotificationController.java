@@ -106,7 +106,7 @@ public class NotificationController {
   public Map<String,Object> options(HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
-    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_TEMPLATE_MANAGE");
+    RichNotificationService.Actor actor=studioReaderActor(request,context,institutionCode);
     Map<String,Object> result=new LinkedHashMap<>();
     if("HRMS".equals(actor.workspace())) {
       result.put("institutions",jdbc.queryForList("""
@@ -146,7 +146,7 @@ public class NotificationController {
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestParam(required=false,defaultValue="") String query,
       @RequestParam(required=false,defaultValue="STUDENT") String kind) {
-    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_TEMPLATE_MANAGE");
+    RichNotificationService.Actor actor=studioReaderActor(request,context,institutionCode);
     String normalized=kind==null?"STUDENT":kind.trim().toUpperCase(java.util.Locale.ROOT);
     String needle=query==null?"":query.trim();
     if(needle.length()>80)throw new IllegalArgumentException("Recipient search text is too long.");
@@ -225,7 +225,7 @@ public class NotificationController {
   public Map<String,Object> templates(HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
-    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_TEMPLATE_MANAGE");
+    RichNotificationService.Actor actor=studioReaderActor(request,context,institutionCode);
     return Map.of("templates",notifications.listTemplates(actor));
   }
 
@@ -302,7 +302,8 @@ public class NotificationController {
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @PathVariable long campaignId) {
     if(campaignId<1)throw new IllegalArgumentException("Notification campaign identity is invalid.");
-    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_INSTITUTION_SEND");
+    String scope=notifications.campaignScope(campaignId);
+    RichNotificationService.Actor actor=actorForSend(request,context,institutionCode,Map.of("scope",scope));
     return notifications.cancelCampaign(actor,campaignId);
   }
 
@@ -315,8 +316,45 @@ public class NotificationController {
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestParam(defaultValue="50") int limit) {
-    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_CAMPAIGN_VIEW");
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
     return Map.of("campaigns",notifications.listCampaigns(actor,limit));
+  }
+
+  private RichNotificationService.Actor studioReaderActor(
+      HttpServletRequest request,AuthContext context,String institutionCode) {
+    String path=request.getRequestURI();
+    if(path.startsWith("/api/v1/hrms/")) {
+      return actor(request,context,institutionCode,"QE_PLATFORM_OWNER");
+    }
+    if(path.startsWith("/api/v1/institution/")) {
+      return actor(request,context,institutionCode,"INSTITUTION_ADMIN_SEND");
+    }
+    context=authorization.requireAuth(context);
+    String permission=null;
+    for(String candidate:List.of("NOTIFICATION_TEMPLATE_MANAGE","NOTIFICATION_COURSE_SEND","NOTIFICATION_INSTITUTION_SEND")) {
+      if(authorization.hasPermission(context,candidate)) { permission=candidate; break; }
+    }
+    if(permission==null)throw new SecurityException("Notification sender access is required.");
+    return actor(request,context,institutionCode,permission);
+  }
+
+  private RichNotificationService.Actor campaignReaderActor(
+      HttpServletRequest request,AuthContext context,String institutionCode) {
+    String path=request.getRequestURI();
+    if(path.startsWith("/api/v1/hrms/")) {
+      return actor(request,context,institutionCode,"QE_PLATFORM_OWNER");
+    }
+    if(path.startsWith("/api/v1/institution/")) {
+      return actor(request,context,institutionCode,"INSTITUTION_ADMIN_SEND");
+    }
+    context=authorization.requireAuth(context);
+    String permission=null;
+    for(String candidate:List.of("NOTIFICATION_CAMPAIGN_VIEW","NOTIFICATION_COURSE_SEND",
+        "NOTIFICATION_INSTITUTION_SEND","NOTIFICATION_TEMPLATE_MANAGE")) {
+      if(authorization.hasPermission(context,candidate)) { permission=candidate; break; }
+    }
+    if(permission==null)throw new SecurityException("Notification campaign access is required.");
+    return actor(request,context,institutionCode,permission);
   }
 
   private RichNotificationService.Actor actorForSend(HttpServletRequest request,AuthContext context,String institutionCode,Map<String,Object> body) {
