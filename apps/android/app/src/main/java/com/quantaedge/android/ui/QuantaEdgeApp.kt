@@ -885,7 +885,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
                 }
                 refreshStudentTextbookDocuments()
-                recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
+                recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId) }.getOrDefault(JSONObject())
                 route = AppRoute.STUDENT_HOME
             }
         } else {
