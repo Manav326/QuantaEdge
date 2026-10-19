@@ -203,24 +203,57 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
 
     def test_renderers_follow_the_shared_visual_contract(self):
         expected_kinds = {item["id"] for item in self.contract["visual_kinds"]}
-        web = (ROOT / "apps/web/app/student/learn/LearnClient.tsx").read_text(encoding="utf-8")
+        # Student web learning now uses the structured lesson renderer. The legacy visual
+        # candidate kinds are represented as reviewed image/diagram blocks, not rendered in
+        # the route shim at apps/web/app/student/learn/LearnClient.tsx.
+        web = (ROOT / "apps/web/app/student/structured-lessons/StructuredLessonContent.tsx").read_text(encoding="utf-8")
+        web_lightbox = (ROOT / "apps/web/app/student/structured-lessons/StructuredImageLightbox.tsx").read_text(encoding="utf-8")
+        web_contract = (ROOT / "apps/web/app/student/structured-lessons/contract.ts").read_text(encoding="utf-8")
         android = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt").read_text(encoding="utf-8")
         admin = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
 
         for kind in expected_kinds - {"TEXTBOOK_FIGURE", "UNCLASSIFIED"}:
             with self.subTest(kind=kind):
-                self.assertIn(kind, web)
                 self.assertIn(kind, android)
-        for required in ("alt_hi", "key+'_hi'", "source_book_title", "source_pdf_page_number",
-                         "source_page_url", "qe-visual-lightbox", "qe-lesson-source-attribution"):
-            with self.subTest(web_field=required):
+
+        for required in (
+            "if (block.type === 'image')",
+            "isStudentRenderableAsset(asset)",
+            "StructuredImageLightbox",
+            "localized(asset.alt_by_locale, locale)",
+            "localized(asset.caption_by_locale, locale)",
+            "source_book_id",
+            "source_pdf_page_number",
+            "review_status",
+        ):
+            with self.subTest(web_renderer_feature=required):
                 self.assertIn(required, web)
+
+        for required in ("if (block.type === 'diagram')", "student_renderable", "APPROVED_FOR_STUDENT_RENDERING", "StructuredDiagramView"):
+            with self.subTest(web_diagram_feature=required):
+                self.assertIn(required, web)
+
+        for required in ('aria-haspopup="dialog"', 'role="dialog"', 'aria-modal="true"', "alt={alt}", "caption &&"):
+            with self.subTest(web_lightbox_feature=required):
+                self.assertIn(required, web_lightbox)
+
+        for required in (
+            "asset.publication_allowed === true",
+            "asset.student_renderable === true",
+            "asset.url.startsWith('https://')",
+            "localized(asset.alt_by_locale)",
+            "'APPROVED', 'APPROVED_FOR_STUDENT_RENDERING'",
+        ):
+            with self.subTest(web_asset_gate=required):
+                self.assertIn(required, web_contract)
+
         for required in ('data.textAny("alt_hi")', 'data.textAny("caption_hi")',
-                         'sourcePageUrl', 'LessonPlayableMedia', 'LessonAnimatedImage',
-                         'AnimatedImageDrawable', 'Dialog'):
+                         "sourcePageUrl", "LessonPlayableMedia", "LessonAnimatedImage",
+                         "AnimatedImageDrawable", "Dialog"):
             with self.subTest(android_feature=required):
                 self.assertIn(required, android)
-        for required in ("LEARNER VISUAL PREVIEW", "caption_hi", "alt_hi", "Source provenance", "qe-admin-visual-lightbox", "View source page", "फ़ोटो"):
+        for required in ("LEARNER VISUAL PREVIEW", "caption_hi", "alt_hi", "Source provenance",
+                         "qe-admin-visual-lightbox", "View source page", "फ़ोटो"):
             with self.subTest(admin_feature=required):
                 self.assertIn(required, admin)
         self.assertIn("Android 9", self.contract["visual_kinds"][-1]["presentation"] if self.contract["visual_kinds"][-1]["id"] == "SEQUENCE" else
