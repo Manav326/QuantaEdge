@@ -161,12 +161,10 @@ export default function ProgressPage(){
           <small className="qe-progress-card-help"><UiText message="legacy.web.only.concepts.below.80.mastery.appear..805a8f68" /></small>
         </div>
         {masteryDetails.length ? masteryDetails.map((m:any)=>{
-          const subjectCode=String(m.subject_code||'').toLowerCase();
           const masteryPercent=safePercent(m.mastery_percent);
-          const subjectTagClass=subjectCode==='maths'||subjectCode==='mathematics'?'qe-progress-subject-tag--maths':subjectCode==='science'?'qe-progress-subject-tag--science':'qe-progress-subject-tag--other';
           return <div className="topic-line" key={m.concept_id ?? m.concept_title}>
             <div className="qe-progress-concept-copy"><b>{m.concept_title || translateUi(locale, 'legacy.web.concept.a596c73d')}</b>
-              <div className="qe-progress-concept-meta"><span className={'qe-progress-subject-tag '+subjectTagClass}>{subjectCode==='maths'||subjectCode==='mathematics'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):subjectCode==='science'?translateUi(locale, 'legacy.web.science.f85a10aa'):(m.subject_name||translateUi(locale, 'legacy.web.subject.0af41287'))}</span><small>{m.chapter_name || '—'}</small></div>
+              <div className="qe-progress-concept-meta"><span className="qe-progress-subject-tag">{m.subject_name||translateUi(locale, 'legacy.web.subject.0af41287')}</span><small>{m.chapter_name || '—'}</small></div>
             </div>
             <span className={masteryPercent!==null&&masteryPercent>=50?'good':''}>{displayPercent(masteryPercent)} · {displayCount(safeCount(m.attempts))} <UiText message="legacy.web.responses.recorded.bc733c11" /></span>
           </div>;
@@ -192,7 +190,7 @@ export default function ProgressPage(){
           </div>
         </div>;
       }):<div className="topic-line"><span><UiText message="legacy.web.your.test.status.and.result.will.appea.0798ef2f" /></span></div>}</div>
-      <Link href="/student/certificates" className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
+      <Link href={courseId!==null?'/student/certificates?courseId='+encodeURIComponent(String(courseId)):'/student/courses'} className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
       <Link href={'/student/tests'+(courseId!==null?'?courseId='+courseId:'')} className="button button-dark"><UiText message="legacy.web.view.all.tests.and.results.f924b495" /></Link>
       <Link href={courseId!==null?'/student/structured-lessons?courseId='+courseId+(activeCourse?.subjects?.[0]?('&subjectCode='+encodeURIComponent(String(activeCourse.subjects[0].subject_code||activeCourse.subjects[0].code||'')):''):'/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
     </section></main>;
