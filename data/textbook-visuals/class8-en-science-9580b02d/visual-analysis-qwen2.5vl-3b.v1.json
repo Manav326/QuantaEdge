@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 844,
+    "assets_selected": 846,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 841,
-    "assets_remaining": 1450,
-    "assets_completion_percent": 36.7,
+    "assets_analyzed": 843,
+    "assets_remaining": 1448,
+    "assets_completion_percent": 36.8,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 839,
+    "assets_skipped_from_checkpoint": 841,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:18:28Z"
+      "checkpointed_at": "2026-10-19T11:25:59Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:19:46Z"
+      "checkpointed_at": "2026-10-19T11:27:18Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:20:38Z"
+      "checkpointed_at": "2026-10-19T11:28:10Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26321,6 +26321,118 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T11:24:22Z"
+    },
+    {
+      "asset_id": "2bcd76c03fca97df5e2fa9dd",
+      "asset_sha256": "e19f57eeb0c5d60aee81c6531e5321da004c23dce8c2ab64be122bd2156e4781",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/e19f57eeb0c5d60aee81c6531e5321da004c23dce8c2ab64be122bd2156e4781.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e048cf4453162f1b423feea8696bf8182017138ad42d261078f1c697e80fc6cd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes with different colored liquids and a balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decomposition",
+          "Plant and animal waste",
+          "Simple substances",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Bread",
+          "Cakes",
+          "Pastries",
+          "Idlis",
+          "Dosas",
+          "Bhaturas",
+          "Lactobacillus"
+        ],
+        "context_relation": "The image does not directly relate to the text.",
+        "limitations": [
+          "The image does not show any direct relationship to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:29:47Z"
+    },
+    {
+      "asset_id": "53a352c28489316ab9fa1eeb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e048cf4453162f1b423feea8696bf8182017138ad42d261078f1c697e80fc6cd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the benefits and harm of microorganisms, including their role in decomposing waste and improving soil fertility, as well as their use in food production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decompose",
+          "Waste",
+          "Simple substances",
+          "Clean up",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Peas",
+          "Beans",
+          "Lentils",
+          "Trapping nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Process of making",
+          "Breads",
+          "Cakes"
+        ],
+        "context_relation": "The page discusses the role of microorganisms in decomposing waste and improving soil fertility, as well as their use in food production.",
+        "limitations": [
+          "The page does not provide specific examples or details about the microorganisms or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:31:01Z"
     }
   ]
 }
