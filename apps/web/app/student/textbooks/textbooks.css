@@ -449,3 +449,243 @@ body.qe-reading-mode .qe-textbook-shell--reader{width:100vw!important;height:100
   .qe-document-reader .qe-reader-zoom>span{min-width:48px;font-size:9px}
   .qe-document-reader .qe-reader-page-viewport.fit-page .qe-reader-page-image{max-height:calc(100dvh - 112px)}
 }
+
+
+/* Tenant theme integration for the textbook library and immersive reader.
+   Keep the document image itself unchanged; all surrounding chrome uses shared semantic roles. */
+html[data-qe-appearance="dark"] .qe-textbook-shell,
+html[data-qe-appearance="dark"] .qe-textbook-shell--reader {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-textbook-header,
+html[data-qe-appearance="dark"] .qe-document-reader .qe-reader-heading,
+html[data-qe-appearance="dark"] .qe-document-reader .qe-reader-toolbar,
+html[data-qe-appearance="dark"] .qe-reader-progress,
+html[data-qe-appearance="dark"] .qe-reader-bottom-nav,
+html[data-qe-appearance="dark"] .qe-textbook-subject,
+html[data-qe-appearance="dark"] .qe-textbook-governance,
+html[data-qe-appearance="dark"] .qe-textbook-resource-card,
+html[data-qe-appearance="dark"] .qe-textbook-book-group,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-card,
+html[data-qe-appearance="dark"] .qe-textbook-empty,
+html[data-qe-appearance="dark"] .qe-textbook-loading {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-textbook-header {
+  background: color-mix(in srgb, var(--qe-color-surface) 94%, transparent);
+  backdrop-filter: blur(14px);
+}
+html[data-qe-appearance="dark"] .qe-textbook-library-hero {
+  background:
+    radial-gradient(circle at 88% 22%, color-mix(in srgb, var(--qe-color-primary) 14%, transparent), transparent 34%),
+    linear-gradient(115deg, #18243A 0%, #202E43 100%);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .qe-textbook-brand,
+html[data-qe-appearance="dark"] .qe-textbook-library-toolbar h2,
+html[data-qe-appearance="dark"] .qe-textbook-subject-heading h3,
+html[data-qe-appearance="dark"] .qe-textbook-resource-card-bottom h4,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-heading h4,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-copy h4,
+html[data-qe-appearance="dark"] .qe-textbook-book-copy strong,
+html[data-qe-appearance="dark"] .qe-textbook-edition-list strong,
+html[data-qe-appearance="dark"] .qe-textbook-governance-copy h2,
+html[data-qe-appearance="dark"] .qe-reader-title-row h1,
+html[data-qe-appearance="dark"] .qe-reader-heading-title,
+html[data-qe-appearance="dark"] .qe-reader-thumbs-head b,
+html[data-qe-appearance="dark"] .qe-reader-thumb-list button,
+html[data-qe-appearance="dark"] .qe-reader-page-indicator,
+html[data-qe-appearance="dark"] .qe-reader-progress strong,
+html[data-qe-appearance="dark"] .qe-reader-pagination strong {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-textbook-brand small,
+html[data-qe-appearance="dark"] .qe-textbook-library-toolbar p,
+html[data-qe-appearance="dark"] .qe-textbook-library-toolbar>label,
+html[data-qe-appearance="dark"] .qe-textbook-subject-heading small,
+html[data-qe-appearance="dark"] .qe-textbook-resource-count,
+html[data-qe-appearance="dark"] .qe-resource-pages,
+html[data-qe-appearance="dark"] .qe-textbook-resource-card-bottom p,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-heading span,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-copy p,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-copy small,
+html[data-qe-appearance="dark"] .qe-textbook-book-copy small,
+html[data-qe-appearance="dark"] .qe-textbook-edition-list small,
+html[data-qe-appearance="dark"] .qe-textbook-filter-wrap label,
+html[data-qe-appearance="dark"] .qe-textbook-filter-summary,
+html[data-qe-appearance="dark"] .qe-textbook-governance-copy p,
+html[data-qe-appearance="dark"] .qe-reader-breadcrumb,
+html[data-qe-appearance="dark"] .qe-reader-title-row p,
+html[data-qe-appearance="dark"] .qe-reader-progress span,
+html[data-qe-appearance="dark"] .qe-reader-page-controls label,
+html[data-qe-appearance="dark"] .qe-reader-zoom>span,
+html[data-qe-appearance="dark"] .qe-reader-thumbs-head small,
+html[data-qe-appearance="dark"] .qe-reader-thumbs-foot,
+html[data-qe-appearance="dark"] .qe-reader-canvas-top,
+html[data-qe-appearance="dark"] .qe-reader-canvas-bottom,
+html[data-qe-appearance="dark"] .qe-reader-viewonly-note,
+html[data-qe-appearance="dark"] .qe-textbook-privacy-note,
+html[data-qe-appearance="dark"] .qe-textbook-privacy-note p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-textbook-resource-type,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-copy>span,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-open,
+html[data-qe-appearance="dark"] .qe-textbook-privacy-note>span,
+html[data-qe-appearance="dark"] .qe-textbook-governance-copy .qe-textbook-eyebrow,
+html[data-qe-appearance="dark"] .qe-reader-breadcrumb button,
+html[data-qe-appearance="dark"] .qe-reader-progress strong,
+html[data-qe-appearance="dark"] .qe-textbook-empty a {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="dark"] .qe-textbook-back,
+html[data-qe-appearance="dark"] .qe-textbook-home,
+html[data-qe-appearance="dark"] .qe-textbook-library-toolbar select,
+html[data-qe-appearance="dark"] .qe-textbook-filter-wrap select,
+html[data-qe-appearance="dark"] .qe-textbook-resource-card-bottom button,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-card>button,
+html[data-qe-appearance="dark"] .qe-reader-heading-back,
+html[data-qe-appearance="dark"] .qe-reader-page-controls>button,
+html[data-qe-appearance="dark"] .qe-reader-zoom>button,
+html[data-qe-appearance="dark"] .qe-reader-tool-button,
+html[data-qe-appearance="dark"] .qe-reader-bottom-nav button,
+html[data-qe-appearance="dark"] .qe-textbook-pagination>button,
+html[data-qe-appearance="dark"] .qe-textbook-book-toggle {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-textbook-resource-card-bottom button,
+html[data-qe-appearance="dark"] .qe-textbook-open-book:hover,
+html[data-qe-appearance="dark"] .qe-reader-page-error button {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-textbook-back:hover,
+html[data-qe-appearance="dark"] .qe-textbook-home:hover,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-card:hover,
+html[data-qe-appearance="dark"] .qe-textbook-book-toggle:hover,
+html[data-qe-appearance="dark"] .qe-textbook-edition-list>button:hover,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-row:hover,
+html[data-qe-appearance="dark"] .qe-textbook-pagination>button:not(:disabled):hover,
+html[data-qe-appearance="dark"] .qe-reader-tool-button:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-textbook-chapter-card,
+html[data-qe-appearance="dark"] .qe-textbook-resource-card,
+html[data-qe-appearance="dark"] .qe-textbook-book-group,
+html[data-qe-appearance="dark"] .qe-textbook-subject,
+html[data-qe-appearance="dark"] .qe-textbook-governance {
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+html[data-qe-appearance="dark"] .qe-textbook-subject-heading,
+html[data-qe-appearance="dark"] .qe-resource-card-top,
+html[data-qe-appearance="dark"] .qe-resource-card-bottom,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-heading,
+html[data-qe-appearance="dark"] .qe-textbook-book-contents,
+html[data-qe-appearance="dark"] .qe-textbook-edition-list>button,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-row,
+html[data-qe-appearance="dark"] .qe-textbook-pagination--top,
+html[data-qe-appearance="dark"] .qe-textbook-pagination--bottom,
+html[data-qe-appearance="dark"] .qe-reader-thumbs-head,
+html[data-qe-appearance="dark"] .qe-reader-bottom-nav {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-textbook-subject-heading .qe-subject-symbol,
+html[data-qe-appearance="dark"] .qe-textbook-empty>span,
+html[data-qe-appearance="dark"] .qe-textbook-no-chapters>span,
+html[data-qe-appearance="dark"] .qe-textbook-book-chevron,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-count,
+html[data-qe-appearance="dark"] .qe-library-pdf-mark,
+html[data-qe-appearance="dark"] .qe-library-mini-pdf,
+html[data-qe-appearance="dark"] .qe-textbook-privacy-note {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-textbook-book-group.expanded,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-card:focus-within,
+html[data-qe-appearance="dark"] .qe-reader-thumb-list button.active,
+html[data-qe-appearance="dark"] .qe-reader-tool-button.selected,
+html[data-qe-appearance="dark"] .qe-textbook-book-group.expanded .qe-textbook-book-chevron {
+  background: var(--qe-color-selected-background);
+  color: var(--qe-color-selected-text);
+  border-color: var(--qe-color-border);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--qe-color-primary) 20%, transparent);
+}
+html[data-qe-appearance="dark"] .qe-textbook-book-contents,
+html[data-qe-appearance="dark"] .qe-textbook-filter-wrap select,
+html[data-qe-appearance="dark"] .qe-reader-thumbnails,
+html[data-qe-appearance="dark"] .qe-reader-canvas-top,
+html[data-qe-appearance="dark"] .qe-reader-canvas-bottom,
+html[data-qe-appearance="dark"] .qe-reader-page-viewport,
+html[data-qe-appearance="dark"] .qe-reader-page-viewport.fit-page,
+html[data-qe-appearance="dark"] .qe-document-reader .qe-reader-workspace {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-reader-image-loading {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+/* These are document contents, not app surfaces; preserve their white paper treatment. */
+html[data-qe-appearance="dark"] .qe-reader-page-image,
+html[data-qe-appearance="dark"] .qe-reader-thumb-list img {
+  background: #FFFFFF;
+}
+html[data-qe-appearance="dark"] .qe-reader-page-error,
+html[data-qe-appearance="dark"] .qe-textbook-error,
+html[data-qe-appearance="dark"] .qe-textbook-notice {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .qe-reader-page-error button,
+html[data-qe-appearance="dark"] .qe-textbook-error button {
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .qe-reader-spinner {
+  border-color: var(--qe-color-border-subtle);
+  border-top-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-reader-page-controls input {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .qe-reader-progress>div,
+html[data-qe-appearance="dark"] .qe-reader-toolbar-divider {
+  background: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-reader-progress i {
+  background: linear-gradient(90deg, var(--qe-color-primary), var(--qe-color-accent));
+}
+html[data-qe-appearance="dark"] .qe-reader-tool-button:focus-visible,
+html[data-qe-appearance="dark"] .qe-reader-page-controls button:focus-visible,
+html[data-qe-appearance="dark"] .qe-reader-zoom button:focus-visible,
+html[data-qe-appearance="dark"] .qe-textbook-book-toggle:focus-visible,
+html[data-qe-appearance="dark"] .qe-textbook-open-book:focus-visible,
+html[data-qe-appearance="dark"] .qe-textbook-chapter-row:focus-visible,
+html[data-qe-appearance="dark"] .qe-textbook-library-hero:focus-within {
+  outline-color: var(--qe-color-focus);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance="dark"] .qe-textbook-chapter-card,
+  html[data-qe-appearance="dark"] .qe-textbook-resource-card,
+  html[data-qe-appearance="dark"] .qe-textbook-book-group,
+  html[data-qe-appearance="dark"] .qe-textbook-subject,
+  html[data-qe-appearance="dark"] .qe-textbook-governance {
+    transition: none;
+  }
+}
