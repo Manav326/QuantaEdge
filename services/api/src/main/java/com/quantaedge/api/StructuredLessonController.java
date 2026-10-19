@@ -127,20 +127,21 @@ public class StructuredLessonController {
 
     jdbc.update("""
       insert into student_structured_question_response
-        (institution_id,student_id,artifact_id,artifact_sha256,question_id,response,
+        (institution_id,student_id,course_id,artifact_id,artifact_sha256,question_id,response,
          result_status, score, max_score, attempt_count, first_submitted_at, last_submitted_at)
-      values (?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, 1, now(), now())
-      on conflict (institution_id,student_id,artifact_id,artifact_sha256,question_id)
+      values (?, ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, 1, now(), now())
+      on conflict (institution_id,student_id,course_id,artifact_id,artifact_sha256,question_id)
       do update set response=excluded.response,
         result_status=excluded.result_status, score=excluded.score, max_score=excluded.max_score,
         attempt_count=student_structured_question_response.attempt_count+1,
         last_submitted_at=now()
       """,
-      institutionId,context.studentId(),artifact.artifactId(),artifact.sha256(),questionId,serialized,
+      institutionId,context.studentId(),courseId,artifact.artifactId(),artifact.sha256(),questionId,serialized,
       evaluation.status().toUpperCase(Locale.ROOT), evaluation.score(), evaluation.maxScore());
 
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("questionId", questionId);
+    result.put("courseId", courseId);
     result.put("saved", true);
     result.put("autoGraded", evaluation.autoGraded());
     result.put("status", evaluation.status());
@@ -171,9 +172,9 @@ public class StructuredLessonController {
     for (Map<String, Object> row : jdbc.queryForList("""
       select question_id, response::text as response, result_status, score, max_score
       from student_structured_question_response
-      where institution_id=? and student_id=? and artifact_id=? and artifact_sha256=?
+      where institution_id=? and student_id=? and course_id=? and artifact_id=? and artifact_sha256=?
       order by last_submitted_at, question_id
-      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256())) {
+      """,institutionId,context.studentId(),courseId,artifact.artifactId(),artifact.sha256())) {
       String id = String.valueOf(row.get("question_id"));
       try {
         JsonNode question = artifacts.questionForStudent(artifact, id);
@@ -237,13 +238,13 @@ public class StructuredLessonController {
     }
     jdbc.update("""
       insert into student_structured_activity_response
-        (institution_id,student_id,artifact_id,artifact_sha256,block_id,response, attempt_count, first_saved_at, last_saved_at)
-      values (?, ?, ?, ?, ?, ?::jsonb, 1, now(), now())
-      on conflict (institution_id,student_id,artifact_id,artifact_sha256,block_id)
+        (institution_id,student_id,course_id,artifact_id,artifact_sha256,block_id,response, attempt_count, first_saved_at, last_saved_at)
+      values (?, ?, ?, ?, ?, ?, ?::jsonb, 1, now(), now())
+      on conflict (institution_id,student_id,course_id,artifact_id,artifact_sha256,block_id)
       do update set response=excluded.response,
         attempt_count=student_structured_activity_response.attempt_count+1, last_saved_at=now()
-      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256(),blockId,serialized);
-    return Map.of("blockId", blockId, "saved", true);
+      """,institutionId,context.studentId(),courseId,artifact.artifactId(),artifact.sha256(),blockId,serialized);
+    return Map.of("blockId", blockId, "saved", true, "courseId", courseId);
   }
 
   private long requireInstitution(InstitutionTenantContext tenant) {
