@@ -450,12 +450,16 @@ public class AssessmentController {
 
   @GetMapping("/admin/assessment-reviews")
   public Map<String,Object> assessmentReviews(
+      @RequestParam Long courseId,
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context=requireGrader(context);
+    if (courseId == null || courseId < 1L) throw badRequest("Select a course before reviewing assessment attempts.");
+    Long activeCourse=jdbc.queryForObject("select count(*) from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'",Long.class,courseId);
+    if(activeCourse==null || activeCourse==0L) throw badRequest("Choose an active course.");
     String statusFilter=safeText(status,24).toUpperCase(Locale.ROOT);
     if(statusFilter.isEmpty())statusFilter="AWAITING_REVIEW";
     if(!Set.of("ALL","AWAITING_REVIEW","GRADED","RELEASED").contains(statusFilter))throw badRequest("Choose a valid test review status.");
@@ -463,12 +467,17 @@ public class AssessmentController {
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String filterSql="""
-      where (?='ALL' or att.status=?)
+      where exists(select 1 from curriculum_program_subject cps
+        join curriculum_program scope_program on scope_program.id=cps.program_id
+        where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+          and scope_program.status='ACTIVE' and scope_program.code<>'GENERAL'
+          and (s.program_id=scope_program.id or (s.program_id is null and scope_program.class_id=s.class_id)))
+        and (?='ALL' or att.status=?)
         and (?='' or a.title ilike ? or st.display_name ilike ? or ch.display_name ilike ?)
         and (?=true or exists(select 1 from assessment_staff_assignment asa
           where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
       """;
-    Object[] filterArgs={statusFilter,statusFilter,term,"%"+term+"%","%"+term+"%","%"+term+"%",context.isAdmin(),context.staffId()};
+    Object[] filterArgs={courseId,statusFilter,statusFilter,term,"%"+term+"%","%"+term+"%","%"+term+"%",context.isAdmin(),context.staffId()};
     List<Object> pageArgs=new ArrayList<>();pageArgs.add(context.isAdmin());pageArgs.addAll(Arrays.asList(filterArgs));pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     String fromJoins="""
       from student_assessment_attempt att
