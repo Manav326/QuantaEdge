@@ -38,7 +38,6 @@ public class AdminController {
           InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
     long institutionId=requireInstitution(tenant);
-    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=query==null?"":query.trim();
@@ -441,28 +440,51 @@ public class AdminController {
 
   @PutMapping("/lessons/{lessonId}/status")
   @Transactional
-  public Map<String,Object> updateLessonStatus(@PathVariable long lessonId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> updateLessonStatus(@PathVariable long lessonId,@RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     AuthContext admin=authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String status=String.valueOf(body.getOrDefault("status","DRAFT"));
     if(!Set.of("DRAFT","REVIEW","PUBLISHED","ARCHIVED").contains(status)) {
       throw new IllegalArgumentException("Invalid lesson status");
     }
+    Long mapped=jdbc.query("""
+      select l.id from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+      join curriculum_subject s on s.id=ch.subject_id and s.active=true
+      join curriculum_program_subject cps on cps.subject_id=s.id and cps.program_id=?
+      join student_program_enrollment spe on spe.program_id=cps.program_id and spe.institution_id=?
+        and spe.status='ACTIVE'
+      join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+      join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=spe.program_id
+      where l.id=? and l.active=true
+      limit 1
+      """,rs->rs.next()?rs.getLong(1):null,courseId,institutionId,lessonId);
+    if(mapped==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson is not part of the selected institution course.");
     if("PUBLISHED".equals(status)) {
-      contentController.publishLesson(lessonId,context);
-      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+      contentController.publishLesson(lessonId,courseId,context,tenant);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+      return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
     }
     if("REVIEW".equals(status)) {
-      contentController.submitLessonForReview(lessonId,context);
-      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+      contentController.submitLessonForReview(lessonId,courseId,context,tenant);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+      return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
     }
-    int changed=jdbc.update("update lesson set status=?,active=? where id=?",
-        status,!"ARCHIVED".equals(status),lessonId);
-    if(changed==0) throw new IllegalArgumentException("Lesson not found");
-    log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-    return Map.of("updated",true,"lessonId",lessonId,"status",status);
+    int changed=jdbc.update("""
+      update lesson l set status=?,active=? where l.id=? and exists(
+        select 1 from curriculum_chapter ch
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.program_id=?
+        where ch.id=l.chapter_id)
+      """,status,!"ARCHIVED".equals(status),lessonId,courseId);
+    if(changed==0) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson is not part of the selected course.");
+    log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+    return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
   }
 
   @PutMapping("/questions/{questionId}")
