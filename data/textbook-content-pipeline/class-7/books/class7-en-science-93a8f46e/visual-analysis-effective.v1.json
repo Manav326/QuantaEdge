@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e1755fe2b66dbe3bef76c92d73ca6008ee6e83bfa78a40ad3f66f77d51ee9103",
+  "raw_analysis_sha256": "f34f6f58784932d3419512ac51bb613eb841c8ad3429af9b50ff6149ed783522",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:24:26Z",
+      "checkpointed_at": "2026-10-19T04:29:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:24:55Z",
+      "checkpointed_at": "2026-10-19T04:29:44Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -79932,6 +79932,164 @@
         "limitations": [
           "The image does not show the actual setup of the circuit.",
           "The image does not show the glowing lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e1de83accbaae33bad1fd7b3",
+      "asset_sha256": "d8f27bd3b1bd410da02241f3b168a000626f6522e228bc9960c1cb36fb65f2d3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/d8f27bd3b1bd410da02241f3b168a000626f6522e228bc9960c1cb36fb65f2d3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red wire is shown with a black bulb at one end, suggesting a simple electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Simple circuit",
+          "Lamp",
+          "Cell",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image represents a part of an educational content related to electrical circuits and predictions in a textbook.",
+        "limitations": [
+          "The image does not show the complete circuit or the glowing lamp, only a part of it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:30:58Z",
+      "effective_analysis": {
+        "visual_summary": "A red wire is shown with a black bulb at one end, suggesting a simple electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Simple circuit",
+          "Lamp",
+          "Cell",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image represents a part of an educational content related to electrical circuits and predictions in a textbook.",
+        "limitations": [
+          "The image does not show the complete circuit or the glowing lamp, only a part of it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "47b8a0f6c8c7b934914c1330",
+      "asset_sha256": "b62298f3cccd5db014222b618e87d411f6c55bca4c2529806ead003c3448213e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/b62298f3cccd5db014222b618e87d411f6c55bca4c2529806ead003c3448213e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue and silver bracelet with a star charm.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Components"
+        ],
+        "concepts": [
+          "bracelet",
+          "star charm"
+        ],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image is not a diagram, chart, or table, and does not provide any educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:32:05Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue and silver bracelet with a star charm.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Components"
+        ],
+        "concepts": [
+          "bracelet",
+          "star charm"
+        ],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image is not a diagram, chart, or table, and does not provide any educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d5ed6289af458e76c5b2559b",
+      "asset_sha256": "b5cd236584c59c942a432328288892dddf96b1f63bc29c4b863f2351435ec5e5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/b5cd236584c59c942a432328288892dddf96b1f63bc29c4b863f2351435ec5e5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a yellow stripe, possibly a piece of fabric or a toy.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image is blurry and not clearly identifiable.",
+          "The text in the image is not readable or relevant to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:33:12Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue object with a yellow stripe, possibly a piece of fabric or a toy.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image is blurry and not clearly identifiable.",
+          "The text in the image is not readable or relevant to the textbook content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
