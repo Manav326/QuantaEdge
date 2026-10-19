@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 924,
-    "successful_visual_analyses": 911,
-    "missing_visual_analyses": 1367,
+    "raw_analysis_result_rows": 926,
+    "successful_visual_analyses": 913,
+    "missing_visual_analyses": 1365,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1380,
+    "unresolved_count": 1378,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35492,9 +35492,22 @@
       "asset_path": "assets/3f3b8b8edafeb6f68614361c1e66a066b131af735d7b8710f4116a2a2dbe9f59.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two hands shaking hands, symbolizing a handshake.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "handshake",
+          "agreement",
+          "partnership"
+        ],
+        "context_relation": "The image represents a handshake, which is often used to symbolize agreement or partnership.",
+        "limitations": [
+          "The image does not provide specific information about the context or the handshake."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35510,9 +35523,25 @@
       "asset_path": "assets/e336b494ea563633cf0384c7162e32732a6a04c302670b5956808c1026ff9301.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a German Shepherd dog standing alert.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "German Shepherd",
+          "alert stance",
+          "dog",
+          "standing",
+          "alert",
+          "German Shepherd dog"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or information is provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

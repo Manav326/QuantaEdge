@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9682423f56001641f09f70afb4019ef999d2ee188d1216f2097f02f84e2ed355",
+  "raw_analysis_sha256": "797b8207e5fd3fe556f96c48fcb95b306a7343aed49baaad3f8880f8c7acf39a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:05:35Z",
+      "checkpointed_at": "2026-10-19T17:11:22Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:06:20Z",
+      "checkpointed_at": "2026-10-19T17:12:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:06:56Z",
+      "checkpointed_at": "2026-10-19T17:12:44Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -42924,6 +42924,108 @@
           "The image does not provide specific examples of diseases or their causes.",
           "The image does not show the relationship between bed bugs and diseases.",
           "The image does not include information about the symptoms or effects of diseases."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "312d82318209330712395592",
+      "asset_sha256": "3f3b8b8edafeb6f68614361c1e66a066b131af735d7b8710f4116a2a2dbe9f59",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/3f3b8b8edafeb6f68614361c1e66a066b131af735d7b8710f4116a2a2dbe9f59.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two hands shaking hands, symbolizing a handshake.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "handshake",
+          "agreement",
+          "partnership"
+        ],
+        "context_relation": "The image represents a handshake, which is often used to symbolize agreement or partnership.",
+        "limitations": [
+          "The image does not provide specific information about the context or the handshake."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:14:19Z",
+      "effective_analysis": {
+        "visual_summary": "Two hands shaking hands, symbolizing a handshake.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "handshake",
+          "agreement",
+          "partnership"
+        ],
+        "context_relation": "The image represents a handshake, which is often used to symbolize agreement or partnership.",
+        "limitations": [
+          "The image does not provide specific information about the context or the handshake."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a02bccb5d7cf7aae69e36cf2",
+      "asset_sha256": "e336b494ea563633cf0384c7162e32732a6a04c302670b5956808c1026ff9301",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/e336b494ea563633cf0384c7162e32732a6a04c302670b5956808c1026ff9301.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a German Shepherd dog standing alert.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "German Shepherd",
+          "alert stance",
+          "dog",
+          "standing",
+          "alert",
+          "German Shepherd dog"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or information is provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:15:55Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a German Shepherd dog standing alert.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "German Shepherd",
+          "alert stance",
+          "dog",
+          "standing",
+          "alert",
+          "German Shepherd dog"
+        ],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "No specific text or information is provided in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
