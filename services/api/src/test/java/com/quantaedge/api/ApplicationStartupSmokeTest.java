@@ -69,6 +69,39 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
+  void studentProgramsCatalogueSqlExecutesAgainstMigratedTenantSchema() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant
+      where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+
+    // A non-existent probe ID deliberately returns no learner rows while forcing PostgreSQL
+    // to parse and plan the complete catalogue SQL, including every tenant-scoped access table
+    // and all bound parameters. This catches the class of migrated-schema errors that returned
+    // HTTP 500 without needing to borrow or mutate a real learner's identity.
+    AuthContext probeStudent = new AuthContext(
+        null, Long.MAX_VALUE, null, "STUDENT", "Catalogue SQL regression", "STUDENT");
+    StudentProgramController controller =
+        new StudentProgramController(jdbc, new AuthorizationService(jdbc));
+    List<Map<String,Object>> rows = controller.programs(
+        probeStudent, new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));
+    assertTrue(rows.isEmpty(), "A non-existent student must not receive any course rows.");
+
+    // Exercise the exact per-course subject query used by the endpoint as well; the catalogue
+    // query above will not enter that loop because the probe student intentionally has no rows.
+    Long classSixCourseId = jdbc.queryForObject("""
+      select id from curriculum_program
+      where code='CLASS_6' and status='ACTIVE' and curriculum_version='CURRENT'
+      order by id limit 1
+      """, Long.class);
+    List<Map<String,Object>> subjects = controller.subjectsForProgram(classSixCourseId);
+    assertTrue(!subjects.isEmpty(), "Class 6 must expose its mapped active subject tracks.");
+    assertTrue(subjects.stream().allMatch(subject ->
+        subject.get("subject_code") != null && subject.get("subject_name") != null),
+        "Course subject rows must contain the fields expected by the web client.");
+  }
+
+  @Test
   void bilingualSchemaExistsAndTranslationInventoryQueryExecutes() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_program') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.lesson_translation') is not null", Boolean.class));
