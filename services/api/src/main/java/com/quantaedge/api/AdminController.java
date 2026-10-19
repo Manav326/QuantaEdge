@@ -160,24 +160,35 @@ public class AdminController {
   }
 
   @GetMapping("/lessons")
-  public List<Map<String,Object>> lessons(@RequestParam(required=false) String classCode,
+  public List<Map<String,Object>> lessons(
+      @RequestParam Long courseId,
       @RequestParam(required=false) String subjectCode,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
-    if(classCode==null || subjectCode==null) return jdbc.queryForList("""
-      select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
-             c.code as class_code,s.code as subject_code
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    String selectedSubject=subjectCode==null?"":subjectCode.trim();
     return jdbc.queryForList("""
       select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
-             c.code as class_code,s.code as subject_code
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true and c.code=? and s.code=? order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,classCode,subjectCode);
+             cc.code as class_code,s.code as subject_code,s.display_name as subject_name,
+             p.id as course_id,p.code as course_code,p.display_name as course_name
+      from curriculum_program p
+      join institution_course_assignment assignment on assignment.institution_id=?
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      join curriculum_class cc on cc.id=s.class_id and cc.active=true
+      join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+      join lesson l on l.chapter_id=ch.id and l.active=true
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and (?='' or s.code=?)
+      order by cps.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
+      """,institutionId,courseId,selectedSubject,selectedSubject);
   }
 
   @GetMapping("/students")
