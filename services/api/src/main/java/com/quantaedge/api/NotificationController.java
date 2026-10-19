@@ -171,14 +171,28 @@ public class NotificationController {
 
   @GetMapping({
     "/admin/notifications/recipients",
+    "/hrms/notifications/recipients",
     "/institution/notifications/recipients"
   })
   public Map<String,Object> recipientOptions(HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestParam(required=false,defaultValue="") String query,
-      @RequestParam(required=false,defaultValue="STUDENT") String kind) {
+      @RequestParam(required=false,defaultValue="STUDENT") String kind,
+      @RequestParam(required=false) Long institutionId) {
     RichNotificationService.Actor actor=studioReaderActor(request,context,institutionCode);
+    Long recipientInstitutionId=actor.institutionId();
+    if("HRMS".equals(actor.workspace())) {
+      if(institutionId==null||institutionId<1) {
+        throw new IllegalArgumentException("Select an institution before searching its individual users.");
+      }
+      Boolean active=jdbc.queryForObject(
+        "select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",Boolean.class,institutionId);
+      if(!Boolean.TRUE.equals(active))throw new SecurityException("The selected institution is not active.");
+      recipientInstitutionId=institutionId;
+    } else if(institutionId!=null&&!institutionId.equals(recipientInstitutionId)) {
+      throw new SecurityException("Recipients can only be searched in the authenticated institution.");
+    }
     String normalized=kind==null?"STUDENT":kind.trim().toUpperCase(java.util.Locale.ROOT);
     String needle=query==null?"":query.trim();
     if(needle.length()>80)throw new IllegalArgumentException("Recipient search text is too long.");
@@ -186,16 +200,16 @@ public class NotificationController {
     if("STUDENT".equals(normalized)) {
       rows=jdbc.queryForList("""
         select distinct st.id as recipient_id,'STUDENT' as recipient_kind,
-          st.display_name as recipient_name,st.class_code
+          st.display_name as recipient_name,st.class_code,m.institution_id as institution_id
         from student st join institution_membership m on m.student_id=st.id
           and m.institution_id=? and m.status='ACTIVE'
         where st.active=true and (?='' or st.display_name ilike '%'||?||'%')
         order by lower(st.display_name),st.id limit 50
-        """,actor.institutionId(),needle,needle);
+        """,recipientInstitutionId,needle,needle);
     } else if("USER_ACCOUNT".equals(normalized)) {
       rows=jdbc.queryForList("""
         select distinct u.id as recipient_id,'USER_ACCOUNT' as recipient_kind,
-          u.display_name as recipient_name,null::varchar as class_code
+          u.display_name as recipient_name,null::varchar as class_code,um.institution_id as institution_id
         from user_account u
         join institution_user_membership um on um.user_id=u.id and um.institution_id=? and um.status='ACTIVE'
         join guardian_student gs on gs.guardian_user_id=u.id and gs.active=true
@@ -204,15 +218,15 @@ public class NotificationController {
         join institution_membership m on m.student_id=st.id and m.institution_id=um.institution_id and m.status='ACTIVE'
         where u.active=true and (?='' or u.display_name ilike '%'||?||'%')
         order by lower(u.display_name),u.id limit 50
-        """,actor.institutionId(),needle,needle);
+        """,recipientInstitutionId,needle,needle);
     } else if("INSTITUTION_ADMIN".equals(normalized)) {
       rows=jdbc.queryForList("""
         select id as recipient_id,'INSTITUTION_ADMIN' as recipient_kind,
-          display_name as recipient_name,null::varchar as class_code
+          display_name as recipient_name,null::varchar as class_code,institution_id
         from institution_admin_account where institution_id=? and active=true
           and (?='' or display_name ilike '%'||?||'%')
         order by lower(display_name),id limit 50
-        """,actor.institutionId(),needle,needle);
+        """,recipientInstitutionId,needle,needle);
     } else {
       throw new IllegalArgumentException("Choose Student, Parent/Guardian or Institution Admin.");
     }
