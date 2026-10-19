@@ -88,10 +88,12 @@ class AdminContentControllerTest {
     AuthContext author = new AuthContext(null, null, 42L, "CONTENT_AUTHOR", "Content author");
     when(jdbc.queryForObject("select content_revision from lesson where id=?", Long.class, 7L))
         .thenReturn(12L);
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.markLessonPreviewChecked(7L, java.util.Map.of("contentRevision", 11L), author));
+        () -> controller.markLessonPreviewChecked(
+            7L, java.util.Map.of("contentRevision", 11L, "courseId", 71L), author, TEST_TENANT));
 
     assertTrue(error.getReason().contains("changed after this preview loaded"));
   }
