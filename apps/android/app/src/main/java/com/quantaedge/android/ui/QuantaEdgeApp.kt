@@ -788,13 +788,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     suspend fun refreshStudentTextbookDocuments() {
+        if (currentCourseId <= 0L) {
+            studentTextbookDocuments = emptyList()
+            studentTextbookDocumentsLoadFailed = false
+            return
+        }
         val loaded = mutableListOf<JSONObject>()
         var requestFailed = false
         listOf("maths", "science").forEach { subjectCode ->
             val response = runCatching {
-                val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
                 ApiClient.getArray("/api/v1/learning/documents?subjectCode=" +
-                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage + courseQuery).objectItems()
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage + "&courseId=" + currentCourseId).objectItems()
             }
             if (response.isFailure) requestFailed = true
             loaded.addAll(response.getOrDefault(emptyList()))
@@ -804,6 +808,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     suspend fun refreshDashboardClasses() {
+        if (currentCourseId <= 0L) {
+            dashboardClasses = emptyList()
+            dashboardClassesError = ""
+            return
+        }
         val enrolledCourse = studentPrograms.firstOrNull {
             it.longAny("id", "course_id") == currentCourseId
         }
@@ -816,9 +825,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         val gathered = mutableListOf<JSONObject>()
         var anyRequestFailed = false
         for (subjectCode in subjects) {
-            val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
             val liveResponse = runCatching {
-                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery + "&includeFuture=true")
+                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&courseId=" + currentCourseId + "&includeFuture=true")
                     .optJSONArray("items").objectItems()
             }
             if (liveResponse.isFailure) anyRequestFailed = true
@@ -1417,9 +1425,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         structuredLessonArtifactId = artifactId
         runTask {
             val encodedId = ApiClient.encodeQuery(artifactId)
-            lesson = ApiClient.getObject("/api/v1/learning/structured-lessons/" + encodedId + "?language=" + learningLanguage)
+            if (currentCourseId <= 0L) throw IOException("Select an active course before opening structured lessons.")
+            lesson = ApiClient.getObject("/api/v1/learning/structured-lessons/" + encodedId + "?courseId=" + currentCourseId + "&language=" + learningLanguage)
             structuredLessonSavedResponses = ApiClient.getObject(
-                "/api/v1/learning/structured-lessons/" + encodedId + "/responses?language=" + learningLanguage
+                "/api/v1/learning/structured-lessons/" + encodedId + "/responses?courseId=" + currentCourseId + "&language=" + learningLanguage
             )
             structuredLessonPendingQuestionIds = emptySet()
             structuredLessonPendingActivityIds = emptySet()
@@ -2347,13 +2356,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (forceRefresh) resourceStore.removePage(documentId, page)
         val cachedPage = if (forceRefresh) null else resourceStore.readPage(documentId, page)
         val bytes = cachedPage ?: ApiClient.getBytes(
-            "/api/v1/learning/documents/" + documentId + "/pages/" + page
+            "/api/v1/learning/documents/" + documentId + "/pages/" + page + "?courseId=" + currentCourseId
         ).also { resourceStore.savePage(documentId, page, it) }
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             ?: throw IOException("पृष्ठ की छवि पढ़ी नहीं जा सकी।")
         documentImage = bitmap.asImageBitmap()
         runCatching {
-            ApiClient.putObject("/api/v1/learning/documents/" + documentId + "/progress",
+            ApiClient.putObject("/api/v1/learning/documents/" + documentId + "/progress?courseId=" + currentCourseId,
                 JSONObject().put("lastPage", page))
         }
     }
@@ -2379,7 +2388,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         documentThumbnailImages = emptyMap()
         documentThumbnailRequests = emptySet()
         runTask {
-            selectedDocument = ApiClient.getObject("/api/v1/learning/documents/" + documentId)
+            selectedDocument = ApiClient.getObject("/api/v1/learning/documents/" + documentId + "?courseId=" + currentCourseId)
             documentPage = selectedDocument.optInt("last_page", 1).coerceAtLeast(1)
             loadPage(documentPage)
             route = AppRoute.DOCUMENT_READER
@@ -3791,7 +3800,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                         val responseValue = JSONTokener(responseJson).nextValue()
                                         val result = ApiClient.postObject(
                                             "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(structuredLessonArtifactId) +
-                                                "/questions/" + ApiClient.encodeQuery(questionId) + "/responses?language=" + learningLanguage,
+                                                "/questions/" + ApiClient.encodeQuery(questionId) + "/responses?courseId=" + currentCourseId + "&language=" + learningLanguage,
                                             JSONObject().put("response", responseValue)
                                         )
                                         val state = JSONObject().put("response", responseValue)
@@ -3817,7 +3826,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                     try {
                                         ApiClient.postObject(
                                             "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(structuredLessonArtifactId) +
-                                                "/activities/" + ApiClient.encodeQuery(blockId) + "/responses",
+                                                "/activities/" + ApiClient.encodeQuery(blockId) + "/responses?courseId=" + currentCourseId,
                                             JSONObject().put("response", responseJson)
                                         )
                                         val all = JSONObject(structuredLessonSavedResponses.toString())
@@ -3834,6 +3843,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             StructuredLessonResourcesPanel(
                                 artifactId = structuredLessonArtifactId,
                                 language = learningLanguage,
+                                courseId = currentCourseId,
                                 onOpenLearningDocument = ::openAssignedLearningDocument
                             )
                         }
