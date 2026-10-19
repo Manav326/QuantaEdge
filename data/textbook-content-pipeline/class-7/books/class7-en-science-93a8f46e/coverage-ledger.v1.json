@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1355,
-    "successful_visual_analyses": 1332,
-    "missing_visual_analyses": 6133,
+    "raw_analysis_result_rows": 1358,
+    "successful_visual_analyses": 1335,
+    "missing_visual_analyses": 6130,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6156,
+    "unresolved_count": 6153,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61052,9 +61052,28 @@
       "asset_path": "assets/f991f1031a861be5cd7cbda1c4160476330d37ca980ac49a3c17fe0320b5b4bc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table titled 'Table 3.1: Trying to make the lamp glow' with columns for 'S.No.', 'Arrangement of Cell and Lamp', 'Prediction', 'Observation', and 'Components'. The table is incomplete, with only one row filled.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "Electric circuit",
+          "Lamp",
+          "Prediction",
+          "Observation",
+          "Components"
+        ],
+        "context_relation": "The table is related to an educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The table is incomplete with only one row filled."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61070,9 +61089,18 @@
       "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61088,9 +61116,29 @@
       "asset_path": "assets/0ad3c13f90cb9f92693e7e587c76c7df31170dac60e62fe85bafe8afd15800ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp and a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit diagram",
+          "lamp",
+          "electricity"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

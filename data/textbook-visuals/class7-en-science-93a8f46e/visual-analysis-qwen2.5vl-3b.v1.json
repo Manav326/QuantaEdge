@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1332,
+    "assets_selected": 1335,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1330,
-    "assets_remaining": 6158,
+    "assets_analyzed": 1333,
+    "assets_remaining": 6155,
     "assets_completion_percent": 17.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1327,
+    "assets_skipped_from_checkpoint": 1330,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:05:16Z"
+      "checkpointed_at": "2026-10-19T04:10:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:05:45Z"
+      "checkpointed_at": "2026-10-19T04:10:35Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50472,6 +50472,111 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T04:09:13Z"
+    },
+    {
+      "asset_id": "c8c5d463410619f309233245",
+      "asset_sha256": "f991f1031a861be5cd7cbda1c4160476330d37ca980ac49a3c17fe0320b5b4bc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/f991f1031a861be5cd7cbda1c4160476330d37ca980ac49a3c17fe0320b5b4bc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Table 3.1: Trying to make the lamp glow' with columns for 'S.No.', 'Arrangement of Cell and Lamp', 'Prediction', 'Observation', and 'Components'. The table is incomplete, with only one row filled.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "Electric circuit",
+          "Lamp",
+          "Prediction",
+          "Observation",
+          "Components"
+        ],
+        "context_relation": "The table is related to an educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The table is incomplete with only one row filled."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:11:49Z"
+    },
+    {
+      "asset_id": "1f37313a18ce65afeef9d13d",
+      "asset_sha256": "8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:12:54Z"
+    },
+    {
+      "asset_id": "7cfb9adba633c391de1ed040",
+      "asset_sha256": "0ad3c13f90cb9f92693e7e587c76c7df31170dac60e62fe85bafe8afd15800ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/0ad3c13f90cb9f92693e7e587c76c7df31170dac60e62fe85bafe8afd15800ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a lamp and a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit diagram",
+          "lamp",
+          "electricity"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:14:03Z"
     }
   ]
 }
