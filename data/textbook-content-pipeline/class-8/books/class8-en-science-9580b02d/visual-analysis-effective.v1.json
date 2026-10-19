@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e8298f9e5a6d6be719f111a94933531e2287007b6ce2ea25a6387c6446ace69f",
+  "raw_analysis_sha256": "1a825b325e1e04d3e2134bc078635b6a2ee11c52cfa954bca8ce87162f7bbf34",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:59:51Z",
+      "checkpointed_at": "2026-10-19T19:05:37Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:00:39Z",
+      "checkpointed_at": "2026-10-19T19:06:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:01:16Z",
+      "checkpointed_at": "2026-10-19T19:07:02Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -44912,6 +44912,144 @@
         "context_relation": "The image is related to the topic of vaccination and immunization.",
         "limitations": [
           "The image does not provide specific details about the type of vaccine being administered."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9f9286dcd490d67392a7c4ed",
+      "asset_sha256": "0cb96bc1defd81e99b0dff8b6bce1fc95d1c399156198039ed6bd4a9da02c41a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/0cb96bc1defd81e99b0dff8b6bce1fc95d1c399156198039ed6bd4a9da02c41a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A line graph showing a decline over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "80",
+          "70",
+          "60",
+          "50",
+          "40",
+          "30",
+          "20",
+          "10",
+          "0",
+          "1950",
+          "1960",
+          "1970",
+          "1980"
+        ],
+        "concepts": [
+          "vaccine",
+          "immunity",
+          "decline",
+          "time",
+          "graph"
+        ],
+        "context_relation": "The graph represents the decline in a specific metric over time.",
+        "limitations": [
+          "The specific metric and its context are not provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:08:41Z",
+      "effective_analysis": {
+        "visual_summary": "A line graph showing a decline over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "80",
+          "70",
+          "60",
+          "50",
+          "40",
+          "30",
+          "20",
+          "10",
+          "0",
+          "1950",
+          "1960",
+          "1970",
+          "1980"
+        ],
+        "concepts": [
+          "vaccine",
+          "immunity",
+          "decline",
+          "time",
+          "graph"
+        ],
+        "context_relation": "The graph represents the decline in a specific metric over time.",
+        "limitations": [
+          "The specific metric and its context are not provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a73f00278c48cf15b9e8e175",
+      "asset_sha256": "f705327f030951c8f2df624a66895ac221e460f0416805f918f2d239e8f7a863",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/f705327f030951c8f2df624a66895ac221e460f0416805f918f2d239e8f7a863.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A woman milking a cow in a grassy field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "milk",
+          "cow",
+          "milking",
+          "grass",
+          "woman",
+          "farm",
+          "agriculture"
+        ],
+        "context_relation": "The image is related to the topic of agriculture and dairy production.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:10:15Z",
+      "effective_analysis": {
+        "visual_summary": "A woman milking a cow in a grassy field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "milk",
+          "cow",
+          "milking",
+          "grass",
+          "woman",
+          "farm",
+          "agriculture"
+        ],
+        "context_relation": "The image is related to the topic of agriculture and dairy production.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

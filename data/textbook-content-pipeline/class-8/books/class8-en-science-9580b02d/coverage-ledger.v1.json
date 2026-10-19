@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 964,
-    "successful_visual_analyses": 949,
-    "missing_visual_analyses": 1327,
+    "raw_analysis_result_rows": 966,
+    "successful_visual_analyses": 951,
+    "missing_visual_analyses": 1325,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1342,
+    "unresolved_count": 1340,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36768,9 +36768,38 @@
       "asset_path": "assets/0cb96bc1defd81e99b0dff8b6bce1fc95d1c399156198039ed6bd4a9da02c41a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A line graph showing a decline over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "80",
+          "70",
+          "60",
+          "50",
+          "40",
+          "30",
+          "20",
+          "10",
+          "0",
+          "1950",
+          "1960",
+          "1970",
+          "1980"
+        ],
+        "concepts": [
+          "vaccine",
+          "immunity",
+          "decline",
+          "time",
+          "graph"
+        ],
+        "context_relation": "The graph represents the decline in a specific metric over time.",
+        "limitations": [
+          "The specific metric and its context are not provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36786,9 +36815,27 @@
       "asset_path": "assets/f705327f030951c8f2df624a66895ac221e460f0416805f918f2d239e8f7a863.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A woman milking a cow in a grassy field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "milk",
+          "cow",
+          "milking",
+          "grass",
+          "woman",
+          "farm",
+          "agriculture"
+        ],
+        "context_relation": "The image is related to the topic of agriculture and dairy production.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

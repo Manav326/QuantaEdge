@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 949,
+    "assets_selected": 951,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 946,
-    "assets_remaining": 1345,
-    "assets_completion_percent": 41.3,
+    "assets_analyzed": 948,
+    "assets_remaining": 1343,
+    "assets_completion_percent": 41.4,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 944,
+    "assets_skipped_from_checkpoint": 946,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:59:51Z"
+      "checkpointed_at": "2026-10-19T19:05:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:00:39Z"
+      "checkpointed_at": "2026-10-19T19:06:24Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T19:01:16Z"
+      "checkpointed_at": "2026-10-19T19:07:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30170,6 +30170,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T19:04:28Z"
+    },
+    {
+      "asset_id": "9f9286dcd490d67392a7c4ed",
+      "asset_sha256": "0cb96bc1defd81e99b0dff8b6bce1fc95d1c399156198039ed6bd4a9da02c41a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/0cb96bc1defd81e99b0dff8b6bce1fc95d1c399156198039ed6bd4a9da02c41a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A line graph showing a decline over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "80",
+          "70",
+          "60",
+          "50",
+          "40",
+          "30",
+          "20",
+          "10",
+          "0",
+          "1950",
+          "1960",
+          "1970",
+          "1980"
+        ],
+        "concepts": [
+          "vaccine",
+          "immunity",
+          "decline",
+          "time",
+          "graph"
+        ],
+        "context_relation": "The graph represents the decline in a specific metric over time.",
+        "limitations": [
+          "The specific metric and its context are not provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:08:41Z"
+    },
+    {
+      "asset_id": "a73f00278c48cf15b9e8e175",
+      "asset_sha256": "f705327f030951c8f2df624a66895ac221e460f0416805f918f2d239e8f7a863",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/f705327f030951c8f2df624a66895ac221e460f0416805f918f2d239e8f7a863.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A woman milking a cow in a grassy field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "milk",
+          "cow",
+          "milking",
+          "grass",
+          "woman",
+          "farm",
+          "agriculture"
+        ],
+        "context_relation": "The image is related to the topic of agriculture and dairy production.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:10:15Z"
     }
   ]
 }
