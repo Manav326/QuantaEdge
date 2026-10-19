@@ -522,6 +522,9 @@ public class LearningDocumentController {
           select p.id
           from curriculum_program p
           join student_program_enrollment spe on spe.student_id=? and spe.institution_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+          join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+          join institution_tenant tenant_scope on tenant_scope.id=spe.institution_id and tenant_scope.status='ACTIVE'
           where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
           """, context.studentId(),institutionId,courseId);
       } else {
@@ -529,6 +532,9 @@ public class LearningDocumentController {
           select p.id
           from curriculum_program p
           join student_program_enrollment spe on spe.student_id=? and spe.institution_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+          join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+          join institution_tenant tenant_scope on tenant_scope.id=spe.institution_id and tenant_scope.status='ACTIVE'
           where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
           order by p.id
           """, context.studentId(),institutionId,programCode.trim());
