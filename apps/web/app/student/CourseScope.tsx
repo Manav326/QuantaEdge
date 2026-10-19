@@ -50,21 +50,32 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       }
       if (!response.ok) throw new Error(body.detail || body.message || body.error || 'Your courses could not be loaded.');
       const rows: EnrolledCourse[] = Array.isArray(body) ? body : [];
-      // Primary focus is not enrollment. Only courses already enrolled or paused for
-      // this learner and institution appear here; marketplace availability/ownership alone
-      // is not permission to browse lesson reports.
-      const enrolled = rows.filter(course =>
+      // Normalize the course identity once. Every downstream route and API call uses
+      // the numeric course ID, never a class code or subject-derived guess.
+      const normalized = rows.map(course => ({
+        ...course,
+        id: Number(course.id || course.course_id),
+      }));
+      // Focus is not enrollment. Only courses actually enrolled (or pre-migration paused)
+      // for this authenticated institution are valid report/lesson destinations.
+      const enrolled = normalized.filter(course =>
         (course.is_enrolled === true || course.paused === true) &&
         Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
       if (!active) return;
       setCourses(enrolled);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
       const requested = Number(requestedCourseId || 0);
-      const selected = enrolled.find(course => Number(course.id) === requested)
-        || enrolled.find(course => Number(course.id) === saved)
-        || enrolled.find(course => course.is_enrolled === true)
-        || enrolled[0]
-        || null;
+      const selected = requested > 0
+        ? enrolled.find(course => Number(course.id) === requested) || null
+        : enrolled.find(course => Number(course.id) === saved)
+          || enrolled.find(course => course.is_enrolled === true || course.enrolled === true)
+          || enrolled[0]
+          || null;
+      if (requested > 0 && !selected) {
+        setCourseId(null);
+        setCourseError('This course is not enrolled in your current institution account.');
+        return;
+      }
       const selectedId = selected ? Number(selected.id) : null;
       if (selected && selectedId !== null && selected.is_enrolled !== true) {
         // Legacy paused enrollment rows need one transition to ACTIVE. The server no
