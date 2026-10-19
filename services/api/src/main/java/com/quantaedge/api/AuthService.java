@@ -681,6 +681,30 @@ public class AuthService {
         passwordAttemptKey(authType,identifier),authType);
   }
 
+  /**
+   * A parent may enter their own learner workspace only when they hold an active
+   * entitlement or an active/paused enrollment in this institution. Child-owned
+   * entitlements do not satisfy this check.
+   */
+  public boolean hasParentPersonalLearningAccess(long parentUserId, long institutionId) {
+    Boolean entitled = jdbc.queryForObject("""
+      select exists(
+        select 1 from course_entitlement ce
+        where ce.institution_id=? and ce.holder_user_id=?
+        union all
+        select 1
+        from student st
+        join institution_membership m on m.student_id=st.id
+          and m.institution_id=? and m.status='ACTIVE'
+        join student_program_enrollment e on e.student_id=st.id
+          and e.institution_id=m.institution_id
+          and e.status in ('ACTIVE','PAUSED')
+        where st.user_account_id=? and st.active=true and st.environment='PRODUCTION'
+      )
+      """, Boolean.class, institutionId, parentUserId, institutionId, parentUserId);
+    return Boolean.TRUE.equals(entitled);
+  }
+
   /** Open a separate learner-scoped session for a parent who wants to use their own courses. */
   @Transactional
   public AuthContext openParentLearningContext(long parentUserId) {
