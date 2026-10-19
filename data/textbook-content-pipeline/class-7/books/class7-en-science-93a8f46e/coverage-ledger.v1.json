@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1618,
-    "successful_visual_analyses": 1596,
-    "missing_visual_analyses": 5870,
+    "raw_analysis_result_rows": 1621,
+    "successful_visual_analyses": 1599,
+    "missing_visual_analyses": 5867,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5892,
+    "unresolved_count": 5889,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -70504,9 +70504,16 @@
       "asset_path": "assets/82d91a123732713d72f4ea26213d677c64b638b0ae97d41e20221358209adfb1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green speech bubble with a pointed tail.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70522,9 +70529,23 @@
       "asset_path": "assets/1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a cricket and a butterfly, possibly representing a comparison or contrast.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cricket",
+          "butterfly",
+          "comparison",
+          "contrast"
+        ],
+        "context_relation": "The image may be used to illustrate a comparison between a cricket and a butterfly, possibly in an educational context.",
+        "limitations": [
+          "The image does not provide specific details about the cricket and butterfly, so the exact comparison cannot be determined without additional context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70540,9 +70561,26 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An LED symbol with a triangle pointing to the direction of current flow and two arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light (Fig. 3.13b).",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Circuit representation"
+        ],
+        "context_relation": "The image is a visual representation of an LED symbol used in electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

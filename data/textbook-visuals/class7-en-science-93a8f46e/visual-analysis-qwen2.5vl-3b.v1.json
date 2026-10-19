@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1596,
+    "assets_selected": 1599,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1594,
-    "assets_remaining": 5894,
+    "assets_analyzed": 1597,
+    "assets_remaining": 5891,
     "assets_completion_percent": 21.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1591,
+    "assets_skipped_from_checkpoint": 1594,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:14:18Z"
+      "checkpointed_at": "2026-10-19T12:16:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:14:38Z"
+      "checkpointed_at": "2026-10-19T12:16:59Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -60189,6 +60189,101 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:15:56Z"
+    },
+    {
+      "asset_id": "213d38dbcc127db7271d9eb5",
+      "asset_sha256": "82d91a123732713d72f4ea26213d677c64b638b0ae97d41e20221358209adfb1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/82d91a123732713d72f4ea26213d677c64b638b0ae97d41e20221358209adfb1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green speech bubble with a pointed tail.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:17:34Z"
+    },
+    {
+      "asset_id": "19a9a69fa66e54f0fd1f4c9a",
+      "asset_sha256": "1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a cricket and a butterfly, possibly representing a comparison or contrast.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cricket",
+          "butterfly",
+          "comparison",
+          "contrast"
+        ],
+        "context_relation": "The image may be used to illustrate a comparison between a cricket and a butterfly, possibly in an educational context.",
+        "limitations": [
+          "The image does not provide specific details about the cricket and butterfly, so the exact comparison cannot be determined without additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:17:42Z"
+    },
+    {
+      "asset_id": "701ceff9cf1ac8b7a3735ca1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An LED symbol with a triangle pointing to the direction of current flow and two arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light (Fig. 3.13b).",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Circuit representation"
+        ],
+        "context_relation": "The image is a visual representation of an LED symbol used in electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:17:57Z"
     }
   ]
 }
