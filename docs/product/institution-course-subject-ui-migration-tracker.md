@@ -19,6 +19,27 @@
 2. Course options come only from the selected institution's authorized course catalogue and the learner's real entitlement/access.
 3. Subject options come only from the active course's `subjects` mapping. Subject changes reset pagination/selection; course changes clear the subject unless the same subject code is confirmed to belong to the new course.
 4. Content APIs and deep links carry `courseId`; subject-based endpoints also carry `subjectCode`. Backend authorization remains authoritative; hiding a selector is not an access check.
+5. **External course identity contract:** learner-facing structured-learning URLs and the structured-lessons API use the course's stable 8-character alphanumeric `curriculum_program.public_id` (`^[A-Z]{3}[A-Z0-9]{5}# Institution → Course → Subject UI Migration Tracker
+
+**Merged branch:** `feat/institution-course-subject-ui-migration` → `main`  
+**Source of route inventory:** `docs/qa/ui-screen-inventory.csv`  
+**Target contract:** all authenticated learner and staff learning interactions are scoped by the resolved institution, then the selected/assigned course, then a subject that belongs to that course. No student-facing class-root or legacy subject-track fallback is accepted. An institution label comes from the trusted tenant context; it is not a user-supplied authorization value.
+
+## Merge status — 2026-10-19
+
+- **Merged into `main`:** PR [#84](https://github.com/Manav326/QuantaEdge/pull/84), squash commit `d6dc124c295985875ff2798a8b3c20ce800c7136`.
+- **Hierarchy retained:** Institutions → Course → Subject → published structured lesson.
+- **Current verification:** post-merge CI has not yet been verified green. Check the [GitHub Actions runs](https://github.com/Manav326/QuantaEdge/actions) for the newest `QuantaEdge Build and Publish` run on `main`; pushes made while updating this tracker can cancel superseded runs.
+- **Deferred by explicit instruction:** pre-merge API verification had 13 failing tests and 4 errors out of 429 tests. These test cases were not treated as a merge blocker and must be revisited after the merged code is available for runtime validation. This does **not** mean the tests passed.
+- The route-by-route and runtime QA checkboxes below remain open until their actual scenarios are executed.
+
+
+## Non-negotiable implementation rules
+
+1. The institution is resolved from the authenticated session / validated institution context. It must not be inferred from a class code, client-controlled ID, or local-storage value.
+2. Course options come only from the selected institution's authorized course catalogue and the learner's real entitlement/access.
+3. Subject options come only from the active course's `subjects` mapping. Subject changes reset pagination/selection; course changes clear the subject unless the same subject code is confirmed to belong to the new course.
+, for example a `CRS`-prefixed course ID). The numeric `curriculum_program.id` is an internal database key and must not be emitted as the new public course ID. Legacy numeric deep links remain accepted during migration; new links must use `public_id`. APIs resolve the public ID to the internal ID before running tenant, enrollment, course/subject-mapping and persistence checks.
 5. Remove class-first routes, `classCode`/legacy `programCode` learning fallbacks, and `LEGACY_CLASS_ENROLLMENT` entitlement fallbacks. No unpublished/draft lesson may become visible to bypass a scope mismatch.
 6. Route and component changes are not marked complete until the build passes and the QA scenario is executed on both web and Android. Static/source checks are supporting evidence, not runtime acceptance.
 
@@ -149,3 +170,11 @@ This pass explicitly includes the admin workspace. Course scope is resolved from
 - The reusable learning-resource catalogue itself is currently a shared catalogue endpoint and is not filtered by `courseId`; only its placements are course-filtered. Confirm the intended ownership model for catalogue records (shared platform resource versus institution-owned resource) before claiming full tenant isolation for that library.
 - The parent directory is institution-scoped and lists each parent's linked children/course names; it is an account directory, not a selected-course progress report. Any child-progress/report view must still select a course when the child has multiple active enrollments.
 - CI and runtime acceptance are not complete merely because source contracts pass. Re-check the newest branch run, then execute admin course-switch, unmapped-subject, cross-institution, and direct-ID tampering scenarios before claiming runtime acceptance is complete.
+
+
+## Structured-learning public course ID correction — 2026-10-19
+
+- Learner course selectors continue to retain numeric internal IDs for local state and legacy APIs, but Learn, Practice, course-subject shortcuts, and structured-lesson detail requests now use `public_id` in the URL and structured-lessons API.
+- Structured-lesson API accepts the 8-character public identifier and resolves it to `curriculum_program.id` before enforcing institution membership, active enrollment, assignment/release and mapped-subject access. Existing numeric links are kept temporarily for backward compatibility.
+- This ID correction does **not** publish draft learning content. The main content inventory currently has 39 Class 6 Science topic JSONs, and the production index records zero reviewed/publishable topics. The API Docker packaging script includes only explicitly published, fully approved artifacts, so the catalogue can continue returning `[]` until the appropriate content review and publish workflow is completed. Do not relax publication gates to mask an empty catalogue.
+- Build/runtime acceptance remains pending until the latest GitHub Actions run completes and a learner account verifies a URL containing the actual 8-character public ID against the authenticated catalogue/detail endpoints.
