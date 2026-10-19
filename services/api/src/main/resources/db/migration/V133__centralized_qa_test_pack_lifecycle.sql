@@ -106,9 +106,6 @@ ALTER TABLE institution_admin_account
 ALTER TABLE staff_account
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 
-ALTER TABLE institution_admin_account
-  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
-
 ALTER TABLE institution_tenant
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 ALTER TABLE institution_branding
