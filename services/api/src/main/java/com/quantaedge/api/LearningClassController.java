@@ -73,6 +73,57 @@ public class LearningClassController {
     this.teachingEligibility = teachingEligibility;
   }
 
+  private long requireAdminAssignedCourse(Long courseId,InstitutionTenantContext tenant) {
+    if(courseId==null||courseId<1L)throw badRequest("Select an active course.");
+    if(tenant==null||tenant.institutionId()<1L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active institution context is required.");
+    Long assigned=jdbc.queryForObject("""
+      select count(*) from institution_course_assignment a
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+      join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where a.institution_id=? and a.status='ASSIGNED'
+      """,Long.class,courseId,tenant.institutionId());
+    if(assigned==null||assigned==0L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"This course is not assigned to the active institution.");
+    return tenant.institutionId();
+  }
+
+  private Long findActiveSubjectForCourse(long courseId,String subjectCode,long institutionId) {
+    return jdbc.query("""
+      select s.id
+      from curriculum_program p
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and upper(s.code)=upper(?)
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """,rs->rs.next()?rs.getLong(1):null,institutionId,courseId,subjectCode);
+  }
+
+  private void requireAdminSessionScope(long sessionId,InstitutionTenantContext tenant) {
+    long institutionId=tenant==null?0L:tenant.institutionId();
+    Long courseId=jdbc.query("""
+      select cs.course_id from learning_class_session cs
+      join institution_course_assignment a on a.institution_id=cs.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=cs.course_id
+      where cs.id=? and cs.institution_id=?
+      """,rs->rs.next()?rs.getLong(1):null,sessionId,institutionId);
+    if(courseId==null)throw notFound("Live class in this institution",sessionId);
+    requireAdminAssignedCourse(courseId,tenant);
+  }
+
+  private void requireAdminRecordingScope(long recordingId,InstitutionTenantContext tenant) {
+    long institutionId=tenant==null?0L:tenant.institutionId();
+    Long courseId=jdbc.query("""
+      select rc.course_id from recorded_class rc
+      join institution_course_assignment a on a.institution_id=rc.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=rc.course_id
+      where rc.id=? and rc.institution_id=?
+      """,rs->rs.next()?rs.getLong(1):null,recordingId,institutionId);
+    if(courseId==null)throw notFound("Recording in this institution",recordingId);
+    requireAdminAssignedCourse(courseId,tenant);
+  }
+
   // Existing unit tests retain their constructors; the fallback fails closed without credentials.
   LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
       StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage,
@@ -174,30 +225,36 @@ public class LearningClassController {
 
   // ---------------- Staff: schedule and manage live classes ----------------
 
-  @GetMapping("/admin/class-chapters")
-  public List<Map<String, Object>> listClassChapters(
-      @RequestParam String classCode,
+  @GetMapping("/admin/course-chapters")
+  public List<Map<String, Object>> listCourseChapters(
+      @RequestParam Long courseId,
       @RequestParam String subjectCode,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireClassView(context);
+    long institutionId=requireAdminAssignedCourse(courseId,tenant);
+    String sc=requiredText(subjectCode,"Subject",40);
+    if(findActiveSubjectForCourse(courseId,sc,institutionId)==null)throw badRequest("Choose a subject mapped to the selected course.");
     return jdbc.queryForList("""
-      select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
-             ch.content_status,ch.active
+      select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,ch.content_status,ch.active
       from curriculum_chapter ch
       join curriculum_subject s on s.id=ch.subject_id
-      join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true and ch.active=true
+      join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id and cps.program_id=?
+      where s.code=? and s.active=true and ch.active=true and (s.program_id=? or s.program_id is null)
       order by coalesce(ch.teaching_order,ch.sort_order),ch.sort_order,ch.id
-      """, requiredText(classCode,"Class",30),requiredText(subjectCode,"Subject",40));
+      """,courseId,sc,courseId);
   }
 
   @GetMapping("/admin/approved-teaching-assignments")
   public List<Map<String,Object>> approvedTeachingAssignments(
-      @RequestParam String classCode, @RequestParam String subjectCode,
+      @RequestParam Long courseId, @RequestParam String subjectCode,
       @RequestParam(required=false) String onDate,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireClassManage(context);
-    String cc=requiredText(classCode,"Class",30),sc=requiredText(subjectCode,"Subject",40);
+    long institutionId=requireAdminAssignedCourse(courseId,tenant);
+    String sc=requiredText(subjectCode,"Subject",40);
+    if(findActiveSubjectForCourse(courseId,sc,institutionId)==null)throw badRequest("Choose a subject mapped to the selected course.");
     java.time.LocalDate date;
     try { date=onDate==null||onDate.isBlank()?java.time.LocalDate.now(ZoneId.of("Asia/Kolkata")):java.time.LocalDate.parse(onDate); }
     catch(RuntimeException ex){throw badRequest("Assignment date must use YYYY-MM-DD format.");}
@@ -213,20 +270,25 @@ public class LearningClassController {
         and e.joining_date<=? and (e.exit_date is null or e.exit_date>=?)
         and not exists(select 1 from hr_leave_request lr where lr.employee_id=e.id
           and lr.request_status='APPROVED' and lr.start_date<=? and lr.end_date>=?)
-        and c.code=? and s.code=? and c.active=true and s.active=true
+        and s.code=? and c.active=true and s.active=true
+        and exists(select 1 from curriculum_program_subject cps
+          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id)
       order by e.display_name,a.id
       """,java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),
-        java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),cc,sc);
+        java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),sc,courseId);
   }
 
   @GetMapping("/admin/live-classes")
   public Map<String,Object> adminLiveClasses(
-      @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
+      @RequestParam Long courseId,@RequestParam(required=false) String subjectCode,
       @RequestParam(required=false) String status,@RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireClassView(context);
-    String classFilter=safeText(classCode,30),subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    long institutionId=requireAdminAssignedCourse(courseId,tenant);
+    String subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(!subjectFilter.isEmpty()&&findActiveSubjectForCourse(courseId,subjectFilter,institutionId)==null)throw badRequest("Choose a subject mapped to the selected course.");
     if(statusFilter.isEmpty())statusFilter="ALL";
     if(!Set.of("ALL","SCHEDULED","LIVE","COMPLETED","CANCELLED").contains(statusFilter))throw badRequest("Choose a valid live class status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
@@ -246,25 +308,28 @@ public class LearningClassController {
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned on assigned.id=ta.employee_id
       left join hr_academic_period ap on ap.id=ta.academic_period_id
-      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or cs.status=?)
+      where cs.institution_id=? and cs.course_id=? and (?='' or s.code=?) and (?='ALL' or cs.status=?)
       order by cs.starts_at desc,cs.id desc limit ? offset ?
-      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
+      """,institutionId,courseId,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
       join curriculum_class c on c.id=s.class_id
-      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or cs.status=?)
-      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter);
+      where cs.institution_id=? and cs.course_id=? and (?='' or s.code=?) and (?='ALL' or cs.status=?)
+      """,Long.class,institutionId,courseId,subjectFilter,subjectFilter,statusFilter,statusFilter);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/admin/live-classes")
   public Map<String, Object> createLiveClass(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireClassManage(context);
+    Long requestedCourseId=optionalLong(body.get("courseId"),"courseId");
+    long institutionId=requireAdminAssignedCourse(requestedCourseId,tenant);
+    long courseId=requestedCourseId;
     String title = requiredText(body.get("title"), "Class title", 240);
     String description = safeText(body.get("description"), 1600);
-    String classCode = requiredText(body.get("classCode"), "Class", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     String provider = safeText(body.getOrDefault("provider", "CUSTOM"), 32).toUpperCase(Locale.ROOT);
     if (!PROVIDERS.contains(provider)) throw badRequest("Choose a supported live class provider.");
@@ -280,8 +345,8 @@ public class LearningClassController {
       throw badRequest("For an earlier class, create the record and mark it completed after scheduling rules are reviewed.");
     }
 
-    Long subjectId = findActiveSubject(classCode, subjectCode);
-    if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
+    Long subjectId = findActiveSubjectForCourse(courseId, subjectCode, institutionId);
+    if (subjectId == null) throw badRequest("Choose a subject mapped to the selected course.");
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     if (chapterId != null) validateChapter(chapterId, subjectId, false);
     Long hostStaffId = optionalLong(body.get("hostStaffId"), "hostStaffId");
@@ -321,10 +386,10 @@ public class LearningClassController {
     String requestId = "GOOGLE_MEET".equals(provider) ? UUID.randomUUID().toString() : null;
     Long id = jdbc.queryForObject("""
       insert into learning_class_session(
-        title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,youtube_video_id,starts_at,ends_at,
+        institution_id,course_id,title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,youtube_video_id,starts_at,ends_at,
         join_window_minutes,status,host_staff_id,created_by_staff_id,provider_operation_status,provider_conference_request_id
-      ) values(?,?,?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
-      """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl, youtubeVideoId,
+      ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
+      """, Long.class, institutionId,courseId,title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl, youtubeVideoId,
         startsAt, endsAt, joinWindowMinutes, hostStaffId, context.staffId(),
         "GOOGLE_MEET".equals(provider) ? "PENDING" : "NOT_REQUIRED", requestId);
 
@@ -351,7 +416,7 @@ public class LearningClassController {
     }
     Map<String,Object> created = adminSessionById(id);
     staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + id + "/created",
-        "Scheduled live class #" + id + " for class " + classCode + " / subject " + subjectCode
+        "Scheduled live class #" + id + " for course #" + courseId + " / subject " + subjectCode
             + ("GOOGLE_MEET".equals(provider) ? "; Google Meet=" + created.get("provider_operation_status") : "") + ".");
     return created;
   }
@@ -361,8 +426,10 @@ public class LearningClassController {
   public Map<String,Object> setLiveClassJoinWindow(
       @PathVariable long sessionId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     int joinWindowMinutes=integer(body.get("joinWindowMinutes"),"Join window minutes",0,1440);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,status,join_window_minutes from learning_class_session where id=?
@@ -385,8 +452,10 @@ public class LearningClassController {
   public Map<String, Object> setLiveClassStatus(
       @PathVariable long sessionId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     String status = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!SESSION_STATUSES.contains(status)) throw badRequest("Choose SCHEDULED, LIVE, COMPLETED, or CANCELLED.");
     List<Map<String, Object>> rows = jdbc.queryForList("""
@@ -474,8 +543,10 @@ public class LearningClassController {
   @Transactional
   public Map<String,Object> replaceScheduledClassTeacher(
       @PathVariable long sessionId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     long assignmentId=positiveLong(body.get("teachingAssignmentId"),"Teaching assignment");
     List<Map<String,Object>> sessions=jdbc.queryForList("""
       select id,title,status,subject_id,starts_at,ends_at,teaching_assignment_id,host_staff_id
@@ -525,8 +596,10 @@ public class LearningClassController {
   @PutMapping("/admin/live-classes/{sessionId}/schedule")
   public Map<String,Object> rescheduleLiveClass(
       @PathVariable long sessionId, @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select cs.id,cs.title,cs.description,cs.provider,cs.status,cs.teaching_assignment_id,
         cs.provider_event_id,cs.provider_conference_request_id,cs.provider_operation_status,
@@ -594,8 +667,10 @@ public class LearningClassController {
   @PostMapping("/admin/live-classes/{sessionId}/google-meet/retry")
   public Map<String,Object> retryGoogleMeet(
       @PathVariable long sessionId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,title,description,provider,status,starts_at,ends_at,provider_event_id,
         provider_conference_request_id,provider_operation_status
@@ -645,8 +720,10 @@ public class LearningClassController {
   @GetMapping("/admin/live-classes/{sessionId}/meeting-link")
   public Map<String, Object> revealLiveClassMeetingLink(
       @PathVariable long sessionId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireClassManage(context);
+    requireAdminSessionScope(sessionId,tenant);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select id,title,provider,private_join_url,provider_operation_status,provider_error_message from learning_class_session where id=?
       """, sessionId);
