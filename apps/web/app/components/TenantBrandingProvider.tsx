@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -120,7 +122,7 @@ function applyTenantIdentity(brand: TenantBrand | null, institutionContextReques
 async function fetchTenantBrand(codeInput: string): Promise<TenantBrand> {
   const code = normalizedCode(codeInput);
   if (!code) throw new Error('Institution code is invalid.');
-  const response = await fetch('/api/v1/institution/public/branding/' + encodeURIComponent(code), {
+  const response = await apiFetch('/api/v1/institution/public/branding/' + encodeURIComponent(code), {
     credentials: 'same-origin',
     cache: 'no-store',
     headers: { 'X-QE-Workspace': 'INSTITUTION' },
@@ -350,7 +352,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
         if (!joinCode) return null;
         setStoredEnrollmentIssue(null);
         try {
-          const response = await fetch('/api/v1/institution/join', {
+          const response = await apiFetch('/api/v1/institution/join', {
             method: 'POST',
             credentials: 'same-origin',
             cache: 'no-store',
@@ -414,7 +416,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           // After learner authentication, validate it against this account before retaining it.
           if (pathname.startsWith('/student') && !joinedCode && !urlCode && !hasUrlJoin &&
               !storedJoinTenant && !readPendingJoinCode() && !enrollmentIssue) {
-            const membershipResponse = await fetch(
+            const membershipResponse = await apiFetch(
               '/api/v1/institution/memberships/me?institutionCode=' + encodeURIComponent(candidate),
               { credentials: 'same-origin', cache: 'no-store',
                 headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' } }
@@ -428,7 +430,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
                 item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
               if (!belongsToCandidate) {
                 saveSessionCode(null);
-                const fallbackResponse = await fetch('/api/v1/institution/memberships/me', {
+                const fallbackResponse = await apiFetch('/api/v1/institution/memberships/me', {
                   credentials: 'same-origin', cache: 'no-store',
                   headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
                 });
@@ -499,7 +501,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       // Existing learners can inherit the school's brand only when membership is unambiguous.
       if (pathname.startsWith('/student')) {
         try {
-          const response = await fetch('/api/v1/institution/memberships/me', {
+          const response = await apiFetch('/api/v1/institution/memberships/me', {
             credentials: 'same-origin',
             cache: 'no-store',
             headers: { 'X-QE-Workspace': 'STUDENT' },

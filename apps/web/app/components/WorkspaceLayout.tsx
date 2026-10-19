@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -129,7 +131,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     }
     const loadPersonalLearningAccess = async () => {
       try {
-        const response = await fetch('/api/v1/auth/my-learning-access', {
+        const response = await apiFetch('/api/v1/auth/my-learning-access', {
           credentials: 'same-origin', cache: 'no-store',
           headers: { 'X-QE-Workspace': 'PARENT' },
         });
@@ -156,14 +158,14 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     let active = true;
     (async()=>{
       try {
-        const catalogue=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
+        const catalogue=await apiFetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
         if(!catalogue.ok){if(active)setDiagnosticAvailable(false);return;}
         const rows=await catalogue.json();
         const enrolled=(Array.isArray(rows)?rows:[]).filter((course:any)=>course.is_enrolled===true&&!course.paused);
         let saved=0;try{saved=Number(window.localStorage.getItem('qe:student:activeCourseId')||0);}catch{}
         const selected=enrolled.find((course:any)=>Number(course.id)===saved)||enrolled[0];
         if(!selected){if(active)setDiagnosticAvailable(false);return;}
-        const response=await fetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(selected.id)),{
+        const response=await apiFetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(selected.id)),{
           credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
         });
         const data=response.ok?await response.json():null;
@@ -208,7 +210,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     }
     const endpoint = role === 'student' ? '/api/v1/students/me/profile' : '/api/v1/guardians/profile';
     const loadProfile = () => {
-      fetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
+      apiFetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
         .then(response => response.ok ? response.json() : null)
         .then(data => {
           if (!active) return;
@@ -266,7 +268,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     setOpeningParentLearning(true);
     setPersonalLearningError('');
     try {
-      const response = await fetch('/api/v1/auth/my-learning-session', {
+      const response = await apiFetch('/api/v1/auth/my-learning-session', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'PARENT' },
@@ -294,12 +296,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       // A parent's learner profile uses a separate STUDENT session. When signing
       // out from either side of that paired workspace, revoke both scoped sessions.
       if (personalLearningActive) {
-        await fetch('/api/v1/auth/logout', {
+        await apiFetch('/api/v1/auth/logout', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
         });
       }
-      await fetch('/api/v1/auth/logout', {
+      await apiFetch('/api/v1/auth/logout', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'X-QE-Workspace': parentLearningRoute ? 'PARENT' : role === 'student' ? 'STUDENT' : 'PARENT' },
         cache: 'no-store',

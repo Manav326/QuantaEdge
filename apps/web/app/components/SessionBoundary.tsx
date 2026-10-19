@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { UiText } from '../i18n/useUiTranslation';
 import { useEffect, useState } from 'react';
 import { LanguageSwitcher, LocaleText } from './LanguageProvider';
@@ -229,7 +231,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     const recoverParentWorkspace = async () => {
       if (!parentLearningRoute) return false;
       try {
-        const parentResponse = await fetch('/api/v1/auth/me', {
+        const parentResponse = await apiFetch('/api/v1/auth/me', {
           headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
         });
         if (!parentResponse.ok) return false;
@@ -264,12 +266,12 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       setReady(false);
       try {
         const response = await withSessionTimeout((async () => {
-          let current = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+          let current = await apiFetch('/api/v1/auth/me', { cache: 'no-store' });
           // On the home or Parent login entry, check Student as well so a logged-in
           // student cannot use browser Back to remain on a public login page.
           // /login/student stays Student-only: a Parent cookie must not hijack that entry.
           if (!current.ok && (pathname === '/' || pathname === '/login')) {
-            const studentResponse = await fetch('/api/v1/auth/me', {
+            const studentResponse = await apiFetch('/api/v1/auth/me', {
               headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
             });
             if (studentResponse.ok) current = studentResponse;
@@ -354,7 +356,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     const heartbeat = window.setInterval(() => {
       if (document.visibilityState !== 'visible') return;
       if (Date.now() - lastActivity > 5 * 60 * 1000) return;
-      void fetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
+      void apiFetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
     }, 2 * 60 * 1000);
     return () => {
       window.clearInterval(heartbeat);

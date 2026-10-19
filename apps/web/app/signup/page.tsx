@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -36,7 +38,7 @@ export default function SignupPage() {
     if (mobile.length !== 10) { setError(english ? 'Enter a valid 10-digit mobile number.' : 'मान्य 10 अंकों का मोबाइल नंबर दर्ज करें।'); return; }
     setBusy(true);
     try {
-      const body = await readJson(await fetch('/api/v1/auth/account-signup/request-otp', {
+      const body = await readJson(await apiFetch('/api/v1/auth/account-signup/request-otp', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile }),
@@ -56,7 +58,7 @@ export default function SignupPage() {
     if (otp.length !== 6) { setError(english ? 'Enter the 6-digit OTP.' : '6 अंकों का OTP दर्ज करें।'); return; }
     setBusy(true);
     try {
-      const body = await readJson(await fetch('/api/v1/auth/account-signup/verify-otp', {
+      const body = await readJson(await apiFetch('/api/v1/auth/account-signup/verify-otp', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile, otp, displayName: name.trim() }),

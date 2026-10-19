@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import GoogleSignInButton from './GoogleSignInButton';
@@ -56,7 +58,7 @@ export default function AccountIdentitySettings() {
     setLoading(true);
     setError('');
     try {
-      const body = await readJson(await fetch('/api/v1/account/me/profile', {
+      const body = await readJson(await apiFetch('/api/v1/account/me/profile', {
         credentials: 'same-origin', cache: 'no-store',
       }));
       setProfile(body);
@@ -111,7 +113,7 @@ export default function AccountIdentitySettings() {
     event.preventDefault();
     setBusy('profile'); setError(''); setNotice('');
     try {
-      await readJson(await fetch('/api/v1/account/me/profile', {
+      await readJson(await apiFetch('/api/v1/account/me/profile', {
         method: 'PUT', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ displayName: displayName.trim(), preferredLocale: selectedLocale }),
@@ -130,7 +132,7 @@ export default function AccountIdentitySettings() {
     event.preventDefault();
     setBusy('username'); setError(''); setNotice('');
     try {
-      const body = await readJson(await fetch('/api/v1/account/me/username', {
+      const body = await readJson(await apiFetch('/api/v1/account/me/username', {
         method: 'PUT', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim() }),
@@ -158,7 +160,7 @@ export default function AccountIdentitySettings() {
     }
     setBusy('password');
     try {
-      const body = await readJson(await fetch('/api/v1/account/me/password', {
+      const body = await readJson(await apiFetch('/api/v1/account/me/password', {
         method: 'PUT', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword, newPassword }),
