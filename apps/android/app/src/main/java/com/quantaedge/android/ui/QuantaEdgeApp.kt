@@ -1521,10 +1521,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openDiagnostic() {
+        if (currentCourseId <= 0L || studentPrograms.none { it.longAny("id", "course_id") == currentCourseId && it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }) {
+            error = if (language == "hi") "पहले अपना enrolled course चुनें।" else "Choose an enrolled course first."
+            route = AppRoute.ALL_COURSES
+            return
+        }
         diagnostic = JSONObject()
         route = AppRoute.DIAGNOSTIC
         runTask {
-            diagnostic = ApiClient.getObject("/api/v1/diagnostic")
+            diagnostic = ApiClient.getObject("/api/v1/diagnostic?courseId=" + currentCourseId)
             feedbacks.clear()
             route = AppRoute.DIAGNOSTIC
         }
@@ -1745,7 +1750,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             .filter { it > 0L }.distinct().take(100)
         assessmentCertificateEligibility = if (attemptIds.isEmpty()) emptyMap() else try {
             ApiClient.getObject(
-                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptIds.joinToString(",")
+                "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" + attemptIds.joinToString(",")
             ).optJSONArray("items").objectItems().mapNotNull { item ->
                 val id = item.optLongAny("attempt_id", "attemptId")
                 if (id > 0L) id to item else null
@@ -1781,7 +1786,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (attemptId <= 0L) return
         runCatching {
             ApiClient.getObject(
-                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptId
+                "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" + attemptId
             ).optJSONArray("items").objectItems()
                 .firstOrNull { it.longAny("attempt_id", "attemptId") == attemptId }
         }.getOrNull()?.let { refreshed ->
@@ -1797,6 +1802,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 JSONObject()
                     .put("achievementType", "ASSESSMENT_PASS")
                     .put("assessmentAttemptId", attemptId)
+                    .put("courseId", currentCourseId)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
                     .put("institutionCode", institutionBrandIdentity?.institutionCode.orEmpty())
@@ -2602,7 +2608,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val attemptId = diagnostic.longAny("attemptId", "attempt_id")
             val questionId = question.longAny("id", "questionId", "question_id")
             val response = ApiClient.postObject(
-                "/api/v1/diagnostic/attempts/" + attemptId + "/answers/" + questionId,
+                "/api/v1/diagnostic/attempts/" + attemptId + "/answers/" + questionId + "?courseId=" + currentCourseId,
                 JSONObject().put("answer", answer)
             )
             val feedback = response.textAny("feedback").ifBlank { "उत्तर सुरक्षित हुआ।" }
@@ -2610,14 +2616,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            diagnostic = ApiClient.getObject("/api/v1/diagnostic")
+            diagnostic = ApiClient.getObject("/api/v1/diagnostic?courseId=" + currentCourseId)
         }
     }
 
     fun submitDiagnostic() {
         runTask {
             val id = diagnostic.longAny("attemptId", "attempt_id")
-            ApiClient.postObject("/api/v1/diagnostic/attempts/" + id + "/submit")
+            ApiClient.postObject("/api/v1/diagnostic/attempts/" + id + "/submit?courseId=" + currentCourseId)
             diagnostic = ApiClient.getObject("/api/v1/diagnostic")
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId) }.getOrDefault(JSONObject())
             status = "Diagnostic पूरा हुआ। आपकी अगली सीख सर्वर के डेटा के आधार पर दिखाई जाएगी।"
