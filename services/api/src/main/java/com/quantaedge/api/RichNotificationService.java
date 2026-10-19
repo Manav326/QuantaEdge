@@ -423,8 +423,9 @@ public class RichNotificationService {
       // Freeze the institution set for a future HRMS send; re-resolve eligibility within
       // these institutions at dispatch rather than accidentally adding newly onboarded tenants.
       if("HRMS_PLATFORM".equals(normalizedScope)) {
+        List<Long> frozenInstitutionIds=targetInstitutionIds(normalizedScope,scheduledFilter,recipients);
         scheduledFilter.put("allActiveInstitutions",false);
-        scheduledFilter.put("institutionIds",targetInstitutionIds(normalizedScope,scheduledFilter,recipients));
+        scheduledFilter.put("institutionIds",frozenInstitutionIds);
       }
       Map<String,Object> scheduledSnapshot=new LinkedHashMap<>();
       scheduledSnapshot.put("recipientCount",recipients.size());
