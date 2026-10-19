@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
-import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
