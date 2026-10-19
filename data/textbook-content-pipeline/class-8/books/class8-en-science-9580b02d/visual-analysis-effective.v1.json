@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e0b99709a5d493a7b58b7256ebcb36256f8fd40ec75090fcc336ffa71f9c4096",
+  "raw_analysis_sha256": "7ac903839f2cb137edb43dc3a5aad71b90d1f575e8eea105546bb58499009956",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:22:33Z",
+      "checkpointed_at": "2026-10-19T17:26:54Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:23:18Z",
+      "checkpointed_at": "2026-10-19T17:27:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:23:54Z",
+      "checkpointed_at": "2026-10-19T17:28:15Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -43206,6 +43206,128 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "70b4601b83fe973c08b725de",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:28:31Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ec8ccb6e4e4881a392e0248f",
+      "asset_sha256": "b068f0b82205ced07b41e7bc2358749015ab354af52d0bb29b2067738fd196f2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 52,
+      "asset_path": "page-0052.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7d9f204be125d830a9669c4e884fe100986b5da7bedc70cb45254bc8b6f34038",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram showing the spread of diseases through different means.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Direct contact",
+          "By air",
+          "Indirect",
+          "contact",
+          "By food",
+          "Mosquitos/insects",
+          "Healthy person",
+          "Infected",
+          "person",
+          "Rabid animal",
+          "Fig. 3.4: Common methods of transmission of diseases",
+          "Non-communicable diseases—Some diseases, like cancer, diabetes, or asthma, are not caused by pathogens and do not spread from one person to another. They are usually linked to lifestyle, diet, and/or environment.",
+          "Communicable diseases—Diseases caused by pathogens are called communicable diseases. They can spread from one person to another. Some examples of communicable diseases are typhoid, dengue, flu, chickenpox, and COVID-19."
+        ],
+        "concepts": [
+          "diseases",
+          "pathogens",
+          "communicable diseases",
+          "non-communicable diseases",
+          "transmission of diseases"
+        ],
+        "context_relation": "The image is a visual representation of the spread of diseases through different means, which is related to the topic of diseases in the textbook.",
+        "limitations": [
+          "The image does not provide specific examples of diseases or pathogens."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:32:33Z",
+      "effective_analysis": {
+        "visual_summary": "Diagram showing the spread of diseases through different means.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Direct contact",
+          "By air",
+          "Indirect",
+          "contact",
+          "By food",
+          "Mosquitos/insects",
+          "Healthy person",
+          "Infected",
+          "person",
+          "Rabid animal",
+          "Fig. 3.4: Common methods of transmission of diseases",
+          "Non-communicable diseases—Some diseases, like cancer, diabetes, or asthma, are not caused by pathogens and do not spread from one person to another. They are usually linked to lifestyle, diet, and/or environment.",
+          "Communicable diseases—Diseases caused by pathogens are called communicable diseases. They can spread from one person to another. Some examples of communicable diseases are typhoid, dengue, flu, chickenpox, and COVID-19."
+        ],
+        "concepts": [
+          "diseases",
+          "pathogens",
+          "communicable diseases",
+          "non-communicable diseases",
+          "transmission of diseases"
+        ],
+        "context_relation": "The image is a visual representation of the spread of diseases through different means, which is related to the topic of diseases in the textbook.",
+        "limitations": [
+          "The image does not provide specific examples of diseases or pathogens."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
