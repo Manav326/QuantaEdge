@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1501,
+    "assets_selected": 1504,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1499,
-    "assets_remaining": 5989,
+    "assets_analyzed": 1501,
+    "assets_remaining": 5987,
     "assets_completion_percent": 20.0,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1496,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 1499,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:44:07Z"
+      "checkpointed_at": "2026-10-19T10:47:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:44:29Z"
+      "checkpointed_at": "2026-10-19T10:47:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -56978,6 +56978,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T10:46:27Z"
+    },
+    {
+      "asset_id": "12d41254ce5549f77d3c9724",
+      "asset_sha256": "59691f0932852133422398f2c069022c75c34795289de35b9fda6742ea6df7eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/59691f0932852133422398f2c069022c75c34795289de35b9fda6742ea6df7eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green border with a white background, possibly indicating a page border or margin.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Representation"
+        ],
+        "context_relation": "Page border or margin",
+        "limitations": [
+          "No specific content or details visible beyond the border"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:48:09Z"
+    },
+    {
+      "asset_id": "fac6a703ef8cd00c551b9f9a",
+      "asset_sha256": "4ff010df7e8fa8f2677fc04f3180d756ef05a5cbd8e3b2056b4dcd36a77a2e58",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/4ff010df7e8fa8f2677fc04f3180d756ef05a5cbd8e3b2056b4dcd36a77a2e58.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams, which is a concept in electrical engineering.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in Table 3.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:48:50Z"
+    },
+    {
+      "asset_id": "37cd7e021b5dad1659dfdf0e",
+      "asset_sha256": "7e1ff58e2334dded1d1886b5b37559e64aff9d0a15802390b2d0e0ac48f959f2",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/7e1ff58e2334dded1d1886b5b37559e64aff9d0a15802390b2d0e0ac48f959f2.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
