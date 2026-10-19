@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bde8bb8d31d62aae52b158edabc5793a522a9cf14eb51cb7c3d4b4ec960cd3b0",
+  "raw_analysis_sha256": "553f9f783a1f644034e7f6b1b3a38ded0f94ffbaf47e036fe9c6ef1ea7c9c9ff",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -101903,6 +101903,256 @@
         "limitations": [
           "unclear if the page contains any text or images. The page is completely black and there are no visible elements to analyze. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish visible evidence from uncertainty. Use the"
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cc7058ec455a7a8075c99845",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:12:55Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c1f07f7753503b61f3abaa4",
+      "asset_sha256": "e16aa40213337b4df547560bb68cc7784f7fc6cc0f50bd03f71a77041cf68a29",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 58,
+      "asset_path": "page-0058.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "800a88af101333c0927a38ef45e3def389e1e155e0739f9ed0bfcbf92b2c6ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about a circuit diagram and a diagram of a simple torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3. In Fig. 3.17, if the ﬁlament of one of the lamps is broken, will\nthe other glow? Justify your answer.",
+          "Fig. 3.17",
+          "4. A student forgot to remove the insulator covering from the\nconnecting wires while making a circuit. If the lamp and the\nINNOVATION\ncell are working properly, will the lamp glow?",
+          "5. Draw a circuit diagram for a simple torch using symbols for\nelectric components.",
+          "6. In Fig. 3.18:",
+          "(i) If S2 is in 'ON' position, S1 is in 'OFF' position, which\nlamp(s) will glow?",
+          "(ii) If S2 is in 'OFF' position, S1 is in 'ON' position, which\nlamp(s) will glow?",
+          "(iii) If S1 and S2 both are in 'ON' position, which lamp(s) will\nglow?",
+          "(iv) If both S1 and S2 are in 'OFF' position, which lamp(s) will\nglow?",
+          "L1 S2 L2\nS1\nFig. 3.18",
+          "7. Vidyut has made the circuit as\nshown in Fig. 3.19. Even after\nclosing the circuit, the lamp\ndoes not glow. What can be the\npossible reasons? List as many\npossible reasons as you can\nfor this faulty operation. What\nwill you do to find out why the\nlamp did not glow?",
+          "Fig. 3.19"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "electric components",
+          "simple torch",
+          "insulator",
+          "lamp",
+          "switch",
+          "battery",
+          "resistor"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:17:15Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about a circuit diagram and a diagram of a simple torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3. In Fig. 3.17, if the ﬁlament of one of the lamps is broken, will\nthe other glow? Justify your answer.",
+          "Fig. 3.17",
+          "4. A student forgot to remove the insulator covering from the\nconnecting wires while making a circuit. If the lamp and the\nINNOVATION\ncell are working properly, will the lamp glow?",
+          "5. Draw a circuit diagram for a simple torch using symbols for\nelectric components.",
+          "6. In Fig. 3.18:",
+          "(i) If S2 is in 'ON' position, S1 is in 'OFF' position, which\nlamp(s) will glow?",
+          "(ii) If S2 is in 'OFF' position, S1 is in 'ON' position, which\nlamp(s) will glow?",
+          "(iii) If S1 and S2 both are in 'ON' position, which lamp(s) will\nglow?",
+          "(iv) If both S1 and S2 are in 'OFF' position, which lamp(s) will\nglow?",
+          "L1 S2 L2\nS1\nFig. 3.18",
+          "7. Vidyut has made the circuit as\nshown in Fig. 3.19. Even after\nclosing the circuit, the lamp\ndoes not glow. What can be the\npossible reasons? List as many\npossible reasons as you can\nfor this faulty operation. What\nwill you do to find out why the\nlamp did not glow?",
+          "Fig. 3.19"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "electric components",
+          "simple torch",
+          "insulator",
+          "lamp",
+          "switch",
+          "battery",
+          "resistor"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "56721b15f02e33c5e1a2f629",
+      "asset_sha256": "20b1b8ba65a6fd681c0ee7af96a836b373effcbfa8b5ab172950471b7deadf20",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/20b1b8ba65a6fd681c0ee7af96a836b373effcbfa8b5ab172950471b7deadf20.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two batteries connected in series with a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "2 batteries",
+          "light bulb"
+        ],
+        "concepts": [
+          "series circuit",
+          "battery",
+          "light bulb"
+        ],
+        "context_relation": "The image shows a simple electrical circuit with two batteries connected in series to a light bulb.",
+        "limitations": [
+          "The image does not show the switch being closed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:18:51Z",
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected in series with a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "2 batteries",
+          "light bulb"
+        ],
+        "concepts": [
+          "series circuit",
+          "battery",
+          "light bulb"
+        ],
+        "context_relation": "The image shows a simple electrical circuit with two batteries connected in series to a light bulb.",
+        "limitations": [
+          "The image does not show the switch being closed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "08fed5a31c94e0e98c9c4cdd",
+      "asset_sha256": "994705c005ae6e6a82dee7bf4a068fd64b16005e5e8a211af172b63f31ac1234",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/994705c005ae6e6a82dee7bf4a068fd64b16005e5e8a211af172b63f31ac1234.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:20:22Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3485c333c4c1717da807a1ef",
+      "asset_sha256": "5d390924b78531e937305f2f355464a8df74a0ca804eb4341a08ac628380b397",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/5d390924b78531e937305f2f355464a8df74a0ca804eb4341a08ac628380b397.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "991346a12af28743b2e04dbe341ec649e489503effb8ab30f6641615658f4235",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T17:21:53Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

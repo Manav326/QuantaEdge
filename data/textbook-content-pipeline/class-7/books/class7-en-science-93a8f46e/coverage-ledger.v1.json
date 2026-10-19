@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1755,
-    "successful_visual_analyses": 1736,
-    "missing_visual_analyses": 5733,
+    "raw_analysis_result_rows": 1760,
+    "successful_visual_analyses": 1741,
+    "missing_visual_analyses": 5728,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5752,
+    "unresolved_count": 5747,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -75161,9 +75161,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -75179,9 +75188,40 @@
       "asset_path": "page-0058.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about a circuit diagram and a diagram of a simple torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3. In Fig. 3.17, if the ﬁlament of one of the lamps is broken, will\nthe other glow? Justify your answer.",
+          "Fig. 3.17",
+          "4. A student forgot to remove the insulator covering from the\nconnecting wires while making a circuit. If the lamp and the\nINNOVATION\ncell are working properly, will the lamp glow?",
+          "5. Draw a circuit diagram for a simple torch using symbols for\nelectric components.",
+          "6. In Fig. 3.18:",
+          "(i) If S2 is in 'ON' position, S1 is in 'OFF' position, which\nlamp(s) will glow?",
+          "(ii) If S2 is in 'OFF' position, S1 is in 'ON' position, which\nlamp(s) will glow?",
+          "(iii) If S1 and S2 both are in 'ON' position, which lamp(s) will\nglow?",
+          "(iv) If both S1 and S2 are in 'OFF' position, which lamp(s) will\nglow?",
+          "L1 S2 L2\nS1\nFig. 3.18",
+          "7. Vidyut has made the circuit as\nshown in Fig. 3.19. Even after\nclosing the circuit, the lamp\ndoes not glow. What can be the\npossible reasons? List as many\npossible reasons as you can\nfor this faulty operation. What\nwill you do to find out why the\nlamp did not glow?",
+          "Fig. 3.19"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "electric components",
+          "simple torch",
+          "insulator",
+          "lamp",
+          "switch",
+          "battery",
+          "resistor"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -75197,9 +75237,25 @@
       "asset_path": "assets/20b1b8ba65a6fd681c0ee7af96a836b373effcbfa8b5ab172950471b7deadf20.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two batteries connected in series with a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "2 batteries",
+          "light bulb"
+        ],
+        "concepts": [
+          "series circuit",
+          "battery",
+          "light bulb"
+        ],
+        "context_relation": "The image shows a simple electrical circuit with two batteries connected in series to a light bulb.",
+        "limitations": [
+          "The image does not show the switch being closed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -75215,9 +75271,16 @@
       "asset_path": "assets/994705c005ae6e6a82dee7bf4a068fd64b16005e5e8a211af172b63f31ac1234.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -75233,9 +75296,16 @@
       "asset_path": "assets/5d390924b78531e937305f2f355464a8df74a0ca804eb4341a08ac628380b397.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
