@@ -62,6 +62,25 @@ class NotificationContentValidatorTest {
   }
 
   @Test
+  void rejectsUnsafePropertiesRegardlessOfKeyCaseAndRejectsNestedUnknownBlocks() {
+    assertThrows(IllegalArgumentException.class, () ->
+        validator.validate(Map.of("version",1,"blocks",List.of(
+            Map.of("type","hero","title","Hello","OnClick","alert(1)")))));
+    assertThrows(IllegalArgumentException.class, () ->
+        validator.validate(Map.of("version",1,"blocks",List.of(
+            Map.of("type","container","children",List.of(Map.of("type","iframe","src","https://example.com")))))));
+  }
+
+  @Test
+  void rejectsDocumentsWithTooManyFields() {
+    java.util.Map<String,Object> block = new java.util.HashMap<>();
+    block.put("type","hero");
+    for (int i=0;i<900;i++) block.put("field"+i,"value");
+    assertThrows(IllegalArgumentException.class, () ->
+        validator.validate(Map.of("version",1,"blocks",List.of(block))));
+  }
+
+  @Test
   void rejectsExcessiveNestingAndOversizedText() {
     assertThrows(IllegalArgumentException.class, () ->
         validator.validate(Map.of("version",1,"blocks",List.of(
