@@ -332,8 +332,8 @@ export default function TextbooksClient() {
     setError(''); setNotice(''); setPageError('');
     localStorage.setItem('qe:student:textbooks:scrollY', String(window.scrollY));
     const code = sourceSubjectCode || subjectFilter;
-    const classCode = String(documents.find(item => item.document_id === id)?.class_code || 'default');
-    if (code && code !== 'ALL') localStorage.setItem('qe:student:textbooks:open:' + classCode, code);
+    const libraryStorageScope = activeCourseId === null ? 'no-course' : 'course-' + activeCourseId;
+    if (code && code !== 'ALL') localStorage.setItem('qe:student:textbooks:open:' + libraryStorageScope, code);
     const returnPath = '/student/textbooks?courseId=' + encodeURIComponent(String(activeCourseId || ''))
       + (code && code !== 'ALL' ? '&subjectCode=' + encodeURIComponent(code) : '');
     router.push('/student/textbooks?documentId=' + id + '&courseId=' + encodeURIComponent(String(activeCourseId || '')) + '&returnTo=' + encodeURIComponent(returnPath));
