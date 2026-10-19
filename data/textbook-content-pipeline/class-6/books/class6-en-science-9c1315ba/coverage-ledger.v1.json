@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 925,
-    "successful_visual_analyses": 916,
-    "missing_visual_analyses": 1153,
+    "raw_analysis_result_rows": 928,
+    "successful_visual_analyses": 919,
+    "missing_visual_analyses": 1150,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1162,
+    "unresolved_count": 1159,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35927,9 +35927,31 @@
       "asset_path": "page-0061.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing iodised salt and salt farming in Gujarat, India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What do you infer from Case 2?",
+          "You may have learnt about iodised salt through\nnewspapers, advertisements or by reading about it on a\nsalt packet. What does it mean? Iodised salt is simply\ncommon salt mixed with required quantities of salts\nof iodine.",
+          "Salt farming is a traditional practice of a tribal\ncommunity named Agariyas. They practice salt\nfarming in the Little Rann of Kutch and other\nparts of Gujarat. For eight months, they live in\nthe extreme heat of the desert and work very\nhard to get salt from seawater."
+        ],
+        "concepts": [
+          "iodised salt",
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "extreme heat",
+          "seawater"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The page does not provide specific details about the iodised salt or its effects.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35945,9 +35967,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35963,9 +35995,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

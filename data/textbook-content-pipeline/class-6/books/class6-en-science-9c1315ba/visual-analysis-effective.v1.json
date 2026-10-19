@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8834cc7ef126bbc1185b9eda5a984216fe9993c8cc3f2d97948a45726c6dadae",
+  "raw_analysis_sha256": "f45179fc733d990a3158bdcd1bf87385520226d233e6ba90d5b346c2a569e46c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:32:06Z",
+      "checkpointed_at": "2026-10-19T09:36:27Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:33:06Z",
+      "checkpointed_at": "2026-10-19T09:37:27Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -43207,6 +43207,150 @@
         "limitations": [
           "unclear"
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "413d25d4ce62a69931de7150",
+      "asset_sha256": "0d18fb3a99eda858ff1225a6f40aa225bb0fc66f377eb9bcbc9e51a8d9342a4b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 61,
+      "asset_path": "page-0061.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9bfe5646cd7f48b6cb972e7cd354eea4d0eb2b98c8c678336521249699bd215b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing iodised salt and salt farming in Gujarat, India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What do you infer from Case 2?",
+          "You may have learnt about iodised salt through\nnewspapers, advertisements or by reading about it on a\nsalt packet. What does it mean? Iodised salt is simply\ncommon salt mixed with required quantities of salts\nof iodine.",
+          "Salt farming is a traditional practice of a tribal\ncommunity named Agariyas. They practice salt\nfarming in the Little Rann of Kutch and other\nparts of Gujarat. For eight months, they live in\nthe extreme heat of the desert and work very\nhard to get salt from seawater."
+        ],
+        "concepts": [
+          "iodised salt",
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "extreme heat",
+          "seawater"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The page does not provide specific details about the iodised salt or its effects.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:41:24Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing iodised salt and salt farming in Gujarat, India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What do you infer from Case 2?",
+          "You may have learnt about iodised salt through\nnewspapers, advertisements or by reading about it on a\nsalt packet. What does it mean? Iodised salt is simply\ncommon salt mixed with required quantities of salts\nof iodine.",
+          "Salt farming is a traditional practice of a tribal\ncommunity named Agariyas. They practice salt\nfarming in the Little Rann of Kutch and other\nparts of Gujarat. For eight months, they live in\nthe extreme heat of the desert and work very\nhard to get salt from seawater."
+        ],
+        "concepts": [
+          "iodised salt",
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "extreme heat",
+          "seawater"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The page does not provide specific details about the iodised salt or its effects.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f69ef2d39295e2594d778b40",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c440be050a5f5fd37dbbd9ce5caecf0a556f1561b6114ebf08bb80cf1d70c22",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:41:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "51e6ea1efa3497d7c13dd9e1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c440be050a5f5fd37dbbd9ce5caecf0a556f1561b6114ebf08bb80cf1d70c22",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:41:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
