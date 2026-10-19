@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1391,
-    "successful_visual_analyses": 1368,
-    "missing_visual_analyses": 6097,
+    "raw_analysis_result_rows": 1394,
+    "successful_visual_analyses": 1371,
+    "missing_visual_analyses": 6094,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6120,
+    "unresolved_count": 6117,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -62338,9 +62338,32 @@
       "asset_path": "assets/411d9daafb2f0cc9cab92ca3f975b942134e75d55fb7e73a53d7d595314ea366.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red lamp with a black base, showing the lamp's base and part of the wire.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "lamp",
+          "base",
+          "wire",
+          "circuit",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is a part of an educational content related to a physics experiment involving a lamp and a circuit.",
+        "limitations": [
+          "The image does not show the lamp glowing in any circuit.",
+          "The image does not show the arrangement of cells and the lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62356,9 +62379,28 @@
       "asset_path": "assets/7b3fbcb5d704835cb817c6a0988a5880d60d2086634a9448166814730e19bd88.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black wire is shown with a yellow wire touching it, creating a spark.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "electricity",
+          "circuit",
+          "spark"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual glowing lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62374,9 +62416,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1368,
+    "assets_selected": 1371,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1366,
-    "assets_remaining": 6122,
-    "assets_completion_percent": 18.2,
+    "assets_analyzed": 1369,
+    "assets_remaining": 6119,
+    "assets_completion_percent": 18.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1363,
+    "assets_skipped_from_checkpoint": 1366,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:03:59Z"
+      "checkpointed_at": "2026-10-19T05:08:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:04:28Z"
+      "checkpointed_at": "2026-10-19T05:09:27Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -51794,6 +51794,114 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T05:08:03Z"
+    },
+    {
+      "asset_id": "c2f72032b73ace0deee6df24",
+      "asset_sha256": "411d9daafb2f0cc9cab92ca3f975b942134e75d55fb7e73a53d7d595314ea366",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/411d9daafb2f0cc9cab92ca3f975b942134e75d55fb7e73a53d7d595314ea366.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red lamp with a black base, showing the lamp's base and part of the wire.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "lamp",
+          "base",
+          "wire",
+          "circuit",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is a part of an educational content related to a physics experiment involving a lamp and a circuit.",
+        "limitations": [
+          "The image does not show the lamp glowing in any circuit.",
+          "The image does not show the arrangement of cells and the lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:10:42Z"
+    },
+    {
+      "asset_id": "ce21690e3bafbdb16c80853e",
+      "asset_sha256": "7b3fbcb5d704835cb817c6a0988a5880d60d2086634a9448166814730e19bd88",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/7b3fbcb5d704835cb817c6a0988a5880d60d2086634a9448166814730e19bd88.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black wire is shown with a yellow wire touching it, creating a spark.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "electricity",
+          "circuit",
+          "spark"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual glowing lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:11:54Z"
+    },
+    {
+      "asset_id": "a2503b0dc9ff0afbf0a78e1e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:12:03Z"
     }
   ]
 }
