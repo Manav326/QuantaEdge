@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1603,
-    "successful_visual_analyses": 1581,
-    "missing_visual_analyses": 5885,
+    "raw_analysis_result_rows": 1606,
+    "successful_visual_analyses": 1584,
+    "missing_visual_analyses": 5882,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5907,
+    "unresolved_count": 5904,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -70103,9 +70103,19 @@
       "asset_path": "assets/5c523dca0058f4c0b413e3e55cc9ae0be99dbc07a576869efe771f3624886ba4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a blue beanie and a plaid shirt, with one hand raised and the other hand near the chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a cartoon character and does not represent any specific concept or formula from the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70121,9 +70131,20 @@
       "asset_path": "assets/f4233452e26a26448ca2d0f3f22e12c39b9dc77a2618cffd034c2f377e54c7a3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A symbol representing an LED with a triangle pointing to the direction of current flow and two arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "LED",
+          "current flow",
+          "light emission"
+        ],
+        "context_relation": "The image is a part of a textbook explanation about the symbol for an LED.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70139,9 +70160,27 @@
       "asset_path": "assets/1b4438eb3c9a7cb4987795513130062f9251f32dcc35d02dbb20ad05d98e74e8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A symbol representing an LED with arrows indicating the direction of current flow and the emission of light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Circuit representation"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the full page, only a cropped figure.",
+          "The image does not show the full page, only a cropped figure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1581,
+    "assets_selected": 1584,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1579,
-    "assets_remaining": 5909,
+    "assets_analyzed": 1582,
+    "assets_remaining": 5906,
     "assets_completion_percent": 21.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1576,
+    "assets_skipped_from_checkpoint": 1579,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:01:18Z"
+      "checkpointed_at": "2026-10-19T12:05:05Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:01:39Z"
+      "checkpointed_at": "2026-10-19T12:05:26Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -59773,6 +59773,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:04:22Z"
+    },
+    {
+      "asset_id": "8fb530bd99ff085f102d449b",
+      "asset_sha256": "5c523dca0058f4c0b413e3e55cc9ae0be99dbc07a576869efe771f3624886ba4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/5c523dca0058f4c0b413e3e55cc9ae0be99dbc07a576869efe771f3624886ba4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a blue beanie and a plaid shirt, with one hand raised and the other hand near the chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a cartoon character and does not represent any specific concept or formula from the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:06:03Z"
+    },
+    {
+      "asset_id": "466280cb3138af960a43e7ca",
+      "asset_sha256": "f4233452e26a26448ca2d0f3f22e12c39b9dc77a2618cffd034c2f377e54c7a3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/f4233452e26a26448ca2d0f3f22e12c39b9dc77a2618cffd034c2f377e54c7a3.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing an LED with a triangle pointing to the direction of current flow and two arrows indicating light emission.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "LED",
+          "current flow",
+          "light emission"
+        ],
+        "context_relation": "The image is a part of a textbook explanation about the symbol for an LED.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:06:39Z"
+    },
+    {
+      "asset_id": "0b6b137d42df0600a9298021",
+      "asset_sha256": "1b4438eb3c9a7cb4987795513130062f9251f32dcc35d02dbb20ad05d98e74e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/1b4438eb3c9a7cb4987795513130062f9251f32dcc35d02dbb20ad05d98e74e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing an LED with arrows indicating the direction of current flow and the emission of light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw and understand circuits."
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Circuit representation"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the full page, only a cropped figure.",
+          "The image does not show the full page, only a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:07:20Z"
     }
   ]
 }
