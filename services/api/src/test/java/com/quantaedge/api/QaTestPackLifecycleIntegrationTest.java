@@ -44,6 +44,7 @@ class QaTestPackLifecycleIntegrationTest {
         .cleanDisabled(true).load().migrate();
 
     JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+    seedPublishedClass7Question(jdbc);
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "qa");
     QaTestPackService qa = new QaTestPackService(
         jdbc, environment, new DataSourceTransactionManager(dataSource), new ObjectMapper(),
@@ -125,6 +126,65 @@ class QaTestPackLifecycleIntegrationTest {
         }
       }
     }
+  }
+
+  /**
+   * Creates the minimum curriculum fixture this lifecycle pack depends on, inside the disposable
+   * integration database only. The product migrations deliberately leave newly aligned content
+   * unpublished, so acceptance tests must not rely on an accidental legacy published lesson.
+   */
+  private static void seedPublishedClass7Question(JdbcTemplate jdbc) {
+    Long lessonId = jdbc.queryForObject("""
+      insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active)
+      select ch.id,'qa-lifecycle-integration-fixture','QA lifecycle integration fixture',
+        'Synthetic lesson reserved for the isolated QA lifecycle acceptance test.',5,'PUBLISHED',999,true
+      from curriculum_chapter ch
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where c.code='7' and s.code='maths' and ch.active=true
+      order by ch.id limit 1
+      on conflict (chapter_id,code) do update set
+        title=excluded.title,summary=excluded.summary,status='PUBLISHED',active=true
+      returning id
+      """, Long.class);
+    if (lessonId == null) throw new AssertionError("Could not seed the isolated Class 7 QA lesson.");
+
+    List<Long> existing = jdbc.queryForList("""
+      select id from question where lesson_id=? and source_ref='qa-lifecycle-integration-fixture'
+      order by id limit 1
+      """, Long.class, lessonId);
+    Long questionId;
+    if (existing.isEmpty()) {
+      questionId = jdbc.queryForObject("""
+        insert into question(
+          lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,
+          source_kind,source_title,source_ref,tags,marks,exam_format,topic,subtopic,skill,
+          answer_payload,review_status,review_notes,reviewed_at
+        ) values (
+          ?, 'MCQ', 'QA fixture: choose the correct lifecycle answer.',
+          'Synthetic options used only to exercise QA-pack progress and attempt installation.',
+          'CORE', 999, true, 'AUTHOR_CREATED', 'QA lifecycle integration fixture',
+          'qa-lifecycle-integration-fixture', jsonb_build_array('test-fixture','qa-lifecycle'),
+          1, 'MCQ', 'QA lifecycle', 'Run ownership', 'Option selection',
+          jsonb_build_object('kind','OPTION','value','B'), 'APPROVED',
+          'Synthetic test fixture; not production curriculum.', now()
+        ) returning id
+        """, Long.class, lessonId);
+    } else {
+      questionId = existing.getFirst();
+      jdbc.update("""
+        update question set active=true,review_status='APPROVED',
+          answer_payload=jsonb_build_object('kind','OPTION','value','B')
+        where id=? and lesson_id=?
+        """, questionId, lessonId);
+    }
+    jdbc.update("""
+      insert into question_option(question_id,option_key,label,is_correct,sort_order)
+      values (?, 'A', 'Incorrect option', false, 1),
+             (?, 'B', 'Correct option', true, 2)
+      on conflict (question_id,option_key) do update set
+        label=excluded.label,is_correct=excluded.is_correct,sort_order=excluded.sort_order
+      """, questionId, questionId);
   }
 
   private static long count(JdbcTemplate jdbc, String sql, Object... args) {
