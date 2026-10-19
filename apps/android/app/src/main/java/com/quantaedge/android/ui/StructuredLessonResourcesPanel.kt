@@ -315,7 +315,7 @@ fun StructuredLessonResourcesPanel(
                         try {
                             val array = ApiClient.getArray(
                                 "/api/v1/learning/resources?artifactId=" + ApiClient.encodeQuery(artifactId) +
-                                    "&language=" + ApiClient.encodeQuery(language)
+                                    "&language=" + ApiClient.encodeQuery(language) + "&courseId=" + courseId
                             )
                             resources = buildList {
                                 for (i in 0 until array.length()) array.optJSONObject(i)?.let { add(JSONObject(it.toString())) }
