@@ -210,7 +210,6 @@ public class StudentProgramController {
         )
       """, Boolean.class, context.studentId(), courseId, institutionId,
           context.studentId(), courseId, institutionId,
-          context.studentId(), courseId, institutionId,
           institutionId, courseId, context.studentId(), context.studentId(),
           institutionId, courseId);
     if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
