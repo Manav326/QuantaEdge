@@ -49,3 +49,7 @@
 @media(prefers-reduced-motion:reduce){.bell,.item,.itemBody,.loading span{transition:none;animation:none}}
 
 .senderLabel{font-size:10px;color:var(--qe-color-text-muted,var(--muted,#637083));font-weight:600;overflow-wrap:anywhere}
+
+.itemActions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.itemActions .secondaryButton{min-height:32px;padding:6px 10px;font-size:11px}
+@media(max-width:640px){.itemActions{width:100%}.itemActions .secondaryButton{flex:1 1 auto}}
