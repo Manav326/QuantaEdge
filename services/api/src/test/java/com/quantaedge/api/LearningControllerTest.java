@@ -30,7 +30,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class LearningControllerTest {
-  @Mock private JdbcTemplate jdbc;
+  
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
+@Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
   @Mock private LearningStateService state;
   @Mock private QuestionAnswerService answerService;
@@ -46,11 +49,11 @@ class LearningControllerTest {
 
   @Test
   void publicQuestionDeliveryDoesNotSelectCorrectAnswerFlags() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
-    controller.questions(42L, "hi", student);
+    controller.questions(42L, "hi", student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq(42L));
@@ -71,7 +74,7 @@ class LearningControllerTest {
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
         "practice_best_graded_count", 10L, "practice_best_percent", 80)));
 
-    List<Map<String,Object>> rows = controller.lessons("7", "maths", "hi", student);
+    List<Map<String,Object>> rows = controller.lessons("7", "maths", "hi", null, null, student, TEST_TENANT);
 
     assertEquals(1, rows.size());
     assertEquals(3L, rows.getFirst().get("mcq_count"));
@@ -90,7 +93,7 @@ class LearningControllerTest {
 
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
@@ -98,10 +101,10 @@ class LearningControllerTest {
             "chapter_code", "algebraic-expressions", "title", "Expressions",
             "class_translated", true, "lesson_translated", true, "chapter_translated", true,
             "subject_translated", true, "objective_translated", true)));
-    when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), any(Object[].class))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
-    Map<String, Object> lesson = controller.lesson(42L, "hi", student);
+    Map<String, Object> lesson = controller.lesson(42L, "hi", student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L));
     verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq("hi"), eq(42L));
@@ -114,7 +117,7 @@ class LearningControllerTest {
 
   @Test
   void revokedInstitutionCourseEntitlementBlocksPreviouslyEnrolledLesson() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForObject(contains("select coalesce(s.program_id,("), eq(Long.class), eq(42L)))
         .thenReturn(91L);
@@ -123,12 +126,12 @@ class LearningControllerTest {
     when(jdbc.queryForObject(contains("from student_course_access_grant legacy_grant"), eq(Boolean.class),
         eq(91L), eq(7L), eq(7L), eq(91L), eq(7L), eq(91L))).thenReturn(false);
 
-    assertThrows(SecurityException.class, () -> controller.lesson(42L, "hi", student));
+    assertThrows(SecurityException.class, () -> controller.lesson(42L, "hi", student, TEST_TENANT));
   }
 
   @Test
   void answerIsGradedServerSideAndPersistedWithoutExposingAnswerPayload() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
@@ -137,7 +140,7 @@ class LearningControllerTest {
     when(answerService.evaluate(anyString(), eq("B"))).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
-    Map<String, Object> result = controller.answer(42L, "hi", Map.of("answer", "B"), student);
+    Map<String, Object> result = controller.answer(42L, "hi", Map.of("answer", "B"), student, TEST_TENANT);
 
     assertEquals(true, result.get("correct"));
     assertEquals(true, result.get("autoGraded"));
@@ -149,7 +152,7 @@ class LearningControllerTest {
 
   @Test
   void answerRejectsQuestionsOutsideThePublishedStudentTrack() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
@@ -157,14 +160,14 @@ class LearningControllerTest {
         .thenReturn(0L);
 
     assertThrows(SecurityException.class,
-        () -> controller.answer(42L, "hi", Map.of("answer", "Z"), student));
+        () -> controller.answer(42L, "hi", Map.of("answer", "Z"), student, TEST_TENANT));
     verify(state, never()).recordAttempt(eq(7L), eq(42L), eq(9L),
         anyString(), anyBoolean(), any());
   }
 
   @Test
   void nullAnswerIsHandledAsAnEmptyAnswerInsteadOfThrowing() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
@@ -176,7 +179,7 @@ class LearningControllerTest {
     Map<String, Object> body = new java.util.HashMap<>();
     body.put("answer", null);
 
-    Map<String, Object> result = controller.answer(42L, "hi", body, student);
+    Map<String, Object> result = controller.answer(42L, "hi", body, student, TEST_TENANT);
 
     assertEquals(42L, result.get("questionId"));
     verify(state).recordAttempt(eq(7L), eq(42L), eq(9L), eq(""), eq(false), isNull());
@@ -184,9 +187,9 @@ class LearningControllerTest {
 
   @Test
   void practiceAnswerLocksTheSessionQuestionBeforeGrading() {
-    when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
+    when(jdbc.queryForList(contains("for update of psq,ps"), any(Object[].class)))
         .thenReturn(List.of(Map.of("question_id", 42L)));
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
@@ -196,7 +199,7 @@ class LearningControllerTest {
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
     Map<String, Object> result = controller.answer(42L, "hi",
-        Map.of("answer", "A", "practiceSessionId", 5L), student);
+        Map.of("answer", "A", "practiceSessionId", 5L), student, TEST_TENANT);
 
     assertEquals(true, result.get("correct"));
     verify(jdbc).queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L));
@@ -206,9 +209,9 @@ class LearningControllerTest {
   @Test
   void structuredOrderPracticeAnswerIsSerializedBeforePersistence() {
     List<String> submitted = List.of("A", "B");
-    when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
+    when(jdbc.queryForList(contains("for update of psq,ps"), any(Object[].class)))
         .thenReturn(List.of(Map.of("question_id", 42L)));
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "ORDER",
             "explanation", "Put the steps in order.",
@@ -220,7 +223,7 @@ class LearningControllerTest {
         new QuestionAnswerService.Evaluation(true, true, "ORDER"));
 
     Map<String, Object> result = controller.answer(42L, "hi",
-        Map.of("answer", submitted, "practiceSessionId", 5L), student);
+        Map.of("answer", submitted, "practiceSessionId", 5L), student, TEST_TENANT);
 
     assertEquals(true, result.get("correct"));
     verify(answerService).serializeForPersistence(eq(submitted));
@@ -231,7 +234,7 @@ class LearningControllerTest {
   void anonymousRequestsAreRejectedBeforeReadingQuestions() {
     when(authorization.requireStudent(null)).thenThrow(new SecurityException("Authentication required"));
 
-    assertThrows(SecurityException.class, () -> controller.questions(42L, "hi", null));
+    assertThrows(SecurityException.class, () -> controller.questions(42L, "hi", null, TEST_TENANT));
     verify(jdbc, never()).queryForList(anyString(), any(Object[].class));
   }
 }
