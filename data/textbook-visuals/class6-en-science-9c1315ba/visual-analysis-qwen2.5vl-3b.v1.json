@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 993,
+    "assets_selected": 996,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 991,
-    "assets_remaining": 1087,
-    "assets_completion_percent": 47.7,
+    "assets_analyzed": 994,
+    "assets_remaining": 1084,
+    "assets_completion_percent": 47.8,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 988,
+    "assets_skipped_from_checkpoint": 991,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:42:35Z"
+      "checkpointed_at": "2026-10-19T12:49:13Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:43:39Z"
+      "checkpointed_at": "2026-10-19T12:50:14Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -31963,6 +31963,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T12:47:59Z"
+    },
+    {
+      "asset_id": "b19161ddf6fb3fbaa3434015",
+      "asset_sha256": "4520f18654914775cf9bcb9d5003e39d6793560f35d7d5243ec134db4cc8a06a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 78,
+      "asset_path": "page-0078.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with the word 'Notes' at the top, followed by a large area of blank space.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes"
+        ],
+        "concepts": [],
+        "context_relation": "Blank page for notes or annotations",
+        "limitations": [
+          "No specific content or information provided on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:53:53Z"
+    },
+    {
+      "asset_id": "984d631f56fd9b9b661df424",
+      "asset_sha256": "683ca7b592caff9a039258bf7bedcbcab830c96dab48041b2a708eaaca24d2a5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/683ca7b592caff9a039258bf7bedcbcab830c96dab48041b2a708eaaca24d2a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl writing in a notebook.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "writing",
+          "storytelling",
+          "spices",
+          "stars",
+          "navigation",
+          "coastal town",
+          "grandmother",
+          "60th birthday"
+        ],
+        "context_relation": "The image is related to the story about Reshma writing a story about spices and navigation.",
+        "limitations": [
+          "The image does not show the actual story or the details of the story."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:55:28Z"
+    },
+    {
+      "asset_id": "0fcda361ead129bab277d7a9",
+      "asset_sha256": "03a90dc0c335230facd6f92e472530e760264820ce5b8d45376c02c5b01b29e1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/03a90dc0c335230facd6f92e472530e760264820ce5b8d45376c02c5b01b29e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a torn red page, revealing the texture and edges of the paper.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a torn page, likely from a textbook or a book, with no visible text or context.",
+        "limitations": [
+          "The image does not provide any text or information about the content of the book.",
+          "The image is a close-up of a torn page, which may not represent the entire page or the full context of the content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:57:08Z"
     }
   ]
 }

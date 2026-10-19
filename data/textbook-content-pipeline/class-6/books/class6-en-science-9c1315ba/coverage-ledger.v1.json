@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1006,
-    "successful_visual_analyses": 993,
-    "missing_visual_analyses": 1072,
+    "raw_analysis_result_rows": 1009,
+    "successful_visual_analyses": 996,
+    "missing_visual_analyses": 1069,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1085,
+    "unresolved_count": 1082,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38806,9 +38806,20 @@
       "asset_path": "page-0078.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with the word 'Notes' at the top, followed by a large area of blank space.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes"
+        ],
+        "concepts": [],
+        "context_relation": "Blank page for notes or annotations",
+        "limitations": [
+          "No specific content or information provided on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38824,9 +38835,27 @@
       "asset_path": "assets/683ca7b592caff9a039258bf7bedcbcab830c96dab48041b2a708eaaca24d2a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl writing in a notebook.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "writing",
+          "storytelling",
+          "spices",
+          "stars",
+          "navigation",
+          "coastal town",
+          "grandmother",
+          "60th birthday"
+        ],
+        "context_relation": "The image is related to the story about Reshma writing a story about spices and navigation.",
+        "limitations": [
+          "The image does not show the actual story or the details of the story."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38842,9 +38871,19 @@
       "asset_path": "assets/03a90dc0c335230facd6f92e472530e760264820ce5b8d45376c02c5b01b29e1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a torn red page, revealing the texture and edges of the paper.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a torn page, likely from a textbook or a book, with no visible text or context.",
+        "limitations": [
+          "The image does not provide any text or information about the content of the book.",
+          "The image is a close-up of a torn page, which may not represent the entire page or the full context of the content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
