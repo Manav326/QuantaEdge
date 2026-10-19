@@ -1119,9 +1119,12 @@ public class SourceIngestionController {
   @PatchMapping("/jobs/{jobId}/metadata")
   @Transactional
   public Map<String, Object> updateJobMetadata(
-      @PathVariable long jobId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
     String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
     if (!sourceUrl.regionMatches(true, 0, "https://", 0, 8)) {
@@ -1154,9 +1157,12 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/chapters")
   @Transactional
   public Map<String, Object> splitIntoChapters(
-      @PathVariable long jobId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) {
       throw badRequest("The source book must finish downloading before chapter ranges can be prepared.");
@@ -1247,9 +1253,13 @@ public class SourceIngestionController {
   @PatchMapping("/jobs/{jobId}/chapters/{chapterRowId}")
   @Transactional
   public Map<String, Object> reviewChapter(
-      @PathVariable long jobId, @PathVariable long chapterRowId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @PathVariable long chapterRowId, @RequestParam Long courseId,
+      @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("This ingestion job is not open for review.");
     String status = requiredText(body.get("status"), "status", 20).toUpperCase(Locale.ROOT);
@@ -1270,9 +1280,12 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/approve")
   @Transactional
   public Map<String, Object> approveJob(
-      @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) return jobDetails(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("Only a downloaded book in review can be approved.");
@@ -1371,9 +1384,12 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/reject")
   @Transactional
   public Map<String, Object> rejectJob(
-      @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) throw badRequest("An approved ingestion is immutable; archive its learning documents instead.");
     if (!List.of("REVIEW", "FAILED").contains(String.valueOf(job.get("status")))) {
@@ -1401,9 +1417,12 @@ public class SourceIngestionController {
   @GetMapping(value = "/jobs/{jobId}/pages/{pageNumber}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> previewSourcePage(
       @PathVariable long jobId, @PathVariable int pageNumber,
-      @RequestParam(required = false) Long chapterRowId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId, @RequestParam(required = false) Long chapterRowId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     Long assetId = null;
     int pageCount;
@@ -1480,7 +1499,8 @@ public class SourceIngestionController {
 
   private Map<String, Object> jobDetails(long jobId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select j.id as job_id,j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
+      select j.id as job_id,j.institution_id,j.course_id,p.code as course_code,p.display_name as course_name,
+             j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
              j.language,j.book_asset_id,j.cache_medium,j.cache_book_id,j.cache_sha256,j.cache_class_no,
              j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
              j.created_at,j.updated_at,j.reviewed_at,c.code as class_code,c.display_name as class_name,
@@ -1488,6 +1508,7 @@ public class SourceIngestionController {
              a.original_filename,a.file_size_bytes,a.sha256,a.review_status as book_review_status
       from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
+      left join curriculum_program p on p.id=j.course_id
       left join learning_pdf_asset a on a.id=j.book_asset_id where j.id=?
       """, jobId);
     if (rows.isEmpty()) throw notFound("Source ingestion job", jobId);
@@ -1586,6 +1607,60 @@ public class SourceIngestionController {
   private String sha256(byte[] bytes) {
     try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
     catch (NoSuchAlgorithmException ex) { throw new IllegalStateException("SHA-256 unavailable.", ex); }
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant==null || tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing source ingestion.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Selected course is not assigned and released to this institution.");
+    }
+  }
+
+  private Map<String,Object> resolveCourseSubject(long courseId,long institutionId,String classCode,String subjectCode) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select p.id as course_id,p.code as course_code,p.display_name as course_name,
+             c.id as class_id,c.code as class_code,c.display_name as class_name,
+             s.id as subject_id,s.code as subject_code,s.display_name as subject_name
+      from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and c.code=? and s.code=?
+      """,institutionId,courseId,classCode,subjectCode);
+    if(rows.isEmpty()) throw badRequest("Choose a subject mapped to the selected institution course.");
+    return rows.getFirst();
+  }
+
+  private void requireJobCourse(long jobId,long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from source_ingestion_job j
+      join curriculum_program p on p.id=j.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=j.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where j.id=? and j.institution_id=? and j.course_id=?
+      """,Long.class,jobId,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Source-ingestion job is not part of the selected course in this institution.");
+    }
   }
 
   private AuthContext requireReviewer(AuthContext context) {
