@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1250,
-    "successful_visual_analyses": 1235,
-    "missing_visual_analyses": 6238,
+    "raw_analysis_result_rows": 1253,
+    "successful_visual_analyses": 1238,
+    "missing_visual_analyses": 6235,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6253,
+    "unresolved_count": 6250,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57607,9 +57607,32 @@
       "asset_path": "assets/d3e47d86740574fa43fd82bbfe50140c24d7aa90274eb765c4208fb9c358e174.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red and white background with a blurred white object at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity"
+        ],
+        "context_relation": "The image is related to the content of the textbook about the components of a torch.",
+        "limitations": [
+          "The image does not provide specific details about the components of a torch.",
+          "The image does not show the actual components of a torch."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57625,9 +57648,30 @@
       "asset_path": "assets/b03a07990d316e3fc4073ab73f9fb05b8e32ee42acc3c3ae83c0198bb43eb0c1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us first ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "torch",
+          "components",
+          "electric cell"
+        ],
+        "context_relation": "The image is a visual representation of the components of a simple electrical circuit, specifically focusing on the torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57643,9 +57687,30 @@
       "asset_path": "assets/93c920514c492b9a6e0aaf511edec6a3c347885986206cf2223d648cb2458344.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a white label, possibly a battery or a component of a torch.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep   Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "Components",
+          "3.2.1 Electric cell",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is related to the text discussing the components of a torch and the electrical circuit it uses.",
+        "limitations": [
+          "The image does not provide a clear view of the torch or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
