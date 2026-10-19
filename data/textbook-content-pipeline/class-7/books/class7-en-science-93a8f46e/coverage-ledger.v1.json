@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1373,
-    "successful_visual_analyses": 1350,
-    "missing_visual_analyses": 6115,
+    "raw_analysis_result_rows": 1376,
+    "successful_visual_analyses": 1353,
+    "missing_visual_analyses": 6112,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6138,
+    "unresolved_count": 6135,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61678,9 +61678,30 @@
       "asset_path": "assets/adf68209d53b3eef2b418d4dc7c0fb3a5fe34d6939dec09643b1d30036b1b59b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black wire with a green light bulb attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "light bulb",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp in the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61696,9 +61717,30 @@
       "asset_path": "assets/6acebf42cfe5c515c33fca0c83c3d61c94616868c7c17d96cfc58bcfac9eb3a0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the arrangement of cells and a lamp in a circuit, with predictions and observations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the concept of circuits and lamps.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamps."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61714,9 +61756,29 @@
       "asset_path": "assets/b139b374dff153fced2a003d3a9c967cea967899240349c7f6f5519cbb7184a4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a table titled 'Table 3.1: Trying to make the lamp glow'. The table includes columns for 'S.No.', 'Arrangement of Cell and Lamp', 'Prediction', 'Observation', and 'Components'. The page also contains a note stating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "Experiment",
+          "Circuit",
+          "Prediction",
+          "Observation",
+          "Components"
+        ],
+        "context_relation": "The table is related to an experiment in the textbook, specifically focusing on making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

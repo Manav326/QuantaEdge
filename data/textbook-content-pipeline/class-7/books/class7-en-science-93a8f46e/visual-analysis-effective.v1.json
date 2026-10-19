@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8737715950b0d93a0a4632d4a6fde8b0397bcaffbf2a67f22df51f7397f7be97",
+  "raw_analysis_sha256": "fa2ae3dac124d9db9f4d2161ce751d221741a8a11bc24b9fc2fd84a637de4371",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:34:07Z",
+      "checkpointed_at": "2026-10-19T04:39:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:34:35Z",
+      "checkpointed_at": "2026-10-19T04:39:29Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -80274,6 +80274,196 @@
           "Observation"
         ],
         "context_relation": "The image is a part of an educational content related to an experiment involving lamps and cells.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ee948ca8d44c4b9165540e4e",
+      "asset_sha256": "adf68209d53b3eef2b418d4dc7c0fb3a5fe34d6939dec09643b1d30036b1b59b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/adf68209d53b3eef2b418d4dc7c0fb3a5fe34d6939dec09643b1d30036b1b59b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black wire with a green light bulb attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "light bulb",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp in the circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:40:40Z",
+      "effective_analysis": {
+        "visual_summary": "A black wire with a green light bulb attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "light bulb",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamp in the circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "382f80797877037fe69ad485",
+      "asset_sha256": "6acebf42cfe5c515c33fca0c83c3d61c94616868c7c17d96cfc58bcfac9eb3a0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/6acebf42cfe5c515c33fca0c83c3d61c94616868c7c17d96cfc58bcfac9eb3a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the arrangement of cells and a lamp in a circuit, with predictions and observations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the concept of circuits and lamps.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamps."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:41:51Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the arrangement of cells and a lamp in a circuit, with predictions and observations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the concept of circuits and lamps.",
+        "limitations": [
+          "The image does not show the actual glowing of the lamps."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6341844728e75cfc6d545dc9",
+      "asset_sha256": "b139b374dff153fced2a003d3a9c967cea967899240349c7f6f5519cbb7184a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/b139b374dff153fced2a003d3a9c967cea967899240349c7f6f5519cbb7184a4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a table titled 'Table 3.1: Trying to make the lamp glow'. The table includes columns for 'S.No.', 'Arrangement of Cell and Lamp', 'Prediction', 'Observation', and 'Components'. The page also contains a note stating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "Experiment",
+          "Circuit",
+          "Prediction",
+          "Observation",
+          "Components"
+        ],
+        "context_relation": "The table is related to an experiment in the textbook, specifically focusing on making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:43:07Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a table titled 'Table 3.1: Trying to make the lamp glow'. The table includes columns for 'S.No.', 'Arrangement of Cell and Lamp', 'Prediction', 'Observation', and 'Components'. The page also contains a note stating that the lamps are not shown glowing in any circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "Experiment",
+          "Circuit",
+          "Prediction",
+          "Observation",
+          "Components"
+        ],
+        "context_relation": "The table is related to an experiment in the textbook, specifically focusing on making a lamp glow in a circuit.",
         "limitations": [
           "The image does not show the actual setup or results of the experiment."
         ]
