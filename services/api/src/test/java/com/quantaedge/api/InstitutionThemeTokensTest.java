@@ -111,6 +111,27 @@ class InstitutionThemeTokensTest {
   }
 
   @Test
+  void savedCuratedPresetsUpgradeButExplicitCustomColoursRemainUnchanged() {
+    Map<String, Object> savedPreset = InstitutionThemeTokens.normalize(Map.of(
+        "schemaVersion", 2,
+        "presetId", "quantaedge-orange",
+        "appearance", "dark",
+        "brandPrimary", "#F97316",
+        "brandAccent", "#C2410C"));
+    assertEquals("#F97316", savedPreset.get("brandPrimary"));
+    assertEquals("#0F766E", savedPreset.get("brandAccent"));
+
+    Map<String, Object> custom = InstitutionThemeTokens.normalize(Map.of(
+        "schemaVersion", 2,
+        "presetId", "custom",
+        "appearance", "dark",
+        "brandPrimary", "#F97316",
+        "brandAccent", "#C2410C"));
+    assertEquals("#F97316", custom.get("brandPrimary"));
+    assertEquals("#C2410C", custom.get("brandAccent"));
+  }
+
+  @Test
   void alreadyMaterializedThemeCanBeReadAndNormalizedAgain() {
     Map<String, Object> original = InstitutionThemeTokens.normalize(Map.of(
         "schemaVersion", 2, "presetId", "academic-blue", "appearance", "dark"));
