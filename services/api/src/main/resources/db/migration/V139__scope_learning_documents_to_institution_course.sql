@@ -63,9 +63,9 @@ JOIN institution_course_assignment a ON a.institution_id=jd.institution_id AND a
 JOIN institution_course_release r ON r.id=a.course_release_id AND r.program_id=jd.course_id
 ON CONFLICT (institution_id,course_id,learning_document_id) DO NOTHING;
 
--- Any remaining pre-course documents are intentional reusable curriculum resources. Backfill
--- access only to active courses which the institution is assigned and which explicitly map the
--- document's subject. New ingestion-created rows are not included in this fan-out path.
+-- Remaining documents came from the old global deployment and are mapped only to its
+-- explicit legacy destination, QuantaEdge. Never fan this legacy content out to other tenants.
+-- New course-scoped ingestion rows are excluded from this backfill path.
 INSERT INTO learning_document_course_assignment(
   institution_id,course_id,learning_document_id,subject_id,status,
   created_by_staff_id,published_by_staff_id,created_at,updated_at,published_at
@@ -78,6 +78,7 @@ JOIN curriculum_program_subject cps ON cps.subject_id=s.id AND cps.class_id=s.cl
 JOIN curriculum_program p ON p.id=cps.program_id AND p.status='ACTIVE' AND p.code<>'GENERAL'
 JOIN institution_course_assignment a ON a.status='ASSIGNED'
 JOIN institution_tenant tenant ON tenant.id=a.institution_id AND tenant.status='ACTIVE'
+  AND tenant.tenant_code='QUANTA-EDGE'
 JOIN institution_course_release r ON r.id=a.course_release_id AND r.program_id=p.id
 WHERE (s.program_id=p.id OR (s.program_id IS NULL AND p.class_id=s.class_id))
   AND NOT EXISTS (
