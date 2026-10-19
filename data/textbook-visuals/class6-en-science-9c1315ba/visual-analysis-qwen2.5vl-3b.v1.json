@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1025,
+    "assets_selected": 1027,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1022,
-    "assets_remaining": 1056,
-    "assets_completion_percent": 49.2,
+    "assets_analyzed": 1024,
+    "assets_remaining": 1054,
+    "assets_completion_percent": 49.3,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1020,
+    "assets_skipped_from_checkpoint": 1022,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:30:19Z"
+      "checkpointed_at": "2026-10-19T15:33:58Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:31:03Z"
+      "checkpointed_at": "2026-10-19T15:34:38Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:31:56Z"
+      "checkpointed_at": "2026-10-19T15:35:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -33080,6 +33080,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T15:33:10Z"
+    },
+    {
+      "asset_id": "2b1f5148ed0f1ee343fd7552",
+      "asset_sha256": "26ab8018a2301d1d41da93cb6e5a59888e8c66f108a444f6be4ee230a5cdfe1b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/26ab8018a2301d1d41da93cb6e5a59888e8c66f108a444f6be4ee230a5cdfe1b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a red magnet with a paperclip attached to it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "paperclip",
+          "attracting materials"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the actual observation or prediction of materials being attracted by the magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:36:10Z"
+    },
+    {
+      "asset_id": "94d0ab7f3c5dc42d9e346eac",
+      "asset_sha256": "dad8a5078c6d60b49df9a5b06f5878f0fa0ee7727392966fd77b768b8c9f1932",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/dad8a5078c6d60b49df9a5b06f5878f0fa0ee7727392966fd77b768b8c9f1932.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal object with blue handles, possibly a tool or instrument.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the materials being identified by a magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:36:46Z"
     }
   ]
 }

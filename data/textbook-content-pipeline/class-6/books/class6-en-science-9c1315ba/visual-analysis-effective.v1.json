@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1c2bf35ceebc66f726205d6c7978a7aba5527b267004d6c722708ca86e47e029",
+  "raw_analysis_sha256": "7426caf5e2d10af46ead4ad233cfefa03716d47919ded3e4d17636f073f544c3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:30:19Z",
+      "checkpointed_at": "2026-10-19T15:33:58Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:31:03Z",
+      "checkpointed_at": "2026-10-19T15:34:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:31:56Z",
+      "checkpointed_at": "2026-10-19T15:35:32Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -49586,6 +49586,94 @@
         "context_relation": "The table is used to record observations on materials that are attracted by a magnet.",
         "limitations": [
           "The table does not include iron as a material that is attracted by a magnet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b1f5148ed0f1ee343fd7552",
+      "asset_sha256": "26ab8018a2301d1d41da93cb6e5a59888e8c66f108a444f6be4ee230a5cdfe1b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/26ab8018a2301d1d41da93cb6e5a59888e8c66f108a444f6be4ee230a5cdfe1b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a red magnet with a paperclip attached to it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "paperclip",
+          "attracting materials"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the actual observation or prediction of materials being attracted by the magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:36:10Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a red magnet with a paperclip attached to it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "paperclip",
+          "attracting materials"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the actual observation or prediction of materials being attracted by the magnet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "94d0ab7f3c5dc42d9e346eac",
+      "asset_sha256": "dad8a5078c6d60b49df9a5b06f5878f0fa0ee7727392966fd77b768b8c9f1932",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/dad8a5078c6d60b49df9a5b06f5878f0fa0ee7727392966fd77b768b8c9f1932.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal object with blue handles, possibly a tool or instrument.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the materials being identified by a magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:36:46Z",
+      "effective_analysis": {
+        "visual_summary": "A metal object with blue handles, possibly a tool or instrument.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the materials being identified by a magnet."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1035,
-    "successful_visual_analyses": 1025,
-    "missing_visual_analyses": 1043,
+    "raw_analysis_result_rows": 1037,
+    "successful_visual_analyses": 1027,
+    "missing_visual_analyses": 1041,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1053,
+    "unresolved_count": 1051,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39888,9 +39888,22 @@
       "asset_path": "assets/26ab8018a2301d1d41da93cb6e5a59888e8c66f108a444f6be4ee230a5cdfe1b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a red magnet with a paperclip attached to it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "paperclip",
+          "attracting materials"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the actual observation or prediction of materials being attracted by the magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39906,9 +39919,18 @@
       "asset_path": "assets/dad8a5078c6d60b49df9a5b06f5878f0fa0ee7727392966fd77b768b8c9f1932.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A metal object with blue handles, possibly a tool or instrument.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the materials being identified by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
