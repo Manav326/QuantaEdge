@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 813,
-    "successful_visual_analyses": 800,
-    "missing_visual_analyses": 1478,
+    "raw_analysis_result_rows": 815,
+    "successful_visual_analyses": 802,
+    "missing_visual_analyses": 1476,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1491,
+    "unresolved_count": 1489,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31437,9 +31437,23 @@
       "asset_path": "assets/69535b730b4b8f1d65775c5fa6de551d55856b1e9ca9400ff95c931b6a49df42.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a virus with a spherical head and long, thin tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "virus",
+          "spherical head",
+          "long tail",
+          "tail structure"
+        ],
+        "context_relation": "The image is an educational illustration related to the study of viruses.",
+        "limitations": [
+          "The image does not provide specific details about the virus's function or the environment it inhabits."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31455,9 +31469,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing organisms present in soil suspension, including bread mould and algae.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae",
+          "4. Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Organisms in soil",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The table provides information about the organisms present in soil suspension, specifically mentioning bread mould, mould, and algae.",
+        "limitations": [
+          "The table does not provide details on the specific characteristics or functions of these organisms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

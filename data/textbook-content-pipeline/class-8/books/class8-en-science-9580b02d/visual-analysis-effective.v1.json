@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "dcf52d6fe5de7726c85aac9170b42dca0cad950de52c9bcecca2a2bd8cdf467f",
+  "raw_analysis_sha256": "a7a0e190e2739f4988cf71d9015bc5a93f8b4af13a9cd13758a1c85deebef9be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:03:54Z",
+      "checkpointed_at": "2026-10-19T05:09:41Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:04:43Z",
+      "checkpointed_at": "2026-10-19T05:10:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:05:21Z",
+      "checkpointed_at": "2026-10-19T05:11:08Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -36368,6 +36368,124 @@
           "The image does not provide any specific information about the textbook content.",
           "The image is a cartoon illustration and may not accurately represent the educational content.",
           "The image does not show any diagrams or tables related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1cf059b32156d58f2cd94ea4",
+      "asset_sha256": "69535b730b4b8f1d65775c5fa6de551d55856b1e9ca9400ff95c931b6a49df42",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/69535b730b4b8f1d65775c5fa6de551d55856b1e9ca9400ff95c931b6a49df42.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a virus with a spherical head and long, thin tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "virus",
+          "spherical head",
+          "long tail",
+          "tail structure"
+        ],
+        "context_relation": "The image is an educational illustration related to the study of viruses.",
+        "limitations": [
+          "The image does not provide specific details about the virus's function or the environment it inhabits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:12:47Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a virus with a spherical head and long, thin tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "virus",
+          "spherical head",
+          "long tail",
+          "tail structure"
+        ],
+        "context_relation": "The image is an educational illustration related to the study of viruses.",
+        "limitations": [
+          "The image does not provide specific details about the virus's function or the environment it inhabits."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c062a0b24cb431a722d1175e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing organisms present in soil suspension, including bread mould and algae.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae",
+          "4. Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Organisms in soil",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The table provides information about the organisms present in soil suspension, specifically mentioning bread mould, mould, and algae.",
+        "limitations": [
+          "The table does not provide details on the specific characteristics or functions of these organisms."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:13:19Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing organisms present in soil suspension, including bread mould and algae.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae",
+          "4. Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Organisms in soil",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The table provides information about the organisms present in soil suspension, specifically mentioning bread mould, mould, and algae.",
+        "limitations": [
+          "The table does not provide details on the specific characteristics or functions of these organisms."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 800,
+    "assets_selected": 802,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 797,
-    "assets_remaining": 1494,
-    "assets_completion_percent": 34.8,
+    "assets_analyzed": 799,
+    "assets_remaining": 1492,
+    "assets_completion_percent": 34.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 795,
+    "assets_skipped_from_checkpoint": 797,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:03:54Z"
+      "checkpointed_at": "2026-10-19T05:09:41Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:04:43Z"
+      "checkpointed_at": "2026-10-19T05:10:30Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:05:21Z"
+      "checkpointed_at": "2026-10-19T05:11:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24692,6 +24692,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T05:08:30Z"
+    },
+    {
+      "asset_id": "1cf059b32156d58f2cd94ea4",
+      "asset_sha256": "69535b730b4b8f1d65775c5fa6de551d55856b1e9ca9400ff95c931b6a49df42",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/69535b730b4b8f1d65775c5fa6de551d55856b1e9ca9400ff95c931b6a49df42.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a virus with a spherical head and long, thin tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "virus",
+          "spherical head",
+          "long tail",
+          "tail structure"
+        ],
+        "context_relation": "The image is an educational illustration related to the study of viruses.",
+        "limitations": [
+          "The image does not provide specific details about the virus's function or the environment it inhabits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:12:47Z"
+    },
+    {
+      "asset_id": "c062a0b24cb431a722d1175e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing organisms present in soil suspension, including bread mould and algae.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae",
+          "4. Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Organisms in soil",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The table provides information about the organisms present in soil suspension, specifically mentioning bread mould, mould, and algae.",
+        "limitations": [
+          "The table does not provide details on the specific characteristics or functions of these organisms."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:13:19Z"
     }
   ]
 }
