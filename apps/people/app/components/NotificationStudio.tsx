@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { apiFetch } from './apiClient';
 import RichNotificationRenderer from './RichNotificationRenderer';
 import LogoGraphicsLab from './LogoGraphicsLab';
@@ -107,6 +107,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [campaignLoading, setCampaignLoading] = useState(false);
   const [campaignError, setCampaignError] = useState('');
+  const idempotencyRef = useRef<{ fingerprint: string; key: string } | null>(null);
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCounts, setPreviewCounts] = useState<Record<string, number>>({});
   const [previewed, setPreviewed] = useState(false);
@@ -327,8 +328,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       templateVersion,
       ...(includeSchedule ? {
         scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : null,
-        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
-        idempotencyKey: crypto.randomUUID()
+        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null
       } : {})
     };
   }
@@ -413,14 +413,24 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     if (!window.confirm(`Send this notification to ${previewCount ?? 'the resolved'} eligible recipients? The recipient audience will be rechecked by the server.`)) return;
     setSending(true); setError(''); setNotice('');
     try {
+      const baseBody = requestBody(true);
+      const fingerprint = JSON.stringify(baseBody);
+      let idempotency = idempotencyRef.current;
+      if (!idempotency || idempotency.fingerprint !== fingerprint) {
+        idempotency = { fingerprint, key: crypto.randomUUID() };
+        idempotencyRef.current = idempotency;
+      }
       const response = await apiFetch(prefix + '/send', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody(true))
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...baseBody, idempotencyKey: idempotency.key })
       });
-      const data = await response.json().catch(() => ({})) as { status?: string; resolved_recipient_count?: number; resolvedRecipientCount?: number; id?: number; message?: string };
+      const data = await response.json().catch(() => ({})) as { status?: string; resolved_recipient_count?: number; resolvedRecipientCount?: number; id?: number; message?: string; idempotentReplay?: boolean };
       if (!response.ok) throw new Error(data.message || 'Notification could not be sent.');
       setNotice(`Campaign ${data.id ?? ''} · ${data.status ?? 'QUEUED'} · ${data.resolved_recipient_count ?? data.resolvedRecipientCount ?? previewCount ?? 0} recipients`);
       setPreviewed(false);
       setPreviewCount(null);
+      idempotencyRef.current = null;
+      if (data.idempotentReplay) setNotice('This send was already accepted. ' + (data.status ?? 'Campaign recorded.') );
     } catch (e) { setError(e instanceof Error ? e.message : 'Notification could not be sent.'); }
     finally { setSending(false); }
   }
