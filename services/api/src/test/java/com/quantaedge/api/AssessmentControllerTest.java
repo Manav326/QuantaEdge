@@ -52,12 +52,14 @@ class AssessmentControllerTest {
 
   @Test
   void offlinePolicyRequiresContentEditAndRejectsGeneratedTests() {
+    when(jdbc.queryForObject(contains("join institution_course_assignment assignment"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("select count(*) from assessment a where a.id=? and a.course_id=?"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author,"CONTENT_EDIT")).thenReturn(author);
     when(jdbc.queryForList(contains("select id,title,status,is_generated,offline_enabled"), any(Object[].class))).thenReturn(List.of(Map.of(
           "id",88L,"title","Generated test","status","PUBLISHED","is_generated",true,"offline_enabled",false)));
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.updateOfflinePolicy(88L,Map.of("offlineEnabled",true),author));
+        ()->controller.updateOfflinePolicy(88L,Map.of("offlineEnabled",true),author,71L,TEST_TENANT));
     assertEquals(400,error.getStatusCode().value());
     verify(jdbc,never()).update(contains("update assessment set offline_enabled"),any(Object[].class));
   }
@@ -112,6 +114,8 @@ class AssessmentControllerTest {
 
   @Test
   void publishedAssessmentCannotSkipTheArchiveAndRestoreDraftLifecycle() {
+    when(jdbc.queryForObject(contains("join institution_course_assignment assignment"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("select count(*) from assessment a where a.id=? and a.course_id=?"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(authorization.requireAuth(admin)).thenReturn(admin);
     when(authorization.requirePermission(admin, "CONTENT_EDIT")).thenReturn(admin);
     when(jdbc.queryForList(contains("select a.id,a.title,a.status"), any(Object[].class)))
@@ -120,7 +124,7 @@ class AssessmentControllerTest {
             "subject_code", "maths", "class_code", "7", "question_count", 5L)));
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.changeAssessmentStatus(42L, Map.of("status", "DRAFT"), admin));
+        () -> controller.changeAssessmentStatus(42L, Map.of("status", "DRAFT"), admin,71L,TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(staffAudit);
@@ -128,6 +132,8 @@ class AssessmentControllerTest {
 
   @Test
   void generatedAssessmentCannotBeManuallyArchived() {
+    when(jdbc.queryForObject(contains("join institution_course_assignment assignment"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("select count(*) from assessment a where a.id=? and a.course_id=?"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(authorization.requireAuth(admin)).thenReturn(admin);
     when(authorization.requirePermission(admin, "CONTENT_PUBLISH")).thenReturn(admin);
     when(jdbc.queryForList(contains("select a.id,a.title,a.status"), any(Object[].class)))
@@ -136,7 +142,7 @@ class AssessmentControllerTest {
             "subject_code", "maths", "class_code", "7", "question_count", 5L)));
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.changeAssessmentStatus(43L, Map.of("status", "ARCHIVED"), admin));
+        () -> controller.changeAssessmentStatus(43L, Map.of("status", "ARCHIVED"), admin,71L,TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verify(jdbc, never()).update(contains("update assessment set status=?"), any(), any(), any(), any(), any());
@@ -198,6 +204,8 @@ class AssessmentControllerTest {
 
   @Test
   void gradingIsRestrictedToTheAssignedStaffMember() {
+    when(jdbc.queryForObject(contains("join institution_course_assignment assignment"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("where att.id=? and a.course_id=? and att.institution_id=?"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author, "ASSESSMENT_GRADE")).thenReturn(author);
     when(jdbc.queryForList(contains("select id,assessment_id,status,auto_score,max_score"), any(Object[].class))).thenReturn(List.of(Map.of(
@@ -206,7 +214,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForObject(contains("from assessment_staff_assignment asa"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     assertThrows(SecurityException.class,
-        () -> controller.gradeAttempt(81L, Map.of("answers", List.of()), author));
+        () -> controller.gradeAttempt(81L, Map.of("answers", List.of()), author,71L,TEST_TENANT));
 
     verify(jdbc, never()).update(contains("update student_assessment_answer"), any(), any(), any(), any());
     verifyNoInteractions(staffAudit);
