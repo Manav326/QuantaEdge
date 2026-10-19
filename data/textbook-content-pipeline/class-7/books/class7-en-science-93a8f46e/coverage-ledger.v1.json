@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1745,
-    "successful_visual_analyses": 1728,
-    "missing_visual_analyses": 5743,
-    "failed_visual_analyses": 17,
+    "raw_analysis_result_rows": 1750,
+    "successful_visual_analyses": 1731,
+    "missing_visual_analyses": 5738,
+    "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5760,
+    "unresolved_count": 5757,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -74873,9 +74873,24 @@
       "asset_path": "assets/dca6514ce7abbd09f802911b58f996c2219ebcc507a8f481e575bd3eefe56494.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a battery with a piece of paper or label attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is related to the text discussing the components of an electric cell and an incandescent electric lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74891,9 +74906,28 @@
       "asset_path": "assets/be6d7023f2a21adaa4b7a5139ddd716864f2319202d70d8cc696a7003eb2296c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper."
+        ],
+        "concepts": [
+          "cartoon",
+          "character",
+          "blue coat",
+          "white pants",
+          "yellow bucket",
+          "piece of paper"
+        ],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific educational content.",
+        "limitations": [
+          "The image does not represent any specific educational content.",
+          "The image is a cartoon illustration and may not accurately represent real-world scenarios."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74909,9 +74943,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a definition of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74927,7 +74980,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -74945,7 +74998,7 @@
       "asset_path": "page-0057.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

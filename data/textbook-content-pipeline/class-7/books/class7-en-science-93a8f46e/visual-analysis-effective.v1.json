@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2a0e6e1268ee34133c6da607476a2f560763e289842b7f3bdf35e3cf59e74b56",
+  "raw_analysis_sha256": "b520f556a259ca5d821ac61bf85108de39f6a2d72a868ab8c62b17122b6cf590",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -101473,6 +101473,218 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "371e557d60799f5f36bc1863",
+      "asset_sha256": "dca6514ce7abbd09f802911b58f996c2219ebcc507a8f481e575bd3eefe56494",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/dca6514ce7abbd09f802911b58f996c2219ebcc507a8f481e575bd3eefe56494.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a battery with a piece of paper or label attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is related to the text discussing the components of an electric cell and an incandescent electric lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:53:14Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a battery with a piece of paper or label attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is related to the text discussing the components of an electric cell and an incandescent electric lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the battery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f9217c5578a0db0674eb7c2",
+      "asset_sha256": "be6d7023f2a21adaa4b7a5139ddd716864f2319202d70d8cc696a7003eb2296c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/be6d7023f2a21adaa4b7a5139ddd716864f2319202d70d8cc696a7003eb2296c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper."
+        ],
+        "concepts": [
+          "cartoon",
+          "character",
+          "blue coat",
+          "white pants",
+          "yellow bucket",
+          "piece of paper"
+        ],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific educational content.",
+        "limitations": [
+          "The image does not represent any specific educational content.",
+          "The image is a cartoon illustration and may not accurately represent real-world scenarios."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:54:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A cartoon character in a blue coat and white pants is standing inside a large yellow bucket, holding a piece of paper."
+        ],
+        "concepts": [
+          "cartoon",
+          "character",
+          "blue coat",
+          "white pants",
+          "yellow bucket",
+          "piece of paper"
+        ],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific educational content.",
+        "limitations": [
+          "The image does not represent any specific educational content.",
+          "The image is a cartoon illustration and may not accurately represent real-world scenarios."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb2cf0abb9fe01f14a90d014",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a definition of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:55:18Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "definition",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a definition of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "981387e8e320d03303f7183b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5f0d88e9b7d8e398b121cff6",
+      "asset_sha256": "66879d035a20e0e382ffd08e7b5908d131d12f9cd0b9a108d02368a529b34861",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "page-0057.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
