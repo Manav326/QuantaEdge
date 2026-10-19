@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 898,
+    "assets_selected": 900,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 895,
-    "assets_remaining": 1396,
-    "assets_completion_percent": 39.1,
+    "assets_analyzed": 897,
+    "assets_remaining": 1394,
+    "assets_completion_percent": 39.2,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 893,
+    "assets_skipped_from_checkpoint": 895,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:12:26Z"
+      "checkpointed_at": "2026-10-19T16:21:09Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:13:13Z"
+      "checkpointed_at": "2026-10-19T16:21:55Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:13:50Z"
+      "checkpointed_at": "2026-10-19T16:22:32Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28341,6 +28341,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T16:20:01Z"
+    },
+    {
+      "asset_id": "be8a814e05dc6c4d997e2857",
+      "asset_sha256": "fd783f31eb67833b70c9cd317483c193a5fdea301411a801b16099f7d5a44064",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/fd783f31eb67833b70c9cd317483c193a5fdea301411a801b16099f7d5a44064.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person sleeping in bed with a red blanket and a blue pillow.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person sleeping, which is related to the topic of sleep and its importance for health.",
+        "limitations": [
+          "The image does not provide specific information about sleep habits or their impact on health."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:24:07Z"
+    },
+    {
+      "asset_id": "88c5a53a6f76798f9d44efa4",
+      "asset_sha256": "4b2520f7c828ede986cf6b586e1436ee91e2b923fc640e9da2cbe8ccd0cfcc8d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/4b2520f7c828ede986cf6b586e1436ee91e2b923fc640e9da2cbe8ccd0cfcc8d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a yellow shirt and blue jeans is holding up a hand with a 'no smoking' sign above it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a 'no smoking' sign, which is related to the topic of health and habits.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:25:37Z"
     }
   ]
 }
