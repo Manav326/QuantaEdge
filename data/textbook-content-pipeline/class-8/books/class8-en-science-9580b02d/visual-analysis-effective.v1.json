@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "be8761cc96d7cef459045c149d2672f78a64e57f59142dc4716e691a094709ca",
+  "raw_analysis_sha256": "d7ae72254ed407f45b5c248e72ff27963664c31ae065d823c7136c1d6f00c639",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:52:33Z",
+      "checkpointed_at": "2026-10-19T01:55:42Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:53:20Z",
+      "checkpointed_at": "2026-10-19T01:56:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:53:58Z",
+      "checkpointed_at": "2026-10-19T01:57:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -32826,6 +32826,176 @@
         "limitations": [
           "The page is completely blank and does not contain any text or images.",
           "The page may be a placeholder or a page with no content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "49c1787167e45915073ab895",
+      "asset_sha256": "e166cbb47f4e98562549665c10ff99461c3a3430456c07eb6f4f7fb1d54a9f5e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 29,
+      "asset_path": "page-0029.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the history of lenses and microscopes, and the concept of organisms.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "The human eye can only see objects that are above a certain",
+          "size. For a long time, many tiny things around us remained",
+          "unknown. Long ago, people discovered that a curved piece of",
+          "glass could make small things look bigger. The piece of glass",
+          "was shaped like a lentil seed—thick in the middle and thin at",
+          "the edge—hence they called it a lens. Over time, lenses were",
+          "improved to become more powerful. Each new tool, from simple",
+          "magnifying glasses to microscopes, helped humans see what",
+          "their eyes could not. The invention of the microscope opened",
+          "a fascinating hidden world filled with tiny living creatures. We",
+          "will explore some of these life forms in this chapter.",
+          "You have already learnt about the amazing variety of living",
+          "beings. Just look around—there are so many beautiful plants",
+          "and animals! They are of all shapes, sizes, and colours. Some",
+          "living beings are tiny, while others are really big. They differ",
+          "not only in their structure but also in many other features. All",
+          "these living beings, whether plants or animals, are called",
+          "organisms. Have you ever noticed the smallest organism around",
+          "you that is visible to the naked eye? Think about it—how small",
+          "a thing can your eyes actually see?",
+          "You might have seen some people using reading glasses. How",
+          "does it help them see better? Or what happens when we use a",
+          "magnifying glass to observe something?",
+          "Activity 2.1: Let us observe",
+          "Take a round-bottom flask made up of glass as shown in",
+          "Fig. 2.1. Fill it with water.",
+          "Close the mouth of the flask with a cork.",
+          "Now, place the flask on an open book and look at",
+          "the letters through it."
+        ],
+        "concepts": [
+          "lenses",
+          "microscopes",
+          "organisms",
+          "magnifying glass",
+          "round-bottom flask",
+          "ant"
+        ],
+        "context_relation": "The text discusses the history of lenses and microscopes, and the concept of organisms.",
+        "limitations": [
+          "The text does not provide specific details about the scientific discovery that helped humans see the tiny world for the first time."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:01:57Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the history of lenses and microscopes, and the concept of organisms.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "The human eye can only see objects that are above a certain",
+          "size. For a long time, many tiny things around us remained",
+          "unknown. Long ago, people discovered that a curved piece of",
+          "glass could make small things look bigger. The piece of glass",
+          "was shaped like a lentil seed—thick in the middle and thin at",
+          "the edge—hence they called it a lens. Over time, lenses were",
+          "improved to become more powerful. Each new tool, from simple",
+          "magnifying glasses to microscopes, helped humans see what",
+          "their eyes could not. The invention of the microscope opened",
+          "a fascinating hidden world filled with tiny living creatures. We",
+          "will explore some of these life forms in this chapter.",
+          "You have already learnt about the amazing variety of living",
+          "beings. Just look around—there are so many beautiful plants",
+          "and animals! They are of all shapes, sizes, and colours. Some",
+          "living beings are tiny, while others are really big. They differ",
+          "not only in their structure but also in many other features. All",
+          "these living beings, whether plants or animals, are called",
+          "organisms. Have you ever noticed the smallest organism around",
+          "you that is visible to the naked eye? Think about it—how small",
+          "a thing can your eyes actually see?",
+          "You might have seen some people using reading glasses. How",
+          "does it help them see better? Or what happens when we use a",
+          "magnifying glass to observe something?",
+          "Activity 2.1: Let us observe",
+          "Take a round-bottom flask made up of glass as shown in",
+          "Fig. 2.1. Fill it with water.",
+          "Close the mouth of the flask with a cork.",
+          "Now, place the flask on an open book and look at",
+          "the letters through it."
+        ],
+        "concepts": [
+          "lenses",
+          "microscopes",
+          "organisms",
+          "magnifying glass",
+          "round-bottom flask",
+          "ant"
+        ],
+        "context_relation": "The text discusses the history of lenses and microscopes, and the concept of organisms.",
+        "limitations": [
+          "The text does not provide specific details about the scientific discovery that helped humans see the tiny world for the first time."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f8de8fbaa87d982cccc4db74",
+      "asset_sha256": "c17af55af6ce2e2c962fe04ab0f74cd9e7bf8a7315f3f4b553cd8a4b2a381015",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/c17af55af6ce2e2c962fe04ab0f74cd9e7bf8a7315f3f4b553cd8a4b2a381015.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aeb17d90d308e69c7b1163022773d7252433762ffd0e51a3a697f06f8a245dd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a microscope and a magnifying glass, likely from a science textbook.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "magnifying glass",
+          "science textbook",
+          "Robert Hooke",
+          "Micrographia",
+          "1665"
+        ],
+        "context_relation": "The image is related to the text about Robert Hooke's book Micrographia, which discusses the use of microscopes to observe tiny things.",
+        "limitations": [
+          "The image does not show the actual microscope or magnifying glass used by Robert Hooke."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:03:34Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a microscope and a magnifying glass, likely from a science textbook.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "magnifying glass",
+          "science textbook",
+          "Robert Hooke",
+          "Micrographia",
+          "1665"
+        ],
+        "context_relation": "The image is related to the text about Robert Hooke's book Micrographia, which discusses the use of microscopes to observe tiny things.",
+        "limitations": [
+          "The image does not show the actual microscope or magnifying glass used by Robert Hooke."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
