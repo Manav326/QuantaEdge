@@ -24,7 +24,7 @@ type NotificationItem = {
 type InboxResponse = { items?: NotificationItem[]; nextBeforeId?: number | null };
 type Role = 'student' | 'parent';
 
-export function NotificationBell({ role }: { role: Role }) {
+export function NotificationBell({ role }: { role: Role | null }) {
   const { locale } = useLocale();
   const [count, setCount] = useState(0);
   const [available, setAvailable] = useState(true);
@@ -47,7 +47,7 @@ export function NotificationBell({ role }: { role: Role }) {
     return () => { window.clearInterval(timer); window.removeEventListener('focus', onFocus); };
   }, [loadCount]);
 
-  if (!available) return null;
+  if (!role || !available) return null;
   return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : '/parent/notifications'}
     aria-label={english ? `Notifications${count ? `, ${count} unread` : ''}` : `Notifications${count ? `, ${count} unread` : ''}`}>
     <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
