@@ -1,6 +1,7 @@
 'use client';
 
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
+import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
@@ -103,8 +104,7 @@ export default function ParentProfilePage() {
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
   const [savedDraft, setSavedDraft] = useState<ParentProfileDraft>(emptyProfile);
   const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', publicUserId: '', profileImageUrl: null });
-  const [protectedPhotoUrl, setProtectedPhotoUrl] = useState('');
-  const [editingCard, setEditingCard] = useState<'photo' | 'personal' | 'about' | null>(null);
+   const [editingCard, setEditingCard] = useState<'photo' | 'personal' | 'about' | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
@@ -169,32 +169,7 @@ export default function ParentProfilePage() {
     return () => { active = false; };
   }, [router]);
 
-  useEffect(() => {
-    let active = true;
-    let objectUrl = '';
-    const imageUrl = identity.profileImageUrl;
-    setProtectedPhotoUrl('');
-    if (!imageUrl) return () => { active = false; };
-    // An img src cannot attach the workspace header. Fetch through the shared request
-    // wrapper so the parent workspace/session is included, then render a temporary blob URL.
-    void fetch(imageUrl, { cache: 'no-store' })
-      .then(response => {
-        if (!response.ok) throw new Error('Profile photo is unavailable.');
-        return response.blob();
-      })
-      .then(blob => {
-        objectUrl = URL.createObjectURL(blob);
-        if (active) setProtectedPhotoUrl(objectUrl);
-        else URL.revokeObjectURL(objectUrl);
-      })
-      .catch(() => { if (active) setProtectedPhotoUrl(''); });
-    return () => {
-      active = false;
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-    };
-  }, [identity.profileImageUrl]);
-
-  function beginEditingCard(card: 'photo' | 'personal' | 'about') {
+   function beginEditingCard(card: 'photo' | 'personal' | 'about') {
     if (editingCard !== null) return;
     setEditingCard(card);
     setError('');
@@ -347,7 +322,7 @@ export default function ParentProfilePage() {
               </div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
-                  <img src={(photoChanged ? draft.profileImageDataUrl : (protectedPhotoUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
+                  <AuthenticatedProfileImage src={identity.profileImageUrl} fallbackSrc="/branding/parent-avatar.svg" alt="Parent profile preview" width={116} height={116} />
                   <span className="parent-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="parent-profile-photo-editor__copy">
