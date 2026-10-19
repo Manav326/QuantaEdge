@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "699344e3449ad054880416b6cec7c40e87a3471e1158e7a8cdd8c8be84574099",
+  "raw_analysis_sha256": "b27a8d96c2ba581b9bf7db75b3ccc5b7ac1d32a8a000efde41cb62e4045f0034",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:56:17Z",
+      "checkpointed_at": "2026-10-19T11:03:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:57:18Z",
+      "checkpointed_at": "2026-10-19T11:04:39Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -45272,6 +45272,268 @@
         "context_relation": "The table provides information on the presence of specific nutrients in different food items.",
         "limitations": [
           "The table does not provide specific examples or details about the food items."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "718af4d545801a86caf86057",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c3a358d4a1a1446eeaa186c25e7af24520c691c5429e9cb593ae48b005c76b29",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing the presence of nutrients in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch    Fat    Protein  Name of    Colour of the",
+          "Oily patch for fat    Colour of the food item   present  present  present  the food    food item for",
+          "test               for protein test         (Yes/     (Yes/     (Yes/    item        starch test                                                                      No)     No)     No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food items"
+        ],
+        "context_relation": "The table provides information about the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not specify the types of food items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:05:08Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing the presence of nutrients in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch    Fat    Protein  Name of    Colour of the",
+          "Oily patch for fat    Colour of the food item   present  present  present  the food    food item for",
+          "test               for protein test         (Yes/     (Yes/     (Yes/    item        starch test                                                                      No)     No)     No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food items"
+        ],
+        "context_relation": "The table provides information about the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not specify the types of food items."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fec3b835078ab4de035abc37",
+      "asset_sha256": "c59f6b30bd2025a2b9f6d42003eb3b72a22f427d0c962cfec807373367437543",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 69,
+      "asset_path": "page-0069.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c3a358d4a1a1446eeaa186c25e7af24520c691c5429e9cb593ae48b005c76b29",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of",
+          "the food",
+          "item",
+          "Colour of the",
+          "food item for",
+          "starch test",
+          "Oily patch for fat",
+          "test",
+          "Colour of the food item",
+          "for protein test",
+          "Starch",
+          "present",
+          "(Yes/No)",
+          "Fat",
+          "present",
+          "(Yes/No)",
+          "Protein",
+          "present",
+          "(Yes/No)",
+          "Potato",
+          "Before",
+          "iodine",
+          "test",
+          "After",
+          "iodine",
+          "test"
+        ],
+        "concepts": [
+          "Exploring nutrients",
+          "Various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Nutritional requirements",
+          "Balanced diet",
+          "Essential nutrients",
+          "Roughage",
+          "Water",
+          "Growth and development"
+        ],
+        "context_relation": "Exploring nutrients in food items",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:09:36Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of",
+          "the food",
+          "item",
+          "Colour of the",
+          "food item for",
+          "starch test",
+          "Oily patch for fat",
+          "test",
+          "Colour of the food item",
+          "for protein test",
+          "Starch",
+          "present",
+          "(Yes/No)",
+          "Fat",
+          "present",
+          "(Yes/No)",
+          "Protein",
+          "present",
+          "(Yes/No)",
+          "Potato",
+          "Before",
+          "iodine",
+          "test",
+          "After",
+          "iodine",
+          "test"
+        ],
+        "concepts": [
+          "Exploring nutrients",
+          "Various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Nutritional requirements",
+          "Balanced diet",
+          "Essential nutrients",
+          "Roughage",
+          "Water",
+          "Growth and development"
+        ],
+        "context_relation": "Exploring nutrients in food items",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "91d8c4cad50c92e936a950ad",
+      "asset_sha256": "be7ccd4caa8e3f9ec98404d5a2595f7593651156b0db509116fc48101d59a928",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/be7ccd4caa8e3f9ec98404d5a2595f7593651156b0db509116fc48101d59a928.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A packet of potato wafers and a packet of roasted chana.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Potato wafers",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information",
+        "limitations": [
+          "No specific nutritional values are provided for the potato wafers and roasted chana."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:11:19Z",
+      "effective_analysis": {
+        "visual_summary": "A packet of potato wafers and a packet of roasted chana.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Potato wafers",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information",
+        "limitations": [
+          "No specific nutritional values are provided for the potato wafers and roasted chana."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
