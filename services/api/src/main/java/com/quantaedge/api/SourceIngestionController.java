@@ -1103,13 +1103,18 @@ public class SourceIngestionController {
       if (sourceKind == null) sourceKind = "BOARD_TEXTBOOK";
       String provider = optionalText(body.get("provider"), 200);
       if (provider == null) provider = "Admin registered source";
-      sourceId = jdbc.queryForObject("""
+      sourceId = jdbc.query("""
         insert into content_source(source_kind,title,provider,source_url,edition,language,status)
         values(?,?,?,?,?,?,'REGISTERED')
-        on conflict(source_kind,title,edition) do update set
-          provider=excluded.provider,source_url=excluded.source_url,language=excluded.language,updated_at=now()
+        on conflict(source_kind,title,edition) do nothing
         returning id
-        """, Long.class, sourceKind, sourceTitle, provider, sourceUrl, edition, language);
+        """, rs -> rs.next() ? rs.getLong(1) : null,
+        sourceKind, sourceTitle, provider, sourceUrl, edition, language);
+      if (sourceId == null) {
+        sourceId = jdbc.queryForObject("""
+          select id from content_source where source_kind=? and title=? and edition=?
+          """, Long.class, sourceKind, sourceTitle, edition);
+      }
       checksum = null;
       linkedAsset = null;
     }
