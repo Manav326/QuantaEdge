@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import styles from './Certificates.module.css';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type CertificateRow = {
   id: number;
@@ -17,6 +18,9 @@ type CertificateRow = {
   recipient_name: string;
   achievement_type: string;
   class_code: string;
+  course_id: number;
+  course_code?: string;
+  course_name?: string;
   subject_code?: string;
   subject_name?: string;
   achievement_title: string;
@@ -34,6 +38,7 @@ export default function AdminCertificatesPage() {
   const router = useRouter();
   const t = useUiTranslation();
   const { locale } = useContext(AdminWorkspaceContext);
+  const { courses, courseId, activeCourse, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
   const [rows, setRows] = useState<CertificateRow[]>([]);
   const [status, setStatus] = useState('ALL');
   const [achievementType, setAchievementType] = useState('ALL');
@@ -51,10 +56,18 @@ export default function AdminCertificatesPage() {
   const [auditLoading, setAuditLoading] = useState(false);
 
   const load = useCallback(async () => {
+    if (!courseId) {
+      setRows([]);
+      setTotal(0);
+      setLoading(loadingCourses);
+      setError(loadingCourses ? '' : courseError || 'Select a course assigned to this institution.');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
       const params = new URLSearchParams({
+        courseId,
         status,
         achievementType,
         language,
@@ -78,7 +91,7 @@ export default function AdminCertificatesPage() {
     } finally {
       setLoading(false);
     }
-  }, [router, status, achievementType, language, page, t]);
+  }, [router, courseId, loadingCourses, courseError, status, achievementType, language, page, t]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -92,7 +105,7 @@ export default function AdminCertificatesPage() {
     setError('');
     setNotice('');
     try {
-      const response = await fetch('/api/v1/admin/certificates/' + certificate.id + '/revoke', {
+      const response = await fetch('/api/v1/admin/certificates/' + certificate.id + '/revoke?courseId=' + encodeURIComponent(String(courseId)), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -124,7 +137,7 @@ export default function AdminCertificatesPage() {
     setAuditLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/v1/admin/certificates/' + certificateId + '/audit', {
+      const response = await fetch('/api/v1/admin/certificates/' + certificateId + '/audit?courseId=' + encodeURIComponent(String(courseId)), {
         cache: 'no-store',
         credentials: 'same-origin',
       });
@@ -167,6 +180,10 @@ export default function AdminCertificatesPage() {
           </div>
 
           <div className={styles.toolbar}>
+            <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+              label={locale === 'english' ? 'Course' : 'कोर्स'}
+              placeholder={locale === 'english' ? 'Choose course' : 'कोर्स चुनें'}
+              onChange={value => { selectCourse(value); setPage(0); setRevoking(null); setAuditFor(null); setAuditRows([]); }} />
             <label>
               <span>{t('admin.certificates.status')}</span>
               <select value={status} onChange={(event) => { setStatus(event.target.value); setPage(0); setRevoking(null); }}>
@@ -208,16 +225,16 @@ export default function AdminCertificatesPage() {
                   {rows.map((row) => (
                     <Fragment key={row.id}>
                       <tr>
-                      <td><strong>{row.recipient_name}</strong><small>{row.certificate_number}</small><small>{t('admin.certificates.classStudent', { classCode: row.class_code, studentId: row.student_id })}</small></td>
-                      <td><strong>{row.achievement_title}</strong><small>{t('admin.certificates.classSubject', { classCode: row.class_code, subject: row.subject_name || row.subject_code || t('admin.certificates.subjectUnavailable') })}</small><small>{row.achievement_type === 'SUBJECT_COMPLETION' ? t('admin.certificates.subjectCompletion') : t('admin.certificates.assessmentPass')}</small></td>
+                      <td><strong>{row.recipient_name}</strong><small>{row.certificate_number}</small><small>{locale === 'english' ? 'Student ID' : 'विद्यार्थी ID'}: {row.student_id}</small></td>
+                      <td><strong>{row.achievement_title}</strong><small>{row.course_name || activeCourse?.display_name || courseId} · {row.subject_name || row.subject_code || t('admin.certificates.subjectUnavailable')}</small><small>{row.achievement_type === 'SUBJECT_COMPLETION' ? t('admin.certificates.subjectCompletion') : t('admin.certificates.assessmentPass')}</small></td>
                       <td>{row.template_id}<small>{row.language === 'hi' ? t('admin.certificates.hindi') : t('admin.certificates.english')}</small></td>
                       <td>{formatUserTimestamp(row.issued_at)}</td>
                       <td><span className={row.status === 'ISSUED' ? styles.valid : styles.revoked}>{row.status === 'ISSUED' ? t('admin.certificates.statusIssued') : row.status === 'REVOKED' ? t('admin.certificates.statusRevoked') : row.status}</span>
                         {row.revocation_reason && <small className={styles.reason}>{row.revocation_reason}</small>}</td>
                       <td>
                         <div className={styles.actionLinks}>
-                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=pdf'}>{row.status === 'ISSUED' ? t('admin.certificates.certificatePdf') : t('admin.certificates.auditCopyPdf')}</a>
-                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=png'}>{row.status === 'ISSUED' ? t('admin.certificates.certificatePng') : t('admin.certificates.auditCopyPng')}</a>
+                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?courseId=' + encodeURIComponent(String(courseId)) + '&format=pdf'}>{row.status === 'ISSUED' ? t('admin.certificates.certificatePdf') : t('admin.certificates.auditCopyPdf')}</a>
+                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?courseId=' + encodeURIComponent(String(courseId)) + '&format=png'}>{row.status === 'ISSUED' ? t('admin.certificates.certificatePng') : t('admin.certificates.auditCopyPng')}</a>
                           <button type="button" className={styles.auditButton}
                             onClick={() => void toggleAudit(row.id)}>{auditFor === row.id ? t('admin.certificates.hideAudit') : t('admin.certificates.viewAudit')}</button>
                           {row.status === 'ISSUED' ? (
