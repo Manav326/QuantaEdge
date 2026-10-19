@@ -1107,7 +1107,7 @@ html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusLIVE"]
   color: var(--qe-color-on-success-container);
   border-color: var(--qe-color-success);
 }
-html[data-qe-appearance="light"] .qe-workspace-content :is([class*="requestPending"], [class*="statusSCHEDULED"], [class*="languageNotice"], [class*="qe-textbook-notice"]) {
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="requestPending"], [class*="qe-textbook-notice"]) {
   background: var(--qe-color-warning-container);
   color: var(--qe-color-on-warning-container);
   border-color: var(--qe-color-warning);
@@ -1122,8 +1122,14 @@ html[data-qe-appearance="light"] .qe-workspace-content :is([class*="statusCOMPLE
   color: var(--qe-color-disabled-text);
   border-color: var(--qe-color-border-subtle);
 }
-html[data-qe-appearance="light"] .qe-workspace-content :is([class*="currentNumber"], [class*="optionSelected"], [class*="chatActive"], [class*="activeTab"], [class*="activeBadge"]) {
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="currentNumber"], [class*="optionSelected"], [class*="chatActive"], [class*="activeTab"], [class*="activeBadge"], [class*="statusSCHEDULED"]) {
   background: var(--qe-color-primary-container);
   color: var(--qe-color-on-primary-container);
   border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="languageNotice"]) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
 }
