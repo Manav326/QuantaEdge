@@ -22,7 +22,7 @@
 
 ## Current test-pack lifecycle work
 
-The install/uninstall requirements and acceptance matrix are tracked in [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md). The first tenant/learner starter-pack slice is implemented on a feature branch; it is **not merged or runtime-verified**. QA-001, QA-002, QA-004, QA-005 and QA-007 remain `NOT_EXECUTED`; QA-003 (scenario runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. A register validator validates CSV/document consistency only; it does not prove runtime execution.
+The install/uninstall requirements and acceptance matrix are tracked in [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md). The starter pack is being expanded to **at least three institutions per run** to exercise origin ownership, HRMS-approved cross-institution assignment, and a third institution that must remain unassigned/isolated. The feature branch is **not merged or runtime-verified**. QA-001, QA-002, QA-004, QA-005 and QA-007 remain `NOT_EXECUTED`; QA-003 (scenario runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. A register validator validates CSV/document consistency only; it does not prove runtime execution.
 
 ## Current audit snapshot
 
