@@ -386,7 +386,8 @@ export default function TestsClient(){
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
-      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts?language='+language,{method:'POST'});
+      if(courseId===null)throw new Error('Select an enrolled course before starting this test.');
+      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts?courseId='+encodeURIComponent(String(courseId))+'&language='+encodeURIComponent(language),{method:'POST'});
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');
@@ -411,7 +412,8 @@ export default function TestsClient(){
     const requestId=++leaderboardRequestRef.current;
     setLeaderboardTest(test);setLeaderboardData(null);setLeaderboardError('');setLeaderboardLoading(true);
     try{
-      const data=await api('/api/v1/learning/assessments/'+test.assessment_id+'/leaderboard?language='+encodeURIComponent(language));
+      if(courseId===null)throw new Error('Select an enrolled course before viewing this leaderboard.');
+      const data=await api('/api/v1/learning/assessments/'+test.assessment_id+'/leaderboard?courseId='+encodeURIComponent(String(courseId))+'&language='+encodeURIComponent(language));
       if(leaderboardRequestRef.current===requestId)setLeaderboardData(data as LeaderboardData);
     }catch(e:any){
       if(leaderboardRequestRef.current!==requestId)return;
