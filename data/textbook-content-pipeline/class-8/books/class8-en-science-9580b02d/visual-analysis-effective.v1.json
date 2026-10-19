@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d7ae72254ed407f45b5c248e72ff27963664c31ae065d823c7136c1d6f00c639",
+  "raw_analysis_sha256": "e7e8c1828688456cef0f811c35f418f1c2d3cf45de6765a015a32ad812655348",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:55:42Z",
+      "checkpointed_at": "2026-10-19T02:04:43Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:56:29Z",
+      "checkpointed_at": "2026-10-19T02:05:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:57:06Z",
+      "checkpointed_at": "2026-10-19T02:06:11Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -32996,6 +32996,110 @@
         "context_relation": "The image is related to the text about Robert Hooke's book Micrographia, which discusses the use of microscopes to observe tiny things.",
         "limitations": [
           "The image does not show the actual microscope or magnifying glass used by Robert Hooke."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dbdee6921eb7383c14da5e2d",
+      "asset_sha256": "398628a6d33f9d2f99dce8b76432ff9c064062cf6b2a684a23f02b274315f86f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/398628a6d33f9d2f99dce8b76432ff9c064062cf6b2a684a23f02b274315f86f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aeb17d90d308e69c7b1163022773d7252433762ffd0e51a3a697f06f8a245dd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A detailed drawing of a plant cell under a microscope, showing the internal structure of a cell.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "cell structure",
+          "Robert Hooke"
+        ],
+        "context_relation": "The image is a visual representation of the content described in the text, showing the detailed drawings of tiny things that people had never seen before using a microscope.",
+        "limitations": [
+          "The image does not show the actual microscope or the plant cell being observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:07:51Z",
+      "effective_analysis": {
+        "visual_summary": "A detailed drawing of a plant cell under a microscope, showing the internal structure of a cell.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "cell structure",
+          "Robert Hooke"
+        ],
+        "context_relation": "The image is a visual representation of the content described in the text, showing the detailed drawings of tiny things that people had never seen before using a microscope.",
+        "limitations": [
+          "The image does not show the actual microscope or the plant cell being observed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8fe2d6b4c686de242f90cc76",
+      "asset_sha256": "cd1e62dc24a30f55372a243800920a3009e46df8a4a6d25b7bd81adda2efeac4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/cd1e62dc24a30f55372a243800920a3009e46df8a4a6d25b7bd81adda2efeac4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aeb17d90d308e69c7b1163022773d7252433762ffd0e51a3a697f06f8a245dd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A detailed illustration of a coat of arms featuring two lions holding a shield with a skull and crossbones, surrounded by ornate decorations.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "AVLLIV",
+          "IN",
+          "VERBA"
+        ],
+        "concepts": [
+          "coat of arms",
+          "skull and crossbones",
+          "lions"
+        ],
+        "context_relation": "The image is related to the historical context of the book 'Micrographia' by Robert Hooke, which discusses the use of microscopes to observe minute bodies.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book 'Micrographia' or the historical context it discusses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:09:29Z",
+      "effective_analysis": {
+        "visual_summary": "A detailed illustration of a coat of arms featuring two lions holding a shield with a skull and crossbones, surrounded by ornate decorations.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "AVLLIV",
+          "IN",
+          "VERBA"
+        ],
+        "concepts": [
+          "coat of arms",
+          "skull and crossbones",
+          "lions"
+        ],
+        "context_relation": "The image is related to the historical context of the book 'Micrographia' by Robert Hooke, which discusses the use of microscopes to observe minute bodies.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book 'Micrographia' or the historical context it discusses."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
