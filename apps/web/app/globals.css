@@ -1238,3 +1238,34 @@ html[data-qe-appearance="dark"] .parent-account__icon {
 .qe-password-field__toggle:hover{border-color:var(--qe-color-border-subtle, #d6dce5);background:var(--qe-color-background, #f7f8fa);color:var(--qe-color-primary-text, #8c3d12)}
 .qe-password-field__toggle:focus-visible{outline:3px solid var(--qe-color-focus, #f97316);outline-offset:1px}
 .qe-password-field__toggle:disabled{opacity:.45;cursor:not-allowed}
+
+
+
+/* Parent-owned learning uses the same nested learning navigation without losing its way back. */
+.qe-parent-learning-return{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;
+  padding:8px 12px;border:1px solid var(--qe-color-border-subtle);border-radius:999px;
+  background:var(--qe-color-surface);color:var(--qe-color-text);font:inherit;font-size:11px;font-weight:800;
+  white-space:nowrap;cursor:pointer;transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+.qe-parent-learning-return:hover{background:var(--qe-color-primary-container);border-color:var(--qe-color-focus);transform:translateY(-1px)}
+.qe-parent-learning-return:focus-visible{outline:2px solid var(--qe-color-focus);outline-offset:2px}
+.qe-parent-learning-return>span:first-child{color:var(--qe-color-primary-text);font-size:16px;line-height:1}
+.qe-parent-learning-nav-group>.qe-workspace-subnav{margin-left:19px}
+.qe-parent-learning-nav-group .qe-workspace-subnav .qe-workspace-nav-group{gap:2px}
+.qe-parent-learning-nav-group .qe-workspace-subnav .qe-workspace-group-button{min-height:34px;padding:7px 8px;font-size:10px}
+.qe-parent-learning-nav-group .qe-workspace-subnav .qe-workspace-subnav{margin:0 0 5px 12px;padding-left:7px}
+.qe-workspace-inline-error,.qe-workspace-inline-status{margin:6px 8px;padding:9px 10px;border:1px solid var(--qe-color-border-subtle);border-radius:10px;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+.qe-workspace-inline-error{border-color:var(--qe-color-error);background:var(--qe-color-error-container);color:var(--qe-color-error)}
+.qe-workspace-inline-status{background:var(--qe-color-surface-elevated);color:var(--qe-color-text-muted)}
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button{flex:1 1 0;min-width:0;width:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 6px;border:0;border-radius:11px;background:transparent;color:var(--qe-color-text-muted);font:inherit;cursor:pointer}
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button>span{font-size:18px;line-height:1}
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button>small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:750}
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button:hover:not(:disabled),
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button:focus-visible{background:var(--qe-color-nav-active-background);color:var(--qe-color-nav-active-text)}
+.qe-workspace-mobile-nav.qe-parent-mobile-nav>button:disabled{opacity:.6;cursor:wait}
+@media(max-width:600px){
+  .qe-parent-learning-return{min-height:34px;padding:6px 8px;gap:4px;font-size:9px}
+  .qe-parent-learning-return>span:first-child{font-size:14px}
+}
+
