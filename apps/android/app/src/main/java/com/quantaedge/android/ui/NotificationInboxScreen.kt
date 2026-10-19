@@ -270,12 +270,23 @@ private fun NotificationInboxDialog(
                 }
                 if (loading && items.isEmpty()) {
                     Box(Modifier.fillMaxWidth().height(150.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-                } else if (items.isEmpty()) {
+                } else if (visibleRows.isEmpty()) {
                     Box(Modifier.fillMaxWidth().height(160.dp), contentAlignment = Alignment.Center) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             Text("✦", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.headlineLarge)
-                            Text(text("You're all caught up", "अभी कोई नई सूचना नहीं है"), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                            Text(text("New updates will appear here.", "नए अपडेट यहाँ दिखेंगे।"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                when {
+                                    filterArchived -> text("No archived notifications", "कोई संग्रहित सूचना नहीं है")
+                                    filterUnread -> text("No unread notifications", "कोई अपठित सूचना नहीं है")
+                                    else -> text("You're all caught up", "अभी कोई नई सूचना नहीं है")
+                                },
+                                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                if (filterArchived) text("Archived notifications can be restored later.", "संग्रहित सूचनाएँ बाद में वापस लाई जा सकती हैं।")
+                                else text("New updates will appear here.", "नए अपडेट यहाँ दिखेंगे।"),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 } else {
