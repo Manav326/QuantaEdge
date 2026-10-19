@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 856,
+    "assets_selected": 857,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 852,
-    "assets_remaining": 1439,
-    "assets_completion_percent": 37.2,
+    "assets_analyzed": 854,
+    "assets_remaining": 1437,
+    "assets_completion_percent": 37.3,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 851,
+    "assets_skipped_from_checkpoint": 852,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:57:55Z"
+      "checkpointed_at": "2026-10-19T12:04:43Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:59:11Z"
+      "checkpointed_at": "2026-10-19T12:06:00Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:00:00Z"
+      "checkpointed_at": "2026-10-19T12:06:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26763,6 +26763,85 @@
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "e9a70628f20cc77a5453bda3",
+      "asset_sha256": "3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of five people standing in a line, with one person pointing upwards and the others holding various items.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "27",
+          "Discover, design, and debate",
+          "India has a long history of biogas production. One of our",
+          "oldest biogas plant was set up in late 1850s. Find out about",
+          "the Biogas Program initiated by the Ministry of New and",
+          "Renewable Energy, Government of India.",
+          "Science Society",
+          "Fermented food items like fermented soya bean and",
+          "fermented bamboo shoots are consumed as traditional food"
+        ],
+        "concepts": [
+          "Biogas production",
+          "Biogas Program",
+          "Fermented food",
+          "Traditional food",
+          "Ministry of New and Renewable Energy",
+          "Government of India",
+          "History of biogas production",
+          "Fermented soya bean",
+          "Fermented bamboo shoots"
+        ],
+        "context_relation": "The image is related to the text discussing the history and significance of biogas production in India.",
+        "limitations": [
+          "The image does not provide specific details about the biogas plant or the Biogas Program."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:08:22Z"
+    },
+    {
+      "asset_id": "4efc974adb83323e2d2ffe7e",
+      "asset_sha256": "f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a standalone illustration, possibly used as a visual aid for educational content.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the visual content.",
+          "The text in the image is not relevant to the content being discussed in the textbook.",
+          "The image does not show any specific educational content or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:09:32Z"
     }
   ]
 }
