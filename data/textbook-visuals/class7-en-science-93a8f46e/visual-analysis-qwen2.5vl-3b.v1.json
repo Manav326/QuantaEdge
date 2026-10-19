@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1599,
+    "assets_selected": 1602,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1597,
-    "assets_remaining": 5891,
-    "assets_completion_percent": 21.3,
+    "assets_analyzed": 1600,
+    "assets_remaining": 5888,
+    "assets_completion_percent": 21.4,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1594,
+    "assets_skipped_from_checkpoint": 1597,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:16:39Z"
+      "checkpointed_at": "2026-10-19T12:18:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:16:59Z"
+      "checkpointed_at": "2026-10-19T12:18:59Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -60284,6 +60284,124 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:17:57Z"
+    },
+    {
+      "asset_id": "88f3ca7a051cc26a5b25be6c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An LED symbol with arrows indicating current flow and light emission.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle points to the direction in which the current can flow. The two arrows indicate that an LED emits light.",
+          "By using symbols to represent electrical components, it is easier to draw",
+          "Fig. 3.13: Positive and negative"
+        ],
+        "concepts": [
+          "LED symbol",
+          "Current flow",
+          "Light emission",
+          "Electrical components"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the symbol for an LED and its components.",
+        "limitations": [
+          "The image does not show the full page or the entire textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:19:14Z"
+    },
+    {
+      "asset_id": "e8365739dd0c30b4bc37ee39",
+      "asset_sha256": "d3081246070293c135e3f8f92ef0ce1a8c1f047c30b9e406377712eeec000375",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "page-0054.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of an LED symbol and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "In the symbol for an LED, the triangle\npoints to the direction in which the current\ncan flow. The two arrows indicate that an\nLED emits light (Fig. 3.13b).\n\nBy using symbols to represent\nelectrical components, it is easier to draw\nand understand electrical circuits. A\nrepresentation of an electrical",
+          "Activity 3.10: Let us draw",
+          "Using symbols shown in Table 3.2, draw the circuit diagram\nof an electrical circuit given in Fig. 3.12a and Fig. 3.10c.\n\nAre your circuit diagrams similar to Fig. 3.14a and Fig. 3.14b\nrespectively?",
+          "Fig. 3.14: A circuit diagram (a) with an incandescent lamp (b) with an LED lamp",
+          "International organisations, such as the International\nElectrotechnical Commission (IEC), American National\nStandards Institute (ANSI), and the Institute of Electrical\nand Electronics Engineers (IEEE) create standard symbols\nfor electrical and electronic parts. Using the same\nsymbols across the worl",
+          "3.4 Electrical Conductors and Insulators",
+          "Why did we use metal wires for\nmaking electric circuits? Can we\nnot use some other materials for\nwires?\n\nAlso, why are electric wires\ncovered with plastic or\nrubber?"
+        ],
+        "concepts": [
+          "LED symbol",
+          "Circuit diagram",
+          "Electrical components",
+          "International organisations",
+          "Electrotechnical Commission",
+          "American National Standards Institute",
+          "Institute of Electrical and Electronics Engineers",
+          "Standard symbols",
+          "Electrical and electronic parts",
+          "Countries and industries",
+          "Understanding each other easily",
+          "Metal wires",
+          "Electric circuits",
+          "Other materials for wires",
+          "Electric wires",
+          "Plastic or rubber"
+        ],
+        "context_relation": "The image is a page from a textbook that discusses the symbols used for LEDs and other electrical components, as well as the benefits of using standard symbols.",
+        "limitations": [
+          "The image does not provide specific details about the symbols used for LEDs or other electrical components.",
+          "The image does not provide specific details about the benefits of using standard symbols.",
+          "The image does not provide specific details about the materials used for wires in electric circuits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:21:04Z"
+    },
+    {
+      "asset_id": "849eaf9be2ea0f28e42a97de",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane in motion.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:21:09Z"
     }
   ]
 }
