@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 990,
+    "assets_selected": 993,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 988,
-    "assets_remaining": 1090,
-    "assets_completion_percent": 47.5,
+    "assets_analyzed": 991,
+    "assets_remaining": 1087,
+    "assets_completion_percent": 47.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 985,
+    "assets_skipped_from_checkpoint": 988,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:35:15Z"
+      "checkpointed_at": "2026-10-19T12:42:35Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:36:18Z"
+      "checkpointed_at": "2026-10-19T12:43:39Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -31866,6 +31866,103 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T12:41:18Z"
+    },
+    {
+      "asset_id": "0a024b8781fd20444beb622f",
+      "asset_sha256": "108bc23fe3bd5dd583910cf6c50970212e5044f43e5dea1b6d3869a52d41069a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 77,
+      "asset_path": "page-0077.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7321fc2cbd322c11b51dd02982fa52a6b2e00f28deaab622f4a5c82390262f48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a project involving junk food lists, nutritional requirements analysis, and a diet chart for a child.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "List junk foods you eat frequently. Ask your friends also to make such lists. On the basis of these lists, write a letter to your principal requesting to ban certain junk foods inside the school campus. Suggest some healthy options.",
+          "Find out the variation in nutritional requirements of different individuals based on age, physical activity and health conditions. Record your observations. Discuss and analyse.",
+          "Prepare a diet chart to provide a balanced diet to a twelve-year-old child. The diet chart should include food items that are not expensive and are commonly available in your area."
+        ],
+        "concepts": [
+          "junk foods",
+          "nutritional requirements",
+          "diet chart",
+          "age",
+          "physical activity",
+          "health conditions",
+          "balanced diet",
+          "twelve-year-old child"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:47:40Z"
+    },
+    {
+      "asset_id": "b7803bcd9a8895d5b7790518",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:47:49Z"
+    },
+    {
+      "asset_id": "40e680a62e4842a093be030c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:47:59Z"
     }
   ]
 }

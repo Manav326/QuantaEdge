@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1003,
-    "successful_visual_analyses": 990,
-    "missing_visual_analyses": 1075,
+    "raw_analysis_result_rows": 1006,
+    "successful_visual_analyses": 993,
+    "missing_visual_analyses": 1072,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1088,
+    "unresolved_count": 1085,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38712,9 +38712,31 @@
       "asset_path": "page-0077.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a project involving junk food lists, nutritional requirements analysis, and a diet chart for a child.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "List junk foods you eat frequently. Ask your friends also to make such lists. On the basis of these lists, write a letter to your principal requesting to ban certain junk foods inside the school campus. Suggest some healthy options.",
+          "Find out the variation in nutritional requirements of different individuals based on age, physical activity and health conditions. Record your observations. Discuss and analyse.",
+          "Prepare a diet chart to provide a balanced diet to a twelve-year-old child. The diet chart should include food items that are not expensive and are commonly available in your area."
+        ],
+        "concepts": [
+          "junk foods",
+          "nutritional requirements",
+          "diet chart",
+          "age",
+          "physical activity",
+          "health conditions",
+          "balanced diet",
+          "twelve-year-old child"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38730,9 +38752,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38748,9 +38779,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
