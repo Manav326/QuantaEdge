@@ -407,11 +407,18 @@ export default function ContentStudio(){
   setPrograms(availablePrograms);
   const requestedFromUrl=typeof window!=='undefined'?(new URLSearchParams(window.location.search).get('courseId')||''): '';
    const requestedProgram=nextProgram||programFilter||requestedFromUrl;
-   const selectedProgram=availablePrograms.some((p:any)=>String(p.id||p.course_id)===String(requestedProgram))
-    ? String(requestedProgram) : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
+   const requestedIsExplicit=Boolean(requestedProgram);
+   const requestedIsAvailable=availablePrograms.some((p:any)=>String(p.id||p.course_id)===String(requestedProgram));
+   // An explicit deep link names one course; never substitute a different course if it
+   // is no longer assigned to this institution.
+   const selectedProgram=requestedIsAvailable
+    ? String(requestedProgram)
+    : requestedIsExplicit ? '' : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
   if(!selectedProgram){
    setProgramFilter('');setRows([]);setQuestionSummary({});setSelected(null);setDetail(null);
-   setError('No courses are assigned to this institution. Assign a course before managing content.');
+   setError(requestedIsExplicit
+     ? 'The requested course is not assigned to this institution. Select a valid assigned course.'
+     : 'No courses are assigned to this institution. Assign a course before managing content.');
    return;
   }
   if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
