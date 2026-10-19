@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1039,
-    "successful_visual_analyses": 1029,
-    "missing_visual_analyses": 1039,
+    "raw_analysis_result_rows": 1041,
+    "successful_visual_analyses": 1031,
+    "missing_visual_analyses": 1037,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1049,
+    "unresolved_count": 1047,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40025,9 +40025,32 @@
       "asset_path": "assets/07738806ad4b22b7a17ff9ff010551c59e0c6916bd7a2ef67c87a3f3bb6d37fd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table summarizing the materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The table is used to record observations about materials attracted by a magnet.",
+        "limitations": [
+          "The table does not include any specific predictions or observations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40043,9 +40066,18 @@
       "asset_path": "assets/644de32a3d7971d99b4291878b228323eecc841b71f444fef7aa3efcd69af6c7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A metal key with a round head and a long, thin shaft.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any information about the textbook's content or the specific topic being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
