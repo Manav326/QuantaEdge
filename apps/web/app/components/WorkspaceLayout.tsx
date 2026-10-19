@@ -127,24 +127,23 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       setExpandedParentLearningGroup(null);
       return () => { active = false; };
     }
-    const loadParentCourses = async () => {
+    const loadPersonalLearningAccess = async () => {
       try {
-        const response = await fetch('/api/v1/marketplace/family/courses', {
+        const response = await fetch('/api/v1/auth/my-learning-access', {
           credentials: 'same-origin', cache: 'no-store',
           headers: { 'X-QE-Workspace': 'PARENT' },
         });
-        const rows = response.ok ? await response.json() : [];
-        if (active) setHasPersonalCourse(Array.isArray(rows)
-          && rows.some((course: any) => course.owned_by_parent === true));
+        const body = response.ok ? await response.json() : null;
+        if (active) setHasPersonalCourse(body?.available === true);
       } catch {
         if (active) setHasPersonalCourse(false);
       }
     };
-    void loadParentCourses();
-    window.addEventListener('qe:parent-courses-updated', loadParentCourses);
+    void loadPersonalLearningAccess();
+    window.addEventListener('qe:parent-courses-updated', loadPersonalLearningAccess);
     return () => {
       active = false;
-      window.removeEventListener('qe:parent-courses-updated', loadParentCourses);
+      window.removeEventListener('qe:parent-courses-updated', loadPersonalLearningAccess);
     };
   }, [role, pathname]);
 
