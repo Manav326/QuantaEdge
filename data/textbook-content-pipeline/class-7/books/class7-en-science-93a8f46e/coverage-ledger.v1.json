@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1714,
-    "successful_visual_analyses": 1691,
-    "missing_visual_analyses": 5774,
+    "raw_analysis_result_rows": 1717,
+    "successful_visual_analyses": 1694,
+    "missing_visual_analyses": 5771,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5797,
+    "unresolved_count": 5794,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -73767,9 +73767,19 @@
       "asset_path": "assets/ef1c7e0483b392196f48c2f4624a9682952887e100966b0e5f46bdfd80b46a77.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a person's face, possibly a student or teacher, with a neutral expression.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is blurred and not clearly identifiable.",
+          "The text in the image is not readable or relevant to the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73785,9 +73795,16 @@
       "asset_path": "assets/d20e8e40934fdd412ac826bd43af6b355aeeda0f1667c2b87f9b1b50f4373f5d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -73803,9 +73820,27 @@
       "asset_path": "assets/d60939235c0d4a61a898b40d4094c1a05b0b7a3e02370cf59ea4b85a196e169c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Electrical energy",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No visual elements present",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
