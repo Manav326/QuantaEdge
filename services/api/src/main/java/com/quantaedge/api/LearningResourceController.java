@@ -89,7 +89,8 @@ public class LearningResourceController {
   @PostMapping("/admin/learning-resources")
   @Transactional
   public Map<String,Object> createResource(@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
     String title=requiredText(body.get("title"),"Resource title",240);
     String description=optionalText(body.get("description"),1600);
@@ -117,6 +118,10 @@ public class LearningResourceController {
         List<Map<String,Object>> rows=jdbc.queryForList("select id,title,language from learning_document where id=?",learningDocumentId);
         if(rows.isEmpty())throw notFound("Learning document",learningDocumentId);
         if(!"PDF".equals(resourceType))throw badRequest("An existing textbook document must be catalogued as PDF.");
+        long courseId=positiveLong(body.get("courseId"),"Course");
+        long institutionId=requireInstitution(tenant);
+        requireAdminAssignedCourse(courseId,tenant);
+        requireCourseDocumentAssignment(learningDocumentId,institutionId,courseId);
         if(body.get("language")==null)language=normalizeLanguage(rows.getFirst().get("language"));
         if(sourceReference==null)sourceReference="learning_document:"+learningDocumentId;
       }
@@ -188,15 +193,19 @@ public class LearningResourceController {
 
   @PatchMapping("/admin/learning-resources/{resourceId}/status")
   @Transactional
-  public Map<String,Object> setResourceStatus(@PathVariable long resourceId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> setResourceStatus(@PathVariable long resourceId,@RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAdminAssignedCourse(courseId,tenant);
     String next=requiredEnum(body.get("status"),"Resource status",RESOURCE_STATUSES);
     if(Set.of("PUBLISHED","ARCHIVED").contains(next))authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
     Map<String,Object> row=resourceRow(resourceId);
     String previous=String.valueOf(row.get("status"));
-    if("PUBLISHED".equals(next))requireResourceReady(row);
+    if("PUBLISHED".equals(next))requireResourceReady(row,institutionId,courseId);
     jdbc.update("""
       update learning_resource set status=?,updated_at=now(),
         published_by_staff_id=case when ?='PUBLISHED' then ? when ?='DRAFT' then null else published_by_staff_id end,
@@ -347,11 +356,15 @@ public class LearningResourceController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
     long courseId=positiveLong(body.get("courseId"),"Course");
+    long institutionId=requireInstitution(tenant);
     requireAdminAssignedCourse(courseId,tenant);
     long resourceId=positiveLong(body.get("resourceId"),"Resource");
     String targetKind=requiredEnum(body.get("targetKind"),"Target kind",TARGET_KINDS);
     int sortOrder=integerValue(body.getOrDefault("sortOrder",0),"Sort order",0,1_000_000);
     Map<String,Object> resource=resourceRow(resourceId);
+    if("LEARNING_DOCUMENT".equals(String.valueOf(resource.get("source_kind")))) {
+      requireCourseDocumentAssignment(((Number)resource.get("learning_document_id")).longValue(),institutionId,courseId);
+    }
     long chapterId;Long lessonId=null;String artifactId=null;
     if("CHAPTER".equals(targetKind)) {
       if(body.get("lessonId")!=null||body.get("artifactId")!=null)throw badRequest("A chapter assignment cannot also name a lesson or structured artifact.");
@@ -421,7 +434,7 @@ public class LearningResourceController {
     if("PUBLISHED".equals(next)) {
       Map<String,Object> resource=resourceRow(((Number)row.get("resource_id")).longValue());
       if(!"PUBLISHED".equals(String.valueOf(resource.get("status"))))throw conflict("Publish the resource before publishing its assignment.");
-      requireResourceReady(resource);validateAssignmentTarget(row,true);
+      requireResourceReady(resource,requireInstitution(tenant),courseId);validateAssignmentTarget(row,true);
     }
     jdbc.update("""
       update learning_resource_assignment set status=?,updated_at=now(),
@@ -596,17 +609,19 @@ public class LearningResourceController {
         a.chapter_id,a.lesson_id,a.artifact_id,a.status as assignment_status,
         rc.status as recording_status,rc.storage_key as recording_storage_key,rc.original_filename as recording_filename,
         rc.media_type as recording_media_type,rc.file_size_bytes as recording_file_size_bytes,rc.sha256 as recording_sha256,
-        ld.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status
+        ldca.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status
       from learning_resource_assignment a join learning_resource r on r.id=a.resource_id
       left join recorded_class rc on rc.id=r.recorded_class_id and rc.institution_id=?
       left join learning_document ld on ld.id=r.learning_document_id
+      left join learning_document_course_assignment ldca
+        on ldca.learning_document_id=ld.id and ldca.institution_id=? and ldca.course_id=?
       left join learning_pdf_asset pa on pa.id=ld.pdf_asset_id
       left join content_asset ca on ca.id=r.content_asset_id
       where r.id=? and a.id=? and r.status='PUBLISHED' and a.status='PUBLISHED'
         and ((r.source_kind='RECORDED_CLASS' and rc.status='PUBLISHED')
-          or (r.source_kind='LEARNING_DOCUMENT' and ld.status='PUBLISHED' and pa.review_status='APPROVED')
+          or (r.source_kind='LEARNING_DOCUMENT' and ldca.status='PUBLISHED' and pa.review_status='APPROVED')
           or (r.source_kind='CONTENT_ASSET' and ca.status='PUBLISHED') or r.source_kind in ('PRIVATE_UPLOAD','EXTERNAL_URL'))
-      """,institutionId,resourceId,assignmentId);
+      """,institutionId,institutionId,courseId,resourceId,assignmentId);
     if(rows.isEmpty())throw notFound("Assigned learning resource",resourceId);
     Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
     long chapterId=((Number)row.get("chapter_id")).longValue();
@@ -689,12 +704,14 @@ public class LearningResourceController {
     item.put("assignment_count",count==null?0L:count);item.remove("storage_key");return item;
   }
 
-  private void requireResourceReady(Map<String,Object> resource) {
+  private void requireResourceReady(Map<String,Object> resource,long institutionId,long courseId) {
     switch(String.valueOf(resource.get("source_kind"))) {
       case "RECORDED_CLASS" -> {if(!"PUBLISHED".equals(String.valueOf(resource.get("recording_status"))) )throw conflict("Publish the linked recorded class before publishing this resource.");}
       case "LEARNING_DOCUMENT" -> {
-        if(!"PUBLISHED".equals(String.valueOf(resource.get("document_status")))||!"APPROVED".equals(String.valueOf(resource.get("pdf_review_status"))))
-          throw conflict("Publish the linked textbook document and approve its PDF asset first.");
+        long documentId=((Number)resource.get("learning_document_id")).longValue();
+        String assignmentStatus=learningDocumentAssignmentStatus(documentId,institutionId,courseId);
+        if(!"PUBLISHED".equals(assignmentStatus)||!"APPROVED".equals(String.valueOf(resource.get("pdf_review_status"))))
+          throw conflict("Publish the textbook document for the selected institution and course and approve its PDF asset first.");
       }
       case "CONTENT_ASSET" -> {
         if(!"PUBLISHED".equals(String.valueOf(resource.get("content_asset_status")))||!isSafeClientAssetUrl(String.valueOf(resource.get("content_asset_url"))))
@@ -806,6 +823,22 @@ public class LearningResourceController {
       throw badRequest("Select an active course before accessing this learning resource.");
     }
     return courseId;
+  }
+
+  private String learningDocumentAssignmentStatus(long documentId,long institutionId,long courseId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select status from learning_document_course_assignment
+      where learning_document_id=? and institution_id=? and course_id=?
+      """,documentId,institutionId,courseId);
+    return rows.isEmpty()?null:String.valueOf(rows.getFirst().get("status"));
+  }
+
+  private void requireCourseDocumentAssignment(long documentId,long institutionId,long courseId) {
+    String status=learningDocumentAssignmentStatus(documentId,institutionId,courseId);
+    if(status==null||"ARCHIVED".equals(status)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "The PDF has not been assigned to the selected institution and course. Assign it in Textbook Resources first.");
+    }
   }
 
   private void ensureStudentHasActiveCourse(long studentId,long institutionId,long courseId) {
