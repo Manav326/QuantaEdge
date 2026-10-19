@@ -2293,7 +2293,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             return
         }
         runTask {
-            ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+            ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress?courseId=" + currentCourseId,
                 JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
                     .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
             recordedClasses = recordedClasses.map { row ->
