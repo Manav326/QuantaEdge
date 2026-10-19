@@ -7147,8 +7147,15 @@ private fun ParentHomeScreen(
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(child.textAny("display_name", "displayName").ifBlank { "छात्र" }, style = MaterialTheme.typography.titleMedium)
-                        Text(localizedUiText("कक्षा ") + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
-                            style = MaterialTheme.typography.bodySmall)
+                        val assignedCourses = child.textAny("course_names")
+                        val noCourse = if (language == "hi") "कोई कोर्स assign नहीं" else "No course assigned"
+                        Text(
+                            (if (language == "hi") "कक्षा " else "Grade ") +
+                                child.textAny("class_code", "class_name") + " • " +
+                                (if (language == "hi") "कोर्स: " else "Courses: ") +
+                                assignedCourses.ifBlank { noCourse },
+                            style = MaterialTheme.typography.bodySmall
+                        )
                         if (section == "children") {
                             Text(
                                 (if (language == "hi") "यूज़रनेम: " else "Username: ") +
@@ -7164,7 +7171,7 @@ private fun ParentHomeScreen(
                             if (section == "children") {
                                 TextButton(onClick = { onManageChild(child) }, enabled = !busy,
                                     modifier = Modifier.weight(1f)) {
-                                    Text(if (language == "hi") "Login / विषय" else "Login / subjects")
+                                    Text(if (language == "hi") "Login / कोर्स" else "Login / courses")
                                 }
                             }
                         }
