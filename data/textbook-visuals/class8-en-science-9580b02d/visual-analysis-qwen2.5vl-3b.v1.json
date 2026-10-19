@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 925,
+    "assets_selected": 927,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 922,
-    "assets_remaining": 1369,
-    "assets_completion_percent": 40.2,
+    "assets_analyzed": 924,
+    "assets_remaining": 1367,
+    "assets_completion_percent": 40.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 920,
+    "assets_skipped_from_checkpoint": 922,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:43:51Z"
+      "checkpointed_at": "2026-10-19T17:50:42Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:44:37Z"
+      "checkpointed_at": "2026-10-19T17:51:27Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:45:13Z"
+      "checkpointed_at": "2026-10-19T17:52:03Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29331,6 +29331,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T17:49:34Z"
+    },
+    {
+      "asset_id": "3833278a4f706787096cf289",
+      "asset_sha256": "642767b155adff301c61c96bf5080f772f342225a2db2fe91c8d3fccde685bc0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/642767b155adff301c61c96bf5080f772f342225a2db2fe91c8d3fccde685bc0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person coughing into a tissue.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Tuberculosis",
+          "Bacteria",
+          "Lungs",
+          "Cough, fever, fatigue, loss of appetite, night sweats",
+          "Avoiding close contact with TB-infected people, covering the mouth and nose, maintaining good hygiene, getting vaccinated"
+        ],
+        "concepts": [
+          "Tuberculosis",
+          "Bacteria",
+          "Lungs",
+          "Symptoms",
+          "Prevention",
+          "Vaccination"
+        ],
+        "context_relation": "The image is related to the educational content about Tuberculosis, its symptoms, and prevention methods.",
+        "limitations": [
+          "The image does not provide detailed information about the bacteria or the lungs."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:53:41Z"
+    },
+    {
+      "asset_id": "645ae37d9cd08306fc48fac6",
+      "asset_sha256": "5be80b5d4fd8722d92bb6dc9d19558bd06a87b8f6b167a0a492aea9744289ef4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/5be80b5d4fd8722d92bb6dc9d19558bd06a87b8f6b167a0a492aea9744289ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person lying in bed with a bandage on their forehead, possibly indicating illness or injury.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "illness symptoms",
+          "illness treatment",
+          "illness prevention"
+        ],
+        "context_relation": "The image is related to the topic of tuberculosis, showing symptoms and prevention measures.",
+        "limitations": [
+          "The image does not provide specific details about the symptoms or prevention measures for tuberculosis."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:55:13Z"
     }
   ]
 }
