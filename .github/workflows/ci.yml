@@ -90,6 +90,9 @@ jobs:
       - name: Verify global notification reliability contract
         run: node scripts/check-global-notification-contract.mjs
 
+      - name: Verify rich notification platform contract
+        run: node scripts/check-rich-notification-contract.mjs
+
       - name: Verify white-label colour theme contract
         run: node scripts/check-color-theme-contract.mjs
 
