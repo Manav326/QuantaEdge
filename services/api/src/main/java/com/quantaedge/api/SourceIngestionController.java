@@ -827,18 +827,17 @@ public class SourceIngestionController {
   @PostMapping("/registry-books/{medium}/{bookId}/jobs")
   public Map<String, Object> startCachedBookJob(
       @PathVariable String medium, @PathVariable String bookId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId = requireInstitution(tenant);
+    Long selectedCourseId = optionalLong(body.get("courseId"), "courseId");
+    if (selectedCourseId == null) throw badRequest("Select an institution-assigned course before ingesting a book.");
+    requireAssignedCourse(selectedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    List<Map<String, Object>> tracks = jdbc.queryForList("""
-      select c.id as class_id,c.code as class_code,c.display_name as class_name,
-             s.id as subject_id,s.code as subject_code,s.display_name as subject_name
-      from curriculum_class c join curriculum_subject s on s.class_id=c.id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, classCode, subjectCode);
-    if (tracks.isEmpty()) throw badRequest("Select an active class and subject from the curriculum.");
-    Map<String, Object> track = tracks.getFirst();
+    Map<String, Object> track = resolveCourseSubject(selectedCourseId, institutionId, classCode, subjectCode);
     int grade = textbookCache.classNumber(
         String.valueOf(track.get("class_code")), String.valueOf(track.get("class_name")));
     final TextbookCacheService.CachedBook cached;
@@ -886,9 +885,10 @@ public class SourceIngestionController {
 
     List<Map<String, Object>> recent = jdbc.queryForList("""
       select id,status from source_ingestion_job
-      where source_id=? and subject_id=? and cache_medium=? and cache_book_id=?
+      where institution_id=? and course_id=? and source_id=? and subject_id=?
+        and cache_medium=? and cache_book_id=?
       order by created_at desc,id desc limit 1
-      """, sourceId, track.get("subject_id"), cached.medium(), cached.bookId());
+      """, institutionId, selectedCourseId, sourceId, track.get("subject_id"), cached.medium(), cached.bookId());
     if (!recent.isEmpty()) {
       String priorStatus = String.valueOf(recent.getFirst().get("status"));
       if (!List.of("FAILED", "REJECTED").contains(priorStatus)) {
@@ -898,12 +898,12 @@ public class SourceIngestionController {
 
     Long jobId = jdbc.queryForObject("""
       insert into source_ingestion_job(
-        source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
+        institution_id,course_id,source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
         cache_medium,cache_book_id,cache_sha256,cache_class_no,status,created_by_staff_id
-      ) values(?,?,?,?,?,?,null,?,?,?,?,'DOWNLOADING',?)
+      ) values(?,?,?,?,?,?,?,?,null,?,?,?,?,'DOWNLOADING',?)
       returning id
-      """, Long.class, sourceId, track.get("subject_id"), title, sourceUrl, edition, language,
-      cached.medium(), cached.bookId(), cached.sha256(), grade, context.staffId());
+      """, Long.class, institutionId, selectedCourseId, sourceId, track.get("subject_id"),
+      title, sourceUrl, edition, language, cached.medium(), cached.bookId(), cached.sha256(), grade, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/registry-books/" + cached.medium()
         + "/" + cached.bookId() + "/jobs",
         "Started source-ingestion review from a SHA-256-verified complete book in the persistent GHCR cache.");
@@ -954,13 +954,19 @@ public class SourceIngestionController {
 
   @GetMapping("/jobs")
   public Map<String,Object> listJobs(
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="20") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?20:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select j.id as job_id,j.source_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,j.language,
+      select j.id as job_id,j.institution_id,j.course_id,p.code as course_code,p.display_name as course_name,
+             j.source_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,j.language,
              j.status,j.error_message,j.book_asset_id,j.page_count,j.created_at,j.updated_at,j.reviewed_at,
              c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id) as chapter_count,
@@ -968,9 +974,11 @@ public class SourceIngestionController {
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='REJECTED') as rejected_chapter_count
       from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=j.course_id
+      where j.institution_id=? and j.course_id=?
       order by j.created_at desc,j.id desc limit ? offset ?
-      """,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from source_ingestion_job",Long.class);
+      """,institutionId,courseId,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from source_ingestion_job where institution_id=? and course_id=?",Long.class,institutionId,courseId);
     Map<String,Object> summary=jdbc.queryForMap("""
       select count(*) as total,
              count(*) filter(where upper(coalesce(status,''))='DOWNLOADING') as downloading,
@@ -978,31 +986,38 @@ public class SourceIngestionController {
              count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
              count(*) filter(where upper(coalesce(status,''))='FAILED') as failed,
              count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
-      from source_ingestion_job
-      """);
+      from source_ingestion_job where institution_id=? and course_id=?
+      """,institutionId,courseId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
   @GetMapping("/jobs/{jobId}")
   public Map<String, Object> getJob(
       @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     return jobDetails(jobId);
   }
 
   @PostMapping("/jobs")
   public Map<String, Object> startJob(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId = requireInstitution(tenant);
+    Long selectedCourseId = optionalLong(body.get("courseId"), "courseId");
+    if (selectedCourseId == null) throw badRequest("Select an institution-assigned course before ingesting a source.");
+    requireAssignedCourse(selectedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    Long subjectId = jdbc.query("""
-      select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    if (subjectId == null) throw badRequest("Select an active class and subject from the curriculum.");
+    Map<String,Object> courseSubject = resolveCourseSubject(selectedCourseId, institutionId, classCode, subjectCode);
+    Long subjectId = ((Number)courseSubject.get("subject_id")).longValue();
 
     Long requestedSourceId = optionalLong(body.get("sourceId"), "sourceId");
     Long sourceId;
@@ -1070,10 +1085,10 @@ public class SourceIngestionController {
     }
     Long activeJobId = jdbc.query("""
       select id from source_ingestion_job
-      where source_id=? and subject_id=? and status='DOWNLOADING'
+      where institution_id=? and course_id=? and source_id=? and subject_id=? and status='DOWNLOADING'
         and created_at > now() - interval '15 minutes'
       order by created_at desc,id desc limit 1
-      """, rs -> rs.next() ? rs.getLong(1) : null, sourceId, subjectId);
+      """, rs -> rs.next() ? rs.getLong(1) : null, institutionId, selectedCourseId, sourceId, subjectId);
     if (activeJobId != null) {
       return jobDetails(activeJobId);
     }
@@ -1090,12 +1105,13 @@ public class SourceIngestionController {
         linkedAsset == null ? null : ((Number) linkedAsset).longValue());
     Long jobId = jdbc.queryForObject("""
       insert into source_ingestion_job(
-        source_id,subject_id,source_title,source_url,edition,language,book_asset_id,status,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,'DOWNLOADING',?)
+        institution_id,course_id,source_id,subject_id,source_title,source_url,edition,language,book_asset_id,status,created_by_staff_id
+      ) values(?,?,?,?,?,?,?,?,?,'DOWNLOADING',?)
       returning id
-      """, Long.class, sourceId, subjectId, sourceTitle, sourceUrl, edition, language, assetId, context.staffId());
+      """, Long.class, institutionId, selectedCourseId, sourceId, subjectId,
+      sourceTitle, sourceUrl, edition, language, assetId, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/jobs/" + jobId,
-        "Started a textbook source ingestion job for class " + classCode + " and subject " + subjectCode + ".");
+        "Started a textbook source ingestion job for course " + selectedCourseId + ", subject " + subjectCode + ".");
     worker.process(jobId);
     return jobDetails(jobId);
   }
