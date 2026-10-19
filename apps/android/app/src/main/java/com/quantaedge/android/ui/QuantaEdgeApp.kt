@@ -1113,8 +1113,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             return
         }
         runTask {
-            // Primary focus is independent of enrollment. Reactivate only a pre-migration
-            // paused course; the API no longer pauses other courses as a side effect.
+            // Focus only selects which course the learner is viewing. It never changes
+            // enrollment for other courses and opens this exact course's structured catalogue.
             if (!course.optBoolean("is_enrolled", course.optBoolean("enrolled"))) {
                 ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
             }
@@ -1123,8 +1123,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             refreshStudentPrograms()
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
             refreshStudentTextbookDocuments()
-            route = AppRoute.STUDENT_HOME
-            status = if (language == "hi") "सीखने का course बदल गया।" else "Learning course changed."
+            structuredSubjectFilter = ""
+            currentSubject = ""
+            structuredLessonMode = true
+            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val array = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
+            structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
+            route = AppRoute.SUBJECT_LESSONS
+            status = if (language == "hi") "चुना गया course खुल गया।" else "Selected structured course opened."
         }
     }
 
@@ -1360,9 +1366,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             route = AppRoute.ALL_COURSES
             return
         }
-        val previousCourseId = currentCourseId
-        val shouldActivateCourse = previousCourseId != targetCourseId
+        val targetCourse = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == targetCourseId &&
+                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+        }
+        if (targetCourse == null) {
+            error = if (language == "hi") "यह course आपके खाते में नामांकित नहीं है।" else "This course is not enrolled in your account."
+            route = AppRoute.ALL_COURSES
+            return
+        }
+        val shouldReactivate = !targetCourse.optBoolean("is_enrolled", targetCourse.optBoolean("enrolled"))
         currentCourseId = targetCourseId
+        preferences.edit().putLong("activeCourseId", targetCourseId).apply()
         currentSubject = subjectCode
         structuredSubjectFilter = subjectCode
         structuredLessonMode = true
@@ -1370,10 +1385,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
-            if (shouldActivateCourse) {
+            if (shouldReactivate) {
                 ApiClient.postObject("/api/v1/students/me/programs/id/" + targetCourseId + "/enroll", JSONObject())
                 refreshStudentPrograms()
-                preferences.edit().putLong("activeCourseId", targetCourseId).apply()
             }
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
             val path = "/api/v1/learning/structured-lessons?courseId=" + targetCourseId +
