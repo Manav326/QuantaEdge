@@ -9,14 +9,19 @@ import Link from 'next/link';
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import { curriculumProgress, displayCount, displayPercent, lessonProgress, safeCount, safePercent } from '../progressMetrics';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useSearchParams } from 'next/navigation';
 
 export default function ProgressPage(){
   const router=useRouter();
+  const searchParams=useSearchParams();
+  const requestedCourseText=searchParams.get('courseId')||'';
+  const requestedCourseId=/^\d+$/.test(requestedCourseText)&&Number(requestedCourseText)>0?Number(requestedCourseText):null;
+  const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale}=useLocale();
   const {brand}=useTenantBranding();
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [data,setData]=useState<any>(null); const [error,setError]=useState('');
-  const [courseId,setCourseId]=useState<number|null>(null);
   const [certificates,setCertificates]=useState<any[]>([]);
   const [certificateEligibility,setCertificateEligibility]=useState<Record<number,any>>({});
   const [issuingAttemptId,setIssuingAttemptId]=useState<number|null>(null);
@@ -63,19 +68,39 @@ export default function ProgressPage(){
     finally{setIssuingAttemptId(null);}
   }
 
-  useEffect(()=>{(async()=>{
-    const query=new URLSearchParams(window.location.search);
-    const rawCourseId=query.get('courseId')||'';
-    const rawProgramCode=query.get('programCode')||'';
-    const scopedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
-    setCourseId(scopedCourseId);
-    const scopeQuery=scopedCourseId!==null?'?courseId='+scopedCourseId:rawProgramCode?'?programCode='+encodeURIComponent(rawProgramCode):'';
-    const r=await fetch('/api/v1/students/me'+scopeQuery,{cache:'no-store',credentials:'same-origin'});
-    if(r.status===401||r.status===403){router.replace('/login/student');return}
-    const b=await r.json();if(!r.ok){setError(b.message||'Unable to load progress');return}
-    if(scopedCourseId===null&&b.programId)setCourseId(Number(b.programId));
-    setData(b);await refreshCertificateRecords(b)
-  })()},[router,refreshCertificateRecords]);
+  useEffect(()=>{
+    if(loadingCourses)return;
+    if(courseId===null){
+      setData(null);
+      setError(courseError||'Choose an enrolled course to view its progress.');
+      setCertificates([]);
+      setCertificateEligibility({});
+      return;
+    }
+    let cancelled=false;
+    setError('');
+    setData(null);
+    (async()=>{
+      try{
+        const response=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+        if(response.status===401||response.status===403){router.replace('/login/student');return;}
+        const body=await response.json().catch(()=>({}));
+        if(!response.ok)throw new Error(body.message||body.detail||'Unable to load progress for this course.');
+        if(cancelled)return;
+        setData(body);
+        await refreshCertificateRecords(body);
+      }catch(e:any){
+        if(!cancelled)setError(e?.message||'Unable to load progress for this course.');
+      }
+    })();
+    return ()=>{cancelled=true;};
+  },[router,refreshCertificateRecords,courseId,loadingCourses,courseError]);
+
+  useEffect(()=>{
+    if(courseId===null || searchParams.get('courseId')===String(courseId))return;
+    router.replace('/student/progress?courseId='+encodeURIComponent(String(courseId)));
+  },[courseId,router,searchParams]);
+  
   if(error)return <main className="app-shell"><section className="progress-page"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.progress.5f5e48c0" /></h1><p>{error}</p></div></section></main>;
   if(!data)return <main className="app-shell"><section className="progress-page"><div className="eyebrow"><UiText message="legacy.web.loading.progress.f8172f0f" /></div></section></main>;
   const stats=data.lessonStats || {},q=data.questionStats || {};
@@ -91,11 +116,11 @@ export default function ProgressPage(){
   const assessmentTypeLabel = (kind:string) => kind==='TOPIC_END'?translateUi(locale, 'legacy.web.topic.end.test.8a9ba225'):kind==='CHAPTER_END'?translateUi(locale, 'legacy.web.chapter.end.test.fede453c'):translateUi(locale, 'legacy.web.admin.created.test.7c1bcdfd');
   const assessmentStatusLabel = (status:string) => status==='RELEASED'?translateUi(locale, 'legacy.web.result.released.140bcdcb'):status==='AWAITING_REVIEW'?translateUi(locale, 'legacy.web.awaiting.teacher.review.9022669f'):status==='GRADED'?translateUi(locale, 'legacy.web.graded.awaiting.release.254753e7'):status==='IN_PROGRESS'?translateUi(locale, 'legacy.web.in.progress.52fed821'):status.replaceAll('_',' ').toLowerCase();
   return <main className="app-shell">
-    <section className="progress-page"><div><span className="eyebrow"><UiText message="legacy.web.your.progress.c5b2f5ab" /></span><h1><UiText message="legacy.web.see.what.you.ve.learned.at.a.glance.2e25b589" /></h1><p><UiText message="legacy.web.every.score.and.completion.figure.come.2a2142b0" /></p></div>
+    <section className="progress-page"><div><span className="eyebrow"><UiText message="legacy.web.your.progress.c5b2f5ab" /></span><h1><UiText message="legacy.web.see.what.you.ve.learned.at.a.glance.2e25b589" /></h1><p><UiText message="legacy.web.every.score.and.completion.figure.come.2a2142b0" /></p><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={value=>void selectCourse(value)} loading={loadingCourses} label={locale==='english'?'Course':'कोर्स'}/></div>
       <div className="progress-grid"><article><span><UiText message="legacy.web.lessons.micro.topics.ad57ed28" /></span><strong>{displayCount(lessons.completed)} / {displayCount(lessons.total)}</strong><small><UiText message="legacy.web.each.lesson.is.a.published.micro.topic.b2433996" /></small></article><article><span><UiText message="legacy.web.practice.accuracy.761c6990" /></span><strong>{displayPercent(accuracy)}</strong><small>{displayCount(safeCount(q.attempts))} <UiText message="legacy.web.responses.6ccf67eb" /> · {displayCount(safeCount(q.graded_attempts))} <UiText message="legacy.web.graded.de067772" /></small></article><article><span><UiText message="legacy.web.curriculum.6b69620f" /></span><strong>{displayPercent(lessons.percent)}</strong><small><UiText message="legacy.web.published.lessons.completed.68f842b9" /></small></article><article><span><UiText message="legacy.web.formal.tests.b493c4c1" /></span><strong>{displayCount(safeCount(assessmentStats.released))}</strong><small>{displayCount(safeCount(assessmentStats.awaiting_review))} <UiText message="legacy.web.awaiting.review.5579170f" /> · {displayPercent(safePercent(assessmentStats.average_released_percent))} <UiText message="legacy.web.average.released.score.52d7549b" /></small></article></div>
       {(certificateError||certificateNotice)&&<div className={certificateError?'feedback':'parent-notice'} role={certificateError?'alert':'status'}>{certificateError||certificateNotice}</div>}
       <div className="mastery-card"><div><span><UiText message="legacy.web.your.test.results.0b8d5440" /></span><strong>{displayCount(safeCount(assessmentStats.submitted))} <UiText message="legacy.web.submitted.367b8358" /> · {displayCount(safeCount(assessmentStats.released))} <UiText message="legacy.web.released.ffcb67dc" /></strong><small className="qe-progress-card-help"><UiText message="legacy.web.submitted.means.the.test.was.finished..456da266" /></small></div>{assessmentByType.length?assessmentByType.map((item:any)=><div className="topic-line" key={item.assessment_type}><b>{assessmentTypeLabel(item.assessment_type)}</b><span>{displayCount(safeCount(item.released))} <UiText message="legacy.web.released.7fac6ede" /> · {displayPercent(safePercent(item.average_released_percent))} <UiText message="legacy.web.average.79b0b3c2" /></span></div>):<div className="topic-line"><span><UiText message="legacy.web.no.formal.test.results.yet.642fb2cf" /></span></div>}</div>
-      <div className="mastery-card"><div><span><UiText message="legacy.web.curriculum.coverage.c5d41a31" /></span><strong>{courseId!==null?(data.programName||translateUi(locale, 'legacy.web.selected.course.45273acf')):translateUi(locale, 'legacy.web.class.3f617911')+(data.class_code||'—')}</strong></div>{curriculum.length ? curriculum.map((item:any)=>{const metric=curriculumProgress(item);const label=metric.percent===null?(metric.total===0?'Not published':'—'):metric.percent+'%';return <div className="mastery-row" key={item.subject_code || item.subject_name}><span>{item.subject_name || item.subject_code || 'Subject'}</span><i><b style={{width:(metric.percent ?? 0)+'%'}}/></i><strong>{label}</strong></div>}) : <div className="topic-line"><span><UiText message="legacy.web.curriculum.coverage.is.not.available.y.8f3020d8" /></span></div>}</div>
+      <div className="mastery-card"><div><span><UiText message="legacy.web.curriculum.coverage.c5d41a31" /></span><strong>{courseId!==null?(data.programName||translateUi(locale, 'legacy.web.selected.course.45273acf')):translateUi(locale, 'legacy.web.select.a.course.2b4ae614')}</strong></div>{curriculum.length ? curriculum.map((item:any)=>{const metric=curriculumProgress(item);const label=metric.percent===null?(metric.total===0?'Not published':'—'):metric.percent+'%';return <div className="mastery-row" key={item.subject_code || item.subject_name}><span>{item.subject_name || item.subject_code || 'Subject'}</span><i><b style={{width:(metric.percent ?? 0)+'%'}}/></i><strong>{label}</strong></div>}) : <div className="topic-line"><span><UiText message="legacy.web.curriculum.coverage.is.not.available.y.8f3020d8" /></span></div>}</div>
       <div className="mastery-card">
         <div><span><UiText message="legacy.web.concept.mastery.2274fbe3" /></span><strong>{displayPercent(masteryAverage)} <UiText message="legacy.web.average.79b0b3c2" /></strong></div>
         <div className="topic-line"><div><b><UiText message="legacy.web.mastered.concepts.d20a3bd7" /></b><small><UiText message="legacy.web.80.mastery.or.higher.fdd7170e" /></small></div><span className="good">{displayCount(safeCount(mastery.mastered))}</span></div>
@@ -139,6 +164,6 @@ export default function ProgressPage(){
       }):<div className="topic-line"><span><UiText message="legacy.web.your.test.status.and.result.will.appea.0798ef2f" /></span></div>}</div>
       <Link href="/student/certificates" className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
       <Link href={'/student/tests'+(courseId!==null?'?courseId='+courseId:'')} className="button button-dark"><UiText message="legacy.web.view.all.tests.and.results.f924b495" /></Link>
-      <Link href={courseId!==null?'/student/learn?courseId='+courseId+'&subjectCode='+encodeURIComponent(String(curriculum[0]?.subject_code||'maths')):'/student/learn'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
+      <Link href={courseId!==null?'/student/structured-lessons?courseId='+courseId+(activeCourse?.subjects?.[0]?('&subjectCode='+encodeURIComponent(String(activeCourse.subjects[0].subject_code||activeCourse.subjects[0].code||'')):''):'/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
     </section></main>;
 }
