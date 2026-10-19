@@ -25,6 +25,7 @@ public final class InstitutionThemeTokens {
       "primary", "accent", "background", "surface", "text",
       "brandPrimary", "brandAccent");
   private static final Map<String, Preset> PRESETS = createPresets();
+  private static final Map<String, Preset> PREVIOUS_PRESETS = createPreviousPresets();
 
   private InstitutionThemeTokens() {}
 
@@ -91,6 +92,15 @@ public final class InstitutionThemeTokens {
     String accentDefault = preset == null ? PRESETS.get(DEFAULT_PRESET).accent() : preset.accent();
     String primary = colorValue(firstPresent(input, "brandPrimary", "primary"), primaryDefault, "primary");
     String accent = colorValue(firstPresent(input, "brandAccent", "accent"), accentDefault, "accent");
+    // A saved v2 preset records the generated colours explicitly. When those values exactly
+    // match a previously curated preset, migrate them to the revised preset. Custom selections
+    // are labelled "custom" by HRMS and therefore remain untouched.
+    Preset previousPreset = PREVIOUS_PRESETS.get(presetId);
+    if (!legacy && preset != null && previousPreset != null
+        && primary.equals(previousPreset.primary()) && accent.equals(previousPreset.accent())) {
+      primary = preset.primary();
+      accent = preset.accent();
+    }
     String lightBackground = legacy && input.containsKey("background")
         ? colorValue(input.get("background"), "#F7F8FC", "background") : "#F8FAFC";
     String lightSurface = legacy && input.containsKey("surface")
@@ -227,6 +237,26 @@ public final class InstitutionThemeTokens {
     add(values, "cobalt", "Cobalt", "#1D4ED8", "#22D3EE");
     add(values, "slate", "Slate", "#475569", "#7DD3FC");
     add(values, "custom", "Custom colours", "#F97316", "#0F766E");
+    return values;
+  }
+
+  private static Map<String, Preset> createPreviousPresets() {
+    Map<String, Preset> values = new LinkedHashMap<>();
+    add(values, "quantaedge-orange", "QuantaEdge Orange", "#F97316", "#C2410C");
+    add(values, "academic-blue", "Academic Blue", "#2563EB", "#1D4ED8");
+    add(values, "forest-green", "Forest Green", "#15803D", "#166534");
+    add(values, "royal-violet", "Royal Violet", "#7C3AED", "#6D28D9");
+    add(values, "teal", "Teal", "#0F766E", "#115E59");
+    add(values, "burgundy", "Burgundy", "#9F1239", "#881337");
+    add(values, "navy-gold", "Navy & Gold", "#1E3A8A", "#92400E");
+    add(values, "graphite", "Graphite", "#374151", "#1F2937");
+    add(values, "indigo", "Indigo", "#4338CA", "#3730A3");
+    add(values, "emerald", "Emerald", "#047857", "#065F46");
+    add(values, "plum", "Plum", "#6B21A8", "#581C87");
+    add(values, "maroon", "Maroon", "#991B1B", "#7F1D1D");
+    add(values, "raspberry", "Raspberry", "#BE185D", "#9D174D");
+    add(values, "cobalt", "Cobalt", "#1D4ED8", "#1E40AF");
+    add(values, "slate", "Slate", "#475569", "#334155");
     return values;
   }
 
