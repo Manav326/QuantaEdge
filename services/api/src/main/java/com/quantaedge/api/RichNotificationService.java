@@ -96,7 +96,7 @@ public class RichNotificationService {
     String templateName = requiredText(name,"Template name",120);
     String detail = optionalText(description,500);
     JsonNode document = validator.validate(rawDocument);
-    long familyId = ((Number)existing.get("template_family_id")).longValue();
+    String familyId = String.valueOf(existing.get("template_family_id"));
     int version = ((Number)existing.get("content_version")).intValue()+1;
     String json=writeJson(document);
     Long id=jdbc.queryForObject("""
@@ -105,7 +105,7 @@ public class RichNotificationService {
         content_document,status,created_by_staff_id,created_by_institution_admin_id,
         updated_by_staff_id,updated_by_institution_admin_id)
       values (?::uuid,?,?,?,?,?,?::jsonb,'ACTIVE',?,?,?,?) returning id
-      """,Long.class,String.valueOf(existing.get("template_family_id")),
+      """,Long.class,familyId,
       String.valueOf(existing.get("owner_scope")),existing.get("institution_id"),templateName,
       emptyToNull(detail),version,json,actor.staffId(),actor.institutionAdminId(),
       actor.staffId(),actor.institutionAdminId());
@@ -330,6 +330,9 @@ public class RichNotificationService {
 
   private static void putRecipient(Map<String,Recipient> target,Recipient recipient) {
     String key=recipient.kind()+":"+recipient.identityId();
+    if(!target.containsKey(key)&&target.size()>=MAX_RECIPIENTS) {
+      throw new IllegalArgumentException("The resolved audience exceeds 10,000 recipients. Narrow the audience or split the campaign.");
+    }
     // HRMS campaigns spanning several tenants send once to each account. Keep the first
     // selected tenant context for inbox scope while recording all target institutions in campaign snapshot.
     target.putIfAbsent(key,recipient);
@@ -566,7 +569,7 @@ public class RichNotificationService {
         beforeId==null?0L:beforeId,beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit);
     for(Map<String,Object> row:rows) {
       row.put("contentDocument",parseJson(String.valueOf(row.remove("content_document"))));
-      row.put("unread",!"READ".equals(String.valueOf(row.get("state"))));
+      row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
     }
     return rows;
   }
@@ -583,7 +586,7 @@ public class RichNotificationService {
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind=? and case when ?='STUDENT' then student_id=?
           when ?='USER_ACCOUNT' then user_account_id=? when ?='STAFF_ACCOUNT' then staff_account_id=?
-          else false end and institution_id=? and state='CREATED'
+          else false end and institution_id=? and state in ('CREATED','QUEUED')
         """,kind,kind,id,kind,id,kind,id,institutionId);
       return true;
     }
