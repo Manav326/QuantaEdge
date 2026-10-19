@@ -44,6 +44,12 @@ class LearningDocumentControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningDocumentController(jdbc, authorization, staffAudit);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from institution_course_assignment"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from learning_document d"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
   }
 
   @Test
@@ -151,7 +157,7 @@ class LearningDocumentControllerTest {
         )
     ));
 
-    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
+    Map<String, Object> result = controller.setAssignmentStatus(88L, 71L, Map.of("status", "PUBLISHED"), author, TEST_TENANT);
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
@@ -193,7 +199,7 @@ class LearningDocumentControllerTest {
     when(authorization.hasPermission(author, "CONTENT_PUBLISH")).thenReturn(true);
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of());
 
-    Map<String,Object> response=controller.listAssignments(null,null,null,null,null,null,null,null,null,null,25,0,author);
+    Map<String,Object> response=controller.listAssignments(71L,null,null,null,null,null,null,null,null,null,25,0,author,TEST_TENANT);
     assertTrue(((List<?>)response.get("items")).isEmpty());
   }
 
