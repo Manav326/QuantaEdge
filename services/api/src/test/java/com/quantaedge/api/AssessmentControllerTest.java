@@ -79,6 +79,8 @@ class AssessmentControllerTest {
   @Test
   void studentCatalogueEligibilityAllowsOnlyAnOwnedInProgressAttemptToBypassContentRefresh() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select count(*) from student_program_enrollment spe"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
