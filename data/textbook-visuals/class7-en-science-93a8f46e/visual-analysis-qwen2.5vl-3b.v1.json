@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1572,
+    "assets_selected": 1575,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1570,
-    "assets_remaining": 5918,
+    "assets_analyzed": 1573,
+    "assets_remaining": 5915,
     "assets_completion_percent": 21.0,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1567,
+    "assets_skipped_from_checkpoint": 1570,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:53:32Z"
+      "checkpointed_at": "2026-10-19T11:56:31Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:53:53Z"
+      "checkpointed_at": "2026-10-19T11:56:52Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -59465,6 +59465,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T11:55:48Z"
+    },
+    {
+      "asset_id": "ec4719b6db7e58ce30bf8e2b",
+      "asset_sha256": "4a27da19e83e57e5500c9976abd7c658b0a269884508fcbb8bb22b727adcf11b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/4a27da19e83e57e5500c9976abd7c658b0a269884508fcbb8bb22b727adcf11b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The text is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The image does not show any diagrams or symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:57:31Z"
+    },
+    {
+      "asset_id": "df8875eb6e0f618776b41e3f",
+      "asset_sha256": "d19fb5b51b09184d82db7e804278e36966edd9e5d0884f5922ff8b26121161a2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/d19fb5b51b09184d82db7e804278e36966edd9e5d0884f5922ff8b26121161a2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2."
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific examples or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:58:10Z"
+    },
+    {
+      "asset_id": "c069546e8226a833533ccc42",
+      "asset_sha256": "550a0de0c32f0f896d99fa37961decb25b55755f1e478f819bbe274bd50fa21a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/550a0de0c32f0f896d99fa37961decb25b55755f1e478f819bbe274bd50fa21a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbols",
+          "Table 3.2"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams using symbols.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in Table 3.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:58:50Z"
     }
   ]
 }
