@@ -890,3 +890,79 @@ html[data-qe-appearance] .auth-method-switch {
   html[data-qe-appearance] .auth-method-switch,
   html[data-qe-appearance] .legal-page { transition: none; }
 }
+
+
+/* Calm reading/practice surfaces: brand colour is emphasis, never the default paragraph colour. */
+.qe-practice-intro h1 { color: var(--qe-color-text); }
+.qe-practice-intro>p { color: var(--qe-color-text-muted); }
+.qe-answer-option { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-practice-progress {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-practice-progress__meta,
+html[data-qe-appearance="dark"] .qe-practice-progress__meta i {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-practice-progress__meta strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-question-card {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-question-card__prompt,
+html[data-qe-appearance="dark"] .qe-question-card__prompt p {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-answer-option {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-answer-option:hover:not(:disabled) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-answer-option[aria-checked="true"],
+html[data-qe-appearance="dark"] .qe-answer-option.is-selected {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-practice-hint {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-practice-hint>span {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] :is(.student-profile-field, .parent-profile-field) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] :is(.student-profile-photo-editor__camera, .parent-profile-photo-editor__camera) {
+  color: var(--qe-color-on-primary);
+}
+html[data-qe-appearance="dark"] .student-profile-page__alert.is-success,
+html[data-qe-appearance="dark"] .parent-profile-page__alert.is-success {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+html[data-qe-appearance="dark"] .qe-language-switcher {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .qe-language-switcher select { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .qe-language-switcher--menu-setting select { border-color: var(--qe-color-border); }
+@media (prefers-reduced-motion: reduce) {
+  .qe-practice-progress,
+  .qe-question-card,
+  .qe-answer-option { transition: none; }
+}
