@@ -849,7 +849,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT") || role.contains("LEARNER")) {
-            studentProfile = ApiClient.getObject("/api/v1/students/me")
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             // Keep content language independent from the app interface language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }
@@ -985,7 +985,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (auth.textAny("role").contains("PARENT", true)) {
                 parentAccount = runCatching { ApiClient.getObject("/api/v1/guardians/account") }.getOrDefault(parentAccount)
             } else {
-                studentProfile = runCatching { ApiClient.getObject("/api/v1/students/me") }.getOrDefault(studentProfile)
+                studentProfile = runCatching { ApiClient.getObject("/api/v1/students/me/profile") }.getOrDefault(studentProfile)
             }
             status = if (language == "hi") "खाते की प्रोफ़ाइल सुरक्षित हो गई।" else "Account profile saved."
         }
@@ -1096,9 +1096,19 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             if (courseId <= 0L) throw IOException("Choose a valid course.")
             ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            currentCourseId = courseId
+            preferences.edit().putLong("activeCourseId", courseId).apply()
             refreshStudentPrograms()
-            studentProfile = ApiClient.getObject("/api/v1/students/me")
-            status = if (language == "hi") "Course join हो गया।" else "Course joined."
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            refreshStudentTextbookDocuments()
+            structuredSubjectFilter = ""
+            currentSubject = ""
+            structuredLessonMode = true
+            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val lessonsArray = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
+            structuredLessons = (0 until lessonsArray.length()).mapNotNull { lessonsArray.optJSONObject(it) }
+            route = AppRoute.SUBJECT_LESSONS
+            status = if (language == "hi") "Course join होकर खुल गया।" else "Course joined and opened."
         }
     }
 
@@ -3180,9 +3190,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         errorStatusCode = 0
         when (route) {
             AppRoute.STUDENT_HOME -> runTask {
-                studentProfile = ApiClient.getObject("/api/v1/students/me")
-                recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
                 refreshStudentPrograms()
+                if (currentCourseId <= 0L) throw IOException("Choose an enrolled course before opening learning reports.")
+                recommendation = ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId)
                 refreshStudentTextbookDocuments()
             }
             AppRoute.PARENT_HOME -> refreshParentData()
@@ -3714,9 +3725,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onProfile = ::openStudentProfile,
                         onProgress = ::openProgress,
                         onRefresh = { runTask {
-                            studentProfile = ApiClient.getObject("/api/v1/students/me")
-                            recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
                             refreshStudentPrograms()
+                            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course before opening learning reports.")
+                            recommendation = ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId)
                             refreshStudentTextbookDocuments()
                         } },
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
