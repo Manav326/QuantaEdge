@@ -70,7 +70,7 @@ export default function ParentPage(){
         setSelected(null);setChildCertificates([]);
         setSelectedCourseId(null);
         setCourseChoiceError('This child has no enrolled course in this institution yet.');
-        router.replace('/parent?childId='+encodeURIComponent(String(child.id)));
+        window.history.replaceState(null, '', '/parent?childId='+encodeURIComponent(String(child.id)));
         return;
       }
 
@@ -83,7 +83,7 @@ export default function ParentPage(){
       if(!course){
         setSelected(null);setChildCertificates([]);setSelectedCourseId(null);
         setCourseChoiceError('This child is enrolled in more than one course. Select which course report to view.');
-        router.replace('/parent?childId='+encodeURIComponent(String(child.id)));
+        window.history.replaceState(null, '', '/parent?childId='+encodeURIComponent(String(child.id)));
         return;
       }
       const courseId=Number(course.id);
@@ -93,7 +93,7 @@ export default function ParentPage(){
       if(!rr.ok)throw new Error(rb.message||`Unable to load the learning report (HTTP ${rr.status}).`);
       if(!rb||typeof rb!=='object')throw new Error('The API returned an invalid learning report.');
       setSelected(rb);
-      router.replace('/parent?childId='+encodeURIComponent(String(child.id))+'&courseId='+encodeURIComponent(String(courseId)));
+      window.history.replaceState(null, '', '/parent?childId='+encodeURIComponent(String(child.id))+'&courseId='+encodeURIComponent(String(courseId)));
       try{
         const certificatesResponse=await fetch(`/api/v1/guardians/children/${child.id}/certificates?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
         const certificateBody=await readApi(certificatesResponse);

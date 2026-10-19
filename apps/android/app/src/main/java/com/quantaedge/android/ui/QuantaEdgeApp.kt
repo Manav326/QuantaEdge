@@ -3734,12 +3734,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                     Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
                                 }
                             }
-                            TextButton(onClick = { clipboardManager.setText(AnnotatedString(error)) }, enabled = !busy) {
-                                Text(if (language == "hi") "कॉपी" else "Copy")
-                            }
-                            TextButton(onClick = { error = ""; errorStatusCode = 0 }, enabled = !busy) {
-                                Text(if (language == "hi") "बंद करें" else "Dismiss")
-                            }
+                            TextButton(
+                                onClick = { clipboardManager.setText(AnnotatedString(error)) },
+                                enabled = !busy,
+                                modifier = Modifier.semantics { contentDescription = if (language == "hi") "सूचना कॉपी करें" else "Copy notification" }
+                            ) { Text("⧉") }
+                            TextButton(
+                                onClick = { error = ""; errorStatusCode = 0 },
+                                enabled = !busy,
+                                modifier = Modifier.semantics { contentDescription = if (language == "hi") "सूचना बंद करें" else "Dismiss notification" }
+                            ) { Text("×") }
                         }
                     }
                 }
@@ -3752,12 +3756,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         verticalAlignment = Alignment.CenterVertically) {
                         Text(text = localizedUiText(status), modifier = Modifier.weight(1f).padding(vertical = 6.dp),
                             style = MaterialTheme.typography.bodyMedium)
-                        TextButton(onClick = { clipboardManager.setText(AnnotatedString(status)) }, enabled = !busy) {
-                            Text(if (language == "hi") "कॉपी" else "Copy")
-                        }
-                        TextButton(onClick = { status = "" }, enabled = !busy) {
-                            Text(if (language == "hi") "बंद करें" else "Close")
-                        }
+                        TextButton(
+                            onClick = { clipboardManager.setText(AnnotatedString(status)) },
+                            enabled = !busy,
+                            modifier = Modifier.semantics { contentDescription = if (language == "hi") "सूचना कॉपी करें" else "Copy notification" }
+                        ) { Text("⧉") }
+                        TextButton(
+                            onClick = { status = "" },
+                            enabled = !busy,
+                            modifier = Modifier.semantics { contentDescription = if (language == "hi") "सूचना बंद करें" else "Dismiss notification" }
+                        ) { Text("×") }
                     }
                 }
             }
