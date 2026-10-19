@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "49c58b2a174a32c90120f956ca1d1e25b67b3ba0561c7467744cf524bccf869b",
+  "raw_analysis_sha256": "2472af1f8167a89058404de20d973cd10873893d908ded52e652c337e22a70cf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -420,7 +420,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -3480,7 +3480,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -6998,7 +6998,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -7018,9 +7018,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -14766,7 +14766,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14775,8 +14775,10 @@
         ],
         "concepts": [
           "science",
+          "exploration",
           "curiosity",
-          "open-mindedness",
+          "questions",
+          "unknown",
           "process",
           "environment",
           "society",
@@ -14785,20 +14787,26 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnectedness"
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
         ],
-        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The page does not provide specific examples or activities for the reader to engage with."
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T23:25:57Z",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T00:16:02Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14807,8 +14815,10 @@
         ],
         "concepts": [
           "science",
+          "exploration",
           "curiosity",
-          "open-mindedness",
+          "questions",
+          "unknown",
           "process",
           "environment",
           "society",
@@ -14817,11 +14827,17 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnectedness"
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
         ],
-        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The page does not provide specific examples or activities for the reader to engage with."
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
