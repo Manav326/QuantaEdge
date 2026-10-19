@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 764,
+    "assets_selected": 766,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 761,
-    "assets_remaining": 1530,
-    "assets_completion_percent": 33.2,
+    "assets_analyzed": 763,
+    "assets_remaining": 1528,
+    "assets_completion_percent": 33.3,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 759,
+    "assets_skipped_from_checkpoint": 761,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:10:48Z"
+      "checkpointed_at": "2026-10-19T03:16:41Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:11:37Z"
+      "checkpointed_at": "2026-10-19T03:17:30Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:12:16Z"
+      "checkpointed_at": "2026-10-19T03:18:09Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -23357,6 +23357,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T03:15:31Z"
+    },
+    {
+      "asset_id": "518d107e9cfbbbc23ab943fe",
+      "asset_sha256": "68027d88360d01b425dfdd9c7e791800a47dc47744d5ec825b7601b7cb226936",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/68027d88360d01b425dfdd9c7e791800a47dc47744d5ec825b7601b7cb226936.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a cell with a nucleus and plastids.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "plant cell",
+          "cell wall",
+          "rigidity",
+          "strength",
+          "arrangement",
+          "structure"
+        ],
+        "context_relation": "The image is related to the educational content about cells and their components, particularly focusing on the nucleus and plastids in plant cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:19:49Z"
+    },
+    {
+      "asset_id": "07d7442aecfed6d79d2d8af7",
+      "asset_sha256": "a2fac2943ef280f52f1dc3c1e5f0b7eed63aee47abed484b1c390af063cd36b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/a2fac2943ef280f52f1dc3c1e5f0b7eed63aee47abed484b1c390af063cd36b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a part of an educational content about climbing stairs.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:21:23Z"
     }
   ]
 }

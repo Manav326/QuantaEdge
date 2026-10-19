@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1b9060d676ef5b0bda2eff21cb96a698b34cebebc1e9faa87b13d874a27cbc44",
+  "raw_analysis_sha256": "7686976eaac06006dc4bfff037ec1f637c81cc71b7784f7b625be8f6e2be399e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:10:48Z",
+      "checkpointed_at": "2026-10-19T03:16:41Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:11:37Z",
+      "checkpointed_at": "2026-10-19T03:17:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:12:16Z",
+      "checkpointed_at": "2026-10-19T03:18:09Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34303,6 +34303,120 @@
         "limitations": [
           "The image does not provide specific details about the organelles or their functions."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "518d107e9cfbbbc23ab943fe",
+      "asset_sha256": "68027d88360d01b425dfdd9c7e791800a47dc47744d5ec825b7601b7cb226936",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/68027d88360d01b425dfdd9c7e791800a47dc47744d5ec825b7601b7cb226936.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a cell with a nucleus and plastids.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "plant cell",
+          "cell wall",
+          "rigidity",
+          "strength",
+          "arrangement",
+          "structure"
+        ],
+        "context_relation": "The image is related to the educational content about cells and their components, particularly focusing on the nucleus and plastids in plant cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:19:49Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a cell with a nucleus and plastids.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "plant cell",
+          "cell wall",
+          "rigidity",
+          "strength",
+          "arrangement",
+          "structure"
+        ],
+        "context_relation": "The image is related to the educational content about cells and their components, particularly focusing on the nucleus and plastids in plant cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "07d7442aecfed6d79d2d8af7",
+      "asset_sha256": "a2fac2943ef280f52f1dc3c1e5f0b7eed63aee47abed484b1c390af063cd36b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/a2fac2943ef280f52f1dc3c1e5f0b7eed63aee47abed484b1c390af063cd36b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a part of an educational content about climbing stairs.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:21:23Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a part of an educational content about climbing stairs.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
