@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1465,
+    "assets_selected": 1468,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1463,
-    "assets_remaining": 6025,
-    "assets_completion_percent": 19.5,
+    "assets_analyzed": 1466,
+    "assets_remaining": 6022,
+    "assets_completion_percent": 19.6,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1460,
+    "assets_skipped_from_checkpoint": 1463,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:05:32Z"
+      "checkpointed_at": "2026-10-19T10:10:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:05:54Z"
+      "checkpointed_at": "2026-10-19T10:10:32Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -55680,6 +55680,133 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T10:09:26Z"
+    },
+    {
+      "asset_id": "f329d78046357e3451d9844b",
+      "asset_sha256": "9e190ab9c3e5e56bea81b66d95ff7b8c37f8fae12aaebe056f5b4e747f3f5d28",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/9e190ab9c3e5e56bea81b66d95ff7b8c37f8fae12aaebe056f5b4e747f3f5d28.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, a light bulb, and a safety pin.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "on or off the torchlight?",
+          "Let us first make a simple",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "two drawing pins, a safety pin (or a",
+          "paper clip), two wires, and a small piece of",
+          "cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "safety pin."
+        ],
+        "concepts": [
+          "Electric circuit",
+          "Switch",
+          "Light bulb",
+          "Safety pin"
+        ],
+        "context_relation": "The image is related to the textbook content about making a simple electrical circuit using a switch.",
+        "limitations": [
+          "The image does not show the completed circuit or the functioning of the switch."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:11:17Z"
+    },
+    {
+      "asset_id": "14c0391645728ecdd9cacaa0",
+      "asset_sha256": "d7d053bec14d7664bdd0174afc050dbf30b35435578236de14a54863e6e16e62",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/d7d053bec14d7664bdd0174afc050dbf30b35435578236de14a54863e6e16e62.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, and a light bulb connected to a switch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2.6 Electric switch",
+          "How does a switch turn",
+          "on or off the torchlight?",
+          "Let us first make a simple",
+          "switch on our own.",
+          "Activity 3.8: Let us construct",
+          "Collect two drawing pins, a safety pin (or a",
+          "paper clip), two wires, and a small piece of",
+          "cardboard.",
+          "(a) Insert a drawing pin through the ring of the",
+          "paper clip, and connect it to the battery.",
+          "(b) Insert the other drawing pin through the ring of the",
+          "paper clip, and connect it to the light bulb.",
+          "(c) Connect the two wires to the switch.",
+          "(d) Place the switch between the two wires.",
+          "(e) Turn on the switch to turn the light bulb on.",
+          "(f) Turn off the switch to turn the light bulb off."
+        ],
+        "concepts": [
+          "Electric circuit",
+          "Switch",
+          "Light bulb",
+          "Wires",
+          "Battery",
+          "Drawing pins",
+          "Safety pin",
+          "Paper clip",
+          "Cardboard"
+        ],
+        "context_relation": "The image shows a step-by-step guide to constructing a simple electrical circuit using basic materials.",
+        "limitations": [
+          "The image does not show the final result of the circuit being operational."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:12:08Z"
+    },
+    {
+      "asset_id": "a7d3fc8ec2e24f98a2cf13a9",
+      "asset_sha256": "87aaae66fb572332d656bee88ee781210a297f8780eab3bd3de2f96df2131b85",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 52,
+      "asset_path": "assets/87aaae66fb572332d656bee88ee781210a297f8780eab3bd3de2f96df2131b85.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cfeaf8badbe49725804f9e7e1dcdc486e77bb63f42400d25f39c9a22ff180d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a checkered shirt and vest, pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:12:43Z"
     }
   ]
 }
