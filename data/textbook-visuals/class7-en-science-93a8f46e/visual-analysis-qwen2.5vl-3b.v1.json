@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1656,
+    "assets_selected": 1659,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1654,
-    "assets_remaining": 5834,
+    "assets_analyzed": 1657,
+    "assets_remaining": 5831,
     "assets_completion_percent": 22.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1651,
+    "assets_skipped_from_checkpoint": 1654,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:11:59Z"
+      "checkpointed_at": "2026-10-19T13:15:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:12:21Z"
+      "checkpointed_at": "2026-10-19T13:15:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -62355,6 +62355,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T13:14:29Z"
+    },
+    {
+      "asset_id": "846b6df66e245cf5d4295192",
+      "asset_sha256": "57574d86c333b6e4d521802b4dd2dfbbc71926fe231666e8882cf90f014b37b4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/57574d86c333b6e4d521802b4dd2dfbbc71926fe231666e8882cf90f014b37b4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:16:12Z"
+    },
+    {
+      "asset_id": "e8f849ddc8c2b5e3a87c41e5",
+      "asset_sha256": "69f77f524708d9c301cf1679ffec210581393b36de697ddb96483e87f7ec9d1f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/69f77f524708d9c301cf1679ffec210581393b36de697ddb96483e87f7ec9d1f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a blue sky with a white cloud and a sun.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "conductors of electricity",
+          "poor conductor"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the properties of materials in terms of their ability to conduct electricity.",
+        "limitations": [
+          "The image does not provide any specific data or measurements.",
+          "The image does not show any physical objects or phenomena.",
+          "The image does not include any text or labels."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:16:50Z"
+    },
+    {
+      "asset_id": "004c5bf9d5964f244e9730bf",
+      "asset_sha256": "0f438d01d7c5d62da60c1248394d5ec056e0f9f7fd980e0547b5f3d727b4e3d9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/0f438d01d7c5d62da60c1248394d5ec056e0f9f7fd980e0547b5f3d727b4e3d9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a diver underwater, with bubbles and fins visible.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "diving",
+          "underwater",
+          "bubbles",
+          "fins"
+        ],
+        "context_relation": "The image is related to the topic of diving and underwater activities.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:17:26Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1678,
-    "successful_visual_analyses": 1656,
-    "missing_visual_analyses": 5810,
+    "raw_analysis_result_rows": 1681,
+    "successful_visual_analyses": 1659,
+    "missing_visual_analyses": 5807,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5832,
+    "unresolved_count": 5829,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -72610,9 +72610,27 @@
       "asset_path": "assets/57574d86c333b6e4d521802b4dd2dfbbc71926fe231666e8882cf90f014b37b4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72628,9 +72646,26 @@
       "asset_path": "assets/69f77f524708d9c301cf1679ffec210581393b36de697ddb96483e87f7ec9d1f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a blue sky with a white cloud and a sun.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "conductors of electricity",
+          "poor conductor"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the properties of materials in terms of their ability to conduct electricity.",
+        "limitations": [
+          "The image does not provide any specific data or measurements.",
+          "The image does not show any physical objects or phenomena.",
+          "The image does not include any text or labels."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72646,9 +72681,21 @@
       "asset_path": "assets/0f438d01d7c5d62da60c1248394d5ec056e0f9f7fd980e0547b5f3d727b4e3d9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a diver underwater, with bubbles and fins visible.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "diving",
+          "underwater",
+          "bubbles",
+          "fins"
+        ],
+        "context_relation": "The image is related to the topic of diving and underwater activities.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
