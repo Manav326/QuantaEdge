@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
@@ -28,7 +30,7 @@ export default function StudentLoginPage() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(''); setBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/student-login', {
+      const response = await apiFetch('/api/v1/auth/student-login', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ parentIdentifier: parentIdentifier.trim(), username: username.trim(), password }),
       });

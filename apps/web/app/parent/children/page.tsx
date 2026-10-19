@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
@@ -52,13 +54,13 @@ export default function ParentChildrenPage(){
 
   async function load(){
     setError('');
-    const meResponse=await fetch('/api/v1/auth/me');
+    const meResponse=await apiFetch('/api/v1/auth/me');
     if(!meResponse.ok){router.replace('/login');return;}
     let me=await readJson(meResponse);
     if(me.role!=='PARENT'&&me.role!=='ADMIN'){router.replace('/login');return;}
     const [accountResponse,childrenResponse,archivedResponse]=await Promise.all([
-      fetch('/api/v1/guardians/account'),fetch('/api/v1/guardians/children'),
-      fetch('/api/v1/guardians/children/archived')
+      apiFetch('/api/v1/guardians/account'),apiFetch('/api/v1/guardians/children'),
+      apiFetch('/api/v1/guardians/children/archived')
     ]);
     const accountBody=await readJson(accountResponse);
     const childrenBody=await readJson(childrenResponse);
@@ -71,7 +73,7 @@ export default function ParentChildrenPage(){
     setArchivedChildren(archivedBody);
     const programLists=await Promise.all(childrenBody.map(async(child:Child)=>{
       try{
-        const response=await fetch('/api/v1/guardians/children/'+child.id+'/programs',{credentials:'same-origin',cache:'no-store'});
+        const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs',{credentials:'same-origin',cache:'no-store'});
         const body=await readJson(response);
         return [child.id,response.ok&&Array.isArray(body)?body:[]] as const;
       }catch{return [child.id,[]] as const;}
@@ -92,7 +94,7 @@ export default function ParentChildrenPage(){
     try{
       const requestId=creationRequestId||crypto.randomUUID();
       if(!creationRequestId)setCreationRequestId(requestId);
-      const response=await fetch('/api/v1/guardians/children',{
+      const response=await apiFetch('/api/v1/guardians/children',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({...draft,consentAccepted:consent,requestId})
       });
@@ -122,7 +124,7 @@ export default function ParentChildrenPage(){
     setError('');setNotice('');setBusyProfile(child.id);
     try{
       const profile=profileDrafts[child.id]||{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'};
-      const response=await fetch('/api/v1/guardians/children/'+child.id+'/profile',{
+      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/profile',{
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(profile)
       });
       const body=await readJson(response);
@@ -137,7 +139,7 @@ export default function ParentChildrenPage(){
     setError('');setNotice('');
     const draft=credentialDrafts[child.id]||{username:'',password:''};
     try{
-      const response=await fetch('/api/v1/guardians/children/'+child.id+'/credentials',{
+      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/credentials',{
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(draft)
       });
       const body=await readJson(response);
@@ -151,7 +153,7 @@ export default function ParentChildrenPage(){
     const key=child.id+':'+course.id;
     setError('');setNotice('');setBusyCourse(key);
     try{
-      const response=await fetch('/api/v1/guardians/children/'+child.id+'/programs/'+course.id+'/enroll',{
+      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs/'+course.id+'/enroll',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
       });
       const body=await readJson(response);
@@ -166,7 +168,7 @@ export default function ParentChildrenPage(){
     if(!window.confirm(t('parent.children.restoreConfirm')))return;
     setError('');setNotice('');
     try{
-      const response=await fetch('/api/v1/guardians/children/'+child.id+'/restore',{
+      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/restore',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({consentAccepted:true})
       });
       const body=await readJson(response);
@@ -180,7 +182,7 @@ export default function ParentChildrenPage(){
     if(!window.confirm(t('parent.children.archiveConfirm',{ name: child.display_name })))return;
     setError('');setNotice('');
     try{
-      const response=await fetch(`/api/v1/guardians/children/${child.id}`,{method:'DELETE'});
+      const response=await apiFetch(`/api/v1/guardians/children/${child.id}`,{method:'DELETE'});
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||t('parent.children.archiveFailed'));
       await load();

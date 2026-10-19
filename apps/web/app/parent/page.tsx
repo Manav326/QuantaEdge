@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
 
@@ -45,11 +47,11 @@ export default function ParentPage(){
     setError('');
     setCourseChoiceError('');
     try{
-      const sessionResponse=await fetch('/api/v1/auth/me',{cache:'no-store'});
+      const sessionResponse=await apiFetch('/api/v1/auth/me',{cache:'no-store'});
       if(!sessionResponse.ok){router.replace('/login');return;}
       const session=await readApi(sessionResponse);
       if(session.role!=='PARENT'&&session.role!=='ADMIN'){router.replace('/login');return;}
-      const cr=await fetch('/api/v1/guardians/children',{cache:'no-store'});
+      const cr=await apiFetch('/api/v1/guardians/children',{cache:'no-store'});
       if(cr.status===401||cr.status===403){router.replace('/login');return;}
       const cb=await readApi(cr);
       if(!cr.ok)throw new Error(cb.message||`Unable to load child profiles (HTTP ${cr.status}).`);
@@ -59,7 +61,7 @@ export default function ParentPage(){
       if(!child){setSelected(null);setChildCertificates([]);setChildCourses([]);setSelectedChildId(null);return;}
       setSelectedChildId(child.id);
 
-      const coursesResponse=await fetch(`/api/v1/guardians/children/${child.id}/programs`,{cache:'no-store'});
+      const coursesResponse=await apiFetch(`/api/v1/guardians/children/${child.id}/programs`,{cache:'no-store'});
       const coursesBody=await readApi(coursesResponse);
       if(!coursesResponse.ok)throw new Error(coursesBody.message||`Unable to load this child's courses (HTTP ${coursesResponse.status}).`);
       const enrolled:ChildCourseRow[]=(Array.isArray(coursesBody)?coursesBody:[]).filter((course:ChildCourseRow)=>
@@ -88,14 +90,14 @@ export default function ParentPage(){
       }
       const courseId=Number(course.id);
       setSelectedCourseId(courseId);
-      const rr=await fetch(`/api/v1/guardians/children/${child.id}/report?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
+      const rr=await apiFetch(`/api/v1/guardians/children/${child.id}/report?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
       const rb=await readApi(rr);
       if(!rr.ok)throw new Error(rb.message||`Unable to load the learning report (HTTP ${rr.status}).`);
       if(!rb||typeof rb!=='object')throw new Error('The API returned an invalid learning report.');
       setSelected(rb);
       window.history.replaceState(null, '', '/parent?childId='+encodeURIComponent(String(child.id))+'&courseId='+encodeURIComponent(String(courseId)));
       try{
-        const certificatesResponse=await fetch(`/api/v1/guardians/children/${child.id}/certificates?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
+        const certificatesResponse=await apiFetch(`/api/v1/guardians/children/${child.id}/certificates?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
         const certificateBody=await readApi(certificatesResponse);
         setChildCertificates(certificatesResponse.ok&&Array.isArray(certificateBody.items)?certificateBody.items:[]);
       }catch{

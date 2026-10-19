@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
@@ -117,19 +119,19 @@ export default function ParentProfilePage() {
     let active = true;
     async function loadProfile() {
       try {
-        const meResponse = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+        const meResponse = await apiFetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!meResponse.ok) {
           router.replace('/login');
           return;
         }
         let me = await readJson(meResponse);
         if (me.role === 'STUDENT' && me.userId) {
-          const switched = await fetch('/api/v1/auth/switch-parent', { method: 'POST' });
+          const switched = await apiFetch('/api/v1/auth/switch-parent', { method: 'POST' });
           if (!switched.ok) {
             router.replace('/login');
             return;
           }
-          const refreshed = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+          const refreshed = await apiFetch('/api/v1/auth/me', { cache: 'no-store' });
           if (!refreshed.ok) {
             router.replace('/login');
             return;
@@ -141,7 +143,7 @@ export default function ParentProfilePage() {
           return;
         }
 
-        const response = await fetch('/api/v1/guardians/profile', { cache: 'no-store' });
+        const response = await apiFetch('/api/v1/guardians/profile', { cache: 'no-store' });
         const body = await readJson(response);
         if (!response.ok) throw new Error(body.message || 'Unable to load the parent profile.');
         if (!active) return;
@@ -192,7 +194,7 @@ export default function ParentProfilePage() {
     setPhotoBusy(true);
     try {
       const profileImageDataUrl = await prepareProfilePhoto(file);
-      const response = await fetch('/api/v1/guardians/profile-photo', {
+      const response = await apiFetch('/api/v1/guardians/profile-photo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileImageDataUrl }),
@@ -221,7 +223,7 @@ export default function ParentProfilePage() {
     setNotice('');
     setSaving(true);
     try {
-      const response = await fetch('/api/v1/guardians/profile', {
+      const response = await apiFetch('/api/v1/guardians/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -270,7 +272,7 @@ export default function ParentProfilePage() {
     setNotice('');
     setPhotoBusy(true);
     try {
-      const response = await fetch('/api/v1/guardians/profile-photo', {
+      const response = await apiFetch('/api/v1/guardians/profile-photo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileImageDataUrl: '' }),

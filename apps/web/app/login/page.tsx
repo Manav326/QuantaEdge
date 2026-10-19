@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
@@ -73,7 +75,7 @@ export default function LoginPage() {
     setBusy(true);
     try {
       if (!otpRequested) {
-        const body = await readJson(await fetch('/api/v1/auth/request-otp', {
+        const body = await readJson(await apiFetch('/api/v1/auth/request-otp', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mobile, purpose: 'LOGIN' }),
@@ -83,7 +85,7 @@ export default function LoginPage() {
         setNotice(english ? 'Enter the code sent to your verified mobile number.' : 'सत्यापित मोबाइल नंबर पर आया कोड दर्ज करें।');
         return;
       }
-      const body = await readJson(await fetch('/api/v1/auth/verify-otp', {
+      const body = await readJson(await apiFetch('/api/v1/auth/verify-otp', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile, otp, purpose: 'LOGIN' }),
@@ -102,7 +104,7 @@ export default function LoginPage() {
     }
     setBusy(true);
     try {
-      const body = await readJson(await fetch('/api/v1/auth/account-login', {
+      const body = await readJson(await apiFetch('/api/v1/auth/account-login', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password }),
