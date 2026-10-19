@@ -84,8 +84,20 @@ class QaTestPackLifecycleIntegrationTest {
       String tenantCodeA = codeFromCredential(installedA, "parentA");
       assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB));
+      assertEquals(1L, count(jdbc, "select count(*) from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'"),
+          "QuantaEdge remains a protected institution outside the synthetic tenant set.");
+      assertEquals(3L, count(jdbc, """
+          select count(distinct p.id)
+          from curriculum_program p
+          join institution_tenant qe on qe.id=(select id from institution_tenant where tenant_code='QUANTA-EDGE')
+          join institution_course_release r on r.program_id=p.id and r.source_institution_id=qe.id
+          join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=qe.id and a.status='ASSIGNED'
+          join institution_course_entitlement e on e.program_id=p.id and e.institution_id=qe.id and e.status='ACTIVE'
+          where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+          """), "QuantaEdge continues owning Classes 6/7/8 while run-specific release revisions are installed.");
       assertEquals(4L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runA));
       assertEquals(1L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=? and role='CONTENT_REVIEWER'", runA));
+      assertEquals(1L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=? and role='ADMIN'", runA));
       assertEquals(2L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_course_entitlement where qa_test_run_id=?", runA));
@@ -100,6 +112,26 @@ class QaTestPackLifecycleIntegrationTest {
             and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='B'
           """, runA, runA));
+      assertEquals(1L, count(jdbc, """
+          select count(*) from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+          join institution_tenant target_tenant on target_tenant.id=a.institution_id
+          join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
+          where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
+            and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
+            and right(target_tenant.tenant_code,1)='A'
+          """, runA, runA), "Institution A receives Class 7 only by an explicit HRMS assignment.");
+      assertEquals(1L, count(jdbc, """
+          select count(*) from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+          join institution_tenant target_tenant on target_tenant.id=a.institution_id
+          join curriculum_program p on p.id=r.program_id and p.code='CLASS_6'
+          where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
+            and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
+            and right(target_tenant.tenant_code,1)='C'
+          """, runA, runA), "Institution C receives the separately assigned Class 6 release.");
       assertEquals(0L, count(jdbc, """
           select count(*) from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
@@ -128,6 +160,8 @@ class QaTestPackLifecycleIntegrationTest {
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB),
           "Removing run A must preserve run B.");
+      assertEquals(1L, count(jdbc, "select count(*) from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'"),
+          "Removing run A must preserve the protected QuantaEdge institution.");
       assertEquals(0L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from institution_course_assignment where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from institution_course_entitlement where qa_test_run_id=?", runA));
@@ -154,6 +188,8 @@ class QaTestPackLifecycleIntegrationTest {
       assertEquals("UNINSTALLED", removedB.get("state"), () -> "Run B cleanup failed: " + removedB.get("error_summary"));
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from institution_tenant where qa_test_run_id=?", runB));
+      assertEquals(1L, count(jdbc, "select count(*) from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'"),
+          "Uninstalling all synthetic runs must not delete QuantaEdge.");
       assertEquals(0L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=?", runB));
       assertEquals(0L, count(jdbc, "select count(*) from institution_course_release where qa_test_run_id=?", runB));
