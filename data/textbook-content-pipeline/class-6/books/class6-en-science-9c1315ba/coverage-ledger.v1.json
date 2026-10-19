@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1159,
-    "successful_visual_analyses": 1137,
-    "missing_visual_analyses": 919,
+    "raw_analysis_result_rows": 1161,
+    "successful_visual_analyses": 1139,
+    "missing_visual_analyses": 917,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 941,
+    "unresolved_count": 939,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44043,9 +44043,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a table using handspans.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says, “I can guess. Our handspans are o"
+        ],
+        "concepts": [
+          "Measurement of length",
+          "Handspans",
+          "Comparison of lengths"
+        ],
+        "context_relation": "The text is discussing a method of measuring the length of a table using the number of handspans.",
+        "limitations": [
+          "The text does not provide the actual length of the table."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44061,9 +44085,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a table using handspans.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says, “I can guess. Our handspans are o"
+        ],
+        "concepts": [
+          "Measurement",
+          "Handspans",
+          "Length of the table"
+        ],
+        "context_relation": "The text discusses the measurement of a table using handspans.",
+        "limitations": [
+          "The text does not provide a visual representation of the table or the students' measurements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1137,
+    "assets_selected": 1139,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1134,
-    "assets_remaining": 944,
-    "assets_completion_percent": 54.6,
+    "assets_analyzed": 1136,
+    "assets_remaining": 942,
+    "assets_completion_percent": 54.7,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1132,
+    "assets_skipped_from_checkpoint": 1134,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:32:59Z"
+      "checkpointed_at": "2026-10-19T19:37:14Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:33:41Z"
+      "checkpointed_at": "2026-10-19T19:37:55Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:34:34Z"
+      "checkpointed_at": "2026-10-19T19:38:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37335,6 +37335,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:36:23Z"
+    },
+    {
+      "asset_id": "be9ce8476e878b441b90ad04",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a table using handspans.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says, “I can guess. Our handspans are o"
+        ],
+        "concepts": [
+          "Measurement of length",
+          "Handspans",
+          "Comparison of lengths"
+        ],
+        "context_relation": "The text is discussing a method of measuring the length of a table using the number of handspans.",
+        "limitations": [
+          "The text does not provide the actual length of the table."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:39:13Z"
+    },
+    {
+      "asset_id": "5d49989dcea2059b47f5e242",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a table using handspans.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says, “I can guess. Our handspans are o"
+        ],
+        "concepts": [
+          "Measurement",
+          "Handspans",
+          "Length of the table"
+        ],
+        "context_relation": "The text discusses the measurement of a table using handspans.",
+        "limitations": [
+          "The text does not provide a visual representation of the table or the students' measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:39:36Z"
     }
   ]
 }
