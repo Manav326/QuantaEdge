@@ -652,15 +652,15 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
 /* Keep each parent destination in an equal-width touch target. */
 @media(max-width:900px){
   .qe-workspace-mobile-nav.qe-parent-mobile-nav{
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
+    display:flex;
     align-items:stretch;
     justify-content:stretch;
     gap:4px;
   }
   .qe-workspace-mobile-nav.qe-parent-mobile-nav>a{
+    flex:1 1 0;
     min-width:0;
-    width:100%;
+    width:auto;
     justify-content:center;
     overflow:hidden;
   }
