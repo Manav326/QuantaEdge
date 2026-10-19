@@ -18,6 +18,6 @@
 .openLink,.downloadLink{align-self:flex-start}
 .downloadLink{border-color:var(--qe-orange,#ed6b20);color:var(--qe-orange,#b64b13)}
 .empty{padding:1rem;border:1px dashed var(--qe-border,#d9e1e7);border-radius:.7rem;color:var(--qe-muted,#5b6b78)}
-.error{padding:.75rem;border-radius:.6rem;background:#fff0f0;color:#a21f1f;font-size:.9rem}
-.completed{font-size:.8rem;font-weight:750;color:#26734d}
+.error{padding:.75rem;border:1px solid var(--qe-color-error);border-radius:.6rem;background:var(--qe-color-error-container);color:var(--qe-color-on-error-container);font-size:.9rem}
+.completed{font-size:.8rem;font-weight:750;color:var(--qe-color-success)}
 @media(max-width:560px){.heading{flex-direction:column}.refresh{align-self:flex-start}.grid{grid-template-columns:1fr}.media{max-height:18rem}}
