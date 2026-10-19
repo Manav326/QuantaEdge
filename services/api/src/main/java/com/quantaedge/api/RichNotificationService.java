@@ -96,11 +96,21 @@ public class RichNotificationService {
   public Map<String,Object> updateTemplate(Actor actor,long templateId,String name,String description,Object rawDocument) {
     Map<String,Object> existing = findTemplateRow(templateId);
     assertTemplateEditable(actor,existing);
+    if(!"ACTIVE".equals(String.valueOf(existing.get("status")))) {
+      throw new IllegalArgumentException("Only the current active template version can be edited. Open the latest version first.");
+    }
+    String familyId = String.valueOf(existing.get("template_family_id"));
+    Integer latestVersion = jdbc.queryForObject(
+      "select max(content_version) from notification_template where template_family_id=?::uuid",
+      Integer.class,familyId);
+    int existingVersion = ((Number)existing.get("content_version")).intValue();
+    if(latestVersion==null||latestVersion.intValue()!=existingVersion) {
+      throw new IllegalArgumentException("This template version is out of date. Reload the library and edit the latest version.");
+    }
     String templateName = requiredText(name,"Template name",120);
     String detail = optionalText(description,500);
     JsonNode document = validator.validate(rawDocument);
-    String familyId = String.valueOf(existing.get("template_family_id"));
-    int version = ((Number)existing.get("content_version")).intValue()+1;
+    int version = existingVersion+1;
     String json=writeJson(document);
     Long id=jdbc.queryForObject("""
       insert into notification_template(
