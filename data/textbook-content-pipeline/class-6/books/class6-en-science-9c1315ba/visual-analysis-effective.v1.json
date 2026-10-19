@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "128ef599ac9dbc1a7bb8539f48057743001bc824627bf401a4c017e8e07f4b31",
+  "raw_analysis_sha256": "1a03c0701b1e9689f9296e302337a993f9f4966511ab662928ca85d9d4d9a836",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:43:28Z",
+      "checkpointed_at": "2026-10-19T03:46:49Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:44:08Z",
+      "checkpointed_at": "2026-10-19T03:47:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:45:00Z",
+      "checkpointed_at": "2026-10-19T03:48:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:45:40Z",
+      "checkpointed_at": "2026-10-19T03:49:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -40854,6 +40854,98 @@
         "limitations": [
           "The table does not include all states or all traditional food items.",
           "The table does not specify the exact quantities or quantities of crops and beverages."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "95c3c2524c8bd849bb82720e",
+      "asset_sha256": "e8708b955225d9978a74f726d43b0e6171cb316c9d5b16e0162c49f4faa585b8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 55,
+      "asset_path": "page-0055.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "15fdae6f6648581b6acb8d2c5d507943d6281f3dce1dd49be2c7fbca1459c86c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing traditional food items in various Indian states.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Some traditional food items in various states of India",
+          "State",
+          "Locally grown crops",
+          "Traditional food items eaten",
+          "Beverages",
+          "Punjab",
+          "Maize, wheat, chickpea, pulses",
+          "Makki di roti, sarson da saag, chhole bhature, parantha, halwa, kheer",
+          "Lassi, chhach (buttermilk), milk, tea",
+          "Karnataka",
+          "Rice, ragi, urad, coconut",
+          "Idli, dosa, sambar, coconut chutney, ragi mudde, palya, rasam, rice",
+          "Buttermilk, coffee, tea",
+          "Manipur",
+          "Rice, bamboo, soya bean",
+          "Rice, eromba (chutney), utti (yellow peas and green onion curry) singju, kangsoi",
+          "Black Tea",
+          "Any other",
+          ""
+        ],
+        "concepts": [
+          "Traditional food items",
+          "Locally grown crops",
+          "Beverages",
+          "India's diverse food culture"
+        ],
+        "context_relation": "Exploring the diversity of traditional foods in different Indian states",
+        "limitations": [
+          "The table does not include all Indian states",
+          "The table does not include specific food items for every state"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:50:47Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing traditional food items in various Indian states.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Some traditional food items in various states of India",
+          "State",
+          "Locally grown crops",
+          "Traditional food items eaten",
+          "Beverages",
+          "Punjab",
+          "Maize, wheat, chickpea, pulses",
+          "Makki di roti, sarson da saag, chhole bhature, parantha, halwa, kheer",
+          "Lassi, chhach (buttermilk), milk, tea",
+          "Karnataka",
+          "Rice, ragi, urad, coconut",
+          "Idli, dosa, sambar, coconut chutney, ragi mudde, palya, rasam, rice",
+          "Buttermilk, coffee, tea",
+          "Manipur",
+          "Rice, bamboo, soya bean",
+          "Rice, eromba (chutney), utti (yellow peas and green onion curry) singju, kangsoi",
+          "Black Tea",
+          "Any other",
+          ""
+        ],
+        "concepts": [
+          "Traditional food items",
+          "Locally grown crops",
+          "Beverages",
+          "India's diverse food culture"
+        ],
+        "context_relation": "Exploring the diversity of traditional foods in different Indian states",
+        "limitations": [
+          "The table does not include all Indian states",
+          "The table does not include specific food items for every state"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

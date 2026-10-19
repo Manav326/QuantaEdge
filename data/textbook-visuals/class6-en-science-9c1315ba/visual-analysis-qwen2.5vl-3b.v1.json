@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 874,
+    "assets_selected": 875,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 870,
-    "assets_remaining": 1208,
+    "assets_analyzed": 871,
+    "assets_remaining": 1207,
     "assets_completion_percent": 41.9,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 869,
+    "assets_skipped_from_checkpoint": 870,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:43:28Z"
+      "checkpointed_at": "2026-10-19T03:46:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:44:08Z"
+      "checkpointed_at": "2026-10-19T03:47:30Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:45:00Z"
+      "checkpointed_at": "2026-10-19T03:48:24Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:45:40Z"
+      "checkpointed_at": "2026-10-19T03:49:05Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27513,6 +27513,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T03:46:00Z"
+    },
+    {
+      "asset_id": "95c3c2524c8bd849bb82720e",
+      "asset_sha256": "e8708b955225d9978a74f726d43b0e6171cb316c9d5b16e0162c49f4faa585b8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 55,
+      "asset_path": "page-0055.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "15fdae6f6648581b6acb8d2c5d507943d6281f3dce1dd49be2c7fbca1459c86c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing traditional food items in various Indian states.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.2: Some traditional food items in various states of India",
+          "State",
+          "Locally grown crops",
+          "Traditional food items eaten",
+          "Beverages",
+          "Punjab",
+          "Maize, wheat, chickpea, pulses",
+          "Makki di roti, sarson da saag, chhole bhature, parantha, halwa, kheer",
+          "Lassi, chhach (buttermilk), milk, tea",
+          "Karnataka",
+          "Rice, ragi, urad, coconut",
+          "Idli, dosa, sambar, coconut chutney, ragi mudde, palya, rasam, rice",
+          "Buttermilk, coffee, tea",
+          "Manipur",
+          "Rice, bamboo, soya bean",
+          "Rice, eromba (chutney), utti (yellow peas and green onion curry) singju, kangsoi",
+          "Black Tea",
+          "Any other",
+          ""
+        ],
+        "concepts": [
+          "Traditional food items",
+          "Locally grown crops",
+          "Beverages",
+          "India's diverse food culture"
+        ],
+        "context_relation": "Exploring the diversity of traditional foods in different Indian states",
+        "limitations": [
+          "The table does not include all Indian states",
+          "The table does not include specific food items for every state"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:50:47Z"
     }
   ]
 }
