@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 897,
+    "assets_selected": 898,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 893,
-    "assets_remaining": 1185,
+    "assets_analyzed": 894,
+    "assets_remaining": 1184,
     "assets_completion_percent": 43.0,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 892,
+    "assets_skipped_from_checkpoint": 893,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:19:52Z"
+      "checkpointed_at": "2026-10-19T05:23:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:20:32Z"
+      "checkpointed_at": "2026-10-19T05:23:43Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:21:23Z"
+      "checkpointed_at": "2026-10-19T05:24:33Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:22:01Z"
+      "checkpointed_at": "2026-10-19T05:25:11Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28401,6 +28401,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:22:17Z"
+    },
+    {
+      "asset_id": "2d44c43930d76ecc18e2fc4e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of various nuts and seeds, including pistachios, sunflower seeds, almonds, walnuts, cashews, groundnuts, sesame seeds, and soya beans, arranged vertically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Butter",
+          "Pistachios",
+          "Sunflower",
+          "seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing"
+        ],
+        "concepts": [
+          "sources of fats",
+          "nutritional information"
+        ],
+        "context_relation": "The image is a visual representation of the sources of fats mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific nutritional information or details about the health benefits of these sources of fats."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:25:28Z"
     }
   ]
 }
