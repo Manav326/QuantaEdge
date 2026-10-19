@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1323,
+    "assets_selected": 1326,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1321,
-    "assets_remaining": 6167,
-    "assets_completion_percent": 17.6,
+    "assets_analyzed": 1324,
+    "assets_remaining": 6164,
+    "assets_completion_percent": 17.7,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1318,
+    "assets_skipped_from_checkpoint": 1321,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:52:27Z"
+      "checkpointed_at": "2026-10-19T03:55:33Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:52:55Z"
+      "checkpointed_at": "2026-10-19T03:56:01Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50156,6 +50156,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T03:54:38Z"
+    },
+    {
+      "asset_id": "f260eccda0d0a89860cff58e",
+      "asset_sha256": "cb86a4fd6b148c827f9604dbbfa997c4bf7baf26888ff91c0f8011cc0f61e84c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/cb86a4fd6b148c827f9604dbbfa997c4bf7baf26888ff91c0f8011cc0f61e84c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black line on a green background.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:57:07Z"
+    },
+    {
+      "asset_id": "393e6591b7b7f24c786f7f04",
+      "asset_sha256": "a95aa083809325743bc90445afe0e7dfadf391bc5974fadc12d90dfa9f5d142c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/a95aa083809325743bc90445afe0e7dfadf391bc5974fadc12d90dfa9f5d142c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow object is partially visible against a light green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify the object's details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:58:19Z"
+    },
+    {
+      "asset_id": "8444ccc9b5b83b6d55740386",
+      "asset_sha256": "c0ba1eba40a6159f7ccbcf5901716fe1c697c48c0431e80a825018cd0f18b59f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/c0ba1eba40a6159f7ccbcf5901716fe1c697c48c0431e80a825018cd0f18b59f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a metallic object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is out of focus and details are not clear.",
+          "The background is blurred, making it difficult to identify the object's context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:59:25Z"
     }
   ]
 }

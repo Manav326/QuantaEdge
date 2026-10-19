@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1346,
-    "successful_visual_analyses": 1323,
-    "missing_visual_analyses": 6142,
+    "raw_analysis_result_rows": 1349,
+    "successful_visual_analyses": 1326,
+    "missing_visual_analyses": 6139,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6165,
+    "unresolved_count": 6162,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60745,9 +60745,16 @@
       "asset_path": "assets/cb86a4fd6b148c827f9604dbbfa997c4bf7baf26888ff91c0f8011cc0f61e84c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black line on a green background.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60763,9 +60770,31 @@
       "asset_path": "assets/a95aa083809325743bc90445afe0e7dfadf391bc5974fadc12d90dfa9f5d142c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow object is partially visible against a light green background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "prediction",
+          "observation"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify the object's details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60781,9 +60810,19 @@
       "asset_path": "assets/c0ba1eba40a6159f7ccbcf5901716fe1c697c48c0431e80a825018cd0f18b59f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a metallic object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is out of focus and details are not clear.",
+          "The background is blurred, making it difficult to identify the object's context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
