@@ -173,7 +173,7 @@ function StudentCertificatesContent() {
     setCertificateLookupLoading(true);
     const loadRecord = async () => {
       try {
-        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId, {
+        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '?courseId=' + encodeURIComponent(String(courseId || '')), {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -220,7 +220,7 @@ function StudentCertificatesContent() {
     setPreviewLoading(true);
     const loadPreview = async () => {
       try {
-        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?format=' + previewFormat, {
+        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -257,7 +257,7 @@ function StudentCertificatesContent() {
     setDownloadBusy(true);
     setPreviewError('');
     try {
-      const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?format=' + previewFormat, {
+      const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
         cache: 'no-store',
         credentials: 'same-origin',
         headers: { 'X-QE-Workspace': 'STUDENT' },
