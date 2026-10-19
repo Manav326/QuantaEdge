@@ -58,7 +58,7 @@ export function NotificationBell({ role }: { role: Role }) {
 }
 
 export default function NotificationInboxClient({ role }: { role: Role }) {
-  const locale = useLocale();
+  const { locale } = useLocale();
   const english = locale === 'english';
   const [items, setItems] = useState<NotificationItem[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
