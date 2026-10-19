@@ -252,46 +252,57 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-brand__tenant-mark{width:36px;height:36px;flex:0 0 36px;border-radius:11px;display:inline-grid;place-items:center;background:var(--qe-color-primary);color:var(--qe-color-on-primary);font-weight:800;font-size:18px;line-height:1}.qe-brand--compact .qe-brand__tenant-mark{width:29px;height:29px;flex-basis:29px;border-radius:9px;font-size:14px}.qe-brand--footer .qe-brand__tenant-mark{width:31px;height:31px;flex-basis:31px}.qe-brand__tenant-logo{object-fit:contain;border-radius:8px}.qe-brand__tenant-name{color:var(--qe-color-text,var(--qe-color-text));font-weight:800;max-width:min(52vw,340px);overflow-wrap:anywhere}.tutor-q-mark:not(img){display:inline-grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:var(--qe-color-primary,var(--qe-brand-orange));color:var(--qe-color-on-primary);font-size:13px;font-weight:800}.qe-session-brand-mark:not(img){display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:var(--qe-color-primary);color:var(--qe-color-on-primary);font-size:22px;font-weight:800}.qe-tenant-landing .footer{gap:20px}
 
 
-/* Canonical semantic colour tokens. Components should consume these roles rather than own palette values. */
+/* Canonical semantic colour tokens. Tenant/API values override these safe standalone defaults. */
 :root {
-  --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #9A3412;
-  --qe-color-primary-container: #FFF0E5; --qe-color-on-primary-container: #7C2D12;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #9A3412; --qe-color-accent-container: #F9ECE7; --qe-color-on-accent-container: #111827;
-  --qe-color-background: #F8FAFC; --qe-color-on-background: #172033;
+  --qe-color-primary: #F97316; --qe-color-on-primary: #111827; --qe-color-primary-text: #B0561C;
+  --qe-color-primary-container: #FEF1E8; --qe-color-on-primary-container: #111827;
+  --qe-color-accent: #0F766E; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #0F766E;
+  --qe-color-accent-container: #E7F1F0; --qe-color-on-accent-container: #111827;
+  --qe-color-background: #F5F7FB; --qe-color-on-background: #172033;
   --qe-color-surface: #FFFFFF; --qe-color-on-surface: #172033;
   --qe-color-surface-elevated: #FFFFFF; --qe-color-on-surface-elevated: #172033;
-  --qe-color-text: #172033; --qe-color-text-muted: #475467;
-  --qe-color-border: #737D91; --qe-color-border-subtle: #D1D5DB; --qe-color-focus: #9A3412;
+  --qe-color-text: #172033; --qe-color-text-muted: #536176;
+  --qe-color-border: #7B8798; --qe-color-border-subtle: #D7DEE8; --qe-color-focus: #F06F17;
   --qe-color-success: #166534; --qe-color-on-success: #FFFFFF; --qe-color-success-container: #DCFCE7; --qe-color-on-success-container: #14532D;
   --qe-color-warning: #92400E; --qe-color-on-warning: #FFFFFF; --qe-color-warning-container: #FEF3C7; --qe-color-on-warning-container: #78350F;
   --qe-color-error: #B42318; --qe-color-on-error: #FFFFFF; --qe-color-error-container: #FEE2E2; --qe-color-on-error-container: #7F1D1D;
-  --qe-color-selected-background: #FFF0E5; --qe-color-selected-text: #9A3412;
-  --qe-color-nav-background: #361805; --qe-color-nav-text: #FFFFFF; --qe-color-nav-active-background: #F97316; --qe-color-nav-active-text: #291400;
+  --qe-color-selected-background: #FEF1E8; --qe-color-selected-text: #111827;
+  --qe-color-nav-background: #F5F7FB; --qe-color-nav-text: #334155; --qe-color-nav-active-background: #FEF1E8; --qe-color-nav-active-text: #111827;
   --qe-color-disabled-background: #E5E7EB; --qe-color-disabled-text: #4B5563;
   --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
   --card: var(--qe-color-surface); --line: var(--qe-color-border-subtle);
   --purple: var(--qe-color-primary-text); --purple-dark: var(--qe-color-accent-text); --purple-soft: var(--qe-color-primary-container);
+  --qe-elevation-1: 0 1px 2px rgb(20 32 54 / .04), 0 4px 14px rgb(20 32 54 / .045);
+  --qe-elevation-2: 0 10px 28px rgb(20 32 54 / .10), 0 2px 6px rgb(20 32 54 / .04);
+  --qe-elevation-3: 0 22px 54px rgb(20 32 54 / .16), 0 4px 12px rgb(20 32 54 / .06);
   color-scheme: light;
-}html[data-qe-appearance="light"]{ color-scheme: light; }html[data-qe-appearance="dark"]{
+}
+html[data-qe-appearance="light"] { color-scheme: light; }
+html[data-qe-appearance="dark"] {
   color-scheme: dark;
-  --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #FDBA74;
-  --qe-color-primary-container: #48220D; --qe-color-on-primary-container: #FFF0E5;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #FDBA74; --qe-color-accent-container: #3F2320; --qe-color-on-accent-container: #FFFFFF;
-  --qe-color-background: #0B1220; --qe-color-on-background: #F3F4F6;
-  --qe-color-surface: #111827; --qe-color-on-surface: #F3F4F6;
-  --qe-color-surface-elevated: #182235; --qe-color-on-surface-elevated: #F3F4F6;
-  --qe-color-text: #F3F4F6; --qe-color-text-muted: #D1D5DB;
-  --qe-color-border: #6B7280; --qe-color-border-subtle: #4B5563; --qe-color-focus: #FDBA74;
-  --qe-color-success: #4ADE80; --qe-color-on-success: #052E16; --qe-color-success-container: #14532D; --qe-color-on-success-container: #DCFCE7;
-  --qe-color-warning: #FCD34D; --qe-color-on-warning: #422006; --qe-color-warning-container: #713F12; --qe-color-on-warning-container: #FEF3C7;
-  --qe-color-error: #FDA4AF; --qe-color-on-error: #450A0A; --qe-color-error-container: #7F1D1D; --qe-color-on-error-container: #FEE2E2;
-  --qe-color-selected-background: #48220D; --qe-color-selected-text: #FDBA74;
-  --qe-color-nav-background: #180D05; --qe-color-nav-text: #FFFFFF; --qe-color-nav-active-background: #F97316; --qe-color-nav-active-text: #291400;
+  --qe-color-primary: #F97316; --qe-color-on-primary: #111827; --qe-color-primary-text: #F97316;
+  --qe-color-primary-container: #362F33; --qe-color-on-primary-container: #FFFFFF;
+  --qe-color-accent: #0F766E; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #5AA09B;
+  --qe-color-accent-container: #1A303E; --qe-color-on-accent-container: #FFFFFF;
+  --qe-color-background: #121A28; --qe-color-on-background: #F4F7FB;
+  --qe-color-surface: #1B2637; --qe-color-on-surface: #F4F7FB;
+  --qe-color-surface-elevated: #243247; --qe-color-on-surface-elevated: #F4F7FB;
+  --qe-color-text: #F4F7FB; --qe-color-text-muted: #B6C2D2;
+  --qe-color-border: #66758B; --qe-color-border-subtle: #354156; --qe-color-focus: #F97316;
+  --qe-color-success: #4ADE80; --qe-color-on-success: #052E16; --qe-color-success-container: #123B2A; --qe-color-on-success-container: #C9F7D7;
+  --qe-color-warning: #FCD34D; --qe-color-on-warning: #422006; --qe-color-warning-container: #463515; --qe-color-on-warning-container: #FDE68A;
+  --qe-color-error: #FDA4AF; --qe-color-on-error: #450A0A; --qe-color-error-container: #451C28; --qe-color-on-error-container: #FFE1E8;
+  --qe-color-selected-background: #362F33; --qe-color-selected-text: #FFFFFF;
+  --qe-color-nav-background: #18243A; --qe-color-nav-text: #F4F7FB; --qe-color-nav-active-background: #362F33; --qe-color-nav-active-text: #FFFFFF;
   --qe-color-disabled-background: #273244; --qe-color-disabled-text: #9CA3AF;
   --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
   --card: var(--qe-color-surface); --line: var(--qe-color-border-subtle);
   --purple: var(--qe-color-primary-text); --purple-dark: var(--qe-color-accent-text); --purple-soft: var(--qe-color-primary-container);
-}/* Dark-mode overrides intentionally target workspace chrome and neutral component surfaces.
+  --qe-elevation-1: 0 1px 2px rgb(0 0 0 / .16), 0 4px 14px rgb(0 0 0 / .12);
+  --qe-elevation-2: 0 10px 28px rgb(0 0 0 / .22), 0 2px 6px rgb(0 0 0 / .12);
+  --qe-elevation-3: 0 22px 54px rgb(0 0 0 / .30), 0 4px 12px rgb(0 0 0 / .16);
+}
+/* Dark-mode overrides intentionally target workspace chrome and neutral component surfaces.
    Correct/incorrect/success/error/warning states keep their semantic cues. */
 html[data-qe-appearance="dark"] body,
 html[data-qe-appearance="dark"] .qe-workspace-layout,
@@ -315,7 +326,7 @@ html[data-qe-appearance="dark"] .qe-workspace-content [class*="card"]:not([class
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="panel"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]),
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="dialog"],
 html[data-qe-appearance="dark"] .qe-workspace-content [class*="popover"]{
-  background-color:var(--qe-color-error-container);
+  background-color:var(--qe-color-surface);
   border-color:var(--qe-color-border-subtle);
   color:var(--qe-color-text);
 }html[data-qe-appearance="dark"] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
@@ -678,5 +689,65 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
     bottom:calc(var(--qe-workspace-mobile-nav-height,68px) + env(safe-area-inset-bottom) + 8px);
     width:auto;height:auto;max-height:none;min-height:0;
     border:1px solid #e6e9ef;border-radius:16px;
+  }
+}
+
+/* Unified smooth surface system for the public, school-entry, learner and parent pages.
+   Ordinary containers stay neutral; the brand tint is reserved for intentional selection/action states. */
+html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock) {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+html[data-qe-appearance="dark"] [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="dark"] [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] :is(.qe-workspace-topbar, .qe-workspace-mobile-nav, .qe-workspace-mobile-subnav, .qe-workspace-sidebar, .qe-workspace-sidebar nav) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] :is(.qe-modal, .qe-dropdown, .qe-popover, [class*="dialog"]:not([class*="dialogue"]), [class*="Dialog"], [class*="popover"], [class*="Popover"], [class*="dropdown"], [class*="Dropdown"]) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]),
+html[data-qe-appearance="dark"] select,
+html[data-qe-appearance="dark"] textarea {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+  color-scheme: dark;
+}
+html[data-qe-appearance="dark"] input::placeholder,
+html[data-qe-appearance="dark"] textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] table {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] :is(th, thead) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] :is(td, th) {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]):not([class*="error"]):not([class*="Error"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="brand"]):not([class*="Brand"]) {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .tutor-dock) {
+    transition: none;
   }
 }
