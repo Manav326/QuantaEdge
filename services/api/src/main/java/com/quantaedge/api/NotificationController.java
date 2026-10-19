@@ -292,6 +292,20 @@ public class NotificationController {
       idempotencyKey,scheduledAt,expiresAt);
   }
 
+  @PostMapping({
+    "/admin/notifications/campaigns/{campaignId}/cancel",
+    "/hrms/notifications/campaigns/{campaignId}/cancel",
+    "/institution/notifications/campaigns/{campaignId}/cancel"
+  })
+  public Map<String,Object> cancelCampaign(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @PathVariable long campaignId) {
+    if(campaignId<1)throw new IllegalArgumentException("Notification campaign identity is invalid.");
+    RichNotificationService.Actor actor=actor(request,context,institutionCode,"NOTIFICATION_INSTITUTION_SEND");
+    return notifications.cancelCampaign(actor,campaignId);
+  }
+
   @GetMapping({
     "/admin/notifications/campaigns",
     "/hrms/notifications/campaigns",
