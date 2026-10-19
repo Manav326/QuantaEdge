@@ -10,7 +10,8 @@ import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Classes.module.css';
 import LearningChatPanel from './LearningChatPanel';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type LiveClass = {
   session_id:number;title:string;description?:string;provider:string;youtube_video_id?:string|null;starts_at:string;ends_at:string;status:string;join_window_minutes?:number|null;
@@ -52,7 +53,7 @@ export default function StudentClassesClient(){
   const {locale}=useLocale();
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [tab,setTab]=useState<'live'|'recorded'>('live');
-  const [subjectFilter,setSubjectFilter]=useState('ALL');
+  const [subjectFilter,setSubjectFilter]=useState(()=>searchParams.get('subjectCode')||'ALL');
   const [sessions,setSessions]=useState<LiveClass[]>([]);
   const [recordings,setRecordings]=useState<Recording[]>([]);
   const [joinedSessionId,setJoinedSessionId]=useState<number|null>(null);
@@ -99,7 +100,24 @@ export default function StudentClassesClient(){
     }finally{setLoading(false);}
   },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router,locale,activeCourseId]);
   useEffect(()=>{setSubjectFilter('ALL');setLivePage(0);setRecordingPage(0);},[activeCourseId]);
-  const availableSubjects=(activeCourse?.subjects||[]).map(subject=>({code:String(subject.subject_code||subject.code||''),name:String(subject.subject_name||subject.display_name||subject.subject_code||subject.code||'')})).filter(subject=>subject.code);
+  useEffect(()=>{
+    if(subjectFilter==='ALL')return;
+    if(!(activeCourse?.subjects||[]).some(subject=>String(subject.subject_code||subject.code||'')===subjectFilter))setSubjectFilter('ALL');
+  },[activeCourseId,activeCourse,subjectFilter]);
+  async function changeCourse(value:string){
+    await selectCourse(value);
+    const params=new URLSearchParams(searchParams.toString());
+    params.set('courseId',value);params.delete('subjectCode');
+    router.replace('/student/classes?'+params.toString());
+    setSubjectFilter('ALL');setLivePage(0);setRecordingPage(0);
+  }
+  function changeSubject(value:string){
+    setSubjectFilter(value);setLivePage(0);setRecordingPage(0);
+    const params=new URLSearchParams(searchParams.toString());
+    if(activeCourseId!==null)params.set('courseId',String(activeCourseId));
+    if(value==='ALL')params.delete('subjectCode');else params.set('subjectCode',value);
+    router.replace('/student/classes?'+params.toString());
+  }
   useEffect(()=>{void load();},[load]);
 
   useEffect(()=>()=>{
@@ -229,7 +247,7 @@ export default function StudentClassesClient(){
       {courseError&&<div className={styles.error} role="alert">{courseError}</div>}{error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
       {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>{translateUi(locale, 'legacy.web.you.are.checked.in.7ace0a90')}</b><small>{activeJoined.title} · {translateUi(locale, 'legacy.web.attendance.is.being.recorded.while.you.96ff7a5a')}</small></div>{activeJoinUrl&&joinedSessionId===activeJoined.session_id&&<a className={styles.openSecureLink} href={activeJoinUrl} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.open.secure.meeting.569ad001')}</a>}{activeJoined.provider!=='YOUTUBE_LIVE'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>{translateUi(locale, 'legacy.web.refresh.meeting.link.64ac8938')}</button>}<button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>{translateUi(locale, 'legacy.web.leave.save.attendance.a503253e')}</button></div>}
       {activeJoined&&activeJoined.provider==='YOUTUBE_LIVE'&&activeVideoId&&<section className={styles.videoFrame} aria-label={translateUi(locale, 'legacy.web.live.broadcast.0729c57a')}><iframe title={activeJoined.title} src={'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(activeVideoId)+'?autoplay=1'} style={{width:'100%',aspectRatio:'16 / 9',border:0}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></section>}
-      <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{translateUi(locale, 'legacy.web.live.classes.82bc4e33')} <span>{liveTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{translateUi(locale, 'legacy.web.recorded.classes.733f426a')} <span>{recordingsTotal}</span></button></div><PrimaryCoursePicker courses={courses} courseId={activeCourseId} onChange={selectCourse} loading={loadingCourses} label={locale==='english'?'Primary course':'मुख्य कोर्स'}/><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setLivePage(0);setRecordingPage(0)}} disabled={activeCourseId===null}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label></div>
+      <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{translateUi(locale, 'legacy.web.live.classes.82bc4e33')} <span>{liveTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{translateUi(locale, 'legacy.web.recorded.classes.733f426a')} <span>{recordingsTotal}</span></button></div><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={activeCourseId} onCourseChange={value=>void changeCourse(value)} subjectCode={subjectFilter} onSubjectChange={changeSubject} loading={loadingCourses} language={locale} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} allSubjectsLabel={translateUi(locale, 'legacy.web.all.subjects.7895d918')}/></div>
 
       {tab==='live'?<>
         <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.timetable.15fa760f')}</span><h2>{translateUi(locale, 'legacy.web.live.and.scheduled.sessions.16cb640d')}</h2><p>{translateUi(locale, 'legacy.web.meeting.links.are.released.only.after..814f18cc')}</p></div><button type="button" className={styles.refreshButton} onClick={()=>void load()}>{translateUi(locale, 'legacy.web.refresh.e9337860')}</button></div>
