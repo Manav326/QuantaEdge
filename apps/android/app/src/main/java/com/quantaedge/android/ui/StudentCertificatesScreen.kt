@@ -233,7 +233,7 @@ fun StudentCertificatesScreen(
             else "Certificate record ID is missing."
         )
         val bytes = withContext(Dispatchers.IO) {
-            ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
+            ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?courseId=" + courseId + "&format=" + format)
         }
         if (bytes.isEmpty()) throw IOException(
             if (language == "hi") "Server से खाली certificate file मिली।"
@@ -288,7 +288,7 @@ fun StudentCertificatesScreen(
                 institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
                 val knownId = attempt.optLongValue("certificate_id", "certificateId")
                 val canonical = if (knownId > 0L) runCatching {
-                    ApiClient.getObject("/api/v1/students/me/certificates/" + knownId)
+                    ApiClient.getObject("/api/v1/students/me/certificates/" + knownId + "?courseId=" + courseId)
                 }.getOrNull() else null
                 val existing = canonical ?: ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
                 prepareCertificateDownload(existing, "pdf")
@@ -313,7 +313,7 @@ fun StudentCertificatesScreen(
                 val id = certificate.optLongValue("id", "certificate_id", "certificateId")
                 if (id <= 0L) throw IOException("Certificate record की पहचान नहीं मिली।")
                 val bytes = withContext(Dispatchers.IO) {
-                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/view?format=pdf")
+                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/view?courseId=" + courseId + "&format=pdf")
                 }
                 if (bytes.isEmpty()) throw IOException(
             if (language == "hi") "Server से खाली certificate file मिली।"
