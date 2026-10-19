@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 904,
+    "assets_selected": 906,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 901,
-    "assets_remaining": 1390,
-    "assets_completion_percent": 39.3,
-    "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 899,
+    "assets_analyzed": 902,
+    "assets_remaining": 1389,
+    "assets_completion_percent": 39.4,
+    "assets_failed": 11,
+    "assets_skipped_from_checkpoint": 901,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:32:19Z"
+      "checkpointed_at": "2026-10-19T16:35:16Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:33:05Z"
+      "checkpointed_at": "2026-10-19T16:36:02Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:33:41Z"
+      "checkpointed_at": "2026-10-19T16:36:39Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28507,6 +28507,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T16:34:08Z"
+    },
+    {
+      "asset_id": "031ae494589edcaa391903b5",
+      "asset_sha256": "fd00d0e6c56903351d34cc3be190a9d2c308954ae22174d7942785897d08a314",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "page-0050.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "66ec88b09ef3d0fb79052a97",
+      "asset_sha256": "ba0ce49996d61341b70150818b7f29bf39b9d2679ae145d408edc9bda21081f2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/ba0ce49996d61341b70150818b7f29bf39b9d2679ae145d408edc9bda21081f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children playing in a playground with various equipment, including a seesaw, swings, and a slide. The playground is surrounded by trees and greenery.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "playground",
+          "equipment",
+          "seesaw",
+          "swings",
+          "slide",
+          "trees",
+          "greenery"
+        ],
+        "context_relation": "The image is related to the topic of health and cleanliness in the playground.",
+        "limitations": [
+          "The image does not show any specific health issues or cleanliness problems.",
+          "The image does not provide information about the cleanliness of the playground in Fig. 3.3b."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:43:16Z"
     }
   ]
 }
