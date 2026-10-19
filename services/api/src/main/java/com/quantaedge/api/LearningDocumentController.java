@@ -467,13 +467,19 @@ public class LearningDocumentController {
   public ResponseEntity<byte[]> previewLearningDocumentPage(
       @PathVariable long documentId,
       @PathVariable int pageNumber,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     if (!authorization.hasPermission(context, "CONTENT_VIEW")
         && !authorization.hasPermission(context, "CONTENT_EDIT")
         && !authorization.hasPermission(context, "CONTENT_PUBLISH")) {
       throw new SecurityException("Learning document preview permission required.");
     }
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    requireDocumentInCourse(documentId,courseId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256,a.file_size_bytes
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
@@ -816,6 +822,41 @@ public class LearningDocumentController {
       """, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null||tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before managing learning documents.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Boolean assigned=jdbc.queryForObject("""
+      select exists(select 1 from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where a.institution_id=? and a.status='ASSIGNED')
+      """,Boolean.class,courseId,institutionId);
+    if(!Boolean.TRUE.equals(assigned)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The selected course is not assigned to the active institution.");
+    }
+  }
+
+  private void requireDocumentInCourse(long documentId,long courseId) {
+    Boolean belongs=jdbc.queryForObject("""
+      select exists(select 1 from learning_document d
+        join curriculum_subject s on s.id=d.subject_id and s.active=true
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        join curriculum_program_subject cps on cps.program_id=p.id
+          and cps.subject_id=s.id and cps.class_id=s.class_id
+        where d.id=? and (s.program_id=p.id or
+          (s.program_id is null and p.class_id=s.class_id)))
+      """,Boolean.class,courseId,documentId);
+    if(!Boolean.TRUE.equals(belongs))throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The learning document is not part of the selected course.");
   }
 
   private AuthContext requireContentView(AuthContext context) {
