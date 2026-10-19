@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1361,
-    "successful_visual_analyses": 1338,
-    "missing_visual_analyses": 6127,
+    "raw_analysis_result_rows": 1364,
+    "successful_visual_analyses": 1341,
+    "missing_visual_analyses": 6124,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6150,
+    "unresolved_count": 6147,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61254,9 +61254,18 @@
       "asset_path": "assets/c4d999fd5b1dd1999e96428bff4f2a74369f19e8356261b7fbeb39da0897f2b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red wire connected to a black object, possibly a battery or a switch.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of electrical circuits and components.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in a circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61272,9 +61281,29 @@
       "asset_path": "assets/83557969d1e1f1f8eb4781e44225a704354c0c4f2496e6ef0200f69a56daab7d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit setup with a battery, wires, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Battery",
+          "Wires"
+        ],
+        "context_relation": "The image is a visual representation of an electrical circuit setup used in the context of Table 3.1.",
+        "limitations": [
+          "The image does not show the lamps glowing, only the setup.",
+          "The text is incomplete, missing the actual arrangement and prediction for each setup."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61290,9 +61319,18 @@
       "asset_path": "assets/fc26cd2c72aa7f3332efb6100b1927673fb1319d4f0c3f59dede28fe36ced48c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red and black object against a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the experiment described in Table 3.1."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

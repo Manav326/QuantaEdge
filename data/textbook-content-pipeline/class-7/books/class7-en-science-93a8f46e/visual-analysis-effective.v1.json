@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9e225fc1c27b5869456d93ff9e15decb3a18ac5f40adfd4f39ec7bfddba9be32",
+  "raw_analysis_sha256": "4486add0288f9268f44aa5ae7c80d55d8eae29e107834b1d22c61cffa225a5bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:14:58Z",
+      "checkpointed_at": "2026-10-19T04:19:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:15:26Z",
+      "checkpointed_at": "2026-10-19T04:20:14Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -79596,6 +79596,148 @@
         "limitations": [
           "The image is blurry and lacks clarity.",
           "The text is partially visible and incomplete."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c3bfc7c5aa6aadd823eb0e25",
+      "asset_sha256": "c4d999fd5b1dd1999e96428bff4f2a74369f19e8356261b7fbeb39da0897f2b2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/c4d999fd5b1dd1999e96428bff4f2a74369f19e8356261b7fbeb39da0897f2b2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red wire connected to a black object, possibly a battery or a switch.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of electrical circuits and components.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in a circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:21:18Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red wire connected to a black object, possibly a battery or a switch.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of electrical circuits and components.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in a circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b897968edb15d0ef80555877",
+      "asset_sha256": "83557969d1e1f1f8eb4781e44225a704354c0c4f2496e6ef0200f69a56daab7d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/83557969d1e1f1f8eb4781e44225a704354c0c4f2496e6ef0200f69a56daab7d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit setup with a battery, wires, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Battery",
+          "Wires"
+        ],
+        "context_relation": "The image is a visual representation of an electrical circuit setup used in the context of Table 3.1.",
+        "limitations": [
+          "The image does not show the lamps glowing, only the setup.",
+          "The text is incomplete, missing the actual arrangement and prediction for each setup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:22:29Z",
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit setup with a battery, wires, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Battery",
+          "Wires"
+        ],
+        "context_relation": "The image is a visual representation of an electrical circuit setup used in the context of Table 3.1.",
+        "limitations": [
+          "The image does not show the lamps glowing, only the setup.",
+          "The text is incomplete, missing the actual arrangement and prediction for each setup."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b1fdd2bc734a46a9c99a9816",
+      "asset_sha256": "fc26cd2c72aa7f3332efb6100b1927673fb1319d4f0c3f59dede28fe36ced48c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/fc26cd2c72aa7f3332efb6100b1927673fb1319d4f0c3f59dede28fe36ced48c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red and black object against a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the experiment described in Table 3.1."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:23:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red and black object against a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the experiment described in Table 3.1."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
