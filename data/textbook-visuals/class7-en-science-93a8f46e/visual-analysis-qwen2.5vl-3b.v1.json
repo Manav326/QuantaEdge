@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1620,
+    "assets_selected": 1623,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1618,
-    "assets_remaining": 5870,
+    "assets_analyzed": 1621,
+    "assets_remaining": 5867,
     "assets_completion_percent": 21.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1615,
+    "assets_skipped_from_checkpoint": 1618,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:34:40Z"
+      "checkpointed_at": "2026-10-19T12:37:41Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:35:01Z"
+      "checkpointed_at": "2026-10-19T12:38:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -61035,6 +61035,113 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:36:58Z"
+    },
+    {
+      "asset_id": "6558b98f3f2eba0a5d9a0fdb",
+      "asset_sha256": "39419922c2afce23b49cc819f9051173aa1199d086db2551563ce8f36777a3f8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/39419922c2afce23b49cc819f9051173aa1199d086db2551563ce8f36777a3f8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass through some materials but not others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:38:46Z"
+    },
+    {
+      "asset_id": "4c82be3ef10953dea537f2db",
+      "asset_sha256": "032dd0f5bd36c6f489f872ee4d2180a46d9fae457dc2fe65cf11ca8eefbdfcb0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/032dd0f5bd36c6f489f872ee4d2180a46d9fae457dc2fe65cf11ca8eefbdfcb0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:39:27Z"
+    },
+    {
+      "asset_id": "123f63304ae5b47bb6e303cc",
+      "asset_sha256": "29cc5de20c6f2244c90e65ace9a4a7b2cea03e604611308ad8050bcfc1e71319",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/29cc5de20c6f2244c90e65ace9a4a7b2cea03e604611308ad8050bcfc1e71319.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a curved edge of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "transparent material",
+          "curved edge",
+          "reflection"
+        ],
+        "context_relation": "The image is a close-up of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "limitations": [
+          "The image does not provide any information about the material or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:40:05Z"
     }
   ]
 }

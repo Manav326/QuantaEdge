@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1642,
-    "successful_visual_analyses": 1620,
-    "missing_visual_analyses": 5846,
+    "raw_analysis_result_rows": 1645,
+    "successful_visual_analyses": 1623,
+    "missing_visual_analyses": 5843,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5868,
+    "unresolved_count": 5865,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -71326,9 +71326,28 @@
       "asset_path": "assets/39419922c2afce23b49cc819f9051173aa1199d086db2551563ce8f36777a3f8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass through some materials but not others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71344,9 +71363,27 @@
       "asset_path": "assets/032dd0f5bd36c6f489f872ee4d2180a46d9fae457dc2fe65cf11ca8eefbdfcb0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71362,9 +71399,22 @@
       "asset_path": "assets/29cc5de20c6f2244c90e65ace9a4a7b2cea03e604611308ad8050bcfc1e71319.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a curved edge of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "transparent material",
+          "curved edge",
+          "reflection"
+        ],
+        "context_relation": "The image is a close-up of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "limitations": [
+          "The image does not provide any information about the material or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

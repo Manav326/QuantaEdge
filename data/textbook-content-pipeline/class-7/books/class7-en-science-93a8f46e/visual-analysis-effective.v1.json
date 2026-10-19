@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4aab0647a515f27d0b4c2b23090971ac610547f1e282dbf6691ad0d38b0af1e9",
+  "raw_analysis_sha256": "0a0f32dea01bbde8d528c4f4d2b6cf866b7e55db8645d456fd5692a46fdab4ba",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:34:40Z",
+      "checkpointed_at": "2026-10-19T12:37:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:35:01Z",
+      "checkpointed_at": "2026-10-19T12:38:02Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -95808,6 +95808,172 @@
         "context_relation": "The image is a visual representation of the text provided in the source text.",
         "limitations": [
           "The image does not show the lamp glowing or the materials being tested."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6558b98f3f2eba0a5d9a0fdb",
+      "asset_sha256": "39419922c2afce23b49cc819f9051173aa1199d086db2551563ce8f36777a3f8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/39419922c2afce23b49cc819f9051173aa1199d086db2551563ce8f36777a3f8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass through some materials but not others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:38:46Z",
+      "effective_analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass through some materials but not others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c82be3ef10953dea537f2db",
+      "asset_sha256": "032dd0f5bd36c6f489f872ee4d2180a46d9fae457dc2fe65cf11ca8eefbdfcb0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/032dd0f5bd36c6f489f872ee4d2180a46d9fae457dc2fe65cf11ca8eefbdfcb0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:39:27Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Good conductors",
+          "Insulators",
+          "Electric current",
+          "Materials"
+        ],
+        "context_relation": "The image explains the difference between good conductors and insulators.",
+        "limitations": [
+          "The image does not show specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "123f63304ae5b47bb6e303cc",
+      "asset_sha256": "29cc5de20c6f2244c90e65ace9a4a7b2cea03e604611308ad8050bcfc1e71319",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/29cc5de20c6f2244c90e65ace9a4a7b2cea03e604611308ad8050bcfc1e71319.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a curved edge of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "transparent material",
+          "curved edge",
+          "reflection"
+        ],
+        "context_relation": "The image is a close-up of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "limitations": [
+          "The image does not provide any information about the material or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:40:05Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a curved edge of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "transparent material",
+          "curved edge",
+          "reflection"
+        ],
+        "context_relation": "The image is a close-up of a transparent material, possibly glass or plastic, with a slight reflection.",
+        "limitations": [
+          "The image does not provide any information about the material or its properties."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
