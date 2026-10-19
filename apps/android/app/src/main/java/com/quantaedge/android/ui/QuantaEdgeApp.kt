@@ -3003,19 +3003,50 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun openParentReport(child: JSONObject) {
+    fun openParentReport(child: JSONObject, requestedCourseId: Long? = null) {
         val childId = child.longAny("id")
+        selectedChild = JSONObject(child.toString())
         parentReport = JSONObject().put("_childId", childId)
             .put("_childName", child.textAny("display_name", "displayName"))
         parentCertificates = emptyList()
         route = AppRoute.PARENT_REPORT
         runTask {
-            val id = child.longAny("id")
-            parentReport = ApiClient.getObject("/api/v1/guardians/children/" + id + "/report")
+            val programs = ApiClient.getArray("/api/v1/guardians/children/" + childId + "/programs").objectItems()
+            val enrolledCourses = programs.filter {
+                it.optBoolean("enrolled") || it.optBoolean("paused")
+            }
+            val selectedCourse = when {
+                requestedCourseId != null -> enrolledCourses.firstOrNull {
+                    it.longAny("id", "course_id") == requestedCourseId
+                } ?: throw IOException("That course is not enrolled for this child in the selected institution.")
+                enrolledCourses.size == 1 -> enrolledCourses.first()
+                else -> null
+            }
+            if (enrolledCourses.isEmpty() || selectedCourse == null) {
+                val options = org.json.JSONArray()
+                enrolledCourses.forEach { options.put(JSONObject(it.toString())) }
+                parentReport = JSONObject()
+                    .put("_childId", childId)
+                    .put("_childName", child.textAny("display_name", "displayName"))
+                    .put("_requiresCourseSelection", enrolledCourses.size > 1)
+                    .put("_noEnrolledCourse", enrolledCourses.isEmpty())
+                    .put("_courses", options)
+                parentCertificates = emptyList()
+                route = AppRoute.PARENT_REPORT
+                return@runTask
+            }
+            val courseId = selectedCourse.longAny("id", "course_id")
+            val courseName = selectedCourse.textAny("display_name", "course_name", "code")
+            parentReport = ApiClient.getObject(
+                "/api/v1/guardians/children/" + childId + "/report?courseId=" + courseId
+            )
             parentReport.put("_childName", child.textAny("display_name", "displayName"))
-            parentReport.put("_childId", id)
+            parentReport.put("_childId", childId)
+            parentReport.put("_courseId", courseId)
+            parentReport.put("_courseName", courseName)
+            parentReport.put("_requiresCourseSelection", false)
             parentCertificates = runCatching {
-                ApiClient.getObject("/api/v1/guardians/children/" + id + "/certificates")
+                ApiClient.getObject("/api/v1/guardians/children/" + childId + "/certificates")
                     .optJSONArray("items").objectItems()
             }.getOrDefault(emptyList())
             route = AppRoute.PARENT_REPORT
@@ -3771,7 +3802,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         language = language,
                         busy = busy,
                         certificates = parentCertificates,
-                        onSelectChild = ::openParentReport,
+                        onSelectChild = { child -> openParentReport(child) },
+                        onSelectCourse = { courseId -> openParentReport(selectedChild, courseId) },
                         onViewCertificate = ::viewParentCertificate,
                         onDownloadCertificate = ::downloadParentCertificate
                     )
