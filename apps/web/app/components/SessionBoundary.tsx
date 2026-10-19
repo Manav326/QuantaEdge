@@ -73,6 +73,7 @@ function institutionCodeForRequest(): string | null {
 
   const routeCookies = [
     { path: '/login/student', name: 'qe-tenant-login-student' },
+    { path: '/parent/learning', name: 'qe-tenant-student' },
     { path: '/student', name: 'qe-tenant-student' },
     { path: '/signup', name: 'qe-tenant-signup' },
     { path: '/session', name: 'qe-tenant-session' },
@@ -114,6 +115,7 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
     ? 'INSTITUTION'
     : path.startsWith('/admin') ? 'EDUCATION_ADMIN'
     : path.startsWith('/hrms') ? 'HRMS'
+    : path === '/parent/learning' || path.startsWith('/parent/learning/') ? 'STUDENT'
     : path.startsWith('/student') || path === '/login/student' || path === '/signup' ? 'STUDENT'
     : path.startsWith('/parent') || path === '/login/parent' ? 'PARENT'
     : explicitWorkspace || 'LEARNING';
@@ -190,6 +192,11 @@ function workspaceRole(home: string | null): WorkspaceRole | null {
   if (home?.startsWith('/parent')) return 'parent';
   return null;
 }
+
+function hasParentPersonalLearningMode(): boolean {
+  return typeof document !== 'undefined'
+    && document.cookie.split(';').some(part => part.trim() === 'QE_PARENT_PERSONAL_LEARNING=1');
+}
 if (typeof window !== 'undefined') installRefreshRecovery();
 
 export default function SessionBoundary({ children }: { children: React.ReactNode }) {
@@ -198,7 +205,10 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
   const { brand, institutionContextRequested } = useTenantBranding();
   const [ready, setReady] = useState(false);
   const isPublicEntry = pathname === '/' || pathname === '/login' || pathname === '/login/student';
-  const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
+  const parentLearningRoute = pathname === '/parent/learning' || pathname.startsWith('/parent/learning/');
+  const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') || parentLearningRoute
+    ? 'student'
+    : pathname.startsWith('/parent') ? 'parent' : null;
   const isProtected = protectedWorkspace !== null;
   const requiresCheck = isPublicEntry || isProtected;
 
@@ -217,6 +227,11 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     // refresh interceptor handles expired access sessions without blanking the UI.
     const check = async (force = false) => {
       if (isPublicEntry) verifiedWorkspace = null;
+      if (parentLearningRoute && !hasParentPersonalLearningMode()) {
+        verifiedWorkspace = null;
+        navigateWithFallback(router, '/student');
+        return;
+      }
       if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
         setReady(true);
         return;
@@ -239,7 +254,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         if (!alive) return;
         if (!response.ok) {
           verifiedWorkspace = null;
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -252,7 +267,9 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
           navigateWithFallback(router, home);
           return;
         }
-        if (protectedWorkspace && home && !pathname.startsWith(home)) {
+        const matchesHome = Boolean(home && pathname.startsWith(home))
+          || Boolean(parentLearningRoute && hasParentPersonalLearningMode() && home === '/student');
+        if (protectedWorkspace && home && !matchesHome) {
           verifiedWorkspace = homeWorkspace;
           navigateWithFallback(router, home);
           return;
@@ -297,7 +314,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       window.removeEventListener('pagehide', onPageHide);
       document.body.classList.remove('qe-session-bfcache-guard');
     };
-  }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected]);
+  }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected, parentLearningRoute]);
 
 
   useEffect(() => {
