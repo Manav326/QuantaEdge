@@ -100,6 +100,7 @@ import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.GoogleCredentialFlow
 import com.quantaedge.android.data.GoogleSignInConfigurationException
+import com.quantaedge.android.data.GoogleSignInUnavailableException
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
 import com.quantaedge.android.data.OfflineAssessmentStore
@@ -745,6 +746,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             is GoogleSignInConfigurationException -> if (language == "hi")
                 "सर्वर पर Google साइन-इन कॉन्फ़िगर नहीं है। कृपया सहायता से संपर्क करें।"
                 else "Google sign-in isn't configured on the server. Please contact support."
+            is GoogleSignInUnavailableException -> if (language == "hi")
+                "इस डिवाइस पर Google खाता उपलब्ध नहीं है। Settings में Google खाता जोड़ें, Google Play services अपडेट करें और Google Account में Sign in with Google चालू करें।"
+                else "No Google account is available. Add a Google account in device Settings, update Google Play services, and enable Sign in with Google in Google Account settings."
             is IOException -> if (language == "hi") "सर्वर से संपर्क नहीं हो पाया। नेटवर्क और कनेक्शन जाँचें।"
                 else "Couldn't reach the learning service. Check your network connection."
             else -> exception.message?.takeIf { it.isNotBlank() }
