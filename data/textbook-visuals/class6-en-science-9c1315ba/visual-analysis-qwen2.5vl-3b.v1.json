@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 942,
+    "assets_selected": 945,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 940,
-    "assets_remaining": 1138,
-    "assets_completion_percent": 45.2,
-    "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 937,
+    "assets_analyzed": 941,
+    "assets_remaining": 1137,
+    "assets_completion_percent": 45.3,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 940,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:34:57Z"
+      "checkpointed_at": "2026-10-19T10:39:45Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:35:57Z"
+      "checkpointed_at": "2026-10-19T10:40:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -29966,6 +29966,89 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T10:38:33Z"
+    },
+    {
+      "asset_id": "cad33ddf766e551a5865ff68",
+      "asset_sha256": "52222f433c5f685cadf6fb66fd13735749685322147ba9936b31c17b2696c0fe",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 66,
+      "asset_path": "page-0066.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e82b9b6e29cf26baa80b7e9b5a92e46095407a1117bb5f6aa1d49c8782a68bc5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for testing different components of food, including starch, fat, and protein, with a focus on testing starch in various food items.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3.3 How to Test Different Components\nof Food?",
+          "Let us find out which nutrients are present in various\nfood items.",
+          "Some nutrients like starch (a type of carbohydrate), fat\nand protein can be detected using fairly simple tests, while\nothers can be detected only in a well-equipped laboratory.\nLet us explore how we can detect the presence of starch,\nfat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5: Let us investigate",
+          "Take a small quantity of the food items such as a slice of\npotato, cucumber, bread, some boiled rice, boiled gram,\ncrushed peanuts, oil, butter and crushed coconut. You\ncan take other food items too for testing.",
+          "Fig. 3.7: Testing for the presence of starch in various food items",
+          "Place a small piece of each item on a separate dish.",
+          "With the help of a dropper, put 2–3 drops of diluted\niodine solution on each food item (Fig. 3.7).",
+          "Observe if there are any changes in the colour of the\nfood items. Have they turned blue-black? Record your\nobservations in Table 3.3.",
+          "A blue-black colour indicates the presence of starch."
+        ],
+        "concepts": [
+          "starch",
+          "carbohydrate",
+          "fat",
+          "protein",
+          "iodine",
+          "iodine solution",
+          "blue-black",
+          "Table 3.3"
+        ],
+        "context_relation": "instruction",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:44:55Z"
+    },
+    {
+      "asset_id": "659b631485346a32150dcac6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "81428c1e9525ee10f4ca82bcb65481977b8b70c9467840b1e4ef785e6ccd9d9c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "df9fc0e04d3fdd8994a69ece",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "81428c1e9525ee10f4ca82bcb65481977b8b70c9467840b1e4ef785e6ccd9d9c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
