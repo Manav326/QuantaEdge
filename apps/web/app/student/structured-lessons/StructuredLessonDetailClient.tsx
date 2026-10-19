@@ -3,8 +3,9 @@ import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
 import StructuredLessonExperience from './StructuredLessonExperience';
 import AssignedLearningResources from './AssignedLearningResources';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
@@ -14,6 +15,10 @@ type SavedQuestion = { response: QuestionResponse; status: QuestionResult['statu
 type SavedResponses = { questions?: Record<string, SavedQuestion>; activities?: Record<string, Record<string, string>> };
 export default function StructuredLessonDetailClient({ artifactId }: { artifactId: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseText = searchParams.get('courseId') || '';
+  const requestedCourseId = /^\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
+  const { courses, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const { locale, learningLanguage } = useLocale();
   const [lesson, setLesson] = useState<StructuredLesson | null>(null);
   const [saved, setSaved] = useState<SavedResponses>({});
@@ -23,12 +28,19 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   useEffect(() => {
     let active = true;
     setBusy(true); setError('');
+    if (courseId === null) {
+      setLesson(null);
+      setBusy(false);
+      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an enrolled course to open this lesson.' : 'यह पाठ खोलने के लिए नामांकित कोर्स चुनें।'));
+      return () => { active = false; };
+    }
     (async () => {
       try {
         const base = '/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId);
+        const scopedQuery = '?courseId=' + encodeURIComponent(String(courseId)) + '&language=' + learningLanguage;
         const [lessonResponse, savedResponse] = await Promise.all([
-          fetch(base + '?language=' + learningLanguage, { credentials: 'same-origin', cache: 'no-store' }),
-          fetch(base + '/responses?language=' + learningLanguage, { credentials: 'same-origin', cache: 'no-store' }),
+          fetch(base + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
+          fetch(base + '/responses' + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
         ]);
         if ([lessonResponse, savedResponse].some(r => r.status === 401 || r.status === 403)) { router.replace('/login/student'); return; }
         const body = await lessonResponse.json();
@@ -41,10 +53,10 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       } finally { if (active) setBusy(false); }
     })();
     return () => { active = false; };
-  }, [artifactId, learningLanguage, locale, router]);
+  }, [artifactId, learningLanguage, locale, router, courseId, loadingCourses, courseError]);
   async function submitQuestion(question: StructuredQuestion, response: QuestionResponse): Promise<QuestionResult> {
     const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/questions/' + encodeURIComponent(question.id) + '/responses?language=' + learningLanguage, {
+      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(courseId || '')) + '&language=' + learningLanguage, {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response }),
       });
@@ -55,7 +67,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   }
   async function saveActivity(blockId: string, value: string): Promise<void> {
     const http = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/activities/' + encodeURIComponent(blockId) + '/responses', {
+      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(String(courseId || '')), {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response: value }),
       });
@@ -71,7 +83,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     submitted[id] = value.status === 'correct' || value.status === 'pending_review';
   });
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
+    <header className="content-heading"><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale === 'english' ? 'Primary course' : 'मुख्य कोर्स'}/><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}</header>
     {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
       busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
@@ -79,7 +91,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
           onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
           initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />
-        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} />
+        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} courseId={courseId ?? 0} />
       </>}
   </section></div></main>;
 }

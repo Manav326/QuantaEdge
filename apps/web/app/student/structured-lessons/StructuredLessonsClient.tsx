@@ -3,8 +3,9 @@ import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
 
 type LessonItem = {
   artifactId: string; classNumber: number; subjectCode: string; chapterNumber: number;
@@ -12,6 +13,10 @@ type LessonItem = {
 };
 export default function StructuredLessonsClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedCourseText = searchParams.get('courseId') || '';
+  const requestedCourseId = /^\d+$/.test(requestedCourseText) && Number(requestedCourseText) > 0 ? Number(requestedCourseText) : null;
+  const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const { locale, learningLanguage } = useLocale();
   const [items, setItems] = useState<LessonItem[]>([]);
   const [busy, setBusy] = useState(true);
@@ -19,8 +24,14 @@ export default function StructuredLessonsClient() {
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const loadCatalogue = useCallback(async () => {
     setBusy(true); setError('');
+    if (courseId === null) {
+      setItems([]);
+      setBusy(false);
+      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an enrolled course to view its approved lessons.' : 'स्वीकृत पाठ देखने के लिए नामांकित कोर्स चुनें।'));
+      return;
+    }
     try {
-      const response = await fetch('/api/v1/learning/structured-lessons?language=' + learningLanguage,
+      const response = await fetch('/api/v1/learning/structured-lessons?language=' + learningLanguage + '&courseId=' + encodeURIComponent(String(courseId)),
         { credentials: 'same-origin', cache: 'no-store' });
       if (response.status === 401 || response.status === 403) { router.replace('/login/student'); return; }
       const body = await response.json();
@@ -29,7 +40,7 @@ export default function StructuredLessonsClient() {
     } catch (error) {
       setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
     } finally { setBusy(false); }
-  }, [learningLanguage, locale, router]);
+  }, [learningLanguage, locale, router, courseId, loadingCourses, courseError]);
   useEffect(() => { void loadCatalogue(); }, [loadCatalogue]);
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><div>
@@ -37,8 +48,8 @@ export default function StructuredLessonsClient() {
       <h1><UiText message="web.navigation.student.structuredLessons" /></h1>
       <p><UiText message="legacy.web.explain.visuals.activities.and.one.que.c789dbec" /></p>
     </div>
-    <button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></header>
-    {error && <p role="alert" className="error-message">{error}</p>}
+    <div className="qe-course-page-actions"><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale === 'english' ? 'Primary course' : 'मुख्य कोर्स'}/><button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></div></header>
+    {courseError && !loadingCourses && <p role="alert" className="error-message">{courseError}</p>}{error && <p role="alert" className="error-message">{error}</p>}
     {busy ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
       items.length === 0 ? <section className="auth-card" role="status">
         <h2>{translateUi(locale, 'legacy.web.no.approved.structured.lessons.are.ava.a3717bf5')}</h2>
@@ -49,7 +60,7 @@ export default function StructuredLessonsClient() {
         <div><span className="eyebrow">{item.subjectCode.toUpperCase()} · {translateUi(locale, 'legacy.web.class.98aaaa31')} {item.classNumber}</span>
           <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
           {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>}</div>
-        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
+        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(courseId || ''))} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
       </article>)}</div>}
   </section></div></main>;
 }

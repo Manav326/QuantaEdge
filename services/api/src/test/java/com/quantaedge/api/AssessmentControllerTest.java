@@ -65,10 +65,12 @@ class AssessmentControllerTest {
   @Test
   void studentCatalogueRequiresCompletedLessonsAndHidesSupersededGeneratedTestsExceptForResumes() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select count(*) from student_program_enrollment spe"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
-    controller.studentAssessmentCatalog(null, null, "hi", 24, 0, student, TEST_TENANT);
+    controller.studentAssessmentCatalog(null, 71L, "hi", 24, 0, student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("tp.status='COMPLETED'"), any(Object[].class));
     verify(jdbc).queryForList(contains("required_lesson.chapter_id=ch.id"), any(Object[].class));
@@ -77,10 +79,12 @@ class AssessmentControllerTest {
   @Test
   void studentCatalogueEligibilityAllowsOnlyAnOwnedInProgressAttemptToBypassContentRefresh() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("select count(*) from student_program_enrollment spe"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
-    controller.studentAssessmentCatalog(null, null, "hi", 24, 0, student, TEST_TENANT);
+    controller.studentAssessmentCatalog(null, 71L, "hi", 24, 0, student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("resumable.student_id=st.id"), any(Object[].class));
     verify(jdbc).queryForList(contains("resumable.status='IN_PROGRESS'"), any(Object[].class));
@@ -357,11 +361,13 @@ class AssessmentControllerTest {
           {"attempt_id":101,"attempt_number":1,"status":"RELEASED","final_score":6.0,"max_score":10.0}
         ]
         """);
+    when(jdbc.queryForObject(contains("select count(*) from student_program_enrollment spe"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
     when(jdbc.queryForList(contains("ranked as ("), any(Object[].class))).thenReturn(List.of(row));
     when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
 
-    Map<String, Object> result = controller.studentResults("hi", null, 25, 0, student, TEST_TENANT);
+    Map<String, Object> result = controller.studentResults("hi", 71L, 25, 0, student, TEST_TENANT);
 
     assertEquals(1L, result.get("total"));
     @SuppressWarnings("unchecked")

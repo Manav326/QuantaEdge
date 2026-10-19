@@ -892,8 +892,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
@@ -941,8 +939,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
@@ -989,11 +985,13 @@ public class LearningClassController {
   @Transactional
   public Map<String, Object> joinLiveClass(
       @PathVariable long sessionId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select cs.id,cs.private_join_url,cs.youtube_video_id,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at,cs.join_window_minutes
       from learning_class_session cs
@@ -1002,8 +1000,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
@@ -1030,8 +1026,8 @@ public class LearningClassController {
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,context.studentId(),institutionId,sessionId);
-    if (rows.isEmpty()) throw notFound("Live class", sessionId);
+      """,context.studentId(),institutionId,sessionId,courseId);
+    if (rows.isEmpty()) throw notFound("Live class in the selected course", sessionId);
     Map<String, Object> session = rows.getFirst();
     OffsetDateTime now = OffsetDateTime.now();
     OffsetDateTime startsAt = toOffsetDateTime(session.get("starts_at"));
@@ -1069,11 +1065,14 @@ public class LearningClassController {
   @Transactional
   public Map<String, Object> leaveLiveClass(
       @PathVariable long sessionId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
+    ensureLiveClassBelongsToCourse(sessionId,context.studentId(),institutionId,courseId);
     int updated = jdbc.update("""
       update learning_class_attendance set
         total_seconds=total_seconds+greatest(0,floor(extract(epoch from (now()-active_since_at)))::bigint),
@@ -1118,8 +1117,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id
@@ -1174,8 +1171,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
         and exists(
@@ -1211,12 +1206,14 @@ public class LearningClassController {
   @GetMapping("/learning/recorded-classes/{recordingId}")
   public Map<String, Object> studentRecordedClass(
       @PathVariable long recordingId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId,courseId);
     recording.remove("storage_key");
     recording.remove("sha256");
     return recording;
@@ -1226,13 +1223,15 @@ public class LearningClassController {
   @Transactional
   public Map<String, Object> saveRecordedProgress(
       @PathVariable long recordingId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId,courseId);
     int position = integer(body.get("positionSeconds"), "Playback position", 0, 86400);
     long maxSeconds = recording.get("duration_seconds") instanceof Number n ? n.longValue() : 86400;
     if (position > maxSeconds) throw badRequest("Playback position exceeds the recording duration.");
@@ -1256,13 +1255,15 @@ public class LearningClassController {
   @GetMapping("/learning/recorded-classes/{recordingId}/stream")
   public ResponseEntity<StreamingResponseBody> streamRecordedClass(
       @PathVariable long recordingId,
+      @RequestParam Long courseId,
       @RequestHeader(value = "Range", required = false) String rangeHeader,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId,courseId);
     String storageKey = String.valueOf(recording.get("storage_key"));
     Path file = mediaStorage.resolve(storageKey);
     if (!Files.isRegularFile(file)) throw notFound("Recorded media", recordingId);
@@ -1320,7 +1321,28 @@ public class LearningClassController {
 
   // ---------------- Access checks and shared helpers ----------------
 
-  private Map<String, Object> readableRecording(long recordingId,long studentId,long institutionId) {
+  private void ensureLiveClassBelongsToCourse(long sessionId,long studentId,long institutionId,long courseId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from learning_class_session cs
+        join curriculum_subject s on s.id=cs.subject_id and s.active=true
+        join curriculum_class c on c.id=s.class_id and c.active=true
+        join student st on st.id=? and st.active=true and st.class_code=c.code
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join curriculum_program selected_course on selected_course.id=? and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+        join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
+          and e.program_id=selected_course.id and e.status='ACTIVE'
+        join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=selected_course.id
+        join curriculum_program_subject cps on cps.program_id=selected_course.id and cps.subject_id=s.id and cps.class_id=c.id
+        where cs.id=? and cs.institution_id=m.institution_id
+          and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
+      )
+      """,Boolean.class,studentId,institutionId,courseId,sessionId);
+    if(!Boolean.TRUE.equals(allowed))throw notFound("Live class in the selected course",sessionId);
+  }
+
+  private Map<String, Object> readableRecording(long recordingId,long studentId,long institutionId,long courseId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select rc.id as recorded_class_id,rc.title,rc.description,rc.storage_key,rc.original_filename,
              rc.media_type,rc.file_size_bytes,rc.sha256,rc.duration_seconds,rc.created_at,rc.published_at,
@@ -1335,8 +1357,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress
@@ -1380,8 +1400,9 @@ public class LearningClassController {
       """,Boolean.class,studentId,institutionId);
     if(!Boolean.TRUE.equals(member)) throw new SecurityException(
         "The learner is not an active member of the selected institution.");
-    if(courseId==null) return;
-    if(courseId<=0L) throw new IllegalArgumentException("Course ID must be positive.");
+    if(courseId==null || courseId<=0L) {
+      throw new IllegalArgumentException("Select an active course before accessing live or recorded classes.");
+    }
     Boolean allowed=jdbc.queryForObject("""
       select exists(
         select 1 from student_program_enrollment e

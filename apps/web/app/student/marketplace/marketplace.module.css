@@ -30,3 +30,27 @@
 .verifyCard strong{color:#803b12}.verifyCard p{color:#5e6674;line-height:1.5;margin:5px 0 0;font-size:13px}
 .verifyCard button,.stateCard button{background:#e87524;color:#fff;flex-shrink:0}
 @media(max-width:640px){.page{padding:16px 13px 30px}.hero{padding:19px;border-radius:17px}.verifyCard{align-items:stretch;flex-direction:column}.verifyCard button{width:100%}.grid{grid-template-columns:minmax(0,1fr)}}
+
+.requestStatus{font-size:12px;line-height:1.5;color:#7c451f;background:#fff8f2;border:1px solid #f0d5c0;border-radius:10px;padding:9px 11px;margin:0}
+
+.requestHistory{margin:20px 0 22px;border:1px solid #e4e7ed;border-radius:16px;background:#fff;padding:18px}
+.requestHistoryHeading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px}
+.requestHistoryHeading h2{font-size:18px;color:#1b2335;margin:0 0 4px}
+.requestHistoryHeading p{font-size:13px;color:#626b7b;margin:0;line-height:1.5}
+.requestHistoryHeading button{border:1px solid #e6c2a6;border-radius:9px;padding:8px 11px;background:#fff8f2;color:#984714;font:inherit;font-weight:700}
+.requestHistoryList{display:grid;gap:8px}
+.requestHistoryRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #eef0f4;border-radius:12px;min-width:0}
+.requestHistoryRow>div:first-child{display:grid;gap:4px;min-width:0}
+.requestHistoryRow strong{font-size:14px;color:#20283a}
+.requestHistoryRow span,.requestHistoryState small{font-size:12px;line-height:1.5;color:#6c7382}
+.requestHistoryState{display:grid;justify-items:end;gap:3px;flex-shrink:0}
+.requestPending,.requestComplete,.requestOther{border-radius:100px;padding:4px 9px;font-size:12px!important;font-weight:750;white-space:nowrap}
+.requestPending{background:#fff4df;color:#905b0c!important}
+.requestComplete{background:#e9f8ef;color:#22623c!important}
+.requestOther{background:#f1f2f5;color:#555d6c!important}
+@media(max-width:560px){
+  .requestHistory{padding:13px}
+  .requestHistoryRow{align-items:flex-start;flex-direction:column}
+  .requestHistoryState{justify-items:start}
+  .requestHistoryHeading{align-items:center}
+}

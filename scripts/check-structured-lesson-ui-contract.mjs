@@ -78,7 +78,7 @@ for (const [key, needle] of [
   ['apiService', 'Set.of("rich_text", "image", "diagram", "interactive", "activity", "recap")'],
   ['apiController', '/responses'],
   ['apiController', 'requireStudent'],
-  ['apiController', 'ensureStudentTrackAccess'],
+  ['apiController', 'ensureStudentCourseTrackAccess'],
   ['webDetail', 'initialResponses={responses}'],
   ['webDetail', 'initialActivityResponses={saved.activities || {}}'],
   ['androidRenderer', 'savedResponses'],

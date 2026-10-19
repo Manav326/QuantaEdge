@@ -40,11 +40,16 @@ export default function AuthenticatedProfileImage({
 
     async function loadPhoto() {
       try {
+        const photoHeaders = new Headers({ Accept: 'image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8' });
+        // These photo endpoints are session-protected; native <img> requests cannot attach
+        // the workspace header required by AuthFilter, so fetch them as authenticated blobs.
+        if (imageUrl.startsWith('/api/v1/students/')) photoHeaders.set('X-QE-Workspace', 'STUDENT');
+        else if (imageUrl.startsWith('/api/v1/guardians/')) photoHeaders.set('X-QE-Workspace', 'PARENT');
         const response = await fetch(imageUrl, {
           method: 'GET',
           credentials: 'same-origin',
           cache: 'no-store',
-          headers: { Accept: 'image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8' },
+          headers: photoHeaders,
           signal: controller.signal,
         });
         if (!response.ok) throw new Error(`Profile photo request failed (HTTP ${response.status}).`);

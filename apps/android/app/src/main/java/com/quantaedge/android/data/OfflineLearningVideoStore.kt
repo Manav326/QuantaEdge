@@ -25,12 +25,13 @@ class OfflineLearningVideoStore(context: Context, ownerKey: String) {
         val id = item.optLongAny("recorded_class_id", "recordingId", "id")
         val resourceId = item.optLongAny("download_resource_id", "downloadResourceId")
         val assignmentId = item.optLongAny("download_assignment_id", "downloadAssignmentId")
+        val courseId = item.optLongAny("course_id", "courseId")
         val mediaType = item.optString("media_type", item.optString("mediaType"))
         val extension = OfflineLearningVideoContract.extensionFor(mediaType)
         val size = item.optLongAny("file_size_bytes", "fileSizeBytes")
         val sha = item.optString("download_sha256", item.optString("downloadSha256")).lowercase()
-        if (id <= 0L || resourceId <= 0L || assignmentId <= 0L) {
-            throw IllegalArgumentException("This recording has no approved offline-download placement.")
+        if (id <= 0L || resourceId <= 0L || assignmentId <= 0L || courseId <= 0L) {
+            throw IllegalArgumentException("This recording has no approved offline-download placement in the selected course.")
         }
         if (extension == null || !OfflineLearningVideoContract.isValidSize(size) ||
             !OfflineLearningVideoContract.isValidSha256(sha) || !item.optBoolean("download_allowed")) {
@@ -43,6 +44,7 @@ class OfflineLearningVideoStore(context: Context, ownerKey: String) {
             row.put("recorded_class_id", id)
                 .put("download_resource_id", resourceId)
                 .put("download_assignment_id", assignmentId)
+                .put("course_id", courseId)
                 .put("download_sha256", sha)
                 .put("file_size_bytes", size)
                 .put("media_type", mediaType)

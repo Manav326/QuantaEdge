@@ -13,6 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.time.OffsetDateTime;
 import java.nio.file.Files;
@@ -52,6 +53,12 @@ class LearningClassControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningClassController(jdbc, authorization, staffAudit, mediaStorage);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    lenient().when(jdbc.queryForObject(
+        contains("from student_program_enrollment e"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
   }
 
   @Test
@@ -66,7 +73,7 @@ class LearningClassControllerTest {
             "status", "SCHEDULED", "starts_at", starts, "ends_at", ends)));
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.joinLiveClass(44L, student, TEST_TENANT));
+        () -> controller.joinLiveClass(44L, 71L, student, TEST_TENANT));
 
     assertEquals(409, error.getStatusCode().value());
     verify(jdbc, never()).update(contains("insert into learning_class_attendance"), any(), any());
@@ -78,18 +85,20 @@ class LearningClassControllerTest {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
         eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForObject(contains("from student_program_enrollment e"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
     when(jdbc.queryForList(contains("select cs.id as session_id"), any(Object[].class))).thenReturn(List.of());
     when(jdbc.queryForObject(contains("select count(*) from learning_class_session"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
-    Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, true, student, TEST_TENANT);
+    Map<String, Object> result = controller.studentLiveClasses(null, 71L, 25, 0, true, student, TEST_TENANT);
 
     assertEquals(0L, result.get("total"));
     ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(itemSql.capture(),
-        eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+        eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
+        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
@@ -178,7 +187,7 @@ class LearningClassControllerTest {
             "id",88L,"private_join_url","https://meet.example.org/class/88",
             "provider","CUSTOM","title","Revision class","status","SCHEDULED",
             "starts_at",starts,"ends_at",starts.plusHours(1),"join_window_minutes",0)));
-    Map<String,Object> result=controller.joinLiveClass(88L,student, TEST_TENANT);
+    Map<String,Object> result=controller.joinLiveClass(88L,71L,student, TEST_TENANT);
     assertEquals(true,result.get("joined"));
     verify(jdbc).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
   }
@@ -199,7 +208,7 @@ class LearningClassControllerTest {
     youtubeSession.put("join_window_minutes",15);
     when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"), any(Object[].class)))
         .thenReturn(List.of(youtubeSession));
-    Map<String,Object> result=controller.joinLiveClass(88L,student, TEST_TENANT);
+    Map<String,Object> result=controller.joinLiveClass(88L,71L,student, TEST_TENANT);
     assertEquals("YOUTUBE_LIVE",result.get("provider"));
     assertEquals("abcdefghijk",result.get("youtubeVideoId"));
     assertEquals(null,result.get("joinUrl"));
@@ -219,7 +228,7 @@ class LearningClassControllerTest {
             "provider","CUSTOM","title","Revision class","status","SCHEDULED",
             "starts_at",starts,"ends_at",starts.plusHours(1),"join_window_minutes",30)));
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.joinLiveClass(88L,student, TEST_TENANT));
+        ()->controller.joinLiveClass(88L, 71L, student, TEST_TENANT));
     assertEquals(409,error.getStatusCode().value());
     verify(jdbc,never()).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
   }
@@ -308,7 +317,7 @@ class LearningClassControllerTest {
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.streamRecordedClass(88L, null, student, TEST_TENANT));
+        () -> controller.streamRecordedClass(88L, 71L, null, student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verifyNoInteractions(mediaStorage);
@@ -327,14 +336,14 @@ class LearningClassControllerTest {
             "download_allowed", true, "download_sha256", "a".repeat(64))));
     when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class), any(Object[].class))).thenReturn(1L);
 
-    Map<String,Object> result = controller.studentRecordedClasses(null, null, 25, 0, student, TEST_TENANT);
+    Map<String,Object> result = controller.studentRecordedClasses(null, 71L, 25, 0, student, TEST_TENANT);
 
     assertEquals(1L, result.get("total"));
     Map<?,?> row = (Map<?,?>)((List<?>)result.get("items")).get(0);
     assertEquals(501L, row.get("download_resource_id"));
     assertEquals(700L, row.get("download_assignment_id"));
     assertEquals(true, row.get("download_allowed"));
-    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
     verifyNoInteractions(staffAudit, mediaStorage);
   }
 
@@ -356,7 +365,7 @@ class LearningClassControllerTest {
     when(mediaStorage.resolve("afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4"))
         .thenReturn(mediaFile);
 
-    var response = controller.streamRecordedClass(88L, "bytes=bad-range", student, TEST_TENANT);
+    var response = controller.streamRecordedClass(88L, 71L, "bytes=bad-range", student, TEST_TENANT);
 
     assertEquals(416, response.getStatusCode().value());
   }

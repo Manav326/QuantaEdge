@@ -99,7 +99,7 @@ public class AssessmentController {
   public Map<String,Object> questionBank(
       @RequestParam String classCode,
       @RequestParam String subjectCode,
-      @RequestParam(required = false) Long courseId,
+      @RequestParam Long courseId,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="40") Integer limit,
@@ -635,19 +635,33 @@ public class AssessmentController {
     long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
     String subjectFilter = safeText(subjectCode, 40);
-    if(courseId!=null) {
-      Long active=jdbc.queryForObject("""
-        select count(*) from student_program_enrollment spe
-        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-        where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
-        """,Long.class,context.studentId(),institutionId,courseId);
-      if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
-    }
+    if(courseId==null || courseId<=0L) throw badRequest("Select an active course before accessing tests and results.");
+    Long active=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+      """,Long.class,context.studentId(),institutionId,courseId);
+    if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    String courseScope=courseId==null
-        ? "s.program_id is null and c.code=st.class_code"
-        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope) and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String courseScope="""
+        exists(select 1 from curriculum_program_subject cps
+          join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+          join institution_course_assignment course_assignment
+            on course_assignment.institution_id=(select institution_id from tenant_scope)
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=selected_course.id
+          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+            and (s.program_id=cps.program_id
+              or (s.program_id is null and selected_course.class_id=s.class_id)))
+        and exists(select 1 from student_program_enrollment selected_enrollment
+          where selected_enrollment.student_id=st.id
+            and selected_enrollment.institution_id=(select institution_id from tenant_scope)
+            and selected_enrollment.program_id=? and selected_enrollment.status='ACTIVE')
+        """;
     String sql= ("""
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id as assessment_id,a.public_id as test_id,coalesce(max(at.title),a.title) as title,
@@ -676,8 +690,6 @@ public class AssessmentController {
       join curriculum_class c on c.id=s.class_id and c.active=true
       left join curriculum_program p on p.id=s.program_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -721,7 +733,7 @@ public class AssessmentController {
       limit ? offset ?
       """).replace("__COURSE_SCOPE__",courseScope);
     List<Object> args=new ArrayList<>(List.of(institutionId,context.studentId(),language,language,language,subjectFilter,subjectFilter));
-    if(courseId!=null)args.add(courseId);
+    args.add(courseId);args.add(courseId);
     args.add(rowLimit+1);args.add(rowOffset);
     List<Map<String,Object>> items=jdbc.queryForList(sql,args.toArray());
     boolean hasMore=items.size()>rowLimit;
@@ -1371,19 +1383,31 @@ public class AssessmentController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
-    if(courseId!=null) {
-      Long active=jdbc.queryForObject("""
-        select count(*) from student_program_enrollment spe
-        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-        where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
-        """,Long.class,context.studentId(),institutionId,courseId);
-      if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
-    }
+    if(courseId==null || courseId<=0L) throw badRequest("Select an active course before accessing tests and results.");
+    Long active=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+      """,Long.class,context.studentId(),institutionId,courseId);
+    if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    String resultScope=courseId==null
-        ? "s.program_id is null and c.code=st.class_code"
-        : "s.program_id=? and exists(select 1 from student_program_enrollment spe join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope) and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String resultScope="""
+        exists(select 1 from curriculum_program_subject cps
+          join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+          join institution_course_assignment course_assignment
+            on course_assignment.institution_id=(select institution_id from tenant_scope)
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=selected_course.id
+          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+            and (s.program_id=cps.program_id or (s.program_id is null and selected_course.class_id=s.class_id)))
+        and exists(select 1 from student_program_enrollment spe
+          where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope)
+            and spe.program_id=? and spe.status='ACTIVE')
+        """;
     String sql="""
       with tenant_scope as (select ?::bigint as institution_id),
       ranked as (
@@ -1443,7 +1467,7 @@ public class AssessmentController {
       limit ? offset ?
       """.replace("__RESULT_SCOPE__",resultScope);
     List<Object> args=new ArrayList<>(List.of(institutionId,language,language,language,context.studentId()));
-    if(courseId!=null)args.add(courseId);
+    args.add(courseId);args.add(courseId);
     args.add(rowLimit);args.add(rowOffset);
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args.toArray());
     List<Map<String,Object>> items=new ArrayList<>();
@@ -1464,9 +1488,7 @@ public class AssessmentController {
       where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
         and att.status='RELEASED' and __RESULT_SCOPE__
       """.replace("__RESULT_SCOPE__",resultScope);
-    Object[] totalArgs=courseId==null
-        ? new Object[]{institutionId,context.studentId()}
-        : new Object[]{institutionId,context.studentId(),courseId};
+    Object[] totalArgs=new Object[]{institutionId,context.studentId(),courseId,courseId};
     Long total=jdbc.queryForObject(totalSql,Long.class,totalArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }

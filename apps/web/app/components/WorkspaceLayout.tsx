@@ -342,7 +342,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         </nav>
       </>
     ) : (
-      <nav className="qe-workspace-mobile-nav" aria-label={t('web.navigation.parent.label')}>
+      <nav className="qe-workspace-mobile-nav qe-parent-mobile-nav" aria-label={t('web.navigation.parent.label')}>
         {items.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''} title={itemLabel(item)}>
           <span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small>
         </Link>)}

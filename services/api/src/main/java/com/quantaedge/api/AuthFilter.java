@@ -58,9 +58,27 @@ public class AuthFilter extends OncePerRequestFilter {
     if (workspace == null) return true; // legacy non-browser clients are still constrained by token identity
     if (uri.equals("/api/v1/auth/me")
         || uri.equals("/api/v1/auth/refresh")
-        || uri.equals("/api/v1/auth/logout")) return true;
+        || uri.equals("/api/v1/auth/logout")
+        || uri.equals("/api/v1/auth/google/config")) return true;
+    // Public account onboarding and sign-in can establish the workspace only after the
+    // controller verifies the account/identity. Do not mistake the route's current UI
+    // workspace for an already-authenticated identity.
+    if (uri.equals("/api/v1/auth/account-signup/request-otp")
+        || uri.equals("/api/v1/auth/account-signup/verify-otp")) {
+      return Set.of("STUDENT", "LEARNING").contains(workspace);
+    }
+    if (uri.equals("/api/v1/auth/google")
+        || uri.equals("/api/v1/auth/account-login")) {
+      return Set.of("STUDENT", "PARENT", "LEARNING").contains(workspace);
+    }
+    if (uri.equals("/api/v1/auth/google/link")) {
+      return Set.of("STUDENT", "PARENT", "LEARNING").contains(workspace);
+    }
+    if (uri.equals("/api/v1/auth/my-learning-session")) {
+      return "PARENT".equals(workspace);
+    }
     if (uri.equals("/api/v1/auth/request-otp") || uri.equals("/api/v1/auth/verify-otp")) {
-      return Set.of("STAFF", "EDUCATION_ADMIN", "PARENT", "LEARNING").contains(workspace);
+      return Set.of("STAFF", "EDUCATION_ADMIN", "PARENT", "LEARNING", "STUDENT").contains(workspace);
     }
     if (uri.equals("/api/v1/auth/hrms-login")
         || uri.equals("/api/v1/auth/hrms/change-password")) return "HRMS".equals(workspace);

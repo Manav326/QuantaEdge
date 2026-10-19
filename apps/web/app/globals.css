@@ -648,3 +648,35 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
 .qe-enrollment-issue-retry{min-height:34px;padding:6px 12px;border:1px solid currentColor;border-radius:9px;background:transparent;color:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .qe-enrollment-issue-retry:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 @media(max-width:600px){.qe-enrollment-issue-actions{align-self:flex-start}.qe-enrollment-issue-retry{padding:6px 9px}}
+
+/* Keep each parent destination in an equal-width touch target. */
+@media(max-width:900px){
+  .qe-workspace-mobile-nav.qe-parent-mobile-nav{
+    display:flex;
+    align-items:stretch;
+    justify-content:stretch;
+    gap:4px;
+  }
+  .qe-workspace-mobile-nav.qe-parent-mobile-nav>a{
+    flex:1 1 0;
+    min-width:0;
+    width:auto;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .qe-workspace-mobile-nav.qe-parent-mobile-nav>a small{
+    display:block;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .tutor-minimized{bottom:calc(82px + env(safe-area-inset-bottom))}
+  .tutor-dock,.tutor-dock.open{
+    left:8px;right:8px;
+    top:calc(var(--qe-workspace-topbar-height,56px) + 8px);
+    bottom:calc(var(--qe-workspace-mobile-nav-height,68px) + env(safe-area-inset-bottom) + 8px);
+    width:auto;height:auto;max-height:none;min-height:0;
+    border:1px solid #e6e9ef;border-radius:16px;
+  }
+}

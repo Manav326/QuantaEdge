@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -71,7 +72,7 @@ class AssessmentLifecycleIntegrationTest {
       update assessment set status='ARCHIVED',is_current=false,updated_at=now() where id=?
       """, fixture.assessmentId());
     Map<String,Object> catalogue = controller.studentAssessmentCatalog(
-        null, null, "hi", 24, 0, fixture.student(), fixture.tenant());
+        null, fixture.courseId(), "hi", 24, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> visible = (List<Map<String,Object>>) catalogue.get("items");
     assertTrue(visible.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()));
@@ -98,12 +99,12 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(new BigDecimal("1.00"), new BigDecimal(savedAnswer.get("awarded_marks").toString()));
 
     List<Map<String,Object>> afterSubmit = (List<Map<String,Object>>) controller
-        .studentAssessmentCatalog(null, null, "hi", 24, 0, fixture.student(), fixture.tenant()).get("items");
+        .studentAssessmentCatalog(null, fixture.courseId(), "hi", 24, 0, fixture.student(), fixture.tenant()).get("items");
     assertFalse(afterSubmit.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()),
         "An archived test must no longer appear as an actionable test after its attempt is submitted.");
 
-    Map<String,Object> results = controller.studentResults("hi", null, 25, 0, fixture.student(), fixture.tenant());
+    Map<String,Object> results = controller.studentResults("hi", fixture.courseId(), 25, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> resultItems = (List<Map<String,Object>>) results.get("items");
     assertEquals(1, resultItems.size());
     assertEquals(fixture.assessmentId(),
@@ -202,6 +203,25 @@ class AssessmentLifecycleIntegrationTest {
       insert into curriculum_subject(class_id,code,display_name,sort_order,active)
       values(?,'maths','Mathematics',1,true) returning id
       """, Long.class, classId);
+    Long courseId = jdbc.queryForObject("""
+      insert into curriculum_program(
+        class_id,code,display_name,curriculum_version,status,notes,public_id_prefix)
+      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS')
+      returning id
+      """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT));
+    jdbc.update("""
+      insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
+      values(?,?,?,true,1)
+      """, courseId, classId, subjectId);
+    Long releaseId = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint)
+      values(?,?,1,'DRAFT',md5(?)) returning id
+      """, Long.class, institutionId, courseId, "assessment-lifecycle-" + suffix);
+    jdbc.update("""
+      insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
+      values(?,?,'ASSIGNED','HRMS')
+      """, institutionId, releaseId);
     Long chapterId = jdbc.queryForObject("""
       insert into curriculum_chapter(
         subject_id,code,display_name,description,sort_order,active,content_status)
@@ -223,6 +243,11 @@ class AssessmentLifecycleIntegrationTest {
         institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at)
       values(?,?,null,'ACTIVE',now(),null,now(),now())
       """, institutionId, studentId);
+    jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,created_at,updated_at)
+      values(?,?,?,'ACTIVE',now(),now(),now())
+      """, studentId, courseId, institutionId);
     jdbc.update("""
       insert into student_track_enrollment(institution_id,student_id,subject_id,status)
       values(?,?,?,'ACTIVE')
@@ -258,11 +283,11 @@ class AssessmentLifecycleIntegrationTest {
       insert into assessment_question(assessment_id,source_question_id,sequence_no,max_marks,question_snapshot)
       values(?,null,1,1,?::jsonb)
       """, assessmentId, snapshot);
-    return new Fixture(studentId, assessmentId,
+    return new Fixture(studentId, assessmentId, courseId,
         new AuthContext(null, studentId, "STUDENT", "Assessment CI student"),
         new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));
   }
 
-  private record Fixture(Long studentId, Long assessmentId, AuthContext student,
+  private record Fixture(Long studentId, Long assessmentId, Long courseId, AuthContext student,
       InstitutionTenantContext tenant) {}
 }

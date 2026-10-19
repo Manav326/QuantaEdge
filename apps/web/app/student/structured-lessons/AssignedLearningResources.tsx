@@ -34,7 +34,7 @@ function formatSize(size?: number | null): string {
   return size >= 1024 * 1024 ? (size / (1024 * 1024)).toFixed(1) + ' MB' : Math.max(1, Math.round(size / 1024)) + ' KB';
 }
 
-export default function AssignedLearningResources({ artifactId, language }: { artifactId: string; language: 'hi' | 'en' }) {
+export default function AssignedLearningResources({ artifactId, language, courseId }: { artifactId: string; language: 'hi' | 'en'; courseId: number }) {
   const [resources, setResources] = useState<AssignedResource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -46,7 +46,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     setLoading(true);
     setError('');
     try {
-      const query = new URLSearchParams({ artifactId, language });
+      const query = new URLSearchParams({ artifactId, language, courseId: String(courseId) });
       const response = await fetch('/api/v1/learning/resources?' + query.toString(), {
         credentials: 'same-origin', cache: 'no-store', signal,
       });
@@ -68,7 +68,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     } finally {
       setLoading(false);
     }
-  }, [artifactId, language]);
+  }, [artifactId, language, courseId]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -81,7 +81,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     state.lastSaved = position;
     watch.current.set(item.resourceId, state);
     try {
-      const response = await fetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId, {
+      const response = await fetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId + '&courseId=' + encodeURIComponent(String(courseId)), {
         method: 'PUT', credentials: 'same-origin', cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lastPositionSeconds: Math.max(0, Math.floor(position)), watchedSeconds: Math.max(0, Math.floor(state.watchedSeconds)), completed }),
@@ -93,7 +93,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('वीडियो प्रगति सुरक्षित नहीं हो सकी।', 'Video progress could not be saved.'));
     }
-  }, [hi]);
+  }, [hi, courseId]);
 
   function onTimeUpdate(item: AssignedResource, element: HTMLMediaElement) {
     const state = watch.current.get(item.resourceId) || { lastTime: 0, watchedSeconds: item.watchedSeconds || 0, lastSaved: 0 };
@@ -143,7 +143,7 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
             onEnded={event => void saveProgress(item, event.currentTarget.currentTime, true)} />}
           {kind === 'IMAGE' && mediaUrl && <a className={styles.openLink} href={mediaUrl} target="_blank" rel="noreferrer">{t('चित्र खोलें', 'Open image')}</a>}
           {item.externalUrl && <a className={styles.openLink} href={item.externalUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन खोलें', 'Open resource')} ↗</a>}
-          {kind === 'PDF' && item.learningDocumentId && <Link className={styles.openLink} href="/student/textbooks">{t('पाठ्यपुस्तक लाइब्रेरी में खोलें', 'Open textbook library')} ↗</Link>}
+          {kind === 'PDF' && item.learningDocumentId && <Link className={styles.openLink} href={'/student/textbooks?courseId=' + encodeURIComponent(String(courseId))}>{t('पाठ्यपुस्तक लाइब्रेरी में खोलें', 'Open textbook library')} ↗</Link>}
           {item.sourceKind === 'CONTENT_ASSET' && item.assetUrl && !isVideo && !isAudio && kind !== 'IMAGE' &&
             <a className={styles.openLink} href={item.assetUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन खोलें', 'Open resource')} ↗</a>}
           {item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE' && !item.learningDocumentId && !item.assetUrl && !item.externalUrl &&

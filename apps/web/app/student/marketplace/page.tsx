@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
@@ -19,7 +20,20 @@ type Offer = {
   has_access: boolean;
   purchased: boolean;
   parent_managed?: boolean;
+  parent_request_status?: string | null;
+  parent_request_requested_at?: string | null;
   subjects?: Subject[];
+};
+type PurchaseRequestStatus = {
+  request_id: number;
+  course_id: number;
+  status: 'PENDING' | 'PURCHASED' | 'DISMISSED' | string;
+  requested_at: string;
+  updated_at?: string;
+  resolved_at?: string | null;
+  course_name: string;
+  price_paise: number;
+  currency: string;
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
 type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string };
@@ -69,6 +83,7 @@ export default function StudentMarketplacePage() {
   const [status, setStatus] = useState('');
   const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
   const [verifying, setVerifying] = useState(false);
+  const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequestStatus[]>([]);
 
   const loadOffers = useCallback(async () => {
     setLoading(true);
@@ -86,7 +101,19 @@ export default function StudentMarketplacePage() {
     }
   }, []);
 
-  useEffect(() => { void loadOffers(); }, [loadOffers]);
+  const loadPurchaseRequests = useCallback(async () => {
+    try {
+      const response = await fetch('/api/v1/marketplace/student/purchase-requests', {
+        credentials: 'same-origin', cache: 'no-store',
+        headers: { 'X-QE-Workspace': 'STUDENT' },
+      });
+      if (!response.ok) return;
+      const body = await response.json().catch(() => []);
+      setPurchaseRequests(Array.isArray(body) ? body : []);
+    } catch { /* Marketplace offers remain usable if request history is temporarily unavailable. */ }
+  }, []);
+
+  useEffect(() => { void loadOffers(); void loadPurchaseRequests(); }, [loadOffers, loadPurchaseRequests]);
 
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
@@ -105,6 +132,7 @@ export default function StudentMarketplacePage() {
       setPendingVerify(null);
       setStatus('Payment verified. Your course is now in All Courses.');
       await loadOffers();
+      await loadPurchaseRequests();
       router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
     } catch (error: any) {
       setPendingVerify(draft);
@@ -113,7 +141,7 @@ export default function StudentMarketplacePage() {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, router]);
+  }, [loadOffers, loadPurchaseRequests, router]);
 
   async function buyCourse(courseId: number) {
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
@@ -178,13 +206,17 @@ export default function StudentMarketplacePage() {
     setBusyCourseId(courseId);
     setStatus('');
     try {
-      await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/purchase-request', {
+      const request = await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/purchase-request', {
         method: 'POST',
         credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
         body: '{}',
       }));
-      setStatus('Purchase request sent. Your parent can review it from the family account and buy this course for you.');
+      const requestedAt = request.requestedAt || request.requestDetails?.[0]?.requestedAt || new Date().toISOString();
+      setOffers(current => current.map(offer => Number(offer.course_id) === courseId
+        ? { ...offer, parent_request_status: request.status || 'PENDING', parent_request_requested_at: requestedAt }
+        : offer));
+      setStatus('Purchase request sent at ' + formatUserTimestamp(requestedAt) + '. Your parent can review it from the family account.');
     } catch (error: any) {
       setStatus(error?.message || 'The purchase request could not be sent. Please retry.');
     } finally {
@@ -226,6 +258,31 @@ export default function StudentMarketplacePage() {
       </header>
 
       {status && <p className={styles.status} role="status">{status}</p>}
+      {purchaseRequests.length > 0 && (
+        <section className={styles.requestHistory} aria-labelledby="qe-purchase-request-history">
+          <div className={styles.requestHistoryHeading}>
+            <div><h2 id="qe-purchase-request-history">Parent purchase requests</h2>
+              <p>Check when you asked and whether the request is still pending.</p></div>
+            <button type="button" disabled={busyCourseId !== null} onClick={() => void loadPurchaseRequests()}>Refresh</button>
+          </div>
+          <div className={styles.requestHistoryList}>
+            {purchaseRequests.map(request => {
+              const status = String(request.status || '').toUpperCase();
+              const label = status === 'PENDING' ? 'Waiting for parent'
+                : status === 'PURCHASED' ? 'Course purchased'
+                : status === 'DISMISSED' ? 'Request dismissed' : status.replaceAll('_', ' ').toLowerCase();
+              return <article className={styles.requestHistoryRow} key={request.request_id}>
+                <div><strong>{request.course_name || 'Course'}</strong>
+                  <span>Request #{request.request_id} · Submitted {formatUserTimestamp(request.requested_at)}</span></div>
+                <div className={styles.requestHistoryState}>
+                  <span className={status === 'PENDING' ? styles.requestPending : status === 'PURCHASED' ? styles.requestComplete : styles.requestOther}>{label}</span>
+                  {request.resolved_at && <small>Updated {formatUserTimestamp(request.resolved_at)}</small>}
+                </div>
+              </article>;
+            })}
+          </div>
+        </section>
+      )}
       {pendingVerify && (
         <section className={styles.verifyCard} aria-label="Retry payment verification">
           <div><strong>Complete course access</strong><p>The checkout response is saved for retry. Verify this payment before starting another checkout.</p></div>
@@ -269,15 +326,23 @@ export default function StudentMarketplacePage() {
                     {offer.subjects.map((subject) => <span key={subject.subject_code}>{subject.subject_name || subject.subject_code}</span>)}
                   </div>
                 )}
+                {offer.parent_request_status === 'PENDING' && (
+                  <p className={styles.requestStatus} role="status">
+                    Parent purchase request pending{offer.parent_request_requested_at
+                      ? ' · sent ' + formatUserTimestamp(offer.parent_request_requested_at) : ''}
+                  </p>
+                )}
                 <div className={styles.cardFooter}>
                   {owned ? (
                     <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
                   ) : !validPrice ? (
                     <button className={styles.disabledButton} type="button" disabled>Not available for purchase</button>
                   ) : offer.parent_managed && offer.price_paise > 0 ? (
-                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null}
+                    <button className={offer.parent_request_status === 'PENDING' ? styles.disabledButton : styles.primaryButton} type="button"
+                      disabled={busyCourseId !== null || offer.parent_request_status === 'PENDING'}
                       onClick={() => void askParentToBuy(offer.course_id)}>
-                      {busyCourseId === offer.course_id ? 'Sending request…' : 'Ask parent to buy'}
+                      {busyCourseId === offer.course_id ? 'Sending request…' : offer.parent_request_status === 'PENDING'
+                        ? 'Parent request pending' : 'Ask parent to buy'}
                     </button>
                   ) : offer.price_paise === 0 ? (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null} onClick={() => void joinFreeCourse(offer.course_id)}>

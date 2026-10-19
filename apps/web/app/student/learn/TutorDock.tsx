@@ -441,15 +441,40 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     if (panelResizeRef.current?.pointerId === event.pointerId) panelResizeRef.current = null;
   }
 
+  function tutorBubbleBounds() {
+    const header = document.querySelector<HTMLElement>('.qe-workspace-topbar');
+    const mobileNav = document.querySelector<HTMLElement>('.qe-workspace-mobile-nav');
+    const navVisible = Boolean(mobileNav && window.getComputedStyle(mobileNav).display !== 'none');
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+    const navTop = navVisible && mobileNav ? mobileNav.getBoundingClientRect().top : window.innerHeight;
+    const topMin = Math.max(8, headerBottom + 8);
+    const topMax = Math.max(topMin, Math.min(window.innerHeight - 66, navTop - 66 - 8));
+    return {
+      leftMin: 8,
+      leftMax: Math.max(8, window.innerWidth - 66),
+      topMin,
+      topMax,
+    };
+  }
+
+  function clampTutorBubble(left: number, top: number) {
+    const bounds = tutorBubbleBounds();
+    return {
+      left: Math.max(bounds.leftMin, Math.min(bounds.leftMax, left)),
+      top: Math.max(bounds.topMin, Math.min(bounds.topMax, top)),
+    };
+  }
+
   function beginBubbleDrag(event: ReactPointerEvent<HTMLButtonElement>) {
     if (event.button !== 0) return;
     const rect = event.currentTarget.getBoundingClientRect();
+    const bounded = clampTutorBubble(rect.left, rect.top);
     suppressBubbleClickRef.current = false;
     bubbleDragRef.current = {
       pointerId: event.pointerId, startX: event.clientX, startY: event.clientY,
-      left: rect.left, top: rect.top, moved: false,
+      left: bounded.left, top: bounded.top, moved: false,
     };
-    setBubblePosition({ left: rect.left, top: rect.top });
+    setBubblePosition(bounded);
     event.currentTarget.setPointerCapture(event.pointerId);
   }
 
@@ -460,10 +485,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     const dy = event.clientY - start.startY;
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) start.moved = true;
     if (!start.moved) return;
-    setBubblePosition({
-      left: Math.max(8, Math.min(window.innerWidth - 66, start.left + dx)),
-      top: Math.max(8, Math.min(window.innerHeight - 66, start.top + dy)),
-    });
+    setBubblePosition(clampTutorBubble(start.left + dx, start.top + dy));
   }
 
   function endBubbleDrag(event: ReactPointerEvent<HTMLButtonElement>) {
@@ -606,6 +628,14 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     left: frame.left, top: frame.top, width: frame.width, height: frame.height,
     right: 'auto', bottom: 'auto',
   } : undefined;
+  useEffect(() => {
+    const keepBubbleInsideContent = () => {
+      setBubblePosition(current => current ? clampTutorBubble(current.left, current.top) : null);
+    };
+    window.addEventListener('resize', keepBubbleInsideContent);
+    return () => window.removeEventListener('resize', keepBubbleInsideContent);
+  }, []);
+
   const bubbleStyle: CSSProperties | undefined = bubblePosition ? {
     left: bubblePosition.left, top: bubblePosition.top, right: 'auto', bottom: 'auto',
   } : undefined;

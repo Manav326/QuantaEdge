@@ -8,6 +8,7 @@ import { useLocale } from '../../components/LanguageProvider';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
 import PremiumPagination from '../../components/PremiumPagination';
 import './textbooks.css';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
 
 type LearningDocument = {
   document_id: number;
@@ -29,6 +30,7 @@ type LearningDocument = {
 
 async function api(url: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers || {});
+  headers.set('X-QE-Workspace', 'STUDENT');
   if (init.body) headers.set('Content-Type', 'application/json');
   const response = await fetch(url, { ...init, headers, credentials: 'same-origin', cache: 'no-store' });
   const raw = await response.text();
@@ -50,14 +52,8 @@ export default function TextbooksClient() {
   const requestedSubjectCode = searchParams.get('subjectCode') || '';
   const documentId = Number(searchParams.get('documentId') || 0);
   const courseIdParam = Number(searchParams.get('courseId') || 0);
-  const [activeCourseId, setActiveCourseId] = useState<number | null>(() => {
-    if (Number.isSafeInteger(courseIdParam) && courseIdParam > 0) return courseIdParam;
-    if (typeof window !== 'undefined') {
-      const saved = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
-      if (Number.isSafeInteger(saved) && saved > 0) return saved;
-    }
-    return null;
-  });
+  const { courses, activeCourse, courseId: activeCourseId, selectCourse, loadingCourses, courseError } =
+    useStudentCourseScope(Number.isSafeInteger(courseIdParam) && courseIdParam > 0 ? courseIdParam : null);
   const readerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -85,24 +81,20 @@ export default function TextbooksClient() {
   const [notice, setNotice] = useState('');
   const [fullscreen, setFullscreen] = useState(false);
 
-  useEffect(() => {
-    if (Number.isSafeInteger(courseIdParam) && courseIdParam > 0) {
-      setActiveCourseId(courseIdParam);
-      try { window.localStorage.setItem('qe:student:activeCourseId', String(courseIdParam)); } catch {}
-    } else {
-      try {
-        const saved = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
-        setActiveCourseId(Number.isSafeInteger(saved) && saved > 0 ? saved : null);
-      } catch { setActiveCourseId(null); }
-    }
-  }, [courseIdParam]);
+
 
   const loadDocuments = useCallback(async () => {
     setLoading(true);
     setError('');
     setDocumentsLanguage(null);
+    if (activeCourseId === null) {
+      setDocuments([]);
+      setLoading(false);
+      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an active course to open its books and chapters.' : 'पुस्तकें और अध्याय खोलने के लिए एक सक्रिय कोर्स चुनें।'));
+      return;
+    }
     try {
-      const courseQuery = activeCourseId !== null ? '&courseId=' + encodeURIComponent(String(activeCourseId)) : '';
+      const courseQuery = '&courseId=' + encodeURIComponent(String(activeCourseId));
       const data = await api('/api/v1/learning/documents?language=' + requestedLanguage + courseQuery);
       setDocuments(Array.isArray(data) ? data : []);
       setDocumentsLanguage(requestedLanguage);
@@ -113,15 +105,21 @@ export default function TextbooksClient() {
     } finally {
       setLoading(false);
     }
-  }, [router, requestedLanguage, locale, activeCourseId]);
+  }, [router, requestedLanguage, locale, activeCourseId, loadingCourses, courseError]);
 
+  useEffect(() => { setSubjectFilter(requestedSubjectCode || 'ALL'); setExpandedSubject(''); setChapterPageBySubject({}); }, [activeCourseId]);
   useEffect(() => { void loadDocuments(); }, [loadDocuments]);
 
   useEffect(() => {
     let active = true;
     if (!documentId) { setSelected(null); return; }
+    if (activeCourseId === null) {
+      setSelected(null);
+      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an enrolled course before opening this textbook.' : 'यह पुस्तक खोलने से पहले नामांकित कोर्स चुनें।'));
+      return;
+    }
     setError('');
-    api('/api/v1/learning/documents/' + documentId)
+    api('/api/v1/learning/documents/' + documentId + '?courseId=' + encodeURIComponent(String(activeCourseId)))
       .then(data => {
         if (!active) return;
         setSelected(data);
@@ -139,7 +137,7 @@ export default function TextbooksClient() {
         setSelected(null);
       });
     return () => { active = false; };
-  }, [documentId, router, locale]);
+  }, [documentId, router, locale, activeCourseId, loadingCourses, courseError]);
 
   useEffect(() => {
     if (!documentId || !selected || Number(selected.document_id) !== documentId || loading || documentsLanguage !== requestedLanguage || !selected.language) return;
@@ -178,16 +176,15 @@ export default function TextbooksClient() {
     const count = Math.min(20, pageCount);
     return Array.from({ length: count }, (_v, index) => firstThumb + index);
   }, [firstThumb, pageCount]);
-  const pageUrl = selected
-    ? '/api/v1/learning/documents/' + selected.document_id + '/pages/' + currentPage + (pageRetry ? '?retry=' + pageRetry : '')
+  const pageUrl = selected && activeCourseId !== null
+    ? '/api/v1/learning/documents/' + selected.document_id + '/pages/' + currentPage + '?courseId=' + encodeURIComponent(String(activeCourseId)) + (pageRetry ? '&retry=' + pageRetry : '')
     : '';
-  const availableSubjects = useMemo(() => {
-    const subjects = new Map<string, string>();
-    for (const item of documents) {
-      if (!subjects.has(item.subject_code)) subjects.set(item.subject_code, item.subject_name);
-    }
-    return [...subjects.entries()].map(([code, name]) => ({ code, name }));
-  }, [documents]);
+  const availableSubjects = useMemo(() => (activeCourse?.subjects || [])
+    .map(subject => ({
+      code: String(subject.subject_code || subject.code || ''),
+      name: String(subject.subject_name || subject.display_name || subject.subject_code || subject.code || ''),
+    }))
+    .filter(subject => subject.code), [activeCourse]);
   const visibleDocuments = useMemo(
     () => documents.filter(item => subjectFilter === 'ALL' || item.subject_code === subjectFilter),
     [documents, subjectFilter],
@@ -279,12 +276,12 @@ export default function TextbooksClient() {
   useEffect(() => {
     if (!selected || currentPage < 1 || currentPage > pageCount) return;
     const timeout = window.setTimeout(() => {
-      void api('/api/v1/learning/documents/' + selected.document_id + '/progress', {
+      void api('/api/v1/learning/documents/' + selected.document_id + '/progress?courseId=' + encodeURIComponent(String(activeCourseId)), {
         method: 'PUT', body: JSON.stringify({ lastPage: currentPage }),
       }).catch(() => undefined);
     }, 350);
     return () => window.clearTimeout(timeout);
-  }, [selected, currentPage, pageCount]);
+  }, [selected, currentPage, pageCount, activeCourseId]);
 
   useEffect(() => {
     if (!documentId) return;
@@ -333,10 +330,9 @@ export default function TextbooksClient() {
     const code = sourceSubjectCode || subjectFilter;
     const classCode = String(documents.find(item => item.document_id === id)?.class_code || 'default');
     if (code && code !== 'ALL') localStorage.setItem('qe:student:textbooks:open:' + classCode, code);
-    const returnPath = code && code !== 'ALL'
-      ? '/student/textbooks?subjectCode=' + encodeURIComponent(code)
-      : '/student/textbooks';
-    router.push('/student/textbooks?documentId=' + id + '&returnTo=' + encodeURIComponent(returnPath));
+    const returnPath = '/student/textbooks?courseId=' + encodeURIComponent(String(activeCourseId || ''))
+      + (code && code !== 'ALL' ? '&subjectCode=' + encodeURIComponent(code) : '');
+    router.push('/student/textbooks?documentId=' + id + '&courseId=' + encodeURIComponent(String(activeCourseId || '')) + '&returnTo=' + encodeURIComponent(returnPath));
   }
 
   function returnToLibrary() {
@@ -378,7 +374,7 @@ export default function TextbooksClient() {
   return <main className={'app-shell qe-textbook-shell' + (documentId ? ' qe-textbook-shell--reader' : '')}>
 
     {!documentId ? <section className="qe-textbook-library">
-      {error && <div className="qe-textbook-error" role="alert">{error}</div>}
+      {courseError && !loadingCourses && <div className="qe-textbook-error" role="alert">{courseError}</div>}{error && <div className="qe-textbook-error" role="alert">{error}</div>}
       {notice && <div className="qe-textbook-notice" role="status">{notice}</div>}
       <section className="qe-textbook-governance" aria-labelledby="qe-textbook-governance-title">
         <div className="qe-textbook-library-toolbar">
@@ -388,6 +384,7 @@ export default function TextbooksClient() {
             <p>{translateUi(locale, 'legacy.web.browse.only.the.published.resources.av.80a34039')}</p>
           </div>
           <div className="qe-textbook-filter-wrap">
+            <PrimaryCoursePicker courses={courses} courseId={activeCourseId} onChange={selectCourse} loading={loadingCourses} label={locale === 'english' ? 'Primary course' : 'मुख्य कोर्स'} />
             <label>{translateUi(locale, 'legacy.web.subject.scope.f130e513')}
               <select aria-label={translateUi(locale, 'legacy.web.filter.textbook.assignments.by.subject.e0994ff3')} value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}>
                 <option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
@@ -479,7 +476,6 @@ export default function TextbooksClient() {
                   </button>)}
                 </div>}
                 {chapterBooks.length>0 ? <>
-                  {showChapterPagination && renderChapterPagination('top')}
                   <div className="qe-textbook-chapter-list">{visibleChapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                     <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * chapterPageSize + index + 1).padStart(2,'0')}</span>
                     <span className="qe-library-mini-pdf">PDF</span>
@@ -515,7 +511,7 @@ export default function TextbooksClient() {
           </div>
 
           <div className={'qe-reader-workspace' + (thumbnailsOpen ? ' with-thumbnails' : '')}>
-            {thumbnailsOpen && <aside className="qe-reader-thumbnails" aria-label={translateUi(locale, 'legacy.web.page.thumbnails.bb715704')}><div className="qe-reader-thumbs-head"><b>{translateUi(locale, 'legacy.web.pages.4b727f1c')}</b><small>{pageCount} {translateUi(locale, 'legacy.web.total.37a7923f')}</small></div><div className="qe-reader-thumb-list">{thumbnails.map(number => <button type="button" key={number} className={number === currentPage ? 'active' : ''} onClick={() => {setCurrentPage(number);setPageError('');}}><img src={'/api/v1/learning/documents/' + selected.document_id + '/pages/' + number + '?rendition=thumbnail'} alt="" loading="lazy" decoding="async" draggable={false}/><span>{translateUi(locale, 'legacy.web.page.5d16e0a7')} {number}</span></button>)}</div><div className="qe-reader-thumbs-foot">{translateUi(locale, 'legacy.web.showing.pages.4fa9e8a0')} {thumbnails[0] || 0}–{thumbnails[thumbnails.length - 1] || 0}</div></aside>}
+            {thumbnailsOpen && <aside className="qe-reader-thumbnails" aria-label={translateUi(locale, 'legacy.web.page.thumbnails.bb715704')}><div className="qe-reader-thumbs-head"><b>{translateUi(locale, 'legacy.web.pages.4b727f1c')}</b><small>{pageCount} {translateUi(locale, 'legacy.web.total.37a7923f')}</small></div><div className="qe-reader-thumb-list">{thumbnails.map(number => <button type="button" key={number} className={number === currentPage ? 'active' : ''} onClick={() => {setCurrentPage(number);setPageError('');}}><img src={'/api/v1/learning/documents/' + selected.document_id + '/pages/' + number + '?courseId=' + encodeURIComponent(String(activeCourseId || '')) + '&rendition=thumbnail'} alt="" loading="lazy" decoding="async" draggable={false}/><span>{translateUi(locale, 'legacy.web.page.5d16e0a7')} {number}</span></button>)}</div><div className="qe-reader-thumbs-foot">{translateUi(locale, 'legacy.web.showing.pages.4fa9e8a0')} {thumbnails[0] || 0}–{thumbnails[thumbnails.length - 1] || 0}</div></aside>}
             <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '') + (fitPage ? ' fit-page' : '')} key={selected.document_id + '-' + currentPage}>
                 {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.rendering.page.821433ef')} {currentPage}…</div>}
                 <AuthenticatedPageImage

@@ -169,7 +169,7 @@ assert.notEqual(mobileStudentStart, -1, 'Student mobile primary navigation must 
 assert.notEqual(mobileStudentEnd, -1, 'Student mobile primary navigation must close.');
 const mobileStudentNav = layout.slice(mobileStudentStart, mobileStudentEnd);
 assert.ok(!mobileStudentNav.includes('logout(') && !mobileStudentNav.includes('Logout'), 'Student mobile primary navigation must not include Logout as a sixth item.');
-const mobileParentStart = layout.indexOf('<nav className="qe-workspace-mobile-nav" aria-label={t(\'web.navigation.parent.label\')}>');
+const mobileParentStart = layout.indexOf('<nav className="qe-workspace-mobile-nav qe-parent-mobile-nav" aria-label={t(\'web.navigation.parent.label\')}>');
 const mobileParentEnd = layout.indexOf('</nav>', mobileParentStart);
 assert.notEqual(mobileParentStart, -1, 'Parent mobile navigation must exist.');
 const mobileParentNav = layout.slice(mobileParentStart, mobileParentEnd);
@@ -250,7 +250,7 @@ assert.ok(studentClasses.includes('session.join_window_minutes') && studentClass
 assert.ok(androidClasses.includes('isLiveClassJoinWindowOpen') && androidClasses.includes('isLiveClassWaitingForJoinWindow') && androidClasses.includes('optInt("join_window_minutes"'), 'Android must use the same saved join window and explain when joining is not open.');
 assert.ok(learningClassesApi.includes('cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes'), 'Student session API must return the saved Admin join window to clients.');
 assert.ok(adminClasses.includes("tRef.current('admin.classes.scheduleSecureMissingFields'));return;}"), 'Admin scheduling validation must remain syntactically valid.');
-assert.ok(studentClasses.includes("'/api/v1/learning/live-classes/'+session.session_id+'/join'") && studentClasses.includes('youtube-nocookie.com/embed/') && studentClasses.includes("activeJoined.provider==='YOUTUBE_LIVE'"), 'Student web must use authorized join before showing/reopening the YouTube embed.');
+assert.ok(studentClasses.includes("'/api/v1/learning/live-classes/'+session.session_id+'/join?courseId='+activeCourseId") && studentClasses.includes("'/api/v1/learning/live-classes/'+sessionId+'/join?courseId='+activeCourseId") && studentClasses.includes('youtube-nocookie.com/embed/') && studentClasses.includes("activeJoined.provider==='YOUTUBE_LIVE'"), 'Student web must use course-scoped authorized join before showing/reopening the YouTube embed.');
 assert.ok(learningClassesApi.includes('result.put("youtubeVideoId", session.get("youtube_video_id"))') && learningClassesApi.includes("cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null") && learningClassesApi.includes('insert into learning_class_attendance'), 'API must return video ID separately from private URLs and persist attendance.');
 assert.ok(learningClassesApiTests.includes('youtubeBroadcastJoinReturnsVideoIdAndRecordsAttendanceWithoutMeetingUrl'), 'API must test the YouTube join/attendance contract.');
 assert.ok(androidClasses.includes('item.textAny("provider") == "YOUTUBE_LIVE"') && androidClasses.includes('t("Watch live broadcast", "लाइव प्रसारण देखें")'), 'Android class catalogue must support YouTube start/reopen.');
@@ -357,8 +357,8 @@ assert.ok(issue66LiveClassApiContract.includes('@GetMapping("/learning/live-clas
   'Full schedule visibility must be explicit for the dashboard while the normal class catalogue retains its 24-hour upcoming window and 60-day history boundary.');
 assert.ok(androidApp.includes('&includeFuture=true') &&
   issue66LiveClassTestsContract.includes('studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow') &&
-  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)') &&
-  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L)'),
+  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0)') &&
+  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L)'),
   'Android dashboard and API tests must exercise the full-schedule query mode.');
 const issue66AndroidDashboardRefresh = androidApp.slice(
   androidApp.indexOf('suspend fun refreshDashboardClasses()'),
