@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f45179fc733d990a3158bdcd1bf87385520226d233e6ba90d5b346c2a569e46c",
+  "raw_analysis_sha256": "20ce3c607009520941c6f691748e3807c7e16e4a54afbcb348bbda2c1c4806f1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:36:27Z",
+      "checkpointed_at": "2026-10-19T09:43:01Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:37:27Z",
+      "checkpointed_at": "2026-10-19T09:44:01Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -43351,6 +43351,246 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "13b7975008dc7f507102dce8",
+      "asset_sha256": "beb2b1aeb923d2459e53dd307208db862e325d99cf332d5e8e942c034a25f12f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 62,
+      "asset_path": "page-0062.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4c440be050a5f5fd37dbbd9ce5caecf0a556f1561b6114ebf08bb80cf1d70c22",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "visual_type": "table",
+        "visible_text": [
+          "Food",
+          "component",
+          "(Vitamin/",
+          "Mineral)",
+          "Functions",
+          "Some sources",
+          "Deficiency",
+          "disease/",
+          "disorder",
+          "Symptoms",
+          "Vitamin A",
+          "Keeps eyes",
+          "and skin",
+          "healthy",
+          "Papaya, carrot,",
+          "mango, milk",
+          "Loss of",
+          "vision",
+          "Poor vision,",
+          "loss of vision",
+          "in darkness",
+          "(night",
+          "blindness),",
+          "sometimes",
+          "complete loss",
+          "of vision",
+          "Vitamin B1",
+          "Keeps heart",
+          "healthy and",
+          "supports"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "functions",
+          "sources",
+          "deficiency diseases",
+          "symptoms"
+        ],
+        "context_relation": "The table provides a comprehensive overview of various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "limitations": [
+          "The table does not include specific quantities or ratios of vitamins and minerals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:48:46Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "visual_type": "table",
+        "visible_text": [
+          "Food",
+          "component",
+          "(Vitamin/",
+          "Mineral)",
+          "Functions",
+          "Some sources",
+          "Deficiency",
+          "disease/",
+          "disorder",
+          "Symptoms",
+          "Vitamin A",
+          "Keeps eyes",
+          "and skin",
+          "healthy",
+          "Papaya, carrot,",
+          "mango, milk",
+          "Loss of",
+          "vision",
+          "Poor vision,",
+          "loss of vision",
+          "in darkness",
+          "(night",
+          "blindness),",
+          "sometimes",
+          "complete loss",
+          "of vision",
+          "Vitamin B1",
+          "Keeps heart",
+          "healthy and",
+          "supports"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "functions",
+          "sources",
+          "deficiency diseases",
+          "symptoms"
+        ],
+        "context_relation": "The table provides a comprehensive overview of various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "limitations": [
+          "The table does not include specific quantities or ratios of vitamins and minerals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "baea6bf0dc3be4884459e354",
+      "asset_sha256": "a594be5978f71356e72f36f88ab842e9f26c6d12ed37e68b70a80103e5476d63",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/a594be5978f71356e72f36f88ab842e9f26c6d12ed37e68b70a80103e5476d63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "340d019d60d41708fce42e837781417f5205f16836997f7acbb10c45b0b3ba55",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a bottle of milk, a mango, and several carrots.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Mango",
+          "Carrot"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "food components"
+        ],
+        "context_relation": "The image illustrates the importance of consuming milk, fruits, and vegetables for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:50:19Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a bottle of milk, a mango, and several carrots.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Mango",
+          "Carrot"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "food components"
+        ],
+        "context_relation": "The image illustrates the importance of consuming milk, fruits, and vegetables for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "49debd608f740dc8bcde37bd",
+      "asset_sha256": "38e5d6a1b7c901ee4c421e7a774cc808eb4ba4c9599a0724711da40d11bb5b46",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/38e5d6a1b7c901ee4c421e7a774cc808eb4ba4c9599a0724711da40d11bb5b46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "340d019d60d41708fce42e837781417f5205f16836997f7acbb10c45b0b3ba55",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of various food items including milk, rice, wheat, flax seeds, paneer, and other vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "disease prevention"
+        ],
+        "context_relation": "exploring food sources for vitamins and minerals",
+        "limitations": [
+          "no specific quantities or relationships"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T09:51:55Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of various food items including milk, rice, wheat, flax seeds, paneer, and other vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "disease prevention"
+        ],
+        "context_relation": "exploring food sources for vitamins and minerals",
+        "limitations": [
+          "no specific quantities or relationships"
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

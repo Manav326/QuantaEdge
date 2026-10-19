@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 928,
-    "successful_visual_analyses": 919,
-    "missing_visual_analyses": 1150,
+    "raw_analysis_result_rows": 931,
+    "successful_visual_analyses": 922,
+    "missing_visual_analyses": 1147,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1159,
+    "unresolved_count": 1156,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36020,9 +36020,56 @@
       "asset_path": "page-0062.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "visual_type": "table",
+        "visible_text": [
+          "Food",
+          "component",
+          "(Vitamin/",
+          "Mineral)",
+          "Functions",
+          "Some sources",
+          "Deficiency",
+          "disease/",
+          "disorder",
+          "Symptoms",
+          "Vitamin A",
+          "Keeps eyes",
+          "and skin",
+          "healthy",
+          "Papaya, carrot,",
+          "mango, milk",
+          "Loss of",
+          "vision",
+          "Poor vision,",
+          "loss of vision",
+          "in darkness",
+          "(night",
+          "blindness),",
+          "sometimes",
+          "complete loss",
+          "of vision",
+          "Vitamin B1",
+          "Keeps heart",
+          "healthy and",
+          "supports"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "functions",
+          "sources",
+          "deficiency diseases",
+          "symptoms"
+        ],
+        "context_relation": "The table provides a comprehensive overview of various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "limitations": [
+          "The table does not include specific quantities or ratios of vitamins and minerals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36038,9 +36085,26 @@
       "asset_path": "assets/a594be5978f71356e72f36f88ab842e9f26c6d12ed37e68b70a80103e5476d63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a bottle of milk, a mango, and several carrots.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Mango",
+          "Carrot"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "food components"
+        ],
+        "context_relation": "The image illustrates the importance of consuming milk, fruits, and vegetables for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36056,9 +36120,32 @@
       "asset_path": "assets/38e5d6a1b7c901ee4c421e7a774cc808eb4ba4c9599a0724711da40d11bb5b46.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of various food items including milk, rice, wheat, flax seeds, paneer, and other vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "disease prevention"
+        ],
+        "context_relation": "exploring food sources for vitamins and minerals",
+        "limitations": [
+          "no specific quantities or relationships"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
