@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1149,
+    "assets_selected": 1150,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1145,
-    "assets_remaining": 933,
+    "assets_analyzed": 1146,
+    "assets_remaining": 932,
     "assets_completion_percent": 55.1,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1144,
+    "assets_skipped_from_checkpoint": 1145,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:27:19Z"
+      "checkpointed_at": "2026-10-19T20:31:00Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:28:01Z"
+      "checkpointed_at": "2026-10-19T20:31:44Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:28:56Z"
+      "checkpointed_at": "2026-10-19T20:32:40Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37467,7 +37467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:29:30Z"
+      "checkpointed_at": "2026-10-19T20:33:14Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37931,6 +37931,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T20:30:08Z"
+    },
+    {
+      "asset_id": "c68b5326f2d4c0204d2db09d",
+      "asset_sha256": "e1c8f2b7fd883d6a0a0ec1316e98bcc1cee1166388c14059cb9667849572487a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/e1c8f2b7fd883d6a0a0ec1316e98bcc1cee1166388c14059cb9667849572487a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16a46680b925b8c8c6ef849c54829957269a9b86765457ceb6a61b83223bd2c4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a red beanie, a red checkered shirt, and yellow pants with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or information related to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T20:33:51Z"
     }
   ]
 }
