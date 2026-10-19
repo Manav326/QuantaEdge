@@ -127,12 +127,12 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
     case 'video':
-      return <figure className={styles.figure} key={index}>
+      return <figure className={styles.figure} key={index} style={presentationStyle}>
         <Asset id={assetId} alt={text('alt', text('title', 'Notification video'))} kind="video" surface={surface} />
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
     case 'animation':
-      return <figure className={styles.figure} key={index}>
+      return <figure className={styles.figure} key={index} style={presentationStyle}>
         <Asset id={assetId} alt={Boolean(block.decorative) ? '' : text('alt')} kind="image" surface={surface} />
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
@@ -144,7 +144,7 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
         <Destination target={block.target} label={text('buttonLabel', 'Open course')} surface={surface} editMode={editMode} />
       </section>;
     case 'eventCard':
-      return <section className={styles.dataCard} key={index}>
+      return <section className={styles.dataCard} key={index} style={presentationStyle}>
         <div className={styles.cardKicker}>EVENT</div>
         <h4>{text('title', 'Upcoming event')}</h4>
         {text('dateLabel') ? <p className={styles.eventDate}>{text('dateLabel')}</p> : null}
