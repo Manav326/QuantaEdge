@@ -74,6 +74,7 @@ private val SHA256_PATTERN = Regex("^[0-9a-fA-F]{64}$")
 fun StructuredLessonResourcesPanel(
     artifactId: String,
     language: String,
+    courseId: Long,
     onOpenLearningDocument: (Long) -> Unit
 ) {
     val context = LocalContext.current
@@ -110,14 +111,14 @@ fun StructuredLessonResourcesPanel(
         }
     }
 
-    LaunchedEffect(artifactId, language) {
+    LaunchedEffect(artifactId, language, courseId) {
         loading = true
         error = ""
         try {
             val encodedArtifact = ApiClient.encodeQuery(artifactId)
             val encodedLanguage = ApiClient.encodeQuery(language)
             val array = ApiClient.getArray(
-                "/api/v1/learning/resources?artifactId=$encodedArtifact&language=$encodedLanguage"
+                "/api/v1/learning/resources?artifactId=$encodedArtifact&language=$encodedLanguage&courseId=$courseId"
             )
             resources = buildList {
                 for (i in 0 until array.length()) array.optJSONObject(i)?.let { add(JSONObject(it.toString())) }
@@ -383,7 +384,7 @@ fun StructuredLessonResourcesPanel(
                                 runCatching {
                                     ApiClient.putObject(
                                         "/api/v1/learning/resources/$resourceId/progress?assignmentId=" +
-                                            item.optLong("assignmentId"),
+                                            item.optLong("assignmentId") + "&courseId=$courseId",
                                         JSONObject().put("lastPositionSeconds", position)
                                             .put("watchedSeconds", watched).put("completed", completed)
                                     )
