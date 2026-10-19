@@ -20,7 +20,7 @@ class InstitutionThemeTokensTest {
     assertEquals("quantaedge-orange", theme.get("presetId"));
     assertEquals("system", theme.get("appearance"));
     assertEquals("#F97316", theme.get("primary"));
-    assertEquals("#C2410C", theme.get("accent"));
+    assertEquals("#0F766E", theme.get("accent"));
 
     Map<?, ?> light = assertInstanceOf(Map.class, theme.get("light"));
     Map<?, ?> dark = assertInstanceOf(Map.class, theme.get("dark"));
@@ -31,8 +31,13 @@ class InstitutionThemeTokensTest {
       assertNotNull(light.get(token), "Missing light token " + token);
       assertNotNull(dark.get(token), "Missing dark token " + token);
     }
-    assertEquals("#0B1220", dark.get("background"));
-    assertEquals("#F8FAFC", light.get("background"));
+    assertEquals("#121A28", dark.get("background"));
+    assertEquals("#F5F7FB", light.get("background"));
+    assertEquals("#1B2637", dark.get("surface"));
+    assertEquals("#243247", dark.get("surfaceElevated"));
+    assertEquals("#18243A", dark.get("navBackground"));
+    assertEquals("#F5F7FB", light.get("navBackground"));
+    assertFalse(dark.get("navBackground").equals(dark.get("primary")));
   }
 
   @Test
