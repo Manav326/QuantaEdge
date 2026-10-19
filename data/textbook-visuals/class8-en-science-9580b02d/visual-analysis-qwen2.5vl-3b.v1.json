@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 886,
+    "assets_selected": 888,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 883,
-    "assets_remaining": 1408,
-    "assets_completion_percent": 38.5,
+    "assets_analyzed": 885,
+    "assets_remaining": 1406,
+    "assets_completion_percent": 38.6,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 881,
+    "assets_skipped_from_checkpoint": 883,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:40:59Z"
+      "checkpointed_at": "2026-10-19T15:46:39Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:41:46Z"
+      "checkpointed_at": "2026-10-19T15:47:25Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:42:23Z"
+      "checkpointed_at": "2026-10-19T15:48:03Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -27925,6 +27925,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T15:45:31Z"
+    },
+    {
+      "asset_id": "7b7713bec248f2083b8ff0ff",
+      "asset_sha256": "006e4a34051675f3322dbaa86e8fb2b64ea802029a7190bd2f6cf7ea32b76c37",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/006e4a34051675f3322dbaa86e8fb2b64ea802029a7190bd2f6cf7ea32b76c37.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a notebook and pen, possibly taking notes or writing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text provided in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:49:34Z"
+    },
+    {
+      "asset_id": "e36804490d7aeb7d954abc10",
+      "asset_sha256": "b991f57bcc8f1e1b972c79acb8c80c3ba08f323d0f791d7dd9170b998869e8bc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/b991f57bcc8f1e1b972c79acb8c80c3ba08f323d0f791d7dd9170b998869e8bc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0877CH03' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH03"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:51:06Z"
     }
   ]
 }
