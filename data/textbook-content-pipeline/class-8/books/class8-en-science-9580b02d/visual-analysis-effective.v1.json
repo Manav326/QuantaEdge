@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ed8eb8e127f938fe43674449bdf43129261c01668baa1658dc3b375e81ab30a",
+  "raw_analysis_sha256": "d7083d8eb6f6e6f8d0cd5a0e4dbead2f7a52e2aed4330a9e9d73934ffc16305e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:16:58Z",
+      "checkpointed_at": "2026-10-19T12:21:06Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:18:13Z",
+      "checkpointed_at": "2026-10-19T12:22:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:19:04Z",
+      "checkpointed_at": "2026-10-19T12:23:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -39938,6 +39938,168 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "34ca542c4aaf6199e86f41f1",
+      "asset_sha256": "7d2a1009bb69f2b1d6969821106809db9a6c389dc292436e288ed467f1360cfc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "page-0047.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing biogas production and fermented food items in India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "27",
+          "Discover, design, and debate",
+          "India has a long history of biogas production. One of our",
+          "oldest biogas plant was set up in late 1850s. Find out about",
+          "the Biogas Program initiated by the Ministry of New and",
+          "Renewable Energy, Government of India.",
+          "Fermented food items like fermented soya bean and",
+          "fermented bamboo shoots are consumed as traditional food",
+          "in some parts of India. With the help of your parents and",
+          "teachers, list some traditional food items from your area",
+          "that utilise the process of fermentation. Investigate the",
+          "ingredients used in the preparation of these fermented food",
+          "items; the method of preparing them; the microorganism",
+          "responsible for the fermentation of the food, and the cultural",
+          "and nutritional importance of the fermented food.",
+          "Study the different parts of a macro fungus mushroom using",
+          "a magnifying glass and microscope. Take the help of students",
+          "from senior classes and explore the internal structure of",
+          "different parts of mushrooms under the microscope in your",
+          "school laboratory.",
+          "Interact with an entrepreneur and learn the steps for",
+          "cultivation of mushroom.",
+          "Reflect on the questions framed by your",
+          "friends and try to answer ..."
+        ],
+        "concepts": [
+          "biogas production",
+          "fermented food items",
+          "traditional food",
+          "microorganisms",
+          "fungus mushrooms",
+          "microscope",
+          "cultivation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:26:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing biogas production and fermented food items in India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "27",
+          "Discover, design, and debate",
+          "India has a long history of biogas production. One of our",
+          "oldest biogas plant was set up in late 1850s. Find out about",
+          "the Biogas Program initiated by the Ministry of New and",
+          "Renewable Energy, Government of India.",
+          "Fermented food items like fermented soya bean and",
+          "fermented bamboo shoots are consumed as traditional food",
+          "in some parts of India. With the help of your parents and",
+          "teachers, list some traditional food items from your area",
+          "that utilise the process of fermentation. Investigate the",
+          "ingredients used in the preparation of these fermented food",
+          "items; the method of preparing them; the microorganism",
+          "responsible for the fermentation of the food, and the cultural",
+          "and nutritional importance of the fermented food.",
+          "Study the different parts of a macro fungus mushroom using",
+          "a magnifying glass and microscope. Take the help of students",
+          "from senior classes and explore the internal structure of",
+          "different parts of mushrooms under the microscope in your",
+          "school laboratory.",
+          "Interact with an entrepreneur and learn the steps for",
+          "cultivation of mushroom.",
+          "Reflect on the questions framed by your",
+          "friends and try to answer ..."
+        ],
+        "concepts": [
+          "biogas production",
+          "fermented food items",
+          "traditional food",
+          "microorganisms",
+          "fungus mushrooms",
+          "microscope",
+          "cultivation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e14ecf76d7d0e1f009b533a6",
+      "asset_sha256": "a6ed5cc00fb2c90cb8c337edc0735323babfcef73eca5cd48e55b3ba49aa625e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/a6ed5cc00fb2c90cb8c337edc0735323babfcef73eca5cd48e55b3ba49aa625e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden-framed bulletin board with a dark red background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "BULLETIN BOARD"
+        ],
+        "concepts": [
+          "bulletin board",
+          "wooden frame",
+          "dark red background"
+        ],
+        "context_relation": "The image is a visual representation of a bulletin board, likely used for displaying information or announcements.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the bulletin board itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:27:43Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden-framed bulletin board with a dark red background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "BULLETIN BOARD"
+        ],
+        "concepts": [
+          "bulletin board",
+          "wooden frame",
+          "dark red background"
+        ],
+        "context_relation": "The image is a visual representation of a bulletin board, likely used for displaying information or announcements.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the bulletin board itself."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
