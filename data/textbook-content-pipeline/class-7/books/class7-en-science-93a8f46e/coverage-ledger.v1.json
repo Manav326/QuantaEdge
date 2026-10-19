@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1394,
-    "successful_visual_analyses": 1371,
-    "missing_visual_analyses": 6094,
+    "raw_analysis_result_rows": 1397,
+    "successful_visual_analyses": 1374,
+    "missing_visual_analyses": 6091,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6117,
+    "unresolved_count": 6114,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -62443,9 +62443,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62461,9 +62470,30 @@
       "asset_path": "page-0049.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing different arrangements of cells and lamps to make a lamp glow, with predictions and observations.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1.                                                                                                                                                                                                                                                                                                 Component",
+          "2.                                                                                                                                                                                                                                                                                                 Component",
+          "3.                                                                                                                                                                                                                                                                                                 Component",
+          "4.                                                                                                                                                                                                                                                                                                 Component",
+          "5.                                                                                                                                                                                                                                                                                                 Component",
+          "6.                                                                                                                                                                                                                                                                                                 Component"
+        ],
+        "concepts": [
+          "Electricity: Circuits and their Components"
+        ],
+        "context_relation": "The table is related to the concept of electricity and circuits.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62479,9 +62509,20 @@
       "asset_path": "assets/da9ed6eb8c37724393616cde07bcf4dd2f2a70c04777add0a29b9e2f7a3d2e6c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long, white rectangular frame with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image is a blank page with no visible text or content.",
+          "The image does not provide any information about the content of the textbook page.",
+          "The image does not show any diagrams, charts, or illustrations related to the textbook page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
