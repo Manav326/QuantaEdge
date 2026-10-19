@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3cfbc60ecf6cd10b9213cdf6fad7624af8b96fb5e6f686197b70bdb7fe14215a",
+  "raw_analysis_sha256": "b2f4a22f6553169f559b8de8f861cb88c7f5792628c6112696612db9a5194af6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:17:57Z",
+      "checkpointed_at": "2026-10-19T16:21:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:18:37Z",
+      "checkpointed_at": "2026-10-19T16:22:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:19:29Z",
+      "checkpointed_at": "2026-10-19T16:23:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -51052,6 +51052,144 @@
         "context_relation": "The compass is used to demonstrate the concept of Earth's magnetic field.",
         "limitations": [
           "The compass is a simplified representation and does not show the Earth's magnetic field in detail."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d6a2bbcd5c8267f7ca2055ce",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the",
+          "north-south direction.",
+          "The end of the magnet that points towards north direction is called the North-seeking pole or the North pole of the magnet.",
+          "The other end that points towards the South direction is called the South-seeking pole or the South pole of the magnet.",
+          "A freely suspended magnet rests along the north-south direction because our Earth itself behaves like a giant magnet."
+        ],
+        "concepts": [
+          "North-seeking pole",
+          "North pole",
+          "South-seeking pole",
+          "South pole",
+          "Earth as a giant magnet"
+        ],
+        "context_relation": "Explain the behavior of a freely suspended magnet",
+        "limitations": [
+          "No visual of the magnet or Earth is present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:23:40Z",
+      "effective_analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the",
+          "north-south direction.",
+          "The end of the magnet that points towards north direction is called the North-seeking pole or the North pole of the magnet.",
+          "The other end that points towards the South direction is called the South-seeking pole or the South pole of the magnet.",
+          "A freely suspended magnet rests along the north-south direction because our Earth itself behaves like a giant magnet."
+        ],
+        "concepts": [
+          "North-seeking pole",
+          "North pole",
+          "South-seeking pole",
+          "South pole",
+          "Earth as a giant magnet"
+        ],
+        "context_relation": "Explain the behavior of a freely suspended magnet",
+        "limitations": [
+          "No visual of the magnet or Earth is present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8b59b9aab36f9e76a334b951",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the",
+          "north-south direction. The end of the magnet that points",
+          "towards north direction is called the North-seeking pole or",
+          "the North pole of the magnet. The other end that points",
+          "towards the South direction is called the South-seeking",
+          "pole or the South pole of the magnet. A freely suspended",
+          "magnet rests along the north-south direction because our",
+          "Earth itself behaves like a giant magnet.",
+          "Repeat this activity with a small iron bar"
+        ],
+        "concepts": [
+          "North-seeking pole",
+          "North pole",
+          "South-seeking pole",
+          "South pole",
+          "Earth's magnetic field",
+          "Magnetism"
+        ],
+        "context_relation": "Explanation of magnetism and Earth's magnetic field",
+        "limitations": [
+          "The image does not show the actual activity of repeating the experiment with a small iron bar."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:24:01Z",
+      "effective_analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the",
+          "north-south direction. The end of the magnet that points",
+          "towards north direction is called the North-seeking pole or",
+          "the North pole of the magnet. The other end that points",
+          "towards the South direction is called the South-seeking",
+          "pole or the South pole of the magnet. A freely suspended",
+          "magnet rests along the north-south direction because our",
+          "Earth itself behaves like a giant magnet.",
+          "Repeat this activity with a small iron bar"
+        ],
+        "concepts": [
+          "North-seeking pole",
+          "North pole",
+          "South-seeking pole",
+          "South pole",
+          "Earth's magnetic field",
+          "Magnetism"
+        ],
+        "context_relation": "Explanation of magnetism and Earth's magnetic field",
+        "limitations": [
+          "The image does not show the actual activity of repeating the experiment with a small iron bar."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
