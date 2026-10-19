@@ -201,15 +201,12 @@ public class GuardianController {
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              slc.username as login_username,gs.relationship,gs.consent_status,
-             coalesce((select string_agg(distinct s.code,',' order by s.code)
-                from student_program_enrollment spe
-                join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-                join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
-                join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
-                join curriculum_program_subject cps on cps.program_id=p.id
-                join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
-                  and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id and cps.class_id=s.class_id))
-                where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as track_codes
+             coalesce((select string_agg(distinct p.display_name,', ' order by p.display_name)
+                 from student_program_enrollment spe
+                 join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                 join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+                 join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+                 where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as course_names
       from guardian_student gs join student st on st.id=gs.student_id
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
@@ -463,15 +460,12 @@ public class GuardianController {
   private Map<String,Object> childProfileResponse(long studentId,long institutionId) {
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
-        coalesce((select string_agg(distinct s.code,',' order by s.code)
-                from student_program_enrollment spe
-                join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-                join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
-                join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
-                join curriculum_program_subject cps on cps.program_id=p.id
-                join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
-                  and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id and cps.class_id=s.class_id))
-                where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as track_codes
+        coalesce((select string_agg(distinct p.display_name,', ' order by p.display_name)
+                 from student_program_enrollment spe
+                 join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                 join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+                 join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+                 where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as course_names
       from student st join institution_membership m on m.student_id=st.id
         and m.institution_id=? and m.status='ACTIVE'
       where st.id=?
