@@ -914,8 +914,13 @@ public class SourceIngestionController {
   @GetMapping("/sources/{sourceId}/chapter-mappings")
   public List<Map<String, Object>> listExistingChapterMappings(
       @PathVariable long sourceId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     return jdbc.queryForList("""
       select cs.id as chapter_source_id,cs.chapter_id,ch.code as chapter_code,
              ch.display_name as chapter_name,cs.source_chapter_no,cs.source_chapter_title,
@@ -948,8 +953,19 @@ public class SourceIngestionController {
         limit 1
       ) d on true
       where cs.source_id=?
+        and exists (
+          select 1
+          from curriculum_program_subject scoped_mapping
+          join curriculum_program selected_course on selected_course.id=scoped_mapping.program_id
+            and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+          join curriculum_subject mapped_subject on mapped_subject.id=scoped_mapping.subject_id
+            and mapped_subject.class_id=scoped_mapping.class_id and mapped_subject.active=true
+          where scoped_mapping.program_id=? and scoped_mapping.subject_id=ch.subject_id
+            and (mapped_subject.program_id=selected_course.id
+              or (mapped_subject.program_id is null and selected_course.class_id=mapped_subject.class_id))
+        )
       order by ch.sort_order,ch.teaching_order,ch.id,cs.id
-      """, sourceId);
+      """, sourceId,courseId);
   }
 
   @GetMapping("/jobs")
