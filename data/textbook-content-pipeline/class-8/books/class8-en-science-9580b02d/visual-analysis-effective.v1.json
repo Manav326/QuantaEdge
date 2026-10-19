@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "28b37642c1fcb90a85bc08738b66da39bdf2e21422bd719b7f36fde36455a900",
+  "raw_analysis_sha256": "0f2f9e1ecf81b20e50a18b79ccfefa67fa18de9e721859440eca909893298c82",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T00:25:46Z",
+      "checkpointed_at": "2026-10-19T00:42:47Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T00:26:38Z",
+      "checkpointed_at": "2026-10-19T00:43:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29084,7 +29084,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29093,27 +29093,25 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Freelance Language Editor",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Acknowledgments",
+          "Contributors",
+          "Editors",
+          "Support",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "The page does not contain any visual elements.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:25:06Z",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T00:47:49Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29122,17 +29120,15 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Freelance Language Editor",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Acknowledgments",
+          "Contributors",
+          "Editors",
+          "Support",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "The page does not contain any visual elements.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29236,7 +29232,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149731645",
+      "run_id": "39178085104",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -31776,6 +31772,96 @@
         "context_relation": "The calendar page is related to the chapter on exploring the investigative world of science.",
         "limitations": [
           "The visible text does not provide specific details about the calendar dates or the chapter content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4bdfc558956dbde0db88b9da",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977554edfd999f43bb0e179dd42eb60686108159d3b5b184c63195f85bf66f4a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A calendar page with dates from March 1 to March 22, 2025, and the text 'But it’s not just calendars or the movements of the Sun and Moon that are linked. Right here on Earth, there are marvellous and complex patterns of relationships between living organisms and their environments. Every living organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "5",
+          "But it’s not just calendars or the movements",
+          "of the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns of relationships between",
+          "living organisms and their environments. Every living",
+          "organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22",
+          "Chaitraof the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns of relationships between",
+          "living organisms and their environments. Every living",
+          "organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22"
+        ],
+        "concepts": [
+          "calendar",
+          "movements of the Sun and Moon",
+          "relationships between living organisms and their environments",
+          "climate",
+          "geography",
+          "ecosystem"
+        ],
+        "context_relation": "The text is discussing the complex relationships between living organisms and their environments, influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+        "limitations": [
+          "The text does not provide specific details about the factors influencing the relationships between living organisms and their environments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T00:51:54Z",
+      "effective_analysis": {
+        "visual_summary": "A calendar page with dates from March 1 to March 22, 2025, and the text 'But it’s not just calendars or the movements of the Sun and Moon that are linked. Right here on Earth, there are marvellous and complex patterns of relationships between living organisms and their environments. Every living organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "5",
+          "But it’s not just calendars or the movements",
+          "of the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns of relationships between",
+          "living organisms and their environments. Every living",
+          "organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22",
+          "Chaitraof the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns of relationships between",
+          "living organisms and their environments. Every living",
+          "organism has a unique relationship with its environment, and this relationship is influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22"
+        ],
+        "concepts": [
+          "calendar",
+          "movements of the Sun and Moon",
+          "relationships between living organisms and their environments",
+          "climate",
+          "geography",
+          "ecosystem"
+        ],
+        "context_relation": "The text is discussing the complex relationships between living organisms and their environments, influenced by various factors such as climate, geography, and other organisms in the ecosystem.",
+        "limitations": [
+          "The text does not provide specific details about the factors influencing the relationships between living organisms and their environments."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
