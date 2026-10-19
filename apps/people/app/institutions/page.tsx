@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
 import InstitutionBrandAssetEditor from './InstitutionBrandAssetEditor';
+import PasswordField from '../components/PasswordField';
 
 type Session = { staffId?: number; displayName?: string; permissions?: string[] };
 type EditableCard = 'profile' | 'status' | 'courses' | 'admins' | 'branding' | 'billing';
@@ -364,7 +365,7 @@ export default function InstitutionsAdminPage() {
       <label>Legal name<input maxLength={220} value={create.legalName} onChange={e=>setCreateField('legalName',e.target.value)}/></label>
       <label>Admin username *<input required minLength={3} maxLength={64} value={create.adminUsername} onChange={e=>setCreateField('adminUsername',e.target.value)}/></label>
       <label>Administrator full name *<input required minLength={2} maxLength={120} value={create.adminDisplayName} onChange={e=>setCreateField('adminDisplayName',e.target.value)}/></label>
-      <label>Temporary password *<input required type="password" minLength={12} maxLength={72} autoComplete="new-password" value={create.initialPassword} onChange={e=>setCreateField('initialPassword',e.target.value)}/><small>12+ characters; the admin must change this after first sign-in.</small></label>
+      <label>Temporary password *<PasswordField required minLength={12} maxLength={72} autoComplete="new-password" value={create.initialPassword} onChange={e=>setCreateField('initialPassword',e.target.value)}/><small>12+ characters; the admin must change this after first sign-in.</small></label>
       <div className={styles.formActions}><button className={styles.primary} disabled={saving}>{saving?'Creating…':'Create institution'}</button></div>
     </form></section>:null}
     <div className={styles.columns}>
@@ -401,7 +402,7 @@ export default function InstitutionsAdminPage() {
             <div className={styles.panelHeading}><div><h3>Institution administrators</h3><p>Only platform owner can create or suspend client admins.</p></div>
               {editingCard==='admins'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('admins')} disabled={saving}>Done</button><button type="button" className={styles.primary} onClick={()=>setShowAdmin(v=>!v)} disabled={saving}>{showAdmin?'Cancel add':'＋ Add admin'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>setEditingCard('admins')} disabled={saving||editingCard!==null}>Edit</button>}
             </div>
-            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<input required type="password" minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Provision admin</button></div></form>:null}
+            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<PasswordField required minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Provision admin</button></div></form>:null}
             <div className={styles.list}>{(detail.admins||[]).map(a=><div className={styles.listItem} key={a.id}><span className={styles.avatar}>{a.display_name.slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{a.display_name}</strong><small>@{a.username} · {a.must_change_password?'initial password not changed':'password set'}</small><small>Last sign-in: {fmt(a.last_login_at)}</small></span>{editingCard==='admins'?<button className={styles.secondary} disabled={saving} onClick={()=>void toggleAdmin(a)}>{a.active?'Suspend':'Activate'}</button>:<span className={styles.status+(a.active?' '+styles.active:' '+styles.suspended)}>{a.active?'ACTIVE':'SUSPENDED'}</span>}</div>)}
             {!(detail.admins||[]).length?<p className={styles.emptyText}>No institution administrators configured.</p>:null}</div>
             {editingCard==='admins'?<p className={styles.disclaimer}>Admin provisioning and activation changes are applied immediately and recorded in the audit history.</p>:null}
