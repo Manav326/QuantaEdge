@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1232,
+    "assets_selected": 1235,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1230,
-    "assets_remaining": 6258,
-    "assets_completion_percent": 16.4,
+    "assets_analyzed": 1233,
+    "assets_remaining": 6255,
+    "assets_completion_percent": 16.5,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1227,
+    "assets_skipped_from_checkpoint": 1230,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:57:15Z"
+      "checkpointed_at": "2026-10-19T01:01:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:57:43Z"
+      "checkpointed_at": "2026-10-19T01:02:26Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -46838,6 +46838,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T01:01:03Z"
+    },
+    {
+      "asset_id": "06725ec0f5111a2cdcb54d51",
+      "asset_sha256": "67052e1830e4f647539d00d002a90dab88b6aea8dc656fadae107c54762461d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/67052e1830e4f647539d00d002a90dab88b6aea8dc656fadae107c54762461d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "+"
+        ],
+        "concepts": [
+          "electric cell"
+        ],
+        "context_relation": "The image is related to the topic of an electric cell, which is part of the components of a torch.",
+        "limitations": [
+          "The image does not provide a clear view of the electric cell or its components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:03:32Z"
+    },
+    {
+      "asset_id": "255dfbc9e10172418cf50106",
+      "asset_sha256": "c2a608aafb98dabec8af3088f5636d577779f222f4f2f06ef5260284d4b80ab0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/c2a608aafb98dabec8af3088f5636d577779f222f4f2f06ef5260284d4b80ab0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep   Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is a close-up of a red object, possibly a part of an electrical circuit or a component of a torch.",
+        "limitations": [
+          "The image is blurry and lacks context, making it difficult to identify the exact object."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:04:45Z"
+    },
+    {
+      "asset_id": "6d653dff45a82f1c06f5eecc",
+      "asset_sha256": "942da3309f59fd86bc75d990ca920fbdf97a3fcc62b01364f2a552f67906bddf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/942da3309f59fd86bc75d990ca920fbdf97a3fcc62b01364f2a552f67906bddf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red background with a white area at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:05:48Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1247,
-    "successful_visual_analyses": 1232,
-    "missing_visual_analyses": 6241,
+    "raw_analysis_result_rows": 1250,
+    "successful_visual_analyses": 1235,
+    "missing_visual_analyses": 6238,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6256,
+    "unresolved_count": 6253,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57510,9 +57510,22 @@
       "asset_path": "assets/67052e1830e4f647539d00d002a90dab88b6aea8dc656fadae107c54762461d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "+"
+        ],
+        "concepts": [
+          "electric cell"
+        ],
+        "context_relation": "The image is related to the topic of an electric cell, which is part of the components of a torch.",
+        "limitations": [
+          "The image does not provide a clear view of the electric cell or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57528,9 +57541,32 @@
       "asset_path": "assets/c2a608aafb98dabec8af3088f5636d577779f222f4f2f06ef5260284d4b80ab0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep   Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is a close-up of a red object, possibly a part of an electrical circuit or a component of a torch.",
+        "limitations": [
+          "The image is blurry and lacks context, making it difficult to identify the exact object."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57546,9 +57582,16 @@
       "asset_path": "assets/942da3309f59fd86bc75d990ca920fbdf97a3fcc62b01364f2a552f67906bddf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red background with a white area at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
