@@ -414,7 +414,7 @@ export default function ContentStudio(){
   if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
   const [data,questionCounts]=await Promise.all([
    api('/api/v1/admin/content?courseId='+encodeURIComponent(selectedProgram)),
-   api('/api/v1/admin/content/questions/review-summary')
+   api('/api/v1/admin/content/questions/review-summary?courseId='+encodeURIComponent(selectedProgram))
   ]);
   setRows(Array.isArray(data)?data:[]);
   setQuestionSummary(questionCounts);
