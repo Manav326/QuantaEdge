@@ -861,7 +861,7 @@ export default function TextbookLibraryPage() {
                 <p>{row.scope === 'SUBJECT_BOOK' ? t('admin.resources.completeSubjectBook') : t('admin.resources.chapterPdf')} · {row.language === 'en' ? t('admin.resources.english') : t('admin.resources.hindi')} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
                 <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || t('admin.resources.sourceTitleNotSet')} · {row.edition || t('admin.resources.editionNotSet')}</small>
                 <small>{row.source_url || t('admin.resources.sourceUrlNotSet')}</small>
-                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
+                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This course chapter is inactive. Reactivate it before publishing its PDF.</small>}
               </div>
               <div className={styles.rowActions}>
                 <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>{t('admin.resources.preview')}</button>
