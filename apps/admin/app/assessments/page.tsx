@@ -140,9 +140,10 @@ export default function AssessmentsPage(){
   },[classCode,subjectCode,courseId,chapterId,search,bankPage,bankPageSize]);
 
   const loadQueue=useCallback(async(nextPage=queuePage,nextPageSize=queuePageSize)=>{
+    if(!courseId){setQueue([]);setQueueTotal(0);setLoading(courses.length===0);return;}
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status:queueStatus,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
+      const params=new URLSearchParams({courseId,status:queueStatus,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       if(query.trim())params.set('query',query.trim());
       const data=await api('/api/v1/admin/assessment-reviews?'+params.toString());
       setQueue(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
@@ -150,7 +151,7 @@ export default function AssessmentsPage(){
       setQueuePage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.queueLoadFailed'));}
     finally{setLoading(false);}
-  },[queueStatus,query,queuePage,queuePageSize]);
+  },[courseId,courses.length,queueStatus,query,queuePage,queuePageSize]);
 
   useEffect(()=>{let active=true;api('/api/v1/admin/content/programs').then((data:any)=>{if(!active)return;const rows=Array.isArray(data)?data:[];setCourses(rows);const current=rows.some((row:CourseOption)=>String(row.course_id||row.id)===courseId)?courseId:String(rows[0]?.course_id||rows[0]?.id||'');if(current!==courseId)setCourseId(current);const chosen=rows.find((row:CourseOption)=>String(row.course_id||row.id)===current);if(chosen?.curriculum_class_code)setClassCode(String(chosen.curriculum_class_code));}).catch((e:any)=>{if(active)setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));});return()=>{active=false;};},[]);
   useEffect(()=>{const chosen=courses.find(row=>String(row.course_id||row.id)===courseId);if(chosen?.curriculum_class_code)setClassCode(String(chosen.curriculum_class_code));},[courses,courseId]);
@@ -266,7 +267,7 @@ export default function AssessmentsPage(){
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.step01')}</span><h2>{t('admin.assessments.chooseCurriculum')}</h2><p>{t('admin.assessments.chooseCurriculumDescription')}</p></div><b>01</b></div>
           <div className={styles.fields}>
-            <label>Course<select value={courseId} onChange={e=>{setCourseId(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}} disabled={!courses.length}><option value="">{courses.length?'Select a course':'No courses assigned to this institution'}</option>{courses.map(course=><option key={course.course_id||course.id} value={course.course_id||course.id}>{course.display_name} · {course.code}</option>)}</select></label>
+            <label>{t('admin.assessments.chooseCurriculum')}<select value={courseId} onChange={e=>{setCourseId(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}} disabled={!courses.length}><option value="">{courses.length?t('admin.assessments.chooseCurriculum'):t('admin.assessments.noCoursesAssigned')}</option>{courses.map(course=><option key={course.course_id||course.id} value={course.course_id||course.id}>{course.display_name} · {course.code}</option>)}</select></label>
             <label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}} disabled={!subjectOptions.length}>{subjectOptions.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
             <label>{t('admin.assessments.chapterFilterOptional')}<select value={chapterId} onChange={e=>{setChapterId(e.target.value);setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);}}><option value="">{t('admin.assessments.anyPublishedChapter')}</option>{chapters.map(ch=><option key={ch.id} value={ch.id}>{ch.code} — {ch.name}</option>)}</select></label>
             <button type="button" className={styles.secondaryButton} onClick={()=>void loadBank()} disabled={bankLoading}>{bankLoading?t('admin.assessments.loading'):t('admin.assessments.loadSearchQuestionBank')}</button>
@@ -288,7 +289,7 @@ export default function AssessmentsPage(){
             <label>{t('admin.assessments.durationMinutes')}<input type="number" min="1" max="240" value={duration} onChange={e=>setDuration(e.target.value)}/></label>
             <label>{t('admin.assessments.attemptsAllowed')}<input type="number" min="1" max="10" value={maxAttempts} onChange={e=>setMaxAttempts(e.target.value)}/></label>
           </div>
-          <div className={styles.submitBar}><p>{t('admin.assessments.selectedQuestionsSummary',{count:selectedQuestionIds.length})}</p><button className={styles.primaryButton} type="button" onClick={()=>void createAssessment()} disabled={busy||!title.trim()||selectedQuestionIds.length===0}>{busy?'Saving…':t('admin.assessments.createDraftTest')}</button></div>
+          <div className={styles.submitBar}><p>{t('admin.assessments.selectedQuestionsSummary',{count:selectedQuestionIds.length})}</p><button className={styles.primaryButton} type="button" onClick={()=>void createAssessment()} disabled={busy||!courseId||!title.trim()||selectedQuestionIds.length===0}>{busy?'Saving…':t('admin.assessments.createDraftTest')}</button></div>
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.governance')}</span><h2>{t('admin.assessments.testCatalogue')}</h2><p>{t('admin.assessments.catalogueDescription')}</p></div><select className={styles.filter} value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setAssessmentPage(0)}}><option value="ALL">{t('admin.assessments.allStatuses')}</option><option value="DRAFT">{t('admin.assessments.draftsOnly')}</option><option value="PUBLISHED">{t('admin.assessments.publishedOnly')}</option><option value="ARCHIVED">{t('admin.assessments.archivedOnly')}</option></select></div>
