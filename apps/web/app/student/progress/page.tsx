@@ -177,7 +177,7 @@ export default function ProgressPage(){
           <div><b>{item.assessment_title || assessmentTypeLabel(item.assessment_type)}</b><small>{assessmentTypeLabel(item.assessment_type)} · {item.subject_name || '—'}{item.chapter_name?' · '+item.chapter_name:''}</small></div>
           <div className="student-test-result">
             <span className={item.status==='RELEASED'?'good':''}>{item.status==='RELEASED'?String(item.final_score??'—')+' / '+String(item.max_score??'—'):assessmentStatusLabel(item.status)}</span>
-            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?certificateId='+certificate.id}><UiText message="legacy.web.view.certificate.07663aac" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked"><UiText message="legacy.web.certificate.revoked.29f7fafd" /></small>:eligibility?.eligible?(
+            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificate.id}><UiText message="legacy.web.view.certificate.07663aac" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked"><UiText message="legacy.web.certificate.revoked.29f7fafd" /></small>:eligibility?.eligible?(
               <button type="button" className="student-cert-issue" disabled={issuingAttemptId!==null} onClick={()=>void issueResultCertificate(Number(item.attempt_id))}>
                 {issuingAttemptId===Number(item.attempt_id)?translateUi(locale, 'legacy.web.issuing.1efee91b'):translateUi(locale, 'legacy.web.issue.certificate.2e69c02c')}
               </button>
