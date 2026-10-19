@@ -644,9 +644,15 @@ public class RichNotificationService {
     else throw new SecurityException("A supported authenticated recipient identity is required.");
     String sql="""
       select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
-        c.public_id as campaign_public_id,c.scope,c.title,c.summary,c.content_document::text as content_document,
-        c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,
+        case when c.sender_workspace='HRMS' then 'HRMS Platform'
+             when c.sender_workspace='INSTITUTION_ADMIN' then coalesce(sender_admin.display_name,tenant.display_name,'Institution Admin')
+             else coalesce(sender_staff.display_name,tenant.display_name,'QuantaEdge Admin') end as sender_label,
+        c.content_document::text as content_document,c.institution_id as campaign_institution_id,c.course_id,c.expires_at
       from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      left join institution_tenant tenant on tenant.id=c.institution_id
+      left join staff_account sender_staff on sender_staff.id=c.sender_staff_id
+      left join institution_admin_account sender_admin on sender_admin.id=c.sender_institution_admin_id
       where r.recipient_kind=? and
         case when ?='STUDENT' then r.student_id=? when ?='USER_ACCOUNT' then r.user_account_id=?
              when ?='STAFF_ACCOUNT' then r.staff_account_id=? else false end
@@ -671,9 +677,15 @@ public class RichNotificationService {
     int limit=Math.max(1,Math.min(requestedLimit,100));
     return jdbc.queryForList("""
       select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
-        c.public_id as campaign_public_id,c.scope,c.title,c.summary,c.content_document::text as content_document,
-        c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,
+        case when c.sender_workspace='HRMS' then 'HRMS Platform'
+             when c.sender_workspace='INSTITUTION_ADMIN' then coalesce(sender_admin.display_name,tenant.display_name,'Institution Admin')
+             else coalesce(sender_staff.display_name,tenant.display_name,'QuantaEdge Admin') end as sender_label,
+        c.content_document::text as content_document,c.institution_id as campaign_institution_id,c.course_id,c.expires_at
       from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      left join institution_tenant tenant on tenant.id=c.institution_id
+      left join staff_account sender_staff on sender_staff.id=c.sender_staff_id
+      left join institution_admin_account sender_admin on sender_admin.id=c.sender_institution_admin_id
       where r.recipient_kind='INSTITUTION_ADMIN' and r.institution_admin_id=?
         and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'
           and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))) and c.status='SENT'
