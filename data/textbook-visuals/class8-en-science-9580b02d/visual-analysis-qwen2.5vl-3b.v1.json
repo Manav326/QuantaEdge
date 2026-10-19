@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 838,
+    "assets_selected": 840,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 835,
-    "assets_remaining": 1456,
-    "assets_completion_percent": 36.4,
+    "assets_analyzed": 837,
+    "assets_remaining": 1454,
+    "assets_completion_percent": 36.5,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 833,
+    "assets_skipped_from_checkpoint": 835,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:59:34Z"
+      "checkpointed_at": "2026-10-19T11:05:14Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:00:55Z"
+      "checkpointed_at": "2026-10-19T11:06:33Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:01:48Z"
+      "checkpointed_at": "2026-10-19T11:07:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26097,6 +26097,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T11:03:37Z"
+    },
+    {
+      "asset_id": "cff4f412e42d63c840ffd430",
+      "asset_sha256": "0b426b12a7cbeeb02fd635b4d84e8003883a9d401397dc511218c83366c9c156",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "page-0043.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing Spirulina, a microalgae, and its benefits.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "Spirulina, a microalga, is called a superfood because of its health benefits. Spirulina is also a good source of vitamin B12, which is essential for our body. It is rich in protein—more than 60 per cent of its body weight—and only a small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood opportunity. You can grow Spirulina easily by following these steps:",
+          "1. Set a clear glass tank in a bright place away from direct sunlight.",
+          "2. Cover the tank with a shade net, or keep the tank at a place with moderate temperature conditions.",
+          "3. Fill the tank with pond water.",
+          "4. Add living Spirulina collected from a pond.",
+          "5. Stir the growing Spirulina twice a week.",
+          "6. After 3–6 weeks, Spirulina may be harvested from the tank by filtering it through a fine cloth.",
+          "Conservation of microalgae is a good practice for ensuring food security and livelihood development."
+        ],
+        "concepts": [
+          "Spirulina",
+          "microalgae",
+          "superfood",
+          "vitamin B12",
+          "protein",
+          "fat",
+          "sugar",
+          "livelihood",
+          "microalgae conservation",
+          "food security",
+          "livelihood development"
+        ],
+        "context_relation": "The page discusses the benefits and cultivation of Spirulina, a microalgae, in relation to health and livelihood.",
+        "limitations": [
+          "The page does not provide specific details about the cultivation process or the nutritional benefits of Spirulina."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:10:38Z"
+    },
+    {
+      "asset_id": "5211e02d8b7fd98d19de2133",
+      "asset_sha256": "88f1d5d30616d3c95186818746b86fe639579f23a5ee1aac8a06496a29b6920b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/88f1d5d30616d3c95186818746b86fe639579f23a5ee1aac8a06496a29b6920b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1d043a747a859b8f9f27c0e856772a4668133af1d7fa778e039a7a70e1b02d5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text.",
+          "The image is a cartoon illustration and may not accurately represent the content of the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:11:43Z"
     }
   ]
 }
