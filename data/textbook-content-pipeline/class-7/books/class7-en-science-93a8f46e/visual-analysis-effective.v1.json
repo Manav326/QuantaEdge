@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6bb02b793a58036fff347fa65e094724730d23ba90489c1c77a40ce17a56b108",
+  "raw_analysis_sha256": "24bd9bb502cfb0546a70e2816f15de8b12f8e3d3a5b6c109fe5e314982cc5774",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -100979,6 +100979,246 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2712ffcc86e6904cc9a0fd06",
+      "asset_sha256": "c6e8b594a07c80b4c3312c3ad33d935c2b7c29769f2f42461c72f6bb480c4b9d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/c6e8b594a07c80b4c3312c3ad33d935c2b7c29769f2f42461c72f6bb480c4b9d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible reflection or shadow"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:38:12Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible reflection or shadow"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4770a2ee089aaf9b832992b1",
+      "asset_sha256": "a10f191ebf03f7074956f7b817f4a6d4a25653e82b39fa14d7ab6e9542c37f82",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/a10f191ebf03f7074956f7b817f4a6d4a25653e82b39fa14d7ab6e9542c37f82.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red and black object, possibly a part of an electric cell or lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a close-up of a part of an electric cell or lamp, likely used to illustrate the components of an electric cell or lamp.",
+        "limitations": [
+          "The image is a close-up and may not show the entire object.",
+          "The text is partially visible and may not provide a complete understanding of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:39:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red and black object, possibly a part of an electric cell or lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a close-up of a part of an electric cell or lamp, likely used to illustrate the components of an electric cell or lamp.",
+        "limitations": [
+          "The image is a close-up and may not show the entire object.",
+          "The text is partially visible and may not provide a complete understanding of the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c183eff3a799e5e55af7457",
+      "asset_sha256": "3b806073a653edf37efe34120ef54df820e2397ec035e482397ef5aae2e62d9e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/3b806073a653edf37efe34120ef54df820e2397ec035e482397ef5aae2e62d9e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red string attached to a black object, possibly a battery or a similar device.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:41:29Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red string attached to a black object, possibly a battery or a similar device.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b55c4af62af67995ba964c1",
+      "asset_sha256": "3986543599ff9ac6673520ac231e6988dc2dd0cea1e0e22f87976e026b889b6e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/3986543599ff9ac6673520ac231e6988dc2dd0cea1e0e22f87976e026b889b6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red flag with a white cross on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The flag is likely a symbol or representation of a country or organization.",
+        "limitations": [
+          "The flag is not clearly visible or identifiable without additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:43:01Z",
+      "effective_analysis": {
+        "visual_summary": "A red flag with a white cross on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The flag is likely a symbol or representation of a country or organization.",
+        "limitations": [
+          "The flag is not clearly visible or identifiable without additional context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "776f824ed890cbcbd9994898",
+      "asset_sha256": "31445209aa8c79e0aaa65974b50efa0fbf1f2452775122b0cbe8ab4b5502d58b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/31445209aa8c79e0aaa65974b50efa0fbf1f2452775122b0cbe8ab4b5502d58b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red object with a black border, possibly a part of an electric cell or lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is a close-up of a part of an electric cell or lamp, likely used to illustrate the concept of an electric cell in the text.",
+        "limitations": [
+          "The image is a close-up and does not show the entire electric cell or lamp, so the full context is not visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:44:43Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red object with a black border, possibly a part of an electric cell or lamp.",
+        "visual_type": "photo",
+        "visible_text": [
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "The image is a close-up of a part of an electric cell or lamp, likely used to illustrate the concept of an electric cell in the text.",
+        "limitations": [
+          "The image is a close-up and does not show the entire electric cell or lamp, so the full context is not visible."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
