@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a24688c13afe3957de8daa8111df5a60f5ce1370f48b30ce8506bc785b31334d",
+  "raw_analysis_sha256": "bb9e9f4af6abedfb71f40b9716627f6ee88832f7f1cd13bafe1dba8569f1b3fb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:36:55Z",
+      "checkpointed_at": "2026-10-19T18:40:42Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:37:36Z",
+      "checkpointed_at": "2026-10-19T18:41:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:38:30Z",
+      "checkpointed_at": "2026-10-19T18:42:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -54892,6 +54892,130 @@
         "context_relation": "The image illustrates the different shapes of magnets and their corresponding poles.",
         "limitations": [
           "The image does not provide specific information about the properties of the magnets."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "20c2270c2ba7f965938eff42",
+      "asset_sha256": "d30752bfe0d95fb2940f211e3d4e7213314977b1f961a29d0176d1846cc50d6f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/d30752bfe0d95fb2940f211e3d4e7213314977b1f961a29d0176d1846cc50d6f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of different shapes of bar magnets.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "magnetic properties",
+          "magnetic poles",
+          "magnetic field",
+          "magnetic materials"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of magnets.",
+        "limitations": [
+          "The image does not show the magnetic field lines or the interaction between magnets.",
+          "The image does not show the magnetic poles of the magnets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:42:56Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of different shapes of bar magnets.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "magnetic properties",
+          "magnetic poles",
+          "magnetic field",
+          "magnetic materials"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of magnets.",
+        "limitations": [
+          "The image does not show the magnetic field lines or the interaction between magnets.",
+          "The image does not show the magnetic poles of the magnets."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dc649b68528f4a622facaa55",
+      "asset_sha256": "07f579711ef7c9e01e14d420e14f7e3853907df5f4d03f62717e87ad45ac213a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/07f579711ef7c9e01e14d420e14f7e3853907df5f4d03f62717e87ad45ac213a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of bar magnets.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnet shapes",
+          "Magnet poles",
+          "Magnet pairs"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the paragraph.",
+        "limitations": [
+          "The image does not show the magnetic poles of the magnets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:43:35Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing different shapes of bar magnets.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnet shapes",
+          "Magnet poles",
+          "Magnet pairs"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the paragraph.",
+        "limitations": [
+          "The image does not show the magnetic poles of the magnets."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
