@@ -111,8 +111,15 @@ public class AdminContentController {
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String programCode,
       @RequestParam(required = false) Long courseId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     authorize(token, context, "CONTENT_VIEW");
+    long institutionId = requireInstitution(tenant);
+    if (courseId == null || courseId < 1L) {
+      throw badRequest("Select an institution-assigned course before viewing curriculum content.");
+    }
+    requireAssignedCourse(courseId, institutionId);
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.public_id as class_public_id, c.display_name as class_name,
              p.id as course_id,p.public_id as course_public_id,p.code as program_code,p.display_name as program_name,
@@ -174,13 +181,18 @@ public class AdminContentController {
   @GetMapping("/questions/review-queue")
   public Map<String,Object> questionReviewQueue(
       @RequestParam(required=false, defaultValue="ALL") String status,
+      @RequestParam Long courseId,
       @RequestParam(required=false) String classCode,
       @RequestParam(required=false) String subjectCode,
       @RequestParam(required=false) String query,
       @RequestParam(required=false, defaultValue="100") Integer limit,
       @RequestParam(required=false, defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     if (!authorization.hasPermission(context,"CONTENT_VIEW")
         && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
       throw new SecurityException("Content review access required");
@@ -198,9 +210,18 @@ public class AdminContentController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where 1=1
+      where exists (
+        select 1 from curriculum_program_subject scoped_mapping
+        join curriculum_program scoped_course on scoped_course.id=scoped_mapping.program_id
+          and scoped_course.status='ACTIVE' and scoped_course.code<>'GENERAL'
+        where scoped_mapping.program_id=? and scoped_mapping.subject_id=s.id
+          and (s.program_id=scoped_course.id
+            or (s.program_id is null and scoped_course.class_id=s.class_id
+              and scoped_mapping.class_id=s.class_id))
+      )
       """);
     List<Object> filterArgs=new ArrayList<>();
+    filterArgs.add(courseId);
     if (!"ALL".equals(normalizedStatus)) {
       fromWhere.append(" and upper(coalesce(q.review_status,'DRAFT'))=?");
       filterArgs.add(normalizedStatus);
@@ -255,19 +276,36 @@ public class AdminContentController {
 
   @GetMapping("/questions/review-summary")
   public Map<String,Object> questionReviewSummary(
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     if (!authorization.hasPermission(context,"CONTENT_VIEW")
         && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
       throw new SecurityException("Question review access required");
     }
     List<Map<String,Object>> byStatus=jdbc.queryForList("""
-      select coalesce(nullif(upper(review_status),''),'DRAFT') as review_status,
-             active,count(*) as count
-      from question
-      group by coalesce(nullif(upper(review_status),''),'DRAFT'),active
-      order by review_status,active desc
-      """);
+      select coalesce(nullif(upper(q.review_status),''),'DRAFT') as review_status,
+             q.active,count(*) as count
+      from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      where exists (
+        select 1 from curriculum_program_subject scoped_mapping
+        join curriculum_program scoped_course on scoped_course.id=scoped_mapping.program_id
+          and scoped_course.status='ACTIVE' and scoped_course.code<>'GENERAL'
+        where scoped_mapping.program_id=? and scoped_mapping.subject_id=s.id
+          and (s.program_id=scoped_course.id
+            or (s.program_id is null and scoped_course.class_id=s.class_id
+              and scoped_mapping.class_id=s.class_id))
+      )
+      group by coalesce(nullif(upper(q.review_status),''),'DRAFT'),q.active
+      order by review_status,q.active desc
+      """,courseId);
     long total=0,activeCount=0,inactiveCount=0;
     for(Map<String,Object> row:byStatus) {
       long count=row.get("count") instanceof Number n?n.longValue():0L;
@@ -286,10 +324,30 @@ public class AdminContentController {
   @GetMapping("/questions/{questionId}/history")
   public Map<String,Object> questionHistory(
       @PathVariable long questionId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="10") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    Boolean inCourse=jdbc.queryForObject("""
+      select exists(
+        select 1 from question q
+        join lesson l on l.id=q.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject mapping on mapping.program_id=? and mapping.subject_id=s.id
+          and mapping.class_id=s.class_id
+        join curriculum_program selected_course on selected_course.id=mapping.program_id
+          and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+        where q.id=? and (s.program_id=selected_course.id
+          or (s.program_id is null and selected_course.class_id=s.class_id))
+      )
+      """,Boolean.class,courseId,questionId);
+    if(!Boolean.TRUE.equals(inCourse)) throw notFound("Question",questionId);
     if (!authorization.hasPermission(context,"CONTENT_VIEW")
         && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
       throw new SecurityException("Question history access required");
@@ -705,9 +763,29 @@ public class AdminContentController {
   public Map<String,Object> reviewQuestion(
       @PathVariable long lessonId,
       @PathVariable long questionId,
+      @RequestParam Long courseId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_REVIEW");
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    Boolean inCourse=jdbc.queryForObject("""
+      select exists(
+        select 1 from question q
+        join lesson l on l.id=q.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject mapping on mapping.program_id=? and mapping.subject_id=s.id
+          and mapping.class_id=s.class_id
+        join curriculum_program selected_course on selected_course.id=mapping.program_id
+          and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+        where q.id=? and q.lesson_id=? and (s.program_id=selected_course.id
+          or (s.program_id is null and selected_course.class_id=s.class_id))
+      )
+      """,Boolean.class,courseId,questionId,lessonId);
+    if(!Boolean.TRUE.equals(inCourse)) throw notFound("Question",questionId);
     String status=requiredText(body.get("status"),20).toUpperCase();
     if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(status)) {
       throw badRequest("Review status must be Draft, Needs review, Approved or Rejected.");
@@ -1859,6 +1937,23 @@ public class AdminContentController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "An active institution context is required.");
     }
     return tenant.institutionId();
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    if(courseId<1L) throw badRequest("Select a valid course.");
+    Boolean assigned=jdbc.queryForObject("""
+      select exists(
+        select 1 from curriculum_program p
+        join institution_course_assignment assignment
+          on assignment.institution_id=? and assignment.status='ASSIGNED'
+        join institution_course_release release
+          on release.id=assignment.course_release_id and release.program_id=p.id
+        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      )
+      """,Boolean.class,institutionId,courseId);
+    if(!Boolean.TRUE.equals(assigned))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The selected course is not assigned to the authenticated institution.");
   }
 
   private void authorize(String suppliedToken, AuthContext context, String permission) {
