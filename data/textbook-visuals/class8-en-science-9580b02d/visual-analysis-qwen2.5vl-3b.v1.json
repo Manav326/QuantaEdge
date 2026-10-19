@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 763,
+    "assets_selected": 764,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 759,
-    "assets_remaining": 1532,
-    "assets_completion_percent": 33.1,
+    "assets_analyzed": 761,
+    "assets_remaining": 1530,
+    "assets_completion_percent": 33.2,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 758,
+    "assets_skipped_from_checkpoint": 759,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:02:42Z"
+      "checkpointed_at": "2026-10-19T03:10:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:03:31Z"
+      "checkpointed_at": "2026-10-19T03:11:37Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:04:09Z"
+      "checkpointed_at": "2026-10-19T03:12:16Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -23287,6 +23287,76 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "517ee3c5a3b2f2f57ff3da2f",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a set of stairs, with one hand outstretched as if reaching for something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:13:52Z"
+    },
+    {
+      "asset_id": "f5b58161de6f2e69cf284af8",
+      "asset_sha256": "06ac727b5f60dd91bcaafefb1a098d14816cb543c12d29f7950c42537a7d87d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/06ac727b5f60dd91bcaafefb1a098d14816cb543c12d29f7950c42537a7d87d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a cell with various organelles.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis",
+          "cell wall",
+          "rigidity",
+          "strength",
+          "plant cells",
+          "arrangement",
+          "structure"
+        ],
+        "context_relation": "The image is related to the text discussing the structure and functions of plant cells.",
+        "limitations": [
+          "The image does not provide specific details about the organelles or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:15:31Z"
     }
   ]
 }
