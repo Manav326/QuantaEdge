@@ -1269,3 +1269,131 @@ html[data-qe-appearance="dark"] .parent-account__icon {
   .qe-parent-learning-return>span:first-child{font-size:14px}
 }
 
+
+
+/* Student Learn and Practice: keep headings, course/subject filters and actions aligned
+   at laptop widths, while allowing every control and long lesson title to shrink safely. */
+.qe-lesson-list-header {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(.75rem, 1.5vw, 1.25rem);
+  min-width: 0;
+}
+.qe-lesson-list-header > div:first-child {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+.qe-lesson-list-header > div:first-child h1,
+.qe-lesson-list-header > div:first-child p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.qe-lesson-list-header > .qe-course-page-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .5rem;
+  flex: 1 1 28rem;
+  min-width: 0;
+  max-width: 100%;
+}
+.qe-lesson-list-header .qe-institution-course-subject-scope {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  grid-column: 1;
+  grid-row: 1;
+}
+.qe-lesson-list-header .qe-icon-action {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 2.65rem;
+  width: 2.65rem;
+  height: 2.65rem;
+  margin-top: 0;
+  padding: .65rem;
+  border: 1px solid var(--qe-color-border-subtle);
+  border-radius: .75rem;
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease;
+}
+.qe-lesson-list-header .qe-icon-action:hover,
+.qe-lesson-list-header .qe-icon-action:focus-visible {
+  border-color: var(--qe-color-focus);
+  background: var(--qe-color-primary-container);
+}
+.qe-lesson-list-header .qe-icon-action:focus-visible {
+  outline: 2px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+.qe-lesson-list-header .qe-icon-action:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+.qe-lesson-list-header .qe-icon-action svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.qe-institution-course-subject-scope {
+  box-sizing: border-box;
+}
+.qe-institution-course-subject-scope > * {
+  min-width: 0;
+}
+.qe-institution-course-subject-scope select {
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+.app-content .task-list > .task-card {
+  min-width: 0;
+}
+.app-content .task-list > .task-card > div,
+.app-content .task-list > .task-card h2,
+.app-content .task-list > .task-card p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+@media (max-width: 1100px) {
+  .qe-lesson-list-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .qe-lesson-list-header > div:first-child,
+  .qe-lesson-list-header > .qe-course-page-actions {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+}
+@media (max-width: 720px) {
+  .qe-lesson-list-header > .qe-course-page-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+  .qe-lesson-list-header .qe-institution-course-subject-scope {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .qe-lesson-list-header .qe-icon-action {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+}
+@media (max-width: 420px) {
+  .qe-lesson-list-header > .qe-course-page-actions {
+    gap: .4rem;
+  }
+  .qe-lesson-list-header .qe-institution-course-subject-scope {
+    padding: .65rem;
+    gap: .55rem;
+  }
+}
