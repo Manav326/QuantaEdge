@@ -172,7 +172,18 @@ public class NotificationMediaController {
     UploadOwner requester=uploadOwner(request,context,institutionCode);
     MediaRow asset=findAsset(assetId);
     if("PLATFORM".equals(asset.ownerScope())) {
-      if(!"HRMS".equals(requester.workspace()))throw new SecurityException("Only an HRMS platform owner can preview platform-owned media.");
+      if(!"HRMS".equals(requester.workspace())) {
+        Boolean reusable=jdbc.queryForObject("""
+          select exists(
+            select 1 from notification_template t
+            where t.owner_scope='PLATFORM' and t.status='ACTIVE'
+              and t.content_document::text like '%'||?||'%'
+          )
+          """,Boolean.class,assetId.toString());
+        if(!Boolean.TRUE.equals(reusable)) {
+          throw new SecurityException("Platform-owned media is only available through an active shared template.");
+        }
+      }
     } else if(requester.institutionId()==null||!requester.institutionId().equals(asset.institutionId())) {
       throw new SecurityException("This media asset belongs to another institution.");
     }
