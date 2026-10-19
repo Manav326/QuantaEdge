@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1567,
-    "successful_visual_analyses": 1545,
-    "missing_visual_analyses": 5921,
+    "raw_analysis_result_rows": 1570,
+    "successful_visual_analyses": 1548,
+    "missing_visual_analyses": 5918,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5943,
+    "unresolved_count": 5940,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -68878,9 +68878,30 @@
       "asset_path": "assets/741974f86f8fce745280e6b45652697e80cd8776b9f2e6aa0fdfc70517470bba.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A partial view of a page from a textbook discussing electrical circuits and their symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuits",
+          "Components",
+          "Symbols",
+          "Table 3.2"
+        ],
+        "context_relation": "The image is a partial view of a textbook page discussing electrical circuits and their symbols.",
+        "limitations": [
+          "The image does not show the full page or the table 3.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68896,9 +68917,19 @@
       "asset_path": "assets/c8d8df90333be2a34b457ce8910ef7cac60f8cb27050389960f5d26e169ae3d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a golden bell hanging from a red string.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any educational content or information related to the textbook.",
+          "The image is a close-up of a bell and does not represent any specific concept or formula from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68914,9 +68945,30 @@
       "asset_path": "assets/b8c0c293832ef364a4e79b5be65c937a6fe7409a3c0856a2ff76abf872283089.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "limitations": [
+          "The image does not show any diagrams or symbols.",
+          "The image does not provide any specific examples or explanations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

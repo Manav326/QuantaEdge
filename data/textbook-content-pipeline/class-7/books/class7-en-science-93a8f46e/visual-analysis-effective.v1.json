@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "10a35517f90e816bc62d9f6283c192c433ec90485e2c2d500ae590022411925c",
+  "raw_analysis_sha256": "28f5807c4843641234f630fa59621fdadfff6e552484895b1c99837d19084332",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:27:28Z",
+      "checkpointed_at": "2026-10-19T11:30:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:27:49Z",
+      "checkpointed_at": "2026-10-19T11:30:46Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -91962,6 +91962,176 @@
         "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
         "limitations": [
           "The page does not provide specific examples or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4196ac89c858cb6e4c723e2f",
+      "asset_sha256": "741974f86f8fce745280e6b45652697e80cd8776b9f2e6aa0fdfc70517470bba",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/741974f86f8fce745280e6b45652697e80cd8776b9f2e6aa0fdfc70517470bba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partial view of a page from a textbook discussing electrical circuits and their symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuits",
+          "Components",
+          "Symbols",
+          "Table 3.2"
+        ],
+        "context_relation": "The image is a partial view of a textbook page discussing electrical circuits and their symbols.",
+        "limitations": [
+          "The image does not show the full page or the table 3.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:31:24Z",
+      "effective_analysis": {
+        "visual_summary": "A partial view of a page from a textbook discussing electrical circuits and their symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuits",
+          "Components",
+          "Symbols",
+          "Table 3.2"
+        ],
+        "context_relation": "The image is a partial view of a textbook page discussing electrical circuits and their symbols.",
+        "limitations": [
+          "The image does not show the full page or the table 3.2."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "db250a1cec7e5c7c20fc3f49",
+      "asset_sha256": "c8d8df90333be2a34b457ce8910ef7cac60f8cb27050389960f5d26e169ae3d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/c8d8df90333be2a34b457ce8910ef7cac60f8cb27050389960f5d26e169ae3d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a golden bell hanging from a red string.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any educational content or information related to the textbook.",
+          "The image is a close-up of a bell and does not represent any specific concept or formula from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:31:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a golden bell hanging from a red string.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any educational content or information related to the textbook.",
+          "The image is a close-up of a bell and does not represent any specific concept or formula from the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "853823f0f4e33e8cf88154a7",
+      "asset_sha256": "b8c0c293832ef364a4e79b5be65c937a6fe7409a3c0856a2ff76abf872283089",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/b8c0c293832ef364a4e79b5be65c937a6fe7409a3c0856a2ff76abf872283089.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "limitations": [
+          "The image does not show any diagrams or symbols.",
+          "The image does not provide any specific examples or explanations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:32:36Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the representation of electrical components in circuits using symbols.",
+        "limitations": [
+          "The image does not show any diagrams or symbols.",
+          "The image does not provide any specific examples or explanations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
