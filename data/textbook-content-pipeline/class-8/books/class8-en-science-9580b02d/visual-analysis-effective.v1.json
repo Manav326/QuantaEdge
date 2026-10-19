@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b90721401546f0b6bc0df7684018cf7678aaa7b00f10852a915934fbf8f75923",
+  "raw_analysis_sha256": "9e92466df608084aefe811e96ad1cd0fb727ab48f403c4d997b664e44bfda12e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:45:10Z",
+      "checkpointed_at": "2026-10-19T09:54:55Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:46:30Z",
+      "checkpointed_at": "2026-10-19T09:56:13Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:47:24Z",
+      "checkpointed_at": "2026-10-19T09:57:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -37709,6 +37709,102 @@
           "Unclear context",
           "No visible text"
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d030050da30c5fd923da63ac",
+      "asset_sha256": "53fc9b973b14e61e6c7973d848aa1daf11c2e56dfd43630ce7739236e34071ff",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/53fc9b973b14e61e6c7973d848aa1daf11c2e56dfd43630ce7739236e34071ff.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a scientist using a microscope.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "microorganisms",
+          "biogas",
+          "oxygen-free environment",
+          "decomposition",
+          "plant and animal waste",
+          "household wastewater",
+          "biogas mixture"
+        ],
+        "context_relation": "The image is related to the text about microorganisms and their role in biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of microorganisms or the process of biogas production."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T09:58:18Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a scientist using a microscope.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "microorganisms",
+          "biogas",
+          "oxygen-free environment",
+          "decomposition",
+          "plant and animal waste",
+          "household wastewater",
+          "biogas mixture"
+        ],
+        "context_relation": "The image is related to the text about microorganisms and their role in biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of microorganisms or the process of biogas production."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c537d3a9776a6f1a2180748c",
+      "asset_sha256": "ea8d0870e09c90fb6d9fc13aa30a7d595903e9bbeebbd01a6bd70eb333493864",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/ea8d0870e09c90fb6d9fc13aa30a7d595903e9bbeebbd01a6bd70eb333493864.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a person wearing glasses and a suit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a black and white illustration of a person wearing glasses and a suit.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T09:59:21Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a person wearing glasses and a suit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a black and white illustration of a person wearing glasses and a suit.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
