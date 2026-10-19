@@ -604,7 +604,15 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
                   <label>Accent colour<input type="color" value={String(activeBlock.accentColor??'#c45c16')} onChange={event=>updateBlock('accentColor',event.target.value)}/></label>
                   <p className={styles.helpText}>Colours are applied to this element only. Image fit and crop controls are available for media elements.</p>
                   <button type="button" className={styles.ghostButton} onClick={()=>{
-                    ['backgroundColor','textColor','accentColor','alignment','padding','borderRadius','fontSize'].forEach(key=>updateBlock(key,''));
+                    const keys=['backgroundColor','textColor','accentColor','alignment','padding','borderRadius','fontSize'];
+                    setDocument(current=>{
+                      const blocks=[...current.blocks];
+                      const block={...blocks[selectedBlock]};
+                      keys.forEach(key=>delete block[key]);
+                      blocks[selectedBlock]=block;
+                      return {...current,blocks};
+                    });
+                    setPreviewed(false);setPreviewCount(null);
                   }}>Reset appearance</button>
                 </div>
                 {['image','video','animation','hero'].includes(activeBlock.type) ? <div className={styles.mediaControl}>
