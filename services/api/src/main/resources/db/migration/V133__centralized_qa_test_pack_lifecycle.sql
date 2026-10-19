@@ -38,7 +38,7 @@ CREATE TABLE qa_test_run_resource (
   resource_kind varchar(48) NOT NULL CHECK (resource_kind IN (
     'INSTITUTION','INSTITUTION_BRANDING','INSTITUTION_ADMIN_ACCOUNT','STAFF_ACCOUNT','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
     'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
-    'STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT','COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
+    'COURSE','COURSE_SUBJECT','PROGRAM_SUBJECT_MAP','COURSE_CHAPTER','MARKETPLACE_OFFER','STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT','COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
   )),
   resource_id varchar(160) NOT NULL,
   resource_ref jsonb NOT NULL DEFAULT '{}'::jsonb CHECK (jsonb_typeof(resource_ref)='object'),
@@ -81,6 +81,19 @@ CREATE INDEX idx_qa_test_run_check_history ON qa_test_run_check(run_id,executed_
 
 -- Core fixture identities are visibly marked. The resource manifest remains the ownership
 -- authority; the flag is an additional fence and never authorizes deletion on its own.
+-- Course masters and course-scoped QA curriculum are run-owned only when created by the QA pack.
+-- Existing QuantaEdge Classes 6/7/8 and their shared textbook curriculum keep NULL markers.
+ALTER TABLE curriculum_program
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE curriculum_subject
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE curriculum_program_subject
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE curriculum_chapter
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE institution_marketplace_offer
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+
 ALTER TABLE lesson
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 ALTER TABLE question
@@ -124,6 +137,11 @@ ALTER TABLE student_lesson_progress
 ALTER TABLE student_question_attempt
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 
+CREATE INDEX idx_qa_course_run ON curriculum_program(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_course_subject_run ON curriculum_subject(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_program_subject_map_run ON curriculum_program_subject(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_course_chapter_run ON curriculum_chapter(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_marketplace_offer_run ON institution_marketplace_offer(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_lesson_run ON lesson(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_question_run ON question(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_question_option_run ON question_option(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
