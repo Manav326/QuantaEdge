@@ -13,6 +13,7 @@ type NotificationItem = {
   state: string;
   delivered_at: string;
   read_at?: string | null;
+  dismissed_at?: string | null;
   scope: string;
   title: string;
   summary: string;
@@ -146,7 +147,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
     try {
       const response = await apiFetch('/api/v1/notifications/read-all', { method: 'POST', cache: 'no-store' });
       if (!response.ok) throw new Error(t('Notifications could not be marked as read.', 'Notifications read nahi ho sakin.'));
-      setItems(current => current.map(item => ({ ...item, state: 'READ', read_at: item.read_at || new Date().toISOString(), unread: false })));
+      setItems(current => current.map(item => item.state === 'DISMISSED' ? item : ({ ...item, state: 'READ', read_at: item.read_at || new Date().toISOString(), unread: false })));
     } catch (err) {
       setError(err instanceof Error ? err.message : t('Notifications could not be marked as read.', 'Notifications read nahi ho sakin.'));
     } finally { setSaving(false); }
@@ -201,8 +202,8 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
     {loading ? <div className={styles.loading}><span/><span/><span/></div> : visible.length === 0 ? (
       <section className={styles.empty}>
         <div className={styles.emptyIcon} aria-hidden="true">♧</div>
-        <h2>{t('You’re all caught up', 'Abhi koi naya notification nahi hai')}</h2>
-        <p>{t('New course, school and account updates will appear here.', 'Course, school aur account ke naye updates yahan dikhenge.')}</p>
+        <h2>{filter === 'ARCHIVED' ? t('No archived notifications', 'Koi archived notification nahi hai') : filter === 'UNREAD' ? t('No unread notifications', 'Koi unread notification nahi hai') : t('You’re all caught up', 'Abhi koi naya notification nahi hai')}</h2>
+        <p>{filter === 'ARCHIVED' ? t('Notifications you archive will appear here, and you can restore them later.', 'Archive ki gayi notifications yahan dikhengi; aap unhe wapas la sakte hain.') : t('New course, school and account updates will appear here.', 'Course, school aur account ke naye updates yahan dikhenge.')}</p>
         <Link href={role === 'student' ? '/student' : '/parent'}>{t('Back to learning', 'Learning par wapas')}</Link>
       </section>
     ) : (
