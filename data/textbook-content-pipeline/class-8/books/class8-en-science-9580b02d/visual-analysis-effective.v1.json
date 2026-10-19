@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "687ea7182ebb616dd5cf5dd13f12e23f6b8f1ccbca7a874290f78b13fdd8dd0c",
+  "raw_analysis_sha256": "61a5b1e0f0ee6c17319b40db5e09e9319ea7a9efd820c1b87f1962598f832bae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:57:52Z",
+      "checkpointed_at": "2026-10-19T03:02:42Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:58:40Z",
+      "checkpointed_at": "2026-10-19T03:03:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:59:19Z",
+      "checkpointed_at": "2026-10-19T03:04:09Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34115,6 +34115,88 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2331c0ab58084e0545dc2aa7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a biological experiment involving scraping cheek tissue and staining it.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over the material on slide. Adding stain improves the visibility of the material under the microscope."
+        ],
+        "concepts": [
+          "Biological experiment",
+          "Cheek scraping",
+          "Methylene blue staining",
+          "Microscope observation"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No visual aids or diagrams are present.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:04:37Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for a biological experiment involving scraping cheek tissue and staining it.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over the material on slide. Adding stain improves the visibility of the material under the microscope."
+        ],
+        "concepts": [
+          "Biological experiment",
+          "Cheek scraping",
+          "Methylene blue staining",
+          "Microscope observation"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No visual aids or diagrams are present.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9dc83721dcdd3c3fceaa5a44",
+      "asset_sha256": "57d7965cc24d10a4c081a0bd411eefd12d117780531997f6dc613eaa57960bee",
+      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 32,
+      "asset_path": "page-0032.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
