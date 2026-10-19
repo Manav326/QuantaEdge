@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { useUiTranslation } from '../../i18n/useUiTranslation';
 import { useEffect, useRef, useState } from 'react';
@@ -43,7 +45,7 @@ export default function CertificateVerifyPage() {
     if (!normalized) { setError(t('certificate.verify.enterId')); return; }
     setBusy(true); setError(''); setData(null);
     try {
-      const response = await fetch('/api/v1/certificates/verify/' + encodeURIComponent(normalized), { cache: 'no-store' });
+      const response = await apiFetch('/api/v1/certificates/verify/' + encodeURIComponent(normalized), { cache: 'no-store' });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(response.status === 404 ? t('certificate.verify.notFound') : t('certificate.verify.failed'));
       setData(body);

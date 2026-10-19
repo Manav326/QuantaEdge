@@ -521,3 +521,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Started replacing global `window.fetch` interception with a shared `apiFetch` helper in Web, Admin and People Operations. Each migrated call awaits inspection of a cloned response, then returns the original response unchanged to existing parsers.
 - Non-2xx responses and non-aborted network failures route to the fixed notification host. Explicit API notices and warning-level payloads are handled centrally; warnings use an amber state.
 - The fixed viewport portal and its Copy, Dismiss, queueing, and auto-dismiss behavior are retained. This first client batch covers 10 student-learning flows; remaining client call sites are included in the follow-up batch before final CI acceptance.
+
+
+## Centralized API response notification — final client migration batch (2026-10-19)
+
+- Replaced global `window.fetch` interception with explicit `apiFetch` calls. Across Web Student/Parent, Admin and People Operations, 50 client files now route request/response handling through the same helper.
+- The helper waits for inspection of a response clone, then returns the original `Response`; existing `json()`, `text()`, and status handling are preserved. All non-2xx API responses, network failures (except intentional aborts), explicit `warning` payloads, and warning-level notices are forwarded to the root notification host.
+- The host now only displays notifications; it no longer overrides browser `fetch`. Toasts render in a fixed viewport portal attached to `document.body`, support info/success/warning/error tones, and retain Copy, Dismiss, queue and auto-dismiss controls.
+- CI contract now checks that the three app hosts/clients stay identical, the global fetch override stays absent, and every migrated client file imports `apiFetch` without direct fetch calls. The next Actions run is the acceptance gate.

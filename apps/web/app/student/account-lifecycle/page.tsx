@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import PasswordField from '../../components/PasswordField';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -39,7 +41,7 @@ export default function StudentAccountLifecyclePage(){
   const [notice,setNotice]=useState('');
 
   const refresh=useCallback(async()=>{
-    const response=await fetch('/api/v1/account/me/lifecycle',{credentials:'same-origin',cache:'no-store'});
+    const response=await apiFetch('/api/v1/account/me/lifecycle',{credentials:'same-origin',cache:'no-store'});
     if(response.status===401||response.status===403){router.replace('/login/student');return;}
     const body=await readBody(response);
     setData(body);
@@ -56,7 +58,7 @@ export default function StudentAccountLifecyclePage(){
 
   function requestAdultReview(){
     return run(async()=>{
-      await readBody(await fetch('/api/v1/account/me/adult-verification-request',{
+      await readBody(await apiFetch('/api/v1/account/me/adult-verification-request',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({consentAccepted:true})
       }));
@@ -67,7 +69,7 @@ export default function StudentAccountLifecyclePage(){
 
   function requestConversionOtp(){
     return run(async()=>{
-      const body=await readBody(await fetch('/api/v1/auth/learner-transition/request-otp',{
+      const body=await readBody(await apiFetch('/api/v1/auth/learner-transition/request-otp',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({mobile,consentAccepted:true})
       }));
@@ -79,7 +81,7 @@ export default function StudentAccountLifecyclePage(){
 
   function completeConversion(){
     return run(async()=>{
-      await readBody(await fetch('/api/v1/auth/verify-otp',{
+      await readBody(await apiFetch('/api/v1/auth/verify-otp',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({mobile,otp,purpose:'LEARNER_TRANSITION',password})
       }));
@@ -91,7 +93,7 @@ export default function StudentAccountLifecyclePage(){
 
   function requestParentReview(){
     return run(async()=>{
-      await readBody(await fetch('/api/v1/account/me/parent-eligibility-request',{
+      await readBody(await apiFetch('/api/v1/account/me/parent-eligibility-request',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({consentAccepted:true})
       }));
@@ -105,7 +107,7 @@ export default function StudentAccountLifecyclePage(){
       ?'Confirm transition to a parent account? Your user identity and learner history stay linked. You will need to sign in again.'
       :'क्या आप parent account में transition की पुष्टि करते हैं? आपकी user identity और learning history linked रहेंगी। आपको फिर से sign in करना होगा।'))return;
     void run(async()=>{
-      await readBody(await fetch('/api/v1/account/me/transition-to-parent',{
+      await readBody(await apiFetch('/api/v1/account/me/transition-to-parent',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({confirmParentTransition:true})
       }));

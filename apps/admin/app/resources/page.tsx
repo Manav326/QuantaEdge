@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import AdminSidebar from '../components/AdminSidebar';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -65,7 +67,7 @@ function normalizeIntakeReport(value: any): any {
 async function api(url: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers || {});
   if (init.body && !(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     ...init, headers, credentials: 'same-origin', cache: 'no-store',
   });
   const raw = await response.text();
@@ -539,7 +541,7 @@ export default function TextbookLibraryPage() {
   }
 
   useEffect(() => {
-    fetch('/api/v1/auth/me', { cache: 'no-store' })
+    apiFetch('/api/v1/auth/me', { cache: 'no-store' })
       .then(response => response.ok ? response.json() : null)
       .then(me => {
         if (!me) return;

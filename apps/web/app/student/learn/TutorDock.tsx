@@ -1,4 +1,6 @@
 'use client';
+
+import { apiFetch } from '../../components/apiClient';
 import { translateUi } from '../../i18n/catalog';
 
 import {
@@ -69,7 +71,7 @@ async function recoverPersistedTutorTurn(sessionId: number, userMessage: string)
   for (let attempt = 0; attempt < TUTOR_RECOVERY_ATTEMPTS; attempt += 1) {
     if (attempt > 0) await new Promise(resolve => window.setTimeout(resolve, TUTOR_RECOVERY_INTERVAL_MS));
     try {
-      const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30', {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30', {
         credentials: 'same-origin',
         cache: 'no-store',
       });
@@ -306,7 +308,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setError('');
     (async () => {
       try {
-        const response = await fetch('/api/v1/tutor/sessions', {
+        const response = await apiFetch('/api/v1/tutor/sessions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
@@ -332,7 +334,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
           setError(translateUi(languageRef.current.locale, 'legacy.web.ai.tutor.is.not.enabled.for.this.envir.fee73b3a'));
           return;
         }
-        const historyResponse = await fetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?limit=30', {
+        const historyResponse = await apiFetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?limit=30', {
           credentials: 'same-origin',
         });
         const historyBody = await readBody(historyResponse);
@@ -500,7 +502,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setLoadingOlder(true);
     setError('');
     try {
-      const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30&beforeId=' + olderBeforeId, {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30&beforeId=' + olderBeforeId, {
         credentials: 'same-origin',
       });
       const body = await readBody(response);
@@ -526,7 +528,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setBusy(true);
     setError('');
     try {
-      const response = await fetch('/api/v1/tutor/sessions', {
+      const response = await apiFetch('/api/v1/tutor/sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -572,7 +574,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setError('');
     setMessages(current => [...current, { clientId: optimisticMessageId, role: 'USER', mode: selectedMode, message, created_at: new Date().toISOString() }]);
     try {
-      const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages', {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',

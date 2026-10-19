@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -91,7 +93,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   useEffect(() => {
     if (publicRoute) { setSession(null); return; }
     let alive = true;
-    fetch('/api/v1/auth/me', { cache: 'no-store' })
+    apiFetch('/api/v1/auth/me', { cache: 'no-store' })
       .then(response => response.ok ? response.json() : null)
       .then(me => { if (alive) setSession(me && me.staffId ? me as StaffSession : null); })
       .catch(() => { if (alive) setSession(null); });
@@ -158,7 +160,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     setLoggingOut(true);
     setMobileMenuOpen(false);
     try {
-      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await apiFetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
     } catch {
       // The UI still returns to login if the logout request cannot reach the server.
     } finally {

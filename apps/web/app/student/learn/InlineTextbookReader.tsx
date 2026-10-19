@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../components/apiClient';
 import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
@@ -43,7 +45,7 @@ export default function InlineTextbookReader({
   useEffect(() => {
     if (!expanded) return;
     const timeout = window.setTimeout(() => {
-      void fetch('/api/v1/learning/documents/' + item.document_id + '/progress', {
+      void apiFetch('/api/v1/learning/documents/' + item.document_id + '/progress', {
         method: 'PUT',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },

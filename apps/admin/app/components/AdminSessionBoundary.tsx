@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -110,7 +112,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
     const check = async () => {
       setReady(false);
       try {
-        const response = await withSessionTimeout(fetch('/api/v1/auth/me', { cache: 'no-store' }));
+        const response = await withSessionTimeout(apiFetch('/api/v1/auth/me', { cache: 'no-store' }));
         if (!alive) return;
         if (!response.ok) {
           if (isLogin) setReady(true); else navigateWithFallback(router, '/login');
@@ -166,7 +168,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
     const heartbeat = window.setInterval(() => {
       if (document.visibilityState !== 'visible') return;
       if (Date.now() - lastActivity > 5 * 60 * 1000) return;
-      void fetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
+      void apiFetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
     }, 2 * 60 * 1000);
     return () => {
       window.clearInterval(heartbeat);
