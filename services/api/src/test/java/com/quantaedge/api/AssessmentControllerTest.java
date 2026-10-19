@@ -82,7 +82,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
-    controller.studentAssessmentCatalog(null, null, "hi", 24, 0, student, TEST_TENANT);
+    controller.studentAssessmentCatalog(null, 71L, "hi", 24, 0, student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("resumable.student_id=st.id"), any(Object[].class));
     verify(jdbc).queryForList(contains("resumable.status='IN_PROGRESS'"), any(Object[].class));
