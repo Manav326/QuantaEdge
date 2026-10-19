@@ -92,7 +92,7 @@ class QaTestPackServiceTest {
     assertTrue(Boolean.TRUE.equals(packs.getFirst().get("createsRunOwnedSyntheticCurriculum")));
     assertFalse(Boolean.TRUE.equals(packs.getFirst().get("requiresPublishedClass7Question")));
     assertEquals(3, packs.getFirst().get("minimumInstitutions"));
-    assertEquals(3, ((java.util.List<?>) packs.getFirst().get("institutionCourseCoverage")).size());
+    assertEquals(4, ((java.util.List<?>) packs.getFirst().get("institutionCourseCoverage")).size());
   }
 
   static final class MapAssert {
