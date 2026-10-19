@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1704,
+    "assets_selected": 1706,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1701,
-    "assets_remaining": 5787,
+    "assets_analyzed": 1703,
+    "assets_remaining": 5785,
     "assets_completion_percent": 22.7,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1699,
+    "assets_failed": 19,
+    "assets_skipped_from_checkpoint": 1701,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37022,63 +37022,19 @@
     {
       "asset_id": "5de2c7c332b12d26dded6f61",
       "asset_sha256": "8a841bef2b289bc576ac9aed940d8d0ec089307009f31554a1d1c11b315f899f",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 40,
       "asset_path": "page-0040.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Question about litmus paper and solution reactions.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Let Us Enhance Our Learning",
-          "1. A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
-          "(i) Lime water",
-          "(ii) Baking soda",
-          "(iii) Vinegar",
-          "(iv) Common salt solution",
-          "2. You are provided with three unknown solutions labelled A, B, and C, but you do not know which of these are acidic, basic, or neutral. Upon adding a few drops of red litmus solution to solution A, it turns blue. When a few drops of turmeric solution are added to solution B, it turns red. Finally, ",
-          "Based on the observations, which of the following is the correct sequence for the nature of solutions A, B, and C?",
-          "(i) Acidic, acidic, and acidic",
-          "(ii) Neutral, basic, and basic",
-          "(iii) Basic, basic, and acidic",
-          "(iv) Basic, basic, and basic",
-          "3. Observe and analyse Figs. 2.13, 2.14, and 2.15, in which red rose extract paper strips are used. Label the nature of solutions present in each of the containers.",
-          "Fig. 2.13",
-          "Fig. 2.14",
-          "Fig. 2.15",
-          "4. A liquid sample from the laboratory was tested using various indicators:",
-          "Indicator | Red litmus | Blue litmus | Turmeric",
-          "Change | No change | Turned red | No change in colour",
-          "Based on the tests, identify the acidic or basic nature of the liquid and justify your answer."
-        ],
-        "concepts": [
-          "litmus paper",
-          "solution reactions",
-          "acidic",
-          "basic",
-          "neutral",
-          "red litmus",
-          "blue litmus",
-          "turmeric",
-          "red rose extract",
-          "indicator"
-        ],
-        "context_relation": "educational content",
-        "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
-      "checkpointed_at": "2026-10-19T15:34:17Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "eafaaf8bb5519333e48f597e",
@@ -41151,19 +41107,54 @@
     {
       "asset_id": "eb56ae524ad0d3b8829d54b1",
       "asset_sha256": "0dad40fb38567c1e2c0b54fb35dd041d4031bb31056e2571c52e070530bd5301",
-      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 43,
       "asset_path": "assets/0dad40fb38567c1e2c0b54fb35dd041d4031bb31056e2571c52e070530bd5301.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "Punjab",
+          "Himachal Pradesh",
+          "Sutlej river",
+          "Shivalik hills",
+          "electricity uses"
+        ],
+        "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment given to Nihal and his classmates to prepare a presentation on the uses of electricity.",
+        "limitations": [
+          "The page does not show any diagrams, charts, or illustrations related to the concepts discussed."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T15:40:52Z"
     },
     {
       "asset_id": "b27a3a09676353e481094789",
@@ -45298,19 +45289,53 @@
     {
       "asset_id": "79bbc448b9853ba138d248e2",
       "asset_sha256": "90e50152108662b7ede2d02c15e8ae958a90d480a851cd779acacc75bbecff2c",
-      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 44,
       "asset_path": "page-0044.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the uses of electricity and a caution about electrical safety.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Can you help Nihal by adding some more uses to his lists?\nAlso, suggest some other ways of grouping the uses of electricity.\nWe use electricity all the time, so let us learn something more\nabout electricity. You have learnt earlier that electricity is\ngenerated in multiple ways—by windmills, by usin",
+          "Caution — The danger signs on electric poles and\nother appliances warn people that electricity can\nbe dangerous if not carefully handled. Never ever\nperform experiments with power supply at your\nhome or school. Even electricity from portable\ngenerators can be dangerous. Use only batteries or\ncells, ",
+          "3.1 A Torchlight\nYou might have used a torchlight, also called a torch or a flashlight.\nActivity 3.1: Let us explore\nTake a torchlight similar to the one shown in Fig. 3.1.\nObserve it carefully. Do you notice a lamp? And a switch?\nSlide its switch and observe. Does the torch lamp glow?\nNow slide the",
+          "Why does the torch lamp\n    glow in one position of\n    its switch?"
+        ],
+        "concepts": [
+          "electricity",
+          "windmills",
+          "solar panels",
+          "natural gas",
+          "coal",
+          "electricity sources",
+          "electrical sockets",
+          "portable electricity",
+          "electricity dangers",
+          "experiments with electricity",
+          "torchlight",
+          "torch",
+          "flashlight",
+          "electric cells",
+          "switch",
+          "lamp"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T15:45:31Z"
     },
     {
       "asset_id": "f3b7e3c73bf24731b01738e4",
@@ -48832,19 +48857,47 @@
     {
       "asset_id": "6bfebd57a84171be20397ef8",
       "asset_sha256": "0f61fa3e04797703c9d0f9a7febaa9fcffb69f4f898d56d07612f3e8e61dfa48",
-      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 46,
       "asset_path": "page-0046.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of electric lamps, specifically incandescent lamps, and their components.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "For many devices, we may need more than one cell. So,\nwe connect two or more cells together as shown in Fig. 3.3.\nConnecting more than one cell provides energy to the circuit for\na longer time and/or more energy.",
+          "FASCINATING FACTS\nThe term battery is also used for a single cell. We use the term battery\neven for the single cell that powers our mobile phones.",
+          "3.2.3 Electric lamp\nIncandescent Lamp",
+          "Activity 3.4: Let us observe",
+          "Glass bulb\nThick\nwire\nInsulator\n(support)\nMetal case\nMetal tip\n(terminal)",
+          "For this activity, you will require a torchlight with an\nincandescent lamp (or light bulb). Many old torchlights\nstill use such lamps. With your teacher’s help, confirm\nthat your torchlight uses an incandescent lamp.\nTake the torch and examine its lamp. What do you\nsee? Do you notice a thin wire fix",
+          "The thin wire inside the glass bulb of the lamp glows.\nThe glowing thin wire is called the filament of the lamp.\nTake out the lamp with the help of your teacher and\ninspect it from all sides. How is the filament fixed?\nThe filament is attached to two thicker wires that\nsupport it, as shown in Fig. 3",
+          "Fig. 3.4: (a) A small incandescent\nlamp used in a torch (b) its\nsimplified drawing showing\nthe connection of wires to the\nterminals"
+        ],
+        "concepts": [
+          "electric lamp",
+          "incandescent lamp",
+          "torchlight",
+          "filament",
+          "term battery",
+          "connection of wires to the terminals"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "The image does not show the actual components of an incandescent lamp.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T15:50:02Z"
     },
     {
       "asset_id": "6a054f7fb3aaf81607a34cf2",
@@ -49568,7 +49621,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219695642",
+      "run_id": "39270473891",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
