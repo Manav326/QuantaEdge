@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4bbc64423f2b66cad222d9c32cf3462ffe41ddee889e5b07ac2b28a41443f4aa",
+  "raw_analysis_sha256": "54901ce56b77cf2c98bd5a6e826c1d42d795c20bde86c3c3609be017e01b9939",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:32:40Z",
+      "checkpointed_at": "2026-10-19T11:40:53Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:34:00Z",
+      "checkpointed_at": "2026-10-19T11:42:12Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:34:55Z",
+      "checkpointed_at": "2026-10-19T11:43:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -39341,6 +39341,94 @@
           "The page does not provide specific examples or details for each concept.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "768a49e7f09823c62e10a429",
+      "asset_sha256": "e04bb22b1e056f49c491d78d6ca381dfb412c4b2cc612cfa75214577ce1e0fbf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/e04bb22b1e056f49c491d78d6ca381dfb412c4b2cc612cfa75214577ce1e0fbf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A laboratory setup with a conical flask containing a yellow liquid and a burette with a clear liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "laboratory setup",
+          "conical flask",
+          "burette",
+          "yellow liquid",
+          "clear liquid"
+        ],
+        "context_relation": "The image represents a laboratory setup used for chemical experiments or demonstrations.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the chemicals involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:44:16Z",
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a conical flask containing a yellow liquid and a burette with a clear liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "laboratory setup",
+          "conical flask",
+          "burette",
+          "yellow liquid",
+          "clear liquid"
+        ],
+        "context_relation": "The image represents a laboratory setup used for chemical experiments or demonstrations.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the chemicals involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9e22686df064ac15a4b62ae2",
+      "asset_sha256": "720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy raising his hand, holding a notebook and a pen.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:45:20Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy raising his hand, holding a notebook and a pen.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
