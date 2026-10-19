@@ -550,7 +550,7 @@ export default function TestsClient(){
                      </button>
                      {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
                        <div className={styles.certificateActionLinks}>
-                         <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
+                         <Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
                          
                          
                          <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.verify.status.8146b8bf')}</a>
@@ -617,7 +617,7 @@ export default function TestsClient(){
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
-                  <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
+                  <Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
                   
                   
                   <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.verify.status.8146b8bf')}</a>
