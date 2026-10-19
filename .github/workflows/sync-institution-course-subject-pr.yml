@@ -1,0 +1,56 @@
+name: Temporary PR 84 Branch Sync
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-institution-course-subject-pr.yml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-main-into-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the migration branch with full history
+        uses: actions/checkout@v4
+        with:
+          ref: feat/institution-course-subject-ui-migration
+          fetch-depth: 0
+
+      - name: Merge current main into the migration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="feat/institution-course-subject-ui-migration"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          echo "PR branch before sync: $(git rev-parse HEAD)"
+          echo "Current main: $(git rev-parse origin/main)"
+          if git merge --no-edit -X ours origin/main; then
+            echo "Git merged main without remaining conflicts."
+          else
+            mapfile -t conflicts < <(git diff --name-only --diff-filter=U)
+            echo "::warning::Git left ${#conflicts[@]} conflicted paths; preserving the migration branch's version for those paths."
+            if [ "${#conflicts[@]}" -eq 0 ]; then
+              git status --short
+              exit 1
+            fi
+            for path in "${conflicts[@]}"; do
+              if git checkout --ours -- "$path"; then
+                git add -- "$path"
+              else
+                git rm -f -- "$path" || true
+              fi
+            done
+            git commit -m "Merge current main into institution course subject migration"
+          fi
+          if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
+            echo "::error::Unresolved conflict paths remain."
+            git status --short
+            exit 1
+          fi
+          git log -1 --oneline
+          git push origin "HEAD:refs/heads/$branch"
