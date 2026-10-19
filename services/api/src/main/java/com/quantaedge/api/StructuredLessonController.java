@@ -48,6 +48,8 @@ public class StructuredLessonController {
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
+    ensureStudentEnrolledCourse(context.studentId(),courseId,institutionId);
     String locale = normalizeLanguage(language);
     String requestedSubject = subjectCode == null ? "" : subjectCode.trim();
     if (classNumber != null && classNumber < 1) {
@@ -257,6 +259,24 @@ public class StructuredLessonController {
           400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing structured lessons.");
     }
     return tenant.institutionId();
+  }
+
+  private void ensureStudentEnrolledCourse(long studentId,long courseId,long institutionId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from student st
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
+          and e.program_id=p.id and e.status='ACTIVE'
+        join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+        where st.id=? and st.active=true
+      )
+      """,Boolean.class,institutionId,courseId,studentId);
+    if(!Boolean.TRUE.equals(allowed))throw new SecurityException(
+        "The selected course is not actively enrolled in this institution.");
   }
 
   private long requireCourseId(Long courseId) {
