@@ -673,7 +673,7 @@ public class RichNotificationService {
           and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
         and c.status='SENT' and (c.expires_at is null or c.expires_at>now())
         and (?=0 or r.id<?)
-        and (?=false or r.state<>'READ')
+        and (?=false or r.state NOT IN ('READ','DISMISSED'))
       order by r.created_at desc,r.id desc limit ?
       """;
     List<Map<String,Object>> rows=jdbc.queryForList(sql,kind,kind,id,kind,id,kind,id,institutionId,institutionId,
@@ -703,7 +703,7 @@ public class RichNotificationService {
         and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'
           and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))) and c.status='SENT'
         and (c.expires_at is null or c.expires_at>now())
-        and (?=0 or r.id<?) and (?=false or r.state<>'READ')
+        and (?=0 or r.id<?) and (?=false or r.state NOT IN ('READ','DISMISSED'))
       order by r.created_at desc,r.id desc limit ?
       """,adminId,institutionId,institutionId,beforeId==null?0L:beforeId,
         beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit)
