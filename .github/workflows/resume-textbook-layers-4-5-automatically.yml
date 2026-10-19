@@ -105,14 +105,18 @@ jobs:
               candidates="$(python - "$RUNNER_TEMP/layer45-jobs-$run_id.json" <<'PY'
           import json,re,sys
           data=json.load(open(sys.argv[1],encoding="utf-8"))
+          target="Run exhaustive, resumable Layers 4–5 for the selected class"
           for job in data.get("jobs",[]):
               match=re.search(r"Class\s+(6|7|8)\s+candidate set",job.get("name",""))
-              if not match:
+              if not match or job.get("status") not in {"queued","in_progress"}:
                   continue
               grade=match.group(1)
-              for step in job.get("steps",[]):
-                  if step.get("name")=="Run exhaustive, resumable Layers 4–5 for the selected class" and step.get("status")=="in_progress" and step.get("started_at"):
-                      print(f"{grade}\t{step['started_at']}")
+              step=next((item for item in job.get("steps",[]) if item.get("name")==target),None)
+              # Watch the Layer 4–5 step when it has started; otherwise watch the
+              # running job from its own start time so a stuck checkout/setup is caught too.
+              checkpoint_baseline=(step or {}).get("started_at") if (step or {}).get("status")=="in_progress" else job.get("started_at")
+              if checkpoint_baseline:
+                  print(f"{grade}\t{checkpoint_baseline}")
           PY
               )"
               if [[ -z "$candidates" ]]; then
