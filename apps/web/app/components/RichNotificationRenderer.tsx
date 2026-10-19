@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
 import { apiFetch } from './apiClient';
 import styles from './RichNotificationRenderer.module.css';
@@ -61,7 +61,7 @@ function Asset({ id, alt, kind, surface, fit = 'contain', aspectRatio = 'auto', 
   if (!url) return <div className={styles.mediaSkeleton} aria-label="Loading media" />;
   const ratios: Record<string, string> = { '16:9': '16 / 9', '4:3': '4 / 3', '1:1': '1 / 1', '3:4': '3 / 4' };
   const positions: Record<string, string> = { center: 'center', top: 'center top', bottom: 'center bottom', left: 'left center', right: 'right center' };
-  const imageStyle: React.CSSProperties = {
+  const imageStyle: CSSProperties = {
     objectFit: fit === 'cover' ? 'cover' : 'contain',
     aspectRatio: ratios[aspectRatio] || 'auto',
     objectPosition: positions[focalPoint] || 'center',
