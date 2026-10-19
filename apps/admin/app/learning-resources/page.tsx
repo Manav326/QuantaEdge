@@ -78,7 +78,7 @@ export default function LearningResourcesPage(){
     const body:any={title:title.trim(),description:description.trim(),resourceType,language,sourceKind,downloadAllowed};
     if(sourceKind==='EXTERNAL_URL')body.externalUrl=externalUrl.trim();
     if(sourceKind==='RECORDED_CLASS')body.recordedClassId=Number(sourceId);
-    if(sourceKind==='LEARNING_DOCUMENT')body.learningDocumentId=Number(sourceId);
+    if(sourceKind==='LEARNING_DOCUMENT'){if(!courseId){setError('Select a course first.');return;}body.learningDocumentId=Number(sourceId);body.courseId=Number(courseId);}
     if(sourceKind==='CONTENT_ASSET')body.contentAssetId=Number(sourceId);
     out=await api('/api/v1/admin/learning-resources',{method:'POST',body:JSON.stringify(body)});
    }
@@ -90,7 +90,8 @@ export default function LearningResourcesPage(){
  }
  async function setResourceStatus(r:Resource,next:string){
   setBusy(true);setError('');setNotice('');
-  try{await api('/api/v1/admin/learning-resources/'+r.resource_id+'/status',{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Resource status changed to '+next+'.');await loadResources();await loadAssignments(String(r.resource_id));}
+  if(!courseId){setError('Select a course first.');return;}
+  try{await api('/api/v1/admin/learning-resources/'+r.resource_id+'/status?courseId='+encodeURIComponent(courseId),{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Resource status changed to '+next+'.');await loadResources();await loadAssignments(String(r.resource_id));}
   catch(e:any){setError(e.message||'Resource status could not be changed.');}finally{setBusy(false);}
  }
  async function setDownload(r:Resource,next:boolean){
