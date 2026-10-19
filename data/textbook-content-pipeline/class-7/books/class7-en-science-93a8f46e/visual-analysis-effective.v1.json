@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "07a14b9485e61664bab0f8e8e4c871d28b938f51d26410bd7944fd9badd559fe",
+  "raw_analysis_sha256": "1cfea784b66f896d2db29d7ff5141cdb20d8ae788d46f6cc0b54bce407ddd94c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:22:57Z",
+      "checkpointed_at": "2026-10-19T10:25:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:23:19Z",
+      "checkpointed_at": "2026-10-19T10:26:21Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -88524,6 +88524,162 @@
         "context_relation": "The image is not directly related to the text about electrical circuits.",
         "limitations": [
           "The image does not provide specific details about electrical circuits or symbols."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "55701e1587a9e2b1fe89027d",
+      "asset_sha256": "00b119ef5ab341b524a801fd283ed872565f8b7a565791eb815cf36a0b2f0c98",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/00b119ef5ab341b524a801fd283ed872565f8b7a565791eb815cf36a0b2f0c98.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the components without further details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:27:00Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the components without further details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8c13a7677356561361b1f263",
+      "asset_sha256": "c42719e105399e0eebe2904bc0afcb610aec80fa294f791f021f38edd9738829",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/c42719e105399e0eebe2904bc0afcb610aec80fa294f791f021f38edd9738829.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the title."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:27:39Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the title."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c645666fa7b8acb36d296a62",
+      "asset_sha256": "0b5592c103aa0a7ba663d2b62e6a41cace6d65041a1f5f4b95322d97e8c56a0d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/0b5592c103aa0a7ba663d2b62e6a41cace6d65041a1f5f4b95322d97e8c56a0d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark shadow on the left side.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Components"
+        ],
+        "context_relation": "The image is related to the text about circuit diagrams and components.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the exact content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:28:19Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark shadow on the left side.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Components"
+        ],
+        "context_relation": "The image is related to the text about circuit diagrams and components.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the exact content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

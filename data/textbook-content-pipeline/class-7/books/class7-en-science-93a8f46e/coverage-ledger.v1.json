@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1501,
-    "successful_visual_analyses": 1480,
-    "missing_visual_analyses": 5987,
+    "raw_analysis_result_rows": 1504,
+    "successful_visual_analyses": 1483,
+    "missing_visual_analyses": 5984,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6008,
+    "unresolved_count": 6005,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -66696,9 +66696,22 @@
       "asset_path": "assets/00b119ef5ab341b524a801fd283ed872565f8b7a565791eb815cf36a0b2f0c98.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the components without further details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -66714,9 +66727,22 @@
       "asset_path": "assets/c42719e105399e0eebe2904bc0afcb610aec80fa294f791f021f38edd9738829.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components of an electrical circuit"
+        ],
+        "context_relation": "The table is a visual representation of the components listed in the text.",
+        "limitations": [
+          "The table is incomplete and only lists the title."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -66732,9 +66758,28 @@
       "asset_path": "assets/0b5592c103aa0a7ba663d2b62e6a41cace6d65041a1f5f4b95322d97e8c56a0d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark shadow on the left side.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Components"
+        ],
+        "context_relation": "The image is related to the text about circuit diagrams and components.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the exact content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
