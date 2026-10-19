@@ -105,26 +105,33 @@ public class StudentProgramController {
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
-      List<Map<String,Object>> subjects = jdbc.queryForList("""
-        select s.id,s.code as subject_code,s.display_name as subject_name,
-          c.code as curriculum_class_code,s.sort_order,
-          count(distinct ch.id) as chapters,count(distinct l.id) as lessons
-        from curriculum_program_subject ps
-        join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
-        join curriculum_class c on c.id=s.class_id
-        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
-          and ch.content_status='PUBLISHED'
-        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-        where ps.program_id=?
-        group by s.id,s.code,s.display_name,c.code,s.sort_order
-        order by ps.sort_order,s.sort_order,s.id
-        """, courseId);
-      program.put("subjects", subjects);
+      program.put("subjects", subjectsForProgram(courseId));
       program.put("is_enrolled", Boolean.TRUE.equals(program.get("enrolled")));
     }
     return programs;
+  }
+
+  /**
+   * Loads the exact subject mapping for one active course. Kept as a focused method so the
+   * migrated-database smoke test exercises the same SQL that the learner catalogue uses.
+   */
+  List<Map<String,Object>> subjectsForProgram(long courseId) {
+    return jdbc.queryForList("""
+      select s.id,s.code as subject_code,s.display_name as subject_name,
+        c.code as curriculum_class_code,s.sort_order,
+        count(distinct ch.id) as chapters,count(distinct l.id) as lessons
+      from curriculum_program_subject ps
+      join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      join curriculum_class c on c.id=s.class_id
+      left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+        and ch.content_status='PUBLISHED'
+      left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+      where ps.program_id=?
+      group by s.id,s.code,s.display_name,c.code,s.sort_order
+      order by ps.sort_order,s.sort_order,s.id
+      """, courseId);
   }
 
   /** Stable ID route. An institution assignment, not a global program row, determines eligibility. */
