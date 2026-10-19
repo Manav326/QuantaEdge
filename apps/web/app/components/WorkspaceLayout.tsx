@@ -10,6 +10,7 @@ import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
+import { NotificationBell } from './NotificationInboxClient';
 import { AppearanceModeButton } from './ColorThemeProvider';
 import { useTenantBranding } from './TenantBrandingProvider';
 
@@ -435,6 +436,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               <span>{locale === 'english' ? 'Parent workspace' : locale === 'hinglish' ? 'Parent workspace' : 'अभिभावक कार्यक्षेत्र'}</span>
             </button>
           ) : null}
+          <NotificationBell role={role} />
           <AppearanceModeButton />
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || t('web.workspace.studentFallbackName')} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
