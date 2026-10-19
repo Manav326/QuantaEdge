@@ -11,8 +11,8 @@
     "assets_selected": 1228,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1223,
-    "assets_remaining": 6265,
+    "assets_analyzed": 1224,
+    "assets_remaining": 6264,
     "assets_completion_percent": 16.3,
     "assets_failed": 15,
     "assets_skipped_from_checkpoint": 1223,
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:35:04Z"
+      "checkpointed_at": "2026-10-19T00:44:20Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:35:32Z"
+      "checkpointed_at": "2026-10-19T00:44:49Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -41082,7 +41082,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -45229,7 +45229,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -46580,6 +46580,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T23:28:14Z"
+    },
+    {
+      "asset_id": "d69452bc1d3ad842b228d862",
+      "asset_sha256": "8dfa5d25b644da505956cefa1e4d668673ead6a86d9dcd2f1c627a52c7d47831",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/8dfa5d25b644da505956cefa1e4d668673ead6a86d9dcd2f1c627a52c7d47831.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, focusing on the electrical circuit and its components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and its components.",
+        "limitations": [
+          "The page does not provide detailed information about the components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T00:51:23Z"
     }
   ]
 }
