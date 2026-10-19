@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 831,
+    "assets_selected": 832,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 827,
-    "assets_remaining": 1464,
+    "assets_analyzed": 828,
+    "assets_remaining": 1463,
     "assets_completion_percent": 36.1,
-    "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 826,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 827,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:11:58Z"
+      "checkpointed_at": "2026-10-19T10:19:58Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:13:16Z"
+      "checkpointed_at": "2026-10-19T10:21:17Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:14:09Z"
+      "checkpointed_at": "2026-10-19T10:22:09Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25742,6 +25742,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T10:18:20Z"
+    },
+    {
+      "asset_id": "40357deffafe243d25c82a1a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "124e730f1f5bae61e0a1b0b31c3b3388e5167fece5218e698daefc68f9706bda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:22:28Z"
+    },
+    {
+      "asset_id": "b95e4aa142dcd057e69879f3",
+      "asset_sha256": "56449aee082a79063b9beaff7256af1f33e93eb35ac310cf7387a1b17b601afe",
+      "page_text_context_sha256": "124e730f1f5bae61e0a1b0b31c3b3388e5167fece5218e698daefc68f9706bda",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 41,
+      "asset_path": "page-0041.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
