@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "362bfff9004b3668a6fedafb990f5171391ebf0787b9f3ffbd7868e8c7eaa986",
+  "raw_analysis_sha256": "5d9a121924104fe4118335e2c945e613691f9a9e1e1c5cf716b53c384cb40d12",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:16:56Z",
+      "checkpointed_at": "2026-10-19T00:29:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19902,7 +19902,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -19911,12 +19911,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "eclipse",
+          "Eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking",
-          "hands-on experiments"
+          "Day and night",
+          "Science experiments",
+          "Questioning answers"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -19927,9 +19927,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T00:24:16Z",
+      "checkpointed_at": "2026-10-19T00:30:23Z",
       "effective_analysis": {
-        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -19938,12 +19938,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "eclipse",
+          "Eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking",
-          "hands-on experiments"
+          "Day and night",
+          "Science experiments",
+          "Questioning answers"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -55864,7 +55864,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -55884,7 +55884,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -57068,7 +57068,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149729681",
+      "run_id": "39178083731",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
