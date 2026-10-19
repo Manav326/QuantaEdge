@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ab5fa48502d5b40eb945684ae83f8183dc520f0f4bcb0bf8b35006ad6d05325a",
+  "raw_analysis_sha256": "21b5592d938cd4d10dd8ec55ba2dc1ec66f74949c0b53794259604c097f4c61e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:04:53Z",
+      "checkpointed_at": "2026-10-19T03:09:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:05:21Z",
+      "checkpointed_at": "2026-10-19T03:09:33Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77388,6 +77388,180 @@
         "context_relation": "The page is discussing the use of LED lamps in torches and their components.",
         "limitations": [
           "The page does not provide specific details about the components of an LED lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "395f77cd47e304081cb059d1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:09:42Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ce32af36c46ab4b4f92e83bc",
+      "asset_sha256": "da9173d1bc691481d65127a067a8d0a32beff3ee71432b5e133d30b04ef65706",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 47,
+      "asset_path": "page-0047.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "8f94d48066bd3170637a59db5aec8e8718a58f8873ea8557c307a6bfdb826288",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page showing an LED lamp and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Fig. 3.5: An LED lamp for torch",
+          "Activity 3.5: Let us observe",
+          "Take an LED of any colour (Fig. 3.6) and observe. Do you see any filament inside it?",
+          "Notice the length of two wires attached to the LED. Do you find one of those longer than the other?",
+          "Unlike incandescent lamps, LEDs do not have filaments (Fig. 3.6). They also have two terminals, but one is positive (attached to a longer wire) and the other is negative (the shorter wire). A torch may use one or more LEDs, sometimes of different shapes, in its lamp.",
+          "After having learnt about the electric cell, battery, and electric lamps, we are now ready to make the torch lamp glow using an electric cell or battery.",
+          "3.2.4 Making an electric lamp glow using an electric cell or battery",
+          "Activity 3.6: Let us construct",
+          "Take an electric cell, an incandescent lamp used in a torch, a cell holder, a lamp holder, and four lengths of electric wire.",
+          "Remove about 1 cm of the plastic covering from both ends of each wire to expose the metal.",
+          "Attach two wires to the two ends of the cell holder as shown in Fig. 3.7a."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp",
+          "Electric cell",
+          "Electric battery",
+          "Electric lamp",
+          "Electric wire",
+          "Electricity: Circuits and their Components"
+        ],
+        "context_relation": "The page provides instructions for an activity related to the use of LED lamps in torches, including observations and construction steps.",
+        "limitations": [
+          "The page does not provide visual aids or diagrams for the instructions.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:13:03Z",
+      "effective_analysis": {
+        "visual_summary": "Page showing an LED lamp and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "LED Lamp",
+          "Many torches in use today have a Light Emitting Diode (LED) lamp, instead of an incandescent lamp, as shown in Fig. 3.5.",
+          "Fig. 3.5: An LED lamp for torch",
+          "Activity 3.5: Let us observe",
+          "Take an LED of any colour (Fig. 3.6) and observe. Do you see any filament inside it?",
+          "Notice the length of two wires attached to the LED. Do you find one of those longer than the other?",
+          "Unlike incandescent lamps, LEDs do not have filaments (Fig. 3.6). They also have two terminals, but one is positive (attached to a longer wire) and the other is negative (the shorter wire). A torch may use one or more LEDs, sometimes of different shapes, in its lamp.",
+          "After having learnt about the electric cell, battery, and electric lamps, we are now ready to make the torch lamp glow using an electric cell or battery.",
+          "3.2.4 Making an electric lamp glow using an electric cell or battery",
+          "Activity 3.6: Let us construct",
+          "Take an electric cell, an incandescent lamp used in a torch, a cell holder, a lamp holder, and four lengths of electric wire.",
+          "Remove about 1 cm of the plastic covering from both ends of each wire to expose the metal.",
+          "Attach two wires to the two ends of the cell holder as shown in Fig. 3.7a."
+        ],
+        "concepts": [
+          "LED lamp",
+          "Light Emitting Diode (LED)",
+          "Incandescent lamp",
+          "Electric cell",
+          "Electric battery",
+          "Electric lamp",
+          "Electric wire",
+          "Electricity: Circuits and their Components"
+        ],
+        "context_relation": "The page provides instructions for an activity related to the use of LED lamps in torches, including observations and construction steps.",
+        "limitations": [
+          "The page does not provide visual aids or diagrams for the instructions.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dfb1b55e0295829127119812",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a spring with a dotted line and a circular shape, possibly representing a spring's potential energy.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "spring",
+          "potential energy"
+        ],
+        "context_relation": "The image is related to the concept of potential energy in physics, specifically in the context of a spring.",
+        "limitations": [
+          "The image does not provide specific details about the spring's properties or the potential energy it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:13:14Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a spring with a dotted line and a circular shape, possibly representing a spring's potential energy.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "spring",
+          "potential energy"
+        ],
+        "context_relation": "The image is related to the concept of potential energy in physics, specifically in the context of a spring.",
+        "limitations": [
+          "The image does not provide specific details about the spring's properties or the potential energy it represents."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
