@@ -407,7 +407,7 @@ class CertificateControllerEligibilityTest {
   void eligibleAssessmentPickerUsesReleasedPassingAdminCreatedTestsWithoutCourseCompletionGate() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
-    controller.eligibleAssessments(student, TEST_TENANT);
+    controller.eligibleAssessments(12L, student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
