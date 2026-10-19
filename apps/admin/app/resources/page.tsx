@@ -585,7 +585,7 @@ export default function TextbookLibraryPage() {
         ? api('/api/v1/admin/content?' + new URLSearchParams({ courseId, classCode: nextClassCode, subjectCode: nextSubjectCode }).toString())
         : Promise.resolve([]);
       const intakePromise = canReview
-        ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
+        ? api('/api/v1/admin/source-ingestion/intake?' + new URLSearchParams({courseId,limit:String(intakePageSize),offset:String(intakePage*intakePageSize)}).toString()).catch(() => ({ items: [], total: 0, summary: {} }))
         : Promise.resolve({ items: [], total: 0, summary: {} });
       const [contentRows, resourceRows, intakeData] = await Promise.all([
         chapterPromise,
@@ -688,7 +688,7 @@ export default function TextbookLibraryPage() {
       }
       setIntakeAssetId(id);
       // Classification is stored in a dedicated table, never hidden in source-reference text.
-      await api('/api/v1/admin/source-ingestion/intake/' + id, {
+      await api('/api/v1/admin/source-ingestion/intake/' + id + '?courseId=' + encodeURIComponent(courseId), {
         method: 'PUT',
         body: JSON.stringify({
           category: uploadCategory,
@@ -701,7 +701,7 @@ export default function TextbookLibraryPage() {
       });
       let analysis: any = null;
       try {
-        analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze', { method: 'POST' });
+        analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
         setIntakeReport(normalizeIntakeReport(analysis));
       } catch (analysisError) {
         setIntakeReport(null);
@@ -999,7 +999,7 @@ export default function TextbookLibraryPage() {
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
-                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                   setIntakeReport(normalizeIntakeReport(result));
                   const report = result.reconciliation || {};
                   setNotice(t('admin.resources.inventoryScanComplete', { missingCount: report.missing_from_book?.length || 0, extraCount: report.extra_in_book?.length || 0, ambiguousCount: report.ambiguous?.length || 0 }));
@@ -1010,7 +1010,7 @@ export default function TextbookLibraryPage() {
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
-                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze-ocr', { method: 'POST' });
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze-ocr?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                   const normalized = normalizeIntakeReport(result);
                   setIntakeReport(normalized);
                   await load();
@@ -1026,7 +1026,7 @@ export default function TextbookLibraryPage() {
             <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
               setBusy(true); setError(''); setNotice('');
               try {
-                await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId, {
+                await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '?courseId=' + encodeURIComponent(courseId), {
                   method: 'PUT',
                   body: JSON.stringify({
                     category: uploadCategory, classCode: uploadClassCode,
@@ -1034,7 +1034,7 @@ export default function TextbookLibraryPage() {
                     partLabel: uploadPartLabel.trim() || null, reviewNotes: reviewNotes.trim() || null,
                   }),
                 });
-                const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                 setIntakeReport(normalizeIntakeReport(result));
                 await load();
                 setNotice(t('admin.resources.classificationScanSaved'));
@@ -1107,7 +1107,7 @@ export default function TextbookLibraryPage() {
                   onClick={async () => {
                     setBusy(true); setError(''); setNotice('');
                     try {
-                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review', {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review?courseId=' + encodeURIComponent(courseId), {
                         method: 'PATCH',
                         body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
                       });
@@ -1165,7 +1165,7 @@ export default function TextbookLibraryPage() {
                       .map((row: any) => ({chapterId:row.chapterId,title:row.title,pageStart:Number(row.pageStart),pageEnd:Number(row.pageEnd)}));
                     setBusy(true); setError(''); setNotice('');
                     try {
-                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/chapter-ranges', {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/chapter-ranges?courseId=' + encodeURIComponent(courseId), {
                         method: 'PATCH', body: JSON.stringify({chapterRanges,notes:rangeReviewNotes.trim() || null}),
                       });
                       const normalized = normalizeIntakeReport({ ...(intakeReport || {}), ...result });
@@ -1201,7 +1201,7 @@ export default function TextbookLibraryPage() {
                     onClick={async () => {
                       setBusy(true); setError(''); setNotice('');
                       try {
-                        const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/draft-resources', {
+                        const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/draft-resources?courseId=' + encodeURIComponent(courseId), {
                           method: 'POST',
                           body: JSON.stringify({
                             sourceTitle: rangeDraftSourceTitle.trim(),
