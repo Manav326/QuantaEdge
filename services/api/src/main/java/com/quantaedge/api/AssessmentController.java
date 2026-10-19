@@ -227,6 +227,9 @@ public class AssessmentController {
     String classCode = requiredText(body.get("classCode"), "Class", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null || courseId < 1L) {
+      throw badRequest("Select an institution-assigned course before creating an assessment.");
+    }
     requireAssignedCourse(courseId, tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
@@ -242,22 +245,14 @@ public class AssessmentController {
       questionIds.add(id);
     }
 
-    Long subjectId;
-    if(courseId==null) {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    } else {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where c.code=? and s.code=? and c.active=true and s.active=true
-          and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
-        """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
-    }
+    Long subjectId = jdbc.query("""
+      select s.id from curriculum_subject s
+      join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
     if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
     if (chapterId != null) {
       Long validChapter = jdbc.queryForObject("""
