@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e3bc1d12e972e5930bd2aaf941796f1bc071b21ec8ba96bf75b65ac08c7bc85c",
+  "raw_analysis_sha256": "77b64abe36fcebb95c4006138c5c3c9ff120a97d06769e0a86e925a9d852b92d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:37:14Z",
+      "checkpointed_at": "2026-10-19T19:40:24Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:37:55Z",
+      "checkpointed_at": "2026-10-19T19:41:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:38:50Z",
+      "checkpointed_at": "2026-10-19T19:41:59Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56276,6 +56276,148 @@
         "context_relation": "The text discusses the measurement of a table using handspans.",
         "limitations": [
           "The text does not provide a visual representation of the table or the students' measurements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "055ba61cf9184b7284850138",
+      "asset_sha256": "3e0c60ea4f278651f651f553d8afa55387229e3776597380aab93ed7c66e531e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 99,
+      "asset_path": "page-0099.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
+          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
+          "Anish gives an idea, “Let us check this.”",
+          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
+          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
+          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
+          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion",
+          "Handspans"
+        ],
+        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "limitations": [
+          "The table does not provide the actual length of the table in handspans."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:43:51Z",
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
+          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
+          "Anish gives an idea, “Let us check this.”",
+          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
+          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
+          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
+          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion",
+          "Handspans"
+        ],
+        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "limitations": [
+          "The table does not provide the actual length of the table in handspans."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "514bb1f7241e92bcb07ac121",
+      "asset_sha256": "fac894f30187c0a9a1d477bc5d99ca4bd0a3c10fcd395005e073d4ad1a1ec4f0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/fac894f30187c0a9a1d477bc5d99ca4bd0a3c10fcd395005e073d4ad1a1ec4f0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "India has a rich history of measurement systems dating back to ancient times. Angula (finger width), multiples of angula, dhanusa, and yojana are some of the units mentioned in ancient Indian literature, and used in measuring artefacts, architecture, and town planning. The angula is still used by tr",
+          "uncertain"
+        ],
+        "concepts": [
+          "measurement systems",
+          "ancient Indian literature",
+          "units of measurement",
+          "traditional craftspeople",
+          "carpenters",
+          "tailors",
+          "scales"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the history of measurement systems in India.",
+        "limitations": [
+          "The image does not provide specific details about the measurement systems mentioned in the text.",
+          "The image does not show any objects or scales with ruled markings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:44:35Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "India has a rich history of measurement systems dating back to ancient times. Angula (finger width), multiples of angula, dhanusa, and yojana are some of the units mentioned in ancient Indian literature, and used in measuring artefacts, architecture, and town planning. The angula is still used by tr",
+          "uncertain"
+        ],
+        "concepts": [
+          "measurement systems",
+          "ancient Indian literature",
+          "units of measurement",
+          "traditional craftspeople",
+          "carpenters",
+          "tailors",
+          "scales"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the history of measurement systems in India.",
+        "limitations": [
+          "The image does not provide specific details about the measurement systems mentioned in the text.",
+          "The image does not show any objects or scales with ruled markings."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

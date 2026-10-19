@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1161,
-    "successful_visual_analyses": 1139,
-    "missing_visual_analyses": 917,
+    "raw_analysis_result_rows": 1163,
+    "successful_visual_analyses": 1141,
+    "missing_visual_analyses": 915,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 939,
+    "unresolved_count": 937,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44127,9 +44127,37 @@
       "asset_path": "page-0099.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
+          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
+          "Anish gives an idea, “Let us check this.”",
+          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
+          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
+          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
+          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion",
+          "Handspans"
+        ],
+        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "limitations": [
+          "The table does not provide the actual length of the table in handspans."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44145,9 +44173,30 @@
       "asset_path": "assets/fac894f30187c0a9a1d477bc5d99ca4bd0a3c10fcd395005e073d4ad1a1ec4f0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "India has a rich history of measurement systems dating back to ancient times. Angula (finger width), multiples of angula, dhanusa, and yojana are some of the units mentioned in ancient Indian literature, and used in measuring artefacts, architecture, and town planning. The angula is still used by tr",
+          "uncertain"
+        ],
+        "concepts": [
+          "measurement systems",
+          "ancient Indian literature",
+          "units of measurement",
+          "traditional craftspeople",
+          "carpenters",
+          "tailors",
+          "scales"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the history of measurement systems in India.",
+        "limitations": [
+          "The image does not provide specific details about the measurement systems mentioned in the text.",
+          "The image does not show any objects or scales with ruled markings."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
