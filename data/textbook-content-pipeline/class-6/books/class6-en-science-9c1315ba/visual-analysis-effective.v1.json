@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "23399f7cb34d5156e650a4b26ad3d2e434610b790baa7f520fdf78449c0fc179",
+  "raw_analysis_sha256": "8f5f497a05c42d4975d12f433e81e28f0a75314f8cd7e5420d6a60740ab8e64d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:31:02Z",
+      "checkpointed_at": "2026-10-19T12:35:15Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:32:05Z",
+      "checkpointed_at": "2026-10-19T12:36:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -47504,6 +47504,172 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T12:34:02Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ca93700378ba287b0130d643",
+      "asset_sha256": "9141d544372b604dd39e7cfc315bc3cd1f58ce3dd3be7d12ad1129332fabeb09",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 76,
+      "asset_path": "page-0076.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e378706dc69ff3098302e0dae84b53f52a1c7ed40f9afae15ec2ca39ffb6fd7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about carbohydrates and iodine testing.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "9.  Sugar is an example of carbohydrates. Sugar is tested with iodine solution but it does not change to blue-black colour. What can be a possible reason?",
+          "10. What do you think of Raman’s statement, “All starches are carbohydrates but not all carbohydrates are starches.’’ Describe the design of an activity to test your answer.",
+          "11. While using iodine in the laboratory, a few drops of iodine fell on Mishti’s socks and a few fell on her teacher’s saree. The drops of iodine on the saree turned blue-black while the colour on the socks did not change. What can be a possible reason?",
+          "12. Why are millets considered a healthy choice of food? Can eating just millets suffice for the nutritional requirements of the body? Discuss.",
+          "13. You are given a sample of a solution. How would you check the possibility of it being an iodine solution?",
+          "Learning further",
+          "Help your mother in unpacking the packets of various food items after shopping for grocery next time. Read the nutritional information of at least three fortified food items and analyse those.",
+          "The Apatani tribe of Arunachal Pradesh produces a salt called taypo to fulfil their dietary requirements. Collect more information from the internet about their salt making process and the need to make their own salt. Collect pictures and paste them on a chart paper. Also, write a paragraph about th",
+          "Vegetables or fruits that grow naturally in the forest or nearby fields without being cultivated by farmers are considered wild varieties. Traditionally, many tribal groups in India depend on these wild varieties, which form a part of their food. Read about ranbhajis from Maharashtra and edible mush"
+        ],
+        "concepts": [
+          "carbohydrates",
+          "iodine",
+          "starches",
+          "millets",
+          "iodine testing",
+          "fortified food items",
+          "salt",
+          "taypo",
+          "vegetables",
+          "fruits",
+          "wild varieties",
+          "tribal groups",
+          "Maharashtra",
+          "Himachal Pradesh"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:40:48Z",
+      "effective_analysis": {
+        "visual_summary": "Questions about carbohydrates and iodine testing.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "9.  Sugar is an example of carbohydrates. Sugar is tested with iodine solution but it does not change to blue-black colour. What can be a possible reason?",
+          "10. What do you think of Raman’s statement, “All starches are carbohydrates but not all carbohydrates are starches.’’ Describe the design of an activity to test your answer.",
+          "11. While using iodine in the laboratory, a few drops of iodine fell on Mishti’s socks and a few fell on her teacher’s saree. The drops of iodine on the saree turned blue-black while the colour on the socks did not change. What can be a possible reason?",
+          "12. Why are millets considered a healthy choice of food? Can eating just millets suffice for the nutritional requirements of the body? Discuss.",
+          "13. You are given a sample of a solution. How would you check the possibility of it being an iodine solution?",
+          "Learning further",
+          "Help your mother in unpacking the packets of various food items after shopping for grocery next time. Read the nutritional information of at least three fortified food items and analyse those.",
+          "The Apatani tribe of Arunachal Pradesh produces a salt called taypo to fulfil their dietary requirements. Collect more information from the internet about their salt making process and the need to make their own salt. Collect pictures and paste them on a chart paper. Also, write a paragraph about th",
+          "Vegetables or fruits that grow naturally in the forest or nearby fields without being cultivated by farmers are considered wild varieties. Traditionally, many tribal groups in India depend on these wild varieties, which form a part of their food. Read about ranbhajis from Maharashtra and edible mush"
+        ],
+        "concepts": [
+          "carbohydrates",
+          "iodine",
+          "starches",
+          "millets",
+          "iodine testing",
+          "fortified food items",
+          "salt",
+          "taypo",
+          "vegetables",
+          "fruits",
+          "wild varieties",
+          "tribal groups",
+          "Maharashtra",
+          "Himachal Pradesh"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "869cd28fbae9f80c3045367e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7321fc2cbd322c11b51dd02982fa52a6b2e00f28deaab622f4a5c82390262f48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:41:04Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dc612d20406ef41e89ee3a4b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7321fc2cbd322c11b51dd02982fa52a6b2e00f28deaab622f4a5c82390262f48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:41:18Z",
       "effective_analysis": {
         "visual_summary": "A black page with no visible content.",
         "visual_type": "uncertain",
