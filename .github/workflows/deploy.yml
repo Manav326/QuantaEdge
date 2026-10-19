@@ -77,7 +77,7 @@ jobs:
                             break
                     if not found:
                         lines.append(replacement)
-                source = "\\n".join(lines) + "\\n"
+                source = "\n".join(lines) + "\n"
                 env_path.write_text(source)
                 os.chmod(env_path, 0o600)
                 values.update(incoming)
