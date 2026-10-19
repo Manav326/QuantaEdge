@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import GoogleSignInButton from './GoogleSignInButton';
 import { useLocale } from './LanguageProvider';
-import { UI_LOCALE_OPTIONS, resolveUiLocale } from '../i18n/catalog';
+import { UI_LOCALE_OPTIONS, resolveUiLocale, translateUi } from '../i18n/catalog';
 
 type AccountProfile = {
   displayName?: string | null;
@@ -48,6 +48,8 @@ export default function AccountIdentitySettings() {
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [editingCard, setEditingCard] = useState<'verification' | 'profile' | 'username' | 'password' | null>(null);
+  const [editSnapshot, setEditSnapshot] = useState<{displayName: string; selectedLocale: typeof locale; username: string} | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -70,10 +72,30 @@ export default function AccountIdentitySettings() {
 
   useEffect(() => { void load(); }, [load]);
 
+  function beginEditing(card: Exclude<typeof editingCard, null>) {
+    if (editingCard !== null) return;
+    setEditSnapshot({ displayName, selectedLocale, username });
+    setEditingCard(card); setError(''); setNotice('');
+  }
+
+  function cancelEditing() {
+    if (editSnapshot) {
+      setDisplayName(editSnapshot.displayName);
+      setSelectedLocale(editSnapshot.selectedLocale);
+      setUsername(editSnapshot.username);
+    } else {
+      setDisplayName(String(profile?.displayName || ''));
+      setUsername(String(profile?.username || ''));
+    }
+    setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
+    setEditingCard(null); setEditSnapshot(null);
+  }
+
   const onGmailLinked = useCallback(async () => {
     setBusy('gmail');
     setError('');
     try {
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(english ? 'Gmail verified and connected to this account.' : 'Gmail सत्यापित होकर इसी खाते से जुड़ गया।');
       await load();
       window.dispatchEvent(new Event('qe:profile-updated'));
@@ -94,6 +116,7 @@ export default function AccountIdentitySettings() {
         body: JSON.stringify({ displayName: displayName.trim(), preferredLocale: selectedLocale }),
       }));
       setLocale(selectedLocale);
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(english ? 'Profile details saved.' : 'प्रोफ़ाइल विवरण सुरक्षित हो गए।');
       window.dispatchEvent(new Event('qe:profile-updated'));
       await load();
@@ -111,6 +134,7 @@ export default function AccountIdentitySettings() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim() }),
       }));
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(body.unchanged
         ? (english ? 'This is already your username.' : 'यह पहले से आपका यूज़रनेम है।')
         : (english ? 'Username saved. A new change is allowed after 15 days.' : 'यूज़रनेम सुरक्षित। अगला बदलाव 15 दिन बाद कर सकते हैं।'));
@@ -139,6 +163,7 @@ export default function AccountIdentitySettings() {
         body: JSON.stringify({ currentPassword, newPassword }),
       }));
       setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(english
         ? 'Password saved. For security, sign in again to continue.'
         : 'पासवर्ड सुरक्षित हो गया। सुरक्षा के लिए दोबारा साइन इन करें।');
@@ -172,6 +197,7 @@ export default function AccountIdentitySettings() {
       {loading && <p role="status" className="auth-note">{english ? 'Loading account settings…' : 'खाते की सेटिंग लोड हो रही हैं…'}</p>}
       {!loading && profile && <>
         <div className="qe-account-identity-settings__verification">
+          <div className="qe-account-identity-settings__form-heading"><h3>{translateUi(locale, 'student.profile.verification')}</h3>{editingCard === 'verification' ? <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editVerification')} disabled={editingCard !== null} onClick={() => beginEditing('verification')}>✎</button>}</div>
           <div className="qe-account-identity-settings__verification-row">
             <span className="qe-account-identity-settings__provider-mark" aria-hidden="true">G</span>
             <div className="qe-account-identity-settings__identity-copy">
@@ -197,7 +223,7 @@ export default function AccountIdentitySettings() {
             : 'हर तरीके का सत्यापन अलग दर्ज होता है। Google की फ़ोटो या नाम मोबाइल सत्यापित नहीं करता और मोबाइल OTP Gmail को सत्यापित नहीं करता।'}</p>
         </div>
 
-        {!profile.gmailVerified && !profile.credentialsManagedByParent && (
+        {editingCard === 'verification' && !profile.gmailVerified && !profile.credentialsManagedByParent && (
           <div className="qe-account-identity-settings__managed">
             <strong>{english ? 'Connect a verified Gmail' : 'सत्यापित Gmail जोड़ें'}</strong>
             <p>{english
@@ -219,54 +245,46 @@ export default function AccountIdentitySettings() {
           </div>
         ) : <>
           <form className="qe-account-identity-settings__form" onSubmit={saveProfile}>
-            <h3>{english ? 'Profile details' : 'प्रोफ़ाइल विवरण'}</h3>
+            <div className="qe-account-identity-settings__form-heading"><h3>{english ? 'Profile details' : 'प्रोफ़ाइल विवरण'}</h3>{editingCard === 'profile' ? <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editAccountDetails')} disabled={editingCard !== null} onClick={() => beginEditing('profile')}>✎</button>}</div>
             <label>{english ? 'Full name' : 'पूरा नाम'}
-              <input value={displayName} onChange={e => setDisplayName(e.target.value)} minLength={2} maxLength={120} required />
+              <input value={displayName} onChange={e => setDisplayName(e.target.value)} minLength={2} maxLength={120} required disabled={editingCard !== 'profile'} />
             </label>
             <label>{english ? 'Interface language' : 'इंटरफ़ेस भाषा'}
-              <select value={selectedLocale} onChange={e => setSelectedLocale(e.target.value as typeof locale)}>
+              <select value={selectedLocale} onChange={e => setSelectedLocale(e.target.value as typeof locale)} disabled={editingCard !== 'profile'}>
                 {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
               </select>
             </label>
-            <button type="submit" className="button button-dark button-small" disabled={busy !== '' || displayName.trim().length < 2}>
-              {busy === 'profile' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save profile' : 'प्रोफ़ाइल सुरक्षित करें')}
-            </button>
+            {editingCard === 'profile' && <div className="qe-account-identity-settings__form-actions"><button type="button" className="button button-light button-small" onClick={cancelEditing} disabled={busy !== ''}>{translateUi(locale, 'legacy.web.cancel.843e86d4')}</button><button type="submit" className="button button-dark button-small" disabled={busy !== '' || displayName.trim().length < 2}>{busy === 'profile' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save profile' : 'प्रोफ़ाइल सुरक्षित करें')}</button></div>}
           </form>
 
           <form className="qe-account-identity-settings__form" onSubmit={saveUsername}>
-            <h3>{english ? 'Username' : 'यूज़रनेम'}</h3>
+            <div className="qe-account-identity-settings__form-heading"><h3>{english ? 'Username' : 'यूज़रनेम'}</h3>{editingCard === 'username' ? <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editUsername')} disabled={editingCard !== null} onClick={() => beginEditing('username')}>✎</button>}</div>
             <label>{english ? 'Your username' : 'आपका यूज़रनेम'}
               <input value={username} onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 32))}
-                minLength={3} maxLength={32} autoComplete="username" required />
+                minLength={3} maxLength={32} autoComplete="username" required disabled={editingCard !== 'username'} />
             </label>
             {profile.username && !profile.usernameCanChange && changeDate && <p className="auth-note">
               {english ? 'Next username change: ' : 'अगला यूज़रनेम बदलाव: '}{changeDate}
             </p>}
             <p className="auth-note">{english ? 'Choose a unique username. After each change, you must wait at least 15 days before changing it again.' : 'अलग यूज़रनेम चुनें। हर बदलाव के बाद अगला बदलाव करने से पहले कम से कम 15 दिन प्रतीक्षा करनी होगी।'}</p>
-            <button type="submit" className="button button-light button-small"
-              disabled={busy !== '' || !profile.usernameCanChange || username.trim().length < 3 || username.trim() === profile.username}>
-              {busy === 'username' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save username' : 'यूज़रनेम सुरक्षित करें')}
-            </button>
+            {editingCard === 'username' && <div className="qe-account-identity-settings__form-actions"><button type="button" className="button button-light button-small" onClick={cancelEditing} disabled={busy !== ''}>{translateUi(locale, 'legacy.web.cancel.843e86d4')}</button><button type="submit" className="button button-dark button-small" disabled={busy !== '' || !profile.usernameCanChange || username.trim().length < 3 || username.trim() === profile.username}>{busy === 'username' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save username' : 'यूज़रनेम सुरक्षित करें')}</button></div>}
           </form>
 
           <form className="qe-account-identity-settings__form" onSubmit={savePassword}>
-            <h3>{profile.passwordSet ? (english ? 'Change password' : 'पासवर्ड बदलें') : (english ? 'Set a password' : 'पासवर्ड सेट करें')}</h3>
+            <div className="qe-account-identity-settings__form-heading"><h3>{profile.passwordSet ? (english ? 'Change password' : 'पासवर्ड बदलें') : (english ? 'Set a password' : 'पासवर्ड सेट करें')}</h3>{editingCard === 'password' ? <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="qe-account-identity-settings__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editPassword')} disabled={editingCard !== null} onClick={() => beginEditing('password')}>✎</button>}</div>
             {profile.passwordSet && <label>{english ? 'Current password' : 'मौजूदा पासवर्ड'}
               <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
-                autoComplete="current-password" required />
+                autoComplete="current-password" required disabled={editingCard !== 'password'} />
             </label>}
             <label>{english ? 'New password' : 'नया पासवर्ड'}
               <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)}
-                minLength={8} autoComplete="new-password" required />
+                minLength={8} autoComplete="new-password" required disabled={editingCard !== 'password'} />
             </label>
             <label>{english ? 'Confirm new password' : 'नए पासवर्ड की पुष्टि करें'}
               <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                minLength={8} autoComplete="new-password" required />
+                minLength={8} autoComplete="new-password" required disabled={editingCard !== 'password'} />
             </label>
-            <button type="submit" className="button button-dark button-small"
-              disabled={busy !== '' || newPassword.length < 8 || newPassword !== confirmPassword || (profile.passwordSet === true && !currentPassword)}>
-              {busy === 'password' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save password' : 'पासवर्ड सुरक्षित करें')}
-            </button>
+            {editingCard === 'password' && <div className="qe-account-identity-settings__form-actions"><button type="button" className="button button-light button-small" onClick={cancelEditing} disabled={busy !== ''}>{translateUi(locale, 'legacy.web.cancel.843e86d4')}</button><button type="submit" className="button button-dark button-small" disabled={busy !== '' || newPassword.length < 8 || newPassword !== confirmPassword || (profile.passwordSet === true && !currentPassword)}>{busy === 'password' ? (english ? 'Saving…' : 'सहेज रहे हैं…') : (english ? 'Save password' : 'पासवर्ड सुरक्षित करें')}</button></div>}
           </form>
         </>}
 

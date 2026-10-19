@@ -5,6 +5,7 @@ import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImag
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import { useStudentCourseScope } from '../CourseScope';
 
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -20,6 +21,8 @@ type LifecycleStatus = {
   parent_eligibility_current?: boolean;
   canTransitionToParent?: boolean;
 };
+
+type ProfileCard = 'photo' | 'about' | 'learning' | 'eligibility';
 
 type ProfileDraft = {
   displayName: string;
@@ -107,10 +110,11 @@ export default function StudentProfilePage() {
   const router = useRouter();
   const { locale } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  const { activeCourse, loadingCourses } = useStudentCourseScope();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ProfileDraft>(emptyProfile);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [student, setStudent] = useState<{class_code: string; board: string; public_user_id: string} | null>(null);
+  const [student, setStudent] = useState<{public_user_id: string} | null>(null);
   const [lifecycle, setLifecycle] = useState<LifecycleStatus | null>(null);
   const [lifecycleBusy, setLifecycleBusy] = useState(false);
   const [lifecycleConsent, setLifecycleConsent] = useState(false);
@@ -124,6 +128,8 @@ export default function StudentProfilePage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [photoName, setPhotoName] = useState('');
+  const [editingCard, setEditingCard] = useState<ProfileCard | null>(null);
+  const [editSnapshot, setEditSnapshot] = useState<ProfileDraft | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -137,7 +143,7 @@ export default function StudentProfilePage() {
         const body = await readJson(response);
         if (!response.ok) throw new Error(body.message || 'Unable to load your profile.');
         if (!active) return;
-        setStudent({ class_code: String(body.class_code || ''), board: String(body.board || ''), public_user_id: String(body.public_user_id || body.publicUserId || '') });
+        setStudent({ public_user_id: String(body.public_user_id || body.publicUserId || '') });
         setProfileImageUrl(body.profile_image_url || null);
         setDraft({
           displayName: body.display_name || '',
@@ -291,6 +297,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName(file.name);
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(translateUi(locale, 'legacy.web.your.photo.has.been.saved.to.your.prof.9c5a5ef0'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
@@ -301,37 +308,49 @@ export default function StudentProfilePage() {
     }
   }
 
-  async function saveProfile(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function beginEditing(card: ProfileCard) {
+    if (editingCard !== null) return;
+    setEditSnapshot({ ...draft });
+    setEditingCard(card);
+    setError('');
+    setNotice('');
+  }
+
+  function cancelEditing() {
+    if (editSnapshot) setDraft({ ...editSnapshot });
+    setEditingCard(null);
+    setEditSnapshot(null);
+    setLifecycleConsent(false);
+    setTransitionMobile('');
+    setTransitionOtp('');
+    setTransitionPassword('');
+    setTransitionOtpSent(false);
+  }
+
+  async function saveProfileSection(section: 'about' | 'learning') {
+    if (editingCard !== section) return;
     setError('');
     setNotice('');
     setSaving(true);
     try {
       const response = await fetch('/api/v1/students/me/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(draft),
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(draft),
       });
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
-      setStudent({ class_code: String(body.class_code || ''), board: String(body.board || ''), public_user_id: String(body.public_user_id || body.publicUserId || '') });
+      setStudent({ public_user_id: String(body.public_user_id || body.publicUserId || '') });
       setProfileImageUrl(body.profile_image_url || null);
       setDraft({
-        displayName: body.display_name || '',
-        city: body.city || '',
-        state: body.state || '',
-        schoolName: body.school_name || '',
-        schoolMedium: body.school_medium || '',
-        favoriteSubject: body.favorite_subject || '',
-        learningGoal: body.learning_goal || '',
+        displayName: body.display_name || '', city: body.city || '', state: body.state || '',
+        schoolName: body.school_name || '', schoolMedium: body.school_medium || '',
+        favoriteSubject: body.favorite_subject || '', learningGoal: body.learning_goal || '',
       });
       setNotice(translateUi(locale, 'legacy.web.your.profile.has.been.saved.c2201d87'));
+      setEditingCard(null); setEditSnapshot(null);
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   }
 
   async function resetPhoto() {
@@ -348,6 +367,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName('');
+      setEditingCard(null); setEditSnapshot(null);
       setNotice(translateUi(locale, 'legacy.web.your.photo.has.been.removed.from.your..2b92c4f9'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
@@ -370,16 +390,16 @@ export default function StudentProfilePage() {
             <h1><UiText message="legacy.web.profile.and.settings.fee038f0" /></h1>
             <p><UiText message="legacy.web.personalise.your.learning.space.by.upd.2f56c645" /></p>
           </div>
-          <div className="student-profile-page__class-pill"><span><UiText message="legacy.web.your.class.1cae66ed" /></span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
+          <div className="student-profile-page__class-pill"><span><LocaleText hinglish="आपका कोर्स" english="Your course" /></span><strong>{activeCourse?.display_name || (loadingCourses ? tx('Loading course…', 'कोर्स लोड हो रहा है…') : tx('No enrolled course', 'कोई नामांकित कोर्स नहीं है'))}</strong><small>{activeCourse ? (activeCourse.curriculum_version || activeCourse.code || tx('Course selected', 'कोर्स चुना गया')) : (!loadingCourses ? tx('Choose a course', 'कोर्स चुनें') : '')}</small></div>
         </div>
 
         {error && <div className="student-profile-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="student-profile-page__alert is-success" role="status">{notice}</div>}
 
         {loading ? <div className="student-profile-page__loading" role="status" aria-live="polite"><span className="student-profile-page__spinner" aria-hidden="true" /> <UiText message="legacy.web.loading.your.profile.81ab5bfd" /></div> : (
-          <form className="student-profile-form" onSubmit={saveProfile}>
+          <form className="student-profile-form" onSubmit={event => event.preventDefault()}>
             <section className="student-profile-card student-profile-photo-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.friendly.photo.for.your.learning.spa.436cd565" /></p></div></div>
+              <div className="student-profile-card__topline"><div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.friendly.photo.for.your.learning.spa.436cd565" /></p></div></div>{editingCard === 'photo' ? <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editPhoto')} disabled={editingCard !== null} onClick={() => beginEditing('photo')}>✎</button>}</div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
                   <AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/student-avatar.svg" alt="Student profile preview" width={144} height={144} />
@@ -390,37 +410,39 @@ export default function StudentProfilePage() {
                   <p><UiText message="legacy.web.choose.a.clear.photo.we.ll.resize.it.a.96c6a10c" /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
-                    <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" aria-label="Choose profile photo" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <UiText message="legacy.web.preparing.photo.75f074e6" /> : profileImageUrl ? <UiText message="legacy.web.change.photo.5b1bc1d0" /> : <UiText message="legacy.web.choose.photo.de5a3f02" />}</button>
-                    {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><UiText message="legacy.web.remove.photo.89a3c097" /></button>}
+                    <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" aria-label="Choose profile photo" disabled={editingCard !== 'photo' || photoBusy} onChange={handlePhotoChange} />
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy || editingCard !== 'photo'} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <UiText message="legacy.web.preparing.photo.75f074e6" /> : profileImageUrl ? <UiText message="legacy.web.change.photo.5b1bc1d0" /> : <UiText message="legacy.web.choose.photo.de5a3f02" />}</button>
+                    {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy || editingCard !== 'photo'} onClick={resetPhoto}><UiText message="legacy.web.remove.photo.89a3c097" /></button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.keep.your.basic.details.up.to.date.482d2614" /></p></div></div>
+              <div className="student-profile-card__topline"><div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.keep.your.basic.details.up.to.date.482d2614" /></p></div></div>{editingCard === 'about' ? <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editAbout')} disabled={editingCard !== null} onClick={() => beginEditing('about')}>✎</button>}</div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={student?.public_user_id || ''} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.name.7d67d7b4" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.should.we.call.you.1b8ed077')} autoComplete="name" /></label>
-                <label className="student-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.patna.e53ea62e')} autoComplete="address-level2" /></label>
-                <label className="student-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.bihar.928d6032')} autoComplete="address-level1" /></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={student?.public_user_id || ''} disabled aria-disabled="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.name.7d67d7b4" /><input required minLength={2} maxLength={120} disabled={editingCard !== 'about'} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.should.we.call.you.1b8ed077')} autoComplete="name" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} disabled={editingCard !== 'about'} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.patna.e53ea62e')} autoComplete="address-level2" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} disabled={editingCard !== 'about'} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.bihar.928d6032')} autoComplete="address-level1" /></label>
               </div>
               <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <UiText message="legacy.web.city.and.state.are.enough.please.do.no.8802cd0a" /></p>
-            </section>
+                          {editingCard === 'about' && <div className="student-profile-card__actions"><button type="button" className="student-profile-quiet-button" onClick={cancelEditing} disabled={saving}><UiText message="legacy.web.cancel.843e86d4" /></button><button type="button" className="button button-dark button-small" onClick={() => void saveProfileSection('about')} disabled={saving}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button></div>}
+</section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><UiText message="legacy.web.school.and.learning.998c3fe4" /></h2><p><UiText message="legacy.web.help.us.make.your.learning.more.releva.938b8ffd" /></p></div></div>
+              <div className="student-profile-card__topline"><div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><UiText message="legacy.web.school.and.learning.998c3fe4" /></h2><p><UiText message="legacy.web.help.us.make.your.learning.more.releva.938b8ffd" /></p></div></div>{editingCard === 'learning' ? <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editLearning')} disabled={editingCard !== null} onClick={() => beginEditing('learning')}>✎</button>}</div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.school.name.c4fef1c5" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.enter.your.school.name.48c04e62')} autoComplete="organization" /></label>
-                <label className="student-profile-field"><UiText message="legacy.web.school.medium.cfa6de85" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><UiText message="legacy.web.choose.if.you.know.e5c58168" /></option><option value="Hindi"><UiText message="legacy.web.hindi.197af92c" /></option><option value="English"><UiText message="common.language.english" /></option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
-                <label className="student-profile-field"><UiText message="legacy.web.favourite.subject.be48a154" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><UiText message="legacy.web.choose.a.subject.518e940d" /></option><option value="maths"><UiText message="legacy.web.maths.a163a4bb" /></option><option value="science"><UiText message="legacy.web.science.4d80727d" /></option><option value="both"><UiText message="legacy.web.both.20542d4e" /></option><option value="other"><UiText message="legacy.web.another.subject.693bc278" /></option><option value="not_sure"><UiText message="legacy.web.still.exploring.595d12f0" /></option></select></label>
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.my.learning.goal.92dbad6c" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.would.you.like.to.improve.for.exa.31332678')} /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.school.name.c4fef1c5" /><input maxLength={180} disabled={editingCard !== 'learning'} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.enter.your.school.name.48c04e62')} autoComplete="organization" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.school.medium.cfa6de85" /><select disabled={editingCard !== 'learning'} value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><UiText message="legacy.web.choose.if.you.know.e5c58168" /></option><option value="Hindi"><UiText message="legacy.web.hindi.197af92c" /></option><option value="English"><UiText message="common.language.english" /></option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
+                <label className="student-profile-field"><UiText message="legacy.web.favourite.subject.be48a154" /><select disabled={editingCard !== 'learning'} value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><UiText message="legacy.web.choose.a.subject.518e940d" /></option><option value="maths"><UiText message="legacy.web.maths.a163a4bb" /></option><option value="science"><UiText message="legacy.web.science.4d80727d" /></option><option value="both"><UiText message="legacy.web.both.20542d4e" /></option><option value="other"><UiText message="legacy.web.another.subject.693bc278" /></option><option value="not_sure"><UiText message="legacy.web.still.exploring.595d12f0" /></option></select></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.my.learning.goal.92dbad6c" /><textarea rows={3} maxLength={300} disabled={editingCard !== 'learning'} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.would.you.like.to.improve.for.exa.31332678')} /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
-            </section>
+                          {editingCard === 'learning' && <div className="student-profile-card__actions"><button type="button" className="student-profile-quiet-button" onClick={cancelEditing} disabled={saving}><UiText message="legacy.web.cancel.843e86d4" /></button><button type="button" className="button button-dark button-small" onClick={() => void saveProfileSection('learning')} disabled={saving}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button></div>}
+</section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">04</span><div><h2><UiText message="legacy.web.account.and.eligibility.94499de8" /></h2><p><UiText message="legacy.web.manage.account.transitions.while.keepi.77f5f331" /></p></div></div>
+              <div className="student-profile-card__topline"><div className="student-profile-card__intro"><span className="student-profile-card__number">04</span><div><h2><UiText message="legacy.web.account.and.eligibility.94499de8" /></h2><p><UiText message="legacy.web.manage.account.transitions.while.keepi.77f5f331" /></p></div></div>{editingCard === 'eligibility' ? <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'legacy.web.cancel.843e86d4')} aria-label={translateUi(locale, 'legacy.web.cancel.843e86d4')} onClick={cancelEditing}>×</button> : <button type="button" className="student-profile-card__edit-button" title={translateUi(locale, 'student.profile.edit')} aria-label={translateUi(locale, 'student.profile.editEligibility')} disabled={editingCard !== null} onClick={() => beginEditing('eligibility')}>✎</button>}</div>
               {!lifecycle?.independentAccountLinked ? (
                 <>
                   <p><strong><UiText message="legacy.web.adult.verification.dbbc059b" />:</strong> {lifecycle?.adult_verification_status || 'NOT_REQUESTED'}</p>
@@ -429,15 +451,15 @@ export default function StudentProfilePage() {
                       <p><UiText message="legacy.web.your.adult.eligibility.is.verified.ver.5fde9e63" /></p>
                       {!transitionOtpSent ? (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.mobile.number.835da1ed" /><input type="tel" value={transitionMobile} onChange={e=>setTransitionMobile(e.target.value)} placeholder="+91…" autoComplete="tel" /></label>
-                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.creating.an.independent.a.0c170fcf" /></span></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestTransitionOtp}><UiText message="legacy.web.send.verification.code.533abf96" /></button>
+                          <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.mobile.number.835da1ed" /><input type="tel" disabled={editingCard !== 'eligibility'} value={transitionMobile} onChange={e=>setTransitionMobile(e.target.value)} placeholder="+91…" autoComplete="tel" /></label>
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} disabled={editingCard !== 'eligibility'} /> <UiText message="legacy.web.i.consent.to.creating.an.independent.a.0c170fcf" /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={requestTransitionOtp}><UiText message="legacy.web.send.verification.code.533abf96" /></button>
                         </div>
                       ) : (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field"><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
-                          <label className="student-profile-field"><UiText message="legacy.web.new.password.32a2f216" /><input type="password" autoComplete="new-password" minLength={8} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={completeIndependentAccount}><UiText message="legacy.web.create.independent.account.7b195fde" /></button>
+                          <label className="student-profile-field"><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" disabled={editingCard !== 'eligibility'} value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
+                          <label className="student-profile-field"><UiText message="legacy.web.new.password.32a2f216" /><input type="password" autoComplete="new-password" minLength={8} disabled={editingCard !== 'eligibility'} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={completeIndependentAccount}><UiText message="legacy.web.create.independent.account.7b195fde" /></button>
                         </div>
                       )}
                     </>
@@ -446,8 +468,8 @@ export default function StudentProfilePage() {
                   ) : (
                     <div className="student-profile-fields">
                       <p><UiText message="legacy.web.an.authorized.staff.review.confirming..ad1fba1b" /></p>
-                      <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.requesting.adult.verifica.bb696e60" /></span></label>
-                      <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestAdultVerification}><UiText message="legacy.web.request.adult.verification.1e2bcfc5" /></button>
+                      <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} disabled={editingCard !== 'eligibility'} /> <UiText message="legacy.web.i.consent.to.requesting.adult.verifica.bb696e60" /></span></label>
+                      <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={requestAdultVerification}><UiText message="legacy.web.request.adult.verification.1e2bcfc5" /></button>
                     </div>
                   )}
                 </>
@@ -456,13 +478,13 @@ export default function StudentProfilePage() {
                   <p><strong><UiText message="legacy.web.account.role.6b333543" />:</strong> {lifecycle?.role || 'LEARNER'}</p>
                   <p><strong><UiText message="legacy.web.parent.eligibility.0f44293b" />:</strong> {lifecycle?.parent_eligibility_status || 'NOT_REQUESTED'}</p>
                   {lifecycle?.canTransitionToParent ? (
-                    <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={transitionToParent}><UiText message="legacy.web.transition.to.parent.account.99ad6dc1" /></button>
+                    <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={transitionToParent}><UiText message="legacy.web.transition.to.parent.account.99ad6dc1" /></button>
                   ) : lifecycle?.role === 'LEARNER' && lifecycle?.adult_verification_current ? (
                     <>
                       {lifecycle?.parent_eligibility_status === 'PENDING' ? <p><UiText message="legacy.web.parent.eligibility.review.is.pending.659105be" /></p> : (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.requesting.parent.eligibi.4f6223f0" /></span></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestParentEligibility}><UiText message="legacy.web.request.parent.eligibility.54fe8ee5" /></button>
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} disabled={editingCard !== 'eligibility'} /> <UiText message="legacy.web.i.consent.to.requesting.parent.eligibi.4f6223f0" /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy || editingCard !== 'eligibility'} onClick={requestParentEligibility}><UiText message="legacy.web.request.parent.eligibility.54fe8ee5" /></button>
                         </div>
                       )}
                     </>
@@ -471,10 +493,6 @@ export default function StudentProfilePage() {
               )}
             </section>
 
-            <div className="student-profile-form__footer">
-              <p><UiText message="legacy.web.your.progress.and.practice.records.rem.110744bb" /></p>
-              <div><Link href="/student" className="student-profile-quiet-button"><UiText message="legacy.web.cancel.843e86d4" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button></div>
-            </div>
           </form>
         )}
         <AccountIdentitySettings />

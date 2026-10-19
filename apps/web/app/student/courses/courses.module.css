@@ -87,3 +87,6 @@ html[data-qe-appearance="dark"] .error {
   color: var(--qe-color-on-error-container);
   border-color: var(--qe-color-error);
 }
+
+/* Keep course titles and metadata readable on narrow cards. */
+.courseCard h2,.courseCard p,.subjectLink strong,.subjectLink small{overflow-wrap:break-word;word-break:normal;hyphens:none}

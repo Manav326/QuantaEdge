@@ -92,7 +92,7 @@ export default function PracticeClient() {
   };
 
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading">
+    <header className="content-heading qe-lesson-list-header">
       <div>
         <span className="eyebrow">{tx('Course-based practice', 'कोर्स के अनुसार अभ्यास')}</span>
         <h1>{tx('Practice', 'अभ्यास')}</h1>

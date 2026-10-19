@@ -1170,3 +1170,49 @@ html[data-qe-appearance="dark"] .parent-account__icon {
   border-radius:999px; background:var(--qe-color-surface-elevated);
   color:var(--qe-color-text-muted); font-size:10px; font-weight:650; line-height:1.4;
 }
+
+
+/* Responsive learner cards: preserve words and keep controls aligned. */
+.qe-active-course-section{min-width:0}
+.qe-active-course-section .subject-track-main{grid-template-columns:44px minmax(0,1fr) auto;align-items:center;min-width:0}
+.qe-active-course-section .subject-track-copy{min-width:0;word-break:normal;overflow-wrap:break-word;hyphens:none}
+.qe-active-course-section .subject-track-copy strong,.qe-active-course-section .subject-track-copy small{overflow-wrap:break-word;word-break:normal;hyphens:none;line-height:1.45}
+.qe-active-course-section .qe-active-course-badge{white-space:nowrap;flex-shrink:0}
+.qe-active-course-section .subject-track-card{min-width:0;overflow:hidden}
+.qe-lesson-list-header{align-items:flex-start!important;gap:1.15rem!important;min-width:0}
+.qe-lesson-list-header>div:first-child{flex:1 1 20rem;min-width:0}
+.qe-lesson-list-header>div:first-child h1{line-height:1.2;overflow-wrap:break-word;word-break:normal;hyphens:none}
+.qe-lesson-list-header>div:first-child p{max-width:66ch;line-height:1.55;overflow-wrap:break-word;word-break:normal;hyphens:none}
+.qe-lesson-list-header>.qe-course-page-actions{display:flex;flex:1 1 25rem;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:.6rem;min-width:0}
+.qe-lesson-list-header .qe-institution-course-subject-scope{flex:1 1 100%;min-width:0;max-width:100%}
+.app-content .task-list>.task-card{align-items:flex-start;justify-content:space-between;gap:1rem;min-width:0}
+.app-content .task-list>.task-card>div{flex:1 1 20rem;min-width:0}
+.app-content .task-list>.task-card h2,.app-content .task-list>.task-card p,.app-content .task-list>.task-card small{overflow-wrap:break-word;word-break:normal;hyphens:none;line-height:1.5}
+.app-content .task-list>.task-card>.button{flex:0 1 auto;max-width:100%;white-space:normal;text-align:center;line-height:1.35}
+.student-profile-page__class-pill{min-width:0;max-width:min(100%,420px);overflow-wrap:break-word;word-break:normal;hyphens:none}
+.student-profile-page__class-pill strong,.student-profile-page__class-pill small{overflow-wrap:break-word;word-break:normal;hyphens:none;line-height:1.45}
+.student-profile-card__topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0;margin-bottom:22px}
+.student-profile-card__topline .student-profile-card__intro{flex:1;min-width:0;margin-bottom:0}
+.student-profile-card__edit-button,.qe-account-identity-settings__edit-button{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:1px solid var(--qe-color-border-subtle);border-radius:11px;background:var(--qe-color-surface);color:var(--qe-color-text-muted);font-size:21px;line-height:1;cursor:pointer}
+.student-profile-card__edit-button:hover:not(:disabled),.qe-account-identity-settings__edit-button:hover:not(:disabled){background:var(--qe-color-primary-container);border-color:var(--qe-color-focus);color:var(--qe-color-primary-text)}
+.student-profile-card__edit-button:focus-visible,.qe-account-identity-settings__edit-button:focus-visible{outline:3px solid color-mix(in srgb,var(--qe-color-focus) 30%,transparent);outline-offset:2px}
+.student-profile-card__edit-button:disabled,.qe-account-identity-settings__edit-button:disabled{opacity:.45;cursor:not-allowed}
+.student-profile-card__actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:18px}
+.student-profile-field input:disabled,.student-profile-field select:disabled,.student-profile-field textarea:disabled{background:var(--qe-color-disabled-background);color:var(--qe-color-disabled-text);border-color:var(--qe-color-border-subtle);cursor:not-allowed;opacity:1}
+.qe-account-identity-settings__form-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;grid-column:1/-1}
+.qe-account-identity-settings__form-heading h3{margin:0}
+.qe-account-identity-settings__form-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;grid-column:1/-1}
+.qe-account-identity-settings__verification>.qe-account-identity-settings__form-heading{margin-bottom:12px}
+.qe-account-identity-settings__form input:disabled,.qe-account-identity-settings__form select:disabled{background:var(--qe-color-disabled-background);color:var(--qe-color-disabled-text);border-color:var(--qe-color-border-subtle);cursor:not-allowed;opacity:1}
+@media(max-width:760px){
+ .qe-lesson-list-header{flex-direction:column!important;align-items:stretch!important}
+ .qe-lesson-list-header>.qe-course-page-actions{flex:1 1 auto;width:100%;justify-content:stretch}
+ .qe-lesson-list-header .qe-institution-course-subject-scope{width:100%}
+ .app-content .task-list>.task-card{flex-direction:column;align-items:stretch}
+ .app-content .task-list>.task-card>.button{width:100%}
+}
+@media(max-width:520px){
+ .qe-active-course-section .subject-track-main{grid-template-columns:36px minmax(0,1fr);align-items:start;gap:10px;padding:13px}
+ .qe-active-course-section .qe-active-course-badge{grid-column:2;justify-self:start}
+ .student-profile-card__topline{gap:8px}
+}

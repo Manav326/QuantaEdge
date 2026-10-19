@@ -3603,5 +3603,15 @@
   "web.workspace.parentFallbackName": "Parent account",
   "web.workspace.progressSavesAutomatically": "Progress अपने-आप save होती है",
   "web.workspace.safeLearningSpace": "सुरक्षित learning space",
-  "web.workspace.studentFallbackName": "Student"
+  "web.workspace.studentFallbackName": "Student",
+  "student.profile.edit": "Edit करें",
+  "student.profile.editPhoto": "Profile photo edit करें",
+  "student.profile.editAbout": "Personal details edit करें",
+  "student.profile.editLearning": "Learning details edit करें",
+  "student.profile.editEligibility": "Account eligibility edit करें",
+  "student.profile.editAccountDetails": "Profile details edit करें",
+  "student.profile.editUsername": "Username edit करें",
+  "student.profile.editPassword": "Password edit करें",
+  "student.profile.editVerification": "Sign-in methods edit करें",
+  "student.profile.verification": "Sign-in methods"
 }

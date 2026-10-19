@@ -285,3 +285,13 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - CI run #39262482841 passed all eight jobs on Web filter commit 13b55c7. This Android notification-icon and parent-history update is the next source revision and requires its own verification.
 - Structured lesson catalogue remains content-blocked, not publication-bypassed: data/structured-lessons currently contains only class-6/science; its production index records 39 drafted topics / 312 drafted questions, with zero reviewed, bilingual-approved or publishable topics. There is no Class 6 Maths structured-artifact directory nor Class 7/8 structured-artifact directory in this source tree. The catalogue endpoint intentionally returns only approved/published packaged artifacts, so it will keep returning [] until legitimate artifacts are reviewed, approved, published and packaged. Do not flip publication flags or expose draft answer keys to make it look populated.
 - Remaining external acceptance: repeat the two API requests in the user's local runtime after rebuilding/restarting the API; verify API /students/me?courseId=5 returns course metrics there. The CI regression proves the SQL path executes against the migrated test schema, but cannot substitute for checking the user's separate local container. Add/review and publish actual structured lessons before expecting them to appear. The desired replacement screen after practice completion is still unspecified in the original instruction, so the existing result behavior has not been replaced by a guess.
+
+
+## Student course wrapping and profile edit-mode update (2026-10-19)
+
+- Fixed whole-word wrapping in the dashboard's **Your course** card and All Courses card titles/metadata.
+- Structured Lessons and Practice list headers now stack title, description, institution/course/subject selectors, and actions at narrow widths.
+- Student Profile & Settings reads the course from the authenticated, institution-scoped enrolled-course hook. Legacy `class_code` and `board` no longer impersonate the canonical course.
+- Profile photo, personal details, learning details, eligibility actions, sign-in methods, profile identity, username, and password are locked by default. Each editable card has a separate pencil control; local save/cancel controls appear where applicable. Existing endpoints, validation and credential rules are retained.
+- New action labels are centralized in the Web and shared localization catalogues. Added UI helper copy remains under ten words.
+- **Validation status:** source assertions and translation JSON parsing passed before commit; CI must pass on this commit.

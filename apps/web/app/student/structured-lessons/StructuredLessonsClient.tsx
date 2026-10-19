@@ -68,7 +68,7 @@ export default function StructuredLessonsClient() {
     window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
   }
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><div>
+    <header className="content-heading qe-lesson-list-header"><div>
       <span className="eyebrow"><UiText message="legacy.web.bilingual.lesson.format.349a3c45" /></span>
       <h1><UiText message="web.navigation.student.structuredLessons" /></h1>
       <p><UiText message="legacy.web.explain.visuals.activities.and.one.que.c789dbec" /></p>
