@@ -249,7 +249,7 @@ class AdminContentControllerTest {
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
-        () -> controller.chapter(7L, "legacy-shared-token", null));
+        () -> controller.chapter(7L, 1L, "legacy-shared-token", null, TEST_TENANT));
 
     verify(authorization).requirePermission(null, "CONTENT_VIEW");
     verifyNoInteractions(jdbc);
@@ -262,7 +262,7 @@ class AdminContentControllerTest {
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
-        () -> controller.chapter(7L, "legacy-shared-token", student));
+        () -> controller.chapter(7L, 1L, null, student, TEST_TENANT));
 
     verify(authorization).requirePermission(student, "CONTENT_VIEW");
     verifyNoInteractions(jdbc);
