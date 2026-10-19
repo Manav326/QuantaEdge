@@ -246,9 +246,11 @@ export default function ParentChildrenPage(){
                   <div className="parent-course-option" key={course.id}>
                     <div><strong>{course.display_name}</strong><small>{course.public_id||course.code} · {course.curriculum_version}</small>
                       <small>{(course.subjects||[]).map((subject:any)=>subject.subject_name+' ('+Number(subject.lessons||0)+' lessons)').join(' · ')}</small></div>
-                    {course.is_enrolled||course.enrolled
+                    {course.is_enrolled||course.enrolled||course.paused
                       ? <span className="track-pill"><UiText message="legacy.web.assigned.f5b576f5" /></span>
-                      : <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<UiText message="legacy.web.assigning.f0834a8f" />:<UiText message="legacy.web.assign.course.c9842149" />}</button>}
+                      : course.free_offer
+                        ? <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<UiText message="legacy.web.assigning.f0834a8f" />:<UiText message="legacy.web.assign.course.c9842149" />}</button>
+                        : <Link href="/parent/courses" className="button button-light button-small">{locale==='english'?'Get course in Family Marketplace':'Family Marketplace से कोर्स लें'}</Link>}
                   </div>
                 ))}</div>}
             </div>
