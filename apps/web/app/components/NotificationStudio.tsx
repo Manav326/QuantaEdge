@@ -485,29 +485,29 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
                 <option value="COURSE">Course</option><option value="INSTITUTION">Institution</option><option value="USER">Individual user(s)</option>
               </>}
             </select></label>
-            {scope==='COURSE' ? <label>Assigned course<select value={courseId} onChange={event=>{setCourseId(event.target.value);setPreviewed(false);}}>
+            {scope==='COURSE' ? <label>Assigned course<select value={courseId} onChange={event=>{setCourseId(event.target.value);setPreviewed(false);setPreviewCount(null);}}>
               <option value="">Choose a course…</option>{courses.map(course=><option value={course.course_id} key={course.course_id}>{course.class_code ? `Class ${course.class_code} · ` : ''}${course.course_name} ({course.course_code})</option>)}
             </select></label> : null}
           </div>
           {scope==='HRMS_PLATFORM' ? <div className={styles.audienceBox}>
-            <label className={styles.check}><input type="checkbox" checked={allInstitutions} onChange={event=>{setAllInstitutions(event.target.checked);setPreviewed(false);}}/> All active institutions</label>
+            <label className={styles.check}><input type="checkbox" checked={allInstitutions} onChange={event=>{setAllInstitutions(event.target.checked);setPreviewed(false);setPreviewCount(null);}}/> All active institutions</label>
             {!allInstitutions ? <div className={styles.institutionPicker}>
               <strong>Select institutions</strong>
               <div className={styles.institutionList}>{institutions.map(item=><label key={item.id} className={styles.check}>
-                <input type="checkbox" checked={selectedInstitutionIds.includes(String(item.id))} onChange={event=>{setSelectedInstitutionIds(current=>event.target.checked?[...new Set([...current,String(item.id)])]:current.filter(id=>id!==String(item.id)));setPreviewed(false);}}/>
+                <input type="checkbox" checked={selectedInstitutionIds.includes(String(item.id))} onChange={event=>{setSelectedInstitutionIds(current=>event.target.checked?[...new Set([...current,String(item.id)])]:current.filter(id=>id!==String(item.id)));setPreviewed(false);setPreviewCount(null);}}/>
                 <span>{item.display_name} <small>{item.tenant_code ?? item.institution_code}</small></span>
               </label>)}</div>
               <p className={styles.helpText}>{selectedInstitutionIds.length} institutions selected.</p>
             </div> : <p className={styles.helpText}>The audience will be resolved across every currently active institution when sent.</p>}
           </div> : null}
           {scope==='USER' ? <div className={styles.audienceBox}>
-            <div className={styles.formGrid}><label>Recipient type<select value={directKind} onChange={event=>{setDirectKind(event.target.value);setRecipientOptions([]);}}>
+            <div className={styles.formGrid}><label>Recipient type<select value={directKind} onChange={event=>{setDirectKind(event.target.value);setRecipientOptions([]);setDirectRecipients([]);setPreviewed(false);setPreviewCount(null);}}>
               <option value="STUDENT">Student</option><option value="USER_ACCOUNT">Parent / guardian</option><option value="INSTITUTION_ADMIN">Institution admin</option>
             </select></label><label>Search recipients<input value={directQuery} onChange={event=>setDirectQuery(event.target.value)} placeholder="Name contains…"/></label></div>
             <button className={styles.ghostButton} type="button" onClick={()=>void searchRecipients()}>Search eligible recipients</button>
             <div className={styles.recipientResults}>{recipientOptions.map(item=>{
               const selected=directRecipients.some(row=>row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id);
-              return <label key={item.recipient_kind+':'+item.recipient_id} className={styles.recipient}><input type="checkbox" checked={selected} onChange={event=>setDirectRecipients(current=>event.target.checked?[...current,item]:current.filter(row=>!(row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id)))}/><span><strong>{item.recipient_name}</strong><small>{item.recipient_kind} · #{item.recipient_id}{item.class_code? ` · Class ${item.class_code}`:''}</small></span></label>;
+              return <label key={item.recipient_kind+':'+item.recipient_id} className={styles.recipient}><input type="checkbox" checked={selected} onChange={event=>{setDirectRecipients(current=>event.target.checked?[...current,item]:current.filter(row=>!(row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id)));setPreviewed(false);setPreviewCount(null);}}/><span><strong>{item.recipient_name}</strong><small>{item.recipient_kind} · #{item.recipient_id}{item.class_code? ` · Class ${item.class_code}`:''}</small></span></label>;
             })}</div>
             <p className={styles.helpText}>{directRecipients.length} direct recipients selected.</p>
           </div> : null}
@@ -516,9 +516,9 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             <div className={styles.checkList}>
               {[
                 ['STUDENT','Students'],['PARENT','Parents / guardians'],['INSTITUTION_ADMINS','Institution administrators']
-              ].map(([value,label])=><label key={value} className={styles.check}><input type="checkbox" checked={recipientTypes.includes(value)} onChange={event=>{setRecipientTypes(current=>event.target.checked?[...current,value]:current.filter(item=>item!==value));setPreviewed(false);}}/>{label}</label>)}
+              ].map(([value,label])=><label key={value} className={styles.check}><input type="checkbox" checked={recipientTypes.includes(value)} onChange={event=>{setRecipientTypes(current=>event.target.checked?[...current,value]:current.filter(item=>item!==value));setPreviewed(false);setPreviewCount(null);}}/>{label}</label>)}
             </div>
-            {scope==='COURSE' ? <label className={styles.check}><input type="checkbox" checked={includeParents} onChange={event=>{setIncludeParents(event.target.checked);setPreviewed(false);}}/> Also notify linked parents / guardians</label>:null}
+            {scope==='COURSE' ? <label className={styles.check}><input type="checkbox" checked={includeParents} onChange={event=>{setIncludeParents(event.target.checked);setPreviewed(false);setPreviewCount(null);}}/> Also notify linked parents / guardians</label>:null}
             {isPlatform ? <p className={styles.helpText}>The same user is delivered at most once per campaign across selected institutions. Only eligible memberships are resolved by the server.</p>:null}
           </div>:null}
         </div>
@@ -633,8 +633,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>04</span><div><h2>Preview, validate and send</h2><p>Delivery begins only after a successful server-side preview and confirmation.</p></div></div>
           <div className={styles.formGrid}>
-            <label>Schedule send (optional)<input type="datetime-local" value={scheduledAt} onChange={event=>{setScheduledAt(event.target.value);setPreviewed(false);}}/></label>
-            <label>Expiry (optional)<input type="datetime-local" value={expiresAt} onChange={event=>{setExpiresAt(event.target.value);setPreviewed(false);}}/></label>
+            <label>Schedule send (optional)<input type="datetime-local" value={scheduledAt} onChange={event=>{setScheduledAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
+            <label>Expiry (optional)<input type="datetime-local" value={expiresAt} onChange={event=>{setExpiresAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
           </div>
           {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} eligible recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>kind+': '+count).join(' · ')}</span></div>:null}
           <div className={styles.sendActions}>
