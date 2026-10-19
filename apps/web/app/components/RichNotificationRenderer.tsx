@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { apiFetch } from './apiClient';
 import styles from './RichNotificationRenderer.module.css';
@@ -73,7 +73,7 @@ function Destination({ target, label, surface }: { target: unknown; label: strin
     : <Link className={className} href={href}>{label}</Link>;
 }
 
-function renderBlock(block: Block, index: number, surface: Surface): React.ReactNode {
+function renderBlock(block: Block, index: number, surface: Surface): ReactNode {
   const type = String(block.type || '');
   const text = (key: string, fallback = '') => typeof block[key] === 'string' ? String(block[key]) : fallback;
   const assetId = block.assetId;
