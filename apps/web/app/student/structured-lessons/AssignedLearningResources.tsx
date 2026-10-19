@@ -93,7 +93,7 @@ export default function AssignedLearningResources({ artifactId, language, course
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('वीडियो प्रगति सुरक्षित नहीं हो सकी।', 'Video progress could not be saved.'));
     }
-  }, [hi]);
+  }, [hi, courseId]);
 
   function onTimeUpdate(item: AssignedResource, element: HTMLMediaElement) {
     const state = watch.current.get(item.resourceId) || { lastTime: 0, watchedSeconds: item.watchedSeconds || 0, lastSaved: 0 };
