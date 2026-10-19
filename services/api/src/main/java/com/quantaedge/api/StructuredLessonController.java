@@ -36,12 +36,11 @@ public class StructuredLessonController {
     this.mapper = mapper;
   }
 
-  /** Lists only published lessons that match the student's active class/subject enrollment. */
+  /** Lists only published structured lessons mapped to the learner's selected institution course and optional subject. */
   @GetMapping
   public List<Map<String, Object>> catalogue(
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) Integer classNumber,
       @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -52,20 +51,14 @@ public class StructuredLessonController {
     ensureStudentEnrolledCourse(context.studentId(),courseId,institutionId);
     String locale = normalizeLanguage(language);
     String requestedSubject = subjectCode == null ? "" : subjectCode.trim();
-    if (classNumber != null && classNumber < 1) {
-      throw new IllegalArgumentException("Class number must be positive.");
-    }
-    requireCourseId(courseId);
     List<Map<String, Object>> result = new ArrayList<>();
     for (StructuredLessonArtifactService.PublishedArtifact artifact : artifacts.listPublishedArtifacts()) {
       if (!requestedSubject.isBlank()
           && !requestedSubject.equalsIgnoreCase(artifacts.subjectCode(artifact))) continue;
-      if (classNumber != null && classNumber != artifacts.classNumber(artifact)) continue;
       if (!studentHasCourseTrackAccess(context.studentId(),courseId,artifact,institutionId)) continue;
       JsonNode source = artifact.source();
       Map<String, Object> item = new LinkedHashMap<>();
       item.put("artifactId", artifact.artifactId());
-      item.put("classNumber", artifacts.classNumber(artifact));
       item.put("subjectCode", artifacts.subjectCode(artifact));
       item.put("chapterNumber", source.path("chapter").path("chapter_number").asInt(0));
       item.put("chapterTitle", localizedText(source.path("chapter").path("title_by_locale"), locale));
