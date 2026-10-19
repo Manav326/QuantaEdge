@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 896,
+    "assets_selected": 898,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 893,
-    "assets_remaining": 1398,
-    "assets_completion_percent": 39.0,
+    "assets_analyzed": 895,
+    "assets_remaining": 1396,
+    "assets_completion_percent": 39.1,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 891,
+    "assets_skipped_from_checkpoint": 893,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:09:26Z"
+      "checkpointed_at": "2026-10-19T16:12:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:10:12Z"
+      "checkpointed_at": "2026-10-19T16:13:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:10:50Z"
+      "checkpointed_at": "2026-10-19T16:13:50Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28257,6 +28257,90 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T16:11:18Z"
+    },
+    {
+      "asset_id": "7900fbb4c538e3dab8077b6b",
+      "asset_sha256": "b5c4ca3621d886439966a5fa6275258dbef82472c15ed9c5cb6498bda4179ae6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 49,
+      "asset_path": "page-0049.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "395606d6db3655c289a42c04cf5947d7fcba63339bdf11d4cffb93bd53e13ef3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Health-related content discussing the importance of physical, mental, and social well-being, and how to maintain a healthy lifestyle.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.1 Health: Is It More Than Not Falling Sick?",
+          "What do the news clippings on the notice board tell you about people’s health in our country? Is being healthy just about not having diseases? Health also includes feeling good physically, staying positive, and having strong relationships. A healthy person takes care of their body, maintains a posit",
+          "Activity 3.1: Let us read",
+          "A Grade 8 student moved to a new school in another city. With no friends in his new environment and busy parents, he felt lonely. To cope, he spent more time on his phone and social media, but this made him feel worse. He stopped trying to make friends, had headaches, lost weight, and could not slee",
+          "Think and Reflect: What was the cause of the boy’s health problems? How did his habits and surroundings affect his well-being?",
+          "As per the World Health Organization (WHO), health is defined as a ‘state of complete physical, mental, and social well-being, and not merely the absence of disease’ (Fig. 3.1). A healthy person can generally perform various tasks more efficiently and cope well in different and difficult situations.",
+          "Our scientific heritage",
+          "Ayurveda teaches us that true health is a balance of body, mind, and surroundings.",
+          "Following dinacharya (daily routine) and ritucharya (seasonal routine) helps maintain this balance. Eating fresh, wholesome food suited to one’s prakriti (body constitution) is essential. Regular exercise, cleanliness, restful sleep, and a calm mind support overall well-being. This can also be achie",
+          "3.2 How Can We Stay Healthy?",
+          "For staying healthy we must eat nutritious food, maintain hygiene, stay in a clean place, exercise regularly, get proper"
+        ],
+        "concepts": [
+          "Health",
+          "Physical",
+          "Mental",
+          "Social",
+          "World Health Organization",
+          "Ayurveda",
+          "Dinacharya",
+          "Ritucharya",
+          "Prakriti",
+          "Yoga",
+          "Meditation",
+          "Nutritious food",
+          "Hygiene",
+          "Exercise",
+          "Clean place"
+        ],
+        "context_relation": "Health",
+        "limitations": [
+          "The content is based on a Grade 8 student's experience and does not represent the entire population's health issues.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:18:30Z"
+    },
+    {
+      "asset_id": "1863b14afabc572f69015164",
+      "asset_sha256": "485b4713adb07f507ba362a2fd28ea955edcf8226b9da9c70524f1536ce8c1cc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/485b4713adb07f507ba362a2fd28ea955edcf8226b9da9c70524f1536ce8c1cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person sitting in a meditative pose on a mat.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:20:01Z"
     }
   ]
 }
