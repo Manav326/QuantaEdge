@@ -74,7 +74,7 @@ export default function PracticeClient() {
     await selectCourse(value);
     const params = new URLSearchParams();
     params.set('courseId', value);
-    router.replace('/student/practice?' + params.toString());
+    window.history.replaceState(null, '', '/student/practice?' + params.toString());
     setSubjectCode('ALL');
   }
 
@@ -83,7 +83,7 @@ export default function PracticeClient() {
     const params = new URLSearchParams();
     if (courseId !== null) params.set('courseId', String(courseId));
     if (value !== 'ALL') params.set('subjectCode', value);
-    router.replace('/student/practice' + (params.size ? '?' + params.toString() : ''));
+    window.history.replaceState(null, '', '/student/practice' + (params.size ? '?' + params.toString() : ''));
   }
 
   const subjectName = (code: string) => {

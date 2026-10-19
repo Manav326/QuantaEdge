@@ -81,6 +81,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
@@ -213,6 +215,7 @@ private fun resourceDownloadUiState(work: androidx.work.WorkInfo, language: Stri
 @Composable
 fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
     val themeController = LocalQuantaEdgeThemeController.current
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
@@ -583,6 +586,22 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var error by remember { mutableStateOf("") }
     var errorStatusCode by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("") }
+
+    // API information is shown near the top and dismissed automatically after eight seconds.
+    LaunchedEffect(error) {
+        if (error.isNotBlank()) {
+            val shown = error
+            delay(8_000)
+            if (error == shown) { error = ""; errorStatusCode = 0 }
+        }
+    }
+    LaunchedEffect(status) {
+        if (status.isNotBlank()) {
+            val shown = status
+            delay(8_000)
+            if (status == shown) status = ""
+        }
+    }
     val answers = remember { mutableStateMapOf<String, String>() }
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
@@ -3401,6 +3420,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     } else studentGroupForRoute(route)
 
     fun selectPrimaryDestination(key: String) {
+        // Re-tapping the current landing destination must not reload its APIs.
+        val alreadyAtLanding = when (key) {
+            "today" -> route == AppRoute.STUDENT_HOME
+            "progress" -> route == AppRoute.PROGRESS
+            "family" -> parentRole && route == AppRoute.PARENT_HOME && parentSection == "family"
+            "children" -> parentRole && route == AppRoute.PARENT_HOME && parentSection == "children"
+            else -> false
+        }
+        if (alreadyAtLanding) return
         error = ""; status = ""
         when (key) {
             "family" -> { parentSection = "family"; route = AppRoute.PARENT_HOME }
@@ -3433,7 +3461,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
                     NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
-                        icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
+                        icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true,
+                        colors = androidx.compose.material3.NavigationRailItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary, selectedTextColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant, unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                        ))
                 }
             }
             Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
@@ -3701,6 +3734,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                     Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
                                 }
                             }
+                            TextButton(onClick = { clipboardManager.setText(AnnotatedString(localizedUiText(error))) }, enabled = !busy) {
+                                Text(if (language == "hi") "कॉपी" else "Copy")
+                            }
                             TextButton(onClick = { error = ""; errorStatusCode = 0 }, enabled = !busy) {
                                 Text(if (language == "hi") "बंद करें" else "Dismiss")
                             }
@@ -3709,11 +3745,21 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 }
             }
             if (status.isNotBlank()) {
-                Text(
-                    text = localizedUiText(status),
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
-                )
+                Surface(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+                    shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = localizedUiText(status), modifier = Modifier.weight(1f).padding(vertical = 6.dp),
+                            style = MaterialTheme.typography.bodyMedium)
+                        TextButton(onClick = { clipboardManager.setText(AnnotatedString(localizedUiText(status))) }, enabled = !busy) {
+                            Text(if (language == "hi") "कॉपी" else "Copy")
+                        }
+                        TextButton(onClick = { status = "" }, enabled = !busy) {
+                            Text(if (language == "hi") "बंद करें" else "Close")
+                        }
+                    }
+                }
             }
 
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
@@ -4386,7 +4432,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
                 navItems.forEach { item ->
                     NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
-                        icon = { Text(item.glyph) }, label = { Text(item.label) })
+                        icon = { Text(item.glyph) }, label = { Text(item.label) },
+                        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary, selectedTextColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant, unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                        ))
                 }
             }
         }

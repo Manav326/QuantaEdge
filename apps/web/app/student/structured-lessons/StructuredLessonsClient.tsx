@@ -57,7 +57,7 @@ export default function StructuredLessonsClient() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('courseId', value);
     params.delete('subjectCode');
-    router.replace('/student/structured-lessons?' + params.toString());
+    window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
     setSubjectCode('ALL');
   }
   function changeSubject(value: string) {
@@ -65,7 +65,7 @@ export default function StructuredLessonsClient() {
     const params = new URLSearchParams(searchParams.toString());
     if (courseId !== null) params.set('courseId', String(courseId));
     if (value === 'ALL') params.delete('subjectCode'); else params.set('subjectCode', value);
-    router.replace('/student/structured-lessons?' + params.toString());
+    window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
   }
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><div>

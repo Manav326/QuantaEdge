@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 export type EnrolledCourseSubject = {
@@ -33,9 +33,40 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [courseError, setCourseError] = useState('');
   const [activatingCourseId, setActivatingCourseId] = useState<number | null>(null);
+  const coursesRef = useRef<EnrolledCourse[]>([]);
+  const courseIdRef = useRef<number | null>(null);
+  // Reuse the current catalogue when the URL changes only to preserve course/subject selection.
+  coursesRef.current = courses;
+  courseIdRef.current = courseId;
 
   useEffect(() => {
     let active = true;
+    const cachedCourses = coursesRef.current;
+    if (cachedCourses.length > 0) {
+      setCourseError('');
+      const requested = Number(requestedCourseId || 0);
+      const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
+      const selected = requested > 0
+        ? cachedCourses.find(course => Number(course.id) === requested) || null
+        : cachedCourses.find(course => Number(course.id) === courseIdRef.current)
+          || cachedCourses.find(course => Number(course.id) === saved)
+          || cachedCourses.find(course => course.is_enrolled === true || course.enrolled === true)
+          || cachedCourses[0]
+          || null;
+      if (requested > 0 && !selected) {
+        setCourseId(null);
+        setCourseError('This course is not enrolled in your current institution account.');
+        setLoadingCourses(false);
+        return () => { active = false; };
+      }
+      const selectedId = selected ? Number(selected.id) : null;
+      setCourseId(selectedId);
+      if (selectedId !== null) {
+        try { window.localStorage.setItem('qe:student:activeCourseId', String(selectedId)); } catch {}
+      }
+      setLoadingCourses(false);
+      return () => { active = false; };
+    }
     setLoadingCourses(true);
     setCourseError('');
     fetch('/api/v1/students/me/programs', {

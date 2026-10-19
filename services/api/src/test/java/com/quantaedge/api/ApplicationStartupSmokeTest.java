@@ -388,6 +388,34 @@ class ApplicationStartupSmokeTest {
 
 
   @Test
+  @Transactional
+  void courseScopedStudentMetricsSqlExecutesAgainstMigratedTenantSchema() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+    Long courseId = jdbc.queryForObject("""
+      select id from curriculum_program where code='CLASS_6' and status='ACTIVE'
+        and curriculum_version='CURRENT' order by id limit 1
+      """, Long.class);
+    String classCode = jdbc.queryForObject("""
+      select c.code from curriculum_program p join curriculum_class c on c.id=p.class_id where p.id=?
+      """, String.class, courseId);
+    Long studentId = jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active)
+      values (gen_random_uuid(),'Course metrics regression probe',?,'BSEB','en','LOCAL_PREVIEW',true)
+      returning id
+      """, Long.class, classCode);
+    // Exercise the same selected-course aggregate path used by GET /api/v1/students/me?courseId=...
+    Map<String,Object> metrics = learningMetrics.statsFor(studentId, courseId, institutionId);
+    assertTrue(metrics.get("lessonStats") instanceof Map<?,?>);
+    assertTrue(metrics.get("questionStats") instanceof Map<?,?>);
+    assertTrue(metrics.get("curriculum") instanceof List<?>);
+    assertTrue(metrics.get("mastery") instanceof Map<?,?>);
+    assertTrue(metrics.get("assessmentStats") instanceof Map<?,?>);
+    assertTrue(metrics.get("sessionStats") instanceof Map<?,?>);
+  }
+
+  @Test
   void sharedStudentAndParentReportSessionAggregatesExecuteWithoutLearnerData() {
     // This is the shared query path used by both dashboards. It must execute even on an
     // empty student fixture so SQL syntax failures cannot be hidden by conditional test skips.

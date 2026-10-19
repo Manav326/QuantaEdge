@@ -8,6 +8,7 @@ import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
+import GlobalNotificationHost from './GlobalNotificationHost';
 import { AppearanceModeButton } from './ColorThemeProvider';
 import { useTenantBranding } from './TenantBrandingProvider';
 
@@ -238,7 +239,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             {visibleStudentNavGroups.map(group => group.href ? (
               <Link key={group.id} href={group.href} title={collapsed ? itemLabel(group) : undefined}
                 aria-current={routeActive(group.href) ? 'page' : undefined}
-                onClick={() => setMobileOpenGroup(null)}
+                onClick={event => { setMobileOpenGroup(null); if (routeActive(group.href)) event.preventDefault(); }}
                 className={routeActive(group.href) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}>
                 <span className="qe-workspace-icon" aria-hidden="true">{group.icon}</span>
                 <span className="qe-workspace-link-label">{itemLabel(group)}</span>
@@ -260,7 +261,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     {group.children.map(item => <Link key={item.href} href={item.href}
                       title={collapsed ? itemLabel(item) : undefined}
                       aria-current={routeActive(item.href) ? 'page' : undefined}
-                      onClick={() => setMobileOpenGroup(null)}
+                      onClick={event => { setMobileOpenGroup(null); if (routeActive(item.href)) event.preventDefault(); }}
                       className={routeActive(item.href) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}>
                       <span className="qe-workspace-link-label">{itemLabel(item)}</span>
                     </Link>)}
@@ -271,12 +272,11 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           </nav>
         ) : (
           <nav aria-label={t('web.navigation.parent.label')}>
-            {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
+            {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} onClick={event => { if (active(item)) event.preventDefault(); }} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
           </nav>
         )}
       </div>
       <div className="qe-workspace-sidebar-footer">
-        <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{t('web.workspace.safeLearningSpace')}</strong><small>{t(role === 'student' ? 'web.workspace.progressSavesAutomatically' : 'web.workspace.childReportsPrivate')}</small></div></div>
         <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={t('web.workspace.logout')}>
           <span aria-hidden="true">↗</span><span>{loggingOut ? t('web.workspace.loggingOut') : t('web.workspace.logout')}</span>
         </button>
@@ -292,6 +292,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             : <ParentAccountMenu displayName={profile?.display_name || t('web.workspace.parentFallbackName')} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
         </div>
       </header>
+      <GlobalNotificationHost />
       {role === 'student' && enrollmentIssue ? (
         <section className="qe-enrollment-issue" role="alert" aria-live="assertive">
           <div className="qe-enrollment-issue-copy">

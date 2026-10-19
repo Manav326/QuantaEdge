@@ -156,7 +156,7 @@ export default function TextbooksClient() {
     if (sameSlot) {
       const nextParams = new URLSearchParams(searchParams.toString());
       nextParams.set('documentId', String(sameSlot.document_id));
-      router.replace('/student/textbooks?' + nextParams.toString());
+      window.history.replaceState(null, '', '/student/textbooks?' + nextParams.toString());
       return;
     }
 
@@ -171,7 +171,7 @@ export default function TextbooksClient() {
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set('subjectCode', selected.subject_code);
     nextParams.delete('documentId');
-    router.replace('/student/textbooks?' + nextParams.toString());
+    window.history.replaceState(null, '', '/student/textbooks?' + nextParams.toString());
   }, [documentId, selected, loading, documentsLanguage, documents, requestedLanguage, locale, router, searchParams]);
 
   const pageCount = Number(selected?.page_count || 0);
@@ -364,7 +364,7 @@ export default function TextbooksClient() {
     if (value === 'ALL') params.delete('subjectCode');
     else params.set('subjectCode', value);
     const query = params.toString();
-    router.replace('/student/textbooks' + (query ? '?' + query : ''), { scroll: false });
+    window.history.replaceState(null, '', '/student/textbooks' + (query ? '?' + query : ''));
   }
 
   const progressPercent = pageCount ? Math.round((currentPage / pageCount) * 100) : 0;

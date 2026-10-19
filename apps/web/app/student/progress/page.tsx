@@ -100,7 +100,7 @@ export default function ProgressPage(){
 
   useEffect(()=>{
     if(courseId===null || searchParams.get('courseId')===String(courseId))return;
-    router.replace('/student/progress?courseId='+encodeURIComponent(String(courseId)));
+    window.history.replaceState(null, '', '/student/progress?courseId='+encodeURIComponent(String(courseId)));
   },[courseId,router,searchParams]);
 
   useEffect(()=>{
@@ -111,14 +111,14 @@ export default function ProgressPage(){
   async function changeCourse(value:string){
     await selectCourse(value);
     setSubjectCode('ALL');
-    router.replace('/student/progress?courseId='+encodeURIComponent(value));
+    window.history.replaceState(null, '', '/student/progress?courseId='+encodeURIComponent(value));
   }
   function changeSubject(value:string){
     setSubjectCode(value);
     const params=new URLSearchParams();
     if(courseId!==null)params.set('courseId',String(courseId));
     if(value!=='ALL')params.set('subjectCode',value);
-    router.replace('/student/progress'+(params.size?'?'+params.toString():''));
+    window.history.replaceState(null, '', '/student/progress'+(params.size?'?'+params.toString():''));
   }
   
   if(error)return <main className="app-shell"><section className="progress-page"><div className="auth-card">
