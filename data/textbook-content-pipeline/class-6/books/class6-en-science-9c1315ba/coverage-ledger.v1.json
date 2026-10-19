@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1091,
-    "successful_visual_analyses": 1077,
-    "missing_visual_analyses": 987,
+    "raw_analysis_result_rows": 1093,
+    "successful_visual_analyses": 1079,
+    "missing_visual_analyses": 985,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1001,
+    "unresolved_count": 999,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41829,9 +41829,36 @@
       "asset_path": "page-0089.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table showing materials placed between a magnet and a compass needle, and observations.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Observing the effect of magnet through\nnon-magnetic materials",
+          "S. no. Material placed\nbetween the magnet\nand the compass needle",
+          "1. Wood",
+          "2. Cardboard",
+          "3. Plastic",
+          "4. Glass",
+          "You would observe that there is no appreciable change in\nthe deflection of the needle when a sheet of any of the above\nmaterial is placed between the magnet and the compass\nneedle. Therefore, we can conclude that the magnetic effect\ncan act through non-magnetic materials.",
+          "4.5 Fun with Magnets",
+          "After learning about magnets, Reshma was excited and\ndecided to set up some fun activities using magnets at her\nschool fair. You may try making these yourself and may also\nthink of some more fun ideas.",
+          "Can we make a garland? (Fig. 4.11)",
+          "Fig. 4.11: Magnetic garland",
+          "Magnets can move\nsome objects without\ntouching them! Is\nthat not amazing?"
+        ],
+        "concepts": [
+          "Observing the effect of magnet through non-magnetic materials",
+          "Fun with Magnets",
+          "Magnetic garland"
+        ],
+        "context_relation": "The table and text describe an experiment to observe the effect of a magnet on non-magnetic materials, and a fun activity involving magnets.",
+        "limitations": [
+          "The table does not show the actual observations made in the experiment.",
+          "The text does not provide the results of the experiment or the fun activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41847,9 +41874,18 @@
       "asset_path": "assets/b9695ac75fd0e7aee966ed6fbcb498e19e6df9d496d04e4b3a0b708a9c061788.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A toy car made from cardboard, with a red roof and black wheels.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about magnetic properties and their applications.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the experiment being described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

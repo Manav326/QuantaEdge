@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1077,
+    "assets_selected": 1079,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1074,
-    "assets_remaining": 1004,
-    "assets_completion_percent": 51.7,
+    "assets_analyzed": 1076,
+    "assets_remaining": 1002,
+    "assets_completion_percent": 51.8,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1072,
+    "assets_skipped_from_checkpoint": 1074,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:18:00Z"
+      "checkpointed_at": "2026-10-19T17:21:04Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:18:40Z"
+      "checkpointed_at": "2026-10-19T17:21:45Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:19:35Z"
+      "checkpointed_at": "2026-10-19T17:22:38Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35069,6 +35069,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:20:17Z"
+    },
+    {
+      "asset_id": "5d554c8dd82e8521a5b44666",
+      "asset_sha256": "de2eeb5e4eb124348521bd35b5d83a8cd80d1be150638477dbed4b900f02f027",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 89,
+      "asset_path": "page-0089.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "29de3d8db0e0024241d05718e823ea0bff08b9c440c47f2b871fcaf72d70feeb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table showing materials placed between a magnet and a compass needle, and observations.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Observing the effect of magnet through\nnon-magnetic materials",
+          "S. no. Material placed\nbetween the magnet\nand the compass needle",
+          "1. Wood",
+          "2. Cardboard",
+          "3. Plastic",
+          "4. Glass",
+          "You would observe that there is no appreciable change in\nthe deflection of the needle when a sheet of any of the above\nmaterial is placed between the magnet and the compass\nneedle. Therefore, we can conclude that the magnetic effect\ncan act through non-magnetic materials.",
+          "4.5 Fun with Magnets",
+          "After learning about magnets, Reshma was excited and\ndecided to set up some fun activities using magnets at her\nschool fair. You may try making these yourself and may also\nthink of some more fun ideas.",
+          "Can we make a garland? (Fig. 4.11)",
+          "Fig. 4.11: Magnetic garland",
+          "Magnets can move\nsome objects without\ntouching them! Is\nthat not amazing?"
+        ],
+        "concepts": [
+          "Observing the effect of magnet through non-magnetic materials",
+          "Fun with Magnets",
+          "Magnetic garland"
+        ],
+        "context_relation": "The table and text describe an experiment to observe the effect of a magnet on non-magnetic materials, and a fun activity involving magnets.",
+        "limitations": [
+          "The table does not show the actual observations made in the experiment.",
+          "The text does not provide the results of the experiment or the fun activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:24:19Z"
+    },
+    {
+      "asset_id": "380817ede4d7b144a80735cb",
+      "asset_sha256": "b9695ac75fd0e7aee966ed6fbcb498e19e6df9d496d04e4b3a0b708a9c061788",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/b9695ac75fd0e7aee966ed6fbcb498e19e6df9d496d04e4b3a0b708a9c061788.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A toy car made from cardboard, with a red roof and black wheels.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about magnetic properties and their applications.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the experiment being described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:24:55Z"
     }
   ]
 }
