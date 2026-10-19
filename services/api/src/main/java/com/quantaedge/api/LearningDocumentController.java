@@ -408,13 +408,17 @@ public class LearningDocumentController {
       authorization.requirePermission(context, "CONTENT_EDIT");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id,d.scope,d.subject_id,d.chapter_id,d.book_part,d.language,d.status,d.source_title,d.source_url,d.edition,
-             d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id,a.review_status as asset_review_status,
+      select d.id,d.scope,d.subject_id,d.chapter_id,d.book_part,d.language,d.source_title,d.source_url,d.edition,
+             d.title,d.page_start,d.page_end,dca.status as status,
+             a.page_count,a.id as asset_id,a.review_status as asset_review_status,
              ch.active as chapter_active,ch.content_status as chapter_content_status
-      from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      from learning_document d
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=? and dca.subject_id=d.subject_id
+      join learning_pdf_asset a on a.id=d.pdf_asset_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=?
-      """, documentId);
+      """, institutionId,courseId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     Map<String, Object> current = rows.getFirst();
     if ("PUBLISHED".equals(nextStatus)) {
@@ -436,41 +440,50 @@ public class LearningDocumentController {
         throw badRequest("The assigned PDF page range is invalid.");
       }
       if (current.get("book_part") == null) {
-        // A whole-book or chapter replacement supersedes the full existing publication slot.
+        // Replace only this institution/course's publication slot. Do not archive
+        // another tenant's or another course's publication for a shared subject.
         jdbc.update("""
-          update learning_document set status='ARCHIVED',updated_at=now()
-          where scope=? and subject_id=? and language=?
-            and chapter_id is not distinct from ?
-            and status='PUBLISHED' and id<>?
-          """, current.get("scope"), current.get("subject_id"), current.get("language"),
-          current.get("chapter_id"), documentId);
+          update learning_document_course_assignment other_assignment
+          set status='ARCHIVED',updated_at=now()
+          from learning_document other_document
+          where other_document.id=other_assignment.learning_document_id
+            and other_assignment.institution_id=? and other_assignment.course_id=?
+            and other_document.scope=? and other_document.subject_id=? and other_document.language=?
+            and other_document.chapter_id is not distinct from ?
+            and other_assignment.status='PUBLISHED' and other_assignment.learning_document_id<>?
+          """, institutionId,courseId,current.get("scope"),current.get("subject_id"),current.get("language"),
+          current.get("chapter_id"),documentId);
       } else {
-        // Publishing Part I must preserve Part II, and vice versa; only archive the same part
-        // plus any legacy whole-book row that occupied the slot before the migration.
+        // Textbook parts have independent publication slots; preserve the opposite part.
         jdbc.update("""
-          update learning_document set status='ARCHIVED',updated_at=now()
-          where scope=? and subject_id=? and language=?
-            and chapter_id is not distinct from ?
-            and status='PUBLISHED' and id<>?
-            and (book_part is null or book_part=?)
-          """, current.get("scope"), current.get("subject_id"), current.get("language"),
-          current.get("chapter_id"), documentId, current.get("book_part"));
+          update learning_document_course_assignment other_assignment
+          set status='ARCHIVED',updated_at=now()
+          from learning_document other_document
+          where other_document.id=other_assignment.learning_document_id
+            and other_assignment.institution_id=? and other_assignment.course_id=?
+            and other_document.scope=? and other_document.subject_id=? and other_document.language=?
+            and other_document.chapter_id is not distinct from ?
+            and other_assignment.status='PUBLISHED' and other_assignment.learning_document_id<>?
+            and (other_document.book_part is null or other_document.book_part=?)
+          """, institutionId,courseId,current.get("scope"),current.get("subject_id"),current.get("language"),
+          current.get("chapter_id"),documentId,current.get("book_part"));
       }
       jdbc.update("""
-        update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
-        where id=?
-        """, context.staffId(), documentId);
+        update learning_document_course_assignment
+        set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
+        where institution_id=? and course_id=? and learning_document_id=?
+        """, context.staffId(),institutionId,courseId,documentId);
     } else {
       jdbc.update("""
-        update learning_document set status=?,updated_at=now(),
+        update learning_document_course_assignment set status=?,updated_at=now(),
           published_by_staff_id=case when ?='DRAFT' then null else published_by_staff_id end,
           published_at=case when ?='DRAFT' then null else published_at end
-        where id=?
-        """, nextStatus, nextStatus, nextStatus, documentId);
+        where institution_id=? and course_id=? and learning_document_id=?
+        """, nextStatus,nextStatus,nextStatus,institutionId,courseId,documentId);
     }
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/status",
-        "Changed learning document status to " + nextStatus + ".");
-    return assignmentById(documentId);
+        "Changed learning document status to " + nextStatus + " for course " + courseId + ".");
+    return assignmentById(documentId,institutionId,courseId);
   }
 
 
