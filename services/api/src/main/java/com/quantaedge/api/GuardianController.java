@@ -246,8 +246,23 @@ public class GuardianController {
   @Transactional
   public Map<String,Object> restoreChild(@PathVariable long studentId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
+    Boolean archivedInInstitution=jdbc.queryForObject("""
+      select exists(
+        select 1 from guardian_student gs
+        join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where gs.guardian_user_id=? and gs.student_id=?
+          and gs.active=false and gs.consent_status='REVOKED'
+      )
+      """,Boolean.class,institutionId,context.userId(),studentId);
+    if(!Boolean.TRUE.equals(archivedInInstitution))
+      throw new SecurityException("This archived child is not available to this parent in the selected institution.");
     if(!Boolean.TRUE.equals(body.get("consentAccepted")))
       throw new SecurityException("Fresh guardian consent is required to restore a child profile.");
     long guardianId=context.userId();
