@@ -82,6 +82,29 @@ function Destination({ target, label, surface, editMode = false }: { target: unk
     : <Link className={className} href={href}>{label}</Link>;
 }
 
+function blockPresentationStyle(block: Block): CSSProperties {
+  const color = (value: unknown): string | undefined =>
+    typeof value === 'string' && /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(value) ? value : undefined;
+  const style: CSSProperties = {};
+  const background = color(block.backgroundColor);
+  const foreground = color(block.textColor);
+  const accent = color(block.accentColor);
+  const alignment = String(block.alignment || '');
+  if (background) style.backgroundColor = background;
+  if (foreground) style.color = foreground;
+  if (['left','center','right','justify'].includes(alignment)) {
+    style.textAlign = alignment as CSSProperties['textAlign'];
+  }
+  const padding = Number(block.padding);
+  if (Number.isFinite(padding) && padding >= 0 && padding <= 48) style.padding = padding + 'px';
+  const radius = Number(block.borderRadius);
+  if (Number.isFinite(radius) && radius >= 0 && radius <= 40) style.borderRadius = radius + 'px';
+  const fontSize = Number(block.fontSize);
+  if (Number.isFinite(fontSize) && fontSize >= 10 && fontSize <= 32) style.fontSize = fontSize + 'px';
+  if (accent) Object.assign(style, {'--qe-color-accent': accent} as CSSProperties);
+  return style;
+}
+
 function renderBlock(block: Block, index: number, surface: Surface, editMode = false): ReactNode {
   const type = String(block.type || '');
   const text = (key: string, fallback = '') => typeof block[key] === 'string' ? String(block[key]) : fallback;
@@ -181,11 +204,13 @@ export default function RichNotificationRenderer({
   return <div className={styles.document + (editMode ? ' ' + styles.canvasDocument : '')}>
     {document.blocks.map((block, index) => {
       if (!block || typeof block !== 'object') return null;
-      if (!editMode) return <div key={index}>{renderBlock(block, index, surface, false)}</div>;
+      const presentationStyle = blockPresentationStyle(block);
+      if (!editMode) return <div key={index} style={presentationStyle}>{renderBlock(block, index, surface, false)}</div>;
       const selected = selectedBlockIndex === index;
       const over = dropIndex === index && dragIndex !== index;
       return <div key={index}
         className={styles.editorBlock + (selected ? ' ' + styles.selectedEditorBlock : '') + (over ? ' ' + styles.dropEditorBlock : '')}
+        style={presentationStyle}
         draggable
         tabIndex={0}
         role="group"
