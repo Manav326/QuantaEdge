@@ -128,10 +128,17 @@ fun StudentAllCoursesScreen(
                             }
                             LinearProgressIndicator(progress = { pct / 100f }, modifier = Modifier.fillMaxWidth())
                         }
-                        if (!active) {
-                            OutlinedButton(onClick = { onActivateCourse(id) }, enabled = !busy && id > 0L) {
-                                Text(if (hi) "इस course पर पढ़ें" else "Focus on this course")
-                            }
+                        Button(
+                            onClick = { onActivateCourse(id) },
+                            enabled = !busy && id > 0L,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(when {
+                                active && hi -> "Structured course खोलें"
+                                active -> "Open structured course"
+                                hi -> "Focus करके course खोलें"
+                                else -> "Focus and open course"
+                            })
                         }
                         if (subjects.isNotEmpty()) {
                             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
