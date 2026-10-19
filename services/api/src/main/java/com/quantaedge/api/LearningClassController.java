@@ -747,12 +747,15 @@ public class LearningClassController {
 
   @GetMapping("/admin/recorded-classes")
   public Map<String,Object> adminRecordedClasses(
-      @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
+      @RequestParam Long courseId,@RequestParam(required=false) String subjectCode,
       @RequestParam(required=false) String status,@RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireClassView(context);
-    String classFilter=safeText(classCode,30),subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    long institutionId=requireAdminAssignedCourse(courseId,tenant);
+    String subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(!subjectFilter.isEmpty()&&findActiveSubjectForCourse(courseId,subjectFilter,institutionId)==null)throw badRequest("Choose a subject mapped to the selected course.");
     if(statusFilter.isEmpty())statusFilter="ALL";
     if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid recording status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
@@ -764,14 +767,14 @@ public class LearningClassController {
       from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
       join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
-      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or rc.status=?)
+      where rc.institution_id=? and rc.course_id=? and (?='' or s.code=?) and (?='ALL' or rc.status=?)
       order by rc.created_at desc,rc.id desc limit ? offset ?
-      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
+      """,institutionId,courseId,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
       join curriculum_class c on c.id=s.class_id
-      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or rc.status=?)
-      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter);
+      where rc.institution_id=? and rc.course_id=? and (?='' or s.code=?) and (?='ALL' or rc.status=?)
+      """,Long.class,institutionId,courseId,subjectFilter,subjectFilter,statusFilter,statusFilter);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -780,31 +783,36 @@ public class LearningClassController {
   public Map<String, Object> uploadRecordedClass(
       @RequestPart("file") MultipartFile file,
       @RequestParam("title") String suppliedTitle,
-      @RequestParam("classCode") String classCode,
+      @RequestParam("courseId") Long courseId,
       @RequestParam("subjectCode") String subjectCode,
       @RequestParam(value = "description", required = false) String description,
       @RequestParam(value = "chapterId", required = false) Long requestedChapterId,
       @RequestParam(value = "classSessionId", required = false) Long classSessionId,
       @RequestParam(value = "durationSeconds", required = false) Integer durationSeconds,
       @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireClassManage(context);
+    long institutionId=requireAdminAssignedCourse(courseId,tenant);
     String title = requiredText(suppliedTitle, "Recording title", 240);
     String desc = safeText(description, 1600);
-    String normalizedClass = requiredText(classCode, "Class", 30);
     String normalizedSubject = requiredText(subjectCode, "Subject", 40);
-    Long subjectId = findActiveSubject(normalizedClass, normalizedSubject);
-    if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
+    Long subjectId = findActiveSubjectForCourse(courseId, normalizedSubject,institutionId);
+    if (subjectId == null) throw badRequest("Choose a subject mapped to the selected course.");
     if (requestedChapterId != null) validateChapter(requestedChapterId, subjectId, false);
     if (durationSeconds != null && (durationSeconds < 1 || durationSeconds > 86400)) {
       throw badRequest("Recording duration must be between 1 second and 24 hours.");
     }
     if (classSessionId != null) {
       List<Map<String, Object>> sessionRows = jdbc.queryForList("""
-        select subject_id,chapter_id,status from learning_class_session where id=?
+        select subject_id,chapter_id,status,institution_id,course_id from learning_class_session where id=?
         """, classSessionId);
       if (sessionRows.isEmpty()) throw badRequest("The linked live class does not exist.");
       Map<String, Object> session = sessionRows.getFirst();
+      if (((Number) session.get("institution_id")).longValue()!=institutionId
+          || session.get("course_id")==null || ((Number) session.get("course_id")).longValue()!=courseId) {
+        throw badRequest("The linked live class must belong to this institution and selected course.");
+      }
       if (((Number) session.get("subject_id")).longValue() != subjectId) {
         throw badRequest("The live class and recording must belong to the same subject.");
       }
@@ -823,8 +831,8 @@ public class LearningClassController {
       if (requestKey != null) {
         List<Map<String, Object>> previous = jdbc.queryForList("""
           select id,request_fingerprint from recorded_class
-          where created_by_staff_id=? and idempotency_key=?
-          """, context.staffId(), requestKey);
+          where created_by_staff_id=? and idempotency_key=? and institution_id=? and course_id=?
+          """, context.staffId(), requestKey,institutionId,courseId);
         if (!previous.isEmpty()) {
           long existingId = ((Number) previous.getFirst().get("id")).longValue();
           String existingFingerprint = String.valueOf(previous.getFirst().get("request_fingerprint"));
@@ -839,20 +847,20 @@ public class LearningClassController {
       List<Long> inserted = requestKey == null
           ? jdbc.query("""
               insert into recorded_class(
-                title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
+                institution_id,course_id,title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
                 media_type,file_size_bytes,sha256,duration_seconds,status,created_by_staff_id
-              ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?) returning id
-              """, (rs, rowNum) -> rs.getLong(1), title, nullable(desc), subjectId,
+              ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?) returning id
+              """, (rs, rowNum) -> rs.getLong(1), institutionId,courseId,title, nullable(desc), subjectId,
               requestedChapterId, classSessionId, stored.storageKey(), stored.originalFilename(),
               stored.mediaType(), stored.sizeBytes(), stored.sha256(), durationSeconds, context.staffId())
           : jdbc.query("""
               insert into recorded_class(
-                title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
+                institution_id,course_id,title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
                 media_type,file_size_bytes,sha256,duration_seconds,status,created_by_staff_id,
                 idempotency_key,request_fingerprint
-              ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?,?,?)
+              ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?,?,?)
               on conflict do nothing returning id
-              """, (rs, rowNum) -> rs.getLong(1), title, nullable(desc), subjectId,
+              """, (rs, rowNum) -> rs.getLong(1), institutionId,courseId,title, nullable(desc), subjectId,
               requestedChapterId, classSessionId, stored.storageKey(), stored.originalFilename(),
               stored.mediaType(), stored.sizeBytes(), stored.sha256(), durationSeconds, context.staffId(),
               requestKey, fingerprint);
@@ -861,8 +869,8 @@ public class LearningClassController {
         // A concurrent request may have won the same idempotency key after the preflight lookup.
         List<Map<String, Object>> previous = jdbc.queryForList("""
           select id,request_fingerprint from recorded_class
-          where created_by_staff_id=? and idempotency_key=?
-          """, context.staffId(), requestKey);
+          where created_by_staff_id=? and idempotency_key=? and institution_id=? and course_id=?
+          """, context.staffId(), requestKey,institutionId,courseId);
         mediaStorage.deleteQuietly(mediaStorage.resolve(stored.storageKey()));
         if (!previous.isEmpty()
             && fingerprint.equals(String.valueOf(previous.getFirst().get("request_fingerprint")))) {
@@ -912,8 +920,10 @@ public class LearningClassController {
   public Map<String, Object> setRecordedClassStatus(
       @PathVariable long recordingId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireClassManage(context);
+    requireAdminRecordingScope(recordingId,tenant);
     String status = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!RECORDING_STATUSES.contains(status)) throw badRequest("Choose DRAFT, PUBLISHED, or ARCHIVED.");
     List<Map<String, Object>> rows = jdbc.queryForList("""
@@ -973,7 +983,7 @@ public class LearningClassController {
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
-      where cs.institution_id=m.institution_id and cs.status<>'CANCELLED'
+      where cs.institution_id=m.institution_id and cs.course_id=? and cs.status<>'CANCELLED'
         and cs.ends_at>now()-interval '60 days'
         and exists(
           select 1
@@ -1009,7 +1019,7 @@ public class LearningClassController {
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
-      """,context.studentId(),institutionId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
+      """,context.studentId(),institutionId,courseId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -1019,7 +1029,7 @@ public class LearningClassController {
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.institution_id=m.institution_id and cs.status<>'CANCELLED'
+      where cs.institution_id=m.institution_id and cs.course_id=? and cs.status<>'CANCELLED'
         and cs.ends_at>now()-interval '60 days'
         and exists(
           select 1
@@ -1054,7 +1064,7 @@ public class LearningClassController {
                 and course_filter.class_id=s.class_id))
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),institutionId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
+      """,Long.class,context.studentId(),institutionId,courseId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -1080,7 +1090,7 @@ public class LearningClassController {
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.id=? and cs.institution_id=m.institution_id and cs.status in ('SCHEDULED','LIVE')
+      where cs.id=? and cs.institution_id=m.institution_id and cs.course_id=? and cs.status in ('SCHEDULED','LIVE')
         and exists(
           select 1
           from curriculum_program scope_course
@@ -1103,7 +1113,7 @@ public class LearningClassController {
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,context.studentId(),institutionId,sessionId,courseId);
+      """,context.studentId(),institutionId,sessionId,courseId,courseId);
     if (rows.isEmpty()) throw notFound("Live class in the selected course", sessionId);
     Map<String, Object> session = rows.getFirst();
     OffsetDateTime now = OffsetDateTime.now();
@@ -1213,7 +1223,7 @@ public class LearningClassController {
           a.sort_order,a.id
         limit 1
       ) download on true
-      where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
+      where rc.institution_id=m.institution_id and rc.course_id=? and rc.status='PUBLISHED' and (?='' or s.code=?)
         and exists(
           select 1
           from curriculum_program scope_course
@@ -1241,7 +1251,7 @@ public class LearningClassController {
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc limit ? offset ?
-      """,context.studentId(),institutionId,subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
+      """,context.studentId(),institutionId,courseId,subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -1249,7 +1259,7 @@ public class LearningClassController {
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
-      where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
+      where rc.institution_id=m.institution_id and rc.course_id=? and rc.status='PUBLISHED' and (?='' or s.code=?)
         and exists(
           select 1
           from curriculum_program scope_course
@@ -1276,7 +1286,7 @@ public class LearningClassController {
                 and course_filter.class_id=s.class_id))
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),institutionId,subjectFilter,subjectFilter,courseScopeId,courseScopeId);
+      """,Long.class,context.studentId(),institutionId,courseId,subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -1412,7 +1422,7 @@ public class LearningClassController {
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=selected_course.id
         join curriculum_program_subject cps on cps.program_id=selected_course.id and cps.subject_id=s.id and cps.class_id=c.id
-        where cs.id=? and cs.institution_id=m.institution_id
+        where cs.id=? and cs.institution_id=m.institution_id and cs.course_id=selected_course.id
           and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
       )
       """,Boolean.class,studentId,institutionId,courseId,sessionId);
@@ -1438,7 +1448,7 @@ public class LearningClassController {
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress
         on progress.recorded_class_id=rc.id and progress.student_id=st.id
-      where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'
+      where rc.id=? and rc.institution_id=m.institution_id and rc.course_id=? and rc.status='PUBLISHED'
         and exists(
           select 1
           from curriculum_program scope_course
@@ -1455,7 +1465,7 @@ public class LearningClassController {
             and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,studentId,institutionId,recordingId);
+      """,studentId,institutionId,recordingId,courseId);
     if (rows.isEmpty()) throw notFound("Recorded class", recordingId);
     return new LinkedHashMap<>(rows.getFirst());
   }
