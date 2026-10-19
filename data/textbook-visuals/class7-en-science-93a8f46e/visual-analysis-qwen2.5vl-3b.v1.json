@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1347,
+    "assets_selected": 1350,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1345,
-    "assets_remaining": 6143,
+    "assets_analyzed": 1348,
+    "assets_remaining": 6140,
     "assets_completion_percent": 18.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1342,
+    "assets_skipped_from_checkpoint": 1345,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:29:16Z"
+      "checkpointed_at": "2026-10-19T04:34:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:29:44Z"
+      "checkpointed_at": "2026-10-19T04:34:35Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50999,6 +50999,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T04:33:12Z"
+    },
+    {
+      "asset_id": "34d42f9281d20d0cf70d24c5",
+      "asset_sha256": "85b57adda198b993d4e6dd583264db837cb59f62b8214f3bdc853df32ba9a709",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/85b57adda198b993d4e6dd583264db837cb59f62b8214f3bdc853df32ba9a709.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partially visible diagram or illustration of a circuit with a lamp and a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "battery"
+        ],
+        "context_relation": "The image is related to the educational content of making a lamp glow in a circuit.",
+        "limitations": [
+          "The image is partially visible and may not show all details of the circuit. The prediction and observation columns are incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:35:45Z"
+    },
+    {
+      "asset_id": "de46352ff1ac6e7fe4373d83",
+      "asset_sha256": "6d5b218ac6c396dad2e7772ce51916dc0fc429c22c28288ed212c060bc879b77",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/6d5b218ac6c396dad2e7772ce51916dc0fc429c22c28288ed212c060bc879b77.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partially visible diagram of a circuit with a lamp and a cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "cell"
+        ],
+        "context_relation": "The image is related to an educational content about making a lamp glow in a circuit.",
+        "limitations": [
+          "The image is incomplete and only partially visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:36:55Z"
+    },
+    {
+      "asset_id": "4ebff9cba6290da34172d05a",
+      "asset_sha256": "25084950e6409c83f0c6e975ec0bf47cc2ec305d073e5e86b7d0b11e1118c075",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/25084950e6409c83f0c6e975ec0bf47cc2ec305d073e5e86b7d0b11e1118c075.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green background with a curved green line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No. Arrangement of Cell and Lamp Prediction Observation",
+          "1."
+        ],
+        "concepts": [
+          "Table",
+          "Experiment",
+          "Circuit",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a part of an educational content related to an experiment involving lamps and cells.",
+        "limitations": [
+          "The image does not show the actual setup or results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:38:07Z"
     }
   ]
 }
