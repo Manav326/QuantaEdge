@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f1d370fb140d766e064bb9434d4ded256718ff89a550bccbf0444171982e3846",
+  "raw_analysis_sha256": "f59bb98326f9b0e703bb7682616a046d7ada75a674399440d028aa631a8511b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:31:08Z",
+      "checkpointed_at": "2026-10-19T05:34:46Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:31:49Z",
+      "checkpointed_at": "2026-10-19T05:35:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:32:43Z",
+      "checkpointed_at": "2026-10-19T05:36:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:33:23Z",
+      "checkpointed_at": "2026-10-19T05:37:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -42471,6 +42471,46 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b166e1770a548601a774c9cf",
+      "asset_sha256": "0a96c5f8711fd95067f118fc9b31c516cfa3cb793cb71a8c6399cde9cc0d4fba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/0a96c5f8711fd95067f118fc9b31c516cfa3cb793cb71a8c6399cde9cc0d4fba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "03f400d89d89592a4468f46a9846ab19d9f6880c015e4c333c4a8b36b43a028b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rectangular, textured yellow background with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for text.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the content of the textbook page. It is a simple, abstract illustration used as a visual separator or background for the text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:37:39Z",
+      "effective_analysis": {
+        "visual_summary": "A rectangular, textured yellow background with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for text.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the content of the textbook page. It is a simple, abstract illustration used as a visual separator or background for the text on the page."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

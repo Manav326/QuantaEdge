@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 900,
+    "assets_selected": 901,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 896,
-    "assets_remaining": 1182,
-    "assets_completion_percent": 43.1,
+    "assets_analyzed": 897,
+    "assets_remaining": 1181,
+    "assets_completion_percent": 43.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 895,
+    "assets_skipped_from_checkpoint": 896,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:31:08Z"
+      "checkpointed_at": "2026-10-19T05:34:46Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:31:49Z"
+      "checkpointed_at": "2026-10-19T05:35:26Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:32:43Z"
+      "checkpointed_at": "2026-10-19T05:36:21Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:33:23Z"
+      "checkpointed_at": "2026-10-19T05:37:01Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28543,6 +28543,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:33:57Z"
+    },
+    {
+      "asset_id": "b166e1770a548601a774c9cf",
+      "asset_sha256": "0a96c5f8711fd95067f118fc9b31c516cfa3cb793cb71a8c6399cde9cc0d4fba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/0a96c5f8711fd95067f118fc9b31c516cfa3cb793cb71a8c6399cde9cc0d4fba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "03f400d89d89592a4468f46a9846ab19d9f6880c015e4c333c4a8b36b43a028b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rectangular, textured yellow background with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for text.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the content of the textbook page. It is a simple, abstract illustration used as a visual separator or background for the text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:37:39Z"
     }
   ]
 }
