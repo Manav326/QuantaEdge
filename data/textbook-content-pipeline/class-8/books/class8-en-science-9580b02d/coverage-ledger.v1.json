@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 793,
-    "successful_visual_analyses": 780,
-    "missing_visual_analyses": 1498,
+    "raw_analysis_result_rows": 795,
+    "successful_visual_analyses": 782,
+    "missing_visual_analyses": 1496,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1511,
+    "unresolved_count": 1509,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30719,9 +30719,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the size of an ostrich egg's yolk.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "15",
+          "Ever heard of...",
+          "The yolk (the yellow part of an egg) of an ostrich egg is a single cell—the largest known cell in the living world—measuring about 130 mm to 170 mm in diameter. The egg contains extra non-cellular material: a shell for protection and a white liquid that nourishes the cell during its continued develo",
+          "2.3 What Are Microorganisms?"
+        ],
+        "concepts": [
+          "ostrich egg",
+          "yolk",
+          "cell",
+          "living world",
+          "microorganisms"
+        ],
+        "context_relation": "The page discusses the size of an ostrich egg's yolk, which is a significant concept in the context of the chapter on the invisible living world.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30737,9 +30758,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c19a28d6a866a7c157cc63d940a5eb40ff71938c74d12712a3a4af30a88a96c5",
+  "raw_analysis_sha256": "b05523fab2a7343a67faf6d74a8c8d8dda67202dbf4d2f4694fdc7919b2a233f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:03:21Z",
+      "checkpointed_at": "2026-10-19T04:09:27Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:04:10Z",
+      "checkpointed_at": "2026-10-19T04:10:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:04:49Z",
+      "checkpointed_at": "2026-10-19T04:10:56Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -35212,6 +35212,110 @@
         "context_relation": "The image is related to the text discussing the size of an ostrich egg's yolk and its components.",
         "limitations": [
           "The image does not provide specific measurements or details about the egg's components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e0afb5d78678573f5efbe6c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0dbf5516b11b557350908814812e56dffe672b7bf2a86274ad40b97dc632b713",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the size of an ostrich egg's yolk.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "15",
+          "Ever heard of...",
+          "The yolk (the yellow part of an egg) of an ostrich egg is a single cell—the largest known cell in the living world—measuring about 130 mm to 170 mm in diameter. The egg contains extra non-cellular material: a shell for protection and a white liquid that nourishes the cell during its continued develo",
+          "2.3 What Are Microorganisms?"
+        ],
+        "concepts": [
+          "ostrich egg",
+          "yolk",
+          "cell",
+          "living world",
+          "microorganisms"
+        ],
+        "context_relation": "The page discusses the size of an ostrich egg's yolk, which is a significant concept in the context of the chapter on the invisible living world.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:11:34Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the size of an ostrich egg's yolk.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "15",
+          "Ever heard of...",
+          "The yolk (the yellow part of an egg) of an ostrich egg is a single cell—the largest known cell in the living world—measuring about 130 mm to 170 mm in diameter. The egg contains extra non-cellular material: a shell for protection and a white liquid that nourishes the cell during its continued develo",
+          "2.3 What Are Microorganisms?"
+        ],
+        "concepts": [
+          "ostrich egg",
+          "yolk",
+          "cell",
+          "living world",
+          "microorganisms"
+        ],
+        "context_relation": "The page discusses the size of an ostrich egg's yolk, which is a significant concept in the context of the chapter on the invisible living world.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a476eb973c4b538f1d0540e2",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0dbf5516b11b557350908814812e56dffe672b7bf2a86274ad40b97dc632b713",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:11:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any visible content or text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
