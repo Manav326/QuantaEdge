@@ -94,8 +94,12 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
   for (const role of roles) root.style.setProperty(cssToken(role), palette[role]);
 
   // These aliases keep existing components themed while they are migrated to semantic tokens.
+  root.style.setProperty('--ink', palette.text);
   root.style.setProperty('--muted', palette.textMuted);
   root.style.setProperty('--paper', palette.background);
+  root.style.setProperty('--brand-primary', palette.primary);
+  root.style.setProperty('--brand-accent', palette.accent);
+  root.style.setProperty('--brand-soft', palette.primaryContainer);
   root.style.setProperty('--card', palette.surface);
   root.style.setProperty('--line', palette.borderSubtle);
   root.style.setProperty('--purple', palette.primaryText);
