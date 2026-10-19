@@ -32,11 +32,11 @@ export default function ProgressPage(){
 
   const refreshCertificateRecords=useCallback(async(source:any)=>{
     try{
-      const certPromise=fetch('/api/v1/students/me/certificates',{cache:'no-store',credentials:'same-origin'});
+      const certPromise=fetch('/api/v1/students/me/certificates?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
       const recent=Array.isArray(source?.recentAssessments)?source.recentAssessments:[];
       const ids=[...new Set(recent.map((item:any)=>Number(item.attempt_id)).filter((id:number)=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
       const eligibilityPromise=ids.length
-        ?fetch('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
+        ?fetch('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
         :Promise.resolve(null);
       const [certResponse,eligibilityResponse]=await Promise.all([certPromise,eligibilityPromise]);
       const certBody=await certResponse.json().catch(()=>({}));
@@ -53,7 +53,7 @@ export default function ProgressPage(){
       setCertificates([]);
       setCertificateEligibility({});
     }
-  },[]);
+  },[courseId]);
 
   async function issueResultCertificate(attemptId:number){
     setIssuingAttemptId(attemptId);setCertificateError('');setCertificateNotice('');
