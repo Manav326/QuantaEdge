@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 import styles from './courses.module.css';
 
 type Subject = {
@@ -34,6 +35,7 @@ async function responseJson(response: Response): Promise<any> {
 
 export default function StudentCoursesPage() {
   const router = useRouter();
+  const { brand } = useTenantBranding();
   const [courses, setCourses] = useState<Course[]>([]);
   const [progress, setProgress] = useState<Record<number, Metric>>({});
   const [activeCourseId, setActiveCourseId] = useState<number | null>(null);
@@ -125,7 +127,7 @@ export default function StudentCoursesPage() {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
-        <div className={styles.eyebrow}>YOUR LEARNING SPACE</div>
+        <div className={styles.eyebrow}>{brand?.displayName || "YOUR INSTITUTION"} · YOUR COURSES</div>
         <h1>All Courses</h1>
         <p>Your courses in one place. Select a course to focus your subjects, lessons and progress on that learning path.</p>
         <div className={styles.actions}>
@@ -172,7 +174,7 @@ export default function StudentCoursesPage() {
                   <div className={styles.subjectHeading}>Subjects</div>
                   {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
                     (course.subjects || []).map(subject => (
-                      <Link key={subject.subject_code} href={'/student/learn?courseId=' + encodeURIComponent(String(id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
+                      <Link key={subject.subject_code} href={'/student/structured-lessons?courseId=' + encodeURIComponent(String(id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
                         <span><strong>{subject.subject_name || subject.subject_code}</strong><small>{Number(subject.chapters || 0)} chapters · {Number(subject.lessons || 0)} lessons</small></span>
                         <span aria-hidden="true">→</span>
                       </Link>
