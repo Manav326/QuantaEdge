@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1352,
-    "successful_visual_analyses": 1329,
-    "missing_visual_analyses": 6136,
+    "raw_analysis_result_rows": 1355,
+    "successful_visual_analyses": 1332,
+    "missing_visual_analyses": 6133,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6159,
+    "unresolved_count": 6156,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60943,9 +60943,31 @@
       "asset_path": "assets/07122afb0bab6fb65edf22c35ffca2143009bfc6f12b965ea75e6c0fa264f510.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a blue object with a blurred background, unrelated to the text about making a lamp glow in a circuit.",
+        "limitations": [
+          "The image is not related to the text about making a lamp glow in a circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60961,9 +60983,28 @@
       "asset_path": "assets/84448e524f6532bde00315443dc213859d7045dfa63207fc0450d0122f83e927.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a circuit with a lamp and a battery, with a yellow arrow indicating the direction of current flow.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No.",
+          "Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "current flow",
+          "lamp"
+        ],
+        "context_relation": "The diagram is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit, as indicated in the note."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60979,9 +61020,23 @@
       "asset_path": "assets/464387cfa6eabe4ad4855b9131b32316577776a8be51c92f9d69a74d307e67bf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red line with a small dot at the end, possibly representing a circuit or a path.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "path"
+        ],
+        "context_relation": "The image is related to the context of a circuit diagram, specifically Table 3.1 from the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or the lamp's behavior."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

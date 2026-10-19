@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1329,
+    "assets_selected": 1332,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1327,
-    "assets_remaining": 6161,
-    "assets_completion_percent": 17.7,
+    "assets_analyzed": 1330,
+    "assets_remaining": 6158,
+    "assets_completion_percent": 17.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1324,
+    "assets_skipped_from_checkpoint": 1327,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:00:19Z"
+      "checkpointed_at": "2026-10-19T04:05:16Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:00:48Z"
+      "checkpointed_at": "2026-10-19T04:05:45Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50360,6 +50360,118 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T04:04:22Z"
+    },
+    {
+      "asset_id": "594e424425a30cf267d9ec52",
+      "asset_sha256": "07122afb0bab6fb65edf22c35ffca2143009bfc6f12b965ea75e6c0fa264f510",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/07122afb0bab6fb65edf22c35ffca2143009bfc6f12b965ea75e6c0fa264f510.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The image is a close-up of a blue object with a blurred background, unrelated to the text about making a lamp glow in a circuit.",
+        "limitations": [
+          "The image is not related to the text about making a lamp glow in a circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:06:56Z"
+    },
+    {
+      "asset_id": "5bcaa5925b7bad09c8ffc243",
+      "asset_sha256": "84448e524f6532bde00315443dc213859d7045dfa63207fc0450d0122f83e927",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/84448e524f6532bde00315443dc213859d7045dfa63207fc0450d0122f83e927.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a circuit with a lamp and a battery, with a yellow arrow indicating the direction of current flow.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No.",
+          "Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "current flow",
+          "lamp"
+        ],
+        "context_relation": "The diagram is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit, as indicated in the note."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:08:06Z"
+    },
+    {
+      "asset_id": "e0238e4b2a4e098434293a79",
+      "asset_sha256": "464387cfa6eabe4ad4855b9131b32316577776a8be51c92f9d69a74d307e67bf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/464387cfa6eabe4ad4855b9131b32316577776a8be51c92f9d69a74d307e67bf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red line with a small dot at the end, possibly representing a circuit or a path.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "path"
+        ],
+        "context_relation": "The image is related to the context of a circuit diagram, specifically Table 3.1 from the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or the lamp's behavior."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:09:13Z"
     }
   ]
 }
