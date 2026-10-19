@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 955,
-    "successful_visual_analyses": 943,
-    "missing_visual_analyses": 1123,
+    "raw_analysis_result_rows": 958,
+    "successful_visual_analyses": 946,
+    "missing_visual_analyses": 1120,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1135,
+    "unresolved_count": 1132,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36941,9 +36941,55 @@
       "asset_path": "page-0067.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for testing fats in food items using paper and starch.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3.3.2 Test for fats",
+          "Activity 3.6: Let us investigate",
+          "   Take a small part of the food items that you tested for",
+          "the presence of starch in Activity 3.5.",
+          "   Place each food item on a separate piece of paper.",
+          "  Wrap the paper around the food and press it. Be careful",
+          "not to tear the paper.",
+          "    If a food item contains a little water, allow the paper",
+          "to dry.",
+          "Does the paper develop an oily patch? What do you think",
+          "is the reason for this patch? If oil or butter is present in the",
+          "food item, it leaves an oily patch on the paper. Now, hold",
+          "the paper against light. Can you see the light faintly shining",
+          "through this patch? An oily patch on the paper shows that",
+          "the food item contains fat. Which of these items contain fats?",
+          "Record your observations in Table 3.3.",
+          "3.3.3 Test for proteins",
+          "Activity 3.7: Let us investigate",
+          "This activity may be demonstrated by the teacher.",
+          "   Take the food items tested in previous activities.",
+          "   Make a paste or powder of the food item using pestle",
+          "and mortar (Fig. 3.8).",
+          "   Put about half teaspoon of each food item in a separate",
+          "clean test tube.",
+          "Precautions",
+          "   These chemicals are harmful and need to be handled with",
+          "care. Do not touch any of these chemicals unless asked",
+          "to do so.",
+          "   If any chemical gets spilled on your body, immediately wash",
+          "the affected area with water."
+        ],
+        "concepts": [
+          "testing fats in food items",
+          "paper and starch",
+          "oil or butter",
+          "precautions for handling chemicals"
+        ],
+        "context_relation": "instructional",
+        "limitations": [
+          "no specific limitations provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36959,9 +37005,29 @@
       "asset_path": "assets/99e5d0a782beb38f06fb9bc0ca278412cb5987ff3275da3143425d7f981ec8b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A teacher and two students in a laboratory setting, conducting an experiment involving test tubes and chemicals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Copper Sulfate",
+          "Caustic Soda",
+          "Soya bean",
+          "Fig. 3.8"
+        ],
+        "concepts": [
+          "Laboratory experiment",
+          "Chemical reactions",
+          "Experimentation",
+          "Chemical solutions",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the educational content of conducting a chemical experiment in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the experiment's outcome or results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36977,9 +37043,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a chemical experiment involving adding water, copper sulfate, and caustic soda to test tubes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Add 2–3 teaspoons of water to each test tube and shake them well.",
+          "Add two drops of copper sulfate solution to each test tube using a dropper.",
+          "Now, take another dropper and add 10 drops of caustic soda solution to each tube (Fig. 3.8).",
+          "Shake well and leave the test tubes undisturbed for a few minutes."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Test tubes",
+          "Copper sulfate",
+          "Caustic soda",
+          "Shaking",
+          "Leaving undisturbed"
+        ],
+        "context_relation": "The image is a continuation of a chemical experiment described in the visible text.",
+        "limitations": [
+          "The image does not show the actual experiment setup or results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
