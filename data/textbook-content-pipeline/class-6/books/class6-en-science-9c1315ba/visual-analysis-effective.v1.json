@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c9e4201ca2bd00a3e9973193f6d19727988f4421596cc2b2e9ea0f7881eb5538",
+  "raw_analysis_sha256": "8b578044ed2c4edcb5f7fa8c7113807f0b8ee8b6e09648fb4462cf81cbd81727",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:20:34Z",
+      "checkpointed_at": "2026-10-19T02:23:48Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:21:15Z",
+      "checkpointed_at": "2026-10-19T02:24:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:22:10Z",
+      "checkpointed_at": "2026-10-19T02:25:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:22:51Z",
+      "checkpointed_at": "2026-10-19T02:26:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39494,6 +39494,94 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1566dcc813726f53676213a5",
+      "asset_sha256": "97d1f6a4f75fa6b8126caaa45c4c8680f987da3ad9cc7160efb47e5af7640c28",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 50,
+      "asset_path": "page-0050.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "91b96ef4d02b2ce2780b8f3ed2895a4ce1c8e19ee65f7423d6bd972378766866",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two images of goats, one labeled 'Mountain Goat' and the other 'Goat found in the plains'. A question about grouping animals based on features other than those discussed in the chapter.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(a) Mountain Goat",
+          "(b) Goat found in the plains",
+          "5. Group the following animals into two groups based on any feature other than those discussed in the chapter—cow, cockroach, pigeon, bat, tortoise, whale, fish, grasshopper, lizard.",
+          "6. As the population grows and people want more comfortable lives, forests are being cut down to meet various needs. How can this affect our surroundings? How do you think we can address this challenge?",
+          "7. Analyse the flowchart. What can be examples of 'A' and 'B'?",
+          "Plant",
+          "Does it have leaves?",
+          "Yes",
+          "Does it have reticulate venation?",
+          "Yes",
+          "A",
+          "B",
+          "8. Raj argues with his friend Sanjay that 'Gudhal (hibiscus) plant is a shrub.' What questions can Sanjay ask for clarification?"
+        ],
+        "concepts": [
+          "Mountain Goat",
+          "Goat found in the plains",
+          "Animals",
+          "Features",
+          "Population growth",
+          "Forest cutting",
+          "Surroundings",
+          "Flowchart",
+          "Examples of 'A' and 'B'"
+        ],
+        "context_relation": "The text is a question and answer set related to the images of goats and a flowchart.",
+        "limitations": [
+          "The text does not provide the answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:27:46Z",
+      "effective_analysis": {
+        "visual_summary": "Two images of goats, one labeled 'Mountain Goat' and the other 'Goat found in the plains'. A question about grouping animals based on features other than those discussed in the chapter.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(a) Mountain Goat",
+          "(b) Goat found in the plains",
+          "5. Group the following animals into two groups based on any feature other than those discussed in the chapter—cow, cockroach, pigeon, bat, tortoise, whale, fish, grasshopper, lizard.",
+          "6. As the population grows and people want more comfortable lives, forests are being cut down to meet various needs. How can this affect our surroundings? How do you think we can address this challenge?",
+          "7. Analyse the flowchart. What can be examples of 'A' and 'B'?",
+          "Plant",
+          "Does it have leaves?",
+          "Yes",
+          "Does it have reticulate venation?",
+          "Yes",
+          "A",
+          "B",
+          "8. Raj argues with his friend Sanjay that 'Gudhal (hibiscus) plant is a shrub.' What questions can Sanjay ask for clarification?"
+        ],
+        "concepts": [
+          "Mountain Goat",
+          "Goat found in the plains",
+          "Animals",
+          "Features",
+          "Population growth",
+          "Forest cutting",
+          "Surroundings",
+          "Flowchart",
+          "Examples of 'A' and 'B'"
+        ],
+        "context_relation": "The text is a question and answer set related to the images of goats and a flowchart.",
+        "limitations": [
+          "The text does not provide the answers to the questions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
