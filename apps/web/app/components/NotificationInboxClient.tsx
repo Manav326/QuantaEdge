@@ -25,7 +25,7 @@ type InboxResponse = { items?: NotificationItem[]; nextBeforeId?: number | null 
 type Role = 'student' | 'parent';
 
 export function NotificationBell({ role }: { role: Role }) {
-  const locale = useLocale();
+  const { locale } = useLocale();
   const [count, setCount] = useState(0);
   const [available, setAvailable] = useState(true);
   const english = locale === 'english';
