@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1477,
+    "assets_selected": 1480,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1475,
-    "assets_remaining": 6013,
+    "assets_analyzed": 1478,
+    "assets_remaining": 6010,
     "assets_completion_percent": 19.7,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1472,
+    "assets_skipped_from_checkpoint": 1475,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:18:37Z"
+      "checkpointed_at": "2026-10-19T10:22:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:18:58Z"
+      "checkpointed_at": "2026-10-19T10:23:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -56155,6 +56155,117 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T10:22:13Z"
+    },
+    {
+      "asset_id": "25304012d8322aaaae9f4d3d",
+      "asset_sha256": "3fe87f57541f372703b7884088575a0bcf6a06ea092d02c9d793eae315f266de",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/3fe87f57541f372703b7884088575a0bcf6a06ea092d02c9d793eae315f266de.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a table titled 'Components Table 3.2' with a list of components.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components",
+          "table"
+        ],
+        "context_relation": "The table is likely related to the discussion of circuit components in the text.",
+        "limitations": [
+          "The image does not show the actual components or their symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:23:58Z"
+    },
+    {
+      "asset_id": "31f36068bc809b7b1ae1681e",
+      "asset_sha256": "8d8238b967deb5472e2806ca1ca46a907277bcea90cdedd7cdcf280711945438",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/8d8238b967deb5472e2806ca1ca46a907277bcea90cdedd7cdcf280711945438.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The text is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The image does not show any diagrams or symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:24:37Z"
+    },
+    {
+      "asset_id": "26d45a13fb1fe6e908d835e8",
+      "asset_sha256": "594393e7460a0fd24e6941c11330bb5e6700544e2048c727eba0f62eeed54488",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/594393e7460a0fd24e6941c11330bb5e6700544e2048c727eba0f62eeed54488.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuits",
+          "symbols",
+          "simplification"
+        ],
+        "context_relation": "The image is not directly related to the text about electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about electrical circuits or symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:25:16Z"
     }
   ]
 }

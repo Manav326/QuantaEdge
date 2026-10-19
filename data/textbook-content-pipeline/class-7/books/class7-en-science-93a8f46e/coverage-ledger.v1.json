@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1498,
-    "successful_visual_analyses": 1477,
-    "missing_visual_analyses": 5990,
+    "raw_analysis_result_rows": 1501,
+    "successful_visual_analyses": 1480,
+    "missing_visual_analyses": 5987,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6011,
+    "unresolved_count": 6008,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -66588,9 +66588,23 @@
       "asset_path": "assets/3fe87f57541f372703b7884088575a0bcf6a06ea092d02c9d793eae315f266de.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a table titled 'Components Table 3.2' with a list of components.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components",
+          "table"
+        ],
+        "context_relation": "The table is likely related to the discussion of circuit components in the text.",
+        "limitations": [
+          "The image does not show the actual components or their symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -66606,9 +66620,29 @@
       "asset_path": "assets/8d8238b967deb5472e2806ca1ca46a907277bcea90cdedd7cdcf280711945438.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical components",
+          "Circuit diagrams",
+          "Symbol representation"
+        ],
+        "context_relation": "The text is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The image does not show any diagrams or symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -66624,9 +66658,29 @@
       "asset_path": "assets/594393e7460a0fd24e6941c11330bb5e6700544e2048c727eba0f62eeed54488.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "33",
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical circuits",
+          "symbols",
+          "simplification"
+        ],
+        "context_relation": "The image is not directly related to the text about electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about electrical circuits or symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
