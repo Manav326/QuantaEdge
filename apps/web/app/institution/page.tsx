@@ -2,6 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import PasswordField from '../components/PasswordField';
+import NotificationStudio from '../components/NotificationStudio';
 
 type Brand = {
   institutionCode?: string;
@@ -96,7 +97,7 @@ export default function InstitutionPortalPage() {
   const [learners, setLearners] = useState<Learner[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState('');
-  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses'>('overview');
+  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications'>('overview');
   const [currentPassword, setCurrentPassword] = useState('');
   const [nextPassword, setNextPassword] = useState('');
   const [error, setError] = useState('');
@@ -386,7 +387,7 @@ export default function InstitutionPortalPage() {
             </div>
           </div>
           <nav className="institution-tabs" aria-label="Institution report sections">
-            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses']] as const).map(([id,label]) =>
+            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notifications','Notifications']] as const).map(([id,label]) =>
               <button type="button" key={id} className={activeView===id?'is-active':''} onClick={()=>setActiveView(id)}>{label}</button>
             )}
             <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
@@ -426,6 +427,8 @@ export default function InstitutionPortalPage() {
               </div>
               <p className="institution-small-note">This profile contains city/state only, not an exact home address. Contact details and any additional sensitive fields are intentionally not exposed in the institution roster.</p>
             </div>
+          ) : activeView === 'notifications' ? (
+            <div className="institution-notifications"><NotificationStudio surface="institution" /></div>
           ) : (
             <div className="institution-panel">
               <div className="institution-table-heading"><div><h2>Authorised courses</h2><p>Courses and lessons approved centrally for this institution.</p></div></div>
