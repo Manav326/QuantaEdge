@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -32,11 +34,11 @@ export default function ProgressPage(){
 
   const refreshCertificateRecords=useCallback(async(source:any)=>{
     try{
-      const certPromise=fetch('/api/v1/students/me/certificates?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+      const certPromise=apiFetch('/api/v1/students/me/certificates?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
       const recent=Array.isArray(source?.recentAssessments)?source.recentAssessments:[];
       const ids=[...new Set(recent.map((item:any)=>Number(item.attempt_id)).filter((id:number)=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
       const eligibilityPromise=ids.length
-        ?fetch('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
+        ?apiFetch('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
         :Promise.resolve(null);
       const [certResponse,eligibilityResponse]=await Promise.all([certPromise,eligibilityPromise]);
       const certBody=await certResponse.json().catch(()=>({}));
@@ -58,7 +60,7 @@ export default function ProgressPage(){
   async function issueResultCertificate(attemptId:number){
     setIssuingAttemptId(attemptId);setCertificateError('');setCertificateNotice('');
     try{
-      const response=await fetch('/api/v1/students/me/certificates/issue',{
+      const response=await apiFetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
         body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId}:{}),...(brand?.institutionCode?{institutionCode:brand.institutionCode}:{})})
       });
@@ -84,7 +86,7 @@ export default function ProgressPage(){
     setData(null);
     (async()=>{
       try{
-        const response=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+        const response=await apiFetch('/api/v1/students/me?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json().catch(()=>({}));
         if(!response.ok)throw new Error(body.message||body.detail||'Unable to load progress for this course.');

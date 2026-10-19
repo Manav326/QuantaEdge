@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -89,7 +91,7 @@ export default function StudentMarketplacePage() {
     setLoading(true);
     setLoadError('');
     try {
-      const body = await readJson(await fetch('/api/v1/marketplace/courses', {
+      const body = await readJson(await apiFetch('/api/v1/marketplace/courses', {
         credentials: 'same-origin', cache: 'no-store',
       }));
       setOffers(Array.isArray(body) ? body : []);
@@ -103,7 +105,7 @@ export default function StudentMarketplacePage() {
 
   const loadPurchaseRequests = useCallback(async () => {
     try {
-      const response = await fetch('/api/v1/marketplace/student/purchase-requests', {
+      const response = await apiFetch('/api/v1/marketplace/student/purchase-requests', {
         credentials: 'same-origin', cache: 'no-store',
         headers: { 'X-QE-Workspace': 'STUDENT' },
       });
@@ -119,7 +121,7 @@ export default function StudentMarketplacePage() {
     setVerifying(true);
     setStatus('');
     try {
-      await readJson(await fetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
+      await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -152,7 +154,7 @@ export default function StudentMarketplacePage() {
     setBusyCourseId(courseId);
     setStatus('');
     try {
-      const order = await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/orders', {
+      const order = await readJson(await apiFetch('/api/v1/marketplace/courses/' + courseId + '/orders', {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -206,7 +208,7 @@ export default function StudentMarketplacePage() {
     setBusyCourseId(courseId);
     setStatus('');
     try {
-      const request = await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/purchase-request', {
+      const request = await readJson(await apiFetch('/api/v1/marketplace/courses/' + courseId + '/purchase-request', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
@@ -229,7 +231,7 @@ export default function StudentMarketplacePage() {
     setBusyCourseId(courseId);
     setStatus('');
     try {
-      await readJson(await fetch('/api/v1/students/me/programs/id/' + courseId + '/enroll', {
+      await readJson(await apiFetch('/api/v1/students/me/programs/id/' + courseId + '/enroll', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       setStatus('Free course added to All Courses.');

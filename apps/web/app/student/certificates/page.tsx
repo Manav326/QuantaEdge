@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
@@ -83,7 +85,7 @@ function StudentCertificatesContent() {
     }
     const courseQuery = '?courseId=' + encodeURIComponent(String(courseId));
     const requestJson = async (path: string) => {
-      const response = await fetch(path, {
+      const response = await apiFetch(path, {
         cache: 'no-store',
         credentials: 'same-origin',
         headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -176,7 +178,7 @@ function StudentCertificatesContent() {
     setCertificateLookupLoading(true);
     const loadRecord = async () => {
       try {
-        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '?courseId=' + encodeURIComponent(String(courseId || '')), {
+        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '?courseId=' + encodeURIComponent(String(courseId || '')), {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -223,7 +225,7 @@ function StudentCertificatesContent() {
     setPreviewLoading(true);
     const loadPreview = async () => {
       try {
-        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
+        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -260,7 +262,7 @@ function StudentCertificatesContent() {
     setDownloadBusy(true);
     setPreviewError('');
     try {
-      const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
+      const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
         cache: 'no-store',
         credentials: 'same-origin',
         headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -306,7 +308,7 @@ function StudentCertificatesContent() {
         };
         if (brand?.institutionCode) body.institutionCode = brand.institutionCode;
         if (Number(selectedAssessment.course_id) > 0) body.courseId = Number(selectedAssessment.course_id);
-        const response = await fetch('/api/v1/students/me/certificates/issue', {
+        const response = await apiFetch('/api/v1/students/me/certificates/issue', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
           credentials: 'same-origin',
@@ -346,7 +348,7 @@ function StudentCertificatesContent() {
         body.assessmentAttemptId = Number(attemptId);
         if (Number(selectedAssessment?.course_id) !== courseId) throw new Error('Select a result belonging to the focused course.');
       }
-      const response = await fetch('/api/v1/students/me/certificates/issue', {
+      const response = await apiFetch('/api/v1/students/me/certificates/issue', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
         credentials: 'same-origin',

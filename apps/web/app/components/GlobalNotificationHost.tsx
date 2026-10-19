@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DEFAULT_UI_LOCALE, resolveUiLocale, translateUi } from '../i18n/catalog';
 
-type Tone = 'info' | 'success' | 'error';
+type Tone = 'info' | 'success' | 'warning' | 'error';
 type Detail = { message?: unknown; tone?: Tone };
 type Active = { id: number; message: string; tone: Tone };
 const EVENT = 'qe:notification';
@@ -44,123 +44,6 @@ function selectedLocale() {
     return DEFAULT_UI_LOCALE;
   }
 }
-
-function fallbackApiError(status: number) {
-  return translateUi(selectedLocale(), 'common.notifications.requestFailed', { status });
-}
-
-function networkErrorMessage() {
-  return translateUi(selectedLocale(), 'common.notifications.networkError');
-}
-
-function explicitApiNotice(payload: unknown): { message: string; tone: Tone } | null {
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null;
-  const record = payload as Record<string, unknown>;
-  const candidate = record.notification ?? record.notice ?? record.userMessage;
-  if (typeof candidate === 'string') {
-    const message = cleanMessage(candidate);
-    if (!message) return null;
-    const tone: Tone = record.level === 'error' ? 'error' : record.level === 'success' ? 'success' : 'info';
-    return { message, tone };
-  }
-  if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
-    const detail = candidate as Record<string, unknown>;
-    const message = cleanMessage(detail.message);
-    if (!message) return null;
-    const tone: Tone = detail.tone === 'success' || detail.tone === 'error' ? detail.tone : 'info';
-    return { message, tone };
-  }
-  return null;
-}
-
-function messageFromPayload(value: unknown, depth = 0): string | null {
-  if (depth > 5 || value == null) return null;
-  const direct = cleanMessage(value);
-  if (direct) return direct;
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const message = messageFromPayload(item, depth + 1);
-      if (message) return message;
-    }
-    return null;
-  }
-  if (typeof value !== 'object') return null;
-  const record = value as Record<string, unknown>;
-  for (const key of ['userMessage', 'message', 'msg', 'error', 'detail', 'title', 'description', 'reason', 'error_description', 'errors']) {
-    const message = messageFromPayload(record[key], depth + 1);
-    if (message) return message;
-  }
-  return null;
-}
-
-function isApiRequest(input: RequestInfo | URL): boolean {
-  try {
-    const raw = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-    const pathname = new URL(raw, window.location.origin).pathname;
-    return /(^|\/)(api|v[0-9]+)(\/|$)/i.test(pathname) || /\/graphql\/?$/i.test(pathname);
-  } catch {
-    return false;
-  }
-}
-
-function isJsonContentType(value: string | null) {
-  return Boolean(value && (value.includes('application/json') || value.includes('+json')));
-}
-
-function plainTextError(value: string, contentType: string | null): string | null {
-  if (!value.trim() || /html/i.test(contentType || '')) return null;
-  if (/^[\[{]\s*["']/.test(value.trim())) return null;
-  return cleanMessage(value);
-}
-
-async function inspectApiResponse(response: Response) {
-  const length = Number(response.headers.get('content-length') || 0);
-  if (response.ok && (!isJsonContentType(response.headers.get('content-type')) || length > 512 * 1024)) return;
-  if (!response.ok && length > 1024 * 1024) {
-    notifyUser(fallbackApiError(response.status), 'error');
-    return;
-  }
-  let body = '';
-  try { body = await response.clone().text(); } catch { /* Keep the HTTP-status fallback. */ }
-  let payload: unknown = null;
-  if (body.trim()) {
-    try { payload = JSON.parse(body); } catch { /* Plain-text errors are handled below. */ }
-  }
-  const explicit = explicitApiNotice(payload);
-  if (!response.ok) {
-    const message = explicit?.message ?? messageFromPayload(payload) ??
-      plainTextError(body, response.headers.get('content-type')) ?? fallbackApiError(response.status);
-    notifyUser(message, 'error');
-  } else if (explicit) {
-    notifyUser(explicit.message, explicit.tone);
-  }
-}
-
-
-
-function installGlobalFetchInterceptor() {
-  if (typeof window === 'undefined') return;
-  const state = window as Window & { __qeGlobalNotificationFetchInterceptorInstalled?: boolean };
-  if (state.__qeGlobalNotificationFetchInterceptorInstalled) return;
-
-  const originalFetch = window.fetch;
-  const wrappedFetch: typeof window.fetch = async (input, init) => {
-    const isApi = isApiRequest(input);
-    try {
-      const response = await originalFetch.call(window, input, init);
-      if (isApi) void inspectApiResponse(response);
-      return response;
-    } catch (error) {
-      const isAbort = Boolean(error && typeof error === 'object' && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
-      if (isApi && !isAbort) notifyUser(networkErrorMessage(), 'error');
-      throw error;
-    }
-  };
-  window.fetch = wrappedFetch;
-  state.__qeGlobalNotificationFetchInterceptorInstalled = true;
-}
-
-installGlobalFetchInterceptor();
 
 export default function GlobalNotificationHost() {
   const [notices, setNotices] = useState<Active[]>([]);
@@ -210,7 +93,7 @@ export default function GlobalNotificationHost() {
       const detail = (event as CustomEvent<Detail | string>).detail;
       if (typeof detail === 'string') publish(detail, 'info');
       else if (detail && typeof detail.message === 'string') {
-        const tone = detail.tone === 'success' || detail.tone === 'error' ? detail.tone : 'info';
+        const tone = detail.tone === 'success' || detail.tone === 'warning' || detail.tone === 'error' ? detail.tone : 'info';
         publish(detail.message, tone);
       }
     };
@@ -268,6 +151,7 @@ export default function GlobalNotificationHost() {
     }}>
       {notices.map(notice => {
         const accent = notice.tone === 'error' ? 'var(--qe-color-error, #b42318)'
+          : notice.tone === 'warning' ? 'var(--qe-color-warning, #b54708)'
           : notice.tone === 'success' ? 'var(--qe-color-success, #067647)'
           : 'var(--qe-color-border-subtle, var(--line, #d0d5dd))';
         return (
@@ -282,7 +166,7 @@ export default function GlobalNotificationHost() {
               overflowWrap: 'anywhere'
             }}>
             <span aria-hidden="true" style={{ display: 'grid', placeItems: 'center', flex: '0 0 24px', color: accent, fontWeight: 800 }}>
-              {notice.tone === 'error' ? '!' : notice.tone === 'success' ? '✓' : 'i'}
+              {notice.tone === 'error' || notice.tone === 'warning' ? '!' : notice.tone === 'success' ? '✓' : 'i'}
             </span>
             <span style={{ flex: 1, minWidth: 0, fontSize: 13, lineHeight: 1.5 }}>{notice.message}</span>
             <button type="button" onClick={() => void copyNotification(notice)}

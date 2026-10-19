@@ -514,3 +514,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - After moving the `fetch` interceptor to module initialization, removed the old component-effect cleanup statement that referenced function-local `wrappedFetch` and `originalFetch` variables. The interceptor remains installed for the app lifetime while the notification host unmounts/remounts safely.
 - Extended `scripts/check-global-notification-contract.mjs` to guard against restoring the module-scoped interceptor from component cleanup. The same host source is kept byte-for-byte identical across Web, Admin and People Operations.
 - CI must verify this correction; do not treat the prior notification run as accepted until the new run completes.
+
+
+## Centralized API response notifications — implementation (2026-10-19)
+
+- Started replacing global `window.fetch` interception with a shared `apiFetch` helper in Web, Admin and People Operations. Each migrated call awaits inspection of a cloned response, then returns the original response unchanged to existing parsers.
+- Non-2xx responses and non-aborted network failures route to the fixed notification host. Explicit API notices and warning-level payloads are handled centrally; warnings use an amber state.
+- The fixed viewport portal and its Copy, Dismiss, queueing, and auto-dismiss behavior are retained. This first client batch covers 10 student-learning flows; remaining client call sites are included in the follow-up batch before final CI acceptance.

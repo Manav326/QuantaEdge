@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -44,7 +46,7 @@ export default function PracticeClient() {
     try {
       const query = new URLSearchParams({ courseId: String(activeCourse?.public_id || courseId), language: learningLanguage });
       if (subjectCode !== 'ALL') query.set('subjectCode', subjectCode);
-      const response = await fetch('/api/v1/learning/structured-lessons?' + query.toString(), {
+      const response = await apiFetch('/api/v1/learning/structured-lessons?' + query.toString(), {
         credentials: 'same-origin',
         cache: 'no-store',
       });

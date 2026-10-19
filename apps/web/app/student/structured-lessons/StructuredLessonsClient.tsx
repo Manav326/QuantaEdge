@@ -1,4 +1,6 @@
 'use client';
+
+import { apiFetch } from '../../app/components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
@@ -36,7 +38,7 @@ export default function StructuredLessonsClient() {
     try {
       const query = new URLSearchParams({ language: learningLanguage, courseId: String(activeCourse?.public_id || courseId) });
       if (subjectCode !== 'ALL') query.set('subjectCode', subjectCode);
-      const response = await fetch('/api/v1/learning/structured-lessons?' + query.toString(),
+      const response = await apiFetch('/api/v1/learning/structured-lessons?' + query.toString(),
         { credentials: 'same-origin', cache: 'no-store' });
       if (response.status === 401 || response.status === 403) { router.replace('/login/student'); return; }
       const body = await response.json();

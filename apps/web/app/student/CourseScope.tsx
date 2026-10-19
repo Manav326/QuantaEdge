@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../app/components/apiClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
@@ -78,7 +80,7 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
     }
     setLoadingCourses(true);
     setCourseError('');
-    fetch('/api/v1/students/me/programs', {
+    apiFetch('/api/v1/students/me/programs', {
       credentials: 'same-origin',
       cache: 'no-store',
       headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -120,7 +122,7 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
       if (selected && selectedId !== null && selected.is_enrolled !== true) {
         // Legacy paused enrollment rows need one transition to ACTIVE. The server no
         // longer pauses other courses, so this does not change the user's primary focus.
-        const activateResponse = await fetch('/api/v1/students/me/programs/id/' + selectedId + '/enroll', {
+        const activateResponse = await apiFetch('/api/v1/students/me/programs/id/' + selectedId + '/enroll', {
           method: 'POST',
           credentials: 'same-origin',
           cache: 'no-store',
@@ -166,7 +168,7 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
       // Switching the primary/focused course must never enrol the learner again or
       // pause another course. Only reactivate a pre-migration paused enrollment.
       if (course.is_enrolled !== true) {
-        const response = await fetch('/api/v1/students/me/programs/id/' + candidate + '/enroll', {
+        const response = await apiFetch('/api/v1/students/me/programs/id/' + candidate + '/enroll', {
           method: 'POST',
           credentials: 'same-origin',
           cache: 'no-store',

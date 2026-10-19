@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../app/components/apiClient';
 import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
 import { useTenantBranding } from '../components/TenantBrandingProvider';
@@ -53,7 +55,7 @@ export default function StudentHome(){
   const [dashboardClassesRefreshToken,setDashboardClassesRefreshToken]=useState(0);
 
   useEffect(()=>{(async()=>{try{
-    const r=await fetch('/api/v1/students/me/profile',{credentials:'same-origin',cache:'no-store'});
+    const r=await apiFetch('/api/v1/students/me/profile',{credentials:'same-origin',cache:'no-store'});
     if(r.status===401||r.status===403){router.replace('/login/student');return}
     const b=await r.json(); if(!r.ok) throw new Error(b.message||b.detail||'Unable to load student profile');
     setData(b);
@@ -62,7 +64,7 @@ export default function StudentHome(){
   useEffect(()=>{
     if(!courseCatalogReady||activeCourseId===null||activeCourseId<=0){setRec(null);return;}
     let active=true;
-    fetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(activeCourseId)),{
+    apiFetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(activeCourseId)),{
       credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
     }).then(async response=>{
       const body=await response.json().catch(()=>({}));
@@ -77,7 +79,7 @@ export default function StudentHome(){
     let active=true;
     (async()=>{
       try {
-        const response=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
+        const response=await apiFetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json();
         if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
@@ -104,7 +106,7 @@ export default function StudentHome(){
           const id=Number(course.id);
           if(!Number.isSafeInteger(id)||id<=0)return null;
           try{
-            const progressResponse=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
+            const progressResponse=await apiFetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
             if(!progressResponse.ok)return {id,error:true};
             return {id,data:await progressResponse.json()};
           }catch{return {id,error:true};}
@@ -134,7 +136,7 @@ export default function StudentHome(){
     (async()=>{
       try {
         const query='courseId='+encodeURIComponent(String(activeCourseId))+'&includeFuture=true&limit=100&offset=0';
-        const response=await fetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
+        const response=await apiFetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json().catch(()=>({}));
         if(!response.ok) throw new Error('Live classes could not be loaded.');
@@ -165,7 +167,7 @@ export default function StudentHome(){
     setTextbooksLoading(true);
     (async()=>{
       try {
-        const response=await fetch('/api/v1/learning/documents?courseId='+encodeURIComponent(String(activeCourseId)),{
+        const response=await apiFetch('/api/v1/learning/documents?courseId='+encodeURIComponent(String(activeCourseId)),{
           credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
         });
         if(response.status===401||response.status===403){router.replace('/login/student');return}

@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -47,7 +49,7 @@ export default function StudentCoursesPage() {
     setLoading(true);
     setError('');
     try {
-      const rows = await responseJson(await fetch('/api/v1/students/me/programs', {
+      const rows = await responseJson(await apiFetch('/api/v1/students/me/programs', {
         credentials: 'same-origin', cache: 'no-store',
       }));
       const all = Array.isArray(rows) ? rows as Course[] : [];
@@ -70,7 +72,7 @@ export default function StudentCoursesPage() {
         const id = Number(course.id || course.course_id);
         if (!Number.isSafeInteger(id) || id <= 0) return null;
         try {
-          const data = await responseJson(await fetch('/api/v1/students/me?courseId=' + encodeURIComponent(String(id)), {
+          const data = await responseJson(await apiFetch('/api/v1/students/me?courseId=' + encodeURIComponent(String(id)), {
             credentials: 'same-origin', cache: 'no-store',
           }));
           return { id, data };
@@ -111,7 +113,7 @@ export default function StudentCoursesPage() {
       if (!selected) throw new Error('That course is not included in your account.');
       // Focus changes independently of enrollment. Only reactivate a legacy paused row.
       if (!(selected.is_enrolled === true || selected.enrolled === true)) {
-        await responseJson(await fetch('/api/v1/students/me/programs/id/' + encodeURIComponent(String(courseId)) + '/enroll', {
+        await responseJson(await apiFetch('/api/v1/students/me/programs/id/' + encodeURIComponent(String(courseId)) + '/enroll', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' }, body: '{}',
         }));

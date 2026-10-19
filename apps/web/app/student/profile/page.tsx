@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../../app/components/apiClient';
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import PasswordField from '../../components/PasswordField';
@@ -136,7 +138,7 @@ export default function StudentProfilePage() {
     let active = true;
     async function loadProfile() {
       try {
-        const response = await fetch('/api/v1/students/me/profile');
+        const response = await apiFetch('/api/v1/students/me/profile');
         if (response.status === 401 || response.status === 403) {
           router.replace('/login/student');
           return;
@@ -156,7 +158,7 @@ export default function StudentProfilePage() {
           learningGoal: body.learning_goal || '',
         });
         try {
-          const lifecycleResponse = await fetch('/api/v1/account/me/lifecycle');
+          const lifecycleResponse = await apiFetch('/api/v1/account/me/lifecycle');
           if (lifecycleResponse.ok) setLifecycle(await readJson(lifecycleResponse));
         } catch {
           // Profile editing remains available if the lifecycle status endpoint is temporarily unavailable.
@@ -172,7 +174,7 @@ export default function StudentProfilePage() {
   }, [router]);
 
   async function refreshLifecycle() {
-    const response = await fetch('/api/v1/account/me/lifecycle');
+    const response = await apiFetch('/api/v1/account/me/lifecycle');
     const body = await readJson(response);
     if (!response.ok) throw new Error(body.message || 'Unable to refresh account status.');
     setLifecycle(body);
@@ -183,7 +185,7 @@ export default function StudentProfilePage() {
     if (!lifecycleConsent) { setError(translateUi(locale, 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
-      const response = await fetch('/api/v1/account/me/adult-verification-request', {
+      const response = await apiFetch('/api/v1/account/me/adult-verification-request', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consentAccepted: true }),
       });
@@ -204,7 +206,7 @@ export default function StudentProfilePage() {
     if (!transitionMobile.trim()) { setError(translateUi(locale, 'legacy.web.enter.your.mobile.number.e521108b')); return; }
     setLifecycleBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/learner-transition/request-otp', {
+      const response = await apiFetch('/api/v1/auth/learner-transition/request-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: transitionMobile, consentAccepted: true }),
       });
@@ -227,7 +229,7 @@ export default function StudentProfilePage() {
     }
     setLifecycleBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/verify-otp', {
+      const response = await apiFetch('/api/v1/auth/verify-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mobile: transitionMobile, otp: transitionOtp, purpose: 'LEARNER_TRANSITION',
@@ -250,7 +252,7 @@ export default function StudentProfilePage() {
     if (!lifecycleConsent) { setError(translateUi(locale, 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
-      const response = await fetch('/api/v1/account/me/parent-eligibility-request', {
+      const response = await apiFetch('/api/v1/account/me/parent-eligibility-request', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consentAccepted: true }),
       });
@@ -269,7 +271,7 @@ export default function StudentProfilePage() {
     if (!window.confirm(translateUi(locale, 'legacy.web.your.account.will.switch.to.the.parent.f21cb2f0'))) return;
     setError(''); setNotice(''); setLifecycleBusy(true);
     try {
-      const response = await fetch('/api/v1/account/me/transition-to-parent', {
+      const response = await apiFetch('/api/v1/account/me/transition-to-parent', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ confirmParentTransition: true }),
       });
@@ -289,7 +291,7 @@ export default function StudentProfilePage() {
     setPhotoBusy(true);
     try {
       const profileImageDataUrl = await prepareProfilePhoto(file);
-      const response = await fetch('/api/v1/students/me/profile-photo', {
+      const response = await apiFetch('/api/v1/students/me/profile-photo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileImageDataUrl }),
@@ -334,7 +336,7 @@ export default function StudentProfilePage() {
     setNotice('');
     setSaving(true);
     try {
-      const response = await fetch('/api/v1/students/me/profile', {
+      const response = await apiFetch('/api/v1/students/me/profile', {
         method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(draft),
       });
       const body = await readJson(response);
@@ -359,7 +361,7 @@ export default function StudentProfilePage() {
     setNotice('');
     setPhotoBusy(true);
     try {
-      const response = await fetch('/api/v1/students/me/profile-photo', {
+      const response = await apiFetch('/api/v1/students/me/profile-photo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileImageDataUrl: '' }),
