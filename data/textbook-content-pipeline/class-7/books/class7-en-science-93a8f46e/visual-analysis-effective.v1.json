@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "aac296afffd8d27e10d811013a9536b83bd393fa3d4a6e231a65868415dcee02",
+  "raw_analysis_sha256": "fb6e5a5d76669a3bf1e1c31a498297114a664d0b50a7496ce6efa6c52ab98354",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:21:52Z",
+      "checkpointed_at": "2026-10-19T13:23:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:22:12Z",
+      "checkpointed_at": "2026-10-19T13:24:10Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -98304,6 +98304,184 @@
         "limitations": [
           "The image does not show the components of an electric cell.",
           "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fdad4ee3c3550165fb8b60ae",
+      "asset_sha256": "42dac9917c597e46415b492b70a2386a10ffc721844aa84891bbbbbcf9cfad31",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/42dac9917c597e46415b492b70a2386a10ffc721844aa84891bbbbbcf9cfad31.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:24:48Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "50741e195c56ecfd54921287",
+      "asset_sha256": "ac146d4f875ae6fcc4519ea1810483e78a4470058f488383afff6b1a8cd40b96",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/ac146d4f875ae6fcc4519ea1810483e78a4470058f488383afff6b1a8cd40b96.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The text describes the basic components and characteristics of an electric cell.",
+        "limitations": [
+          "The text is incomplete and does not provide detailed information about the components of an electric cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:25:31Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The text describes the basic components and characteristics of an electric cell.",
+        "limitations": [
+          "The text is incomplete and does not provide detailed information about the components of an electric cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3421081ace8a7f68dfa2bc8e",
+      "asset_sha256": "f24eb1311f94a73e252387b6f6157c4f558bbfecbc941883ca02084ed7ddd0e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/f24eb1311f94a73e252387b6f6157c4f558bbfecbc941883ca02084ed7ddd0e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:26:09Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No specific image or diagram is provided."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

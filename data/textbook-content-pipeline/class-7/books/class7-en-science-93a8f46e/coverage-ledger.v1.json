@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1687,
-    "successful_visual_analyses": 1664,
-    "missing_visual_analyses": 5801,
+    "raw_analysis_result_rows": 1690,
+    "successful_visual_analyses": 1667,
+    "missing_visual_analyses": 5798,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5824,
+    "unresolved_count": 5821,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -72890,9 +72890,27 @@
       "asset_path": "assets/42dac9917c597e46415b492b70a2386a10ffc721844aa84891bbbbbcf9cfad31.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is described as a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show the components of an electric cell.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72908,9 +72926,31 @@
       "asset_path": "assets/ac146d4f875ae6fcc4519ea1810483e78a4470058f488383afff6b1a8cd40b96.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The text describes the basic components and characteristics of an electric cell.",
+        "limitations": [
+          "The text is incomplete and does not provide detailed information about the components of an electric cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72926,9 +72966,25 @@
       "asset_path": "assets/f24eb1311f94a73e252387b6f6157c4f558bbfecbc941883ca02084ed7ddd0e8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve)."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal"
+        ],
+        "context_relation": "Definition and description of an electric cell",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
