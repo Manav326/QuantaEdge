@@ -187,6 +187,36 @@ public class NotificationController {
     return Map.of("recipients",rows,"limit",50);
   }
 
+  @GetMapping("/institution/notifications")
+  public Map<String,Object> institutionInbox(HttpServletRequest request,
+      @RequestParam(defaultValue="50") int limit,@RequestParam(required=false) Long beforeId,
+      @RequestParam(defaultValue="false") boolean unreadOnly) {
+    InstitutionAuthService.InstitutionPrincipal principal=institutionPrincipal(request);
+    List<Map<String,Object>> rows=notifications.inboxForInstitutionAdmin(
+      principal.adminId(),principal.institutionId(),limit,beforeId,unreadOnly);
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("items",rows);
+    response.put("nextBeforeId",rows.isEmpty()?null:rows.getLast().get("recipient_id"));
+    response.put("limit",Math.max(1,Math.min(limit,100)));
+    return response;
+  }
+
+  @PostMapping("/institution/notifications/{recipientId}/read")
+  public Map<String,Object> markInstitutionRead(HttpServletRequest request,@PathVariable long recipientId) {
+    InstitutionAuthService.InstitutionPrincipal principal=institutionPrincipal(request);
+    boolean updated=notifications.markReadForInstitutionAdmin(
+      principal.adminId(),principal.institutionId(),recipientId,false);
+    if(!updated)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("read",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/institution/notifications/read-all")
+  public Map<String,Object> markInstitutionAllRead(HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal=institutionPrincipal(request);
+    notifications.markReadForInstitutionAdmin(principal.adminId(),principal.institutionId(),0L,true);
+    return Map.of("readAll",true);
+  }
+
   @GetMapping({
     "/admin/notifications/templates",
     "/hrms/notifications/templates",
@@ -335,15 +365,17 @@ public class NotificationController {
   private Object document(HttpServletRequest request,RichNotificationService.Actor actor,Map<String,Object> body) {
     Object raw=body.get("contentDocument");
     Long templateId=numberOrNull(body.get("templateId"));
-    if(raw!=null) return notifications.validateDocument(raw);
-    if(templateId==null) throw new IllegalArgumentException("Rich notification content is required.");
-    Map<String,Object> template=notifications.getTemplateForActor(actor,templateId);
-    Object version=template.get("content_version");
-    Integer requested=integerOrNull(body.get("templateVersion"));
-    if(requested!=null && version instanceof Number n && requested.intValue()!=n.intValue()) {
-      throw new IllegalArgumentException("The selected template version changed. Review the latest template and preview again.");
+    if(templateId!=null) {
+      Map<String,Object> template=notifications.getTemplateForActor(actor,templateId);
+      Object version=template.get("content_version");
+      Integer requested=integerOrNull(body.get("templateVersion"));
+      if(requested!=null && version instanceof Number n && requested.intValue()!=n.intValue()) {
+        throw new IllegalArgumentException("The selected template version changed. Review the latest template and preview again.");
+      }
+      if(raw==null)raw=template.get("contentDocument");
     }
-    return template.get("contentDocument");
+    if(raw==null) throw new IllegalArgumentException("Rich notification content is required.");
+    return notifications.validateDocument(raw);
   }
 
   private InstitutionTenantContext educationAdminTenant(String suppliedCode) {
