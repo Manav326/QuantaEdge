@@ -42,8 +42,7 @@ public class StudentProgramController {
             and spe.status='ACTIVE') as enrolled,
         (exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
-            and spe.status='PAUSED')
-) as paused,
+            and spe.status='PAUSED')) as paused,
         exists(select 1 from course_purchase purchase
           where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id) as purchased,
         (exists(select 1 from student_program_enrollment access_enrollment
@@ -90,9 +89,8 @@ public class StudentProgramController {
               and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
         )
       order by p.display_name,p.id
-      """, institutionId, institutionId, institutionId, institutionId, institutionId,
-          institutionId, institutionId, institutionId, institutionId, context.studentId(),
-          institutionId, institutionId, institutionId, institutionId, institutionId, institutionId);
+      """, institutionId, institutionId, institutionId, institutionId, institutionId, institutionId,
+          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
