@@ -1315,7 +1315,7 @@ public class QaTestPackService {
     Map<String,String> primaryKeys = Map.ofEntries(
         Map.entry("curriculum_program", "id"),
         Map.entry("curriculum_subject", "id"),
-        Map.entry("curriculum_program_subject", "id"),
+        Map.entry("curriculum_program_subject", "program_id, t.subject_id"),
         Map.entry("curriculum_chapter", "id"),
         Map.entry("institution_marketplace_offer", "id"),
         Map.entry("institution_tenant", "id"),
