@@ -47,3 +47,5 @@
 @keyframes qe-notification-pulse{from{opacity:.5}to{opacity:1}}
 @media(max-width:640px){.page{padding:18px 13px 100px}.pageHeader{flex-direction:column}.headerActions{width:100%;justify-content:space-between}.filters{align-items:flex-start;flex-direction:column}.categoryLabel{width:100%;justify-content:space-between}.categoryLabel select{max-width:none;width:70%}.itemHeader{gap:9px;padding:14px 12px}.scopeIcon{width:34px;height:34px;flex-basis:34px}.itemBody{padding:0 12px 15px}.itemMeta{align-items:flex-start;flex-direction:column;gap:3px}.summary{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.bell,.item,.itemBody,.loading span{transition:none;animation:none}}
+
+.senderLabel{font-size:10px;color:var(--qe-color-text-muted,var(--muted,#637083));font-weight:600;overflow-wrap:anywhere}
