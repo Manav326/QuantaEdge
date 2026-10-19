@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e267eeaf8736448f39e69836527e69c4c0cb0b30602228eaed14c9a0da0da175",
+  "raw_analysis_sha256": "4ee4a83018a5e588139c1f95318212f75071ec6b072ad1469ba4002208f6f557",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:07:20Z",
+      "checkpointed_at": "2026-10-19T11:10:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:07:42Z",
+      "checkpointed_at": "2026-10-19T11:10:43Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -90804,6 +90804,144 @@
         "context_relation": "The image is a close-up of a spiral spring with a small black ball at the center, unrelated to the text about circuit diagrams.",
         "limitations": [
           "The image does not provide any information about circuit diagrams or electrical components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ef12101977ede6dffb47184e",
+      "asset_sha256": "6984535d11bb9bb9980796f220b21ffea20b53cbfa4f0813e0c12645106eb347",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/6984535d11bb9bb9980796f220b21ffea20b53cbfa4f0813e0c12645106eb347.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red battery with a plus sign on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:11:16Z",
+      "effective_analysis": {
+        "visual_summary": "A red battery with a plus sign on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "037338ad7fd1c2172d8bd74f",
+      "asset_sha256": "51cb59c1ac1cd631f0fc0f9ee8cd7469729df46da98795dc31ec371fa00609a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/51cb59c1ac1cd631f0fc0f9ee8cd7469729df46da98795dc31ec371fa00609a4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An abstract image with horizontal stripes in green, red, and black colors.",
+        "visual_type": "other",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "The various components of an electrical circuit can be represented by symbols shown in Table 3.2."
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": [
+          "No specific details about the components or symbols are provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:11:53Z",
+      "effective_analysis": {
+        "visual_summary": "An abstract image with horizontal stripes in green, red, and black colors.",
+        "visual_type": "other",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "The various components of an electrical circuit can be represented by symbols shown in Table 3.2."
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": [
+          "No specific details about the components or symbols are provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e40a2bdf73f54bb47298808",
+      "asset_sha256": "fba9fa16c73e7ed9baff08abf37c2e91e55b56c1a57f8a1594bbc3eeaa3e5e5f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/fba9fa16c73e7ed9baff08abf37c2e91e55b56c1a57f8a1594bbc3eeaa3e5e5f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two red circles with a plus sign between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1",
+          "+"
+        ],
+        "concepts": [
+          "mathematical addition"
+        ],
+        "context_relation": "The image represents a simple addition problem.",
+        "limitations": [
+          "The image does not provide a full equation or context for the addition problem."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:12:28Z",
+      "effective_analysis": {
+        "visual_summary": "Two red circles with a plus sign between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1",
+          "+"
+        ],
+        "concepts": [
+          "mathematical addition"
+        ],
+        "context_relation": "The image represents a simple addition problem.",
+        "limitations": [
+          "The image does not provide a full equation or context for the addition problem."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

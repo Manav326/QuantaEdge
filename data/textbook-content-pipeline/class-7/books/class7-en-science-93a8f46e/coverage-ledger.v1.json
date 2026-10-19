@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1546,
-    "successful_visual_analyses": 1524,
-    "missing_visual_analyses": 5942,
+    "raw_analysis_result_rows": 1549,
+    "successful_visual_analyses": 1527,
+    "missing_visual_analyses": 5939,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5964,
+    "unresolved_count": 5961,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -68152,9 +68152,16 @@
       "asset_path": "assets/6984535d11bb9bb9980796f220b21ffea20b53cbfa4f0813e0c12645106eb347.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red battery with a plus sign on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68170,9 +68177,24 @@
       "asset_path": "assets/51cb59c1ac1cd631f0fc0f9ee8cd7469729df46da98795dc31ec371fa00609a4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An abstract image with horizontal stripes in green, red, and black colors.",
+        "visual_type": "other",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "The various components of an electrical circuit can be represented by symbols shown in Table 3.2."
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components"
+        ],
+        "context_relation": "Introduction to electrical circuits",
+        "limitations": [
+          "No specific details about the components or symbols are provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68188,9 +68210,23 @@
       "asset_path": "assets/fba9fa16c73e7ed9baff08abf37c2e91e55b56c1a57f8a1594bbc3eeaa3e5e5f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two red circles with a plus sign between them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1",
+          "+"
+        ],
+        "concepts": [
+          "mathematical addition"
+        ],
+        "context_relation": "The image represents a simple addition problem.",
+        "limitations": [
+          "The image does not provide a full equation or context for the addition problem."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
