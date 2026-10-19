@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 834,
+    "assets_selected": 836,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 831,
-    "assets_remaining": 1460,
-    "assets_completion_percent": 36.3,
+    "assets_analyzed": 833,
+    "assets_remaining": 1458,
+    "assets_completion_percent": 36.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 829,
+    "assets_skipped_from_checkpoint": 831,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:47:03Z"
+      "checkpointed_at": "2026-10-19T10:53:03Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:48:22Z"
+      "checkpointed_at": "2026-10-19T10:54:23Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:49:12Z"
+      "checkpointed_at": "2026-10-19T10:55:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25926,6 +25926,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T10:51:27Z"
+    },
+    {
+      "asset_id": "a8c28d17f91465eb767f0d06",
+      "asset_sha256": "5becbe8e7a48f1eb200d6d5d5fe68e295bacfb21fbeed29183ead6e016318983",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/5becbe8e7a48f1eb200d6d5d5fe68e295bacfb21fbeed29183ead6e016318983.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green spiral structure with dots, possibly representing a microalga.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Spirulina, a microalga, is called a superfood",
+          "because of its health benefits. Spirulina is also",
+          "a good source of vitamin B12, which is essential",
+          "for our body. It is rich in protein—more than",
+          "60 per cent of its body weight—and only a",
+          "small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood",
+          "opportunity. You can grow Spirulina easily by following these steps:"
+        ],
+        "concepts": [
+          "Spirulina",
+          "microalga",
+          "superfood",
+          "vitamin B12",
+          "protein",
+          "health benefits",
+          "farming",
+          "Spirulina farming",
+          "protein content",
+          "vitamin B12 content",
+          "farming steps"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the health benefits and farming of Spirulina.",
+        "limitations": [
+          "The image does not provide specific details about the farming steps."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:56:46Z"
+    },
+    {
+      "asset_id": "ec3c035634eb6b6736f166e1",
+      "asset_sha256": "8f708d258e124440ee1728a2a967079347fad2d626bc88ac8d8685cfc5650d96",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/8f708d258e124440ee1728a2a967079347fad2d626bc88ac8d8685cfc5650d96.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black, elongated shape resembling a worm or caterpillar on a white, oval-shaped background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about Spirulina and its benefits.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about Spirulina and its benefits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:57:54Z"
     }
   ]
 }
