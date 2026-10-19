@@ -61,9 +61,26 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       const requested = Number(requestedCourseId || 0);
       const selected = enrolled.find(course => Number(course.id) === requested)
         || enrolled.find(course => Number(course.id) === saved)
+        || enrolled.find(course => course.is_enrolled === true)
         || enrolled[0]
         || null;
       const selectedId = selected ? Number(selected.id) : null;
+      if (selected && selectedId !== null && selected.is_enrolled !== true) {
+        const activateResponse = await fetch('/api/v1/students/me/programs/id/' + selectedId + '/enroll', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+          body: '{}',
+        });
+        const activateRaw = await activateResponse.text();
+        let activateBody: any = {};
+        try { activateBody = activateRaw ? JSON.parse(activateRaw) : {}; } catch { activateBody = { message: activateRaw }; }
+        if (activateResponse.status === 401 || activateResponse.status === 403) {
+          throw Object.assign(new Error('Student sign-in is required.'), { auth: true });
+        }
+        if (!activateResponse.ok) throw new Error(activateBody.detail || activateBody.message || activateBody.error || 'The selected course could not be activated.');
+      }
       setCourseId(selectedId);
       if (selectedId !== null) {
         try { window.localStorage.setItem('qe:student:activeCourseId', String(selectedId)); } catch {}
