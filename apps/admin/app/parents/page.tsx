@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { formatUserTimestamp } from '../components/formatUserTimestamp';
 
 import Link from 'next/link';
@@ -34,13 +36,13 @@ export default function AdminParents(){
   const [busy,setBusy]=useState<string|null>(null);
 
   async function loadParents(){
-    const mr=await fetch('/api/v1/auth/me');
+    const mr=await apiFetch('/api/v1/auth/me');
     if(!mr.ok){router.replace('/login');return;}
     const me=await json(mr);
     if(me.role!=='ADMIN'){router.replace('/login');return;}
     const params=new URLSearchParams({limit:String(pageSize),offset:String(page*pageSize)});
     if(search.trim())params.set('query',search.trim());
-    const r=await fetch('/api/v1/admin/parents?'+params.toString(),{cache:'no-store'});
+    const r=await apiFetch('/api/v1/admin/parents?'+params.toString(),{cache:'no-store'});
     const body=await json(r);
     if(!r.ok)throw new Error(body.message||t('admin.parents.loadFailed'));
     setParents(Array.isArray(body.items)?body.items:(Array.isArray(body)?body:[]));
@@ -53,7 +55,7 @@ export default function AdminParents(){
     if(expanded===parentId){setExpanded(null);return;}
     setExpanded(parentId);setError('');
     try{
-      const r=await fetch(`/api/v1/admin/parents/${parentId}/children`);
+      const r=await apiFetch(`/api/v1/admin/parents/${parentId}/children`);
       const b=await json(r);if(!r.ok)throw new Error(b.message||t('admin.parents.loadChildrenFailed'));
       setChildren(current=>({...current,[parentId]:b}));
     }catch(e:any){setError(e.message||t('admin.parents.loadChildrenFailed'));}
@@ -64,7 +66,7 @@ export default function AdminParents(){
     if(!active&&!window.confirm(t('admin.parents.confirmSuspendStudent',{name:child.display_name})))return;
     setBusy(`student-${child.id}`);setError('');setNotice('');
     try{
-      const r=await fetch(`/api/v1/admin/students/${child.id}/status`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active})});
+      const r=await apiFetch(`/api/v1/admin/students/${child.id}/status`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active})});
       const b=await json(r);if(!r.ok)throw new Error(b.message||t('admin.parents.updateStudentFailed'));
       setChildren(current=>({...current,...Object.fromEntries(Object.entries(current).map(([parentId,rows])=>[parentId,rows.map(c=>c.id===child.id?{...c,student_active:active}:c)]))}));
       setNotice(active?t('admin.parents.studentAccessReactivated',{name:child.display_name}):t('admin.parents.studentAccessSuspended',{name:child.display_name}));

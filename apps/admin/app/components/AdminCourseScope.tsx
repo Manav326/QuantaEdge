@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type AdminCourseSubject = {
@@ -48,7 +50,7 @@ export function useAdminCourseScope(storageKey = 'qe:admin:activeCourseId'): Adm
     setLoadingCourses(true);
     setCourseError('');
     try {
-      const response = await fetch('/api/v1/admin/content/programs', {
+      const response = await apiFetch('/api/v1/admin/content/programs', {
         credentials: 'same-origin',
         cache: 'no-store',
       });

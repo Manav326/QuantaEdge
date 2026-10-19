@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import Link from 'next/link';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -52,7 +54,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
       // The sidebar still works for this session if storage is unavailable.
     }
     if (insideWorkspace) return;
-    fetch('/api/v1/auth/me', { cache: 'no-store' })
+    apiFetch('/api/v1/auth/me', { cache: 'no-store' })
       .then(response => response.ok ? response.json() : null)
       .then(me => {
         if (!me) return;
@@ -91,7 +93,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
 
   async function logout() {
     try {
-      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await apiFetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
     } catch {
       // Return to login even if the logout request cannot reach the server.
     } finally {
