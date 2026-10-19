@@ -75,6 +75,7 @@ class CertificateControllerEligibilityTest {
   void certificateDetailLookupUsesStudentScopeAndDoesNotDependOnHistoryPageLimit() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("id", 3001L);
+    row.put("course_id", 12L);
     row.put("certificate_number", "QE-2026-ABCDEF1234567890");
     row.put("achievement_type", "ASSESSMENT_PASS");
     row.put("status", "ISSUED");
@@ -426,7 +427,7 @@ class CertificateControllerEligibilityTest {
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6, 0, true, "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.eligibleAssessments(student, TEST_TENANT);
+    Map<String, Object> response = controller.eligibleAssessments(12L, student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
 
     assertEquals(3001L, item.get("certificate_id"));
@@ -539,6 +540,8 @@ class CertificateControllerEligibilityTest {
       boolean activeSubjectTrack, String certificateStatus) {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("attempt_id", 9001L);
+    row.put("course_id", 12L);
+    row.put("course_name", "Sample course");
     row.put("assessment_title", "Admin assessment");
     row.put("assessment_type", type);
     row.put("is_generated", generated);
