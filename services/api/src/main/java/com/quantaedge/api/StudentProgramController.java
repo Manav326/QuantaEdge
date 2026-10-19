@@ -43,12 +43,7 @@ public class StudentProgramController {
         (exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
             and spe.status='PAUSED')
-          or exists(select 1 from student_course_access_grant grant_row
-            where grant_row.institution_id=? and grant_row.student_id=st.id
-              and grant_row.course_id=p.id and grant_row.grant_reason='LEGACY_CLASS_ENROLLMENT'
-            and not exists(select 1 from student_program_enrollment existing
-              where existing.institution_id=? and existing.student_id=st.id
-                and existing.program_id=p.id and existing.status='ACTIVE'))) as paused,
+) as paused,
         exists(select 1 from course_purchase purchase
           where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id) as purchased,
         (exists(select 1 from student_program_enrollment access_enrollment
@@ -56,9 +51,7 @@ public class StudentProgramController {
               and access_enrollment.program_id=p.id and access_enrollment.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase access_purchase
             where access_purchase.institution_id=? and access_purchase.student_id=st.id and access_purchase.course_id=p.id)
-          or exists(select 1 from student_course_access_grant access_grant
-            where access_grant.institution_id=? and access_grant.student_id=st.id
-              and access_grant.course_id=p.id and access_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
           or exists(select 1 from course_entitlement access_entitlement
             where access_entitlement.institution_id=? and access_entitlement.course_id=p.id
               and (access_entitlement.holder_student_id=st.id or access_entitlement.holder_user_id=st.user_account_id))
@@ -91,9 +84,7 @@ public class StudentProgramController {
               and spe.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase purchase
             where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id)
-          or exists(select 1 from student_course_access_grant legacy_grant
-            where legacy_grant.institution_id=? and legacy_grant.student_id=st.id
-              and legacy_grant.course_id=p.id and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
           or exists(select 1 from course_entitlement ce
             where ce.institution_id=? and ce.course_id=p.id
               and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
@@ -204,9 +195,7 @@ public class StudentProgramController {
             and e.status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase cp
           where cp.student_id=? and cp.course_id=? and cp.institution_id=?)
-        or exists(select 1 from student_course_access_grant g
-          where g.student_id=? and g.course_id=? and g.institution_id=?
-            and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
         or exists(select 1 from course_entitlement ce
           where ce.institution_id=? and ce.course_id=?
             and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
