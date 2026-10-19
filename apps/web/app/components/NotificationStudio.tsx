@@ -183,6 +183,22 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     setNotice('Logo asset added to the notification design. Preview and validate again before sending.');
   }
 
+  async function cancelCampaign(campaign: Campaign) {
+    if (String(campaign.status).toUpperCase() !== 'SCHEDULED') return;
+    if (!window.confirm('Cancel this scheduled notification before it is delivered?')) return;
+    setCampaignLoading(true); setCampaignError('');
+    try {
+      const response = await apiFetch(prefix + '/campaigns/' + campaign.id + '/cancel', {
+        method: 'POST', cache: 'no-store'
+      });
+      const data = await response.json().catch(() => ({})) as { message?: string };
+      if (!response.ok) throw new Error(data.message || 'Scheduled notification could not be cancelled.');
+      await loadCampaigns();
+    } catch (error) {
+      setCampaignError(error instanceof Error ? error.message : 'Scheduled notification could not be cancelled.');
+    } finally { setCampaignLoading(false); }
+  }
+
   function chooseTemplate(id: string) {
     setTemplateId(id); setPreviewed(false); setPreviewCount(null); setError(''); setNotice('');
     const row = templates.find(t => String(t.id) === id);
@@ -629,8 +645,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       {campaignError ? <div className={styles.error} role="alert">{campaignError}</div> : null}
       {campaignLoading ? <div className={styles.campaignEmpty}>Loading campaign history…</div> :
         campaigns.length===0 ? <div className={styles.campaignEmpty}><h3>No campaigns found</h3><p>Sent and scheduled notifications will appear here.</p></div> :
-        <div className={styles.campaignTableWrap}><table className={styles.campaignTable}><thead><tr><th>Notification</th><th>Scope</th><th>Status</th><th>Recipients</th><th>Schedule / sent</th><th>Created</th></tr></thead><tbody>
-          {campaigns.map(campaign=><tr key={campaign.id}><td><strong>{campaign.title||'Untitled campaign'}</strong><small>{campaign.summary||''}</small></td><td>{campaign.scope||'—'}</td><td><span className={styles.campaignStatus} data-status={String(campaign.status||'').toLowerCase()}>{campaign.status||'—'}</span></td><td>{Number(campaign.resolved_recipient_count||0).toLocaleString('en-IN')}</td><td>{campaign.scheduled_at?new Date(campaign.scheduled_at).toLocaleString('en-IN'):campaign.dispatched_at?new Date(campaign.dispatched_at).toLocaleString('en-IN'):'—'}</td><td>{campaign.created_at?new Date(campaign.created_at).toLocaleString('en-IN'):'—'}</td></tr>)}
+        <div className={styles.campaignTableWrap}><table className={styles.campaignTable}><thead><tr><th>Notification</th><th>Scope</th><th>Status</th><th>Recipients</th><th>Schedule / sent</th><th>Created</th><th>Action</th></tr></thead><tbody>
+          {campaigns.map(campaign=><tr key={campaign.id}><td><strong>{campaign.title||'Untitled campaign'}</strong><small>{campaign.summary||''}</small></td><td>{campaign.scope||'—'}</td><td><span className={styles.campaignStatus} data-status={String(campaign.status||'').toLowerCase()}>{campaign.status||'—'}</span></td><td>{Number(campaign.resolved_recipient_count||0).toLocaleString('en-IN')}</td><td>{campaign.scheduled_at?new Date(campaign.scheduled_at).toLocaleString('en-IN'):campaign.dispatched_at?new Date(campaign.dispatched_at).toLocaleString('en-IN'):'—'}</td><td>{campaign.created_at?new Date(campaign.created_at).toLocaleString('en-IN'):'—'}</td><td>{String(campaign.status).toUpperCase()==='SCHEDULED'?<button type="button" className={styles.ghostButton} onClick={()=>void cancelCampaign(campaign)} disabled={campaignLoading}>Cancel</button>:'—'}</td></tr>)}
         </tbody></table></div>}
     </section> : null}
   </main>;
