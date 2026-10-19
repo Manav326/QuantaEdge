@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1681c38fc9053909d1a5c5e18326f0416648bcdb2e006242942296cc07705625",
+  "raw_analysis_sha256": "211e19aaf99be1c1739a0eef7e7d404bf712db39aceb110c325be39e041c28f6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:53:02Z",
+      "checkpointed_at": "2026-10-19T10:55:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:53:23Z",
+      "checkpointed_at": "2026-10-19T10:56:12Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -90021,6 +90021,140 @@
         "limitations": [
           "The image does not provide specific details about the capacitor's function or its role in a circuit."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e6f54b7bb574fe0a6df92f95",
+      "asset_sha256": "0d1d32b34528554699878396ccdfde03ffee2e5fa89a406e96024365f64f74ce",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/0d1d32b34528554699878396ccdfde03ffee2e5fa89a406e96024365f64f74ce.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams using symbols.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:56:51Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams using symbols.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "781eb3e52d5141576bd44786",
+      "asset_sha256": "a8b2b49bb26ce7405d05a7663a57171346cc96016d6b879d2a9a0ec70b01cfa7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/a8b2b49bb26ce7405d05a7663a57171346cc96016d6b879d2a9a0ec70b01cfa7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit diagram symbol.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a basic electrical circuit diagram symbol.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:57:24Z",
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit diagram symbol.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a basic electrical circuit diagram symbol.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "451a796bbc1e34f6b12256c0",
+      "asset_sha256": "58f0e88deb1a2649264c7d4e0113a51a2f1da0c3ab100db5057be52b0bf1e175",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/58f0e88deb1a2649264c7d4e0113a51a2f1da0c3ab100db5057be52b0bf1e175.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing a diode with an arrow pointing to it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a representation of a diode symbol.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:57:58Z",
+      "effective_analysis": {
+        "visual_summary": "A symbol representing a diode with an arrow pointing to it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a representation of a diode symbol.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
