@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3755f2294fb9b4c5c5a42b975668196ff416720eb0a9d7f33db11d40d1d192f7",
+  "raw_analysis_sha256": "63b161fd091206dbcd72fac4ab8afe13c868cea8adeec6ac8c11fbf32b673d29",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:34:11Z",
+      "checkpointed_at": "2026-10-19T02:40:00Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:34:59Z",
+      "checkpointed_at": "2026-10-19T02:40:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:35:36Z",
+      "checkpointed_at": "2026-10-19T02:41:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33632,6 +33632,90 @@
         "context_relation": "The image is a part of an educational activity to demonstrate the removal of an onion peel.",
         "limitations": [
           "The image does not show the entire activity or the final result."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9558d0b1441a204046e02be",
+      "asset_sha256": "078ddfc72993a4684fa2bd79a571a2d60c53def56a8547b653903367e6a7bb67",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/078ddfc72993a4684fa2bd79a571a2d60c53def56a8547b653903367e6a7bb67.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a pipette dripping red liquid into a petri dish.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Teacher demonstration activity for studying a cell",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:43:00Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a pipette dripping red liquid into a petri dish.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Teacher demonstration activity for studying a cell",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dd1a004104f65379558753b9",
+      "asset_sha256": "8ddc1599e12768c6f771edc2a6f6b30c5298b4e880c37ee13a79b651609fa16b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/8ddc1599e12768c6f771edc2a6f6b30c5298b4e880c37ee13a79b651609fa16b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A petri dish with a thin, transparent layer of onion peel inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "petri dish",
+          "onion peel"
+        ],
+        "context_relation": "The image is related to the activity of studying a cell, as described in the textbook.",
+        "limitations": [
+          "The image does not show the entire petri dish or the onion peel in its entirety.",
+          "The image does not show the onion bulb or the forceps used to remove the onion peel."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:44:37Z",
+      "effective_analysis": {
+        "visual_summary": "A petri dish with a thin, transparent layer of onion peel inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "petri dish",
+          "onion peel"
+        ],
+        "context_relation": "The image is related to the activity of studying a cell, as described in the textbook.",
+        "limitations": [
+          "The image does not show the entire petri dish or the onion peel in its entirety.",
+          "The image does not show the onion bulb or the forceps used to remove the onion peel."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
