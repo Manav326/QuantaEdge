@@ -1,6 +1,7 @@
 'use client';
 
 import { UiText } from '../../i18n/useUiTranslation';
+import PasswordField from '../../components/PasswordField';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import {useCallback,useEffect,useState} from 'react';
@@ -138,7 +139,7 @@ export default function StudentAccountLifecyclePage(){
             <label><UiText message="legacy.web.your.mobile.number.835da1ed" /><input inputMode="tel" autoComplete="tel" value={mobile} onChange={e=>setMobile(e.target.value)} placeholder="10-digit Indian mobile" /></label>
             {adultCurrent&&<button type="button" className="button button-light button-small" disabled={busy||mobile.replace(/\D/g,'').length<10} onClick={requestConversionOtp}><UiText message="legacy.web.send.otp.439fc436" /></button>}
             {devCode&&<p className="feedback" role="status">{en?'Development OTP: ':'Development OTP: '}{devCode}</p>}
-            {otpRequested?<><label><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} /></label><label><UiText message="legacy.web.new.password.at.least.8.characters.2e1c2863" /><input type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} /></label><button type="button" className="button button-dark" disabled={busy||otp.trim().length<6||password.length<8} onClick={completeConversion}><UiText message="legacy.web.create.independent.account.e49e2607" /></button></>:null}
+            {otpRequested?<><label><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} /></label><label><UiText message="legacy.web.new.password.at.least.8.characters.2e1c2863" /><PasswordField autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} /></label><button type="button" className="button button-dark" disabled={busy||otp.trim().length<6||password.length<8} onClick={completeConversion}><UiText message="legacy.web.create.independent.account.e49e2607" /></button></>:null}
           </div>
         </article>}
         {linked&&role==='LEARNER'&&<article className="app-task">
