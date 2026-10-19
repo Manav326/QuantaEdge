@@ -787,7 +787,6 @@ public class LearningDocumentController {
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
-        and c.code=st.class_code
         and exists(
           select 1 from curriculum_program ep
           join curriculum_program_subject cps on cps.program_id=ep.id and cps.subject_id=s.id
