@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 841,
+    "assets_selected": 842,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 837,
-    "assets_remaining": 1241,
+    "assets_analyzed": 838,
+    "assets_remaining": 1240,
     "assets_completion_percent": 40.3,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 836,
+    "assets_skipped_from_checkpoint": 837,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:39:21Z"
+      "checkpointed_at": "2026-10-19T01:42:44Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:40:02Z"
+      "checkpointed_at": "2026-10-19T01:43:26Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:40:56Z"
+      "checkpointed_at": "2026-10-19T01:44:20Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:41:36Z"
+      "checkpointed_at": "2026-10-19T01:45:00Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26252,6 +26252,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T01:41:55Z"
+    },
+    {
+      "asset_id": "a3a17c9132b7103cd48f831c",
+      "asset_sha256": "8105d6cbbc6e385334b91112d9fa23d8a7b3d529ae659ecce94eec9f151410bc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 48,
+      "asset_path": "page-0048.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3597c430f9263a1d92f5d4b86e415b885f9fd63b043344182184531ff5ae7bca",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Summary of biodiversity and plant classification.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary",
+          "We are surrounded by a large variety of plants and animals.",
+          "Such variety of plants and animals is a part of biodiversity.",
+          "Plants and animals can be grouped on the basis of similarities and differences among them.",
+          "Plants have similarities and differences based on features associated with roots, stems, leaves, flowers, and so on.",
+          "The method of arranging things into groups based on their common features is called grouping.",
+          "Plants can be grouped into herbs, shrubs, and trees based on their heights, types of stem, and branching patterns.",
+          "Plants can also be grouped as dicotyledons (dicots) and monocotyledons (monocots) based on the number of cotyledons in their seeds.",
+          "Monocots generally exhibit parallel venation in their leaves and possess fibrous roots while dicots typically exhibit reticulate venation in their leaves and possess taproots.",
+          "Animals have different types of movement that can be a basis for their grouping.",
+          "Biodiversity of different regions varies because of distinct environmental conditions.",
+          "The special features that enable plants and animals to survive in a particular region are called adaptations.",
+          "The place where plants and animals live is their habitat.",
+          "Based on their habitats, animals and plants can be grouped as terrestrial and aquatic.",
+          "Due to damage of their habitats, plants and animals lose their homes, food and other resources resulting in the loss of biodiversity.",
+          "We must protect biodiversity to ensure that our planet is full of life, helping plants and animals to survive and thrive."
+        ],
+        "concepts": [
+          "biodiversity",
+          "plant classification",
+          "herbs",
+          "shrubs",
+          "trees",
+          "dicotyledons",
+          "monocotyledons",
+          "cotyledons",
+          "venation",
+          "fibrous roots",
+          "reticulate venation",
+          "taproots",
+          "movement",
+          "adaptations",
+          "habitat",
+          "terrestrial",
+          "aquatic",
+          "damage",
+          "habitat loss",
+          "biodiversity loss"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:46:54Z"
     }
   ]
 }
