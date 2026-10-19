@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import PasswordField from '../components/PasswordField';
 import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
 import { useTenantBranding } from '../components/TenantBrandingProvider';
 
@@ -162,7 +163,7 @@ export default function LoginPage() {
                 autoComplete="username" required />
             </label>
             <label>{english ? 'Password' : 'पासवर्ड'}
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+              <PasswordField value={password} onChange={e => setPassword(e.target.value)}
                 autoComplete="current-password" required />
             </label>
             <button type="submit" className="button button-dark full" disabled={busy || username.trim().length < 3 || !password}>
