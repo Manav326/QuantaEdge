@@ -578,7 +578,7 @@ public class RichNotificationService {
       Actor actor,String scope,Long institutionId,Long courseId,Map<String,Object> filter,
       String title,String summary,JsonNode document,Long templateId,Integer templateVersion,
       String key,Instant scheduledAt,Instant expiresAt,List<Recipient> recipients) {
-    Map<String,Object> counts=countByKind(recipients);
+    Map<String,Integer> counts=countByKind(recipients);
     Map<String,Object> snapshot=new LinkedHashMap<>();
     snapshot.put("recipientCount",recipients.size());
     snapshot.put("recipientCounts",counts);

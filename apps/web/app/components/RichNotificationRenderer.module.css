@@ -8,7 +8,7 @@
 .figure{margin:0;display:grid;gap:7px}
 .image{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa));}
 .video{display:block;width:100%;max-height:520px;border-radius:14px;background:#111}
-figure figcaption{color:var(--qe-color-text-muted,var(--muted,#5b6779));font-size:12px}
+.figure figcaption{color:var(--qe-color-text-muted,var(--muted,#5b6779));font-size:12px}
 .mediaSkeleton{height:190px;width:100%;border-radius:14px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa));border:1px solid var(--qe-color-border-subtle,var(--line,#d9e0e8));animation:qe-media-breathe 1.5s ease-in-out infinite alternate}
 .mediaFallback{padding:14px;border:1px dashed var(--qe-color-border-subtle,var(--line,#d9e0e8));border-radius:12px;color:var(--qe-color-text-muted,var(--muted,#5b6779));font-size:12px}
 .dataCard{display:grid;gap:7px;padding:16px;border:1px solid var(--qe-color-border-subtle,var(--line,#d9e0e8));border-radius:16px;background:var(--qe-color-surface-raised,var(--card,#fff));box-shadow:0 5px 18px rgba(25,37,54,.045)}
