@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bc364f2c69019fd3518ae6a805b35fde0773be6bc59a7a4764999101167144ee",
+  "raw_analysis_sha256": "db593273a18448cc4838f80666f1906d34c571ce30e2e3224ed89c1d5bd1bd97",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:07:36Z",
+      "checkpointed_at": "2026-10-19T12:15:42Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:08:37Z",
+      "checkpointed_at": "2026-10-19T12:16:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -46985,6 +46985,254 @@
         ],
         "context_relation": "The light bulb is likely representing an idea or concept related to the text about food and its nutrients.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "38a81ab2e5f9ca3e7cc1f550",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e6881d66ebef833ca881d5ab1455213619c6d14b535f0edee916578eb995cdba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the evolution of culinary practices, the importance of food, and the nutritional components of food.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water."
+        ],
+        "concepts": [
+          "Culinary practices",
+          "Traditional and modern methods of cooking",
+          "Importance of food",
+          "Nutritional components of food"
+        ],
+        "context_relation": "The text discusses the evolution of culinary practices, the importance of food, and the nutritional components of food.",
+        "limitations": [
+          "The text does not provide specific examples or details about the differences between traditional and modern cooking methods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:17:18Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the evolution of culinary practices, the importance of food, and the nutritional components of food.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water."
+        ],
+        "concepts": [
+          "Culinary practices",
+          "Traditional and modern methods of cooking",
+          "Importance of food",
+          "Nutritional components of food"
+        ],
+        "context_relation": "The text discusses the evolution of culinary practices, the importance of food, and the nutritional components of food.",
+        "limitations": [
+          "The text does not provide specific examples or details about the differences between traditional and modern cooking methods."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "672f6627ba204350c4960bd1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e6881d66ebef833ca881d5ab1455213619c6d14b535f0edee916578eb995cdba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the evolution of culinary practices and the nutritional value of food.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water.",
+          "Carbohydrates and fats are primary energy sources, while proteins are essential for building and repairing tissues.",
+          "Vitamins and minerals are crucial for maintaining overall health and preventing diseases.",
+          "Dietary fibres help in digestion and maintaining a healthy gut.",
+          "Water is essential for maintaining bodily functions and hydration."
+        ],
+        "concepts": [
+          "Culinary practices",
+          "Traditional and modern methods of cooking",
+          "Nutritional value of food",
+          "Major nutrients",
+          "Energy sources",
+          "Proteins",
+          "Vitamins and minerals",
+          "Dietary fibres",
+          "Water"
+        ],
+        "context_relation": "The page discusses the evolution of culinary practices and the nutritional value of food, providing information on the different nutrients and their roles in maintaining health.",
+        "limitations": [
+          "The page does not include any visual aids or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:18:01Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the evolution of culinary practices and the nutritional value of food.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water.",
+          "Carbohydrates and fats are primary energy sources, while proteins are essential for building and repairing tissues.",
+          "Vitamins and minerals are crucial for maintaining overall health and preventing diseases.",
+          "Dietary fibres help in digestion and maintaining a healthy gut.",
+          "Water is essential for maintaining bodily functions and hydration."
+        ],
+        "concepts": [
+          "Culinary practices",
+          "Traditional and modern methods of cooking",
+          "Nutritional value of food",
+          "Major nutrients",
+          "Energy sources",
+          "Proteins",
+          "Vitamins and minerals",
+          "Dietary fibres",
+          "Water"
+        ],
+        "context_relation": "The page discusses the evolution of culinary practices and the nutritional value of food, providing information on the different nutrients and their roles in maintaining health.",
+        "limitations": [
+          "The page does not include any visual aids or diagrams to illustrate the concepts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "692c6040372b2888119fd40f",
+      "asset_sha256": "a97ee22d5d28ca973bde2b71a1b58acd91a65f3272e43b79d8d5b63ea0629743",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 74,
+      "asset_path": "page-0074.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e6881d66ebef833ca881d5ab1455213619c6d14b535f0edee916578eb995cdba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing culinary practices, food nutrients, and dietary habits.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water.",
+          "Carbohydrates and fats are primary energy sources, while proteins are body-building nutrients.",
+          "Vitamins and minerals strengthen our body, protect us from infections, and keep us healthy.",
+          "A balanced diet provides all the essential nutrients in the right quantities, along with adequate roughage and water.",
+          "Deficiency of one or more nutrients in our diet for a long time can lead to deficiency diseases and disorders.",
+          "Junk foods are unhealthy as they contain high levels of sugar and fats but little protein, minerals, vitamins, and dietary fibres.",
+          "Millets are known as nutri-cereals as they provide most of the nutrients required for the normal functioning of our bodies. They can be easily cultivated in different climatic conditions.",
+          "Eating food that is locally grown and plant-based, to the extent possible, is not only healthy for our bodies but is also good for our environment and our planet.",
+          "The distance travelled by a food item, from the place of its production to the consumer, is called food miles. We must aim to minimise food miles.",
+          "We should never waste food and only take as much as we can consume.",
+          "Let us enhance our learning",
+          "1. Pick the odd one out and give reasons:",
+          "(i) Jowar, Bajra, Ragi, Chana",
+          "(ii) Kidney beans, Green gram, Soya bean, Rice"
+        ],
+        "concepts": [
+          "culinary practices",
+          "food nutrients",
+          "dietary habits",
+          "carbohydrates",
+          "fats",
+          "proteins",
+          "vitamins",
+          "minerals",
+          "dietary fibres",
+          "balanced diet",
+          "deficiency diseases",
+          "junk foods",
+          "nutri-cereals",
+          "climate conditions",
+          "plant-based food",
+          "food miles",
+          "waste food"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The page does not provide specific questions or exercises.",
+          "The page does not include images or diagrams.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:22:33Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing culinary practices, food nutrients, and dietary habits.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Culinary practices have changed over time. There is a significant difference between traditional and modern methods of cooking food.",
+          "Food provides us energy, support growth, repairs our bodies and protects us from diseases.",
+          "The major nutrients in our food are carbohydrates, fats, proteins, vitamins, and minerals. In addition, food also contains dietary fibres and water.",
+          "Carbohydrates and fats are primary energy sources, while proteins are body-building nutrients.",
+          "Vitamins and minerals strengthen our body, protect us from infections, and keep us healthy.",
+          "A balanced diet provides all the essential nutrients in the right quantities, along with adequate roughage and water.",
+          "Deficiency of one or more nutrients in our diet for a long time can lead to deficiency diseases and disorders.",
+          "Junk foods are unhealthy as they contain high levels of sugar and fats but little protein, minerals, vitamins, and dietary fibres.",
+          "Millets are known as nutri-cereals as they provide most of the nutrients required for the normal functioning of our bodies. They can be easily cultivated in different climatic conditions.",
+          "Eating food that is locally grown and plant-based, to the extent possible, is not only healthy for our bodies but is also good for our environment and our planet.",
+          "The distance travelled by a food item, from the place of its production to the consumer, is called food miles. We must aim to minimise food miles.",
+          "We should never waste food and only take as much as we can consume.",
+          "Let us enhance our learning",
+          "1. Pick the odd one out and give reasons:",
+          "(i) Jowar, Bajra, Ragi, Chana",
+          "(ii) Kidney beans, Green gram, Soya bean, Rice"
+        ],
+        "concepts": [
+          "culinary practices",
+          "food nutrients",
+          "dietary habits",
+          "carbohydrates",
+          "fats",
+          "proteins",
+          "vitamins",
+          "minerals",
+          "dietary fibres",
+          "balanced diet",
+          "deficiency diseases",
+          "junk foods",
+          "nutri-cereals",
+          "climate conditions",
+          "plant-based food",
+          "food miles",
+          "waste food"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The page does not provide specific questions or exercises.",
+          "The page does not include images or diagrams.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
