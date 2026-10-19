@@ -495,7 +495,11 @@ public class CertificateController {
     String key = "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
     Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
     if (existing != null) {
-      if (number(existing.get("course_id")) != courseId) throw new SecurityException("Certificate belongs to another course.");
+      Long existingCourseId = nullableNumber(existing.get("course_id"));
+      if (existingCourseId == null || existingCourseId.longValue() != courseId.longValue()) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This existing certificate has no matching course association. Contact an administrator to reconcile it.");
+      }
       return existingOrRejectRevoked(existing);
     }
 
@@ -582,9 +586,12 @@ public class CertificateController {
 
     String key = "ASSESSMENT_PASS:" + attemptId;
     Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
-    if (existing != null && number(existing.get("course_id")) != requestedCourseId) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "This assessment certificate belongs to another course.");
+    if (existing != null) {
+      Long existingCourseId = nullableNumber(existing.get("course_id"));
+      if (existingCourseId == null || existingCourseId.longValue() != requestedCourseId.longValue()) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This existing assessment certificate has no matching course association. Contact an administrator to reconcile it.");
+      }
     }
     if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,requestedCourseId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
@@ -1483,6 +1490,15 @@ public class CertificateController {
     if (normalized.equals("hi") || normalized.equals("hindi")) return "hi";
     if (normalized.equals("en") || normalized.equals("english")) return "en";
     throw new IllegalArgumentException("Choose Hindi or English certificate language.");
+  }
+
+  /** Returns null for a missing legacy value instead of parsing the literal string "null". */
+  private Long nullableNumber(Object value) {
+    if (value == null) return null;
+    if (value instanceof Number number) return number.longValue();
+    String raw = String.valueOf(value).trim();
+    if (raw.isEmpty() || "null".equalsIgnoreCase(raw)) return null;
+    return Long.parseLong(raw);
   }
 
   private long number(Object value) {
