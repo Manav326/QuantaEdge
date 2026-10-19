@@ -222,6 +222,28 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       return () => { alive = false; };
     }
 
+    // A parent personal-learning session is separate from the parent account session.
+    // If the learner session expires, prefer the still-valid parent workspace before
+    // sending the user to a student login screen.
+    const recoverParentWorkspace = async () => {
+      if (!parentLearningRoute) return false;
+      try {
+        const parentResponse = await fetch('/api/v1/auth/me', {
+          headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
+        });
+        if (!parentResponse.ok) return false;
+        const parentSession = await parentResponse.json() as Session;
+        if (roleHome(parentSession) !== '/parent') return false;
+        if (alive) {
+          verifiedWorkspace = 'parent';
+          navigateWithFallback(router, '/parent');
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
     // Validate sign-in at workspace entry. On intra-workspace navigation, reuse
     // the verified role: API routes still enforce authentication and the shared
     // refresh interceptor handles expired access sessions without blanking the UI.
@@ -253,6 +275,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         })());
         if (!alive) return;
         if (!response.ok) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
           if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
@@ -275,6 +298,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
           return;
         }
         if ((isPublicEntry || isProtected) && !home) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
           // A staff/legacy session must not block the learning site. Let the
           // appropriate public entry render or send a protected route to login.
@@ -286,6 +310,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         setReady(true);
       } catch {
         if (alive) {
+          if (await recoverParentWorkspace()) return;
           verifiedWorkspace = null;
           if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
