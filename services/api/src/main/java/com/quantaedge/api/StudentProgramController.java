@@ -238,11 +238,9 @@ public class StudentProgramController {
           "A matching subject track already exists under another institution. Cross-institution learning history will not be reused.");
     }
 
-    // Pause only this institution's other courses; never alter a different tenant's enrollment.
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """, context.studentId(), institutionId, courseId);
+    // Enrollment is independent of the learner's primary/focused course. Keep other
+    // institution-scoped enrollments active so reports can be switched without altering
+    // eligibility or historical progress for any other course.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
