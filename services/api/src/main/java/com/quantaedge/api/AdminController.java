@@ -457,10 +457,9 @@ public class AdminController {
       join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_program_subject cps on cps.subject_id=s.id and cps.program_id=?
-      join student_program_enrollment spe on spe.program_id=cps.program_id and spe.institution_id=?
-        and spe.status='ACTIVE'
-      join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
-      join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=spe.program_id
+      join curriculum_program cp on cp.id=cps.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=cp.id
       where l.id=? and l.active=true
       limit 1
       """,rs->rs.next()?rs.getLong(1):null,courseId,institutionId,lessonId);
