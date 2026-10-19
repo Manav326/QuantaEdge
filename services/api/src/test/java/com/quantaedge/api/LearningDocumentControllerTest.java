@@ -13,6 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -62,7 +63,7 @@ class LearningDocumentControllerTest {
 
   @Test
   void studentCatalogOnlyUsesPublishedDocumentsAndActiveEnrolment() {
-    when(authorization.requireStudent(student)).thenReturn(student);
+    lenient().when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("from curriculum_program p"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 71L)));
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
