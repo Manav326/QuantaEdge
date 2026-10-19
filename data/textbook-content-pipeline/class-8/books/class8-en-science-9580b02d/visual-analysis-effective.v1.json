@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f603c164f28f5d99b94857e86d6c88f4bf2ec71238d44b631f96bed2f0403270",
+  "raw_analysis_sha256": "e8be7821b93cf5db13b125e49d66905a81a6c40111e062b47db36658a8134b35",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:14:30Z",
+      "checkpointed_at": "2026-10-19T05:21:37Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:15:19Z",
+      "checkpointed_at": "2026-10-19T05:22:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:15:58Z",
+      "checkpointed_at": "2026-10-19T05:23:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -36614,6 +36614,96 @@
         "context_relation": "The table provides information about the organisms present in soil suspension, which is a part of the chapter on the invisible living world.",
         "limitations": [
           "The table does not include specific details about the characteristics of each organism."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eda6d00b45fb397ed20d0112",
+      "asset_sha256": "7831eabe2b80e266dee0ee4c7936894ce3c2e04618d484d150c2c55c50dec8ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/7831eabe2b80e266dee0ee4c7936894ce3c2e04618d484d150c2c55c50dec8ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing with one finger.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about microorganisms and their presence in food items.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:24:37Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing with one finger.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about microorganisms and their presence in food items.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "422f350e06caa5594b41c349",
+      "asset_sha256": "b1052f5a970aa4603ae4e0bccce7471286f9565990dec406a97a1699bb2b49fe",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/b1052f5a970aa4603ae4e0bccce7471286f9565990dec406a97a1699bb2b49fe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person with braided hair wearing a purple shirt, thinking with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "microorganisms",
+          "connectedness",
+          "rotting food",
+          "cotton-like growth",
+          "thinking",
+          "hair braiding"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms and their connection to rotting food.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or their connection to rotting food."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:26:17Z",
+      "effective_analysis": {
+        "visual_summary": "A person with braided hair wearing a purple shirt, thinking with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "microorganisms",
+          "connectedness",
+          "rotting food",
+          "cotton-like growth",
+          "thinking",
+          "hair braiding"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms and their connection to rotting food.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or their connection to rotting food."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
