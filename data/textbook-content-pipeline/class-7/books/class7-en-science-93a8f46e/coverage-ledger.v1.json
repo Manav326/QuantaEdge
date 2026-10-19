@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1651,
-    "successful_visual_analyses": 1629,
-    "missing_visual_analyses": 5837,
+    "raw_analysis_result_rows": 1654,
+    "successful_visual_analyses": 1632,
+    "missing_visual_analyses": 5834,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5859,
+    "unresolved_count": 5856,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -71653,9 +71653,23 @@
       "asset_path": "assets/87034dca7e50c2bac4d8527d88ad9a670703f3d3340f5454290a64c3ed44d289.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a hand holding a black object with a red and yellow label, possibly a battery or a similar device.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "battery"
+        ],
+        "context_relation": "The image is related to the educational content about the properties of materials in terms of their ability to conduct electricity.",
+        "limitations": [
+          "The image does not provide a diagram or chart to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71671,9 +71685,27 @@
       "asset_path": "assets/15aa6a0b82d554ac841bf412a4aa4a977d4c2b4a23e00ccec593bb570601f449.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass easily through some materials but not through others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "conductors of electricity"
+        ],
+        "context_relation": "The text explains the difference between good conductors and insulators based on the behavior of a lamp.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -71689,9 +71721,28 @@
       "asset_path": "assets/d898c7f5b45b95a608d76672645fb85d9201bb13f2fd88876e22731eba9e3891.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The lamp glows for some materials only, indicating that electric current can pass through some materials but not others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "electric current",
+          "conductors",
+          "insulators",
+          "good conductors",
+          "poor conductors"
+        ],
+        "context_relation": "The text explains the difference between good conductors and insulators based on the behavior of a lamp.",
+        "limitations": [
+          "The text does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
