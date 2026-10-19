@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1382,
-    "successful_visual_analyses": 1359,
-    "missing_visual_analyses": 6106,
+    "raw_analysis_result_rows": 1385,
+    "successful_visual_analyses": 1362,
+    "missing_visual_analyses": 6103,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6129,
+    "unresolved_count": 6126,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -62019,9 +62019,28 @@
       "asset_path": "assets/d5bde842a0dcf3959a85a8270f5719b24963cd23f66946290a05147567706e42.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of making a lamp glow in a circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The page is discussing a table that shows different arrangements of cells and lamps to predict and observe the behavior of the lamps in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit",
+          "The table is incomplete, missing specific details about the arrangements and predictions"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62037,9 +62056,30 @@
       "asset_path": "assets/ce6898fe2e6f9bf1a7c5288d517f6ffba4bdbab08c995db460b4598fff6901f9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a circuit with a lamp and wires.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "wires"
+        ],
+        "context_relation": "The image is related to the educational content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62055,9 +62095,19 @@
       "asset_path": "assets/c5752e67a00adae3596f91731b6bb034c53c3561b015df31bd514045f304cd44.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp with a metallic finish, possibly a light bulb, against a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook page about making a lamp glow.",
+        "limitations": [
+          "The image does not show the actual glowing lamp in a circuit.",
+          "The image does not provide specific details about the arrangement of cells and the lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

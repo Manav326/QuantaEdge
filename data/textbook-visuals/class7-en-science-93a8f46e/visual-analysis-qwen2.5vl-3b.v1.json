@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1359,
+    "assets_selected": 1362,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1357,
-    "assets_remaining": 6131,
-    "assets_completion_percent": 18.1,
+    "assets_analyzed": 1360,
+    "assets_remaining": 6128,
+    "assets_completion_percent": 18.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1354,
+    "assets_skipped_from_checkpoint": 1357,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:48:59Z"
+      "checkpointed_at": "2026-10-19T04:53:52Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:49:27Z"
+      "checkpointed_at": "2026-10-19T04:54:21Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -51466,6 +51466,113 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T04:52:57Z"
+    },
+    {
+      "asset_id": "c4875d63fea3b071d992d6ce",
+      "asset_sha256": "d5bde842a0dcf3959a85a8270f5719b24963cd23f66946290a05147567706e42",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/d5bde842a0dcf3959a85a8270f5719b24963cd23f66946290a05147567706e42.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of making a lamp glow in a circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation"
+        ],
+        "concepts": [
+          "Circuit",
+          "Lamp",
+          "Prediction",
+          "Observation"
+        ],
+        "context_relation": "The page is discussing a table that shows different arrangements of cells and lamps to predict and observe the behavior of the lamps in a circuit.",
+        "limitations": [
+          "The lamps are not shown glowing in any circuit",
+          "The table is incomplete, missing specific details about the arrangements and predictions"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:55:34Z"
+    },
+    {
+      "asset_id": "608e13f589c9b619f30b11a6",
+      "asset_sha256": "ce6898fe2e6f9bf1a7c5288d517f6ffba4bdbab08c995db460b4598fff6901f9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/ce6898fe2e6f9bf1a7c5288d517f6ffba4bdbab08c995db460b4598fff6901f9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a circuit with a lamp and wires.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "wires"
+        ],
+        "context_relation": "The image is related to the educational content of Table 3.1 in the textbook.",
+        "limitations": [
+          "The image does not show the lamps glowing in any circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:56:46Z"
+    },
+    {
+      "asset_id": "6df38eb464036293993fabc6",
+      "asset_sha256": "c5752e67a00adae3596f91731b6bb034c53c3561b015df31bd514045f304cd44",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/c5752e67a00adae3596f91731b6bb034c53c3561b015df31bd514045f304cd44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a lamp with a metallic finish, possibly a light bulb, against a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook page about making a lamp glow.",
+        "limitations": [
+          "The image does not show the actual glowing lamp in a circuit.",
+          "The image does not provide specific details about the arrangement of cells and the lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:57:54Z"
     }
   ]
 }
