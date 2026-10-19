@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e36111604e57db775c3fc0e8b89cb29fc81767ec2c37f6ab3f92d6d640532a1",
+  "raw_analysis_sha256": "d8ddc77a3a46e5ee2c24d6923f716c1e00c2fc286116602159403cc552c7b848",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:03:53Z",
+      "checkpointed_at": "2026-10-19T20:07:21Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:04:35Z",
+      "checkpointed_at": "2026-10-19T20:08:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:05:26Z",
+      "checkpointed_at": "2026-10-19T20:08:53Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56326,7 +56326,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:05:58Z",
+      "checkpointed_at": "2026-10-19T20:09:24Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56727,6 +56727,26 @@
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "98aeae849beaac2dcbccd6da",
+      "asset_sha256": "e67aee4a0ab20b3bc3c8a161ab57bf391d8f9f746a665a5814c33990294661ba",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 101,
+      "asset_path": "assets/e67aee4a0ab20b3bc3c8a161ab57bf391d8f9f746a665a5814c33990294661ba.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
