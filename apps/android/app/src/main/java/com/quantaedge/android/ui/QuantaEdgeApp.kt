@@ -810,7 +810,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     suspend fun refreshDashboardClasses() {
         if (currentCourseId <= 0L) {
             dashboardClasses = emptyList()
-            dashboardClassesError = ""
+            dashboardClassesFailed = false
+            dashboardClassesLoaded = true
+            dashboardClassesCourseId = currentCourseId
             return
         }
         val enrolledCourse = studentPrograms.firstOrNull {
