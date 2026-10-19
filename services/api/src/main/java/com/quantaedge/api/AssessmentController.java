@@ -964,12 +964,15 @@ public class AssessmentController {
              a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
+             selected_course.id as course_id,selected_course.code as course_code,selected_course.display_name as course_name,
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -991,13 +994,7 @@ public class AssessmentController {
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
       where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and (
           a.status='PUBLISHED'
           or exists(select 1 from student_assessment_attempt resumable
@@ -1005,8 +1002,8 @@ public class AssessmentController {
                       and resumable.institution_id=(select institution_id from tenant_scope)
                       and resumable.status='IN_PROGRESS')
         )
-      group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
-      """, institutionId,context.studentId(), language, language, language, assessmentId);
+      group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name,selected_course.id,selected_course.code,selected_course.display_name
+      """, institutionId,context.studentId(),courseId, language, language, language, assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Available assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
 
@@ -1040,20 +1037,15 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id
-        and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and a.status='PUBLISHED' and
-      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(), assessmentId);
+      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(),courseId, assessmentId);
     if (eligibleForNewAttempt.isEmpty()) {
       throw conflict("Complete the required published lesson content before starting this test.");
     }
