@@ -592,13 +592,14 @@ public class RichNotificationService {
       where r.recipient_kind=? and
         case when ?='STUDENT' then r.student_id=? when ?='USER_ACCOUNT' then r.user_account_id=?
              when ?='STAFF_ACCOUNT' then r.staff_account_id=? else false end
-        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'))
+        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'
+          and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
         and c.status='SENT' and (c.expires_at is null or c.expires_at>now())
         and (?=0 or r.id<?)
         and (?=false or r.state<>'READ')
       order by r.created_at desc,r.id desc limit ?
       """;
-    List<Map<String,Object>> rows=jdbc.queryForList(sql,kind,kind,id,kind,id,kind,id,institutionId,
+    List<Map<String,Object>> rows=jdbc.queryForList(sql,kind,kind,id,kind,id,kind,id,institutionId,institutionId,
         beforeId==null?0L:beforeId,beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit);
     for(Map<String,Object> row:rows) {
       row.put("contentDocument",parseJson(String.valueOf(row.remove("content_document"))));
@@ -616,11 +617,12 @@ public class RichNotificationService {
         c.institution_id as campaign_institution_id,c.course_id,c.expires_at
       from notification_recipient r join notification_campaign c on c.id=r.campaign_id
       where r.recipient_kind='INSTITUTION_ADMIN' and r.institution_admin_id=?
-        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM')) and c.status='SENT'
+        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'
+          and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))) and c.status='SENT'
         and (c.expires_at is null or c.expires_at>now())
         and (?=0 or r.id<?) and (?=false or r.state<>'READ')
       order by r.created_at desc,r.id desc limit ?
-      """,adminId,institutionId,beforeId==null?0L:beforeId,
+      """,adminId,institutionId,institutionId,beforeId==null?0L:beforeId,
         beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit)
       .stream().map(row->{
         Map<String,Object> item=new LinkedHashMap<>(row);
@@ -637,9 +639,10 @@ public class RichNotificationService {
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
           and (institution_id=? or (institution_id is null and exists(
-            select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
+            select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'
+            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))))
           and state in ('CREATED','QUEUED')
-        """,adminId,institutionId);
+        """,adminId,institutionId,institutionId);
       return true;
     }
     return jdbc.update("""
@@ -648,7 +651,7 @@ public class RichNotificationService {
         and (institution_id=? or (institution_id is null and exists(
           select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
         and state in ('CREATED','QUEUED')
-      """,recipientId,adminId,institutionId)==1;
+      """,recipientId,adminId,institutionId,institutionId)==1;
   }
 
   @Transactional
@@ -664,8 +667,9 @@ public class RichNotificationService {
         where recipient_kind=? and case when ?='STUDENT' then student_id=?
           when ?='USER_ACCOUNT' then user_account_id=? when ?='STAFF_ACCOUNT' then staff_account_id=?
           else false end and (institution_id=? or (institution_id is null and exists(
-          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'))) and state in ('CREATED','QUEUED')
-        """,kind,kind,id,kind,id,kind,id,institutionId);
+          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'
+            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))) and state in ('CREATED','QUEUED')
+        """,kind,kind,id,kind,id,kind,id,institutionId,institutionId);
       return true;
     }
     int changed=jdbc.update("""
@@ -676,7 +680,7 @@ public class RichNotificationService {
         and (institution_id=? or (institution_id is null and exists(
           select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
         and state in ('CREATED','QUEUED')
-      """,recipientId,kind,kind,id,kind,id,kind,id,institutionId);
+      """,recipientId,kind,kind,id,kind,id,kind,id,institutionId,institutionId);
     return changed==1;
   }
 
