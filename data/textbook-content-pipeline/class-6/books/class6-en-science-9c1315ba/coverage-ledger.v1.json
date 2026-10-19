@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 937,
-    "successful_visual_analyses": 928,
-    "missing_visual_analyses": 1141,
+    "raw_analysis_result_rows": 940,
+    "successful_visual_analyses": 931,
+    "missing_visual_analyses": 1138,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1150,
+    "unresolved_count": 1147,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36372,9 +36372,18 @@
       "asset_path": "assets/ba488e70a781987aac36276d8bfa5507fc12ecf5b8d1d69a974a7b5d18589d57.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with one hand on their chin, appearing to be in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person thinking, possibly related to the educational content about vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the differences between raw and cooked vegetables."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36390,9 +36399,19 @@
       "asset_path": "assets/64a6214ec1d9ba00ecbfe2bc02a29972231f2c03b9d9f57e015c01156ee803d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt, with one hand open and the other hand slightly raised.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food, specifically discussing the differences between raw and cooked vegetables.",
+        "limitations": [
+          "The image does not provide specific details about the differences between raw and cooked vegetables.",
+          "The image does not show any specific examples or data points related to the topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36408,9 +36427,20 @@
       "asset_path": "assets/34a8456bcadeacf4eb0d5fd23073100f27e7aae8b1ec30705c349f92277005e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a white shirt with their arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the food items or their nutritional benefits.",
+          "The image does not show any differences between raw and cooked vegetables.",
+          "The image does not include any specific examples of vitamins and minerals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

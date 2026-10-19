@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 928,
+    "assets_selected": 931,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 926,
-    "assets_remaining": 1152,
-    "assets_completion_percent": 44.6,
+    "assets_analyzed": 929,
+    "assets_remaining": 1149,
+    "assets_completion_percent": 44.7,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 923,
+    "assets_skipped_from_checkpoint": 926,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T09:59:05Z"
+      "checkpointed_at": "2026-10-19T10:07:11Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:00:07Z"
+      "checkpointed_at": "2026-10-19T10:08:11Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -29468,6 +29468,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T10:05:59Z"
+    },
+    {
+      "asset_id": "700629ff90a5b3933ece3661",
+      "asset_sha256": "ba488e70a781987aac36276d8bfa5507fc12ecf5b8d1d69a974a7b5d18589d57",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/ba488e70a781987aac36276d8bfa5507fc12ecf5b8d1d69a974a7b5d18589d57.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with one hand on their chin, appearing to be in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person thinking, possibly related to the educational content about vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the differences between raw and cooked vegetables."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:09:48Z"
+    },
+    {
+      "asset_id": "8db12fa0a1043b8708fc198e",
+      "asset_sha256": "64a6214ec1d9ba00ecbfe2bc02a29972231f2c03b9d9f57e015c01156ee803d0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/64a6214ec1d9ba00ecbfe2bc02a29972231f2c03b9d9f57e015c01156ee803d0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt, with one hand open and the other hand slightly raised.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food, specifically discussing the differences between raw and cooked vegetables.",
+        "limitations": [
+          "The image does not provide specific details about the differences between raw and cooked vegetables.",
+          "The image does not show any specific examples or data points related to the topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:11:24Z"
+    },
+    {
+      "asset_id": "5296096ebad8799603a5d26b",
+      "asset_sha256": "34a8456bcadeacf4eb0d5fd23073100f27e7aae8b1ec30705c349f92277005e2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/34a8456bcadeacf4eb0d5fd23073100f27e7aae8b1ec30705c349f92277005e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a white shirt with their arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the food items or their nutritional benefits.",
+          "The image does not show any differences between raw and cooked vegetables.",
+          "The image does not include any specific examples of vitamins and minerals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:13:01Z"
     }
   ]
 }
