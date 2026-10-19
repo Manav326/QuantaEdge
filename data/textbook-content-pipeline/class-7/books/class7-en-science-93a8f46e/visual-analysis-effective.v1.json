@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "211e19aaf99be1c1739a0eef7e7d404bf712db39aceb110c325be39e041c28f6",
+  "raw_analysis_sha256": "f97833712c0949f5159d8c1814624364a5e4268bd0b84b147dc2926e881a34ad",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:55:51Z",
+      "checkpointed_at": "2026-10-19T10:58:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:56:12Z",
+      "checkpointed_at": "2026-10-19T10:59:01Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -90155,6 +90155,162 @@
         "concepts": [],
         "context_relation": "The image is a representation of a diode symbol.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2df1acd8c51846e50de26bb8",
+      "asset_sha256": "caee49718ff6b2965ef800f90895c632493fbd2468b54aea10c8f43722b5b00e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/caee49718ff6b2965ef800f90895c632493fbd2468b54aea10c8f43722b5b00e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green LED with two leads.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a representation of an LED used in electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:59:35Z",
+      "effective_analysis": {
+        "visual_summary": "A green LED with two leads.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a representation of an LED used in electrical circuits.",
+        "limitations": [
+          "The image does not provide specific details about the circuit or components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "98cee7675c3eb89767b2c877",
+      "asset_sha256": "4587dcb55f39abe389fe06c96e4ce6b3ab81532d4a22a2483aed35fa5cc9dba9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/4587dcb55f39abe389fe06c96e4ce6b3ab81532d4a22a2483aed35fa5cc9dba9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two parallel lines, possibly representing electrical components in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent the circuits in a simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the discussion of circuit diagrams in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in the circuit diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:00:12Z",
+      "effective_analysis": {
+        "visual_summary": "Two parallel lines, possibly representing electrical components in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent the circuits in a simpler manner?",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the discussion of circuit diagrams in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the components or their arrangement in the circuit diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "25f3cf27f93418446c445f7d",
+      "asset_sha256": "860851b7416dad709f2ffccd1d4d82aafd8b08931f0f015945bc7a7a63e058dc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/860851b7416dad709f2ffccd1d4d82aafd8b08931f0f015945bc7a7a63e058dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in Table 3.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:00:50Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams.",
+        "limitations": [
+          "The page does not provide specific details about the symbols used in Table 3.2."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
