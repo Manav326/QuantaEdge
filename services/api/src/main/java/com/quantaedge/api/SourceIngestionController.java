@@ -353,7 +353,8 @@ public class SourceIngestionController {
           InstitutionTenantContext tenant) {
     context = requireReviewer(context);
     context = authorization.requirePermission(context, "CONTENT_EDIT");
-    requireBookIntakeCourse(assetId,courseId,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
 
     String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
     String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
@@ -381,8 +382,8 @@ public class SourceIngestionController {
       join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id
       join curriculum_subject s on s.id=i.subject_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     if (intake.get("ranges_reviewed_at") == null
@@ -399,9 +400,9 @@ public class SourceIngestionController {
       cross join lateral jsonb_to_recordset(i.chapter_ranges)
         as r(chapter_id bigint,title text,page_start integer,page_end integer)
       join curriculum_chapter ch on ch.id=r.chapter_id and ch.subject_id=i.subject_id and ch.active=true
-      where i.pdf_asset_id=?
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
       order by r.page_start,r.chapter_id
-      """, assetId);
+      """, assetId,institutionId,courseId);
     if (ranges.size() != ((Number) intake.get("range_count")).intValue()) {
       throw badRequest("One or more saved chapter ranges no longer match active curriculum chapters. Reopen the book, correct the ranges, and save them again.");
     }
