@@ -92,7 +92,7 @@ export default function ParentPage(){
       setSelected(rb);
       router.replace('/parent?childId='+encodeURIComponent(String(child.id))+'&courseId='+encodeURIComponent(String(courseId)));
       try{
-        const certificatesResponse=await fetch(`/api/v1/guardians/children/${child.id}/certificates`,{cache:'no-store'});
+        const certificatesResponse=await fetch(`/api/v1/guardians/children/${child.id}/certificates?courseId=${encodeURIComponent(String(courseId))}`,{cache:'no-store'});
         const certificateBody=await readApi(certificatesResponse);
         setChildCertificates(certificatesResponse.ok&&Array.isArray(certificateBody.items)?certificateBody.items:[]);
       }catch{
@@ -192,9 +192,9 @@ export default function ParentPage(){
             <div className="parent-test-result">
               <span className={m.status==='RELEASED'?'good':''}>{m.status==='RELEASED'?String(m.final_score??'—')+' / '+String(m.max_score??'—'):assessmentStatusLabel(m.status)}</span>
               {certificate?.status==='ISSUED'?<div className="parent-certificate-actions">
-                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/view?format=pdf`} target="_blank" rel="noreferrer">View certificate ↗</a>
-                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?format=pdf`}>PDF</a>
-                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?format=png`}>PNG</a>
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/view?courseId=${encodeURIComponent(String(selectedCourseId||''))}&format=pdf`} target="_blank" rel="noreferrer">View certificate ↗</a>
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?courseId=${encodeURIComponent(String(selectedCourseId||''))}&format=pdf`}>PDF</a>
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?courseId=${encodeURIComponent(String(selectedCourseId||''))}&format=png`}>PNG</a>
               </div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked">Certificate revoked</small>:null}
             </div>
           </div>;
