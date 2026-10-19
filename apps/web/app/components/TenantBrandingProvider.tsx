@@ -188,6 +188,7 @@ function readSessionCode(): string | null {
 
 const SERVER_BRANDING_COOKIES = [
   { name: 'qe-tenant-student', path: '/student' },
+  { name: 'qe-tenant-parent', path: '/parent' },
   { name: 'qe-tenant-login-student', path: '/login/student' },
   { name: 'qe-tenant-signup', path: '/signup' },
   { name: 'qe-tenant-session', path: '/session' },
