@@ -38,7 +38,7 @@ CREATE TABLE qa_test_run_resource (
   resource_kind varchar(48) NOT NULL CHECK (resource_kind IN (
     'INSTITUTION','INSTITUTION_BRANDING','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
     'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
-    'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT'
+    'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','LESSON','QUESTION','QUESTION_OPTION'
   )),
   resource_id varchar(160) NOT NULL,
   resource_ref jsonb NOT NULL DEFAULT '{}'::jsonb CHECK (jsonb_typeof(resource_ref)='object'),
@@ -81,6 +81,13 @@ CREATE INDEX idx_qa_test_run_check_history ON qa_test_run_check(run_id,executed_
 
 -- Core fixture identities are visibly marked. The resource manifest remains the ownership
 -- authority; the flag is an additional fence and never authorizes deletion on its own.
+ALTER TABLE lesson
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE question
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+ALTER TABLE question_option
+  ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
+
 ALTER TABLE institution_tenant
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 ALTER TABLE institution_branding
@@ -104,6 +111,9 @@ ALTER TABLE student_lesson_progress
 ALTER TABLE student_question_attempt
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
 
+CREATE INDEX idx_qa_lesson_run ON lesson(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_question_run ON question(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
+CREATE INDEX idx_qa_question_option_run ON question_option(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_tenant_run ON institution_tenant(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_user_run ON user_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_student_run ON student(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
