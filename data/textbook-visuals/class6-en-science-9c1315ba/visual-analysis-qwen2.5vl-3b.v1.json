@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 837,
+    "assets_selected": 838,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 833,
-    "assets_remaining": 1245,
+    "assets_analyzed": 834,
+    "assets_remaining": 1244,
     "assets_completion_percent": 40.1,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 832,
+    "assets_skipped_from_checkpoint": 833,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:24:12Z"
+      "checkpointed_at": "2026-10-19T01:27:22Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:24:53Z"
+      "checkpointed_at": "2026-10-19T01:28:03Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:25:47Z"
+      "checkpointed_at": "2026-10-19T01:28:57Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:26:27Z"
+      "checkpointed_at": "2026-10-19T01:29:36Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26057,6 +26057,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T01:26:33Z"
+    },
+    {
+      "asset_id": "4d28a7881ba2d53ee787c08d",
+      "asset_sha256": "a0d87f69da2387da8732cee136fb15b736f4da2f16e3460f9c35fc0c7c8b5e5a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 47,
+      "asset_path": "page-0047.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c24143064d71d7b1ca6796b21b879cc40cb029872425518a40f99ef120a9585e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about traditionally protected forests and sacred groves, including a photo of a sacred grove and a list of keywords.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Traditionally Protected Forests: Sacred Groves",
+          "Sacred groves are undisturbed patches of forests. Their sizes",
+          "may vary from quite small to very large. Sacred groves are",
+          "found all over India. They are home to different kinds of",
+          "plants and animals, including",
+          "numerous medicinal plants.",
+          "These are protected by the",
+          "local community and no one is",
+          "allowed to harm any animals",
+          "and cut trees in these groves,",
+          "or disturb the area. This",
+          "way, sacred groves are",
+          "a community protected",
+          "treasure of biodiversity.",
+          "Find out about the sacred",
+          "groves in your region.",
+          "We must protect biodiversity to ensure our planet is full",
+          "of life, helping plants and animals to survive and thrive.",
+          "Keywords",
+          "Adaptation",
+          "Monocot plants",
+          "Analyze",
+          "Amphibians",
+          "Parallel venation",
+          "Compare",
+          "Aquatic",
+          "Reticulate venation",
+          "Create",
+          "Biodiversity",
+          "Sacred groves"
+        ],
+        "concepts": [
+          "Sacred groves",
+          "Biodiversity",
+          "Adaptation",
+          "Monocot plants",
+          "Amphibians",
+          "Parallel venation",
+          "Aquatic",
+          "Reticulate venation",
+          "Biodiversity",
+          "Sacred groves",
+          "Cotyledon",
+          "Shrubs",
+          "Group",
+          "Dicot plants",
+          "Taproot",
+          "Fibrous root",
+          "Terrestrial",
+          "Record",
+          "Habitat",
+          "Tree"
+        ],
+        "context_relation": "The page provides information about sacred groves and their importance in biodiversity, along with a list of related keywords.",
+        "limitations": [
+          "The page does not provide specific details about the location or size of the sacred groves.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:31:34Z"
     }
   ]
 }
