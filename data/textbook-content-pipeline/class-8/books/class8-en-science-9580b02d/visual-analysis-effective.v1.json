@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fea9b29e265770f927cff3105920c5e15b333785ce37238a582139b29eb879d2",
+  "raw_analysis_sha256": "1130c15eba1f038733816251d14e3840e8b9654311ba6254c05d27811f948408",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:38:01Z",
+      "checkpointed_at": "2026-10-19T15:40:59Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:38:48Z",
+      "checkpointed_at": "2026-10-19T15:41:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:39:26Z",
+      "checkpointed_at": "2026-10-19T15:42:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -41388,6 +41388,118 @@
         "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
         "limitations": [
           "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0bdb3d253ed3d4832141ace9",
+      "asset_sha256": "fdf14340963a1ddb9c48aae04b304fdfbcbb1158f271e0e040660e63c876e058",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/fdf14340963a1ddb9c48aae04b304fdfbcbb1158f271e0e040660e63c876e058.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon character, not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:43:50Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon character, not a diagram or chart."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f11515be9452602d8848342",
+      "asset_sha256": "95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, with one hand raised and the other pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast",
+          "11.4% of India’s population is",
+          "food",
+          "More",
+          "than",
+          "100",
+          "million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food",
+          "India's population",
+          "food",
+          "more than 100 million"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and the percentage of India's population.",
+        "limitations": [
+          "The image does not provide specific details about the fast food industry or the exact percentage of India's population."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:45:31Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, with one hand raised and the other pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast",
+          "11.4% of India’s population is",
+          "food",
+          "More",
+          "than",
+          "100",
+          "million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food",
+          "India's population",
+          "food",
+          "more than 100 million"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and the percentage of India's population.",
+        "limitations": [
+          "The image does not provide specific details about the fast food industry or the exact percentage of India's population."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

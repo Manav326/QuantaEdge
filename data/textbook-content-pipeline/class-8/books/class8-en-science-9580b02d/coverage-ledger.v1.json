@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 894,
-    "successful_visual_analyses": 884,
-    "missing_visual_analyses": 1397,
+    "raw_analysis_result_rows": 896,
+    "successful_visual_analyses": 886,
+    "missing_visual_analyses": 1395,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1407,
+    "unresolved_count": 1405,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -34511,9 +34511,19 @@
       "asset_path": "assets/fdf14340963a1ddb9c48aae04b304fdfbcbb1158f271e0e040660e63c876e058.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon character, not a diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34529,9 +34539,33 @@
       "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, with one hand raised and the other pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast",
+          "11.4% of India’s population is",
+          "food",
+          "More",
+          "than",
+          "100",
+          "million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food",
+          "India's population",
+          "food",
+          "more than 100 million"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and the percentage of India's population.",
+        "limitations": [
+          "The image does not provide specific details about the fast food industry or the exact percentage of India's population."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
