@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e8be7821b93cf5db13b125e49d66905a81a6c40111e062b47db36658a8134b35",
+  "raw_analysis_sha256": "56c3b46585c3761d513b5579eb0a6ecb55ad4b00a277c26f842a2b5dab42ea6e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:21:37Z",
+      "checkpointed_at": "2026-10-19T05:27:27Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:22:26Z",
+      "checkpointed_at": "2026-10-19T05:28:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:23:05Z",
+      "checkpointed_at": "2026-10-19T05:28:54Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -36704,6 +36704,134 @@
         "context_relation": "The image is related to the discussion about microorganisms and their connection to rotting food.",
         "limitations": [
           "The image does not provide specific details about the microorganisms or their connection to rotting food."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7c3e971b1b718d4ab0adc62a",
+      "asset_sha256": "04f4083a3b78b61edabd7960e49f6211a294decea8f85f30633211c9226639a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/04f4083a3b78b61edabd7960e49f6211a294decea8f85f30633211c9226639a1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rotting fruit with a powdery or cotton-like growth on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rotting",
+          "powdery",
+          "cotton-like",
+          "growth",
+          "infected",
+          "microbes",
+          "lemon",
+          "tomato",
+          "orange",
+          "food item",
+          "outside",
+          "discussion"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms in food items.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:30:34Z",
+      "effective_analysis": {
+        "visual_summary": "A rotting fruit with a powdery or cotton-like growth on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rotting",
+          "powdery",
+          "cotton-like",
+          "growth",
+          "infected",
+          "microbes",
+          "lemon",
+          "tomato",
+          "orange",
+          "food item",
+          "outside",
+          "discussion"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms in food items.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9d9699bed3884aeaaa87c21b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits and their associated powdery or cotton-like growth.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Powdery or cotton-like growth",
+          "Discussion"
+        ],
+        "context_relation": "The image is a continuation of a discussion about microorganisms in food items, specifically focusing on rotting fruits and their associated growth.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion, only text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:31:10Z",
+      "effective_analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits and their associated powdery or cotton-like growth.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Powdery or cotton-like growth",
+          "Discussion"
+        ],
+        "context_relation": "The image is a continuation of a discussion about microorganisms in food items, specifically focusing on rotting fruits and their associated growth.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion, only text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

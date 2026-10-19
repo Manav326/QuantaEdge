@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 819,
-    "successful_visual_analyses": 806,
-    "missing_visual_analyses": 1472,
+    "raw_analysis_result_rows": 821,
+    "successful_visual_analyses": 808,
+    "missing_visual_analyses": 1470,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1485,
+    "unresolved_count": 1483,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31647,9 +31647,31 @@
       "asset_path": "assets/04f4083a3b78b61edabd7960e49f6211a294decea8f85f30633211c9226639a1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rotting fruit with a powdery or cotton-like growth on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rotting",
+          "powdery",
+          "cotton-like",
+          "growth",
+          "infected",
+          "microbes",
+          "lemon",
+          "tomato",
+          "orange",
+          "food item",
+          "outside",
+          "discussion"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms in food items.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31665,9 +31687,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits and their associated powdery or cotton-like growth.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Powdery or cotton-like growth",
+          "Discussion"
+        ],
+        "context_relation": "The image is a continuation of a discussion about microorganisms in food items, specifically focusing on rotting fruits and their associated growth.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion, only text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
