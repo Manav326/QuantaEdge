@@ -10,6 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import styles from './Tests.module.css';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
 
 type AssessmentCard = {
   assessment_id:number;test_id?:string|null;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -162,7 +163,8 @@ export default function TestsClient(){
   const router=useRouter();
   const searchParams=useSearchParams();
   const rawCourseId=searchParams.get('courseId')||'';
-  const courseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const requestedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
   const uiLanguage=locale==='english'?'en':'hi';
@@ -203,12 +205,13 @@ export default function TestsClient(){
 
   const loadOverview=useCallback(async()=>{
     setLoading(true);setError('');
+    if(courseId===null){setTests([]);setResults([]);setTestsTotal(0);setResultsTotal(0);setCertificateEligibility({});setLoading(false);return;}
     try{
       const catalogParams=new URLSearchParams({language,limit:String(testsPageSize),offset:String(testsPage*testsPageSize)});
       if(subjectFilter!=='ALL')catalogParams.set('subjectCode',subjectFilter);
-      if(courseId!==null)catalogParams.set('courseId',String(courseId));
+      catalogParams.set('courseId',String(courseId));
       const resultsParams=new URLSearchParams({language,limit:String(resultsPageSize),offset:String(resultsPage*resultsPageSize)});
-      if(courseId!==null)resultsParams.set('courseId',String(courseId));
+      resultsParams.set('courseId',String(courseId));
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?'+catalogParams.toString()),
         api('/api/v1/learning/assessment-results?'+resultsParams.toString())
@@ -240,6 +243,7 @@ export default function TestsClient(){
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
+  useEffect(()=>{setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);},[courseId]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -475,11 +479,11 @@ export default function TestsClient(){
 
   return <main className={styles.shell}>
     <section className={styles.wrap}>
-      {!attempt?<>
+      {courseError&&<div className={styles.error} role="alert">{courseError}</div>}{!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
         <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{translateUi(locale, 'legacy.web.available.tests.83298a6c')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{translateUi(locale, 'legacy.web.my.results.f7fbefd3')} <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option><option value="maths">{translateUi(locale, 'legacy.web.mathematics.4cf6be1a')}</option><option value="science">{translateUi(locale, 'legacy.web.science.f85a10aa')}</option></select></label></div>
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale==='english'?'Primary course':'मुख्य कोर्स'}/><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} disabled={courseId===null} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{(activeCourse?.subjects||[]).map(subject=>{const code=String(subject.subject_code||subject.code||'');return code?<option key={code} value={code}>{String(subject.subject_name||subject.display_name||code)}</option>:null;})}</select></label></div>
           {loading?<div className={styles.empty}>{translateUi(locale, 'legacy.web.loading.your.tests.ff94a584')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{translateUi(locale, 'legacy.web.no.published.tests.yet.04ce394c')}</b><small>{translateUi(locale, 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
