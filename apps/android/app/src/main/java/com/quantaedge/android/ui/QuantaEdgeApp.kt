@@ -753,37 +753,60 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.getArray("/api/v1/students/me/programs").objectItems()
         }
         studentProgramsLoadFailed = response.isFailure
-        val programs = response.getOrDefault(emptyList())
-        studentPrograms = programs
-        val ownedPrograms = programs.filter {
-            it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
+        // A network/server error is not an empty catalogue. Keep the persisted focused course
+        // and last known course cards so a temporary outage cannot erase the learner's context.
+        if (response.isFailure) return
+
+        var programs = response.getOrThrow()
+        fun isActive(course: JSONObject): Boolean =
+            course.optBoolean("is_enrolled") || course.optBoolean("enrolled")
+        fun isAvailable(course: JSONObject): Boolean = isActive(course) || course.optBoolean("paused")
+        var ownedPrograms = programs.filter {
+            isAvailable(it) && it.longAny("id", "course_id") > 0L
         }
-        if (currentCourseId <= 0L || ownedPrograms.none { it.longAny("id", "course_id") == currentCourseId }) {
-            currentCourseId = ownedPrograms.firstOrNull {
-                it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
-            }?.longAny("id", "course_id") ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
-        }
-        val progress = linkedMapOf<Long, JSONObject>()
-        ownedPrograms.forEach { program ->
-            val id = program.longAny("id", "course_id")
-            if (id > 0L) runCatching {
-                ApiClient.getObject("/api/v1/students/me?courseId=" + id)
-            }.getOrNull()?.let { progress[id] = it }
-        }
-        courseProgress = progress
-        // Primary course is a saved reporting focus, not the most recently enrolled
-        // server row. Preserve it while this institution still grants access to the course.
+
         if (currentCourseId <= 0L || ownedPrograms.none {
                 it.longAny("id", "course_id") == currentCourseId
             }) {
-            currentCourseId = ownedPrograms.firstOrNull {
-                it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
-            }?.longAny("id", "course_id") ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
-            if (currentCourseId > 0L) preferences.edit().putLong("activeCourseId", currentCourseId).apply()
-            else preferences.edit().remove("activeCourseId").apply()
+            currentCourseId = ownedPrograms.firstOrNull { isActive(it) }?.longAny("id", "course_id")
+                ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
         }
-    }
 
+        // Pre-migration paused rows are legacy state, not a primary-course feature. Re-activate
+        // only the focused row, using the same audited course-enrolment endpoint as the web picker.
+        val focused = ownedPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }
+        if (focused != null && !isActive(focused) && focused.optBoolean("paused")) {
+            val normalized = runCatching {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + currentCourseId + "/enroll", JSONObject())
+                ApiClient.getArray("/api/v1/students/me/programs").objectItems()
+            }
+            if (normalized.isFailure) {
+                studentPrograms = programs
+                studentProgramsLoadFailed = true
+                return
+            }
+            programs = normalized.getOrThrow()
+            ownedPrograms = programs.filter { isAvailable(it) && it.longAny("id", "course_id") > 0L }
+            studentProgramsLoadFailed = false
+        }
+
+        studentPrograms = programs
+        if (currentCourseId > 0L && ownedPrograms.any { it.longAny("id", "course_id") == currentCourseId }) {
+            preferences.edit().putLong("activeCourseId", currentCourseId).apply()
+        } else {
+            currentCourseId = 0L
+            preferences.edit().remove("activeCourseId").apply()
+        }
+
+        val progress = linkedMapOf<Long, JSONObject>()
+        // The course-metrics API intentionally rejects paused rows; report only active courses.
+        ownedPrograms.filter { isActive(it) }.forEach { program ->
+            val id = program.longAny("id", "course_id")
+            runCatching { ApiClient.getObject("/api/v1/students/me?courseId=" + id) }
+                .getOrNull()?.let { progress[id] = it }
+        }
+        courseProgress = progress
+    }
     suspend fun refreshStudentTextbookDocuments() {
         if (currentCourseId <= 0L) {
             studentTextbookDocuments = emptyList()
