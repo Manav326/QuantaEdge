@@ -47,7 +47,8 @@ type ExtractionStatus = {
   ocr_pages?: number; failed_pages?: number; last_error?: string | null;
 };
 type Job = {
-  job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
+  job_id: number; source_id: number; institution_id: number; course_id: number;
+  course_code?: string; course_name?: string; source_title: string; source_url: string; final_pdf_url?: string;
   cache_medium?: string | null; cache_book_id?: string | null; cache_sha256?: string | null;
   edition: string; language: string; status: string; error_message?: string | null;
   chapter_count?: number; approved_chapter_count?: number; rejected_chapter_count?: number;
