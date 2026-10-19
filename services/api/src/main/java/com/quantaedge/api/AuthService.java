@@ -727,8 +727,26 @@ public class AuthService {
               on tenant_scope.id=assignment.institution_id and tenant_scope.status='ACTIVE'
             where assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
           )
+        union all
+        select 1
+        from course_purchase purchase
+        join student st on st.id=purchase.student_id and st.active=true
+          and st.environment='PRODUCTION' and st.user_account_id=?
+        join institution_membership m on m.student_id=st.id
+          and m.institution_id=purchase.institution_id and m.status='ACTIVE'
+        join institution_tenant tenant_scope on tenant_scope.id=m.institution_id and tenant_scope.status='ACTIVE'
+        join curriculum_program p on p.id=purchase.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where purchase.institution_id=?
+          and exists(
+            select 1
+            from institution_course_assignment assignment
+            join institution_course_release release
+              on release.id=assignment.course_release_id and release.program_id=p.id
+            where assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
+          )
       )
-      """, Boolean.class, institutionId, parentUserId, institutionId, parentUserId);
+      """, Boolean.class, institutionId, parentUserId, institutionId, parentUserId,
+          parentUserId, institutionId);
     return Boolean.TRUE.equals(entitled);
   }
 
