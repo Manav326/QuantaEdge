@@ -26,6 +26,37 @@ class ApplicationStartupSmokeTest {
   @Autowired
   private AdminContentController adminContentController;
 
+  @Autowired
+  private InstitutionMembershipService institutionMembershipService;
+
+
+  @Test
+  @Transactional
+  void signupMembershipAuditPersistsNullActorAsJsonNull() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant
+      where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+
+    // A fresh phone signup has a linked student identity but no separate actor user ID
+    // in its AuthContext yet. Exercise the real PostgreSQL jsonb_build_object call.
+    Long studentId = jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active)
+      values(gen_random_uuid(),'Signup audit null-actor regression','6','Bihar Board','hi','PRODUCTION',true)
+      returning id
+      """, Long.class);
+
+    institutionMembershipService.ensureStudentMembership(
+        studentId, institutionId, "PHONE_SIGNUP", null);
+
+    assertTrue(jdbc.queryForObject("""
+      select details ? 'actorUserId' and details->>'actorUserId' is null
+      from institution_membership_event
+      where institution_id=? and student_id=? and event_type='MEMBERSHIP_CREATED'
+      order by id desc limit 1
+      """, Boolean.class, institutionId, studentId),
+      "A null signup actor must be serialized as JSON null without failing membership creation.");
+  }
 
   @Test
   void classSixThroughEightArePublishedOrdinaryCoursesWithMappedTracksAndGrandfatheredAccess() {
