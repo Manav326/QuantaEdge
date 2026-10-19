@@ -33,8 +33,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class QaTestPackService {
   private static final String PACK_KEY = "TENANT_LEARNER_BOUNDARY_V1";
-  private static final int PACK_VERSION = 2;
-  private static final String PACK_DEFINITION = "TENANT_LEARNER_BOUNDARY_V1:2:two-tenants-parent-child-adult-learner-run-owned-synthetic-class7-curriculum-progress-attempts";
+  private static final int PACK_VERSION = 3;
+  private static final String PACK_DEFINITION = "TENANT_LEARNER_BOUNDARY_V1:3:three-institutions-hrms-approved-cross-institution-course-release-institution-bound-users-and-learners-run-owned-synthetic-curriculum";
   private static final Pattern IDEMPOTENCY_KEY = Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._:-]{7,119}$");
   private static final Pattern ENVIRONMENT_LABEL = Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$");
   private static final Pattern QA_DATABASE = Pattern.compile("(?i)^[a-z0-9][a-z0-9_-]*(?:_qa|_test|_ci|_integration)(?:_[a-z0-9]+)?$");
@@ -95,8 +95,10 @@ public class QaTestPackService {
     pack.put("packKey", PACK_KEY);
     pack.put("version", PACK_VERSION);
     pack.put("title", "Tenant and learner boundary smoke pack");
-    pack.put("summary", "Two synthetic institutions, two parent-child pairs, one independent learner, class-7 tracks, a run-owned synthetic lesson/question/options fixture, progress and contrasting question attempts.");
-    pack.put("personas", List.of("Parent A", "Minor child A", "Parent B", "Minor child B", "Independent adult learner"));
+    pack.put("summary", "Three synthetic institutions, institution-linked parent/child/adult learner accounts, two institution-owned course releases, one HRMS-approved cross-institution assignment, a third-institution denial check, and run-owned curriculum/progress/answer fixtures.");
+    pack.put("minimumInstitutions", 3);
+    pack.put("institutionCourseCoverage", List.of("Institution A owns a shareable course", "HRMS assigns A\u2019s approved release to Institution B", "Institution C owns a separate release and must not receive A\u2019s release"));
+    pack.put("personas", List.of("Institution Admin A", "Parent A", "Minor child A", "Institution Admin B", "Parent B", "Minor child B", "Institution Admin C", "Independent adult learner C", "HRMS content reviewer"));
     pack.put("createsExternalResources", false);
     pack.put("createsRunOwnedSyntheticCurriculum", true);
     pack.put("status", "AVAILABLE");
@@ -372,8 +374,139 @@ public class QaTestPackService {
     }
     List<Map<String,Object>> checks = new ArrayList<>();
     long tenantCount = scalarCount("select count(*) from institution_tenant where qa_test_run_id=?", runId);
-    addCheck(runId, checks, "PACK_TWO_TENANTS", tenantCount == 2, "2 run-owned active institutions",
+    addCheck(runId, checks, "PACK_THREE_TENANTS", tenantCount == 3, "At least 3 run-owned active institutions",
         Long.toString(tenantCount), Map.of("actual", tenantCount));
+
+    long ownedAdminAccounts = scalarCount("select count(*) from institution_admin_account where qa_test_run_id=?", runId);
+    addCheck(runId, checks, "PACK_THREE_INSTITUTION_ADMINS", ownedAdminAccounts == 3,
+        "3 institution-admin fixtures, each bound to its own tenant", Long.toString(ownedAdminAccounts),
+        Map.of("actual", ownedAdminAccounts));
+
+    long ownedStaffReviewers = scalarCount("select count(*) from staff_account where qa_test_run_id=? and role='CONTENT_REVIEWER'", runId);
+    addCheck(runId, checks, "PACK_HRMS_COURSE_REVIEWER", ownedStaffReviewers == 1,
+        "1 run-owned HRMS-side course-quality reviewer", Long.toString(ownedStaffReviewers),
+        Map.of("actual", ownedStaffReviewers));
+
+    long courseReleaseCount = scalarCount("select count(*) from institution_course_release where qa_test_run_id=?", runId);
+    long orphanCourseReleases = scalarCount("""
+      select count(*) from institution_course_release r
+      where r.qa_test_run_id=? and not exists(
+        select 1 from institution_tenant t
+        where t.id=r.source_institution_id and t.qa_test_run_id=?
+      )
+      """, runId, runId);
+    addCheck(runId, checks, "COURSE_RELEASES_HAVE_AN_INSTITUTION_OWNER",
+        courseReleaseCount == 2 && orphanCourseReleases == 0,
+        "2 course releases with a run-owned source institution; no global/orphan course",
+        "releases=" + courseReleaseCount + ", orphaned=" + orphanCourseReleases,
+        Map.of("releases", courseReleaseCount, "orphaned", orphanCourseReleases));
+
+    long courseAssignmentCount = scalarCount("select count(*) from institution_course_assignment where qa_test_run_id=?", runId);
+    long orphanAssignments = scalarCount("""
+      select count(*) from institution_course_assignment a
+      where a.qa_test_run_id=? and (
+        not exists(select 1 from institution_tenant t where t.id=a.institution_id and t.qa_test_run_id=?)
+        or not exists(select 1 from institution_course_release r where r.id=a.course_release_id and r.qa_test_run_id=?)
+      )
+      """, runId, runId, runId);
+    addCheck(runId, checks, "COURSE_ASSIGNMENTS_ARE_TENANT_BOUND",
+        courseAssignmentCount == 3 && orphanAssignments == 0,
+        "3 institution-bound assignments with owned destination tenant and owned course release",
+        "assignments=" + courseAssignmentCount + ", orphaned=" + orphanAssignments,
+        Map.of("assignments", courseAssignmentCount, "orphaned", orphanAssignments));
+
+    long tenantsWithoutAssignedCourse = scalarCount("""
+      select count(*) from institution_tenant t
+      where t.qa_test_run_id=? and not exists(
+        select 1 from institution_course_assignment a
+        where a.institution_id=t.id and a.status='ASSIGNED' and a.qa_test_run_id=?
+      )
+      """, runId, runId);
+    addCheck(runId, checks, "EVERY_INSTITUTION_HAS_AN_ASSIGNED_COURSE",
+        tenantsWithoutAssignedCourse == 0,
+        "Every synthetic institution has at least one active, institution-scoped course assignment",
+        Long.toString(tenantsWithoutAssignedCourse), Map.of("institutionsWithoutCourses", tenantsWithoutAssignedCourse));
+
+    long hrmsApprovedCrossAssignments = scalarCount("""
+      select count(*) from institution_course_assignment a
+      join institution_course_release r on r.id=a.course_release_id
+      join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+      join institution_tenant target_tenant on target_tenant.id=a.institution_id
+      where a.qa_test_run_id=? and r.qa_test_run_id=? and source_tenant.qa_test_run_id=?
+        and target_tenant.qa_test_run_id=? and source_tenant.id<>target_tenant.id
+        and r.release_state='SHAREABLE' and a.assignment_source='HRMS' and a.status='ASSIGNED'
+      """, runId, runId, runId, runId);
+    addCheck(runId, checks, "HRMS_APPROVED_CROSS_INSTITUTION_COURSE",
+        hrmsApprovedCrossAssignments == 1,
+        "Exactly one origin-approved shareable course assigned to another institution by HRMS",
+        Long.toString(hrmsApprovedCrossAssignments), Map.of("actual", hrmsApprovedCrossAssignments));
+
+    long thirdTenantReceivedForeignCourse = scalarCount("""
+      select count(*) from institution_course_assignment a
+      join institution_course_release r on r.id=a.course_release_id
+      join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
+      join institution_tenant third_tenant on third_tenant.id=a.institution_id
+      where a.qa_test_run_id=? and r.qa_test_run_id=? and source_tenant.qa_test_run_id=?
+        and third_tenant.qa_test_run_id=? and source_tenant.id<>third_tenant.id
+        and right(source_tenant.tenant_code,1)='A' and right(third_tenant.tenant_code,1)='C'
+      """, runId, runId, runId, runId);
+    addCheck(runId, checks, "THIRD_INSTITUTION_DOES_NOT_INHERIT_COURSE",
+        thirdTenantReceivedForeignCourse == 0,
+        "Institution C must not receive Institution A's course release without an HRMS assignment",
+        Long.toString(thirdTenantReceivedForeignCourse), Map.of("unexpectedAssignments", thirdTenantReceivedForeignCourse));
+
+    long courseEntitlementCount = scalarCount("select count(*) from institution_course_entitlement where qa_test_run_id=?", runId);
+    long orphanCourseEntitlements = scalarCount("""
+      select count(*) from institution_course_entitlement e
+      where e.qa_test_run_id=? and (
+        not exists(select 1 from institution_tenant t where t.id=e.institution_id and t.qa_test_run_id=?)
+        or not exists(select 1 from curriculum_program p where p.id=e.program_id and p.status='ACTIVE')
+      )
+      """, runId, runId);
+    addCheck(runId, checks, "COURSE_ENTITLEMENTS_ARE_TENANT_BOUND",
+        courseEntitlementCount == 3 && orphanCourseEntitlements == 0,
+        "3 institution-bound course entitlements with active course templates",
+        "entitlements=" + courseEntitlementCount + ", orphaned=" + orphanCourseEntitlements,
+        Map.of("entitlements", courseEntitlementCount, "orphaned", orphanCourseEntitlements));
+
+    long unownedUserAccounts = scalarCount("""
+      select count(*) from user_account u where u.qa_test_run_id=? and not exists(
+        select 1 from institution_user_membership m
+        where m.user_id=u.id and m.status='ACTIVE' and m.qa_test_run_id=?
+          and exists(select 1 from institution_tenant t where t.id=m.institution_id and t.qa_test_run_id=?)
+      )
+      """, runId, runId, runId);
+    long unownedStudentProfiles = scalarCount("""
+      select count(*) from student st where st.qa_test_run_id=? and not exists(
+        select 1 from institution_membership m
+        where m.student_id=st.id and m.status='ACTIVE' and m.qa_test_run_id=?
+          and exists(select 1 from institution_tenant t where t.id=m.institution_id and t.qa_test_run_id=?)
+      )
+      """, runId, runId, runId);
+    addCheck(runId, checks, "NO_ORPHAN_USERS_OR_STUDENTS",
+        unownedUserAccounts == 0 && unownedStudentProfiles == 0,
+        "Every run-owned login identity and student belongs to a run-owned institution",
+        "unownedUsers=" + unownedUserAccounts + ", unownedStudents=" + unownedStudentProfiles,
+        Map.of("unownedUsers", unownedUserAccounts, "unownedStudents", unownedStudentProfiles));
+
+    long courseEnrollmentCount = scalarCount("select count(*) from student_program_enrollment where qa_test_run_id=?", runId);
+    long invalidCourseEnrollments = scalarCount("""
+      select count(*) from student_program_enrollment e
+      where e.qa_test_run_id=? and (
+        not exists(select 1 from institution_membership m
+          where m.student_id=e.student_id and m.institution_id=e.institution_id
+            and m.status='ACTIVE' and m.qa_test_run_id=?)
+        or not exists(select 1 from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          where a.institution_id=e.institution_id and a.status='ASSIGNED'
+            and a.qa_test_run_id=? and r.program_id=e.program_id and r.release_state in ('SHAREABLE','DRAFT','QUALITY_APPROVED','LEGACY_MIGRATED'))
+      )
+      """, runId, runId, runId);
+    addCheck(runId, checks, "LEARNER_COURSE_ENROLLMENTS_MATCH_TENANT_ASSIGNMENTS",
+        courseEnrollmentCount == 3 && invalidCourseEnrollments == 0,
+        "Every active learner course enrollment matches that learner's institution membership and an assigned course release",
+        "enrollments=" + courseEnrollmentCount + ", invalid=" + invalidCourseEnrollments,
+        Map.of("enrollments", courseEnrollmentCount, "invalid", invalidCourseEnrollments));
 
     long parentCount = scalarCount("select count(*) from user_account where qa_test_run_id=? and role='PARENT' and active=true", runId);
     addCheck(runId, checks, "PACK_TWO_PARENTS", parentCount == 2, "2 active synthetic parent accounts",
@@ -468,10 +601,11 @@ public class QaTestPackService {
     long unexpectedExternalResources = scalarCount("""
       select count(*) from qa_test_run_resource
       where run_id=? and resource_kind not in (
-        'INSTITUTION','INSTITUTION_BRANDING','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
-        'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
-        'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT',
-        'LESSON','QUESTION','QUESTION_OPTION'
+        'INSTITUTION','INSTITUTION_BRANDING','INSTITUTION_ADMIN_ACCOUNT','STAFF_ACCOUNT',
+        'USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT','INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP',
+        'STUDENT_LOGIN_CREDENTIAL','STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT',
+        'STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT',
+        'COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
       )
       """, runId);
     addCheck(runId, checks, "STARTER_PACK_HAS_NO_EXTERNAL_RESOURCES", unexpectedExternalResources == 0,
@@ -515,6 +649,12 @@ public class QaTestPackService {
     String kind = String.valueOf(resource.get("resource_kind"));
     String sql = switch (kind) {
       case "STUDENT_QUESTION_ATTEMPT" -> "select exists(select 1 from student_question_attempt where id=? and qa_test_run_id=?)";
+      case "STUDENT_COURSE_ENROLLMENT" -> "select exists(select 1 from student_program_enrollment where id=? and qa_test_run_id=?)";
+      case "COURSE_ENTITLEMENT" -> "select exists(select 1 from institution_course_entitlement where id=? and qa_test_run_id=?)";
+      case "COURSE_ASSIGNMENT" -> "select exists(select 1 from institution_course_assignment where id=? and qa_test_run_id=?)";
+      case "COURSE_RELEASE" -> "select exists(select 1 from institution_course_release where id=? and qa_test_run_id=?)";
+      case "INSTITUTION_ADMIN_ACCOUNT" -> "select exists(select 1 from institution_admin_account where id=? and qa_test_run_id=?)";
+      case "STAFF_ACCOUNT" -> "select exists(select 1 from staff_account where id=? and qa_test_run_id=?)";
       case "LESSON" -> "select exists(select 1 from lesson where id=? and qa_test_run_id=?)";
       case "QUESTION" -> "select exists(select 1 from question where id=? and qa_test_run_id=?)";
       case "QUESTION_OPTION" -> "select exists(select 1 from question_option where id=? and qa_test_run_id=?)";
@@ -536,76 +676,280 @@ public class QaTestPackService {
 
   private Map<String,Object> seedTenantLearnerPack(UUID runId, Long actorStaffId) {
     String slug = runId.toString().replace("-", "").substring(0, 12).toUpperCase(Locale.ROOT);
+    String lowerSlug = slug.toLowerCase(Locale.ROOT);
     String passwordHash = passwordEncoder.encode(fixturePassword);
+
+    // Three explicit tenants model the HRMS control plane, a destination institution receiving an
+    // approved course, and a third independent institution that must not inherit that assignment.
     Long tenantA = insertTenant(runId, actorStaffId, "QAT" + slug + "A", "QA " + slug + " Institution A");
     Long tenantB = insertTenant(runId, actorStaffId, "QAT" + slug + "B", "QA " + slug + " Institution B");
+    Long tenantC = insertTenant(runId, actorStaffId, "QAT" + slug + "C", "QA " + slug + " Institution C");
     insertBranding(runId, "tenant-a-branding", tenantA, "QA Institution A", "institution-QAT" + slug + "A");
     insertBranding(runId, "tenant-b-branding", tenantB, "QA Institution B", "institution-QAT" + slug + "B");
+    insertBranding(runId, "tenant-c-branding", tenantC, "QA Institution C", "institution-QAT" + slug + "C");
 
     String parentAMobile = testMobile(runId, 1);
     String parentBMobile = testMobile(runId, 2);
     String learnerMobile = testMobile(runId, 3);
-    String parentAUsername = "qa_parent_" + slug.toLowerCase(Locale.ROOT) + "a";
-    String parentBUsername = "qa_parent_" + slug.toLowerCase(Locale.ROOT) + "b";
-    String learnerUsername = "qa_learner_" + slug.toLowerCase(Locale.ROOT);
+    String parentAUsername = "qa_parent_" + lowerSlug + "a";
+    String parentBUsername = "qa_parent_" + lowerSlug + "b";
+    String learnerUsername = "qa_learner_" + lowerSlug;
 
     Long parentA = insertUser(runId, "QA Parent A " + slug, "PARENT", parentAMobile, parentAUsername, passwordHash, "parent-a");
     Long parentB = insertUser(runId, "QA Parent B " + slug, "PARENT", parentBMobile, parentBUsername, passwordHash, "parent-b");
-    Long independentLearner = insertUser(runId, "QA Independent Learner " + slug, "LEARNER",
+    Long independentLearner = insertUser(runId, "QA Independent Learner C " + slug, "LEARNER",
         learnerMobile, learnerUsername, passwordHash, "independent-learner");
 
     insertUserMembership(runId, "parent-a-membership", tenantA, parentA, "institution-QAT" + slug + "A", "user-parent-a");
     insertUserMembership(runId, "parent-b-membership", tenantB, parentB, "institution-QAT" + slug + "B", "user-parent-b");
-    insertUserMembership(runId, "adult-learner-membership", tenantA, independentLearner, "institution-QAT" + slug + "A", "user-independent-learner");
+    insertUserMembership(runId, "adult-learner-membership", tenantC, independentLearner, "institution-QAT" + slug + "C", "user-independent-learner");
 
     Long childA = insertStudent(runId, "QA Child A " + slug, "en", null, "child-a");
     Long childB = insertStudent(runId, "QA Child B " + slug, "hi", null, "child-b");
-    Long adultStudent = insertStudent(runId, "QA Adult Learner " + slug, "en", independentLearner, "adult-student");
+    Long adultStudent = insertStudent(runId, "QA Adult Learner C " + slug, "en", independentLearner, "adult-student");
 
     insertGuardianStudent(runId, "parent-a-child-a", parentA, childA, "user-parent-a", "student-child-a");
     insertGuardianStudent(runId, "parent-b-child-b", parentB, childB, "user-parent-b", "student-child-b");
-    String childAUsername = "qa_child_" + slug.toLowerCase(Locale.ROOT) + "a";
-    String childBUsername = "qa_child_" + slug.toLowerCase(Locale.ROOT) + "b";
+    String childAUsername = "qa_child_" + lowerSlug + "a";
+    String childBUsername = "qa_child_" + lowerSlug + "b";
     insertStudentCredential(runId, "child-a-credential", parentA, childA, childAUsername, passwordHash, "user-parent-a", "student-child-a");
     insertStudentCredential(runId, "child-b-credential", parentB, childB, childBUsername, passwordHash, "user-parent-b", "student-child-b");
 
     insertStudentMembership(runId, "child-a-institution-membership", tenantA, childA, "institution-QAT" + slug + "A", "student-child-a");
     insertStudentMembership(runId, "child-b-institution-membership", tenantB, childB, "institution-QAT" + slug + "B", "student-child-b");
-    insertStudentMembership(runId, "adult-institution-membership", tenantA, adultStudent, "institution-QAT" + slug + "A", "student-adult-student");
-
-    ensureRequiredTracks(runId, childA, tenantA, "student-child-a", "institution-QAT" + slug + "A");
-    ensureRequiredTracks(runId, childB, tenantB, "student-child-b", "institution-QAT" + slug + "B");
-    ensureRequiredTracks(runId, adultStudent, tenantA, "student-adult-student", "institution-QAT" + slug + "A");
+    insertStudentMembership(runId, "adult-institution-membership", tenantC, adultStudent, "institution-QAT" + slug + "C", "student-adult-student");
 
     Map<String,Object> content = insertSyntheticClass7Question(runId);
     Long lessonId = number(content.get("lesson_id"));
     Long questionId = number(content.get("question_id"));
     String correct = String.valueOf(content.get("correct_option"));
     String wrong = String.valueOf(content.get("wrong_option"));
+    Long programId = jdbc.queryForObject("""
+      select id from curriculum_program
+      where code='CLASS_7' and curriculum_version='CURRENT' and status='ACTIVE'
+      order by id limit 1
+      """, Long.class);
+    if (programId == null) throw new IllegalStateException("The active Class 7 institution course template is unavailable.");
+
+    Map<String,Object> courseGraph = insertInstitutionCourseGraph(
+        runId, slug, tenantA, tenantB, tenantC, programId);
+    String releaseAKey = String.valueOf(courseGraph.get("release_a_resource_key"));
+    String releaseCKey = String.valueOf(courseGraph.get("release_c_resource_key"));
+
+    insertStudentCourseEnrollment(runId, "child-a-course-enrollment", childA, tenantA, programId,
+        "student-child-a", "institution-QAT" + slug + "A", releaseAKey);
+    insertStudentCourseEnrollment(runId, "child-b-course-enrollment", childB, tenantB, programId,
+        "student-child-b", "institution-QAT" + slug + "B", releaseAKey);
+    insertStudentCourseEnrollment(runId, "adult-course-enrollment", adultStudent, tenantC, programId,
+        "student-adult-student", "institution-QAT" + slug + "C", releaseCKey);
+
+    ensureRequiredTracks(runId, childA, tenantA, programId, "student-child-a", "institution-QAT" + slug + "A");
+    ensureRequiredTracks(runId, childB, tenantB, programId, "student-child-b", "institution-QAT" + slug + "B");
+    ensureRequiredTracks(runId, adultStudent, tenantC, programId, "student-adult-student", "institution-QAT" + slug + "C");
+
     insertProgress(runId, "child-a-progress", childA, tenantA, lessonId,
         "student-child-a", "institution-QAT" + slug + "A", String.valueOf(content.get("lesson_resource_key")));
     insertProgress(runId, "child-b-progress", childB, tenantB, lessonId,
         "student-child-b", "institution-QAT" + slug + "B", String.valueOf(content.get("lesson_resource_key")));
-    insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId,
-        "student-adult-student", "institution-QAT" + slug + "A", String.valueOf(content.get("lesson_resource_key")));
+    insertProgress(runId, "adult-progress", adultStudent, tenantC, lessonId,
+        "student-adult-student", "institution-QAT" + slug + "C", String.valueOf(content.get("lesson_resource_key")));
     insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true,
         "student-child-a", "institution-QAT" + slug + "A", String.valueOf(content.get("question_resource_key")));
     insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false,
         "student-child-b", "institution-QAT" + slug + "B", String.valueOf(content.get("question_resource_key")));
-    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true,
-        "student-adult-student", "institution-QAT" + slug + "A", String.valueOf(content.get("question_resource_key")));
+    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantC, questionId, correct, true,
+        "student-adult-student", "institution-QAT" + slug + "C", String.valueOf(content.get("question_resource_key")));
 
     Map<String,Object> credentials = new LinkedHashMap<>();
+    credentials.put("institutionAdminA", courseGraph.get("institution_admin_a_credentials"));
+    credentials.put("institutionAdminB", courseGraph.get("institution_admin_b_credentials"));
+    credentials.put("institutionAdminC", courseGraph.get("institution_admin_c_credentials"));
     credentials.put("parentA", Map.of("institutionCode", "QAT" + slug + "A", "mobile", parentAMobile, "username", parentAUsername, "password", fixturePassword));
     credentials.put("parentB", Map.of("institutionCode", "QAT" + slug + "B", "mobile", parentBMobile, "username", parentBUsername, "password", fixturePassword));
     credentials.put("childA", Map.of("institutionCode", "QAT" + slug + "A", "parentMobile", parentAMobile, "username", childAUsername, "password", fixturePassword));
     credentials.put("childB", Map.of("institutionCode", "QAT" + slug + "B", "parentMobile", parentBMobile, "username", childBUsername, "password", fixturePassword));
-    credentials.put("independentLearner", Map.of("institutionCode", "QAT" + slug + "A", "mobile", learnerMobile, "username", learnerUsername, "password", fixturePassword));
+    credentials.put("independentLearner", Map.of("institutionCode", "QAT" + slug + "C", "mobile", learnerMobile, "username", learnerUsername, "password", fixturePassword));
+    credentials.put("hrmsCourseReviewer", Map.of("username", "qa_reviewer_" + lowerSlug,
+        "scope", "HRMS course-release review fixture", "institutionCode", "HRMS"));
+
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("credentials", credentials);
-    result.put("fixtureSummary", Map.of("institutions", 2, "parentAccounts", 2, "minorChildren", 2,
-        "independentLearners", 1, "guardianRelationships", 2, "learningProgressRows", 3, "questionAttempts", 3));
+    result.put("fixtureSummary", Map.ofEntries(
+        Map.entry("institutions", 3),
+        Map.entry("institutionAdminAccounts", 3),
+        Map.entry("parentAccounts", 2),
+        Map.entry("minorChildren", 2),
+        Map.entry("independentLearners", 1),
+        Map.entry("guardianRelationships", 2),
+        Map.entry("institutionOwnedCourseReleases", 2),
+        Map.entry("courseAssignments", 3),
+        Map.entry("hrmsApprovedCrossInstitutionAssignments", 1),
+        Map.entry("unassignedThirdInstitutionChecks", 1),
+        Map.entry("institutionCourseEntitlements", 3),
+        Map.entry("institutionScopedCourseEnrollments", 3),
+        Map.entry("learningProgressRows", 3),
+        Map.entry("questionAttempts", 3)));
     return result;
+  }
+
+  /**
+   * Creates an institution-owned release, grants it to its origin institution, shares that approved
+   * release with institution B through an HRMS assignment, and gives institution C a separate
+   * origin-owned release. All account, release, assignment and entitlement rows are run-owned.
+   */
+  private Map<String,Object> insertInstitutionCourseGraph(
+      UUID runId, String slug, Long tenantA, Long tenantB, Long tenantC, Long programId) {
+    Long reviewerId = insertQaCourseReviewer(runId, slug);
+    String reviewerUsername = "qa_reviewer_" + slug.toLowerCase(Locale.ROOT);
+    Long adminA = insertInstitutionAdmin(runId, "institution-admin-a", tenantA,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "a", "QA Institution A Admin", reviewerId,
+        "institution-QAT" + slug + "A");
+    Long adminB = insertInstitutionAdmin(runId, "institution-admin-b", tenantB,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "b", "QA Institution B Admin", reviewerId,
+        "institution-QAT" + slug + "B");
+    Long adminC = insertInstitutionAdmin(runId, "institution-admin-c", tenantC,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "c", "QA Institution C Admin", reviewerId,
+        "institution-QAT" + slug + "C");
+
+    String fingerprint = courseFingerprint(programId);
+    Long releaseA = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        submitted_by_institution_admin_id,submitted_at,quality_reviewed_by_staff_id,quality_reviewed_at,
+        quality_review_notes,origin_approved_by_admin_id,origin_approved_at,shareable_at,legacy_migration,qa_test_run_id
+      ) values(?,?,1,'SHAREABLE',?,?,now(),?,now(),?,?,now(),now(),false,?) returning id
+      """, Long.class, tenantA, programId, fingerprint, adminA, reviewerId,
+      "Approved by the synthetic HRMS QA content reviewer for cross-institution boundary testing.",
+      adminA, runId);
+    addResource(runId, "course-release-institution-a", "COURSE_RELEASE", releaseA, 46,
+        List.of("institution-QAT" + slug + "A", "institution-admin-a", "staff-course-reviewer"),
+        "institution_course_release");
+
+    Long releaseC = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        legacy_migration,qa_test_run_id
+      ) values(?,?,1,'DRAFT',?,false,?) returning id
+      """, Long.class, tenantC, programId, fingerprint, runId);
+    addResource(runId, "course-release-institution-c", "COURSE_RELEASE", releaseC, 46,
+        List.of("institution-QAT" + slug + "C", "institution-admin-c"), "institution_course_release");
+
+    Long assignmentA = insertCourseAssignment(runId, "course-assignment-a-origin", tenantA, releaseA,
+        "ORIGIN", reviewerId, List.of("institution-QAT" + slug + "A", "course-release-institution-a"));
+    Long assignmentB = insertCourseAssignment(runId, "course-assignment-a-to-b-hrms", tenantB, releaseA,
+        "HRMS", reviewerId, List.of("institution-QAT" + slug + "B", "course-release-institution-a"));
+    Long assignmentC = insertCourseAssignment(runId, "course-assignment-c-origin", tenantC, releaseC,
+        "ORIGIN", reviewerId, List.of("institution-QAT" + slug + "C", "course-release-institution-c"));
+
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-a", tenantA, programId, reviewerId,
+        "institution-QAT" + slug + "A", "course-release-institution-a");
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-b", tenantB, programId, reviewerId,
+        "institution-QAT" + slug + "B", "course-release-institution-a");
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-c", tenantC, programId, reviewerId,
+        "institution-QAT" + slug + "C", "course-release-institution-c");
+
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("release_a_id", releaseA);
+    result.put("release_c_id", releaseC);
+    result.put("release_a_resource_key", "course-release-institution-a");
+    result.put("release_c_resource_key", "course-release-institution-c");
+    result.put("institution_admin_a_credentials", Map.of("institutionCode", "QAT" + slug + "A",
+        "username", "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "a", "password", fixturePassword));
+    result.put("institution_admin_b_credentials", Map.of("institutionCode", "QAT" + slug + "B",
+        "username", "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "b", "password", fixturePassword));
+    result.put("institution_admin_c_credentials", Map.of("institutionCode", "QAT" + slug + "C",
+        "username", "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "c", "password", fixturePassword));
+    result.put("courseIds", Map.of("institutionAReleaseId", releaseA, "institutionCReleaseId", releaseC,
+        "institutionAAssignmentId", assignmentA, "institutionBAssignmentId", assignmentB,
+        "institutionCAssignmentId", assignmentC, "programId", programId));
+    return result;
+  }
+
+  private Long insertQaCourseReviewer(UUID runId, String slug) {
+    Long id = jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active,qa_test_run_id)
+      values(?,?,?,'CONTENT_REVIEWER',true,?) returning id
+      """, Long.class, UUID.randomUUID(), testMobile(runId, 9), "QA HRMS Course Reviewer " + slug, runId);
+    addResource(runId, "staff-course-reviewer", "STAFF_ACCOUNT", id, 48, List.of(), "staff_account");
+    return id;
+  }
+
+  private Long insertInstitutionAdmin(UUID runId, String key, Long institutionId, String username,
+      String displayName, Long createdByStaffId, String institutionResourceKey) {
+    Long id = jdbc.queryForObject("""
+      insert into institution_admin_account(
+        institution_id,username,display_name,password_hash,active,must_change_password,
+        created_by_staff_id,qa_test_run_id
+      ) values(?,?,?,?,true,true,?,?) returning id
+      """, Long.class, institutionId, username, displayName, passwordEncoder.encode(fixturePassword),
+      createdByStaffId, runId);
+    addResource(runId, key, "INSTITUTION_ADMIN_ACCOUNT", id, 47,
+        List.of(institutionResourceKey, "staff-course-reviewer"), "institution_admin_account");
+    return id;
+  }
+
+  private Long insertCourseAssignment(UUID runId, String key, Long institutionId, Long releaseId,
+      String source, Long actorStaffId, List<String> dependencies) {
+    Long id = jdbc.queryForObject("""
+      insert into institution_course_assignment(
+        institution_id,course_release_id,status,assignment_source,assigned_by_staff_id,
+        assigned_at,created_at,updated_at,qa_test_run_id
+      ) values(?,?,'ASSIGNED',?,?,now(),now(),now(),?) returning id
+      """, Long.class, institutionId, releaseId, source, actorStaffId, runId);
+    addResource(runId, key, "COURSE_ASSIGNMENT", id, 44, dependencies, "institution_course_assignment");
+    return id;
+  }
+
+  private void insertInstitutionCourseEntitlement(UUID runId, String key, Long institutionId,
+      Long programId, Long actorStaffId, String institutionResourceKey, String courseResourceKey) {
+    Long id = jdbc.queryForObject("""
+      insert into institution_course_entitlement(
+        institution_id,program_id,status,valid_from,granted_by_staff_id,qa_test_run_id
+      ) values(?,?,'ACTIVE',now(),?,?) returning id
+      """, Long.class, institutionId, programId, actorStaffId, runId);
+    addResource(runId, key, "COURSE_ENTITLEMENT", id, 42,
+        List.of(institutionResourceKey, courseResourceKey), "institution_course_entitlement");
+  }
+
+  private String courseFingerprint(Long programId) {
+    String value = jdbc.queryForObject("""
+      select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,E'\\n'
+          order by entity_type,entity_id),'')) as fingerprint
+      from (
+        select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
+        from curriculum_program p where p.id=?
+        union all
+        select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
+        from curriculum_program_subject ps
+        join curriculum_program p on p.id=ps.program_id
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          and (s.program_id=ps.program_id or s.program_id is null)
+        where ps.program_id=?
+        union all
+        select 'chapter',ch.id,to_jsonb(ch)::text
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+        join curriculum_chapter ch on ch.subject_id=s.id where ps.program_id=?
+        union all
+        select 'lesson',l.id,to_jsonb(l)::text
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+        join curriculum_chapter ch on ch.subject_id=s.id
+        join lesson l on l.chapter_id=ch.id where ps.program_id=?
+      ) content_rows
+      """, String.class, programId, programId, programId, programId);
+    return value == null ? "d41d8cd98f00b204e9800998ecf8427e" : value.trim();
+  }
+
+  private void insertStudentCourseEnrollment(UUID runId, String key, Long studentId, Long institutionId,
+      Long programId, String studentResourceKey, String institutionResourceKey, String courseReleaseResourceKey) {
+    Long id = jdbc.queryForObject("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at,qa_test_run_id
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now(),?) returning id
+      """, Long.class, studentId, programId, institutionId, runId);
+    addResource(runId, key, "STUDENT_COURSE_ENROLLMENT", id, 32,
+        List.of(studentResourceKey, institutionResourceKey, courseReleaseResourceKey), "student_program_enrollment");
   }
 
   private Long insertTenant(UUID runId, Long actorStaffId, String code, String name) {
@@ -695,16 +1039,16 @@ public class QaTestPackService {
         List.of(institutionResourceKey, studentResourceKey), "institution_membership");
   }
 
-  private void ensureRequiredTracks(UUID runId, Long studentId, Long institutionId,
+  private void ensureRequiredTracks(UUID runId, Long studentId, Long institutionId, Long programId,
       String studentResourceKey, String institutionResourceKey) {
     List<Map<String,Object>> rows = jdbc.queryForList("""
       insert into student_track_enrollment(student_id,subject_id,institution_id,status,qa_test_run_id)
       select ?,s.id,?,'ACTIVE',?
-      from curriculum_subject s
-      join curriculum_class c on c.id=s.class_id
-      where c.code='7' and c.active=true and s.active=true and s.code in ('maths','science')
+      from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+      where ps.program_id=?
       returning id,subject_id
-      """, studentId, institutionId, runId);
+      """, studentId, institutionId, runId, programId);
     if (rows.isEmpty()) throw new IllegalStateException("Class 7 active Maths/Science tracks are unavailable in the approved QA database.");
     for (Map<String,Object> row : rows) {
       long id = number(row.get("id"));
@@ -861,6 +1205,24 @@ public class QaTestPackService {
       case "STUDENT_QUESTION_ATTEMPT" -> new DeleteSpec(
           "delete from student_question_attempt where id=? and qa_test_run_id=?",
           "select qa_test_run_id from student_question_attempt where id=?");
+      case "STUDENT_COURSE_ENROLLMENT" -> new DeleteSpec(
+          "delete from student_program_enrollment where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from student_program_enrollment where id=?");
+      case "COURSE_ENTITLEMENT" -> new DeleteSpec(
+          "delete from institution_course_entitlement where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from institution_course_entitlement where id=?");
+      case "COURSE_ASSIGNMENT" -> new DeleteSpec(
+          "delete from institution_course_assignment where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from institution_course_assignment where id=?");
+      case "COURSE_RELEASE" -> new DeleteSpec(
+          "delete from institution_course_release where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from institution_course_release where id=?");
+      case "INSTITUTION_ADMIN_ACCOUNT" -> new DeleteSpec(
+          "delete from institution_admin_account where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from institution_admin_account where id=?");
+      case "STAFF_ACCOUNT" -> new DeleteSpec(
+          "delete from staff_account where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from staff_account where id=?");
       case "QUESTION_OPTION" -> new DeleteSpec(
           "delete from question_option where id=? and qa_test_run_id=?",
           "select qa_test_run_id from question_option where id=?");
@@ -931,7 +1293,7 @@ public class QaTestPackService {
   }
 
   private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
-    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
+    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "institution_admin_account", "staff_account", "institution_course_release", "institution_course_assignment", "institution_course_entitlement", "student_program_enrollment", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
     if (before == null || after == null || before.size() != protectedTables.size()
         || after.size() != protectedTables.size()) return false;
     for (String table : protectedTables) {
@@ -949,6 +1311,12 @@ public class QaTestPackService {
     Map<String,String> primaryKeys = Map.ofEntries(
         Map.entry("institution_tenant", "id"),
         Map.entry("institution_branding", "institution_id"),
+        Map.entry("institution_admin_account", "id"),
+        Map.entry("staff_account", "id"),
+        Map.entry("institution_course_release", "id"),
+        Map.entry("institution_course_assignment", "id"),
+        Map.entry("institution_course_entitlement", "id"),
+        Map.entry("student_program_enrollment", "id"),
         Map.entry("user_account", "id"),
         Map.entry("student", "id"),
         Map.entry("guardian_student", "id"),
