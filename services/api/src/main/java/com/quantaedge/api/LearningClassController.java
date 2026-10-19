@@ -892,8 +892,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
@@ -941,8 +939,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
@@ -1002,8 +998,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
@@ -1118,8 +1112,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id
@@ -1174,8 +1166,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
         and exists(
@@ -1335,8 +1325,6 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
-        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress
