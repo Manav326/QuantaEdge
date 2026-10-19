@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "19a4cd29e01277c8a19b05e594b834119be61babff37eef8b95ebf1a8726d9b1",
+  "raw_analysis_sha256": "e44b90bf1685ff30fa3a04ccf9b0b927e292c6c38116471d429216b10f425e10",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:33:46Z",
+      "checkpointed_at": "2026-10-19T04:38:46Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:34:35Z",
+      "checkpointed_at": "2026-10-19T04:39:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:35:14Z",
+      "checkpointed_at": "2026-10-19T04:40:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -35774,6 +35774,126 @@
         "context_relation": "Observing soil suspension under a microscope",
         "limitations": [
           "The image does not show the actual microscope or the observed particles."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e31f188ce27a6bda5d1c2247",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A clear liquid with fine particles of soil suspended in it, observed under a microscope.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer.",
+          "Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small particles of soil suspended in the water."
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Microscope observation",
+          "Water sample preparation"
+        ],
+        "context_relation": "Observation and analysis of soil suspension in water",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:40:44Z",
+      "effective_analysis": {
+        "visual_summary": "A clear liquid with fine particles of soil suspended in it, observed under a microscope.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer.",
+          "Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small particles of soil suspended in the water."
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Microscope observation",
+          "Water sample preparation"
+        ],
+        "context_relation": "Observation and analysis of soil suspension in water",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "597f36860fbfd6d513f73f65",
+      "asset_sha256": "29b93394144f6246a176b386a01e54013aefbfbd895dd60889ce705f13317dd5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "page-0036.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for observing soil suspension under a microscope.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Pour some water into the beaker and stir it with a glass rod.",
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer. Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small moving organisms similar to those you saw in Activity 2.4. This indicates that even soil suspension contains a variety of tiny creatures that cannot be seen with the unaided eye. The tiny creatures that cannot be seen with the naked eye are called microorganisms (micro means ve"
+        ],
+        "concepts": [
+          "soil suspension",
+          "microorganisms",
+          "microscopy"
+        ],
+        "context_relation": "Observing soil suspension under a microscope",
+        "limitations": [
+          "The image does not provide specific details about the organisms observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:44:47Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for observing soil suspension under a microscope.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Pour some water into the beaker and stir it with a glass rod.",
+          "The liquid, which may look dirty, has very fine particles of soil, and is called soil suspension. Keep it aside for some time and let the mixture settle.",
+          "Use a dropper and take a drop of water from the top layer. Place the drop on a microscope slide.",
+          "Cover it gently with a coverslip and observe it under the microscope (Fig. 2.8).",
+          "You may observe small moving organisms similar to those you saw in Activity 2.4. This indicates that even soil suspension contains a variety of tiny creatures that cannot be seen with the unaided eye. The tiny creatures that cannot be seen with the naked eye are called microorganisms (micro means ve"
+        ],
+        "concepts": [
+          "soil suspension",
+          "microorganisms",
+          "microscopy"
+        ],
+        "context_relation": "Observing soil suspension under a microscope",
+        "limitations": [
+          "The image does not provide specific details about the organisms observed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
