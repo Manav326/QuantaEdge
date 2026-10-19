@@ -50,7 +50,7 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       const rows: EnrolledCourse[] = Array.isArray(body) ? body : [];
       // A catalogue/marketplace offer is not an entitlement. Only an active enrollment
       // can establish the selected learning context for resources.
-      const enrolled = rows.filter(course => course.is_enrolled === true && Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
+      const enrolled = rows.filter(course => course.is_enrolled === true && course.paused !== true && Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
       if (!active) return;
       setCourses(enrolled);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
