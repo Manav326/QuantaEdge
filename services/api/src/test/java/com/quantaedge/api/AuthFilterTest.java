@@ -273,4 +273,38 @@ class AuthFilterTest {
     verifyNoInteractions(auth);
   }
 
+
+  @Test
+  void archivedChildCanReachRestoreOnlyThroughItsPreviouslyLinkedInstitution() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
+        Map.<String,Object>of("id", 17L, "tenant_code", "SCHOOL-A", "display_name", "School A")));
+    when(jdbc.queryForObject(contains("institution_user_membership"), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
+    when(jdbc.queryForObject(contains("gs.active=false"), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/guardians/children/70/restore");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "PARENT");
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "SCHOOL-A");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("PARENT"), "parent-session"));
+    when(auth.currentForWorkspace("parent-session", "PARENT"))
+        .thenReturn(new AuthContext(90L, null, "PARENT", "Parent"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+    assertTrue(request.getAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE) instanceof InstitutionTenantContext);
+    org.mockito.Mockito.verify(jdbc).queryForObject(
+        contains("gs.active=false"), eq(Boolean.class), any(Object[].class));
+    org.mockito.Mockito.verify(jdbc, org.mockito.Mockito.never()).queryForObject(
+        contains("gs.active=true"), eq(Boolean.class), any(Object[].class));
+  }
 }
