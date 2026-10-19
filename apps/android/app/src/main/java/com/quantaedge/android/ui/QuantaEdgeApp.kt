@@ -5142,11 +5142,14 @@ private fun LessonListScreen(
 @Composable
 private fun StructuredLessonCatalogueScreen(
     items: List<JSONObject>,
+    courseName: String,
+    subjects: List<JSONObject>,
+    selectedSubjectCode: String,
     language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
-    onOpenLesson: (JSONObject) -> Unit,
-    onOpenLegacyLessons: () -> Unit
+    onSelectSubject: (String) -> Unit,
+    onOpenLesson: (JSONObject) -> Unit
 ) {
     fun completed(item: JSONObject): Boolean =
         item.optBoolean("completed") || item.optBoolean("isCompleted") ||
@@ -5163,14 +5166,38 @@ private fun StructuredLessonCatalogueScreen(
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(if (language == "hi") "संरचित पाठ" else "Structured lessons", style = MaterialTheme.typography.headlineSmall)
-                Text(if (language == "hi") "एक topic पर ध्यान दें और क्रम से आगे बढ़ें" else "Focus on one topic and move through the sequence",
+                Text((if (language == "hi") "कोर्स: " else "Course: ") + courseName.ifBlank {
+                    if (language == "hi") "चुना गया कोर्स" else "Selected course"
+                }, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                Text(if (language == "hi") "कोर्स चुनें, फिर उसी कोर्स का विषय चुनें" else "Choose a subject within this course",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(if (language == "hi") "रिफ्रेश" else "Refresh") }
         }
-        OutlinedButton(onClick = onOpenLegacyLessons, enabled = !busy,
-            modifier = Modifier.fillMaxWidth().height(40.dp)) {
-            Text(if (language == "hi") "Existing lessons पर लौटें" else "Return to existing lessons")
+        Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (selectedSubjectCode.isBlank()) {
+                Button(onClick = { onSelectSubject("") }, enabled = !busy) {
+                    Text(if (language == "hi") "सभी विषय" else "All subjects")
+                }
+            } else {
+                TextButton(onClick = { onSelectSubject("") }, enabled = !busy) {
+                    Text(if (language == "hi") "सभी विषय" else "All subjects")
+                }
+            }
+            subjects.forEach { subject ->
+                val code = subject.textAny("subject_code", "code")
+                if (code.isBlank()) return@forEach
+                val label = subject.textAny("subject_name", "display_name").ifBlank { code }
+                if (code == selectedSubjectCode) {
+                    Button(onClick = { onSelectSubject(code) }, enabled = !busy) { Text(label) }
+                } else {
+                    TextButton(onClick = { onSelectSubject(code) }, enabled = !busy) { Text(label) }
+                }
+            }
         }
         when {
             busy && items.isEmpty() -> Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
@@ -5186,8 +5213,11 @@ private fun StructuredLessonCatalogueScreen(
                     modifier = Modifier.fillMaxWidth()) {
                     Text(if (language == "hi") "Topic ${safeIndex + 1} / ${items.size}" else "Topic ${safeIndex + 1} of ${items.size}",
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                    Text(active.optString("subjectCode").uppercase() + " · " +
-                        (if (language == "hi") "कक्षा " else "Class ") + active.optInt("classNumber"),
+                    val code = active.optString("subjectCode")
+                    val subjectName = subjects.firstOrNull {
+                        it.textAny("subject_code", "code") == code
+                    }?.textAny("subject_name", "display_name").orEmpty().ifBlank { code }
+                    Text(courseName + " · " + subjectName,
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                 }
                 LinearProgressIndicator(progress = { (safeIndex + 1).toFloat() / items.size.coerceAtLeast(1) },
