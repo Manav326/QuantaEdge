@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1630,
-    "successful_visual_analyses": 1608,
-    "missing_visual_analyses": 5858,
+    "raw_analysis_result_rows": 1633,
+    "successful_visual_analyses": 1611,
+    "missing_visual_analyses": 5855,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5880,
+    "unresolved_count": 5877,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -70914,9 +70914,33 @@
       "asset_path": "assets/d6c7b695ad7f3b2d9ea27e7f247110eacd33956c632dc6456c3be3827e2fe9e3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electrical circuit with a battery, wires, and a light bulb connected to a metal spoon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "battery",
+          "wires",
+          "light bulb",
+          "metal spoon"
+        ],
+        "context_relation": "The image illustrates an experiment to test the conductivity of different materials in an electrical circuit.",
+        "limitations": [
+          "The image does not show the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70932,9 +70956,34 @@
       "asset_path": "assets/96a895d8ebd14b4f20b8d5d9da2eed593c69f4a666e9036b580c7cd54cbfe30a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "battery",
+          "wires",
+          "light bulb",
+          "electric current",
+          "materials"
+        ],
+        "context_relation": "The image is related to the text about identifying components in an electrical circuit.",
+        "limitations": [
+          "The image does not show the materials used for the wires."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -70950,9 +70999,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1608,
+    "assets_selected": 1611,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1606,
-    "assets_remaining": 5882,
-    "assets_completion_percent": 21.4,
+    "assets_analyzed": 1609,
+    "assets_remaining": 5879,
+    "assets_completion_percent": 21.5,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1603,
+    "assets_skipped_from_checkpoint": 1606,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:23:53Z"
+      "checkpointed_at": "2026-10-19T12:26:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:24:14Z"
+      "checkpointed_at": "2026-10-19T12:26:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -60611,6 +60611,121 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T12:25:28Z"
+    },
+    {
+      "asset_id": "dce5280f6bee68eeb5455da8",
+      "asset_sha256": "d6c7b695ad7f3b2d9ea27e7f247110eacd33956c632dc6456c3be3827e2fe9e3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/d6c7b695ad7f3b2d9ea27e7f247110eacd33956c632dc6456c3be3827e2fe9e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electrical circuit with a battery, wires, and a light bulb connected to a metal spoon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "battery",
+          "wires",
+          "light bulb",
+          "metal spoon"
+        ],
+        "context_relation": "The image illustrates an experiment to test the conductivity of different materials in an electrical circuit.",
+        "limitations": [
+          "The image does not show the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:27:12Z"
+    },
+    {
+      "asset_id": "c39212661a61038353a252fa",
+      "asset_sha256": "96a895d8ebd14b4f20b8d5d9da2eed593c69f4a666e9036b580c7cd54cbfe30a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/96a895d8ebd14b4f20b8d5d9da2eed593c69f4a666e9036b580c7cd54cbfe30a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "battery",
+          "wires",
+          "light bulb",
+          "electric current",
+          "materials"
+        ],
+        "context_relation": "The image is related to the text about identifying components in an electrical circuit.",
+        "limitations": [
+          "The image does not show the materials used for the wires."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:27:52Z"
+    },
+    {
+      "asset_id": "b430a24ec100091fdb565ec5",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:27:58Z"
     }
   ]
 }
