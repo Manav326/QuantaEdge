@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1241,
+    "assets_selected": 1244,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1239,
-    "assets_remaining": 6249,
-    "assets_completion_percent": 16.5,
+    "assets_analyzed": 1242,
+    "assets_remaining": 6246,
+    "assets_completion_percent": 16.6,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1236,
+    "assets_skipped_from_checkpoint": 1239,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:11:40Z"
+      "checkpointed_at": "2026-10-19T01:16:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:12:08Z"
+      "checkpointed_at": "2026-10-19T01:17:07Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -47170,6 +47170,130 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T01:15:45Z"
+    },
+    {
+      "asset_id": "96d96c73211d63f05239bda3",
+      "asset_sha256": "9e6e02f30c5b60cc607ac1ebad24e00e6c5994436814040cee9d2476a2e6a1b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/9e6e02f30c5b60cc607ac1ebad24e00e6c5994436814040cee9d2476a2e6a1b7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, including an electrical circuit.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The text is discussing the components of a torch, specifically focusing on the electrical circuit.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The text is in English and does not include any visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:18:24Z"
+    },
+    {
+      "asset_id": "09bfd975d95514cf4eba982f",
+      "asset_sha256": "2ca63fb8281daabc65d864d14cd1fe37154d5b138bf2b50027372752403b2947",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/2ca63fb8281daabc65d864d14cd1fe37154d5b138bf2b50027372752403b2947.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular shape with a green border.",
+        "visual_type": "other",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "activity"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "unclear content",
+          "incomplete text"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:19:34Z"
+    },
+    {
+      "asset_id": "c02358dd7391638e1bb491b0",
+      "asset_sha256": "7e4e90b27367a753776126d69a2f6cc79685a3647b2c4489f3639f4f26229c9e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/7e4e90b27367a753776126d69a2f6cc79685a3647b2c4489f3639f4f26229c9e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular shape with a curved corner, possibly representing a component or part of a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is related to the text discussing the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:20:49Z"
     }
   ]
 }
