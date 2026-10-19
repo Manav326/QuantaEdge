@@ -1229,3 +1229,12 @@ html[data-qe-appearance="dark"] .parent-account__icon {
 .parent-profile-card__actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:18px}
 .parent-profile-card__actions .button{min-height:38px;padding:9px 13px}
 @media(max-width:430px){.parent-profile-card__topline{gap:8px}.parent-profile-card__edit-button{flex-basis:34px;width:34px;height:34px}}
+
+
+/* Shared show/hide password control for learner, family and institution workspaces. */
+.qe-password-field{position:relative;display:block;width:100%;min-width:0}
+.qe-password-field>input{width:100%;min-width:0;padding-right:44px!important}
+.qe-password-field__toggle{position:absolute;top:50%;right:7px;display:grid;place-items:center;width:32px;height:32px;padding:0;transform:translateY(-50%);border:1px solid transparent;border-radius:9px;background:transparent;color:var(--qe-color-text-muted, #687386);cursor:pointer}
+.qe-password-field__toggle:hover{border-color:var(--qe-color-border-subtle, #d6dce5);background:var(--qe-color-background, #f7f8fa);color:var(--qe-color-primary-text, #8c3d12)}
+.qe-password-field__toggle:focus-visible{outline:3px solid var(--qe-color-focus, #f97316);outline-offset:1px}
+.qe-password-field__toggle:disabled{opacity:.45;cursor:not-allowed}
