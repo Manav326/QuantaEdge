@@ -417,8 +417,7 @@ public class GuardianController {
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
         String.valueOf(body.getOrDefault("classCode","7")),String.valueOf(body.getOrDefault("language","hi")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")),
-        consentAccepted,
-        body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
+        consentAccepted);
     if(Boolean.TRUE.equals(parentAlreadyInInstitution)) {
       if(memberships==null) throw new IllegalStateException("Institution membership service is not configured.");
       memberships.ensureStudentMembership(child.studentId(),institutionId,"PARENT_CREATED_CHILD",context.userId());
