@@ -141,7 +141,7 @@ export default function CourseMarketplaceAdminPage() {
                       <div className={styles.offerIcon} aria-hidden="true">✦</div>
                       <div className={styles.offerIdentity}>
                         <h3>{row.display_name}</h3>
-                        <p>{row.code} · {row.curriculum_version || 'Course curriculum'}</p>
+                        <p>{row.code} · {row.curriculum_version || 'Course structure'}</p>
                       </div>
                       <span className={styles.statusPill + ' ' + (draft.status === 'PUBLISHED' ? styles.published : draft.status === 'ARCHIVED' ? styles.archived : styles.draft)}>
                         {draft.status === 'PUBLISHED' ? 'Published' : draft.status === 'ARCHIVED' ? 'Archived' : 'Draft'}
