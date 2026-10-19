@@ -17,6 +17,10 @@ type Template = {
 type Option = { id: number; institution_code?: string; tenant_code?: string; display_name?: string; institution_name?: string; status?: string };
 type Course = { course_id: number; course_code: string; course_name: string; class_code?: string };
 type Recipient = { recipient_id: number; recipient_kind: string; recipient_name: string; class_code?: string | null };
+type Campaign = {
+  id: number; public_id?: string; scope?: string; title?: string; summary?: string; status?: string;
+  resolved_recipient_count?: number; scheduled_at?: string | null; dispatched_at?: string | null; created_at?: string;
+};
 
 const DEFAULT_DOCUMENT: Document = {
   version: 1,
@@ -98,6 +102,10 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [document, setDocument] = useState<Document>(() => clone(DEFAULT_DOCUMENT));
   const [selectedBlock, setSelectedBlock] = useState(0);
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop' | 'push'>('mobile');
+  const [workspaceTab, setWorkspaceTab] = useState<'studio' | 'templates' | 'campaigns'>('studio');
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaignLoading, setCampaignLoading] = useState(false);
+  const [campaignError, setCampaignError] = useState('');
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCounts, setPreviewCounts] = useState<Record<string, number>>({});
   const [previewed, setPreviewed] = useState(false);
@@ -132,6 +140,22 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }, [prefix]);
 
   useEffect(() => { void loadBase(); }, [loadBase]);
+
+  const loadCampaigns = useCallback(async () => {
+    setCampaignLoading(true); setCampaignError('');
+    try {
+      const response = await apiFetch(prefix + '/campaigns?limit=100', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Campaign history is not available for this account.');
+      const data = await response.json() as { campaigns?: Campaign[] };
+      setCampaigns(Array.isArray(data.campaigns) ? data.campaigns : []);
+    } catch (error) {
+      setCampaignError(error instanceof Error ? error.message : 'Campaign history could not be loaded.');
+    } finally { setCampaignLoading(false); }
+  }, [prefix]);
+
+  useEffect(() => {
+    if (workspaceTab === 'campaigns') void loadCampaigns();
+  }, [workspaceTab, loadCampaigns]);
 
   function chooseTemplate(id: string) {
     setTemplateId(id); setPreviewed(false); setPreviewCount(null); setError(''); setNotice('');
