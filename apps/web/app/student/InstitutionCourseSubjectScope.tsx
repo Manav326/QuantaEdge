@@ -80,7 +80,6 @@ export default function InstitutionCourseSubjectScope({
             </option>;
           })}
         </select>
-      </label>
       </label>}
     </div>
   );
