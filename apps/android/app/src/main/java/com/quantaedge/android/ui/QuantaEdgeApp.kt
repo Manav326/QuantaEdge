@@ -7086,10 +7086,16 @@ private fun ParentReportScreen(
     busy: Boolean,
     certificates: List<JSONObject>,
     onSelectChild: (JSONObject) -> Unit,
+    onSelectCourse: (Long) -> Unit,
     onViewCertificate: (Long, Long) -> Unit,
     onDownloadCertificate: (Long, Long, String) -> Unit
 ) {
     val childId = report.optLong("_childId", 0L)
+    val needsCourseSelection = report.optBoolean("_requiresCourseSelection")
+    val noEnrolledCourse = report.optBoolean("_noEnrolledCourse")
+    val availableCourses = report.optJSONArray("_courses")?.objectItems()?.filter {
+        it.optBoolean("enrolled") || it.optBoolean("paused")
+    } ?: emptyList()
     val otherChildren = children.filter { it.longAny("id") > 0L && it.longAny("id") != childId }
     val compact = LocalConfiguration.current.screenWidthDp < 390
     val lessons = report.optJSONObject("lessonStats") ?: JSONObject()
@@ -7107,8 +7113,10 @@ private fun ParentReportScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(report.textAny("_childName", "display_name").ifBlank { t("Student report", "छात्र की रिपोर्ट") },
             style = MaterialTheme.typography.headlineSmall)
-        Text(t("Class", "कक्षा") + " " + report.textAny("class_code", "classCode"),
-            color = MaterialTheme.colorScheme.secondary)
+        if (!needsCourseSelection && !noEnrolledCourse) {
+            Text(t("Course: ", "कोर्स: ") + report.textAny("_courseName", "courseName", "course_name"),
+                color = MaterialTheme.colorScheme.secondary)
+        }
         if (otherChildren.isNotEmpty()) {
             Text(t("Switch child report", "दूसरे बच्चे की रिपोर्ट देखें"), style = MaterialTheme.typography.titleMedium)
             otherChildren.forEach { child ->
@@ -7122,7 +7130,36 @@ private fun ParentReportScreen(
                 }
             }
         }
-        if (compact) {
+        if (needsCourseSelection || noEnrolledCourse) {
+            if (noEnrolledCourse || availableCourses.isEmpty()) {
+                EmptyState(
+                    t("No enrolled course is available", "कोई नामांकित कोर्स उपलब्ध नहीं है"),
+                    t("Ask the institution to enrol this child in a course before opening the report.",
+                        "रिपोर्ट खोलने से पहले संस्थान से बच्चे को किसी कोर्स में नामांकित करने के लिए कहें।")
+                )
+            } else {
+                Text(t("Choose which course report to view", "जिस कोर्स की रिपोर्ट देखनी है, उसे चुनें"),
+                    style = MaterialTheme.typography.titleMedium)
+                Text(t("Each report contains only that course's subjects, lessons, practice and tests.",
+                    "हर रिपोर्ट में केवल उसी कोर्स के विषय, पाठ, अभ्यास और टेस्ट शामिल हैं।"),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                availableCourses.forEach { course ->
+                    val courseId = course.longAny("id", "course_id")
+                    if (courseId > 0L) {
+                        OutlinedButton(
+                            onClick = { onSelectCourse(courseId) },
+                            enabled = !busy,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(course.textAny("display_name", "course_name", "code").ifBlank {
+                                t("Course ", "कोर्स ") + courseId
+                            })
+                        }
+                    }
+                }
+            }
+        } else {
+                if (compact) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                 ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
                     lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.fillMaxWidth())
@@ -7243,6 +7280,7 @@ private fun ParentReportScreen(
         Text(t("Parent view is read-only. The child must sign in with their own credentials to learn and take assessments.",
             "अभिभावक दृश्य केवल देखने के लिए है। पढ़ाई और टेस्ट के लिए बच्चे को अपने लॉगिन से प्रवेश करना होगा।"),
             style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.secondary)
+        }
     }
 }
 @Composable private fun ParentReportMetric(title:String,value:String,detail:String,modifier:Modifier) {
