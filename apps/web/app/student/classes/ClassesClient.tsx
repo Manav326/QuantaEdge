@@ -99,7 +99,7 @@ export default function StudentClassesClient(){
       setError(e instanceof Error?e.message:translateUi(locale, 'legacy.web.your.class.library.could.not.be.loaded.ef90dceb'));
     }finally{setLoading(false);}
   },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router,locale,activeCourseId]);
-  useEffect(()=>{setSubjectFilter('ALL');setLivePage(0);setRecordingPage(0);},[activeCourseId]);
+  useEffect(()=>{setLivePage(0);setRecordingPage(0);},[activeCourseId]);
   useEffect(()=>{
     if(subjectFilter==='ALL')return;
     if(!(activeCourse?.subjects||[]).some(subject=>String(subject.subject_code||subject.code||'')===subjectFilter))setSubjectFilter('ALL');
