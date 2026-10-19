@@ -97,6 +97,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [directRecipients, setDirectRecipients] = useState<Recipient[]>([]);
   const [document, setDocument] = useState<Document>(() => clone(DEFAULT_DOCUMENT));
   const [selectedBlock, setSelectedBlock] = useState(0);
+  const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop' | 'push'>('mobile');
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCounts, setPreviewCounts] = useState<Record<string, number>>({});
   const [previewed, setPreviewed] = useState(false);
@@ -186,6 +187,16 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     [blocks[selectedBlock], blocks[next]] = [blocks[next], blocks[selectedBlock]];
     setDocument({ ...document, blocks });
     setSelectedBlock(next);
+    setPreviewed(false); setPreviewCount(null);
+  }
+
+  function reorderBlocks(from: number, to: number) {
+    if (from < 0 || from >= document.blocks.length || to < 0 || to >= document.blocks.length || from === to) return;
+    const blocks = [...document.blocks];
+    const moved = blocks.splice(from, 1)[0];
+    blocks.splice(to, 0, moved);
+    setDocument({ ...document, blocks });
+    setSelectedBlock(to);
     setPreviewed(false); setPreviewCount(null);
   }
 
@@ -408,41 +419,80 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>03</span><div><h2>Design your content</h2><p>Build with media, cards, highlights and actions—not only text and images.</p></div></div>
-          <div className={styles.builder}>
-            <aside className={styles.blockList}>
-              {document.blocks.map((block,index)=><button type="button" key={index} onClick={()=>setSelectedBlock(index)} className={selectedBlock===index?styles.activeBlock:styles.blockButton}><span>{String(index+1).padStart(2,'0')}</span><strong>{BLOCK_OPTIONS.find(option=>option[0]===block.type)?.[1] ?? block.type}</strong></button>)}
-              <label className={styles.addBlock}>+ Add content block<select value="" onChange={event=>{if(event.target.value)addBlock(event.target.value);event.target.value='';}}>
-                <option value="">Choose block…</option>{BLOCK_OPTIONS.map(option=><option value={option[0]} key={option[0]}>{option[1]}</option>)}
-              </select></label>
-            </aside>
-            <div className={styles.blockEditor}>
-              {activeBlock ? <>
-                <div className={styles.blockActions}><strong>{BLOCK_OPTIONS.find(option=>option[0]===activeBlock.type)?.[1] ?? activeBlock.type}</strong><div><button type="button" onClick={()=>moveBlock(-1)} disabled={selectedBlock===0} aria-label="Move block up">↑</button><button type="button" onClick={()=>moveBlock(1)} disabled={selectedBlock===document.blocks.length-1} aria-label="Move block down">↓</button><button type="button" onClick={removeBlock} aria-label="Remove block">×</button></div></div>
-                <div className={styles.fieldGrid}>
-                  {Object.entries(activeBlock).filter(([key])=>key!=='type'&&key!=='assetId'&&key!=='decorative').map(([key,value])=>{
-                    const multiline=['text','subtitle','description','caption'].includes(key);
-                    return <label key={key}>{key.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase())}
-                      {multiline?<textarea rows={key==='text'?4:2} value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>
-                        :<input value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>}
-                    </label>;
-                  })}
-                  {['image','video','animation','hero'].includes(activeBlock.type) ? <div className={styles.mediaControl}>
-                    <div><strong>{activeBlock.assetId?'Media attached':'Optional media'}</strong><small>{activeBlock.assetId?String(activeBlock.assetId):'Upload a graphic or video to attach it to this block.'}</small></div>
-                    <label className={styles.uploadButton}>{uploading?'Uploading…':'Upload media'}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" onChange={event=>void uploadMedia(event)} disabled={uploading}/></label>
-                    {activeBlock.assetId?<button type="button" className={styles.ghostButton} onClick={()=>updateBlock('assetId','')}>Remove media</button>:null}
-                  </div>:null}
-                  {['image','animation'].includes(activeBlock.type)?<label className={styles.check}><input type="checkbox" checked={Boolean(activeBlock.decorative)} onChange={event=>updateBlock('decorative',event.target.checked)}/> Decorative only (no alt text required)</label>:null}
-                </div>
-              </>:<p>Select a content block to edit it.</p>}
+          <div className={styles.canvaToolbar}>
+            <div className={styles.canvasTabs} role="group" aria-label="Preview surface">
+              <button type="button" className={previewMode==='mobile'?styles.canvasTabActive:styles.canvasTab} onClick={()=>setPreviewMode('mobile')}>▯ Phone</button>
+              <button type="button" className={previewMode==='desktop'?styles.canvasTabActive:styles.canvasTab} onClick={()=>setPreviewMode('desktop')}>▱ Web</button>
+              <button type="button" className={previewMode==='push'?styles.canvasTabActive:styles.canvasTab} onClick={()=>setPreviewMode('push')}>♧ Push</button>
             </div>
+            <span>Drag blocks on the canvas to rearrange · Select any block to edit</span>
           </div>
-          <div className={styles.previewHeader}><h3>Live preview</h3><span>Same rich document used by the inbox renderer</span></div>
-          <div className={styles.previewCard}>
-            <div className={styles.previewTop}><span className={styles.brandGlyph}>✦</span><div><strong>{title || 'Notification title'}</strong><small>{surface==='hrms'?'HRMS platform':surface==='institution'?'Your institution':'QuantaEdge Admin'}</small></div></div>
-            <p className={styles.previewSummary}>{summary}</p>
-            <RichNotificationRenderer surface={surface} contentDocument={document}/>
-          </div>
-        </div>
+          <div className={styles.builder}>
+            <aside className={styles.blockList} aria-label="Content elements and layers">
+              <div className={styles.railLabel}>LAYERS</div>
+              {document.blocks.map((block,index)=><button type="button" key={index} draggable
+                onDragStart={event=>{event.dataTransfer.setData('text/plain',String(index));event.dataTransfer.effectAllowed='move';}}
+                onDragOver={event=>event.preventDefault()}
+                onDrop={event=>{event.preventDefault();const from=Number(event.dataTransfer.getData('text/plain'));if(Number.isInteger(from))reorderBlocks(from,index);}}
+                onClick={()=>setSelectedBlock(index)}
+                className={selectedBlock===index?styles.activeBlock:styles.blockButton}>
+                <span>{String(index+1).padStart(2,'0')}</span><strong>{BLOCK_OPTIONS.find(option=>option[0]===block.type)?.[1] ?? block.type}</strong>
+              </button>)}
+              <div className={styles.railLabel}>ADD ELEMENT</div>
+              <div className={styles.elementPalette}>
+                {BLOCK_OPTIONS.map(option=><button type="button" key={option[0]} onClick={()=>addBlock(option[0])} className={styles.elementButton}>
+                  <span aria-hidden="true">{option[0]==='image'?'▧':option[0]==='video'?'▷':option[0]==='hero'?'▰':option[0]==='richText'?'T':option[0]==='cta'?'↗':option[0]==='courseCard'?'▤':option[0]==='eventCard'?'◷':option[0]==='highlight'?'▦':option[0]==='animation'?'✦':'＋'}</span>
+                  <strong>{option[1]}</strong>
+                </button>)}
+              </div>
+            </aside>
+            <section className={styles.canvasStage} aria-label="Notification design canvas">
+              <div className={styles.canvasTopline}><span>CANVAS</span><span>{document.blocks.length} elements</span></div>
+              {previewMode==='push' ? <div className={styles.pushPreview}>
+                <div className={styles.pushAppIcon}>Q</div>
+                <div className={styles.pushCopy}><strong>{title || 'Notification title'}</strong><p>{summary || 'Notification summary'}</p><small>now · QuantaEdge</small></div>
+                <div className={styles.pushMedia}>{document.blocks.some(b=>['hero','image','animation'].includes(b.type)&&Boolean(b.assetId))?'▧':'✦'}</div>
+                <p className={styles.pushFootnote}>System push is compact. Tap opens the full rich notification.</p>
+              </div> : <div className={previewMode==='mobile'?styles.phoneCanvas:styles.desktopCanvas}>
+                <div className={styles.canvasBrandBar}><span className={styles.brandGlyph}>✦</span><div><strong>{title || 'Notification title'}</strong><small>{surface==='hrms'?'HRMS platform':surface==='institution'?'Your institution':'QuantaEdge Admin'}</small></div><span className={styles.canvasBell}>♧</span></div>
+                <p className={styles.previewSummary}>{summary}</p>
+                <RichNotificationRenderer
+                  surface={surface}
+                  contentDocument={document}
+                  editMode
+                  selectedBlockIndex={selectedBlock}
+                  onSelectBlock={setSelectedBlock}
+                  onReorderBlocks={reorderBlocks}
+                />
+                <div className={styles.canvasFooter}>PREVIEW · CONTENT IS NOT YET SENT</div>
+              </div>}
+            </section>
+            <aside className={styles.inspector} aria-label="Selected element properties">
+              <div className={styles.inspectorHeading}><div><span>DESIGN</span><h3>{activeBlock ? BLOCK_OPTIONS.find(option=>option[0]===activeBlock.type)?.[1] ?? activeBlock.type : 'Select an element'}</h3></div>
+                {activeBlock ? <div className={styles.inspectorMove}><button type="button" onClick={()=>moveBlock(-1)} disabled={selectedBlock===0} aria-label="Move element up">↑</button><button type="button" onClick={()=>moveBlock(1)} disabled={selectedBlock===document.blocks.length-1} aria-label="Move element down">↓</button><button type="button" onClick={removeBlock} aria-label="Delete element">×</button></div>:null}
+              </div>
+              {activeBlock ? <div className={styles.fieldGrid}>
+                {Object.entries(activeBlock).filter(([key])=>key!=='type'&&key!=='assetId'&&key!=='decorative').map(([key,value])=>{
+                  const multiline=['text','subtitle','description','caption'].includes(key);
+                  return <label key={key}>{key.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase())}
+                    {multiline?<textarea rows={key==='text'?4:2} value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>
+                      :<input value={String(value??'')} onChange={event=>updateBlock(key,event.target.value)}/>}
+                  </label>;
+                })}
+                {['image','video','animation','hero'].includes(activeBlock.type) ? <div className={styles.mediaControl}>
+                  <div><strong>{activeBlock.assetId?'Media attached':'Media & graphics'}</strong><small>{activeBlock.assetId?String(activeBlock.assetId):'Upload a graphic, animation or video.'}</small></div>
+                  <label className={styles.uploadButton}>{uploading?'Uploading…':'Upload media'}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" onChange={event=>void uploadMedia(event)} disabled={uploading}/></label>
+                  {activeBlock.assetId?<button type="button" className={styles.ghostButton} onClick={()=>updateBlock('assetId','')}>Remove media</button>:null}
+                </div>:null}
+                {['image','animation'].includes(activeBlock.type)?<label className={styles.check}><input type="checkbox" checked={Boolean(activeBlock.decorative)} onChange={event=>updateBlock('decorative',event.target.checked)}/> Decorative graphic</label>:null}
+                {['image','hero','animation'].includes(activeBlock.type)?<>
+                  <label>Image fit<select value={String(activeBlock.fit??'cover')} onChange={event=>updateBlock('fit',event.target.value)}><option value="cover">Fill / cover</option><option value="contain">Fit inside</option></select></label>
+                  <label>Aspect ratio<select value={String(activeBlock.aspectRatio??'16:9')} onChange={event=>updateBlock('aspectRatio',event.target.value)}><option value="auto">Natural</option><option value="16:9">Wide · 16:9</option><option value="4:3">Landscape · 4:3</option><option value="1:1">Square · 1:1</option><option value="3:4">Portrait · 3:4</option></select></label>
+                  <label>Focus point<select value={String(activeBlock.focalPoint??'center')} onChange={event=>updateBlock('focalPoint',event.target.value)}><option value="center">Center</option><option value="top">Top</option><option value="bottom">Bottom</option><option value="left">Left</option><option value="right">Right</option></select></label>
+                </>:null}
+              </div> : <p className={styles.helpText}>Select an element on the canvas or add a new block.</p>}
+            </aside>
+          </div>        </div>
 
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>04</span><div><h2>Preview, validate and send</h2><p>Delivery begins only after a successful server-side preview and confirmation.</p></div></div>
