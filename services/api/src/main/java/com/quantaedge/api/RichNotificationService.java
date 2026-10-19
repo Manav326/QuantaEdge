@@ -336,6 +336,16 @@ public class RichNotificationService {
       "select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",Boolean.class,institutionId));
   }
 
+  private List<Long> targetInstitutionIds(String scope,Map<String,Object> filter,List<Recipient> recipients) {
+    if ("HRMS_PLATFORM".equals(scope)) {
+      if (Boolean.TRUE.equals(filter.get("allActiveInstitutions"))) {
+        return jdbc.queryForList("select id from institution_tenant where status='ACTIVE' order by id",Long.class);
+      }
+      return longList(filter.get("institutionIds"));
+    }
+    return recipients.stream().map(Recipient::institutionId).filter(java.util.Objects::nonNull)
+      .distinct().sorted().toList();
+  }
   private static void putRecipient(Map<String,Recipient> target,Recipient recipient) {
     String key=recipient.kind()+":"+recipient.identityId();
     if(!target.containsKey(key)&&target.size()>=MAX_RECIPIENTS) {
@@ -465,7 +475,7 @@ public class RichNotificationService {
     List<Recipient> recipients=resolveAudience(String.valueOf(row.get("scope")),institutionId,courseId,filter);
     JsonNode document=parseJson(String.valueOf(row.get("content_document")));
     String summary=String.valueOf(row.get("summary"));
-    dispatchExistingCampaign(actor,campaignId,recipients,document);
+    dispatchExistingCampaign(actor,campaignId,recipients,document,String.valueOf(row.get("scope")),filter);
     audit(actor,institutionId,campaignId,row.get("template_id") instanceof Number n?n.longValue():null,
         "CAMPAIGN_DISPATCHED",Map.of("recipientCount",recipients.size(),"scheduled",true));
   }
@@ -479,9 +489,7 @@ public class RichNotificationService {
     snapshot.put("recipientCount",recipients.size());
     snapshot.put("recipientCounts",counts);
     snapshot.put("resolvedAt",Instant.now().toString());
-    List<Long> institutionIds=recipients.stream().map(Recipient::institutionId).filter(java.util.Objects::nonNull)
-        .distinct().sorted().toList();
-    snapshot.put("institutionIds",institutionIds);
+    snapshot.put("institutionIds",targetInstitutionIds(scope,filter,recipients));
     Long id=jdbc.queryForObject("""
       insert into notification_campaign(
         scope,institution_id,course_id,template_id,template_version,title,summary,content_document,
@@ -492,13 +500,13 @@ public class RichNotificationService {
       """,Long.class,scope,institutionId,courseId,templateId,templateVersion,title,summary,
       writeJson(document),writeJson(filter),writeJson(snapshot),actor.workspace(),actor.staffId(),
       actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
-    dispatchExistingCampaign(actor,id,recipients,document);
+    dispatchExistingCampaign(actor,id,recipients,document,scope,filter);
     audit(actor,institutionId,id,templateId,"CAMPAIGN_SENT",Map.of(
       "scope",scope,"recipientCount",recipients.size(),"recipientCounts",counts));
     return campaignResult(id,false);
   }
 
-  private void dispatchExistingCampaign(Actor actor,long campaignId,List<Recipient> recipients,JsonNode document) {
+  private void dispatchExistingCampaign(Actor actor,long campaignId,List<Recipient> recipients,JsonNode document,String scope,Map<String,Object> filter) {
     if(recipients.isEmpty()) {
       jdbc.update("update notification_campaign set status='FAILED',updated_at=now() where id=?",campaignId);
       return;
@@ -509,7 +517,8 @@ public class RichNotificationService {
       Long user="USER_ACCOUNT".equals(recipient.kind())?recipient.identityId():null;
       Long staff="STAFF_ACCOUNT".equals(recipient.kind())?recipient.identityId():null;
       Long institutionAdmin="INSTITUTION_ADMIN".equals(recipient.kind())?recipient.identityId():null;
-      batch.add(new Object[]{campaignId,recipient.institutionId(),recipient.kind(),student,user,staff,institutionAdmin});
+      Long deliveryInstitutionId="HRMS_PLATFORM".equals(scope)?null:recipient.institutionId();
+      batch.add(new Object[]{campaignId,deliveryInstitutionId,recipient.kind(),student,user,staff,institutionAdmin});
     }
     jdbc.batchUpdate("""
       insert into notification_recipient(campaign_id,institution_id,recipient_kind,
@@ -526,8 +535,7 @@ public class RichNotificationService {
     snapshot.put("recipientCount",recipients.size());
     snapshot.put("recipientCounts",countByKind(recipients));
     snapshot.put("resolvedAt",Instant.now().toString());
-    snapshot.put("institutionIds",recipients.stream().map(Recipient::institutionId)
-        .filter(java.util.Objects::nonNull).distinct().sorted().toList());
+    snapshot.put("institutionIds",targetInstitutionIds(scope,filter,recipients));
     jdbc.update("""
       update notification_campaign set status='SENT',dispatched_at=now(),updated_at=now(),
         resolved_recipient_count=?,audience_snapshot=?::jsonb where id=?
