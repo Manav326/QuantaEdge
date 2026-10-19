@@ -81,7 +81,7 @@ export default function AssignedLearningResources({ artifactId, language, course
     state.lastSaved = position;
     watch.current.set(item.resourceId, state);
     try {
-      const response = await fetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId, {
+      const response = await fetch('/api/v1/learning/resources/' + item.resourceId + '/progress?assignmentId=' + item.assignmentId + '&courseId=' + encodeURIComponent(String(courseId)), {
         method: 'PUT', credentials: 'same-origin', cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lastPositionSeconds: Math.max(0, Math.floor(position)), watchedSeconds: Math.max(0, Math.floor(state.watchedSeconds)), completed }),
