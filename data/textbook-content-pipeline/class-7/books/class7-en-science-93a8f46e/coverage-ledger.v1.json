@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1364,
-    "successful_visual_analyses": 1341,
-    "missing_visual_analyses": 6124,
+    "raw_analysis_result_rows": 1367,
+    "successful_visual_analyses": 1344,
+    "missing_visual_analyses": 6121,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6147,
+    "unresolved_count": 6144,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61346,9 +61346,31 @@
       "asset_path": "assets/a65cd72b66cd52a9693aa10e1b23c85cf34e6915a5a04c3b686cc1b91c6f0ea3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue circuit board with a yellow wire connected to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No. Arrangement of Cell and Lamp Prediction Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit board",
+          "wire",
+          "lamp",
+          "circuit",
+          "observation",
+          "prediction"
+        ],
+        "context_relation": "The image is related to an educational content about making a lamp glow using a circuit.",
+        "limitations": [
+          "The image does not show the actual glowing lamp or the circuit setup."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61364,9 +61386,29 @@
       "asset_path": "assets/35b59289f4db94f32b5c7b28c57f63fb3ae938defd0aabe460d92e8365606959.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red lamp is shown glowing in a circuit.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation",
+          "1."
+        ],
+        "concepts": [
+          "circuit",
+          "lamp",
+          "cell",
+          "glowing"
+        ],
+        "context_relation": "The image is a photograph of a glowing lamp in a circuit.",
+        "limitations": [
+          "The image does not show the arrangement of cells and lamps in the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61382,9 +61424,31 @@
       "asset_path": "assets/b49fc3962960b8fb9f56d0c2dbe06e8286305b50d5a6289b52b5840c420a2cf7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black wire with a small green dot at the end.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamp",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image does not show the actual setup of the circuit.",
+          "The image does not show the glowing lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
