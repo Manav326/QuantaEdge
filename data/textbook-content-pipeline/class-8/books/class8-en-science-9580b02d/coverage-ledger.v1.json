@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 950,
-    "successful_visual_analyses": 936,
-    "missing_visual_analyses": 1341,
+    "raw_analysis_result_rows": 952,
+    "successful_visual_analyses": 938,
+    "missing_visual_analyses": 1339,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1355,
+    "unresolved_count": 1353,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36313,9 +36313,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36331,9 +36340,34 @@
       "asset_path": "page-0055.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table showing diseases transmitted by insects and their symptoms and prevention methods.",
+        "visual_type": "table",
+        "visible_text": [
+          "Diseases transmitted by insects",
+          "Malaria",
+          "Protozoa",
+          "Skin, blood",
+          "High fever, profuse sweating, periodic chills",
+          "Use of mosquito nets and repellents, wearing long-sleeved clothes, control of mosquito breeding in and around your home",
+          "Dengue fever",
+          "Virus",
+          "Skin, blood",
+          "Fever, headache, muscle and joint pain, nausea",
+          "Use of mosquito nets and repellents, wearing long-sleeved clothes, control of mosquito breeding in and around your home, avoiding areas with still water"
+        ],
+        "concepts": [
+          "Diseases transmitted by insects",
+          "Prevention methods",
+          "Symptoms of diseases"
+        ],
+        "context_relation": "The table provides information on diseases transmitted by insects and their symptoms and prevention methods.",
+        "limitations": [
+          "The table does not include all possible diseases transmitted by insects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
