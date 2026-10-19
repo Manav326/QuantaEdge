@@ -389,6 +389,11 @@ public class QaTestPackService {
         "1 run-owned HRMS-side course-quality reviewer", Long.toString(ownedStaffReviewers),
         Map.of("actual", ownedStaffReviewers));
 
+    long ownedHrmsPlatformAdmins = scalarCount("select count(*) from staff_account where qa_test_run_id=? and role='ADMIN'", runId);
+    addCheck(runId, checks, "PACK_HRMS_PLATFORM_ADMIN", ownedHrmsPlatformAdmins == 1,
+        "1 run-owned non-login HRMS/platform-owner actor for assignment operations",
+        Long.toString(ownedHrmsPlatformAdmins), Map.of("actual", ownedHrmsPlatformAdmins));
+
     long quantaEdgeOwnedClassCourses = scalarCount("""
       select count(distinct p.id)
       from curriculum_program p
@@ -723,9 +728,9 @@ public class QaTestPackService {
     insertUserMembership(runId, "parent-b-membership", tenantB, parentB, "institution-QAT" + slug + "B", "user-parent-b");
     insertUserMembership(runId, "adult-learner-membership", tenantC, independentLearner, "institution-QAT" + slug + "C", "user-independent-learner");
 
-    Long childA = insertStudent(runId, "QA Child A " + slug, "en", null, "child-a");
-    Long childB = insertStudent(runId, "QA Child B " + slug, "hi", null, "child-b");
-    Long adultStudent = insertStudent(runId, "QA Adult Learner C " + slug, "en", independentLearner, "adult-student");
+    Long childA = insertStudent(runId, "QA Child A " + slug, "7", "en", null, "child-a");
+    Long childB = insertStudent(runId, "QA Child B " + slug, "7", "hi", null, "child-b");
+    Long adultStudent = insertStudent(runId, "QA Adult Learner C " + slug, "6", "en", independentLearner, "adult-student");
 
     insertGuardianStudent(runId, "parent-a-child-a", parentA, childA, "user-parent-a", "student-child-a");
     insertGuardianStudent(runId, "parent-b-child-b", parentB, childB, "user-parent-b", "student-child-b");
@@ -801,6 +806,7 @@ public class QaTestPackService {
     result.put("fixtureSummary", Map.ofEntries(
         Map.entry("institutions", 3),
         Map.entry("institutionAdminAccounts", 4),
+        Map.entry("hrmsPlatformAdminActors", 1),
         Map.entry("parentAccounts", 2),
         Map.entry("minorChildren", 2),
         Map.entry("independentLearners", 1),
@@ -831,18 +837,19 @@ public class QaTestPackService {
     jdbc.queryForObject("select id from institution_tenant where id=? for update", Long.class, quantaEdgeId);
 
     Long reviewerId = insertQaCourseReviewer(runId, slug);
+    Long hrmsPlatformAdminId = insertQaHrmsPlatformAdmin(runId, slug);
     Long adminA = insertInstitutionAdmin(runId, "institution-admin-a", tenantA,
-        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "a", "QA Institution A Admin", reviewerId,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "a", "QA Institution A Admin", hrmsPlatformAdminId,
         "institution-QAT" + slug + "A");
     Long adminB = insertInstitutionAdmin(runId, "institution-admin-b", tenantB,
-        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "b", "QA Institution B Admin", reviewerId,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "b", "QA Institution B Admin", hrmsPlatformAdminId,
         "institution-QAT" + slug + "B");
     Long adminC = insertInstitutionAdmin(runId, "institution-admin-c", tenantC,
-        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "c", "QA Institution C Admin", reviewerId,
+        "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "c", "QA Institution C Admin", hrmsPlatformAdminId,
         "institution-QAT" + slug + "C");
     Long quantaEdgeOwnerAdmin = insertInstitutionAdmin(runId, "institution-admin-quantaedge",
         quantaEdgeId, "qa_quantaedge_" + slug.toLowerCase(Locale.ROOT),
-        "QA QuantaEdge Course Owner", reviewerId, "institution-QUANTA-EDGE");
+        "QA QuantaEdge Course Owner", hrmsPlatformAdminId, "institution-QUANTA-EDGE");
 
     Long release7 = insertQuantaEdgeShareableRelease(runId, "course-release-class-7",
         quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, class7ProgramId,
@@ -852,21 +859,21 @@ public class QaTestPackService {
         "Run-owned QA release; Class 6 source owner remains QuantaEdge.");
 
     Long assignmentA = insertCourseAssignment(runId, "course-assignment-class-7-to-a",
-        tenantA, release7, "HRMS", reviewerId,
+        tenantA, release7, "HRMS", hrmsPlatformAdminId,
         List.of("institution-QAT" + slug + "A", "course-release-class-7"));
     Long assignmentB = insertCourseAssignment(runId, "course-assignment-class-7-to-b",
-        tenantB, release7, "HRMS", reviewerId,
+        tenantB, release7, "HRMS", hrmsPlatformAdminId,
         List.of("institution-QAT" + slug + "B", "course-release-class-7"));
     Long assignmentC = insertCourseAssignment(runId, "course-assignment-class-6-to-c",
-        tenantC, release6, "HRMS", reviewerId,
+        tenantC, release6, "HRMS", hrmsPlatformAdminId,
         List.of("institution-QAT" + slug + "C", "course-release-class-6"));
 
     insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, class7ProgramId,
-        reviewerId, "institution-QAT" + slug + "A", "course-release-class-7");
+        hrmsPlatformAdminId, "institution-QAT" + slug + "A", "course-release-class-7");
     insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, class7ProgramId,
-        reviewerId, "institution-QAT" + slug + "B", "course-release-class-7");
+        hrmsPlatformAdminId, "institution-QAT" + slug + "B", "course-release-class-7");
     insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, class6ProgramId,
-        reviewerId, "institution-QAT" + slug + "C", "course-release-class-6");
+        hrmsPlatformAdminId, "institution-QAT" + slug + "C", "course-release-class-6");
 
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("release_class7_id", release7);
@@ -944,6 +951,19 @@ public class QaTestPackService {
     return id;
   }
 
+
+  /** Run-owned, non-login actor representing HRMS/platform-owner assignment authority. */
+  private Long insertQaHrmsPlatformAdmin(UUID runId, String slug) {
+    Long id = jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active,qa_test_run_id)
+      values(?,?,?,'ADMIN',true,?) returning id
+      """, Long.class, UUID.randomUUID(), testMobile(runId, 10),
+      "QA HRMS Platform Admin " + slug, runId);
+    addResource(runId, "staff-hrms-platform-admin", "STAFF_ACCOUNT", id, 48,
+        List.of(), "staff_account");
+    return id;
+  }
+
   private Long insertInstitutionAdmin(UUID runId, String key, Long institutionId, String username,
       String displayName, Long createdByStaffId, String institutionResourceKey) {
     Long id = jdbc.queryForObject("""
@@ -954,7 +974,7 @@ public class QaTestPackService {
       """, Long.class, institutionId, username, displayName, passwordEncoder.encode(fixturePassword),
       createdByStaffId, runId);
     addResource(runId, key, "INSTITUTION_ADMIN_ACCOUNT", id, 47,
-        List.of(institutionResourceKey, "staff-course-reviewer"), "institution_admin_account");
+        List.of(institutionResourceKey, "staff-hrms-platform-admin"), "institution_admin_account");
     return id;
   }
 
@@ -966,7 +986,9 @@ public class QaTestPackService {
         assigned_at,created_at,updated_at,qa_test_run_id
       ) values(?,?,'ASSIGNED',?,?,now(),now(),now(),?) returning id
       """, Long.class, institutionId, releaseId, source, actorStaffId, runId);
-    addResource(runId, key, "COURSE_ASSIGNMENT", id, 44, dependencies, "institution_course_assignment");
+    addResource(runId, key, "COURSE_ASSIGNMENT", id, 44,
+        java.util.stream.Stream.concat(dependencies.stream(), java.util.stream.Stream.of("staff-hrms-platform-admin"))
+            .distinct().toList(), "institution_course_assignment");
     return id;
   }
 
@@ -978,7 +1000,7 @@ public class QaTestPackService {
       ) values(?,?,'ACTIVE',now(),?,?) returning id
       """, Long.class, institutionId, programId, actorStaffId, runId);
     addResource(runId, key, "COURSE_ENTITLEMENT", id, 42,
-        List.of(institutionResourceKey, courseResourceKey), "institution_course_entitlement");
+        List.of(institutionResourceKey, courseResourceKey, "staff-hrms-platform-admin"), "institution_course_entitlement");
   }
 
   private String courseFingerprint(Long programId) {
@@ -1064,12 +1086,13 @@ public class QaTestPackService {
         List.of(institutionResourceKey, userResourceKey), "institution_user_membership");
   }
 
-  private Long insertStudent(UUID runId, String displayName, String language, Long linkedUserId, String resourceKey) {
+  private Long insertStudent(UUID runId, String displayName, String classCode, String language,
+      Long linkedUserId, String resourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student(
         public_id,display_name,class_code,board,language,environment,active,user_account_id,qa_test_run_id
-      ) values (?,?, '7','Bihar Board',?,'PRODUCTION',true,?,?) returning id
-      """, Long.class, UUID.randomUUID(), displayName, language, linkedUserId, runId);
+      ) values (?,?,?,'Bihar Board',?,'PRODUCTION',true,?,?) returning id
+      """, Long.class, UUID.randomUUID(), displayName, classCode, language, linkedUserId, runId);
     addResource(runId, "student-" + resourceKey, "STUDENT", id, 70, List.of(), "student");
     return id;
   }
