@@ -10,7 +10,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import styles from './Tests.module.css';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type AssessmentCard = {
   assessment_id:number;test_id?:string|null;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -212,6 +213,7 @@ export default function TestsClient(){
       catalogParams.set('courseId',String(courseId));
       const resultsParams=new URLSearchParams({language,limit:String(resultsPageSize),offset:String(resultsPage*resultsPageSize)});
       resultsParams.set('courseId',String(courseId));
+      if(subjectFilter!=='ALL')resultsParams.set('subjectCode',subjectFilter);
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?'+catalogParams.toString()),
         api('/api/v1/learning/assessment-results?'+resultsParams.toString())
@@ -244,6 +246,25 @@ export default function TestsClient(){
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
   useEffect(()=>{setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);},[courseId]);
+  useEffect(()=>{
+    if(subjectFilter==='ALL')return;
+    if(!(activeCourse?.subjects||[]).some(subject=>String(subject.subject_code||subject.code||'')===subjectFilter))setSubjectFilter('ALL');
+  },[courseId,activeCourse,subjectFilter]);
+
+  async function changeCourse(value:string){
+    await selectCourse(value);
+    const params=new URLSearchParams(searchParams.toString());
+    params.set('courseId',value);params.delete('subjectCode');
+    router.replace('/student/tests?'+params.toString());
+    setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);
+  }
+  function changeSubject(value:string){
+    setSubjectFilter(value);setTestsPage(0);setResultsPage(0);
+    const params=new URLSearchParams(searchParams.toString());
+    if(courseId!==null)params.set('courseId',String(courseId));
+    if(value==='ALL')params.delete('subjectCode');else params.set('subjectCode',value);
+    router.replace('/student/tests?'+params.toString());
+  }
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -482,8 +503,12 @@ export default function TestsClient(){
       {courseError&&<div className={styles.error} role="alert">{courseError}</div>}{!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
         <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{translateUi(locale, 'legacy.web.available.tests.83298a6c')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{translateUi(locale, 'legacy.web.my.results.f7fbefd3')} <span>{resultsTotal}</span></button></div>
+        <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+          onCourseChange={value=>void changeCourse(value)} subjectCode={subjectFilter} onSubjectChange={changeSubject}
+          loading={loadingCourses} language={locale} courseLabel={t('Course','कोर्स')} subjectLabel={t('Subject','विषय')}
+          allSubjectsLabel={t('All subjects','सभी विषय')} />
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale==='english'?'Primary course':'मुख्य कोर्स'}/><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} disabled={courseId===null} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{(activeCourse?.subjects||[]).map(subject=>{const code=String(subject.subject_code||subject.code||'');return code?<option key={code} value={code}>{String(subject.subject_name||subject.display_name||code)}</option>:null;})}</select></label></div>
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div></div>
           {loading?<div className={styles.empty}>{translateUi(locale, 'legacy.web.loading.your.tests.ff94a584')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{translateUi(locale, 'legacy.web.no.published.tests.yet.04ce394c')}</b><small>{translateUi(locale, 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
