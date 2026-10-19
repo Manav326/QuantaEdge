@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9c2f4c68760b3268f187fe5329272bdff157e39bd60f8483414e3e42237acebb",
+  "raw_analysis_sha256": "6abeb5b82f86dbe3d01958e2213a6a9cbd5c701768c19746cb877c58cc9333c2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:35:16Z",
+      "checkpointed_at": "2026-10-19T16:44:25Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:36:02Z",
+      "checkpointed_at": "2026-10-19T16:45:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:36:39Z",
+      "checkpointed_at": "2026-10-19T16:45:48Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -42457,6 +42457,80 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d8eac356965169bf8ad0f642",
+      "asset_sha256": "8a25a434eb70e2e2ec105ed2b9e162b1e69d13341d0bc61e61a3e55d78fe5bb7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/8a25a434eb70e2e2ec105ed2b9e162b1e69d13341d0bc61e61a3e55d78fe5bb7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children playing in a polluted playground with flies and mosquitos, and a factory in the background emitting smoke.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pollution",
+          "environmental cleanliness",
+          "health risks",
+          "factory emissions",
+          "flies and mosquitos",
+          "children's play area"
+        ],
+        "context_relation": "The image illustrates the negative impact of pollution on children's play areas, emphasizing the importance of maintaining clean environments for health and safety.",
+        "limitations": [
+          "The image does not provide specific details about the types of pollution or the exact location of the factory."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:47:29Z",
+      "effective_analysis": {
+        "visual_summary": "Children playing in a polluted playground with flies and mosquitos, and a factory in the background emitting smoke.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pollution",
+          "environmental cleanliness",
+          "health risks",
+          "factory emissions",
+          "flies and mosquitos",
+          "children's play area"
+        ],
+        "context_relation": "The image illustrates the negative impact of pollution on children's play areas, emphasizing the importance of maintaining clean environments for health and safety.",
+        "limitations": [
+          "The image does not provide specific details about the types of pollution or the exact location of the factory."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0a564647931af1b141729e6e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

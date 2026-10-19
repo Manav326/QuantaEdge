@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 906,
+    "assets_selected": 907,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 902,
-    "assets_remaining": 1389,
+    "assets_analyzed": 903,
+    "assets_remaining": 1388,
     "assets_completion_percent": 39.4,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 901,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 902,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:35:16Z"
+      "checkpointed_at": "2026-10-19T16:44:25Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:36:02Z"
+      "checkpointed_at": "2026-10-19T16:45:11Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T16:36:39Z"
+      "checkpointed_at": "2026-10-19T16:45:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28561,6 +28561,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T16:43:16Z"
+    },
+    {
+      "asset_id": "d8eac356965169bf8ad0f642",
+      "asset_sha256": "8a25a434eb70e2e2ec105ed2b9e162b1e69d13341d0bc61e61a3e55d78fe5bb7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/8a25a434eb70e2e2ec105ed2b9e162b1e69d13341d0bc61e61a3e55d78fe5bb7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children playing in a polluted playground with flies and mosquitos, and a factory in the background emitting smoke.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pollution",
+          "environmental cleanliness",
+          "health risks",
+          "factory emissions",
+          "flies and mosquitos",
+          "children's play area"
+        ],
+        "context_relation": "The image illustrates the negative impact of pollution on children's play areas, emphasizing the importance of maintaining clean environments for health and safety.",
+        "limitations": [
+          "The image does not provide specific details about the types of pollution or the exact location of the factory."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T16:47:29Z"
+    },
+    {
+      "asset_id": "0a564647931af1b141729e6e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
