@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {useContext, useState} from 'react';
@@ -36,7 +38,7 @@ export default function AdminLogin() {
     setError('');
     setBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/request-otp', {
+      const response = await apiFetch('/api/v1/auth/request-otp', {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',
@@ -60,7 +62,7 @@ export default function AdminLogin() {
     setError('');
     setBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/verify-otp', {
+      const response = await apiFetch('/api/v1/auth/verify-otp', {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',
@@ -83,7 +85,7 @@ export default function AdminLogin() {
       if (!(Number(body.staffId) > 0)) {
         throw new Error(t('admin.login.otpNoSession'));
       }
-      const meResponse = await fetch('/api/v1/auth/me', {cache: 'no-store', credentials: 'same-origin'});
+      const meResponse = await apiFetch('/api/v1/auth/me', {cache: 'no-store', credentials: 'same-origin'});
       const me = await readApiJson(meResponse, t);
       if (!meResponse.ok || !me.staffId) {
         throw new Error(me.message || me.detail || t('admin.login.sessionNotConfirmed'));

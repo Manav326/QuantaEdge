@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type GoogleCredentialResponse = { credential?: string; select_by?: string };
@@ -75,7 +77,7 @@ export default function GoogleSignInButton({
     setBusy(true);
     setError('');
     try {
-      const result = await fetch(endpoint, {
+      const result = await apiFetch(endpoint, {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -114,7 +116,7 @@ export default function GoogleSignInButton({
     setReady(false);
     setError('');
     const initialize = async () => {
-      const configResponse = await fetch('/api/v1/auth/google/config', {
+      const configResponse = await apiFetch('/api/v1/auth/google/config', {
         method: 'GET',
         credentials: 'same-origin',
         cache: 'no-store',

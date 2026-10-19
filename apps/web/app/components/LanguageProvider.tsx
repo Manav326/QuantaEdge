@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { DEFAULT_UI_LOCALE, UI_LOCALE_OPTIONS, getUiLocaleLanguage, resolveUiLocale, translateUi, type UiLocale } from '../i18n/catalog';
@@ -90,7 +92,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLearningLanguage = useCallback((next: LearningLanguage) => {
     applyLearningLanguage(next, true);
     if (isStudentRoute && typeof window !== 'undefined') {
-      void fetch('/api/v1/students/me/language', {
+      void apiFetch('/api/v1/students/me/language', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -144,7 +146,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const resolveLanguage = async () => {
       if (isStudentRoute) {
         try {
-          const response = await fetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' });
+          const response = await apiFetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' });
           const profile = response.ok ? await response.json() : null;
           if (active && profile) {
             const savedLanguage = normalizedLanguage(profile.learningLanguage ?? profile.learning_language ?? profile.language);
@@ -177,7 +179,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     // An explicit interface-language choice on this device must not be overwritten
     // by the parent's older profile preference during navigation or reload.
     if (localLocaleIsSet()) return;
-    fetch('/api/v1/guardians/profile', { cache: 'no-store', credentials: 'same-origin' })
+    apiFetch('/api/v1/guardians/profile', { cache: 'no-store', credentials: 'same-origin' })
       .then(response => response.ok ? response.json() : null)
       .then(profile => {
         if (!active || !profile || localLocaleIsSet()) return;

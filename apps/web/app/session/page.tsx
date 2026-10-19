@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TenantBrandMark, useTenantBranding } from '../components/TenantBrandingProvider';
@@ -49,11 +51,11 @@ export default function SessionLandingPage() {
     setMessage('Aapka secure session check ho raha hai…');
     try {
       const response = await withSessionTimeout((async () => {
-        let current = await fetch('/api/v1/auth/me', {
+        let current = await apiFetch('/api/v1/auth/me', {
           headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
         });
         if (!current.ok) {
-          const studentResponse = await fetch('/api/v1/auth/me', {
+          const studentResponse = await apiFetch('/api/v1/auth/me', {
             headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
           });
           current = studentResponse;
@@ -70,10 +72,10 @@ export default function SessionLandingPage() {
       }
       if (response.status === 401 || response.status === 403) {
         await Promise.all([
-          fetch('/api/v1/auth/logout', {
+          apiFetch('/api/v1/auth/logout', {
             method: 'POST', headers: { 'X-QE-Workspace': 'PARENT' },
           }).catch(() => undefined),
-          fetch('/api/v1/auth/logout', {
+          apiFetch('/api/v1/auth/logout', {
             method: 'POST', headers: { 'X-QE-Workspace': 'STUDENT' },
           }).catch(() => undefined),
         ]);
@@ -88,10 +90,10 @@ export default function SessionLandingPage() {
   }
   async function logoutToSwitch() {
     await Promise.all([
-      fetch('/api/v1/auth/logout', {
+      apiFetch('/api/v1/auth/logout', {
         method: 'POST', headers: { 'X-QE-Workspace': 'PARENT' },
       }).catch(() => undefined),
-      fetch('/api/v1/auth/logout', {
+      apiFetch('/api/v1/auth/logout', {
         method: 'POST', headers: { 'X-QE-Workspace': 'STUDENT' },
       }).catch(() => undefined),
     ]);

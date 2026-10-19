@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -39,7 +41,7 @@ export default function AdminSessionLandingPage() {
     setError('');
     setMessage('Checking your staff session…');
     try {
-      const response = await withSessionTimeout(fetch('/api/v1/auth/me', { cache: 'no-store' }));
+      const response = await withSessionTimeout(apiFetch('/api/v1/auth/me', { cache: 'no-store' }));
       if (response.ok) {
         const identity = await response.json() as StaffSession;
         const home = identity.staffId ? staffHome(identity) : null;
@@ -50,7 +52,7 @@ export default function AdminSessionLandingPage() {
         return;
       }
       if (response.status === 401 || response.status === 403) {
-        await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
+        await apiFetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
         window.location.replace('/login');
         return;
       }
@@ -61,7 +63,7 @@ export default function AdminSessionLandingPage() {
     setMessage('Secure session check could not be completed.');
   }
   async function logoutToSwitch() {
-    await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
+    await apiFetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
     window.location.replace('/login');
   }
   useEffect(() => { void resolveSession(); }, []);
