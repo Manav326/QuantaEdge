@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1083,
-    "successful_visual_analyses": 1070,
-    "missing_visual_analyses": 995,
-    "failed_visual_analyses": 13,
+    "raw_analysis_result_rows": 1085,
+    "successful_visual_analyses": 1071,
+    "missing_visual_analyses": 993,
+    "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1008,
+    "unresolved_count": 1007,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41541,7 +41541,7 @@
       "asset_path": "assets/94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -41559,9 +41559,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the deflection of a compass needle when different poles of a magnet are brought close to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass?"
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "North pole",
+          "South pole"
+        ],
+        "context_relation": "The image is a visual representation of the interaction between a magnet and a compass needle, focusing on the deflection of the needle based on the poles of the magnet.",
+        "limitations": [
+          "The image does not show the actual deflection of the compass needle.",
+          "The image does not show the effect of placing a piece of wood between the magnet and the compass needle."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

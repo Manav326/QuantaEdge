@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1070,
+    "assets_selected": 1072,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1067,
-    "assets_remaining": 1011,
-    "assets_completion_percent": 51.3,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1065,
+    "assets_analyzed": 1068,
+    "assets_remaining": 1010,
+    "assets_completion_percent": 51.4,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 1067,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:01:06Z"
+      "checkpointed_at": "2026-10-19T17:05:41Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:01:46Z"
+      "checkpointed_at": "2026-10-19T17:06:22Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:02:39Z"
+      "checkpointed_at": "2026-10-19T17:07:13Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34775,6 +34775,61 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:04:53Z"
+    },
+    {
+      "asset_id": "89cf95fdbcd5de946249415f",
+      "asset_sha256": "94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9350e89a35fe0361015f5048",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the deflection of a compass needle when different poles of a magnet are brought close to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b).",
+          "Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass?"
+        ],
+        "concepts": [
+          "magnet",
+          "compass needle",
+          "deflection",
+          "North pole",
+          "South pole"
+        ],
+        "context_relation": "The image is a visual representation of the interaction between a magnet and a compass needle, focusing on the deflection of the needle based on the poles of the magnet.",
+        "limitations": [
+          "The image does not show the actual deflection of the compass needle.",
+          "The image does not show the effect of placing a piece of wood between the magnet and the compass needle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:09:03Z"
     }
   ]
 }
