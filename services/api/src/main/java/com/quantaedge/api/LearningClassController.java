@@ -1380,8 +1380,9 @@ public class LearningClassController {
       """,Boolean.class,studentId,institutionId);
     if(!Boolean.TRUE.equals(member)) throw new SecurityException(
         "The learner is not an active member of the selected institution.");
-    if(courseId==null) return;
-    if(courseId<=0L) throw new IllegalArgumentException("Course ID must be positive.");
+    if(courseId==null || courseId<=0L) {
+      throw new IllegalArgumentException("Select an active course before accessing live or recorded classes.");
+    }
     Boolean allowed=jdbc.queryForObject("""
       select exists(
         select 1 from student_program_enrollment e
