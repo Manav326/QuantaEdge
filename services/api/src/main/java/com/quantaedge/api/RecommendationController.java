@@ -45,9 +45,22 @@ public class RecommendationController {
     if(enrolled==null || enrolled==0L) throw new SecurityException("The selected course is not enrolled in this institution.");
 
     Long diagnostics=jdbc.queryForObject("""
-      select count(*) from student_diagnostic_attempt
-      where student_id=? and institution_id=? and status='SUBMITTED'
-      """,Long.class,context.studentId(),institutionId);
+      select count(distinct diagnostic.id)
+      from student_diagnostic_attempt diagnostic
+      join student_diagnostic_attempt_question picked
+        on picked.diagnostic_attempt_id=diagnostic.id
+      join lesson l on l.id=picked.lesson_id and l.active=true
+      join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true and ch.content_status='PUBLISHED'
+      join curriculum_subject s on s.id=ch.subject_id and s.active=true
+      join curriculum_program_subject mapped
+        on mapped.program_id=? and mapped.subject_id=s.id and mapped.class_id=s.class_id
+      join curriculum_program course on course.id=mapped.program_id and course.status='ACTIVE'
+      join student_program_enrollment enrollment
+        on enrollment.student_id=diagnostic.student_id and enrollment.institution_id=diagnostic.institution_id
+           and enrollment.program_id=course.id and enrollment.status='ACTIVE'
+      where diagnostic.student_id=? and diagnostic.institution_id=? and diagnostic.status='SUBMITTED'
+        and (s.program_id=course.id or s.program_id is null)
+      """,Long.class,courseId,context.studentId(),institutionId);
     if(diagnostics==null||diagnostics==0)
       return Map.of("available",true,"kind","DIAGNOSTIC","reason","INITIAL_DIAGNOSTIC","courseId",courseId);
 
