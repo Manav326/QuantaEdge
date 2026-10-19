@@ -33,6 +33,7 @@ type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;subm
 type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
 type CertificateEligibility = {
   attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
+  course_id?:number|null;course_name?:string|null;program_id?:number|null;
   certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
   class_code?:string;subject_code?:string;subject_name?:string;
 };
