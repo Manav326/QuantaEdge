@@ -278,7 +278,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
           verifiedWorkspace = null;
           // A staff/legacy session must not block the learning site. Let the
           // appropriate public entry render or send a protected route to login.
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -287,7 +287,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       } catch {
         if (alive) {
           verifiedWorkspace = null;
-          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, (pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
           else setReady(true);
         }
       }
@@ -336,7 +336,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const onSessionExpired = () => {
-      if (isProtected) window.location.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+      if (isProtected) window.location.replace((pathname.startsWith('/student') || parentLearningRoute) ? '/login/student' : '/login');
     };
     window.addEventListener('qe:session-expired', onSessionExpired);
     return () => window.removeEventListener('qe:session-expired', onSessionExpired);
