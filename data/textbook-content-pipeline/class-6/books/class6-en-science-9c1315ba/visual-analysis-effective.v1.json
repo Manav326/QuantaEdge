@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4dea3b27b539b7d18e0ec45afca6948e620638a95009f20564df1f028a23841a",
+  "raw_analysis_sha256": "301721ff8e6814847c18690e76d72c4822e15fdc8bbd7eb5cfb3d913fe521711",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:28:05Z",
+      "checkpointed_at": "2026-10-19T10:34:57Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:29:05Z",
+      "checkpointed_at": "2026-10-19T10:35:57Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -44479,6 +44479,216 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "37ef5c0337a4f011e5ccec04",
+      "asset_sha256": "f95473dd7fbe1fbf124df050639e80e6235c317143a1df87d62f8c5744ba54f4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/f95473dd7fbe1fbf124df050639e80e6235c317143a1df87d62f8c5744ba54f4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e82b9b6e29cf26baa80b7e9b5a92e46095407a1117bb5f6aa1d49c8782a68bc5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two individuals in lab coats are conducting a test on food items, with iodine solution and a knife present on the table.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Iodine",
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "starch",
+          "carbohydrate",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "nutrients",
+          "carbohydrates",
+          "fat",
+          "protein"
+        ],
+        "context_relation": "The image is a visual representation of an activity related to the textbook content about testing different components of food.",
+        "limitations": [
+          "The image does not show the actual test being conducted, only the setup.",
+          "The image does not show the results of the test."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:37:44Z",
+      "effective_analysis": {
+        "visual_summary": "Two individuals in lab coats are conducting a test on food items, with iodine solution and a knife present on the table.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Iodine",
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "starch",
+          "carbohydrate",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "nutrients",
+          "carbohydrates",
+          "fat",
+          "protein"
+        ],
+        "context_relation": "The image is a visual representation of an activity related to the textbook content about testing different components of food.",
+        "limitations": [
+          "The image does not show the actual test being conducted, only the setup.",
+          "The image does not show the results of the test."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a834937b943dc5da8cfe2081",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e82b9b6e29cf26baa80b7e9b5a92e46095407a1117bb5f6aa1d49c8782a68bc5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:37:57Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b1583c28d44c03dcd05de067",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e82b9b6e29cf26baa80b7e9b5a92e46095407a1117bb5f6aa1d49c8782a68bc5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about testing different components of food, specifically focusing on starch, fat, and protein.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch,",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "testing food components",
+          "starch",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "detecting nutrients"
+        ],
+        "context_relation": "Introduction to testing food components",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:38:33Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about testing different components of food, specifically focusing on starch, fat, and protein.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch,",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "testing food components",
+          "starch",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "detecting nutrients"
+        ],
+        "context_relation": "Introduction to testing food components",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
