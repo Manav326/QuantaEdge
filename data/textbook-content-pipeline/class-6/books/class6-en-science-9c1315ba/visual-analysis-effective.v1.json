@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "03df974035ad8d94f5dcd6bf29d8e2986368c4b40cf9e3dd442d93280cae41f9",
+  "raw_analysis_sha256": "c9ec6531186cba61ff0b5c119d2cbcb24dbb36e325064e2b9273995d281393fd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:24:51Z",
+      "checkpointed_at": "2026-10-19T16:29:59Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:25:34Z",
+      "checkpointed_at": "2026-10-19T16:30:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:26:29Z",
+      "checkpointed_at": "2026-10-19T16:31:38Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -51324,6 +51324,134 @@
         "context_relation": "The image is related to the activity of making an iron needle magnet.",
         "limitations": [
           "The image does not show the actual process of making a magnet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f4a94d7674b80e5c2c01f18f",
+      "asset_sha256": "bd2a6f222fc41701d3de3181309799fa993b862a8415eb9af75758d28755452c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/bd2a6f222fc41701d3de3181309799fa993b862a8415eb9af75758d28755452c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ccbeb555e73ced48a04a3e3bad6c26a3009f2b3e6f9ce51bd1f76e410e83c339",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cork piece floating on water in a glass bowl with a magnet and a needle nearby.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 4.4: Let us construct",
+          "Collect a few materials like a cork piece, iron sewing",
+          "needle, a permanent bar magnet, a glass bowl, and water.",
+          "Place the iron sewing needle on a wooden table. Then",
+          "keep any one pole of the magnet at one end of",
+          "the needle. Move the magnet over the needle",
+          "along its length as shown in Fig. 4.7a. When it",
+          "reaches the other end of the needle, lift it up.",
+          "Bring the same pole of the magnet you started",
+          "with to the same end of the sewing needle from",
+          "which you began, and repeat the process.",
+          "Fig. 4.7(a): Making an iron",
+          "needle a magnet"
+        ],
+        "concepts": [
+          "Magnetism",
+          "Floating cork piece",
+          "Glass bowl with water",
+          "Iron sewing needle",
+          "Permanent bar magnet",
+          "Constructing a magnet"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text, showing the steps to construct a magnet using a cork piece, iron sewing needle, and a permanent bar magnet.",
+        "limitations": [
+          "The image does not show the actual construction process.",
+          "The image does not show the result of the construction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:32:29Z",
+      "effective_analysis": {
+        "visual_summary": "A cork piece floating on water in a glass bowl with a magnet and a needle nearby.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 4.4: Let us construct",
+          "Collect a few materials like a cork piece, iron sewing",
+          "needle, a permanent bar magnet, a glass bowl, and water.",
+          "Place the iron sewing needle on a wooden table. Then",
+          "keep any one pole of the magnet at one end of",
+          "the needle. Move the magnet over the needle",
+          "along its length as shown in Fig. 4.7a. When it",
+          "reaches the other end of the needle, lift it up.",
+          "Bring the same pole of the magnet you started",
+          "with to the same end of the sewing needle from",
+          "which you began, and repeat the process.",
+          "Fig. 4.7(a): Making an iron",
+          "needle a magnet"
+        ],
+        "concepts": [
+          "Magnetism",
+          "Floating cork piece",
+          "Glass bowl with water",
+          "Iron sewing needle",
+          "Permanent bar magnet",
+          "Constructing a magnet"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text, showing the steps to construct a magnet using a cork piece, iron sewing needle, and a permanent bar magnet.",
+        "limitations": [
+          "The image does not show the actual construction process.",
+          "The image does not show the result of the construction process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5455a7a1a1adef7563e81f42",
+      "asset_sha256": "43afed249ec5b5fdf0097d18572f5ada37e139aafc1cd646f1195ae81205a3d1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/43afed249ec5b5fdf0097d18572f5ada37e139aafc1cd646f1195ae81205a3d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ccbeb555e73ced48a04a3e3bad6c26a3009f2b3e6f9ce51bd1f76e410e83c339",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a torn edge on the left and right sides.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of constructing an iron needle magnet.",
+        "limitations": [
+          "The image does not provide any specific information or data that can be analyzed.",
+          "The image does not contain any text or labels that can be read or interpreted.",
+          "The image does not show any specific objects or elements that can be counted or measured."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:33:10Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a torn edge on the left and right sides.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of constructing an iron needle magnet.",
+        "limitations": [
+          "The image does not provide any specific information or data that can be analyzed.",
+          "The image does not contain any text or labels that can be read or interpreted.",
+          "The image does not show any specific objects or elements that can be counted or measured."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
