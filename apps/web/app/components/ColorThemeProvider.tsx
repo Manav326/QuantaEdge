@@ -100,6 +100,16 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
   root.style.setProperty('--brand-primary', palette.primary);
   root.style.setProperty('--brand-accent', palette.accent);
   root.style.setProperty('--brand-soft', palette.primaryContainer);
+  // Compatibility aliases are consumed by older structured lesson/resource surfaces.
+  root.style.setProperty('--qe-text', palette.text);
+  root.style.setProperty('--qe-muted', palette.textMuted);
+  root.style.setProperty('--qe-border', palette.borderSubtle);
+  root.style.setProperty('--qe-surface', palette.surface);
+  root.style.setProperty('--qe-surface-raised', palette.surfaceElevated);
+  root.style.setProperty('--qe-soft', palette.primaryContainer);
+  root.style.setProperty('--qe-input', palette.surfaceElevated);
+  root.style.setProperty('--qe-orange', palette.primaryText);
+  root.style.setProperty('--qe-accent', palette.accentText);
   root.style.setProperty('--card', palette.surface);
   root.style.setProperty('--line', palette.borderSubtle);
   root.style.setProperty('--purple', palette.primaryText);
