@@ -71,18 +71,17 @@ class LearningControllerTest {
 
   @Test
   void lessonCatalogueIncludesDurableMcqAndPracticeHistoryForEachTopic() {
-    when(jdbc.queryForObject("select class_code from student where id=? and active=true", String.class, 7L))
-        .thenReturn("7");
-    when(jdbc.queryForList(contains("select p.id"), eq(1L), eq("maths"), eq(7L)))
+    when(jdbc.queryForList(contains("select p.id"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 91L)));
-    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class),
-        eq(1L), eq(7L), eq(91L), eq(91L), eq(91L), eq(91L))).thenReturn(true);
-    lenient().when(jdbc.queryForList(contains("practice_best_correct_count"), any(Object[].class))).thenReturn(List.of(Map.of(
+    when(jdbc.queryForObject(contains("from curriculum_program_subject cps"), eq(Long.class), eq(91L), eq("maths")))
+        .thenReturn(1L);
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    lenient().when(jdbc.queryForList(contains("select l.id,l.code"), any(Object[].class))).thenReturn(List.of(Map.of(
         "id", 99L, "title", "Fractions", "mcq_count", 3L, "mcq_answered_count", 3L,
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
         "practice_best_graded_count", 10L, "practice_best_percent", 80)));
 
-    List<Map<String,Object>> rows = controller.lessons("maths", "hi", 91L, student, TEST_TENANT);
+    List<Map<String,Object>> rows = controller.lessons("maths", 91L, "hi", student, TEST_TENANT);
 
     assertEquals(1, rows.size());
     assertEquals(3L, rows.getFirst().get("mcq_count"));
@@ -92,7 +91,7 @@ class LearningControllerTest {
     assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
     assertEquals(80, rows.getFirst().get("practice_best_percent"));
     org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("maths"), eq(91L));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq(91L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("maths"), eq(91L));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));
@@ -101,6 +100,7 @@ class LearningControllerTest {
 
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class))).thenReturn(true);
     when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
@@ -129,12 +129,9 @@ class LearningControllerTest {
         .thenReturn(1L);
     when(jdbc.queryForObject(contains("select coalesce(s.program_id,("), eq(Long.class), eq(42L)))
         .thenReturn(91L);
-    when(jdbc.queryForObject(contains("from institution_membership m"), eq(Boolean.class), eq(7L)))
-        .thenReturn(true);
-    when(jdbc.queryForObject(contains("from student_course_access_grant legacy_grant"), eq(Boolean.class),
-        eq(91L), eq(7L), eq(7L), eq(91L), eq(7L), eq(91L))).thenReturn(false);
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class))).thenReturn(false);
 
-    assertThrows(SecurityException.class, () -> controller.lesson(42L, "hi", student, TEST_TENANT));
+    assertThrows(SecurityException.class, () -> controller.lesson(42L, 91L, "hi", student, TEST_TENANT));
   }
 
   @Test
