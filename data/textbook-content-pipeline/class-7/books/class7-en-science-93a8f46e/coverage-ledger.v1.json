@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1549,
-    "successful_visual_analyses": 1527,
-    "missing_visual_analyses": 5939,
+    "raw_analysis_result_rows": 1552,
+    "successful_visual_analyses": 1530,
+    "missing_visual_analyses": 5936,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5961,
+    "unresolved_count": 5958,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -68242,9 +68242,30 @@
       "asset_path": "assets/0d04862a6bcf779c21607bd8cc0831c417f9cb9b7a2cdb085ecdf68ba5cc2579.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red and green striped background with a black horizontal line in the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols Representation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing circuit diagrams and their components.",
+        "limitations": [
+          "The image does not show any diagrams or symbols.",
+          "The image does not provide any specific information about the components or symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68260,9 +68281,23 @@
       "asset_path": "assets/dd5ed86c7301fc69f0f829fde529865b5674b6703eb74e0085ad79e3164f9a50.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red cylindrical object with a metallic cap, possibly a battery.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "battery",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and components, specifically batteries.",
+        "limitations": [
+          "The image does not provide specific details about the battery's brand or type, and the focus is on the general shape and color of the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -68278,9 +68313,24 @@
       "asset_path": "assets/a6613afa11e7fc1c6716fe208fe40b2eeafd2757a8e16ced459f92338f2ee8bc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red cylindrical object with a white label on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the topic of circuit diagrams in an electrical context.",
+        "limitations": [
+          "The image does not provide specific details about the components or their symbols.",
+          "The image does not show the actual components or their arrangement in a circuit diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

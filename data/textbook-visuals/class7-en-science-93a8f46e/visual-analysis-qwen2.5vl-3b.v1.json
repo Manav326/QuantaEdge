@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1527,
+    "assets_selected": 1530,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1525,
-    "assets_remaining": 5963,
+    "assets_analyzed": 1528,
+    "assets_remaining": 5960,
     "assets_completion_percent": 20.4,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1522,
+    "assets_skipped_from_checkpoint": 1525,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:10:22Z"
+      "checkpointed_at": "2026-10-19T11:13:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:10:43Z"
+      "checkpointed_at": "2026-10-19T11:13:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -57858,6 +57858,113 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T11:12:28Z"
+    },
+    {
+      "asset_id": "a0c2c24395979b3f43192778",
+      "asset_sha256": "0d04862a6bcf779c21607bd8cc0831c417f9cb9b7a2cdb085ecdf68ba5cc2579",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/0d04862a6bcf779c21607bd8cc0831c417f9cb9b7a2cdb085ecdf68ba5cc2579.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red and green striped background with a black horizontal line in the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols Representation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing circuit diagrams and their components.",
+        "limitations": [
+          "The image does not show any diagrams or symbols.",
+          "The image does not provide any specific information about the components or symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:14:11Z"
+    },
+    {
+      "asset_id": "17a5c67bf8c365613ae1730c",
+      "asset_sha256": "dd5ed86c7301fc69f0f829fde529865b5674b6703eb74e0085ad79e3164f9a50",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/dd5ed86c7301fc69f0f829fde529865b5674b6703eb74e0085ad79e3164f9a50.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red cylindrical object with a metallic cap, possibly a battery.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "battery",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and components, specifically batteries.",
+        "limitations": [
+          "The image does not provide specific details about the battery's brand or type, and the focus is on the general shape and color of the battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:14:48Z"
+    },
+    {
+      "asset_id": "2f2e4dcb937a03b8fba489dc",
+      "asset_sha256": "a6613afa11e7fc1c6716fe208fe40b2eeafd2757a8e16ced459f92338f2ee8bc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/a6613afa11e7fc1c6716fe208fe40b2eeafd2757a8e16ced459f92338f2ee8bc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red cylindrical object with a white label on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "components",
+          "circuit diagram"
+        ],
+        "context_relation": "The image is related to the topic of circuit diagrams in an electrical context.",
+        "limitations": [
+          "The image does not provide specific details about the components or their symbols.",
+          "The image does not show the actual components or their arrangement in a circuit diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:15:25Z"
     }
   ]
 }
