@@ -772,7 +772,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         courseProgress = progress
         // Primary course is a saved reporting focus, not the most recently enrolled
         // server row. Preserve it while this institution still grants access to the course.
-        if (currentCourseId > 0L && ownedPrograms.none {
+        if (currentCourseId <= 0L || ownedPrograms.none {
                 it.longAny("id", "course_id") == currentCourseId
             }) {
             currentCourseId = ownedPrograms.firstOrNull {
