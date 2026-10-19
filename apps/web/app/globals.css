@@ -767,3 +767,38 @@ html[data-qe-appearance] :is(button, a, input, select, textarea, [tabindex]:not(
     transition: none;
   }
 }
+
+
+/* Page typography defaults for CSS-module routes. Component-specific semantic classes win where a state
+   needs success/warning/error/brand emphasis; ordinary headings and body copy follow the theme. */
+html[data-qe-appearance="dark"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(p, li, label, legend, dt, dd, th, td) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="dark"] .qe-workspace-content textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(hr, .divider, [class*="Divider"]) {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-light, .secondary-button, .secondaryButton, .outline-button, .outlineButton, .icon-button, .iconButton, .ghost-button, .ghostButton) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .qe-primary-action, [data-variant="primary"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .qe-primary-action, [data-variant="primary"]):hover:not(:disabled) {
+  filter: brightness(1.06);
+}
