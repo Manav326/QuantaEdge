@@ -1555,8 +1555,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val onlineResponse = runCatching {
                 val filterQuery = if (subjectCode.isBlank()) "" else
                     "&subjectCode=" + ApiClient.encodeQuery(subjectCode)
-                val path = "/api/v1/learning/assessments?language=" + learningContentLanguage +
-                    filterQuery + "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
+                val path = "/api/v1/learning/assessments?courseId=" + currentCourseId +
+                    "&language=" + learningContentLanguage + filterQuery +
+                    "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
                 ApiClient.getObject(path)
             }.getOrNull()
             val onlinePage = onlineResponse?.optJSONArray("items")?.objectItems().orEmpty()
@@ -1652,8 +1653,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 route = AppRoute.ASSESSMENT_ATTEMPT
                 return@runTask
             }
+            val attemptCourseId = item.longAny("course_id", "courseId", "program_id").takeIf { it > 0L } ?: currentCourseId
+            if (attemptCourseId < 1L) throw IOException("टेस्ट शुरू करने से पहले एक enrolled course चुनें।")
             assessmentAttempt = ApiClient.postObject(
-                "/api/v1/learning/assessments/" + assessmentId + "/attempts?language=" + learningContentLanguage
+                "/api/v1/learning/assessments/" + assessmentId + "/attempts?courseId=" + attemptCourseId +
+                    "&language=" + learningContentLanguage
             )
             answers.clear()
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
@@ -1680,9 +1684,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val assessmentId = item.longAny("assessment_id", "assessmentId", "id")
             if (assessmentId <= 0L) throw IOException("इस टेस्ट की पहचान नहीं मिली।")
             if (!item.optBoolean("offline_enabled")) throw IOException("यह test offline उपयोग के लिए अनुमत नहीं है।")
+            val attemptCourseId = item.longAny("course_id", "courseId", "program_id").takeIf { it > 0L } ?: currentCourseId
+            if (attemptCourseId < 1L) throw IOException("ऑफलाइन टेस्ट तैयार करने से पहले एक enrolled course चुनें।")
             val attempt = ApiClient.postObject(
                 "/api/v1/learning/assessments/" + assessmentId +
-                    "/attempts?language=" + learningContentLanguage + "&offlineMode=true"
+                    "/attempts?courseId=" + attemptCourseId + "&language=" + learningContentLanguage + "&offlineMode=true"
             )
             if (!attempt.optBoolean("offlineMode") ||
                 attempt.textAny("offlinePackageToken").isBlank()) {
