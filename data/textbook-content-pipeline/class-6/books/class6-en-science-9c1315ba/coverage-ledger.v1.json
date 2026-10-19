@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1087,
-    "successful_visual_analyses": 1073,
-    "missing_visual_analyses": 991,
+    "raw_analysis_result_rows": 1089,
+    "successful_visual_analyses": 1075,
+    "missing_visual_analyses": 989,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1005,
+    "unresolved_count": 1003,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41682,9 +41682,23 @@
       "asset_path": "assets/d6838c6252ae7e6f0d86d4a38bfdebd7ec22213388e3a576f294673cc49af365.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a bracelet with a measuring tape showing its size.",
+        "visual_type": "photo",
+        "visible_text": [
+          "S",
+          "N"
+        ],
+        "concepts": [
+          "measuring bracelet size"
+        ],
+        "context_relation": "The image shows a bracelet being measured, likely for size or fit.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the bracelet's material or design."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41700,9 +41714,24 @@
       "asset_path": "assets/a1b34331faf83dc60f59db8e2444c74367e14ebfd1f8307b36996050853a0f7b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character with braided hair wearing a blue and white shirt, standing with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "braided hair",
+          "blue and white shirt",
+          "arms crossed"
+        ],
+        "context_relation": "The image is a cartoon character, not related to the text about observing the effect of magnet through non-magnetic materials.",
+        "limitations": [
+          "The image does not provide any information about the text or the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

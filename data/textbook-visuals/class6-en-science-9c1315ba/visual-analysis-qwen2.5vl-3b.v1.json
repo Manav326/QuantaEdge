@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1073,
+    "assets_selected": 1075,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1070,
-    "assets_remaining": 1008,
-    "assets_completion_percent": 51.5,
+    "assets_analyzed": 1072,
+    "assets_remaining": 1006,
+    "assets_completion_percent": 51.6,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1068,
+    "assets_skipped_from_checkpoint": 1070,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:09:50Z"
+      "checkpointed_at": "2026-10-19T17:14:21Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:10:31Z"
+      "checkpointed_at": "2026-10-19T17:15:02Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:11:24Z"
+      "checkpointed_at": "2026-10-19T17:15:56Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34918,6 +34918,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:13:30Z"
+    },
+    {
+      "asset_id": "97ae780cd6e150dad01848dc",
+      "asset_sha256": "d6838c6252ae7e6f0d86d4a38bfdebd7ec22213388e3a576f294673cc49af365",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/d6838c6252ae7e6f0d86d4a38bfdebd7ec22213388e3a576f294673cc49af365.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "29de3d8db0e0024241d05718e823ea0bff08b9c440c47f2b871fcaf72d70feeb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a bracelet with a measuring tape showing its size.",
+        "visual_type": "photo",
+        "visible_text": [
+          "S",
+          "N"
+        ],
+        "concepts": [
+          "measuring bracelet size"
+        ],
+        "context_relation": "The image shows a bracelet being measured, likely for size or fit.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the bracelet's material or design."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:16:33Z"
+    },
+    {
+      "asset_id": "16a2c3332b1003d45f4020e1",
+      "asset_sha256": "a1b34331faf83dc60f59db8e2444c74367e14ebfd1f8307b36996050853a0f7b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/a1b34331faf83dc60f59db8e2444c74367e14ebfd1f8307b36996050853a0f7b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "29de3d8db0e0024241d05718e823ea0bff08b9c440c47f2b871fcaf72d70feeb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with braided hair wearing a blue and white shirt, standing with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "braided hair",
+          "blue and white shirt",
+          "arms crossed"
+        ],
+        "context_relation": "The image is a cartoon character, not related to the text about observing the effect of magnet through non-magnetic materials.",
+        "limitations": [
+          "The image does not provide any information about the text or the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:17:12Z"
     }
   ]
 }
