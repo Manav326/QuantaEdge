@@ -378,7 +378,14 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       if (!response.ok) throw new Error(data.message || 'Template could not be saved.');
       setNotice('Template saved as a new immutable version.');
       await loadBase();
-      if (data.id) chooseTemplate(String(data.id));
+      if (data.id) {
+        setTemplateId(String(data.id));
+        setTemplateVersion(Number(field(data,'content_version','contentVersion') ?? 1));
+        setTemplateName(String(field(data,'template_name','templateName') ?? templateName));
+        setTemplateDescription(String(data.description ?? templateDescription));
+        const savedDocument = asDocument(field(data,'content_document','contentDocument'));
+        if (savedDocument) setDocument(clone(savedDocument));
+      }
     } catch (e) { setError(e instanceof Error ? e.message : 'Template could not be saved.'); }
     finally { setSaving(false); }
   }
