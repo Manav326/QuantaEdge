@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "233adcca3187ecf903d396ddc3b67ea8703719cac187bfddf0f87afe39de4cfd",
+  "raw_analysis_sha256": "973ee465e77f2b01ef01688371f52afb126494d3c3b4cc8629a85b3a50069a3f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:42:37Z",
+      "checkpointed_at": "2026-10-19T00:47:15Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:43:18Z",
+      "checkpointed_at": "2026-10-19T00:47:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:44:10Z",
+      "checkpointed_at": "2026-10-19T00:48:54Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:44:49Z",
+      "checkpointed_at": "2026-10-19T00:49:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -38035,6 +38035,54 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "af00977ad253caa8fe25e25f",
+      "asset_sha256": "37449951c9cf435605873ebec821d664585bce1a2709fc72f5baa50efb2d2c28",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/37449951c9cf435605873ebec821d664585bce1a2709fc72f5baa50efb2d2c28.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "57826b7c50430393a7093ace4baf66d71d240eba2f192defcbaac2b7bf548080",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bird standing on a dirt path in a grassy field.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "bird",
+          "grassy field",
+          "dirt path"
+        ],
+        "context_relation": "The image shows a bird in a natural habitat.",
+        "limitations": [
+          "The image does not provide specific details about the bird or its habitat."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T00:50:13Z",
+      "effective_analysis": {
+        "visual_summary": "A bird standing on a dirt path in a grassy field.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "bird",
+          "grassy field",
+          "dirt path"
+        ],
+        "context_relation": "The image shows a bird in a natural habitat.",
+        "limitations": [
+          "The image does not provide specific details about the bird or its habitat."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
