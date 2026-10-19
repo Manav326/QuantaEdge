@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 857,
+    "assets_selected": 859,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 854,
-    "assets_remaining": 1437,
-    "assets_completion_percent": 37.3,
+    "assets_analyzed": 856,
+    "assets_remaining": 1435,
+    "assets_completion_percent": 37.4,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 852,
+    "assets_skipped_from_checkpoint": 854,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:04:43Z"
+      "checkpointed_at": "2026-10-19T12:11:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:06:00Z"
+      "checkpointed_at": "2026-10-19T12:12:23Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:06:51Z"
+      "checkpointed_at": "2026-10-19T12:13:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26842,6 +26842,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T12:09:32Z"
+    },
+    {
+      "asset_id": "82d8166392ecdd87f78f975c",
+      "asset_sha256": "2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon character",
+          "large green octagonal object"
+        ],
+        "context_relation": "The image appears to be a part of an educational content, possibly related to a science or biology topic.",
+        "limitations": [
+          "The image does not provide specific details about the context or the topic it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:14:18Z"
+    },
+    {
+      "asset_id": "0bd1155ec6ef6757f0d439ab",
+      "asset_sha256": "0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of biogas production in India.",
+        "limitations": [
+          "The image does not provide specific details about the biogas program or the fermented food items mentioned in the text.",
+          "The image is a cartoon and may not accurately represent the historical context or scientific aspects of biogas production."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:15:24Z"
     }
   ]
 }
