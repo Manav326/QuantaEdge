@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e1d54f7fa8cb5b08b655b66ab228c99dbddd131ebacd71ddc6bb093f47968877",
+  "raw_analysis_sha256": "97dc927a45b2808ae26832049df17f92c4dbd385f61abb9a57b7ec9b38562bef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:18:09Z",
+      "checkpointed_at": "2026-10-19T03:26:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:18:37Z",
+      "checkpointed_at": "2026-10-19T03:26:54Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77779,6 +77779,108 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "19182aa83463f523d90ed77b",
+      "asset_sha256": "8734bef952df3a1e1950017e78be0cd9d8d440a4438fb4922df80887b7895484",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/8734bef952df3a1e1950017e78be0cd9d8d440a4438fb4922df80887b7895484.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5abf0bbf91f1337f73719e33",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8af962a30473628319dea907",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal and the wires connected to the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not",
+          "cell holder is not"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Wires",
+          "Electrical tape",
+          "Spring",
+          "Electric cell holder"
+        ],
+        "context_relation": "The image is a diagram explaining how to insert an electric cell into a holder and connect wires to it.",
+        "limitations": [
+          "The image does not show the actual physical setup or the wires being connected to the cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:31:29Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal and the wires connected to the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not",
+          "cell holder is not"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Wires",
+          "Electrical tape",
+          "Spring",
+          "Electric cell holder"
+        ],
+        "context_relation": "The image is a diagram explaining how to insert an electric cell into a holder and connect wires to it.",
+        "limitations": [
+          "The image does not show the actual physical setup or the wires being connected to the cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
