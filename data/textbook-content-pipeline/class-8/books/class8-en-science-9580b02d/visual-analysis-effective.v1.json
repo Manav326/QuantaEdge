@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f914db669f36738121e996e4aa94e38557dbdb5ba0b448ab0fdd622a3ba43ed7",
+  "raw_analysis_sha256": "2bd0971170f6f5a55bf47bd6bbc73e4f741e84238dad2cb7238b63078e1f8cc2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T14:37:07Z",
+      "checkpointed_at": "2026-10-19T14:53:25Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T14:37:57Z",
+      "checkpointed_at": "2026-10-19T14:54:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T14:38:37Z",
+      "checkpointed_at": "2026-10-19T14:54:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -38222,21 +38222,97 @@
     {
       "asset_id": "126f999a48566e83beb4bca3",
       "asset_sha256": "4d49059b542aa61fd531338ad6fa4be7cd097726cabd6c4bfc76dc9aeab13e65",
-      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 42,
       "asset_path": "page-0042.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e870f4c6a278c57cff9e020145b6e650a835ffd671b120aa6b7826aee4f61df5",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a plant with roots and leaves.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.12: Root nodules of Cowpea plant which contain Rhizobium",
+          "You will observe that in bowl A, the milk has turned into curd after a few hours and has become little sour. Whereas in bowl B, the milk has not curdled, but it might be a little sour. Do you know why this happens? The curd contains several types of bacteria. One of them is Lactobacillus. This bacte",
+          "We can categorise the microorganisms into different categories, such as protozoa, fungi, bacteria, some algae, and more. Some bacteria, such as Rhizobium, form the swollen regions called nodules and live in them as shown in Fig. 2.12. Roots of certain legumes, such as beans, peas, and lentils have r",
+          "2.4.3 Amazing microalgae: tiny helpers in water",
+          "Microalgae are microscopic plant-like organisms that live in water, soil, air, and even on trees. They make their own food using sunlight. While doing this, they also release oxygen and produce more than half of the Earth's oxygen supply. They are rich in nutrients and serve as a food source for man",
+          "However, pollution, climate change, and habitat destruction are threatening microalgal diversity and abundance. It is important to conserve these tiny organisms to protect the environment and maintain oxygen balance on Earth."
+        ],
+        "concepts": [
+          "Microalgae",
+          "Rhizobium",
+          "Lactobacillus",
+          "Protozoa",
+          "Fungi",
+          "Bacteria",
+          "Algae",
+          "Nodules",
+          "Legumes",
+          "Nitrogen",
+          "Chemical fertilisers",
+          "Rotation",
+          "Soil",
+          "Microorganisms",
+          "Sunlight",
+          "Oxygen",
+          "Nutrients",
+          "Aquatic animals",
+          "Health supplements",
+          "Medicines"
+        ],
+        "context_relation": "The image is a diagram of a plant with roots and leaves.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or the process of curdling milk."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T14:59:47Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a plant with roots and leaves.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.12: Root nodules of Cowpea plant which contain Rhizobium",
+          "You will observe that in bowl A, the milk has turned into curd after a few hours and has become little sour. Whereas in bowl B, the milk has not curdled, but it might be a little sour. Do you know why this happens? The curd contains several types of bacteria. One of them is Lactobacillus. This bacte",
+          "We can categorise the microorganisms into different categories, such as protozoa, fungi, bacteria, some algae, and more. Some bacteria, such as Rhizobium, form the swollen regions called nodules and live in them as shown in Fig. 2.12. Roots of certain legumes, such as beans, peas, and lentils have r",
+          "2.4.3 Amazing microalgae: tiny helpers in water",
+          "Microalgae are microscopic plant-like organisms that live in water, soil, air, and even on trees. They make their own food using sunlight. While doing this, they also release oxygen and produce more than half of the Earth's oxygen supply. They are rich in nutrients and serve as a food source for man",
+          "However, pollution, climate change, and habitat destruction are threatening microalgal diversity and abundance. It is important to conserve these tiny organisms to protect the environment and maintain oxygen balance on Earth."
+        ],
+        "concepts": [
+          "Microalgae",
+          "Rhizobium",
+          "Lactobacillus",
+          "Protozoa",
+          "Fungi",
+          "Bacteria",
+          "Algae",
+          "Nodules",
+          "Legumes",
+          "Nitrogen",
+          "Chemical fertilisers",
+          "Rotation",
+          "Soil",
+          "Microorganisms",
+          "Sunlight",
+          "Oxygen",
+          "Nutrients",
+          "Aquatic animals",
+          "Health supplements",
+          "Medicines"
+        ],
+        "context_relation": "The image is a diagram of a plant with roots and leaves.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or the process of curdling milk."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -39626,21 +39702,73 @@
     {
       "asset_id": "a43ec0e453e0bd95af021783",
       "asset_sha256": "1922c520572c73f779e0287d4aefd0114fd17d39a7b1ac3a6decd71a93e4ed50",
-      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 46,
       "asset_path": "page-0046.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e2c9c811601d423e2b54b7f77d0408359d95eb71ef12ffe5ad750ceb16d851ef",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39219698568",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A farmer planting wheat crops and another farmer growing bean crops without nitrogen fertiliser.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3. A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Desi",
+          "A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Design "
+        ],
+        "concepts": [
+          "nitrogen-rich fertiliser",
+          "wheat crops",
+          "bean crops",
+          "microorganisms",
+          "temperature",
+          "air",
+          "moisture",
+          "curd",
+          "sugar solution",
+          "yeast",
+          "limestone"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the microorganisms.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:04:25Z",
+      "effective_analysis": {
+        "visual_summary": "A farmer planting wheat crops and another farmer growing bean crops without nitrogen fertiliser.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3. A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Desi",
+          "A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Design "
+        ],
+        "concepts": [
+          "nitrogen-rich fertiliser",
+          "wheat crops",
+          "bean crops",
+          "microorganisms",
+          "temperature",
+          "air",
+          "moisture",
+          "curd",
+          "sugar solution",
+          "yeast",
+          "limestone"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the microorganisms.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
