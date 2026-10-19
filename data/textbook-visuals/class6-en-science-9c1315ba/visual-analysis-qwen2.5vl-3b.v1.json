@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1103,
+    "assets_selected": 1105,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1100,
-    "assets_remaining": 978,
-    "assets_completion_percent": 52.9,
+    "assets_analyzed": 1102,
+    "assets_remaining": 976,
+    "assets_completion_percent": 53.0,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1098,
+    "assets_skipped_from_checkpoint": 1100,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:05:46Z"
+      "checkpointed_at": "2026-10-19T18:08:27Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:06:28Z"
+      "checkpointed_at": "2026-10-19T18:09:09Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:07:23Z"
+      "checkpointed_at": "2026-10-19T18:10:02Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35920,6 +35920,95 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T18:07:37Z"
+    },
+    {
+      "asset_id": "e84aa2e72791d749b8e9a2f3",
+      "asset_sha256": "43fdedab1957ba5bfcd96962b921d2d3fd1ccd001ce8fa346a12d50028767d22",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 93,
+      "asset_path": "page-0093.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "70cfccb66321fad3dab4c67e16574c92db7d0f20af10337ace33222f07578e74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table comparing different positions of a magnet and their interactions.",
+        "visual_type": "table",
+        "visible_text": [
+          "Column I",
+          "Column II",
+          "N – N",
+          "N –",
+          "S – N",
+          "– S",
+          "Attraction",
+          "Repulsion",
+          "Table 4.3: Number of pins attracted by the magnet at its various positions",
+          "(i)",
+          "10",
+          "2",
+          "10",
+          "(ii)",
+          "10",
+          "10",
+          "2",
+          "(iii)",
+          "2",
+          "10",
+          "10",
+          "(iv)",
+          "10",
+          "10",
+          "10",
+          "Reshma bought three identical metal bars from the market. Out of these bars, two were magnets and one was just a piece of iron. How will she identify which two amongst the three could be magnets (without using any other material)?",
+          "You are given a magnet which does not have the poles marked. How can you find its poles with the help of another magnet which has its poles marked?"
+        ],
+        "concepts": [
+          "magnet poles",
+          "attraction",
+          "repulsion",
+          "magnet experiment",
+          "metal bars",
+          "magnet poles identification"
+        ],
+        "context_relation": "The table and questions are related to the experiment and identification of magnet poles.",
+        "limitations": [
+          "The questions and table are not directly related to the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:11:43Z"
+    },
+    {
+      "asset_id": "efc3585c727893714af4276c",
+      "asset_sha256": "d520cb8a24454e7fa58beb77d4de2801c2a716033dec366405e47670fd494629",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/d520cb8a24454e7fa58beb77d4de2801c2a716033dec366405e47670fd494629.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a yellow background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:12:19Z"
     }
   ]
 }
