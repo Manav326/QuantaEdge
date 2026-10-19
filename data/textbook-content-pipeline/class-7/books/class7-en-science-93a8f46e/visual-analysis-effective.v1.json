@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a400a752448b5e4ee236ebd8cda76cb92ddcae640f6ffd5e8c91965501a4f564",
+  "raw_analysis_sha256": "8d55efeecccc2dcf51c566b09ced640d65b457421ccc859c45878ef9d9469136",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:18:39Z",
+      "checkpointed_at": "2026-10-19T12:21:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:18:59Z",
+      "checkpointed_at": "2026-10-19T12:22:11Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -94831,6 +94831,200 @@
         "concepts": [],
         "context_relation": "The image is a visual representation of a paper airplane in motion.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2c9d7e1bc2800fd17e8f2622",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a circuit or a node in an electrical diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the text about materials and electric current in a circuit.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the circuit.",
+          "The image does not show the electric current passing through the materials.",
+          "The image does not show the components of the circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:22:22Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a circuit or a node in an electrical diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the text about materials and electric current in a circuit.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the circuit.",
+          "The image does not show the electric current passing through the materials.",
+          "The image does not show the components of the circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "67bc9e8b235ad32cbe86d424",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a small amount of text at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "metal",
+          "circuit",
+          "electricity",
+          "conductivity",
+          "activity"
+        ],
+        "context_relation": "The text is related to an educational activity about electricity and materials.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "The text is incomplete and does not provide specific details about the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:23:03Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a small amount of text at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than",
+          "metal and use them for making the electrical",
+          "circuit. Do you think the electric current will",
+          "pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify",
+          "Components",
+          "Co"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "metal",
+          "circuit",
+          "electricity",
+          "conductivity",
+          "activity"
+        ],
+        "context_relation": "The text is related to an educational activity about electricity and materials.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "The text is incomplete and does not provide specific details about the activity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dcc1caa47c5a2ad748dfd815",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about the passage of electric current through materials other than metal.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify Components",
+          "Co"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "metal",
+          "electrical circuit"
+        ],
+        "context_relation": "The passage discusses the possibility of electric current passing through materials other than metal in an electrical circuit.",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:23:12Z",
+      "effective_analysis": {
+        "visual_summary": "A question about the passage of electric current through materials other than metal.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify Components",
+          "Co"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "metal",
+          "electrical circuit"
+        ],
+        "context_relation": "The passage discusses the possibility of electric current passing through materials other than metal in an electrical circuit.",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
