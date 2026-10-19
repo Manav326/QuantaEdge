@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1065,
+    "assets_selected": 1066,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1061,
-    "assets_remaining": 1017,
-    "assets_completion_percent": 51.1,
+    "assets_analyzed": 1063,
+    "assets_remaining": 1015,
+    "assets_completion_percent": 51.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1060,
+    "assets_skipped_from_checkpoint": 1061,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:48:49Z"
+      "checkpointed_at": "2026-10-19T16:54:38Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:49:30Z"
+      "checkpointed_at": "2026-10-19T16:55:22Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:50:24Z"
+      "checkpointed_at": "2026-10-19T16:56:20Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34594,6 +34594,65 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "00d56aa98387e0a2fe3723e2",
+      "asset_sha256": "20cbd21fa064953ecc72aa524a2bb154a675feb47d6a0e8957daa41385b1f002",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/20cbd21fa064953ecc72aa524a2bb154a675feb47d6a0e8957daa41385b1f002.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle pointing towards the north pole.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "compass",
+          "north pole",
+          "south pole"
+        ],
+        "context_relation": "The compass needle is pointing towards the north pole.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:56:57Z"
+    },
+    {
+      "asset_id": "b822027e975339242a6d688c",
+      "asset_sha256": "c55bbe8ec708640df2a27bbb998a03935c9407f884d7a463fbec80b55233f7f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c55bbe8ec708640df2a27bbb998a03935c9407f884d7a463fbec80b55233f7f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair wearing a blue shirt and blue skirt, standing with one hand on her hip and the other raised to her head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl standing and adjusting her hair, possibly for a school or educational setting.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:57:36Z"
     }
   ]
 }

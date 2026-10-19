@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e9aa687bc11b290df85ffaf6499c64a88343cd85aaaf9f956b317ba96ef65680",
+  "raw_analysis_sha256": "b53040d2e4e6915fe16e66b0b4157f1f5be15a6ddeb804dbe73377451a0e2820",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:48:49Z",
+      "checkpointed_at": "2026-10-19T16:54:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:49:30Z",
+      "checkpointed_at": "2026-10-19T16:55:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:50:24Z",
+      "checkpointed_at": "2026-10-19T16:56:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -51951,6 +51951,92 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "00d56aa98387e0a2fe3723e2",
+      "asset_sha256": "20cbd21fa064953ecc72aa524a2bb154a675feb47d6a0e8957daa41385b1f002",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/20cbd21fa064953ecc72aa524a2bb154a675feb47d6a0e8957daa41385b1f002.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle pointing towards the north pole.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "compass",
+          "north pole",
+          "south pole"
+        ],
+        "context_relation": "The compass needle is pointing towards the north pole.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:56:57Z",
+      "effective_analysis": {
+        "visual_summary": "A compass needle pointing towards the north pole.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "N",
+          "S"
+        ],
+        "concepts": [
+          "compass",
+          "north pole",
+          "south pole"
+        ],
+        "context_relation": "The compass needle is pointing towards the north pole.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b822027e975339242a6d688c",
+      "asset_sha256": "c55bbe8ec708640df2a27bbb998a03935c9407f884d7a463fbec80b55233f7f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c55bbe8ec708640df2a27bbb998a03935c9407f884d7a463fbec80b55233f7f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair wearing a blue shirt and blue skirt, standing with one hand on her hip and the other raised to her head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl standing and adjusting her hair, possibly for a school or educational setting.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:57:36Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair wearing a blue shirt and blue skirt, standing with one hand on her hip and the other raised to her head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl standing and adjusting her hair, possibly for a school or educational setting.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
