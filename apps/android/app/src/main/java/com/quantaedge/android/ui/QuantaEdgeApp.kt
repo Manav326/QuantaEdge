@@ -226,6 +226,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var activeTenantCode by rememberSaveable {
         mutableStateOf(launchTenantCode ?: preferences.getString("institutionCode", null).orEmpty())
     }
+    LaunchedEffect(activeTenantCode) {
+        // Keep login and all subsequent API calls aligned with the current school/deep-link context.
+        ApiClient.setInstitutionCode(activeTenantCode)
+    }
     var pendingInstitutionJoinCode by rememberSaveable {
         mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
     }
@@ -948,6 +952,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun signIn(mode: String, mobile: String, parentMobile: String, username: String, password: String) {
         runTask {
+            ApiClient.setInstitutionCode(activeTenantCode)
             ApiClient.setWorkspace(if (mode == "PARENT") "PARENT" else "STUDENT")
             if (mode == "PARENT") {
                 ApiClient.postObject("/api/v1/auth/parent-login", JSONObject()
@@ -975,6 +980,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun signInWithGoogle(context: Context) {
         runTask {
+            ApiClient.setInstitutionCode(activeTenantCode)
             val idToken = GoogleCredentialFlow.requestIdToken(context)
             val session = ApiClient.postObject("/api/v1/auth/google",
                 JSONObject().put("credential", idToken))

@@ -6,6 +6,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+  @ExceptionHandler(InstitutionTenantContextService.InvalidInstitutionContextException.class)
+  public org.springframework.http.ResponseEntity<Map<String,String>> institutionContext(
+      InstitutionTenantContextService.InvalidInstitutionContextException ex) {
+    return org.springframework.http.ResponseEntity.status(ex.statusCode())
+        .body(Map.of("error", ex.errorCode(), "message", ex.getMessage()));
+  }
+
   @ExceptionHandler(LessonNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String,String> lessonNotFound(LessonNotFoundException ex){return Map.of("error","LESSON_NOT_FOUND","message",ex.getMessage());}
