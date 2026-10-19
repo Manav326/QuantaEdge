@@ -252,7 +252,9 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       if (isPublicEntry) verifiedWorkspace = null;
       if (parentLearningRoute && !hasParentPersonalLearningMode()) {
         verifiedWorkspace = null;
-        navigateWithFallback(router, '/student');
+        // Never strand a parent under /student when this routing hint expires.
+        // The parent route's own SessionBoundary check will verify their session.
+        navigateWithFallback(router, '/parent');
         return;
       }
       if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
