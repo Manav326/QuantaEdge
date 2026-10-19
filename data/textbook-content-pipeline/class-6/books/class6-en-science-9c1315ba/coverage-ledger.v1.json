@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1047,
-    "successful_visual_analyses": 1037,
-    "missing_visual_analyses": 1031,
+    "raw_analysis_result_rows": 1049,
+    "successful_visual_analyses": 1039,
+    "missing_visual_analyses": 1029,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1041,
+    "unresolved_count": 1039,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40330,9 +40330,33 @@
       "asset_path": "page-0081.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table for identifying materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of (plastic/wood/glass/iron/any other)",
+          "Attracted by the magnet (Yes/No)",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Identifying materials attracted by a magnet",
+          "Prediction and observation"
+        ],
+        "context_relation": "The table is used to record observations about materials attracted by a magnet.",
+        "limitations": [
+          "The table is incomplete and requires additional data to be filled in."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40348,9 +40372,27 @@
       "asset_path": "assets/c77117c5d1f2867b5c154d699e525d5b91e59cb277eb9ce4f46a83aa47a157e7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red and black object with a white letter 'S' and 'Z' on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "S",
+          "Z"
+        ],
+        "concepts": [
+          "magnetic materials",
+          "metal iron",
+          "magnet",
+          "attractive force",
+          "magnetic properties"
+        ],
+        "context_relation": "The image is related to the concept of magnetic materials and their properties.",
+        "limitations": [
+          "The image does not provide specific details about the materials that stick to the magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
