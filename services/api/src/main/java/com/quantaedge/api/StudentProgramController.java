@@ -100,8 +100,8 @@ public class StudentProgramController {
         )
       order by p.display_name,p.id
       """, institutionId, institutionId, institutionId, institutionId, institutionId,
-          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId, institutionId,
-          institutionId, institutionId, institutionId, institutionId);
+          institutionId, institutionId, institutionId, institutionId, context.studentId(),
+          institutionId, institutionId, institutionId, institutionId, institutionId, institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
