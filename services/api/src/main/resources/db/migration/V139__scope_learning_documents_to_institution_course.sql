@@ -90,13 +90,11 @@ WHERE (s.program_id=p.id OR (s.program_id IS NULL AND p.class_id=s.class_id))
     SELECT 1 FROM source_ingestion_chapter ch
     JOIN source_ingestion_job j ON j.id=ch.job_id
     WHERE ch.learning_document_id=d.id
-      AND j.institution_id IS NOT NULL AND j.course_id IS NOT NULL
   )
   AND NOT EXISTS (
     SELECT 1 FROM source_ingestion_job j
     WHERE d.scope='SUBJECT_BOOK' AND j.book_asset_id=d.pdf_asset_id
       AND j.subject_id=d.subject_id AND j.status='APPROVED'
-      AND j.institution_id IS NOT NULL AND j.course_id IS NOT NULL
   )
 ON CONFLICT (institution_id,course_id,learning_document_id) DO NOTHING;
 
