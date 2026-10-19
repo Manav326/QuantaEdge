@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ef7ec5b9a54308ff406b4ab6795c10e881b911ed9155ce35a4ae0ebca754798a",
+  "raw_analysis_sha256": "a830df898ee410df259e1b30b130eb02967ebe38b6f898def7cab641f80454b5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:55:06Z",
+      "checkpointed_at": "2026-10-19T12:01:54Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:56:08Z",
+      "checkpointed_at": "2026-10-19T12:02:55Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -46666,6 +46666,138 @@
         "context_relation": "educational",
         "limitations": [
           "The image does not show the entire process of making chapati."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1a0fc15cf8ca35e51995df17",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d91b90ad79dfb1ee9a34b1f819fc46b70fa2a0c71d49bf024c9400950d0af6bb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "food waste",
+          "food consumption",
+          "food production"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear specific content of the note"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:04:30Z",
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "food waste",
+          "food consumption",
+          "food production"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear specific content of the note"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2ec85f927a2cf607d347924b",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d91b90ad79dfb1ee9a34b1f819fc46b70fa2a0c71d49bf024c9400950d0af6bb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of reducing food waste and the effort put by farmers and community members in getting food from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the effort put by farmers and community members in getting food from the farm to the plate."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:06:06Z",
+      "effective_analysis": {
+        "visual_summary": "A green banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of reducing food waste and the effort put by farmers and community members in getting food from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the effort put by farmers and community members in getting food from the farm to the plate."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7bd821d67792f726027248e9",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d91b90ad79dfb1ee9a34b1f819fc46b70fa2a0c71d49bf024c9400950d0af6bb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T12:06:22Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
