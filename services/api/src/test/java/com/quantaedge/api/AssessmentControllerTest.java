@@ -389,7 +389,7 @@ class AssessmentControllerTest {
   @Test
   void leaderboardReturnsTopTwentyAndTheCurrentStudentsRankUsingReleasedBestAttempts() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("from student_program_enrollment spe"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.queryForObject(contains("from assessment a"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
