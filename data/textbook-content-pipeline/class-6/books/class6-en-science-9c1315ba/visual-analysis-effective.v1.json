@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8e266965e8c47a1a738ced729b81f058e0ab9690f5499afc24e31091b15694c6",
+  "raw_analysis_sha256": "8178dd5ac7f32a6aa0f8b58b39373db10440dce7170d59b996b9efd4f569d128",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:06:11Z",
+      "checkpointed_at": "2026-10-19T01:09:37Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:06:53Z",
+      "checkpointed_at": "2026-10-19T01:10:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:07:46Z",
+      "checkpointed_at": "2026-10-19T01:11:12Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:08:26Z",
+      "checkpointed_at": "2026-10-19T01:11:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -38286,6 +38286,74 @@
           "The text does not provide specific examples of plants or animals that live in water or on land.",
           "The text does not provide information on the specific impacts of habitat damage on plant and animal populations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "48bc536185e7fad4d0ce005a",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c24143064d71d7b1ca6796b21b879cc40cb029872425518a40f99ef120a9585e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sacred groves are undisturbed patches of forests. Their sizes may vary from quite small to very large. Sacred groves are found all over India. They are home to different kinds of plants and animals, including numerous medicinal plants. These are protected by the local community and no one is allowed"
+        ],
+        "concepts": [
+          "Sacred groves",
+          "undisturbed patches of forests",
+          "various sizes",
+          "found all over India",
+          "home to plants and animals",
+          "numerous medicinal plants",
+          "protected by local community",
+          "no harm allowed",
+          "disturbance"
+        ],
+        "context_relation": "The image is related to the text about Sacred groves.",
+        "limitations": [
+          "The image does not provide specific details about the size or location of the sacred groves.",
+          "The image does not show the animals or plants within the sacred groves.",
+          "The image does not depict the local community's activities or the consequences of harming the groves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:12:40Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sacred groves are undisturbed patches of forests. Their sizes may vary from quite small to very large. Sacred groves are found all over India. They are home to different kinds of plants and animals, including numerous medicinal plants. These are protected by the local community and no one is allowed"
+        ],
+        "concepts": [
+          "Sacred groves",
+          "undisturbed patches of forests",
+          "various sizes",
+          "found all over India",
+          "home to plants and animals",
+          "numerous medicinal plants",
+          "protected by local community",
+          "no harm allowed",
+          "disturbance"
+        ],
+        "context_relation": "The image is related to the text about Sacred groves.",
+        "limitations": [
+          "The image does not provide specific details about the size or location of the sacred groves.",
+          "The image does not show the animals or plants within the sacred groves.",
+          "The image does not depict the local community's activities or the consequences of harming the groves."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
