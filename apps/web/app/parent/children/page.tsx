@@ -19,10 +19,10 @@ type Child = {
 };
 type ChildProfileDraft = {displayName:string;classCode:string;language:string};
 type Account = { parentName:string; activeChildren:number; maxChildren:number; remainingSlots:number };
-type Draft = {displayName:string;classCode:string;language:string;username:string;password:string;trackCodes:string[]};
+type Draft = {displayName:string;classCode:string;language:string;username:string;password:string};
 type CredentialDraft = {username:string;password:string};
 
-const emptyDraft:Draft={displayName:'',classCode:'7',language:'hi',username:'',password:'',trackCodes:['maths','science']};
+const emptyDraft:Draft={displayName:'',classCode:'7',language:'hi',username:'',password:''};
 
 async function readJson(response:Response):Promise<any>{
   const raw=await response.text();
@@ -38,7 +38,6 @@ export default function ParentChildrenPage(){
   const [account,setAccount]=useState<Account|null>(null);
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
-  const [trackDrafts,setTrackDrafts]=useState<Record<number,string[]>>({});
   const [childPrograms,setChildPrograms]=useState<Record<number,any[]>>({});
   const [busyCourse,setBusyCourse]=useState<string>('');
   const [profileDrafts,setProfileDrafts]=useState<Record<number,ChildProfileDraft>>({});
@@ -47,7 +46,6 @@ export default function ParentChildrenPage(){
   const [creationRequestId,setCreationRequestId]=useState('');
   const [consent,setConsent]=useState(false);
   const [busy,setBusy]=useState(false);
-  const [busyTrack,setBusyTrack]=useState<number|null>(null);
   const [busyProfile,setBusyProfile]=useState<number|null>(null);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
@@ -82,23 +80,12 @@ export default function ParentChildrenPage(){
     setProfileDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
       child.id,{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'}
     ])));
-    setTrackDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
-      child.id,(child.track_codes||'').split(',').filter(Boolean)
-    ])));
     setCredentialDrafts(current=>Object.fromEntries(childrenBody.map((child:Child)=>[
       child.id,{username:child.login_username||current[child.id]?.username||'',password:''}
     ])));
   }
 
   useEffect(()=>{load().catch((e:any)=>setError(e.message||'Unable to load profiles'));},[router]);
-
-  function toggleTrack(studentId:number,code:string,checked:boolean){
-    setTrackDrafts(current=>{
-      const next=new Set(current[studentId]||[]);
-      checked?next.add(code):next.delete(code);
-      return {...current,[studentId]:[...next]};
-    });
-  }
 
   async function createChild(){
     setError('');setNotice('');setBusy(true);
@@ -175,21 +162,6 @@ export default function ParentChildrenPage(){
     finally{setBusyCourse('');}
   }
 
-  async function saveTracks(child:Child){
-    setError('');setNotice('');setBusyTrack(child.id);
-    try{
-      const trackCodes=trackDrafts[child.id]||[];
-      const response=await fetch(`/api/v1/guardians/children/${child.id}/tracks`,{
-        method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({trackCodes})
-      });
-      const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||t('parent.children.updateTracksFailed'));
-      await load();
-      setNotice(t('parent.children.tracksSaved',{ name: child.display_name }));
-    }catch(e:any){setError(e.message||t('parent.children.updateTracksFailed'));}
-    finally{setBusyTrack(null);}
-  }
-
   async function restoreChild(child:Child){
     if(!window.confirm(t('parent.children.restoreConfirm')))return;
     setError('');setNotice('');
@@ -216,8 +188,6 @@ export default function ParentChildrenPage(){
     }catch(e:any){setError(e.message||t('parent.children.archiveFailed'));}
   }
 
-  const trackOptions=[{code:'maths',label:t('parent.children.maths')},{code:'science',label:t('parent.children.science')}];
-
   return <main className="parent-app">
     <section className="parent-dashboard parent-manage">
       <div className="parent-manage-hero">
@@ -236,7 +206,6 @@ export default function ParentChildrenPage(){
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
               <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · {t('parent.children.learningContentLanguage',{ language: (child.language||'hi')==='en' ? t('common.language.english') : t('parent.children.hindiLanguage') })}</p>
-                <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><UiText message="legacy.web.archive.profile.4dc003f9" /></button>
             </div>
@@ -268,16 +237,6 @@ export default function ParentChildrenPage(){
                 <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password" /></label>
               </div>
               <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><UiText message="legacy.web.save.login.details.bcf9bcd7" /></button>
-            </div>
-            <div className="parent-track-editor">
-              <div><strong><UiText message="legacy.web.learning.access.dc503c1d" /></strong><small><UiText message="legacy.web.only.selected.subjects.appear.in.the.s.993efbad" /></small></div>
-              <div className="parent-track-options">{trackOptions.map(option=><label key={option.code}>
-                <input type="checkbox" checked={(trackDrafts[child.id]||[]).includes(option.code)}
-                  onChange={e=>toggleTrack(child.id,option.code,e.target.checked)}/>
-                <span>{option.label}</span>
-              </label>)}</div>
-              <button className="button button-dark button-small" disabled={busyTrack===child.id||(trackDrafts[child.id]||[]).length===0}
-                onClick={()=>saveTracks(child)}>{busyTrack===child.id?<UiText message="legacy.web.saving.ec034ad4" />:<UiText message="legacy.web.save.subjects.123d5ff5" />}</button>
             </div>
             <div className="parent-track-editor qe-child-course-editor">
               <div><strong><UiText message="legacy.web.independent.courses.13023fbd" /></strong><small><UiText message="legacy.web.assign.a.course.to.this.child.s.accoun.b2c771e2" /></small></div>
@@ -315,9 +274,9 @@ export default function ParentChildrenPage(){
             <label><UiText message="legacy.web.learning.language.8be9be9d" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
             <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={t('parent.children.usernameExample')} autoComplete="off"/></label>
             <label><UiText message="legacy.web.student.password.9ba6b0cd" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password"/></label>
-            <fieldset className="parent-track-fieldset"><legend><UiText message="legacy.web.choose.subjects.1c060640" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):option.label}</span></label>)}</fieldset>
+            
             <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><UiText message="legacy.web.i.am.the.child.s.authorised.guardian.a.45b1acdf" /></span></label>
-            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?<UiText message="legacy.web.creating.profile.03f9567c" />:<UiText message="legacy.web.create.student.profile.b50fed07" />}</button>
+            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||!consent} onClick={createChild}>{busy?<UiText message="legacy.web.creating.profile.03f9567c" />:<UiText message="legacy.web.create.student.profile.b50fed07" />}</button>
           </div>}
       </section>
     </section>
