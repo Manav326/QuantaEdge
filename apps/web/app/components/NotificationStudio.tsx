@@ -388,7 +388,12 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     {error ? <div className={styles.error} role="alert">{error}</div> : null}
     {notice ? <div className={styles.notice} role="status">{notice}</div> : null}
 
-    <div className={styles.layout}>
+    <nav className={styles.studioNav} aria-label="Notification workspace">
+      <button type="button" className={workspaceTab==='studio'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('studio')}>Design Studio</button>
+      <button type="button" className={workspaceTab==='templates'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('templates')}>Templates <span>{templates.length}</span></button>
+      <button type="button" className={workspaceTab==='campaigns'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('campaigns')}>Campaigns & Delivery</button>
+    </nav>
+    <div className={styles.layout + (workspaceTab!=='studio'?' '+styles.workspaceHidden:'')}>
       <section className={styles.editor}>
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>01</span><div><h2>Start from a template</h2><p>Choose a preset or load and edit a saved version.</p></div></div>
