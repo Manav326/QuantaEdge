@@ -141,7 +141,7 @@ class QaTestPackLifecycleIntegrationTest {
           where a.qa_test_run_id=? and r.qa_test_run_id=?
             and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='C'
-          """, runA), "Institution C must not receive QuantaEdge Class 7 without an explicit HRMS assignment.");
+          """, runA, runA), "Institution C must not receive QuantaEdge Class 7 without an explicit HRMS assignment.");
       assertEquals(3L, count(jdbc, "select count(*) from institution_user_membership where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_membership where qa_test_run_id=?", runA));
       assertEquals(2L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runA));
