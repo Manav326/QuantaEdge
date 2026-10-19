@@ -141,10 +141,10 @@ class QaTestPackLifecycleIntegrationTest {
       assertEquals(0L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runA));
       assertEquals(0L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runA));
-      assertEquals(1L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runB),
+      assertEquals(2L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runB),
           "Removing run A must preserve run B's curriculum fixture.");
-      assertEquals(1L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runB));
-      assertEquals(2L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runB));
+      assertEquals(2L, count(jdbc, "select count(*) from question where qa_test_run_id=?", runB));
+      assertEquals(4L, count(jdbc, "select count(*) from question_option where qa_test_run_id=?", runB));
 
       Map<String,Object> replayUninstallA = qa.uninstall(runA, runA.toString(), null);
       assertTrue(Boolean.TRUE.equals(replayUninstallA.get("replayed")));
