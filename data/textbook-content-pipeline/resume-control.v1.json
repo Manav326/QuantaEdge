@@ -10,5 +10,7 @@
   "vision_model": "qwen2.5vl:3b",
   "checkpoint_batch_size": 5,
   "initiated_at": "2026-10-18",
-  "reason": "User requested resuming all Class 6, 7, and 8 Layer 4–5 processing from existing durable checkpoints."
+  "reason": "User requested resuming all Class 6, 7, and 8 Layer 4–5 processing from existing durable checkpoints.",
+  "last_manual_recovery_requested_at": "2026-10-19T14:31:00Z",
+  "recovery_reason": "Status check found Class 6 and 7 runners cancelled after checkpoint inactivity; immediately reconcile and resume unfinished classes while preserving active Class 8."
 }
