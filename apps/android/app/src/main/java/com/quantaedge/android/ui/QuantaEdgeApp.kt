@@ -882,6 +882,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
             }
             refreshStudentPrograms()
+            if (studentProgramsLoadFailed) {
+                // Do not clear the saved course or route the learner to Marketplace during an outage.
+                recommendation = JSONObject()
+                status = if (language == "hi")
+                    "कोर्स की जानकारी अभी अपडेट नहीं हो सकी। आपका चुना हुआ कोर्स सुरक्षित है; फिर प्रयास करें।"
+                else "Course data could not be refreshed. Your selected course is preserved; please retry."
+                route = AppRoute.STUDENT_HOME
+                return
+            }
             val hasCourseAccess = studentPrograms.any {
                 it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
             }
