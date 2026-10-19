@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 934,
+    "assets_selected": 936,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 931,
-    "assets_remaining": 1360,
-    "assets_completion_percent": 40.6,
+    "assets_analyzed": 933,
+    "assets_remaining": 1358,
+    "assets_completion_percent": 40.7,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 929,
+    "assets_skipped_from_checkpoint": 931,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:13:56Z"
+      "checkpointed_at": "2026-10-19T18:19:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:14:42Z"
+      "checkpointed_at": "2026-10-19T18:20:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:15:18Z"
+      "checkpointed_at": "2026-10-19T18:20:56Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29646,6 +29646,63 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T18:18:26Z"
+    },
+    {
+      "asset_id": "94fc6404a2fb35f4258db076",
+      "asset_sha256": "8f36b8f875205724c15bdd3103314b0bbf69fd6618297199487a40bf19c41456",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/8f36b8f875205724c15bdd3103314b0bbf69fd6618297199487a40bf19c41456.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9433a7d9440d427f4e9c7df34edca5c372517dbe66cabb5e292e0663404e4cda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person in a light blue shirt with their hand on their chin, appearing thoughtful or contemplative.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of health and diseases, specifically mentioning malaria and its transmission by insects.",
+        "limitations": [
+          "The image does not provide specific details about the person or the context of the illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:22:28Z"
+    },
+    {
+      "asset_id": "51d6e6a02876f0641273adf8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9433a7d9440d427f4e9c7df34edca5c372517dbe66cabb5e292e0663404e4cda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:22:41Z"
     }
   ]
 }
