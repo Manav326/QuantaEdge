@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 966,
+    "assets_selected": 969,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 964,
-    "assets_remaining": 1114,
-    "assets_completion_percent": 46.4,
+    "assets_analyzed": 967,
+    "assets_remaining": 1111,
+    "assets_completion_percent": 46.5,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 961,
+    "assets_skipped_from_checkpoint": 964,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:40:49Z"
+      "checkpointed_at": "2026-10-19T11:47:56Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:41:49Z"
+      "checkpointed_at": "2026-10-19T11:48:57Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -31013,6 +31013,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T11:46:43Z"
+    },
+    {
+      "asset_id": "2be52ffbcf4b1511f715d1ec",
+      "asset_sha256": "c6f13d6d1f4c60e321215d29d7f5f7a77d3d953898b25ba555130724c3710009",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c6f13d6d1f4c60e321215d29d7f5f7a77d3d953898b25ba555130724c3710009.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a folded flatbread on a plate.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "flatbread",
+          "plate",
+          "folded",
+          "bread"
+        ],
+        "context_relation": "The image represents a step in the process of making chapati, which is a type of flatbread.",
+        "limitations": [
+          "The image does not provide specific details about the process of making chapati."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:50:32Z"
+    },
+    {
+      "asset_id": "dc5c61131702a96c5bb39964",
+      "asset_sha256": "fab0efda00bcf5217562696011b36edde2bed3d507b5c30e5be56b2cbf347898",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/fab0efda00bcf5217562696011b36edde2bed3d507b5c30e5be56b2cbf347898.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a farmer carrying a bundle of logs on his head while walking through a field.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "farmer",
+          "wheat",
+          "logs",
+          "field",
+          "walking"
+        ],
+        "context_relation": "The image is related to the educational content about the process of making chapati, which involves the steps from farm to plate.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in making chapati."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:52:11Z"
+    },
+    {
+      "asset_id": "2a48748bd5cc990892ea39cd",
+      "asset_sha256": "c8f5e0ee04a0f21e769d1f80c03810bfd7b08f11c8f66eff5ca5835b0f4bd746",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c8f5e0ee04a0f21e769d1f80c03810bfd7b08f11c8f66eff5ca5835b0f4bd746.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6ec0f197cdceedbee8f6c02d28ab2079f86f6c32d137153f4d496477f04bcf50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a stack of wheat stalks.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "stack",
+          "crop",
+          "agriculture"
+        ],
+        "context_relation": "The image represents the process of growing wheat and its subsequent use in making chapati.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in the process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:53:49Z"
     }
   ]
 }
