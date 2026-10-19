@@ -966,3 +966,90 @@ html[data-qe-appearance="dark"] .qe-language-switcher--menu-setting select { bor
   .qe-question-card,
   .qe-answer-option { transition: none; }
 }
+
+
+/* Shared light-mode parity for legacy route components.
+   This makes HRMS-selected primary/accent colours flow through every workspace page, not only dark mode. */
+html[data-qe-appearance="light"] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] .qe-workspace-content [class*="Panel"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance="light"] :is(.qe-card, .qe-panel, .qe-metric-card, .qe-section-card, .qe-school-entry-panel, .auth-card, .login-card, .login-panel),
+html[data-qe-appearance="light"] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]),
+html[data-qe-appearance="light"] .site :is(.student-card, .parent-card, .report-card, .subject-card, .strip, .section-soft, .promise) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.hero, .qe-workspace-topbar, .qe-workspace-mobile-nav, .qe-workspace-mobile-subnav, .qe-workspace-sidebar) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero {
+  background:
+    radial-gradient(circle at 94% 0%, color-mix(in srgb, var(--qe-color-primary) 8%, transparent), transparent 38%),
+    var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero h1,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero h1,
+html[data-qe-appearance="light"] .qe-workspace-content :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content .hero p,
+html[data-qe-appearance="light"] .qe-tenant-landing .hero p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.eyebrow, [class*="eyebrow"], [class*="Eyebrow"], [class*="kicker"], [class*="Kicker"]) {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(p, li, label, legend, dt, dd, th, td) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is([class*="description"], [class*="Description"], [class*="helper-text"], [class*="HelperText"], [class*="muted"], [class*="Muted"], [class*="caption"], [class*="Caption"]) {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="hidden"]), select, textarea) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="light"] .qe-workspace-content input::placeholder,
+html[data-qe-appearance="light"] .qe-workspace-content textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-light, .secondary-button, .secondaryButton, .outline-button, .outlineButton, .icon-button, .iconButton, .ghost-button, .ghostButton, [class*="secondaryButton"], [class*="secondaryLink"]) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .primaryLink, .qe-primary-action, [data-variant="primary"], [class*="primaryButton"], [class*="primaryLink"]) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .primaryLink, .qe-primary-action, [data-variant="primary"], [class*="primaryButton"], [class*="primaryLink"]):hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.tabs .activeTab, .tabs .chatActive, .activeBadge, .qe-textbook-pagination>button[aria-current="page"], .qe-textbook-pagination>button[aria-pressed="true"]) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.error, .is-error, [class*="Alert"][class*="error"], [class*="alert"][class*="error"]) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(.notice, .is-success, [class*="success-alert"], [class*="SuccessAlert"]) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="light"] .qe-workspace-content :is(hr, .divider, [class*="Divider"]) {
+  border-color: var(--qe-color-border-subtle);
+}
