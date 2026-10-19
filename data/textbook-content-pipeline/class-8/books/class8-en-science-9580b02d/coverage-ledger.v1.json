@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 956,
-    "successful_visual_analyses": 941,
-    "missing_visual_analyses": 1335,
+    "raw_analysis_result_rows": 958,
+    "successful_visual_analyses": 943,
+    "missing_visual_analyses": 1333,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1350,
+    "unresolved_count": 1348,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36490,9 +36490,26 @@
       "asset_path": "assets/586cfe37ca884f2e769e520b0533c17e7732091c5f840b505f03f714a5af565d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope in a laboratory setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "laboratory",
+          "health",
+          "prevention",
+          "control",
+          "disease"
+        ],
+        "context_relation": "The image represents a scientific study or experiment related to health and disease prevention.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientist's work."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36508,9 +36525,28 @@
       "asset_path": "assets/6bf6c8aa29e5e3f45f46a310987eaaf2c268dd876d9b984060ce3a41dcc7af5c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a woman wearing glasses and a saree.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Kamal Ranadive",
+          "biomedical researcher",
+          "cancer",
+          "healthy lifestyle",
+          "tobacco",
+          "diet",
+          "pollution",
+          "prevention",
+          "control"
+        ],
+        "context_relation": "The image is related to the text discussing Kamal Ranadive's work in biomedical research and its impact on cancer prevention and control.",
+        "limitations": [
+          "The image does not provide specific details about Kamal Ranadive's work or the exact context of the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
