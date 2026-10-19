@@ -523,7 +523,16 @@ public class GuardianController {
             and spe.status='ACTIVE') as enrolled,
         exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
-            and spe.status='PAUSED') as paused
+            and spe.status='PAUSED') as paused,
+        exists(select 1
+          from institution_marketplace_offer free_offer
+          join institution_course_assignment free_assignment
+            on free_assignment.id=free_offer.assignment_id
+           and free_assignment.institution_id=free_offer.institution_id
+           and free_assignment.status='ASSIGNED'
+          where free_offer.institution_id=assignment.institution_id
+            and free_offer.course_id=p.id and free_offer.status='PUBLISHED'
+            and free_offer.price_paise=0 and free_offer.currency='INR') as free_offer
       from curriculum_program p
       join institution_course_assignment assignment on assignment.institution_id=?
         and assignment.status='ASSIGNED'
