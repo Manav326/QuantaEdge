@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1155,
+    "assets_selected": 1156,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1151,
-    "assets_remaining": 1140,
-    "assets_completion_percent": 50.2,
+    "assets_analyzed": 1152,
+    "assets_remaining": 1139,
+    "assets_completion_percent": 50.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1150,
+    "assets_skipped_from_checkpoint": 1151,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:45:33Z"
+      "checkpointed_at": "2026-10-20T17:49:42Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:46:18Z"
+      "checkpointed_at": "2026-10-20T17:50:27Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:46:48Z"
+      "checkpointed_at": "2026-10-20T17:50:57Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:47:37Z"
+      "checkpointed_at": "2026-10-20T17:51:46Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37736,6 +37736,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T17:48:42Z"
+    },
+    {
+      "asset_id": "dae950b7eeb529551321644d",
+      "asset_sha256": "7ee5fb7b9f1cc19ad7f13700e802286f7e55deb9019f815fbec9d1be3aae3a7d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7ee5fb7b9f1cc19ad7f13700e802286f7e55deb9019f815fbec9d1be3aae3a7d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a child walking and smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "interaction",
+          "contact force",
+          "disappearing force",
+          "interaction ceasing",
+          "two objects no longer experience the force"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the types of forces or their effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:52:54Z"
     }
   ]
 }

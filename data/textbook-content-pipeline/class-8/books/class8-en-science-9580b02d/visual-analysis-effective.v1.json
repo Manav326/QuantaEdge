@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "71ffeba3ceb618d9d864bf255c62ef868a4f36ade4d0cf424b86b68dc0a4c109",
+  "raw_analysis_sha256": "afc9af5b98d2465db6ba84707356d5a495fdd5ec6dfd6d520869282da3b6dd4d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:45:33Z",
+      "checkpointed_at": "2026-10-20T17:49:42Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:46:18Z",
+      "checkpointed_at": "2026-10-20T17:50:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:46:48Z",
+      "checkpointed_at": "2026-10-20T17:50:57Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:47:37Z",
+      "checkpointed_at": "2026-10-20T17:51:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56636,6 +56636,60 @@
         "context_relation": "The image is related to the educational content about forces and interactions.",
         "limitations": [
           "No specific text or formula is present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dae950b7eeb529551321644d",
+      "asset_sha256": "7ee5fb7b9f1cc19ad7f13700e802286f7e55deb9019f815fbec9d1be3aae3a7d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7ee5fb7b9f1cc19ad7f13700e802286f7e55deb9019f815fbec9d1be3aae3a7d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a child walking and smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "interaction",
+          "contact force",
+          "disappearing force",
+          "interaction ceasing",
+          "two objects no longer experience the force"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the types of forces or their effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:52:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a child walking and smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "interaction",
+          "contact force",
+          "disappearing force",
+          "interaction ceasing",
+          "two objects no longer experience the force"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the types of forces or their effects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
