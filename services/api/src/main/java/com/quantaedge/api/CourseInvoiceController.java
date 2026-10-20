@@ -46,7 +46,7 @@ public class CourseInvoiceController {
         coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
         true as pdf_available
       from course_payment_order o
-      join fiscal_document d on d.id=o.fiscal_document_id
+      join fiscal_document d on (d.id=o.fiscal_document_id or d.original_document_id=o.fiscal_document_id)
       join fiscal_document_asset a on a.fiscal_document_id=d.id and a.asset_type='PDF'
       join curriculum_program p on p.id=o.course_id
       join institution_marketplace_offer offer on offer.id=o.institution_offer_id
@@ -71,7 +71,7 @@ public class CourseInvoiceController {
         learner.display_name as beneficiary_name,
         true as pdf_available
       from course_payment_order o
-      join fiscal_document d on d.id=o.fiscal_document_id
+      join fiscal_document d on (d.id=o.fiscal_document_id or d.original_document_id=o.fiscal_document_id)
       join fiscal_document_asset a on a.fiscal_document_id=d.id and a.asset_type='PDF'
       join curriculum_program p on p.id=o.course_id
       join institution_marketplace_offer offer on offer.id=o.institution_offer_id
@@ -106,6 +106,59 @@ public class CourseInvoiceController {
     return buildDownload(orderId,"PARENT",context.userId());
   }
 
+  @GetMapping(value="/orders/{orderId}/documents/{documentId}.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
+  @Transactional
+  public ResponseEntity<byte[]> downloadStudentFiscalDocument(
+      @PathVariable long orderId,@PathVariable long documentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    long institutionId=requireTenant(tenant);
+    requireStudentDocument(orderId,documentId,context.studentId(),institutionId);
+    return buildDocumentDownload(orderId,documentId,"STUDENT",context.userId());
+  }
+
+  @GetMapping(value="/family/orders/{orderId}/documents/{documentId}.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
+  @Transactional
+  public ResponseEntity<byte[]> downloadParentFiscalDocument(
+      @PathVariable long orderId,@PathVariable long documentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
+    context=authorization.requireParent(context);
+    long institutionId=requireTenant(tenant);
+    requireParentDocument(orderId,documentId,context.userId(),institutionId);
+    return buildDocumentDownload(orderId,documentId,"PARENT",context.userId());
+  }
+
+  private void requireStudentDocument(long orderId,long documentId,long studentId,long institutionId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from course_payment_order o
+        where o.id=? and o.student_id=? and o.institution_id=?
+          and o.purchaser_user_id is null and o.status='VERIFIED'
+          and exists(select 1 from fiscal_document d where d.id=?
+            and (d.id=o.fiscal_document_id
+              or (d.document_type='CREDIT_NOTE' and d.original_document_id=o.fiscal_document_id)))
+      )
+      """,Boolean.class,orderId,studentId,institutionId,documentId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,"The fiscal document is not available to this student account.");
+  }
+
+  private void requireParentDocument(long orderId,long documentId,long purchaserUserId,long institutionId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from course_payment_order o
+        where o.id=? and o.purchaser_user_id=? and o.institution_id=? and o.status='VERIFIED'
+          and exists(select 1 from fiscal_document d where d.id=?
+            and (d.id=o.fiscal_document_id
+              or (d.document_type='CREDIT_NOTE' and d.original_document_id=o.fiscal_document_id)))
+      )
+      """,Boolean.class,orderId,purchaserUserId,institutionId,documentId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,"The fiscal document is not available to this parent account.");
+  }
+
   private void requireStudentOrder(long orderId,long studentId,long institutionId) {
     Boolean allowed=jdbc.queryForObject("""
       select exists(select 1 from course_payment_order
@@ -129,17 +182,24 @@ public class CourseInvoiceController {
 
   private ResponseEntity<byte[]> buildDownload(long orderId,String actorType,long actorUserId) {
     CourseOrderFinancialService.DownloadableInvoice invoice=financialService.invoiceDownload(orderId);
-    byte[] bytes=financialService.readInvoice(invoice);
+    return buildDownloadDocument(orderId,invoice.documentId(),actorType,actorUserId);
+  }
+
+  private ResponseEntity<byte[]> buildDownloadDocument(
+      long orderId,long documentId,String actorType,long actorUserId) {
+    CourseOrderFinancialService.DownloadableInvoice document=financialService.fiscalDocumentDownload(documentId);
+    byte[] bytes=financialService.readInvoice(document);
     try {
       jdbc.update("""
         insert into fiscal_document_event(fiscal_document_id,event_type,idempotency_key,details)
         values(?,'DOWNLOAD_AUDITED',?,?::jsonb)
-        """,invoice.documentId(),"invoice-download:"+UUID.randomUUID(),
-          mapper.writeValueAsString(Map.of("actorType",actorType,"actorUserId",actorUserId,"courseOrderId",orderId)));
+        """,document.documentId(),"fiscal-document-download:"+UUID.randomUUID(),
+          mapper.writeValueAsString(Map.of("actorType",actorType,"actorUserId",actorUserId,
+              "courseOrderId",orderId,"documentId",documentId)));
     } catch(Exception ex) {
-      throw new IllegalStateException("The invoice download could not be recorded in the audit trail.",ex);
+      throw new IllegalStateException("The fiscal-document download could not be recorded in the audit trail.",ex);
     }
-    String safeName=invoice.documentNumber().replaceAll("[^A-Za-z0-9_-]","-");
+    String safeName=document.documentNumber().replaceAll("[^A-Za-z0-9_-]","-");
     return ResponseEntity.ok()
       .contentType(MediaType.APPLICATION_PDF)
       .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")
