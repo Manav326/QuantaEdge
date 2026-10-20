@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d5c1e4d87e6449aab19bec8b30d29f88120a08a05145c5dd50d09c443efe2d72",
+  "raw_analysis_sha256": "acbf204244497c8107c29ef352f3b3027676dfd97897a46038c539c6295d1bbe",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:27:00Z",
+      "checkpointed_at": "2026-10-20T03:28:57Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:27:34Z",
+      "checkpointed_at": "2026-10-20T03:29:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:27:56Z",
+      "checkpointed_at": "2026-10-20T03:29:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47658,6 +47658,152 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a91395f1816dac7f4d7faecd",
+      "asset_sha256": "0b0e08a4d762f92a493dacc90a4e07c482478ce580379e0c9045337ca6533bb0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 63,
+      "asset_path": "page-0063.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e803910878954953ab2ab2fe35110ac871ef986ad953a4747e386ac432b67e02",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing health and diseases.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Diseases can be broadly grouped into communicable and\nnon-communicable diseases. From the options given below,\nidentify the non-communicable diseases.",
+          "(i) Typhoid     (ii) Asthma      (iii) Diabetes   (iv) Measles\n(a) (i) and (ii)  (b) (ii) and (iii)  (c) (i) and (iv)  (d) (ii) and (iv)",
+          "3. There is a flu outbreak in your school. Several classmates are\nabsent, while some are still coming to school coughing and\nsneezing.",
+          "(i) What immediate actions should the school take to\nprevent further spread?",
+          "(ii) If your classmate, who shares the bench with you, starts\nshowing symptoms of the flu, how can you respond in a\nconsiderate way without being rude or hurtful?",
+          "(iii) How can you protect yourself and others from getting\ninfected in this situation?",
+          "4. Your family is planning to travel to another city where\nmalaria is prevalent.",
+          "(i) What precautions should you take before, during, and\nafter the trip?",
+          "(ii) How can you explain the importance of mosquito nets\nor repellents to your sibling?",
+          "(iii) What could happen if travellers ignore health advisories\nin such areas?",
+          "5. Your uncle has started smoking just to fit in with his friends,\neven though it is well known that smoking can seriously\nharm health and even cause death.",
+          "(i) What would you say to him to make him stop, without\nbeing rude?",
+          "(ii) What would you do if your friend offers you a cigarette\nat a party?",
+          "(iii) How can schools help prevent students from indulging\nin such harmful habits?",
+          "6. Saniya claims to her friend Vinita that \"Antibiotics can cure\nany infection, so we don’t need to worry about diseases.\" What\nquestion(s) can Vinita ask her to help Saniya understand that\nher statement is incorrect?"
+        ],
+        "concepts": [
+          "communicable diseases",
+          "non-communicable diseases",
+          "flu outbreak",
+          "malaria",
+          "smoking",
+          "antibiotics",
+          "health advisories",
+          "coughing",
+          "sneezing",
+          "precautions",
+          "mosquito nets",
+          "repellents",
+          "health advisories",
+          "harmful habits"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The page does not contain any images or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:31:50Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing health and diseases.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Diseases can be broadly grouped into communicable and\nnon-communicable diseases. From the options given below,\nidentify the non-communicable diseases.",
+          "(i) Typhoid     (ii) Asthma      (iii) Diabetes   (iv) Measles\n(a) (i) and (ii)  (b) (ii) and (iii)  (c) (i) and (iv)  (d) (ii) and (iv)",
+          "3. There is a flu outbreak in your school. Several classmates are\nabsent, while some are still coming to school coughing and\nsneezing.",
+          "(i) What immediate actions should the school take to\nprevent further spread?",
+          "(ii) If your classmate, who shares the bench with you, starts\nshowing symptoms of the flu, how can you respond in a\nconsiderate way without being rude or hurtful?",
+          "(iii) How can you protect yourself and others from getting\ninfected in this situation?",
+          "4. Your family is planning to travel to another city where\nmalaria is prevalent.",
+          "(i) What precautions should you take before, during, and\nafter the trip?",
+          "(ii) How can you explain the importance of mosquito nets\nor repellents to your sibling?",
+          "(iii) What could happen if travellers ignore health advisories\nin such areas?",
+          "5. Your uncle has started smoking just to fit in with his friends,\neven though it is well known that smoking can seriously\nharm health and even cause death.",
+          "(i) What would you say to him to make him stop, without\nbeing rude?",
+          "(ii) What would you do if your friend offers you a cigarette\nat a party?",
+          "(iii) How can schools help prevent students from indulging\nin such harmful habits?",
+          "6. Saniya claims to her friend Vinita that \"Antibiotics can cure\nany infection, so we don’t need to worry about diseases.\" What\nquestion(s) can Vinita ask her to help Saniya understand that\nher statement is incorrect?"
+        ],
+        "concepts": [
+          "communicable diseases",
+          "non-communicable diseases",
+          "flu outbreak",
+          "malaria",
+          "smoking",
+          "antibiotics",
+          "health advisories",
+          "coughing",
+          "sneezing",
+          "precautions",
+          "mosquito nets",
+          "repellents",
+          "health advisories",
+          "harmful habits"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The page does not contain any images or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4fbefbc85953589226271ec1",
+      "asset_sha256": "720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising his hand in a classroom.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to an educational setting, possibly a classroom where a student is raising their hand.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook or the page number.",
+          "The image does not show any text or data related to the textbook content.",
+          "The image does not depict any specific educational content or question from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:32:29Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student raising his hand in a classroom.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to an educational setting, possibly a classroom where a student is raising their hand.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook or the page number.",
+          "The image does not show any text or data related to the textbook content.",
+          "The image does not depict any specific educational content or question from the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
