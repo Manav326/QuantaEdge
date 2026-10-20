@@ -138,6 +138,12 @@ export default function ParentCoursesPage() {
   }
 
   async function startPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId?: number) {
+    if (pendingVerify) {
+      setError(english
+        ? 'A previous payment still needs verification. Retry verification before starting another checkout.'
+        : 'पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले फिर से सत्यापित करें।');
+      return;
+    }
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busy) return;
     if (recipientType === 'CHILD' && (!studentId || studentId <= 0)) {
       setError(english ? 'Choose a child first.' : 'पहले बच्चे का चयन करें।');
@@ -305,7 +311,7 @@ export default function ParentCoursesPage() {
                 <div><strong>{request.student_name}</strong><span>{request.course_name}</span>
                   <small>{money(Number(request.price_paise))} · <LocaleText hinglish="कोर्स खरीदने का अनुरोध" english="Purchase request" /></small></div>
                 <div className="parent-courses-page__request-actions">
-                  <button type="button" className="button button-dark button-small" disabled={busy !== ''}
+                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || (Number(request.price_paise) > 0 && pendingVerify !== null)}
                     onClick={() => {
                       const kid = children.find(child => child.id === request.student_id);
                       if (!kid) { setError('This child is no longer linked to your account.'); return; }
@@ -358,7 +364,7 @@ export default function ParentCoursesPage() {
                   </p>}
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
-                    disabled={busy !== '' || (ownedByParent && (isFree || !transferableByParent))}
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || (ownedByParent && (isFree || !transferableByParent))}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
                     {busy === 'checkout-' + course.course_id || busy === 'free-' + course.course_id
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
@@ -373,7 +379,7 @@ export default function ParentCoursesPage() {
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
-                    disabled={busy !== '' || !selectedChild || selectedChildAlreadyOwns}
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {selectedChildAlreadyOwns
                       ? (english ? 'Already has access' : 'पहले से पहुँच है')
