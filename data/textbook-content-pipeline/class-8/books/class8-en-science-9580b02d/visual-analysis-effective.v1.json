@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a3b981be8dbdcfcfce0de70acfac70fac5f7eac13083fcb366afaf779b03127b",
+  "raw_analysis_sha256": "719bd0d45c53615d5536ff026df2e3fa5a4ffa01f41341bcd7c80818ed410ba3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:09:09Z",
+      "checkpointed_at": "2026-10-20T07:11:33Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:09:43Z",
+      "checkpointed_at": "2026-10-20T07:12:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:10:04Z",
+      "checkpointed_at": "2026-10-20T07:12:39Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:10:40Z",
+      "checkpointed_at": "2026-10-20T07:13:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53564,6 +53564,46 @@
         "context_relation": "The image likely represents the idea of progressing or achieving something, possibly related to the text about lithium-ion batteries and their importance in modern devices.",
         "limitations": [
           "The image does not provide specific details about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "db9a1feb50004bc9a987bbeb",
+      "asset_sha256": "9f72cb1b329a1f72ba1ef0cea845c02dca0681a41559dfd49d5bd0fb2ffa30a4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/9f72cb1b329a1f72ba1ef0cea845c02dca0681a41559dfd49d5bd0fb2ffa30a4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "30a9718af722b445ea06280501b62ed4c094302ae837e7af82151b11532c1f06",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about lithium-ion batteries.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T07:13:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about lithium-ion batteries.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
