@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1210,
-    "successful_visual_analyses": 1187,
-    "missing_visual_analyses": 868,
+    "raw_analysis_result_rows": 1212,
+    "successful_visual_analyses": 1189,
+    "missing_visual_analyses": 866,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 891,
+    "unresolved_count": 889,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45905,9 +45905,31 @@
       "asset_path": "page-0108.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table with columns for objects in motion, justification, objects at rest, and justification.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.3: Observing things around you",
+          "Objects in motion",
+          "Justification",
+          "Objects at rest",
+          "Justification",
+          "Cow grazing in the field",
+          "Tree"
+        ],
+        "concepts": [
+          "Observing things around you",
+          "Objects in motion",
+          "Objects at rest",
+          "Justification"
+        ],
+        "context_relation": "Observing things around you",
+        "limitations": [
+          "The table is incomplete and requires the user to fill in the details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45923,9 +45945,19 @@
       "asset_path": "assets/15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper or a label.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a label or a torn piece of paper, not related to the text content.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a simple, abstract shape and does not provide any specific information about the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

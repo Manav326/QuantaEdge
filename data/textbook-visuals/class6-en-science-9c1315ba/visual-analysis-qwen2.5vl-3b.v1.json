@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1187,
+    "assets_selected": 1189,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1184,
-    "assets_remaining": 894,
-    "assets_completion_percent": 57.0,
+    "assets_analyzed": 1186,
+    "assets_remaining": 892,
+    "assets_completion_percent": 57.1,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1182,
+    "assets_skipped_from_checkpoint": 1184,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:00:55Z"
+      "checkpointed_at": "2026-10-20T03:04:25Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:01:55Z"
+      "checkpointed_at": "2026-10-20T03:05:25Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:02:46Z"
+      "checkpointed_at": "2026-10-20T03:06:16Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39246,6 +39246,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T03:03:15Z"
+    },
+    {
+      "asset_id": "f4977245d34d670451c54763",
+      "asset_sha256": "521d4dc06f893b7e604a9f55f2df54408dcd2d8b9507fc0a17db67a60c14c69f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 108,
+      "asset_path": "page-0108.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "131ba41c7aaf531a2534e1d6586a0247c3657f8881c24f58259ea8bcd502d80e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table with columns for objects in motion, justification, objects at rest, and justification.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.3: Observing things around you",
+          "Objects in motion",
+          "Justification",
+          "Objects at rest",
+          "Justification",
+          "Cow grazing in the field",
+          "Tree"
+        ],
+        "concepts": [
+          "Observing things around you",
+          "Objects in motion",
+          "Objects at rest",
+          "Justification"
+        ],
+        "context_relation": "Observing things around you",
+        "limitations": [
+          "The table is incomplete and requires the user to fill in the details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:10:07Z"
+    },
+    {
+      "asset_id": "b4d74339f7894c3a7c65728c",
+      "asset_sha256": "15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper or a label.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a label or a torn piece of paper, not related to the text content.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a simple, abstract shape and does not provide any specific information about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:11:46Z"
     }
   ]
 }
