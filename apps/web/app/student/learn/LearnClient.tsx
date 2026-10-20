@@ -352,7 +352,7 @@ export default function LearnClient() {
         return r.json();
       }) as Detail;
       setLesson(detail);
-      localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseId!==null?'course-'+selectedCourseId+':':selectedProgram?'program-'+selectedProgram+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
+      localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
       setMcqAttempted(Object.fromEntries(detail.questions
         .filter(question=>question.question_type==='MCQ'&&question.attempted)
         .map(question=>[question.id,true])));
