@@ -375,6 +375,14 @@ export default function TextbooksClient() {
     setPageError('');
   }, [selected?.document_id, currentPage]);
 
+  const noEnrolledCourses = !documentId && !loadingCourses && !courseError && courses.length === 0;
+  if (noEnrolledCourses) return <main className="app-shell qe-textbook-shell"><section className="qe-textbook-library">
+    <div className="qe-textbook-empty" role="status"><span>▤</span>
+      <h3>{translateUi(locale, 'legacy.web.books.and.chapters.7c0f264b')}</h3>
+      <p>{translateUi(locale, 'student.empty.books.message')}</p>
+    </div>
+  </section></main>;
+
   return <main className={'app-shell qe-textbook-shell' + (documentId ? ' qe-textbook-shell--reader' : '')}>
 
     {!documentId ? <section className="qe-textbook-library">
