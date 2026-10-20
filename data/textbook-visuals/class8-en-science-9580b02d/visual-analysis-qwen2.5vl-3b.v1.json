@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1023,
+    "assets_selected": 1025,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1020,
-    "assets_remaining": 1271,
-    "assets_completion_percent": 44.5,
+    "assets_analyzed": 1022,
+    "assets_remaining": 1269,
+    "assets_completion_percent": 44.6,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1018,
+    "assets_skipped_from_checkpoint": 1020,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:01:05Z"
+      "checkpointed_at": "2026-10-20T04:03:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:01:40Z"
+      "checkpointed_at": "2026-10-20T04:04:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:02:03Z"
+      "checkpointed_at": "2026-10-20T04:04:36Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32753,6 +32753,85 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:02:49Z"
+    },
+    {
+      "asset_id": "7382f0f3c98c4cd425735ad7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:04:44Z"
+    },
+    {
+      "asset_id": "1e19f2d73aad82ae1c67a6e4",
+      "asset_sha256": "57ff7640d7680b022884d11d6d0d0649e41884a15d9eee8069e184ecc125c701",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "page-0066.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about electricity, focusing on magnetic and heating effects, with questions and a QR code for further information.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity: Magnetic and Heating Effects  4",
+          "Probe and ponder",
+          "z If we don’t have an electric lamp while making an electric circuit with an electric cell, is there any other way through which we can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic effects",
+          "Heating effects",
+          "Electric circuit",
+          "Electric lamp",
+          "Electric cell",
+          "Temporary magnets",
+          "Fossil fuels",
+          "Wood",
+          "Electrical appliances",
+          "Cell",
+          "Battery",
+          "Heat generation",
+          "Rechargeable cells"
+        ],
+        "context_relation": "The page is an educational resource discussing various aspects of electricity, including its magnetic and heating effects, and encourages readers to ponder and share their questions.",
+        "limitations": [
+          "The page does not provide answers to the questions but rather prompts for further exploration.",
+          "The page does not include visual aids beyond the text and the QR code."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:06:27Z"
     }
   ]
 }
