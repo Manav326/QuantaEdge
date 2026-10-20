@@ -43,7 +43,7 @@ type PurchaseRequestStatus = {
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:student';
-type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string };
+type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null };
 
 declare global {
   interface Window {
@@ -87,6 +87,7 @@ export default function StudentMarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [busyCourseId, setBusyCourseId] = useState<number | null>(null);
+  const [discountCode, setDiscountCode] = useState('');
   const [status, setStatus] = useState('');
   const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
   const [verifying, setVerifying] = useState(false);
@@ -243,11 +244,14 @@ export default function StudentMarketplacePage() {
           'Content-Type': 'application/json',
           'Idempotency-Key': crypto.randomUUID(),
         },
-        body: '{}',
+        body: JSON.stringify({ discountCode: discountCode.trim() || null }),
       })) as CheckoutResponse;
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
           !order.keyId || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0 || order.currency !== 'INR') {
         throw new Error('The course order could not be prepared. Please retry.');
+      }
+      if (Number(order.discountPaise || 0) > 0) {
+        setStatus('Offer code '+String(order.discountCode || discountCode.trim())+' applied. You save '+money(Number(order.discountPaise))+'. The displayed Razorpay amount includes this server-calculated discount.');
       }
       const recoverableDraft: VerifyDraft = {
         courseId,
@@ -353,6 +357,16 @@ export default function StudentMarketplacePage() {
       </header>
 
       {status && <p className={styles.status} role="status">{status}</p>}
+      <section className={styles.discountCodeBox} aria-label="Course offer code">
+        <label htmlFor="qe-student-discount-code">Offer code <span>(optional)</span></label>
+        <div className={styles.discountCodeEntry}>
+          <input id="qe-student-discount-code" autoComplete="off" maxLength={40} value={discountCode}
+            onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
+            placeholder="Enter a code supplied by your institution" disabled={busyCourseId!==null||!!pendingVerify}/>
+          <span>Validated securely when you start checkout</span>
+        </div>
+        <p>Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.</p>
+      </section>
       <BillingProfileEditor workspace="STUDENT" english />
       <InvoiceDownloads workspace="STUDENT" english />
       {purchaseRequests.length > 0 && (
