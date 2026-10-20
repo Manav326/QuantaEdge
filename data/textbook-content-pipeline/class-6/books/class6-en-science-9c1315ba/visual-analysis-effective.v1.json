@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7d163aae35430aaa45deecb00252d1f62faad2928c71b844336ee58eb1319e76",
+  "raw_analysis_sha256": "983df5d92cf43e91ab3b6d3c35b7810ba8823bb041bda5a03b7c5211ce8bfa20",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:14:42Z",
+      "checkpointed_at": "2026-10-20T02:20:47Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:15:40Z",
+      "checkpointed_at": "2026-10-20T02:21:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:16:29Z",
+      "checkpointed_at": "2026-10-20T02:22:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -58282,6 +58282,200 @@
         "context_relation": "uncertain",
         "limitations": [
           "unclear if the page is a full page or a cropped figure, and the content is not visible in the image provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "476ab184f8458182b309194a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a curved line using a flexible measuring tape or a thread.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.4 Measuring the length of a curved line",
+          "Anish and his parents fixed electric string lights on the",
+          "arches of the verandah of their",
+          "house, as shown in Fig. 5.7, for a",
+          "celebration at home. How would",
+          "they have measured the required",
+          "length of string lights?",
+          "In the case of a curved line",
+          "measurements can be made with",
+          "the help of a flexible measuring",
+          "tape or by using a thread as",
+          "shown in Fig. 5.8.",
+          "The thread can then",
+          "Fig. 5.7: House decorated with string lights"
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring curved lines"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the measurement of a curved line using a flexible measuring tape or a thread.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:23:13Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the measurement of a curved line using a flexible measuring tape or a thread.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.4 Measuring the length of a curved line",
+          "Anish and his parents fixed electric string lights on the",
+          "arches of the verandah of their",
+          "house, as shown in Fig. 5.7, for a",
+          "celebration at home. How would",
+          "they have measured the required",
+          "length of string lights?",
+          "In the case of a curved line",
+          "measurements can be made with",
+          "the help of a flexible measuring",
+          "tape or by using a thread as",
+          "shown in Fig. 5.8.",
+          "The thread can then",
+          "Fig. 5.7: House decorated with string lights"
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring curved lines"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the measurement of a curved line using a flexible measuring tape or a thread.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0fee1ddb51ca259f071814e8",
+      "asset_sha256": "546cea6d442472e1418c4b0a49732e39015ddbad305e89388636e22d471d8a74",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 105,
+      "asset_path": "page-0105.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing how to measure the length of a curved line using a flexible measuring tape or a thread.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "5.4 Measuring the length of a curved line",
+          "Anish and his parents fixed electric string lights on the",
+          "arches of the verandah of their",
+          "house, as shown in Fig. 5.7, for a",
+          "celebration at home. How would",
+          "they have measured the required",
+          "length of string lights?",
+          "In the case of a curved line,",
+          "measurements can be made with",
+          "the help of a flexible measuring",
+          "tape or by using a thread as",
+          "shown in Fig. 5.8.",
+          "Fig. 5.7: House decorated with string lights",
+          "The thread can then",
+          "be straightened and its",
+          "length can be measured",
+          "using a metre scale.",
+          "Fig. 5.8: Measuring the length of a curved line",
+          "5.5 Describing Position",
+          "One day the teacher informs her students that she has",
+          "planned an educational visit to a nearby garden. She asks",
+          "the students to reach there directly in the morning. Deepa",
+          "and her friends start discussing whether the garden would",
+          "be closer than their school or farther. Tasneem and Padma",
+          "say that the garden would be closer, while Deepa and Anish",
+          "feel that the school would be closer, Hardeep thinks that",
+          "both would be almost at an equal distance (Fig. 5.9).",
+          "Bus stand School Deepa's",
+          "house Anish's",
+          "house Hardeep's Tasneem's"
+        ],
+        "concepts": [
+          "measuring curved lines",
+          "flexible measuring tape",
+          "thread",
+          "metrical scale",
+          "describing position"
+        ],
+        "context_relation": "The image is a page from a textbook discussing how to measure the length of a curved line using a flexible measuring tape or a thread.",
+        "limitations": [
+          "The image does not provide specific instructions on how to measure the length of a curved line using a flexible measuring tape or a thread.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:27:39Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing how to measure the length of a curved line using a flexible measuring tape or a thread.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "5.4 Measuring the length of a curved line",
+          "Anish and his parents fixed electric string lights on the",
+          "arches of the verandah of their",
+          "house, as shown in Fig. 5.7, for a",
+          "celebration at home. How would",
+          "they have measured the required",
+          "length of string lights?",
+          "In the case of a curved line,",
+          "measurements can be made with",
+          "the help of a flexible measuring",
+          "tape or by using a thread as",
+          "shown in Fig. 5.8.",
+          "Fig. 5.7: House decorated with string lights",
+          "The thread can then",
+          "be straightened and its",
+          "length can be measured",
+          "using a metre scale.",
+          "Fig. 5.8: Measuring the length of a curved line",
+          "5.5 Describing Position",
+          "One day the teacher informs her students that she has",
+          "planned an educational visit to a nearby garden. She asks",
+          "the students to reach there directly in the morning. Deepa",
+          "and her friends start discussing whether the garden would",
+          "be closer than their school or farther. Tasneem and Padma",
+          "say that the garden would be closer, while Deepa and Anish",
+          "feel that the school would be closer, Hardeep thinks that",
+          "both would be almost at an equal distance (Fig. 5.9).",
+          "Bus stand School Deepa's",
+          "house Anish's",
+          "house Hardeep's Tasneem's"
+        ],
+        "concepts": [
+          "measuring curved lines",
+          "flexible measuring tape",
+          "thread",
+          "metrical scale",
+          "describing position"
+        ],
+        "context_relation": "The image is a page from a textbook discussing how to measure the length of a curved line using a flexible measuring tape or a thread.",
+        "limitations": [
+          "The image does not provide specific instructions on how to measure the length of a curved line using a flexible measuring tape or a thread.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
