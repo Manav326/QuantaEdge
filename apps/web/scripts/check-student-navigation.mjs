@@ -18,6 +18,8 @@ const certificatesPage = read('../app/student/certificates/page.tsx');
 const studentProgressPage = read('../app/student/progress/page.tsx');
 const studentBooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
 const studentMarketplacePage = read('../app/student/marketplace/page.tsx');
+const parentMarketplacePage = read('../app/parent/courses/page.tsx');
+const courseMarketplaceApi = read('../../../services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java');
 const studentCoursesPage = read('../app/student/courses/page.tsx');
 const studentClassesClient = read('../app/student/classes/ClassesClient.tsx');
 const studentDiagnosticPage = read('../app/student/diagnostic/page.tsx');
@@ -155,6 +157,16 @@ assert.ok(coursePage.includes("'/api/v1/students/me/programs'"), 'All Courses mu
 assert.ok(coursePage.includes("'/api/v1/students/me/programs/id/'"), 'Switching the active course must go through the server-owned enrolment transition.');
 assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketplacePage.includes("'/api/v1/marketplace/orders/'"),
   'Marketplace checkout must use server-created Razorpay orders and server-side payment verification.');
+assert.ok(marketplacePage.includes("'/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile'") &&
+  marketplacePage.includes('sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)'),
+  'Student web checkout must save the order before opening Razorpay and reconcile it when the callback is lost.');
+assert.ok(parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile'") &&
+  parentMarketplacePage.includes('sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)'),
+  'Parent web checkout must save the order before opening Razorpay and reconcile it when the callback is lost.');
+assert.ok(courseMarketplaceApi.includes('@PostMapping("/orders/{localOrderId}/reconcile")') &&
+  courseMarketplaceApi.includes('@PostMapping("/family/orders/{localOrderId}/reconcile")') &&
+  courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt'),
+  'Server must reconcile both student and parent orders and refuse reuse of a paid Razorpay order.');
 assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.includes('/student/courses') && dashboardPage.includes('/student/marketplace'),
   'Dashboard must show the active course and link to dedicated Courses and Marketplace screens.');
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
@@ -211,6 +223,14 @@ assert.ok(!androidApp.includes('Text(if (language == "hi") "ट्यूटर" 
   'The Learn submenu must not expose the unusable Tutor text link.');
 assert.ok(androidApp.includes('StudentAllCoursesScreen(') && androidApp.includes('StudentMarketplaceScreen('),
   'Android must have dedicated All Courses and Marketplace routes.');
+assert.ok(androidApp.includes('setPendingCoursePayment("STUDENT", recoverableDraft)') &&
+  androidApp.includes('"/api/v1/marketplace/orders/" + localOrderId + "/reconcile"') &&
+  androidMarketplaceScreen.includes('pendingVerification') && androidMarketplaceScreen.includes('onRetryVerification'),
+  'Android student checkout must persist and reconcile the exact order after a missing or failed callback.');
+assert.ok(androidApp.includes('setPendingCoursePayment("PARENT", recoverableDraft)') &&
+  androidApp.includes('"/api/v1/marketplace/family/orders/" + localOrderId + "/reconcile"') &&
+  read('../../android/app/src/main/java/com/quantaedge/android/ui/ParentCourseMarketplaceScreen.kt').includes('onRetryVerification'),
+  'Android parent checkout must persist and reconcile the exact order after a missing or failed callback.');
 assert.ok(androidGoogleCredentialFlow.includes('.setFilterByAuthorizedAccounts(true)') &&
   androidGoogleCredentialFlow.includes('GetSignInWithGoogleOption.Builder(clientId)') &&
   androidGoogleCredentialFlow.includes('catch (error: GetCredentialCancellationException)') &&
