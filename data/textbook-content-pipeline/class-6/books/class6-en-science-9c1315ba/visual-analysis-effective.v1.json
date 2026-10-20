@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1cb479cc61bcaeee93a53f9a1452b46df9dee6de0c5dc4d698293993d8d1104d",
+  "raw_analysis_sha256": "293b5e8714f5a8457d98db7b41d0ac89d4cb082470455a356ebeac8aed4888f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:26:14Z",
+      "checkpointed_at": "2026-10-20T10:34:28Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:27:14Z",
+      "checkpointed_at": "2026-10-20T10:35:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:28:06Z",
+      "checkpointed_at": "2026-10-20T10:36:22Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:28:54Z",
+      "checkpointed_at": "2026-10-20T10:37:11Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62380,6 +62380,48 @@
         "context_relation": "The page discusses the materials used in making crucibles and transitions to a scene in a classroom where students are interacting with their new school supplies.",
         "limitations": [
           "The page does not provide specific details about the materials used in crucibles or the exact scene in the classroom."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7aa188e535b735d6dc7ce9d6",
+      "asset_sha256": "66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "131615122ceabfc036819a3f59dd1d30fb60ce77227cc5d66ae211a6c160e1f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow textured square with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a page with multiple visual elements.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image does not provide any specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:38:46Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow textured square with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a page with multiple visual elements.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image does not provide any specific details about the textbook or its content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
