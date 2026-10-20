@@ -6094,7 +6094,7 @@ private fun AssessmentListScreen(
             StudentEnrollmentEmptyState(
                 icon = "✓",
                 title = localizedUiText("Tests and results need a course"),
-                message = localizedUiText("Enrol in a course to access published tests, saved results and certificate eligibility."),
+                message = localizedUiText("Your practice activities will appear here once you enroll in a course."),
                 primaryLabel = localizedUiText("Explore Marketplace"),
                 onPrimary = onMarketplace
             )
