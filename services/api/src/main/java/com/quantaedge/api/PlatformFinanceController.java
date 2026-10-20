@@ -228,7 +228,7 @@ public class PlatformFinanceController {
       values(?,?,?,?,?,?,?,?,?,?::jsonb,'DRAFT',?,?,?) returning id
       """,Long.class,offerId,entityId,version,optionalText(body.get("serviceClassificationCode")),
         treatment,gst,cess,bool(body,"priceIncludesTax",true),place,jsonObject(body.get("taxComponents")),
-        start,end,context.staffId());
+        dbInstant(start),dbInstant(end),context.staffId());
     audit(entityId,institutionId,context,"TAX_PROFILE_CREATED","COURSE_TAX_PROFILE",Long.toString(id),
         Map.of("offerId",offerId,"version",version,"treatment",treatment));
     return Map.of("id",id,"version",version,"status","DRAFT");
@@ -359,6 +359,7 @@ public class PlatformFinanceController {
     List<Map<String,Object>> normalized=new ArrayList<>();
     List<RevenueDistributionCalculator.Share> validation=new ArrayList<>();
     Set<Long> recipientInstitutionIds=new HashSet<>();
+    long combinedPercentageBasisPoints=0L;
     for(Object item:raw) {
       if(!(item instanceof Map<?,?> map)) throw bad("Each recipient must be an object.");
       long institutionId=requiredLong(map.get("institutionId"),"institutionId");
@@ -370,6 +371,7 @@ public class PlatformFinanceController {
       if("PERCENTAGE".equals(type)) {
         int bps=Math.toIntExact(requiredLong(map.get("percentageBasisPoints"),"percentageBasisPoints"));
         validation.add(RevenueDistributionCalculator.Share.percentage(institutionId,bps));
+        combinedPercentageBasisPoints=Math.addExact(combinedPercentageBasisPoints,bps);
         normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"percentageBasisPoints",bps));
       } else if("FLAT".equals(type)) {
         long paise=requiredLong(map.get("flatAmountPaise"),"flatAmountPaise");
@@ -377,6 +379,7 @@ public class PlatformFinanceController {
         normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"flatAmountPaise",paise));
       } else throw bad("Recipient calculation type must be PERCENTAGE or FLAT.");
     }
+    if(combinedPercentageBasisPoints>10_000) throw bad("Combined percentage shares cannot exceed 100% of the distributable pool.");
     long sourceInstitution=offerInstitution(((Number)policy.get("institution_offer_id")).longValue());
     jdbc.update("delete from revenue_share_policy_recipient where policy_id=?",policyId);
     for(Map<String,Object> r:normalized) {

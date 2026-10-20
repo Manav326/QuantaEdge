@@ -268,3 +268,10 @@ Verification at this checkpoint:
 
 - Actions run #4866 (`57bbfd8271a2c887bd5f4737a3c9a6e75291f1ed`) verified API, web, Admin, Android and content-import safeguards successfully, but the People Operations build failed TypeScript at `app/finance/page.tsx`: the Issued Documents table referenced `source_type` without declaring it on the `FinancialDocument` type. This field is returned by the controller and is now included in that client type.
 - The PDF renderer and preview endpoint are in commit `015ad5a8c578eb3437d6bde9d9710f6ebc0c6e23`; run #4867 is the first CI verification for that exact commit and must be checked after the UI type correction.
+
+
+### 2026-10-20 — Policy and JDBC hardening
+
+- Corrected the remaining tax-profile INSERT to bind UTC `OffsetDateTime` values rather than `Instant`, matching PostgreSQL JDBC's supported timestamp-with-time-zone type.
+- Percentage recipients are now validated at draft-save time as well as approval time: total percentage must be at most 100%. Mixed flat amounts can still exceed a small actual pool, so the deterministic sale allocation must validate the real pool before any allocation is posted.
+- Customer billing profiles and per-order locked billing/tax/discount snapshots are the next model slice; production sale issuance is not yet wired to these foundations.
