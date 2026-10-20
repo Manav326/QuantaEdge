@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1127,
+    "assets_selected": 1128,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1123,
-    "assets_remaining": 1168,
-    "assets_completion_percent": 49.0,
+    "assets_analyzed": 1124,
+    "assets_remaining": 1167,
+    "assets_completion_percent": 49.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1122,
+    "assets_skipped_from_checkpoint": 1123,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:39:23Z"
+      "checkpointed_at": "2026-10-20T15:42:38Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:40:08Z"
+      "checkpointed_at": "2026-10-20T15:43:23Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:40:38Z"
+      "checkpointed_at": "2026-10-20T15:43:52Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:41:27Z"
+      "checkpointed_at": "2026-10-20T15:44:41Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36654,6 +36654,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T15:41:38Z"
+    },
+    {
+      "asset_id": "99cb2281aa7feb2ae38a448c",
+      "asset_sha256": "90832189be2d0eb5c12bbc06a6e1427cfee31cba47e0e958d73d6345d747c84f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 81,
+      "asset_path": "page-0081.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of current passing through coils on compass needles, and instructions for an experiment involving coils and a magnetic compass.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "61",
+          "When current is passed through the coils, compass needles",
+          "placed near the coils will show deflection.",
+          "(i) Only in circuit (a)",
+          "(ii) Only in circuits (a) and (b)",
+          "(iii) Only in circuits (a), (b), and (c)",
+          "(iv) In all four circuits",
+          "Discover, design, and debate",
+          "Make coils of turns 25, 50, 75, and 100. Connect them to",
+          "the same cell one by one. Note the deflection in a magnetic",
+          "compass placed in the same position in all the cases. Report",
+          "your observations. Draw conclusion of the effect of number",
+          "of turns of the coil on the strength of the electromagnet.",
+          "Take two thin nichrome wires of equal length and different",
+          "thickness (approximately one of these wire thickness to be",
+          "double of the other, say 0.3 mm and 0.6 mm). Connect them",
+          "one by one in a circuit which has a switch and a cell, and",
+          "allow the current to flow for 30 s in each case. Momentarily",
+          "touch these wires. Which wire heats up more? Now repeat the",
+          "same activity with two nichrome wires of same diameter but",
+          "of different lengths. Prepare a brief report of your activity.",
+          "Try to make an electric cell using various fruits and",
+          "vegetables. Also try with electrodes of different metals.",
+          "Prepare a brief report.",
+          "A step further",
+          "Even when a battery stops working, it is not completely ‘dead’.",
+          "It could still contain materials like acids, and metals like lead",
+          "cadmium, nickel, or lithium, which may cause fires, or be harmful",
+          "for the environment if the battery is thrown in regular garbage."
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic and Heating Effects",
+          "Compass needles",
+          "Current passing through coils",
+          "Magnetic compass",
+          "Number of turns of the coil",
+          "Thickness of nichrome wires",
+          "Electric cell",
+          "Fruits and vegetables",
+          "Electrodes",
+          "Battery",
+          "Recycling batteries"
+        ],
+        "context_relation": "The page discusses the effects of current passing through coils on compass needles, and provides instructions for an experiment involving coils and a magnetic compass.",
+        "limitations": [
+          "The page does not provide specific instructions for the experiment.",
+          "The page does not provide specific results or conclusions from the experiment.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:48:14Z"
     }
   ]
 }
