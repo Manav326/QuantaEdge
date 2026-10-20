@@ -149,6 +149,9 @@ public class LearningMetricsService {
         .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,
           programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
 
+    Object[] assessmentArgs = programId == null
+        ? new Object[]{studentId}
+        : new Object[]{studentId,programId,programId};
     result.put("assessmentStats",jdbc.queryForMap(tenantSql("""
       select count(*) filter(where att.status<>'ABANDONED') as attempts,
              count(*) filter(where att.status in ('AWAITING_REVIEW','GRADED','RELEASED')) as submitted,
@@ -159,8 +162,9 @@ public class LearningMetricsService {
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
       join curriculum_subject s on s.id=a.subject_id
-      where att.student_id=? __TENANT_ATT__ and __SUBJECT_SCOPE__
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      where att.student_id=? __TENANT_ATT__ and __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
+      """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
 
     result.put("assessmentByType",jdbc.queryForList(tenantSql("""
       select a.assessment_type,count(att.id) filter(where att.status<>'ABANDONED') as attempts,
@@ -172,7 +176,8 @@ public class LearningMetricsService {
       where __SUBJECT_SCOPE__
       group by a.assessment_type
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
 
     result.put("recentAssessments",jdbc.queryForList(tenantSql("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.final_score,
@@ -183,9 +188,11 @@ public class LearningMetricsService {
       join curriculum_subject s on s.id=a.subject_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join lesson l on l.id=a.lesson_id
-      where att.student_id=? __TENANT_ATT__ and att.status<>'ABANDONED' and __SUBJECT_SCOPE__
+      where att.student_id=? __TENANT_ATT__ and att.status<>'ABANDONED'
+        and __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
       order by coalesce(att.released_at,att.submitted_at,att.started_at) desc,att.id desc limit 10
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
 
     result.put("recentAttempts",jdbc.queryForList(tenantSql("""
       select qa.answered_at,qa.correct,q.question_type,ch.display_name as chapter_name,
@@ -195,9 +202,11 @@ public class LearningMetricsService {
       join lesson l on l.id=q.lesson_id join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       where qa.student_id=? __TENANT_QA__ and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
-        and __SUBJECT_SCOPE__
+        and __COURSE_ATTEMPT_SCOPE__ and __SUBJECT_SCOPE__
       order by qa.answered_at desc,qa.id desc limit 20
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,
+          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
 
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
