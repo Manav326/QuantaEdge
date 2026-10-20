@@ -59,7 +59,12 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun NotificationBellButton(language: String, onNavigate: (String) -> Unit) {
+fun NotificationBellButton(
+    language: String,
+    requestedRecipientId: Long? = null,
+    requestKey: Int = 0,
+    onNavigate: (String) -> Unit
+) {
     var open by remember { mutableStateOf(false) }
     var unreadCount by remember { mutableStateOf(0) }
     var loaded by remember { mutableStateOf(false) }
@@ -73,6 +78,10 @@ fun NotificationBellButton(language: String, onNavigate: (String) -> Unit) {
             unreadCount = it
             loaded = true
         }
+    }
+
+    LaunchedEffect(requestedRecipientId, requestKey) {
+        if (requestedRecipientId != null && requestedRecipientId > 0L) open = true
     }
 
     LaunchedEffect(Unit) {
@@ -107,7 +116,9 @@ fun NotificationBellButton(language: String, onNavigate: (String) -> Unit) {
             language = language,
             onDismiss = { open = false },
             onChanged = { scope.launch { refreshCount() } },
-            onNavigate = onNavigate
+            onNavigate = onNavigate,
+            requestedRecipientId = requestedRecipientId,
+            requestKey = requestKey
         )
     }
 }
@@ -129,7 +140,9 @@ private fun NotificationInboxDialog(
     language: String,
     onDismiss: () -> Unit,
     onChanged: () -> Unit,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    requestedRecipientId: Long?,
+    requestKey: Int
 ) {
     val hindi = language == "hi"
     val scope = rememberCoroutineScope()
@@ -142,6 +155,7 @@ private fun NotificationInboxDialog(
     var hasMore by remember { mutableStateOf(false) }
     var filterUnread by remember { mutableStateOf(false) }
     var filterArchived by remember { mutableStateOf(false) }
+    var handledPushRequestKey by remember { mutableStateOf("") }
 
     fun text(en: String, hi: String) = if (hindi) hi else en
 
@@ -182,7 +196,50 @@ private fun NotificationInboxDialog(
         }
     }
 
-    LaunchedEffect(filterUnread, filterArchived) { load(append = false, unreadOnly = filterUnread && !filterArchived) }
+    suspend fun loadSingle(recipientId: Long) {
+        loading = true
+        error = ""
+        try {
+            val row = ApiClient.getObject("/api/v1/notifications/$recipientId")
+            val content = row.optJSONObject("contentDocument") ?: JSONObject()
+            items = listOf(NotificationRow(
+                id = row.optLong("recipient_id", recipientId),
+                title = row.optString("title", text("Notification", "सूचना")),
+                summary = row.optString("summary"),
+                senderLabel = row.optString("sender_label"),
+                scope = row.optString("scope", "USER"),
+                state = row.optString("state", "CREATED"),
+                deliveredAt = row.optString("delivered_at"),
+                expiresAt = row.optString("expires_at"),
+                content = content
+            ))
+            expandedId = recipientId
+            beforeId = null
+            hasMore = false
+            if (items.firstOrNull()?.state !in setOf("READ", "DISMISSED")) {
+                runCatching { ApiClient.postObject("/api/v1/notifications/$recipientId/read") }
+                    .onSuccess {
+                        items = items.map { if (it.id == recipientId) it.copy(state = "READ") else it }
+                        onChanged()
+                    }
+            }
+        } catch (failure: Exception) {
+            error = failure.message ?: text("This notification could not be opened.", "यह सूचना नहीं खुल सकी।")
+        } finally {
+            loading = false
+        }
+    }
+
+    LaunchedEffect(filterUnread, filterArchived, requestedRecipientId, requestKey) {
+        val requested = requestedRecipientId?.takeIf { it > 0L }
+        val requestIdentity = requested?.let { "$it:$requestKey" }.orEmpty()
+        if (requested != null && requestIdentity != handledPushRequestKey && !filterUnread && !filterArchived) {
+            handledPushRequestKey = requestIdentity
+            loadSingle(requested)
+        } else {
+            load(append = false, unreadOnly = filterUnread && !filterArchived)
+        }
+    }
 
     suspend fun markRead(id: Long) {
         val row = items.firstOrNull { it.id == id } ?: return

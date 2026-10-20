@@ -628,7 +628,42 @@ public class RichNotificationService {
     jdbc.update("""
       insert into notification_delivery_attempt(recipient_id,channel,attempt_number,status,attempted_at,acknowledged_at)
       select id,'IN_APP',1,'SENT',now(),now() from notification_recipient
-      where campaign_id=? on conflict(recipient_id,channel,attempt_number) do nothing
+      where campaign_id=? on conflict do nothing
+      """,campaignId);
+    // FCM delivery is asynchronous and never gates durable in-app notification delivery.
+    jdbc.update("""
+      insert into notification_delivery_attempt(
+        recipient_id,channel,attempt_number,device_registration_id,status,attempted_at,next_attempt_at)
+      select r.id,'ANDROID_PUSH',1,d.id,'PENDING',now(),now()
+      from notification_recipient r
+      join notification_campaign c on c.id=r.campaign_id
+      join notification_device_registration d on d.status='ACTIVE'
+        and d.identity_kind=r.recipient_kind
+        and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
+          or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
+        and (d.institution_id=r.institution_id or
+          (r.institution_id is null and c.scope='HRMS_PLATFORM'
+            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
+      where r.campaign_id=? and r.recipient_kind in ('STUDENT','USER_ACCOUNT')
+      on conflict do nothing
+      """,campaignId);
+    jdbc.update("""
+      insert into notification_delivery_attempt(
+        recipient_id,channel,attempt_number,device_registration_id,status,
+        failure_code,attempted_at,next_attempt_at)
+      select r.id,'ANDROID_PUSH',1,null,'NOT_CONFIGURED','NO_ACTIVE_DEVICE',now(),now()
+      from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      where r.campaign_id=? and r.recipient_kind in ('STUDENT','USER_ACCOUNT')
+        and not exists (
+          select 1 from notification_device_registration d
+          where d.status='ACTIVE' and d.identity_kind=r.recipient_kind
+            and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
+              or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
+            and (d.institution_id=r.institution_id or
+              (r.institution_id is null and c.scope='HRMS_PLATFORM'
+                and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
+        )
+      on conflict do nothing
       """,campaignId);
     Map<String,Object> snapshot=new LinkedHashMap<>();
     snapshot.put("recipientCount",recipients.size());
@@ -679,6 +714,38 @@ public class RichNotificationService {
       args=new Object[]{actor.institutionId(),size};
     }
     return jdbc.queryForList(sql,args);
+  }
+
+
+  /** Fetch one notification after a push tap, rechecking identity and tenant visibility. */
+  public Map<String,Object> notificationForRecipient(AuthContext context,long institutionId,long recipientId) {
+    String kind;
+    Long identityId;
+    if(context.studentId()!=null) {kind="STUDENT";identityId=context.studentId();}
+    else if(context.isParent()&&context.userId()!=null) {kind="USER_ACCOUNT";identityId=context.userId();}
+    else throw new SecurityException("A supported authenticated recipient identity is required.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,
+        case when c.sender_workspace='HRMS' then 'HRMS Platform'
+             when c.sender_workspace='INSTITUTION_ADMIN' then coalesce(sender_admin.display_name,tenant.display_name,'Institution Admin')
+             else coalesce(sender_staff.display_name,tenant.display_name,'QuantaEdge Admin') end as sender_label,
+        c.content_document::text as content_document,c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+      from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      left join institution_tenant tenant on tenant.id=c.institution_id
+      left join staff_account sender_staff on sender_staff.id=c.sender_staff_id
+      left join institution_admin_account sender_admin on sender_admin.id=c.sender_institution_admin_id
+      where r.id=? and r.recipient_kind=?
+        and case when ?='STUDENT' then r.student_id=? when ?='USER_ACCOUNT' then r.user_account_id=? else false end
+        and (r.institution_id=? or (r.institution_id is null and c.scope='HRMS_PLATFORM'
+          and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+        and c.status='SENT' and (c.expires_at is null or c.expires_at>now())
+      """,recipientId,kind,kind,identityId,kind,identityId,institutionId,institutionId);
+    if(rows.isEmpty())return null;
+    Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
+    row.put("contentDocument",parseJson(String.valueOf(row.remove("content_document"))));
+    row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
+    return row;
   }
 
   public List<Map<String,Object>> inbox(

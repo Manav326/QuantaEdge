@@ -48,6 +48,12 @@ for (const path of [
   'services/api/src/main/java/com/quantaedge/api/NotificationContentValidator.java',
   'services/api/src/main/java/com/quantaedge/api/RichNotificationService.java',
   'services/api/src/main/java/com/quantaedge/api/NotificationDispatchScheduler.java',
+  'services/api/src/main/java/com/quantaedge/api/AndroidPushService.java',
+  'services/api/src/main/java/com/quantaedge/api/NotificationDeviceController.java',
+  'services/api/src/main/java/com/quantaedge/api/NotificationPushDispatchScheduler.java',
+  'services/api/src/test/java/com/quantaedge/api/AndroidPushServiceTest.java',
+  'apps/android/app/src/main/java/com/quantaedge/android/data/NotificationPushRegistration.kt',
+  'apps/android/app/src/main/java/com/quantaedge/android/data/NotificationPushMessagingService.kt',
   'services/api/src/test/java/com/quantaedge/api/NotificationContentValidatorTest.java',
   'services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationTest.java',
   'services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationIntegrationTest.java',
@@ -55,6 +61,7 @@ for (const path of [
   'services/api/src/main/resources/db/migration/V143__rich_notification_template_versioning.sql',
   'services/api/src/main/resources/db/migration/V144__rich_notification_template_active_name.sql',
   'services/api/src/main/resources/db/migration/V145__retain_notification_templates_and_media_after_creator_deletion.sql',
+  'services/api/src/main/resources/db/migration/V146__android_push_notification_devices.sql',
   'docs/product/rich-notification-platform-contract.md',
 ]) {
   assert.doesNotThrow(() => read(path), `Required notification feature file is missing: ${path}`);
@@ -63,10 +70,11 @@ const webLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 assert.ok(webLayout.includes('<NotificationBell role={role} />'),
   'The learner/parent workspace header must include the persistent notification bell.');
 const androidShell = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
-assert.ok(androidShell.includes('NotificationBellButton(language = language)') &&
+assert.ok(androidShell.includes('NotificationBellButton(') &&
+  androidShell.includes('requestedRecipientId = launchIntent?.getStringExtra("qe_notification_recipient_id")') &&
   androidShell.includes('"/student/classes" -> openClasses(currentSubject)') &&
   androidShell.includes('"/parent/children"'),
-  'Android signed-in shell must expose the notification inbox and map notification actions to native routes.');
+  'Android signed-in shell must expose the notification inbox, open push-selected recipients and map notification actions to native routes.');
 const boundary = read('apps/web/app/components/SessionBoundary.tsx');
 assert.ok(boundary.includes('X-QE-Institution-Code') && boundary.includes('institutionCodeForRequest()'),
   'Learner inbox requests must preserve the selected institution context.');
@@ -105,6 +113,18 @@ const validator = read('services/api/src/main/java/com/quantaedge/api/Notificati
 assert.ok(validator.includes('MAX_DOCUMENT_NODES') &&
   validator.includes('UNSAFE_KEYS') && validator.includes('validateTarget'),
   'Rich-content document validation and unsafe markup/link checks are required.');
+const pushService = read('services/api/src/main/java/com/quantaedge/api/AndroidPushService.java');
+assert.ok(pushService.includes('FirebaseMessaging') && pushService.includes('UNREGISTERED') &&
+  pushService.includes('FCM_NOT_CONFIGURED') && pushService.includes('isRecipientCurrentlyEligible'),
+  'Android push must be provider-backed, retryable/configuration-safe, and recheck current recipient eligibility.');
+const deviceController = read('services/api/src/main/java/com/quantaedge/api/NotificationDeviceController.java');
+assert.ok(deviceController.includes('assertActiveMembership') && deviceController.includes('QE_PLATFORM_OWNER') &&
+  deviceController.includes('tokenHash') && deviceController.includes('revokeDevice'),
+  'Android registration must be authenticated, tenant-bound, revocable, and token-private.');
+const pushClient = read('apps/android/app/src/main/java/com/quantaedge/android/data/NotificationPushRegistration.kt');
+assert.ok(pushClient.includes('POST_NOTIFICATIONS') && pushClient.includes('FCM_CLIENT_CONFIGURED') &&
+  pushClient.includes('/api/v1/notifications/devices') && pushClient.includes('revokeCurrent'),
+  'Android push registration must handle optional configuration, notification permission, token registration and logout.');
 const audienceTests = read('services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationTest.java');
 for (const required of [
   '101L', '202L', '303L', 'directStudentAudienceMustBelongToTheSelectedInstitutionAcrossThreeTenants',

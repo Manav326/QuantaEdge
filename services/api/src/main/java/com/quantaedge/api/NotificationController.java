@@ -69,6 +69,22 @@ public class NotificationController {
     return response;
   }
 
+  @GetMapping("/notifications/{recipientId}")
+  public Map<String,Object> notificationDetail(
+      @PathVariable long recipientId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    context=authorization.requireAuth(context);
+    if(!context.isStudent()&&!context.isParent()) throw new SecurityException("Only a notification recipient can open a notification.");
+    InstitutionTenantContext selected=tenant!=null?tenant:tenantContexts.requireSelector(institutionCode);
+    tenantContexts.assertActiveMembership(context,selected);
+    Map<String,Object> row=notifications.notificationForRecipient(context,selected.institutionId(),recipientId);
+    if(row==null)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return row;
+  }
+
   @PostMapping("/notifications/{recipientId}/read")
   public Map<String,Object> markRead(
       @PathVariable long recipientId,

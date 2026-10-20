@@ -175,9 +175,11 @@ Do not send real notifications to production users from fixtures or QA automatio
 - a CI contract script for shared surfaces, routes, tenant boundaries and rich-content safety.
 
 **Not yet delivered/configured:**
-- Android system push transport/token registration (no Firebase/FCM provider is configured in this repository yet). The current send operation persists and delivers into the in-app inbox; the push view in Studio is a layout preview, not evidence of a delivered system push.
+- Live provider delivery is not yet verified against a configured Firebase project. Android FCM token registration, installation/account/tenant binding, notification permission/channels, push-tap inbox detail, invalid-token revocation and bounded retries are now implemented. The provider remains disabled when server credentials are absent; no provider secret is committed.
 - prompt-to-image generation: the logo tool creates editable local vector concepts and is not labelled AI-generated. An image-generation provider must be selected/configured before that capability can be truthfully enabled.
 - institution employee/staff recipients: the existing schema intentionally separates tenant membership from `hr_employee`/`staff_account`; do not infer membership until HRMS defines and enforces the tenant-to-organization mapping.
 - live database/Flyway tests, application builds and a green GitHub Actions result have not been confirmed from this session. CI now contains a contract check that will run on the main push, but source commits alone do not count as runtime verification.
 
-The next acceptance gate is to run the API/Flyway, all three Next.js builds, Android unit tests/build and the full CI workflow; resolve failures, then add provider-backed Android push only after HRMS owns the required provider configuration.
+Runtime configuration is server-side: set `APP_NOTIFICATIONS_FCM_PROJECT_ID` and `APP_NOTIFICATIONS_FCM_SERVICE_ACCOUNT_JSON_BASE64` on the API deployment, then provide the matching Android Firebase app values (`QUANTAEDGE_FIREBASE_PROJECT_ID`, `QUANTAEDGE_FIREBASE_APPLICATION_ID`, `QUANTAEDGE_FIREBASE_API_KEY`, `QUANTAEDGE_FIREBASE_SENDER_ID`) when building the APK/AAB. Encode the service-account JSON as one base64 line. HRMS platform owners can inspect delivery health at `GET /api/v1/hrms/notifications/push/status`; the endpoint never returns credentials or device tokens. Do not store real service-account credentials in GitHub source files.
+
+The next acceptance gate is to apply the additive migration, run API/Android tests and exact-head CI, then verify real delivery against a Firebase test project and test-owned users before enabling production credentials.

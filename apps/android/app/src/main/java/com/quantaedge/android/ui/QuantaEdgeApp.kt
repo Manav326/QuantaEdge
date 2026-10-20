@@ -3,7 +3,10 @@ package com.quantaedge.android.ui
 import android.app.Activity
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -98,6 +101,7 @@ import com.quantaedge.android.RazorpayCourseCheckoutHost
 import com.quantaedge.android.data.InstitutionBrandingRepository
 import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.NotificationPushRegistration
 import com.quantaedge.android.data.GoogleCredentialFlow
 import com.quantaedge.android.data.GoogleSignInConfigurationException
 import com.quantaedge.android.data.GoogleSignInUnavailableException
@@ -3187,6 +3191,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun logout() {
         runTask {
+            runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
             runCatching { ApiClient.postObject("/api/v1/auth/logout") }
             WorkManager.getInstance(context.applicationContext).cancelAllWorkByTag("quantaedge-resource-download")
             ApiClient.clearSession()
@@ -3383,6 +3388,27 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        NotificationPushRegistration.setPermissionWasRequested(context.applicationContext)
+        if (granted && signedIn) {
+            scope.launch {
+                runCatching { NotificationPushRegistration.sync(context.applicationContext) }
+            }
+        }
+    }
+    LaunchedEffect(signedIn, activeTenantCode, stateOwnerKey) {
+        if (!signedIn || !NotificationPushRegistration.isFirebaseConfigured()) return@LaunchedEffect
+        val permissionGranted = Build.VERSION.SDK_INT < 33 ||
+            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        if (permissionGranted) {
+            runCatching { NotificationPushRegistration.sync(context.applicationContext) }
+        } else if (!NotificationPushRegistration.permissionWasRequested(context.applicationContext)) {
+            NotificationPushRegistration.setPermissionWasRequested(context.applicationContext)
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
     LaunchedEffect(route, currentCourseId, signedIn) {
         if (route == AppRoute.STUDENT_HOME && signedIn &&
             (!dashboardClassesLoaded || dashboardClassesCourseId != currentCourseId)) {
@@ -3496,7 +3522,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     QuantaEdgeBrand(modifier = Modifier, compact = true)
                     Spacer(modifier = Modifier.weight(1f))
                     if (signedIn) {
-                        NotificationBellButton(language = language) { target ->
+                        NotificationBellButton(
+                            language = language,
+                            requestedRecipientId = launchIntent?.getStringExtra("qe_notification_recipient_id")?.toLongOrNull()
+                                ?: launchIntent?.getLongExtra("qe_notification_recipient_id", 0L)?.takeIf { it > 0L },
+                            requestKey = launchIntent?.hashCode() ?: 0
+                        ) { target ->
                             error = ""
                             if (target.startsWith("https://", ignoreCase = true)) {
                                 runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(target))) }

@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.mutableStateOf
 import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.NotificationPushRegistration
 import com.quantaedge.android.ui.QuantaEdgeApp
 import com.quantaedge.android.ui.QuantaEdgeTheme
 import com.razorpay.Checkout
@@ -100,6 +101,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         incomingLaunchIntent.value = intent
         ApiClient.initialize(applicationContext)
+        NotificationPushRegistration.ensureNotificationChannel(applicationContext)
         themeController = com.quantaedge.android.ui.QuantaEdgeThemeController(applicationContext)
         setContent { QuantaEdgeTheme(themeController) { QuantaEdgeApp(incomingLaunchIntent.value) } }
     }

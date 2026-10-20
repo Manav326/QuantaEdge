@@ -13,6 +13,27 @@ val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
+val configuredFirebaseProjectId = providers.gradleProperty("quantaedgeFirebaseProjectId")
+    .orElse(providers.environmentVariable("QUANTAEDGE_FIREBASE_PROJECT_ID"))
+    .orElse("").get().trim()
+val configuredFirebaseApplicationId = providers.gradleProperty("quantaedgeFirebaseApplicationId")
+    .orElse(providers.environmentVariable("QUANTAEDGE_FIREBASE_APPLICATION_ID"))
+    .orElse("").get().trim()
+val configuredFirebaseApiKey = providers.gradleProperty("quantaedgeFirebaseApiKey")
+    .orElse(providers.environmentVariable("QUANTAEDGE_FIREBASE_API_KEY"))
+    .orElse("").get().trim()
+val configuredFirebaseSenderId = providers.gradleProperty("quantaedgeFirebaseSenderId")
+    .orElse(providers.environmentVariable("QUANTAEDGE_FIREBASE_SENDER_ID"))
+    .orElse("").get().trim()
+val configuredFirebaseValues = listOf(
+    configuredFirebaseProjectId, configuredFirebaseApplicationId,
+    configuredFirebaseApiKey, configuredFirebaseSenderId
+)
+val firebaseClientConfigured = configuredFirebaseValues.all { it.isNotBlank() }
+require(firebaseClientConfigured || configuredFirebaseValues.all { it.isBlank() }) {
+    "Configure all four QUANTAEDGE_FIREBASE_* client values together, or leave them all empty for test/local builds."
+}
+
 val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
 
 val configuredInstitutionCode = providers.gradleProperty("quantaedgeInstitutionCode")
@@ -111,6 +132,11 @@ android {
         buildConfigField("String", "INSTITUTION_CODE", buildConfigString(configuredInstitutionCode))
         buildConfigField("String", "INSTITUTION_DISPLAY_NAME", buildConfigString(configuredInstitutionDisplayName))
         buildConfigField("boolean", "IS_TENANT_BRANDED", configuredInstitutionCode.isNotBlank().toString())
+        buildConfigField("boolean", "FCM_CLIENT_CONFIGURED", firebaseClientConfigured.toString())
+        buildConfigField("String", "FCM_PROJECT_ID", buildConfigString(configuredFirebaseProjectId))
+        buildConfigField("String", "FCM_APPLICATION_ID", buildConfigString(configuredFirebaseApplicationId))
+        buildConfigField("String", "FCM_API_KEY", buildConfigString(configuredFirebaseApiKey))
+        buildConfigField("String", "FCM_SENDER_ID", buildConfigString(configuredFirebaseSenderId))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -134,6 +160,9 @@ android {
 
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.02.00"))
+    implementation(platform("com.google.firebase:firebase-bom:35.0.2"))
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.1")
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
