@@ -10,6 +10,7 @@ import PremiumPagination from '../../components/PremiumPagination';
 import './textbooks.css';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type LearningDocument = {
   document_id: number;
