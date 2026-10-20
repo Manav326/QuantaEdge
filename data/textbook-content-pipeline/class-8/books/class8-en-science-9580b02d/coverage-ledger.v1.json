@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1177,
-    "successful_visual_analyses": 1154,
-    "missing_visual_analyses": 1114,
+    "raw_analysis_result_rows": 1178,
+    "successful_visual_analyses": 1155,
+    "missing_visual_analyses": 1113,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1137,
+    "unresolved_count": 1136,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44104,9 +44104,23 @@
       "asset_path": "assets/4cd9cbe9c50cf7f63e3f5ad22d28eaaf9ecc4f206e282159e43c00d536e582c5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful bird with wings spread out.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bird",
+          "wings",
+          "colorful",
+          "spread out"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "No specific text or formula is present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

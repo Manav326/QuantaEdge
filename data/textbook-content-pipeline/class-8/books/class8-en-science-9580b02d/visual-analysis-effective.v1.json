@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e44d4ff6b36871f4486f4c2a0b29078832fe5c34efc1f3b299804069a4fc7ff6",
+  "raw_analysis_sha256": "71ffeba3ceb618d9d864bf255c62ef868a4f36ade4d0cf424b86b68dc0a4c109",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:41:21Z",
+      "checkpointed_at": "2026-10-20T17:45:33Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:42:06Z",
+      "checkpointed_at": "2026-10-20T17:46:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:42:35Z",
+      "checkpointed_at": "2026-10-20T17:46:48Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:43:24Z",
+      "checkpointed_at": "2026-10-20T17:47:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56586,6 +56586,56 @@
         "context_relation": "The image is related to the educational content about forces and interactions.",
         "limitations": [
           "The image does not provide specific information about the educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "84e979b158c4ea5b80f19e20",
+      "asset_sha256": "4cd9cbe9c50cf7f63e3f5ad22d28eaaf9ecc4f206e282159e43c00d536e582c5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/4cd9cbe9c50cf7f63e3f5ad22d28eaaf9ecc4f206e282159e43c00d536e582c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful bird with wings spread out.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bird",
+          "wings",
+          "colorful",
+          "spread out"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "No specific text or formula is present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:48:42Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful bird with wings spread out.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bird",
+          "wings",
+          "colorful",
+          "spread out"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "No specific text or formula is present in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
