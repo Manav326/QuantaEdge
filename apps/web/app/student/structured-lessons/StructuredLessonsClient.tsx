@@ -87,11 +87,17 @@ export default function StructuredLessonsClient() {
     <div className="qe-course-page-actions"><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId} onCourseChange={value => void changeCourse(value)} subjectCode={subjectCode} onSubjectChange={changeSubject} loading={loadingCourses} language={locale} courseLabel={locale === 'english' ? 'Course' : 'कोर्स'} subjectLabel={locale === 'english' ? 'Subject' : 'विषय'} allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} /><button type="button" className="qe-icon-action" onClick={() => void loadCatalogue()} disabled={busy} aria-label={locale === 'english' ? 'Reload lessons' : 'पाठ फिर से लोड करें'} title={locale === 'english' ? 'Reload lessons' : 'पाठ फिर से लोड करें'}><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 17.2 6L20 12M4 12l2.8 6A7 7 0 0 0 18.4 15"/></svg></button></div></header>
     {courseError && !loadingCourses && <p role="alert" className="error-message">{courseError}</p>}{error && <p role="alert" className="error-message">{error}</p>}
     {busy ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
-      items.length === 0 ? <section className="auth-card" role="status">
-        <h2>{translateUi(locale, 'legacy.web.no.approved.structured.lessons.are.ava.a3717bf5')}</h2>
-        <p>{translateUi(locale, 'legacy.web.lessons.appear.here.only.after.content.88a83834')}</p>
-        <Link href={'/student/courses' + (courseId !== null ? '?focus=' + encodeURIComponent(String(courseId)) : '')} className="button button-dark">{locale === 'english' ? 'Review your course' : 'अपना कोर्स देखें'}</Link>
-      </section> :
+      (error || courseError) ? null :
+      items.length === 0 ? <StudentEmptyState
+        icon="learn"
+        title={<UiText message="legacy.web.no.approved.structured.lessons.are.ava.a3717bf5" />}
+        message={<UiText message="legacy.web.lessons.appear.here.only.after.content.88a83834" />}
+        primaryActionHref={'/student/courses' + (courseId !== null ? '?focus=' + encodeURIComponent(String(courseId)) : '')}
+        primaryActionLabel={<UiText message="web.navigation.student.allCourses" />}
+        onRetry={() => void loadCatalogue()}
+        retryLabel={<UiText message="legacy.web.refresh.e9337860" />}
+        retryDisabled={busy}
+      /> :
       <div className="task-list">{items.map(item => <article className="task-card" key={item.artifactId}>
         <div><span className="qe-course-subject-context">{activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')} · {(activeCourse?.subjects || []).find(subject => String(subject.subject_code || subject.code || '') === item.subjectCode)?.subject_name || item.subjectCode}</span>
           <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
