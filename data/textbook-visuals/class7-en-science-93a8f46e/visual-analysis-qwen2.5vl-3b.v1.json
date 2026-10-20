@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1811,
+    "assets_selected": 1812,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1807,
-    "assets_remaining": 5681,
-    "assets_completion_percent": 24.1,
-    "assets_failed": 57,
-    "assets_skipped_from_checkpoint": 1806,
+    "assets_analyzed": 1810,
+    "assets_remaining": 5678,
+    "assets_completion_percent": 24.2,
+    "assets_failed": 59,
+    "assets_skipped_from_checkpoint": 1807,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -68176,6 +68176,164 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338690203",
       "checkpointed_at": "2026-10-20T02:29:47Z"
+    },
+    {
+      "asset_id": "893a36b78a3e024c128799bc",
+      "asset_sha256": "7fc6fa62ed1a6cfca4af9fb499d1d0c02ea3e4fa0d96663574676644d54fbeca",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/7fc6fa62ed1a6cfca4af9fb499d1d0c02ea3e4fa0d96663574676644d54fbeca.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pattern of various metal items, including a crescent moon, a faucet, and a pumpkin.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "C",
+          "faucet",
+          "pumpkin",
+          "tawas"
+        ],
+        "concepts": [
+          "metal items",
+          "daily use",
+          "craftspersons",
+          "metalwork"
+        ],
+        "context_relation": "The image is related to the topic of metals and non-metals, specifically focusing on metal items and their uses.",
+        "limitations": [
+          "The image does not provide specific details about the metal items or their uses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T02:31:36Z"
+    },
+    {
+      "asset_id": "ed2a1d11a825dd857bc71f25",
+      "asset_sha256": "6620b2fe2834ac6cad1f6aa2fb7bf914ffa1cb8c8fcdba35a81305866a550ce9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/6620b2fe2834ac6cad1f6aa2fb7bf914ffa1cb8c8fcdba35a81305866a550ce9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the parts of a metal pan, including the handle, lid, and base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan.",
+          "Their school has assigned them a project to learn about craftspersons who work with metals.",
+          "They decide to visit the local ironsmiths who practise this craft.",
+          "Yashwant and Anandi request their grandfather to accompany them.",
+          "They are curious to learn how these ironsmiths make different items of daily use.",
+          "They interact with an elderly craftsperson, Sudarshan uncle.",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas)."
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image is a visual representation of the items made by the ironsmiths.",
+        "limitations": [
+          "The image does not show the entire process of making the items.",
+          "The image does not show the materials used in making the items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T02:33:34Z"
+    },
+    {
+      "asset_id": "2addd6b5c33bf57e2377d7cf",
+      "asset_sha256": "c38b678f96255252c547217fd160b3f0cc9d61227e0283238c3e5b24509c9a2e",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c38b678f96255252c547217fd160b3f0cc9d61227e0283238c3e5b24509c9a2e.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d1950327264d1f4c61ea9a5e",
+      "asset_sha256": "423dedc596ca2725b6bdc7d446453ef8aa53f429e9d1e6b958ab3d7e722b1419",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/423dedc596ca2725b6bdc7d446453ef8aa53f429e9d1e6b958ab3d7e722b1419.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ccc6b21ca2127dddbfc432f4",
+      "asset_sha256": "bb8b2d78cb76b769f3704e2ff04129093907a7e9850f8c4cad2bcfacdfa2c381",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/bb8b2d78cb76b769f3704e2ff04129093907a7e9850f8c4cad2bcfacdfa2c381.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different items made by an iron smith.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan.",
+          "Their school has assigned them a project to learn about craftspersons who work with metals.",
+          "They decide to visit the local ironsmiths who practise this craft.",
+          "Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1).",
+          "They are curious to learn how these ironsmiths make different items of daily use.",
+          "They interact with an elderly craftsperson, Sudarshan uncle.",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas)."
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image shows the items made by the ironsmiths, which are related to the project Yashwant and Anandi are doing.",
+        "limitations": [
+          "The image does not show the process of making the items.",
+          "The image does not show the materials used in making the items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T02:41:51Z"
     }
   ]
 }
