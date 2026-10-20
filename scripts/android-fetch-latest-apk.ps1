@@ -219,16 +219,7 @@ try {
         Remove-Item -LiteralPath $stagedApk -Force -ErrorAction SilentlyContinue
         throw "The downloaded APK reported an invalid SHA-1 fingerprint: $apkSha1Display. The previously saved APK was not changed."
     }
-    $sha256Match = [regex]::Match($signerText, '(?im)Signer\s+#1\s+certificate\s+SHA-256\s+digest:[ \t]*([0-9a-f:]+)')
-    $apkCertSha256 = if ($sha256Match.Success) {
-        ($sha256Match.Groups[1].Value -replace '[^0-9a-fA-F]', '').ToUpperInvariant()
-    } else { "" }
-
-    Write-Status ("APK signing certificate SHA-1 for Android OAuth (copy this value): {0}" -f $apkSha1Display) "Green"
-    Write-Status ("APK signing certificate SHA-1 normalized: {0}" -f $apkSha1) "Green"
-    if ($apkCertSha256) {
-        Write-Status ("APK signing certificate SHA-256: {0}" -f $apkCertSha256) "Green"
-    }
+    Write-Status ("Android signing certificate SHA-1 (fixed OAuth fingerprint): {0}" -f $apkSha1Display) "Green"
 
     $metadata = [ordered]@{
         repository = $Repository
@@ -241,9 +232,7 @@ try {
         runCreatedAt = [string]$sourceRun.createdAt
         downloadedAtUtc = [DateTime]::UtcNow.ToString("o")
         sizeBytes = [long]$apkInfo.Length
-        signingCertificateSha1 = $apkSha1
-        signingCertificateSha1ColonSeparated = $apkSha1Display
-        signingCertificateSha256 = $apkCertSha256
+        signingCertificateSha1 = $apkSha1Display
         sha256 = $apkHash
     }
 
@@ -257,7 +246,7 @@ try {
     Write-Status ("APK source branch: {0}" -f $sourceRun.headBranch) "Green"
     Write-Status ("APK source commit: {0}" -f $sourceRun.headSha) "Green"
     Write-Status ("Actions run: {0}; created: {1}; run result: {2}" -f $sourceRun.databaseId, $sourceRun.createdAt, $sourceRun.conclusion) "Green"
-    Write-Status ("File size: {0:N2} MB; file SHA-256: {1}" -f ($apkInfo.Length / 1MB), $apkHash) "Green"
+    Write-Status ("File size: {0:N2} MB" -f ($apkInfo.Length / 1MB))
     Write-Status ("Signing certificate SHA-1 (Google Cloud Android OAuth): {0}" -f $apkSha1Display) "Green"
 
     Write-Status "Checking connected ADB devices (USB or wireless debugging)..." "Cyan"
