@@ -35,3 +35,12 @@ These counts describe the recorded tracker state, not a claim that full parity h
 - Implementation and detailed QA plan: `docs/plans/web-android-ui-parity-implementation.md`
 - Branch: `main`
 
+## 2026-10-20 — No-enrolment dashboard and learning states
+
+- **Implementation recorded on `main`:** First-time student login remains on the Dashboard instead of being routed directly to Marketplace.
+- The Dashboard now presents a concise, localized enrolment message and an explicit **Explore Marketplace** action; navigation occurs only when that action is selected.
+- Learn, Practice, Progress and Books render localized empty states when the authoritative course request completes successfully with no enrolled/paused course. Course/subject filters are omitted in this state.
+- API/loading failures remain errors/loading states; they are not treated as an empty enrolment catalogue. When a course is enrolled, the existing course-scoped content and filters remain in place.
+- Web messages use the English/Hinglish catalogs; Android messages use the selected app language and Material theme semantic colors.
+- Added source-contract assertions in `apps/web/scripts/check-student-navigation.mjs` for the cross-platform empty states. Main application changes include `f482a00e2749512340fa6e23be10889a4e33a160`; contract coverage is recorded in `41677758e1147873d8be034a1bb7bc42725b0746`.
+- **Verification status:** Implementation is recorded on `main`; automated build/contract results and real-account end-to-end QA are pending. This is not marked as end-to-end passed.
