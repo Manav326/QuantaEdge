@@ -223,6 +223,7 @@ public class LearningMetricsService {
   }
 
   /** Course-scoped activity totals; old generic sessions cannot be safely attributed to a course. */
+  /** Course-scoped activity totals. Ambiguous legacy activity remains unassigned, not guessed. */
   Map<String,Object> sessionStatsFor(long studentId, Long institutionId, Long courseId) {
     if (courseId == null || courseId < 1L) {
       return sessionStatsForUnscoped(studentId, institutionId);
@@ -231,117 +232,43 @@ public class LearningMetricsService {
       select
         (
           (select count(*) from student_practice_session ps
-           where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
-             and ps.created_at>=now()-interval '30 days'
-             and exists (
-               select 1
-               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
-               join lesson l on l.id=case
-                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
-                 else null end
-               join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
-                 and ch.content_status='PUBLISHED'
-               join curriculum_subject s on s.id=ch.subject_id and s.active=true
-               join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-                 and mapped.class_id=s.class_id
-               join curriculum_program selected_course on selected_course.id=mapped.program_id
-                 and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-               where s.program_id=selected_course.id
-                 or (s.program_id is null and selected_course.class_id=s.class_id)
-             ))
+           where ps.student_id=? __TENANT_PS__ and ps.course_id=? and ps.status='COMPLETED'
+             and ps.created_at>=now()-interval '30 days')
           +(select count(*) from student_diagnostic_attempt da
-            where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
-              and da.started_at>=now()-interval '30 days'
-              and exists (
-                select 1 from student_diagnostic_attempt_question picked
-                join lesson l on l.id=picked.lesson_id
-                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
-                  and ch.content_status='PUBLISHED'
-                join curriculum_subject s on s.id=ch.subject_id and s.active=true
-                join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-                  and mapped.class_id=s.class_id
-                join curriculum_program selected_course on selected_course.id=mapped.program_id
-                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-                where picked.diagnostic_attempt_id=da.id
-                  and (s.program_id=selected_course.id
-                    or (s.program_id is null and selected_course.class_id=s.class_id))
-              ))
+            where da.student_id=? __TENANT_DA__ and da.course_id=? and da.status='SUBMITTED'
+              and da.started_at>=now()-interval '30 days')
           +(select count(*) from student_assessment_attempt att
             join assessment a on a.id=att.assessment_id
-            join curriculum_subject s on s.id=a.subject_id and s.active=true
-            join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-              and mapped.class_id=s.class_id
-            join curriculum_program selected_course on selected_course.id=mapped.program_id
-              and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-            where att.student_id=? __TENANT_ATT__
+            where att.student_id=? __TENANT_ATT__ and a.course_id=?
               and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
-              and att.started_at>=now()-interval '30 days'
-              and (s.program_id=selected_course.id
-                or (s.program_id is null and selected_course.class_id=s.class_id))
-          )
+              and att.started_at>=now()-interval '30 days')
         ) as sessions_30d,
         (
-          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
+          (select coalesce(sum(least(240,greatest(0,
+             ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
            from student_practice_session ps
-           where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
-             and ps.completed_at is not null and ps.created_at>=now()-interval '30 days'
-             and exists (
-               select 1
-               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
-               join lesson l on l.id=case
-                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
-                 else null end
-               join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
-                 and ch.content_status='PUBLISHED'
-               join curriculum_subject s on s.id=ch.subject_id and s.active=true
-               join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-                 and mapped.class_id=s.class_id
-               join curriculum_program selected_course on selected_course.id=mapped.program_id
-                 and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-               where s.program_id=selected_course.id
-                 or (s.program_id is null and selected_course.class_id=s.class_id)
-             ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
+           where ps.student_id=? __TENANT_PS__ and ps.course_id=? and ps.status='COMPLETED'
+             and ps.completed_at is not null and ps.created_at>=now()-interval '30 days')
+          +(select coalesce(sum(least(240,greatest(0,
+             ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
             from student_diagnostic_attempt da
-            where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
-              and da.submitted_at is not null and da.started_at>=now()-interval '30 days'
-              and exists (
-                select 1 from student_diagnostic_attempt_question picked
-                join lesson l on l.id=picked.lesson_id
-                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
-                  and ch.content_status='PUBLISHED'
-                join curriculum_subject s on s.id=ch.subject_id and s.active=true
-                join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-                  and mapped.class_id=s.class_id
-                join curriculum_program selected_course on selected_course.id=mapped.program_id
-                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-                where picked.diagnostic_attempt_id=da.id
-                  and (s.program_id=selected_course.id
-                    or (s.program_id is null and selected_course.class_id=s.class_id))
-              ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
+            where da.student_id=? __TENANT_DA__ and da.course_id=? and da.status='SUBMITTED'
+              and da.submitted_at is not null and da.started_at>=now()-interval '30 days')
+          +(select coalesce(sum(least(240,greatest(0,
+             ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
             from student_assessment_attempt att
             join assessment a on a.id=att.assessment_id
-            join curriculum_subject s on s.id=a.subject_id and s.active=true
-            join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
-              and mapped.class_id=s.class_id
-            join curriculum_program selected_course on selected_course.id=mapped.program_id
-              and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-            where att.student_id=? __TENANT_ATT__
+            where att.student_id=? __TENANT_ATT__ and a.course_id=?
               and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
-              and att.submitted_at is not null and att.started_at>=now()-interval '30 days'
-              and (s.program_id=selected_course.id
-                or (s.program_id is null and selected_course.class_id=s.class_id))
-          )
+              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')
         ) as minutes_30d
       """;
     Object[] scopedArgs = new Object[]{
-        studentId, courseId, studentId, courseId, courseId, studentId,
-        studentId, courseId, studentId, courseId, courseId, studentId
+        studentId,courseId, studentId,courseId, studentId,courseId,
+        studentId,courseId, studentId,courseId, studentId,courseId
     };
     return jdbc.queryForMap(tenantSql(courseSql, institutionId), tenantArgs(institutionId, scopedArgs));
   }
-
   private Map<String,Object> sessionStatsForUnscoped(long studentId, Long institutionId) {
     String sql = """
       select
