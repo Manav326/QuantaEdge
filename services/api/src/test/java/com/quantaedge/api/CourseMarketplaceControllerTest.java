@@ -1,5 +1,8 @@
 package com.quantaedge.api;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -45,6 +48,52 @@ class CourseMarketplaceControllerTest {
     order.put("provider_order_id", "order_Abc123");
     order.put("currency", "USD");
     assertFalse(CourseMarketplaceController.isReusablePendingOrder(order));
+  }
+
+  @Test
+  void capturedPaymentMustMatchPaymentIdOrderAmountAndCurrency() throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode payment = mapper.readTree("""
+        {
+          "id": "pay_123",
+          "order_id": "order_123",
+          "amount": 100000,
+          "currency": "INR",
+          "status": "captured"
+        }
+        """);
+
+    assertTrue(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_123", "order_123", 100000, "INR"));
+    assertFalse(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_other", "order_123", 100000, "INR"));
+    assertFalse(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_123", "order_other", 100000, "INR"));
+    assertFalse(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_123", "order_123", 99999, "INR"));
+    assertFalse(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_123", "order_123", 100000, "USD"));
+  }
+
+  @Test
+  void authorisedPaymentMustBeBoundToExpectedOrderBeforeCapture() throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode payment = mapper.readTree("""
+        {
+          "id": "pay_456",
+          "order_id": "order_456",
+          "amount": 100000,
+          "currency": "INR",
+          "status": "authorized"
+        }
+        """);
+
+    assertTrue(CourseMarketplaceController.isPaymentForExactOrder(
+        payment, "pay_456", "order_456", 100000, "INR"));
+    assertFalse(CourseMarketplaceController.isCapturedPaymentForExactOrder(
+        payment, "pay_456", "order_456", 100000, "INR"));
+    assertFalse(CourseMarketplaceController.isPaymentForExactOrder(
+        payment, "pay_456", "order_tampered", 100000, "INR"));
   }
 
   @Test
