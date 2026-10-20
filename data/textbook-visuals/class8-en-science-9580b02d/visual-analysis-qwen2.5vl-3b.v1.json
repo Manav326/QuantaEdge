@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1065,
+    "assets_selected": 1067,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1062,
-    "assets_remaining": 1229,
+    "assets_analyzed": 1063,
+    "assets_remaining": 1228,
     "assets_completion_percent": 46.4,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1060,
+    "assets_skipped_from_checkpoint": 1062,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:15:50Z"
+      "checkpointed_at": "2026-10-20T05:17:43Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:16:24Z"
+      "checkpointed_at": "2026-10-20T05:18:16Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:16:46Z"
+      "checkpointed_at": "2026-10-20T05:18:38Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34366,6 +34366,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:16:59Z"
+    },
+    {
+      "asset_id": "9c000d9c87aaab53a1112cac",
+      "asset_sha256": "1c9b9c97329def0675dea691eaa460055663fe0e9775baeeb546db7a360fb20a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "page-0073.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(Do not hold the nichrome wire).",
+          "Safety first",
+          "What difference do you feel?",
+          "Do not touch the wire for an extended period to avoid any injuries.",
+          "Repeat the last two steps to confirm the observation.",
+          "You may have observed that nichrome wire feels warm when current is passed through it.",
+          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nichrome wire, for example, offers higher resistance compared to a copper wire of the same ",
+          "This activity should be carried out strictly under the supervision of a teacher.",
+          "Repeat Activity 4.5 with a battery of 2 cells. What do you notice? For the same duration, does the wire heat up more with one cell or two cells?",
+          "The amount of heat generated is more in the experiment with 2 cells. This is due to the fact that the heat generated depends on the magnitude of the electric current. The heat generated in a wire depends on the material, thickness, length of the wire, and the duration for which the current flows.",
+          "In Grade 7, we have learnt that an incandescent lamp glows because its filament is heated by an electric current. Many household appliances, such as electric room heaters, electric stoves, electric kettles, electric irons, water heating immersion rods, and hair dryers (Fig. 4.6) work on the same pri"
+        ],
+        "concepts": [
+          "Electric current",
+          "Resistance",
+          "Heat generation",
+          "Nichrome wire",
+          "Incandescent lamp",
+          "Electric current in household appliances"
+        ],
+        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "limitations": [
+          "The page does not provide specific instructions for the activity, only a general description of what to observe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:20:32Z"
+    },
+    {
+      "asset_id": "7c9ef269c86e97f96897e031",
+      "asset_sha256": "9bc740d72c54fffe66e264ccf9cefd0cfd17301ab3fcbabcbd39078b974f98e1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/9bc740d72c54fffe66e264ccf9cefd0cfd17301ab3fcbabcbd39078b974f98e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a green shirt, holding a phone to their ear with one hand and pointing upwards with the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:21:08Z"
     }
   ]
 }
