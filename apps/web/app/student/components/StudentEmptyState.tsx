@@ -41,6 +41,8 @@ function EmptyIcon({ icon }: { icon: StudentEmptyStateIcon }) {
       return <><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16.5 9" /></>;
     case 'diagnostic':
       return <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /><path d="M8 2.8 6 5M16 2.8 18 5" /></>;
+    default:
+      return null;
   }
 }
 
