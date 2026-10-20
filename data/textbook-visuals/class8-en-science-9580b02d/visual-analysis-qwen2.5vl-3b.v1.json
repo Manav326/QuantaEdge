@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1071,
+    "assets_selected": 1072,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1067,
-    "assets_remaining": 1224,
+    "assets_analyzed": 1068,
+    "assets_remaining": 1223,
     "assets_completion_percent": 46.6,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1066,
+    "assets_skipped_from_checkpoint": 1067,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:30:30Z"
+      "checkpointed_at": "2026-10-20T05:33:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:31:03Z"
+      "checkpointed_at": "2026-10-20T05:33:55Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:31:25Z"
+      "checkpointed_at": "2026-10-20T05:34:17Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:32:02Z"
+      "checkpointed_at": "2026-10-20T05:34:53Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34574,6 +34574,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:32:39Z"
+    },
+    {
+      "asset_id": "d2cb04a5a07c4fcb150c174f",
+      "asset_sha256": "74d8809d666ec53610573c326fef2f7d34e638cc7ef3312065d85d79ca1c0d12",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/74d8809d666ec53610573c326fef2f7d34e638cc7ef3312065d85d79ca1c0d12.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black hair dryer with a cord and a nozzle.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electric hair dryer",
+          "hair care",
+          "electric appliances"
+        ],
+        "context_relation": "The image is a visual representation of an electric hair dryer, which is part of the educational content about simple household electric heating appliances.",
+        "limitations": [
+          "The image does not provide specific details about the hair dryer's features or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:35:29Z"
     }
   ]
 }
