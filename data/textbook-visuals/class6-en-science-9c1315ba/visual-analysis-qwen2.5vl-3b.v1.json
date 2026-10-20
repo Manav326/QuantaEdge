@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1295,
+    "assets_selected": 1296,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1291,
-    "assets_remaining": 787,
-    "assets_completion_percent": 62.1,
+    "assets_analyzed": 1292,
+    "assets_remaining": 786,
+    "assets_completion_percent": 62.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1290,
+    "assets_skipped_from_checkpoint": 1291,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:33:32Z"
+      "checkpointed_at": "2026-10-20T21:40:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:34:25Z"
+      "checkpointed_at": "2026-10-20T21:41:24Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:35:34Z"
+      "checkpointed_at": "2026-10-20T21:42:34Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:36:16Z"
+      "checkpointed_at": "2026-10-20T21:43:16Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43222,6 +43222,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:39:29Z"
+    },
+    {
+      "asset_id": "39629bb5f5eb4f6ae30ec553",
+      "asset_sha256": "10c6ac947fa88be9ce375e1d2a3f0419fa9d85b27ffcf5329a8ea86ad69c6002",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 129,
+      "asset_path": "assets/10c6ac947fa88be9ce375e1d2a3f0419fa9d85b27ffcf5329a8ea86ad69c6002.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "639e0eeefb7ad11a739f4b551820b316d64b89d7df947c37078501bcc668fadc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass filled with water, with a small amount of green substance floating on the surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "dissolution",
+          "soluble",
+          "disappear in water"
+        ],
+        "context_relation": "The image is related to the concept of dissolution and solubility in water.",
+        "limitations": [
+          "The image does not show the complete dissolution of a material in water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:44:23Z"
     }
   ]
 }

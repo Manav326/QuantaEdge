@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1318,
-    "successful_visual_analyses": 1295,
-    "missing_visual_analyses": 760,
+    "raw_analysis_result_rows": 1319,
+    "successful_visual_analyses": 1296,
+    "missing_visual_analyses": 759,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 783,
+    "unresolved_count": 782,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49773,9 +49773,22 @@
       "asset_path": "assets/10c6ac947fa88be9ce375e1d2a3f0419fa9d85b27ffcf5329a8ea86ad69c6002.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass filled with water, with a small amount of green substance floating on the surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "dissolution",
+          "soluble",
+          "disappear in water"
+        ],
+        "context_relation": "The image is related to the concept of dissolution and solubility in water.",
+        "limitations": [
+          "The image does not show the complete dissolution of a material in water."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
