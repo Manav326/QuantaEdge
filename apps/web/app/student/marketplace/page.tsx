@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
+import { UiText } from '../../i18n/useUiTranslation';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
