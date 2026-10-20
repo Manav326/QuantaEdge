@@ -38,11 +38,13 @@ public class PracticeController {
 
   @GetMapping("/catalog")
   public List<Map<String,Object>> catalog(
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    ensureActiveEnrolledCourse(context.studentId(),institutionId,courseId);
     return jdbc.queryForList("""
       select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -51,28 +53,28 @@ public class PracticeController {
              count(distinct q.id) as question_count,
              coalesce(jsonb_agg(distinct q.question_type order by q.question_type),'[]'::jsonb)::text as question_types
       from student st
-      join curriculum_class c on c.active=true
-      join curriculum_subject s on s.class_id=c.id and s.active=true
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+        and spe.program_id=p.id and spe.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       join question q on q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
       where st.id=? and st.active=true
-        and (
-          (s.program_id is null and c.code=st.class_code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
-        )
-        and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=st.id and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
       group by ch.id,ch.code,ch.display_name,s.code,s.display_name,
                coalesce(nullif(btrim(q.topic),''),ch.display_name),
                coalesce(nullif(btrim(q.subtopic),''),'')
       order by s.display_name,coalesce(ch.teaching_order,ch.sort_order),
                ch.display_name,topic_name,subtopic_name
-      """,context.studentId(),institutionId,institutionId);
+      """,courseId,institutionId,context.studentId());
   }
 
   /**
