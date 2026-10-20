@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1269,
+    "assets_selected": 1270,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1265,
-    "assets_remaining": 813,
+    "assets_analyzed": 1266,
+    "assets_remaining": 812,
     "assets_completion_percent": 60.9,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1264,
+    "assets_skipped_from_checkpoint": 1265,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:21:59Z"
+      "checkpointed_at": "2026-10-20T19:28:30Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:22:52Z"
+      "checkpointed_at": "2026-10-20T19:29:23Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:24:02Z"
+      "checkpointed_at": "2026-10-20T19:30:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:24:45Z"
+      "checkpointed_at": "2026-10-20T19:31:14Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42204,6 +42204,54 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T12:36:12Z"
+    },
+    {
+      "asset_id": "ea4179fcf88ce9dcbca04dc2",
+      "asset_sha256": "e77f16c7067d2f198f3104558f2be3ec08144de6ecded260536247ecc9d46027",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "page-0123.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity involving different balls and their bounce heights.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.4: Let us explore",
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce.",
+          "Tennis ball",
+          "Cricket ball",
+          "Hand exercise ball",
+          "Fig. 6.3: Different types of balls used for various purposes",
+          "Table 6.2: Bouncing level of the balls",
+          "Ball",
+          "Tennis ball",
+          "Cricket ball",
+          "Hand exercise ball",
+          "Any other"
+        ],
+        "concepts": [
+          "Bouncing balls",
+          "Materials of balls",
+          "Comparing bounce heights"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T19:34:04Z"
     }
   ]
 }
