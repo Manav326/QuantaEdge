@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1278,
+    "assets_selected": 1279,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1274,
-    "assets_remaining": 804,
-    "assets_completion_percent": 61.3,
+    "assets_analyzed": 1275,
+    "assets_remaining": 803,
+    "assets_completion_percent": 61.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1273,
+    "assets_skipped_from_checkpoint": 1274,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:08:21Z"
+      "checkpointed_at": "2026-10-20T20:15:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:09:14Z"
+      "checkpointed_at": "2026-10-20T20:16:28Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:10:24Z"
+      "checkpointed_at": "2026-10-20T20:17:40Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:11:06Z"
+      "checkpointed_at": "2026-10-20T20:18:23Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42544,6 +42544,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T20:14:29Z"
+    },
+    {
+      "asset_id": "0f885bee9f31d53d4c82562a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 126,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e6560a69b60e64613f0cfebd11a7d39a81619c19c912291707db01dd038403b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing hard and soft objects and their materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials they are made up of",
+          "Object           Hard/Soft          Material(s)",
+          "Brick                 Hard           Baked clay",
+          "Water bottle",
+          "Pillow",
+          "Tumbler",
+          "Table",
+          "Sweater",
+          "Any other",
+          "Compare your observations with the observations of your friends and discuss.",
+          "You have learnt that materials can have different properties."
+        ],
+        "concepts": [
+          "Hardness",
+          "Softness",
+          "Materials",
+          "Observations",
+          "Discussion"
+        ],
+        "context_relation": "The table is a visual representation of the information provided in the text.",
+        "limitations": [
+          "The table does not include specific examples or descriptions of the materials used for each object.",
+          "The text suggests that the table is meant to be discussed with friends, but does not provide specific questions or prompts for discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:18:50Z"
     }
   ]
 }

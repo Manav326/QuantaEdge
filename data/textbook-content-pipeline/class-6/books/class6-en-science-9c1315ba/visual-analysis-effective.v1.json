@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "573ee37996b114b7c73ddafc0ecb04b194807193dd0db055710224b8bc665265",
+  "raw_analysis_sha256": "8d08260bc1cd12e088ea8e30275556034f15a2e704768312e61df027cf57741d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:08:21Z",
+      "checkpointed_at": "2026-10-20T20:15:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:09:14Z",
+      "checkpointed_at": "2026-10-20T20:16:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:10:24Z",
+      "checkpointed_at": "2026-10-20T20:17:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:11:06Z",
+      "checkpointed_at": "2026-10-20T20:18:23Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64284,6 +64284,84 @@
         "limitations": [
           "The page does not provide specific examples or measurements for the properties discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f885bee9f31d53d4c82562a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 126,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e6560a69b60e64613f0cfebd11a7d39a81619c19c912291707db01dd038403b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing hard and soft objects and their materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials they are made up of",
+          "Object           Hard/Soft          Material(s)",
+          "Brick                 Hard           Baked clay",
+          "Water bottle",
+          "Pillow",
+          "Tumbler",
+          "Table",
+          "Sweater",
+          "Any other",
+          "Compare your observations with the observations of your friends and discuss.",
+          "You have learnt that materials can have different properties."
+        ],
+        "concepts": [
+          "Hardness",
+          "Softness",
+          "Materials",
+          "Observations",
+          "Discussion"
+        ],
+        "context_relation": "The table is a visual representation of the information provided in the text.",
+        "limitations": [
+          "The table does not include specific examples or descriptions of the materials used for each object.",
+          "The text suggests that the table is meant to be discussed with friends, but does not provide specific questions or prompts for discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:18:50Z",
+      "effective_analysis": {
+        "visual_summary": "A table comparing hard and soft objects and their materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials they are made up of",
+          "Object           Hard/Soft          Material(s)",
+          "Brick                 Hard           Baked clay",
+          "Water bottle",
+          "Pillow",
+          "Tumbler",
+          "Table",
+          "Sweater",
+          "Any other",
+          "Compare your observations with the observations of your friends and discuss.",
+          "You have learnt that materials can have different properties."
+        ],
+        "concepts": [
+          "Hardness",
+          "Softness",
+          "Materials",
+          "Observations",
+          "Discussion"
+        ],
+        "context_relation": "The table is a visual representation of the information provided in the text.",
+        "limitations": [
+          "The table does not include specific examples or descriptions of the materials used for each object.",
+          "The text suggests that the table is meant to be discussed with friends, but does not provide specific questions or prompts for discussion."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
