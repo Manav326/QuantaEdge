@@ -1435,7 +1435,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L) {
+    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L, discountCode: String = "") {
         if (pendingParentPaymentVerification != null) {
             error = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1456,6 +1456,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             try {
                 val body = JSONObject().put("recipientType", recipientType)
                 if (recipientType == "CHILD") body.put("studentId", studentId)
+                if (discountCode.isNotBlank()) body.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
                     "/api/v1/marketplace/family/courses/" + courseId + "/orders",
                     body,
@@ -1540,7 +1541,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseMarketplaceCourse(courseId: Long) {
+    fun purchaseMarketplaceCourse(courseId: Long, discountCode: String = "") {
         if (pendingStudentPaymentVerification != null) {
             status = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1555,9 +1556,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         marketplaceBusyCourseId = courseId
         runTask {
             try {
+                val checkoutBody = JSONObject()
+                if (discountCode.isNotBlank()) checkoutBody.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
                     "/api/v1/marketplace/courses/" + courseId + "/orders",
-                    JSONObject(),
+                    checkoutBody,
                     mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
                 )
                 val localOrderId = order.optLong("localOrderId", 0L)
@@ -4186,7 +4189,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         language = language,
                         busyCourseId = marketplaceBusyCourseId.takeIf { it > 0L },
                         busy = busy || marketplaceBusyCourseId > 0L,
-                        onBuy = ::purchaseMarketplaceCourse,
+                        onBuy = { courseId, code -> purchaseMarketplaceCourse(courseId, code) },
                         onJoinFree = ::joinFreeMarketplaceCourse,
                         onAskParent = ::requestParentCoursePurchase,
                         onRefresh = ::refreshMarketplace,
@@ -4241,7 +4244,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         error = error,
                         status = status,
                         onRefresh = ::refreshParentMarketplace,
-                        onBuy = ::purchaseFamilyMarketplaceCourse,
+                        onBuy = { courseId, recipientType, studentId, code -> purchaseFamilyMarketplaceCourse(courseId, recipientType, studentId, code) },
                         onAddFree = ::addFreeFamilyCourse,
                         onDismissRequest = ::dismissParentCourseRequest,
                         onTransfer = ::transferParentCourse,
