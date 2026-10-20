@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9cd376dc3783b42161ef85b7800f8e16f412adcc90f0f227b83aa6f97ffefa3f",
+  "raw_analysis_sha256": "07a841d9155fedaed6b53e0073821c90d9049190d02bd6857baee73fd8cc832f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T01:41:54Z",
+      "checkpointed_at": "2026-10-20T01:46:27Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T01:42:30Z",
+      "checkpointed_at": "2026-10-20T01:47:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T01:42:53Z",
+      "checkpointed_at": "2026-10-20T01:47:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -33058,21 +33058,77 @@
     {
       "asset_id": "d5b07d71464e9d052df1d76f",
       "asset_sha256": "b471ae001eb94b4e11ca883d949f8dfdec0a9c3bc8b1c64c54dc0de422807377",
-      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 29,
       "asset_path": "assets/b471ae001eb94b4e11ca883d949f8dfdec0a9c3bc8b1c64c54dc0de422807377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338692901",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A magnifying glass is held over an open book page, focusing on the text.",
+        "visual_type": "photo",
+        "visible_text": [
+          "It is important that antibiotics should be used as directed by a qualified healthcare professional. You must complete the full course of antibiotics, even if you start to feel better. Do not stop taking them early. Also, antibiotics do not work against viruses, so they are not effective against cold",
+          "In your childhood, you must have been given injections to protect yourself against several diseases. Can you prepare a list of these diseases? You may take help from your parents.",
+          "It is essential to protect all children against these diseases. Necessary vaccines are available in the near future. You might have seen them on TV and newspapers. A selection of children aged 2 to 5 years old is given to children.",
+          "A campaign against the eradication of the world's microorganisms is underway. Vaccines are made from microorganisms and other animal products.",
+          "Fertility (Fig. 2.7) are at the atmosphere. The atmosphere is made of nitrogen and other gases. These gases are essential for life.",
+          "These microbes are also important for the biological nitrogen fixation process."
+        ],
+        "concepts": [
+          "antibiotics",
+          "vaccines",
+          "microorganisms",
+          "virus",
+          "antibodies",
+          "microscope",
+          "vaccination",
+          "microbiology",
+          "biological nitrogen fixation"
+        ],
+        "context_relation": "The image shows a magnifying glass being used to read text in a book, which is related to the concepts of microscopy and the study of microorganisms.",
+        "limitations": [
+          "The image does not show the full page or the entire text, only a portion of it.",
+          "The text is partially obscured by the magnifying glass, making some words difficult to read."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T01:48:14Z",
+      "effective_analysis": {
+        "visual_summary": "A magnifying glass is held over an open book page, focusing on the text.",
+        "visual_type": "photo",
+        "visible_text": [
+          "It is important that antibiotics should be used as directed by a qualified healthcare professional. You must complete the full course of antibiotics, even if you start to feel better. Do not stop taking them early. Also, antibiotics do not work against viruses, so they are not effective against cold",
+          "In your childhood, you must have been given injections to protect yourself against several diseases. Can you prepare a list of these diseases? You may take help from your parents.",
+          "It is essential to protect all children against these diseases. Necessary vaccines are available in the near future. You might have seen them on TV and newspapers. A selection of children aged 2 to 5 years old is given to children.",
+          "A campaign against the eradication of the world's microorganisms is underway. Vaccines are made from microorganisms and other animal products.",
+          "Fertility (Fig. 2.7) are at the atmosphere. The atmosphere is made of nitrogen and other gases. These gases are essential for life.",
+          "These microbes are also important for the biological nitrogen fixation process."
+        ],
+        "concepts": [
+          "antibiotics",
+          "vaccines",
+          "microorganisms",
+          "virus",
+          "antibodies",
+          "microscope",
+          "vaccination",
+          "microbiology",
+          "biological nitrogen fixation"
+        ],
+        "context_relation": "The image shows a magnifying glass being used to read text in a book, which is related to the concepts of microscopy and the study of microorganisms.",
+        "limitations": [
+          "The image does not show the full page or the entire text, only a portion of it.",
+          "The text is partially obscured by the magnifying glass, making some words difficult to read."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -34516,9 +34572,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338692901",
+      "run_id": "39353199646",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
