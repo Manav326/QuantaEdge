@@ -858,7 +858,7 @@ public class CourseMarketplaceController {
     return value != null && value.matches("[A-Za-z0-9_-]{16,64}");
   }
 
-  private static boolean hasLockedFinancialSnapshots(Map<String,Object> order) {
+  static boolean hasLockedFinancialSnapshots(Map<String,Object> order) {
     if(order==null||order.get("tax_profile_id")==null||order.get("revenue_share_policy_id")==null) return false;
     String tax=String.valueOf(order.get("tax_calculation_snapshot_json"));
     String shares=String.valueOf(order.get("revenue_share_policy_snapshot_json"));

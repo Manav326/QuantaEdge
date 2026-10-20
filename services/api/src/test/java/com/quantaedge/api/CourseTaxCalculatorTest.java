@@ -7,6 +7,17 @@ import org.junit.jupiter.api.Test;
 
 class CourseTaxCalculatorTest {
   @Test
+  void canQuoteTaxBeforeAnyPaymentHasBeenCaptured() {
+    CourseTaxCalculator.Result quote = CourseTaxCalculator.quote(
+        11_800L, 0L, CourseTaxCalculator.Treatment.TAXABLE,
+        1_800, 0, true);
+
+    assertEquals(10_000L, quote.taxableValuePaise());
+    assertEquals(1_800L, quote.outputTaxPaise());
+    assertEquals(11_800L, quote.customerPayablePaise());
+  }
+
+  @Test
   void extractsTaxFromTaxInclusivePrice() {
     CourseTaxCalculator.Result result = CourseTaxCalculator.calculate(
         11_800L, 0L, CourseTaxCalculator.Treatment.TAXABLE,

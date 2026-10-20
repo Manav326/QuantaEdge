@@ -40,6 +40,26 @@ class CourseMarketplaceTenantScopeTest {
   }
 
   @Test
+  void onlyReusesPendingOrdersWithLockedTaxAndShareSnapshots() {
+    Map<String,Object> complete = new LinkedHashMap<>();
+    complete.put("tax_profile_id", 12L);
+    complete.put("revenue_share_policy_id", 7L);
+    complete.put("tax_calculation_snapshot_json", "{\"customerPayablePaise\":11800,\"taxProfileId\":12}");
+    complete.put("revenue_share_policy_snapshot_json", "{\"policyId\":7,\"recipients\":[]}");
+
+    assertTrue(CourseMarketplaceController.hasLockedFinancialSnapshots(complete));
+
+    complete.put("revenue_share_policy_snapshot_json", "{}");
+    org.junit.jupiter.api.Assertions.assertFalse(
+        CourseMarketplaceController.hasLockedFinancialSnapshots(complete));
+
+    complete.put("revenue_share_policy_snapshot_json", "{\"policyId\":7,\"recipients\":[]}");
+    complete.put("tax_profile_id", null);
+    org.junit.jupiter.api.Assertions.assertFalse(
+        CourseMarketplaceController.hasLockedFinancialSnapshots(complete));
+  }
+
+  @Test
   void marketplaceDiscoveryUsesOnlyPublishedOffersAssignedToExactTenant() {
     Map<String,Object> offer = new LinkedHashMap<>();
     offer.put("course_id", 91L);
