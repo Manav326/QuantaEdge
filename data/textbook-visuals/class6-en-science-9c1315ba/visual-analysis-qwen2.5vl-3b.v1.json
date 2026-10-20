@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1210,
+    "assets_selected": 1212,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1207,
-    "assets_remaining": 871,
-    "assets_completion_percent": 58.1,
+    "assets_analyzed": 1209,
+    "assets_remaining": 869,
+    "assets_completion_percent": 58.2,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1205,
+    "assets_skipped_from_checkpoint": 1207,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:17:32Z"
+      "checkpointed_at": "2026-10-20T04:22:00Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:18:34Z"
+      "checkpointed_at": "2026-10-20T04:22:59Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:19:26Z"
+      "checkpointed_at": "2026-10-20T04:23:52Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40090,6 +40090,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T04:20:46Z"
+    },
+    {
+      "asset_id": "621ecca847aba94a2cbd7b26",
+      "asset_sha256": "89c87ccf3d821ae2eceef65053a119af7ba6612254f19988de67c9ca16ce0ad8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "asset_path": "page-0112.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "cbad9675c0acf2a75c1e7c46b4942f58b8e43a865698fce561a758c14e3b3846",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity instructions for investigating oscillatory motion using a metal strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Take a thin metal strip of about 50 cm long.",
+          "Hold its one end pressed to a table. You may use a few books or a brick to hold it (Fig. 5.17).",
+          "Press the free end of the strip slightly and let it go.",
+          "Observe the motion of this end of the strip.",
+          "Does it move up and down? This is also an example of oscillatory motion.",
+          "Fig. 5.17: Oscillatory motion of a metal strip",
+          "If an object repeats its path after a fixed interval of time, its motion is said to be periodic. When an object is in circular motion, it moves along the circular path again and again. An object in oscillatory motion also repeats its motion while moving to and fro. Both circular and oscillatory moti"
+        ],
+        "concepts": [
+          "oscillatory motion",
+          "periodic motion",
+          "circular motion"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The instructions are for a specific activity, not a general concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:28:00Z"
+    },
+    {
+      "asset_id": "2a8daf1626a6f8b3d67e6079",
+      "asset_sha256": "6d7e63583d058ae131f16ebee8bcf443480944609f8cf63a24156cd5bdf1f7cf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/6d7e63583d058ae131f16ebee8bcf443480944609f8cf63a24156cd5bdf1f7cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dd50592391f4dded6552901d509d10248cd9876f76c35fd734ad1e3ee7719995",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children playing in a playground with various types of motion, including linear, circular, and oscillatory motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children’s park",
+          "Table 5.4: Types of Motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "context_relation": "The image illustrates the different types of motion observed in a children's park, as listed in Table 5.4.",
+        "limitations": [
+          "The image does not provide specific examples or descriptions of each type of motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:29:38Z"
     }
   ]
 }
