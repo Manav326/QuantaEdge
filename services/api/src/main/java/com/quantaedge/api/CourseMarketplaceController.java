@@ -676,13 +676,16 @@ public class CourseMarketplaceController {
           throw new IllegalStateException(
               "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
         }
-        int expired = jdbc.update("""
-            update course_payment_order set status='EXPIRED',updated_at=now()
-            where id=? and institution_id=? and status='PENDING'
-            """, ((Number) prior.get("id")).longValue(), institutionId);
-        if (expired != 1) {
-          throw new IllegalStateException("The previous checkout changed while being retried. Refresh and retry safely.");
+        // Keep the local order and its discount reservation alive while Razorpay still permits
+        // another payment attempt against that provider order. Expiring locally here would
+        // release a limited coupon slot even though an old checkout could still be paid.
+        String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
+        String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
+        if(!java.util.Objects.equals(previousCode,requestedCode)) {
+          throw new IllegalStateException(
+              "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
         }
+        return checkoutResponse(prior,courseId,title,institutionDisplayName);
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -837,7 +840,7 @@ public class CourseMarketplaceController {
 
   private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
     return jdbc.queryForList("""
-        select id,offer_price_paise,currency,provider_order_id,status
+        select id,offer_price_paise,currency,provider_order_id,status,discount_reference
         from course_payment_order
         where student_id=? and institution_id=? and course_id=?
           and purchaser_user_id is not distinct from ?
