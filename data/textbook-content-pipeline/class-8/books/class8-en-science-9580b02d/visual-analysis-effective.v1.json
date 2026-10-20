@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1eca0cfcf38d70f6f38ae741b8bed774c122ce7772062fe00b44bf47b4b7643e",
+  "raw_analysis_sha256": "f078e64e54836a301f55db294e033604d26012adf92340345a3ab89abcdffe8e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:21:41Z",
+      "checkpointed_at": "2026-10-20T04:23:50Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:22:16Z",
+      "checkpointed_at": "2026-10-20T04:24:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:22:39Z",
+      "checkpointed_at": "2026-10-20T04:24:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -49627,6 +49627,96 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f9ec5486db57c95dfdda631a",
+      "asset_sha256": "0e1c8e28e4a24eca198b3502368dd888b2fd990cbb5b25bf317ff2ae91e67baf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 68,
+      "asset_path": "page-0068.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a9f65368010430a62158ac802ec9a84804c0f50269da6aaad2f5dc70588db4a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the relationship between electric current and a compass needle.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "While watching the compass needle, move the switch to\n‘ON’ position to allow electric current to flow through the wire\n(Fig. 4.1b). What do you observe?",
+          "Now again while watching the compass needle, move the\nswitch to ‘OFF’ position. What do you observe this time?",
+          "Move the switch between ‘ON’ and ‘OFF’ positions a few more\n\ntimes. Carefully observe how the compass needle behaves\nthe each time.",
+          "You may have noticed that when the current flows, the compass\nneedle gets deflected from its original direction. When the current\nstops, the needle returns to its original direction.",
+          "As we have learnt earlier (in the chapter ‘Exploring Magnets’\nin Curiosity, Grade 6), the compass needle is a tiny magnet which\n\ndeflects when a magnet is brought near it and this magnetic effect\n\ncan act through any non-magnetic materials kept in between.\nBut why does the compass needle deflect whe",
+          "When electric current flows\nthrough a conductor (like a wire), it\nproduces a magnetic field around it.\nThis phenomenon is known as the\nmagnetic effect of electric current.\nThe magnetic field disappears when\nthe current stops flowing.",
+          "You have just now made the same discovery which\nwas made by the scientist Hans Christian Oersted\n(1777–1851) in 1820, that is, the discovery that\nelectricity and magnetism are linked. He was a\nprofessor at a university in Denmark. It is said that\nonce while giving a demonstration, he noticed that\nwh"
+        ],
+        "concepts": [
+          "magnetic field",
+          "electric current",
+          "compass needle",
+          "magnetic effect of electric current",
+          "Hans Christian Oersted"
+        ],
+        "context_relation": "explaining the relationship between electric current and a compass needle",
+        "limitations": [
+          "The text does not provide visual aids or diagrams to support the explanation.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:26:52Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the relationship between electric current and a compass needle.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "While watching the compass needle, move the switch to\n‘ON’ position to allow electric current to flow through the wire\n(Fig. 4.1b). What do you observe?",
+          "Now again while watching the compass needle, move the\nswitch to ‘OFF’ position. What do you observe this time?",
+          "Move the switch between ‘ON’ and ‘OFF’ positions a few more\n\ntimes. Carefully observe how the compass needle behaves\nthe each time.",
+          "You may have noticed that when the current flows, the compass\nneedle gets deflected from its original direction. When the current\nstops, the needle returns to its original direction.",
+          "As we have learnt earlier (in the chapter ‘Exploring Magnets’\nin Curiosity, Grade 6), the compass needle is a tiny magnet which\n\ndeflects when a magnet is brought near it and this magnetic effect\n\ncan act through any non-magnetic materials kept in between.\nBut why does the compass needle deflect whe",
+          "When electric current flows\nthrough a conductor (like a wire), it\nproduces a magnetic field around it.\nThis phenomenon is known as the\nmagnetic effect of electric current.\nThe magnetic field disappears when\nthe current stops flowing.",
+          "You have just now made the same discovery which\nwas made by the scientist Hans Christian Oersted\n(1777–1851) in 1820, that is, the discovery that\nelectricity and magnetism are linked. He was a\nprofessor at a university in Denmark. It is said that\nonce while giving a demonstration, he noticed that\nwh"
+        ],
+        "concepts": [
+          "magnetic field",
+          "electric current",
+          "compass needle",
+          "magnetic effect of electric current",
+          "Hans Christian Oersted"
+        ],
+        "context_relation": "explaining the relationship between electric current and a compass needle",
+        "limitations": [
+          "The text does not provide visual aids or diagrams to support the explanation.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e2b1867d601a9ad83b7f7e99",
+      "asset_sha256": "da73b8d06d118c3232a119a97895c4ed29c02d75b17bfc6b1b100ed38371e35b",
+      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/da73b8d06d118c3232a119a97895c4ed29c02d75b17bfc6b1b100ed38371e35b.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
