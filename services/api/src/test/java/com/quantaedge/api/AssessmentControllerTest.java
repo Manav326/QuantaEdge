@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -48,6 +49,13 @@ class AssessmentControllerTest {
   void setUp() {
     controller = new AssessmentController(
         jdbc, authorization, questionHistory, answerService, staffAudit, new ObjectMapper(), assessmentCatalog);
+    // The public learner attempt routes must supply and prove their selected course scope.
+    lenient().when(jdbc.queryForObject(
+        contains("select count(*) from curriculum_program p"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
+    lenient().when(jdbc.queryForObject(
+        contains("select count(*) from student_assessment_attempt att"), eq(Long.class), any(Object[].class)))
+        .thenReturn(1L);
   }
 
   @Test
@@ -167,7 +175,7 @@ class AssessmentControllerTest {
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 7L)));
 
     Map<String, Object> result = controller.saveAnswer(
-        5L, 25L, Map.of("answer", "My saved answer"), student, TEST_TENANT);
+        5L, 25L, 71L, Map.of("answer", "My saved answer"), student, TEST_TENANT);
 
     assertEquals(true, result.get("saved"));
     verify(jdbc).update(contains("update student_assessment_answer set response_payload"),
@@ -183,7 +191,7 @@ class AssessmentControllerTest {
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 8L)));
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.saveAnswer(5L, 25L, Map.of("answer", "intrusion"), student, TEST_TENANT));
+        () -> controller.saveAnswer(5L, 25L, 71L, Map.of("answer", "intrusion"), student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).update(contains("update student_assessment_answer set response_payload"),
@@ -266,7 +274,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), any(Object[].class)))
         .thenReturn(List.of(questionRow));
 
-    Map<String, Object> result = controller.studentAttempt(5L, student, TEST_TENANT);
+    Map<String, Object> result = controller.studentAttempt(5L, 71L, student, TEST_TENANT);
     @SuppressWarnings("unchecked")
     Map<String, Object> question = ((List<Map<String, Object>>) result.get("questions")).getFirst();
     @SuppressWarnings("unchecked")
@@ -328,7 +336,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), any(Object[].class)))
         .thenReturn(List.of(questionRow));
 
-    Map<String, Object> result = controller.studentAttempt(6L, student, TEST_TENANT);
+    Map<String, Object> result = controller.studentAttempt(6L, 71L, student, TEST_TENANT);
     @SuppressWarnings("unchecked")
     Map<String, Object> question = ((List<Map<String, Object>>) result.get("questions")).getFirst();
     @SuppressWarnings("unchecked")
