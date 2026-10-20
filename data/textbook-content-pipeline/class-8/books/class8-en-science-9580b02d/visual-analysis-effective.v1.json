@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ec1553dc8842db9a9299fdf5f0e7ff1202327ae603ba575829ac8f702042cb1",
+  "raw_analysis_sha256": "9eb49d8c3516317a08b1d7854c71611352e3f7d2bbb9c070cace71ac979c636e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:09:19Z",
+      "checkpointed_at": "2026-10-20T17:15:08Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:10:03Z",
+      "checkpointed_at": "2026-10-20T17:15:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:10:33Z",
+      "checkpointed_at": "2026-10-20T17:16:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:11:22Z",
+      "checkpointed_at": "2026-10-20T17:17:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56264,6 +56264,64 @@
         "context_relation": "The table is a continuation of the previous text about forces and their effects.",
         "limitations": [
           "The table is incomplete and only lists three actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ab9d03f90a7e37452e7501d5",
+      "asset_sha256": "116b532339f0440192b1b4ebef3fdea83a722d53444c3afb5c1ae8a93e19ee5c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/116b532339f0440192b1b4ebef3fdea83a722d53444c3afb5c1ae8a93e19ee5c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5ef6be77826ded0e4c0fb51889bbddecdd1cfb40c0b3d5099b6975b4cf5a4ffe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange dress, standing with her hands open and palms facing forward.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "moving",
+          "rest",
+          "application of force",
+          "effect on objects"
+        ],
+        "context_relation": "The image is related to the text discussing the effects of force on objects in everyday life.",
+        "limitations": [
+          "The image does not provide specific details about the force or the objects involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:18:23Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange dress, standing with her hands open and palms facing forward.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "moving",
+          "rest",
+          "application of force",
+          "effect on objects"
+        ],
+        "context_relation": "The image is related to the text discussing the effects of force on objects in everyday life.",
+        "limitations": [
+          "The image does not provide specific details about the force or the objects involved."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1148,
+    "assets_selected": 1149,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1144,
-    "assets_remaining": 1147,
-    "assets_completion_percent": 49.9,
+    "assets_analyzed": 1145,
+    "assets_remaining": 1146,
+    "assets_completion_percent": 50.0,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1143,
+    "assets_skipped_from_checkpoint": 1144,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:09:19Z"
+      "checkpointed_at": "2026-10-20T17:15:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:10:03Z"
+      "checkpointed_at": "2026-10-20T17:15:52Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:10:33Z"
+      "checkpointed_at": "2026-10-20T17:16:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:11:22Z"
+      "checkpointed_at": "2026-10-20T17:17:11Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37487,6 +37487,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T17:14:08Z"
+    },
+    {
+      "asset_id": "ab9d03f90a7e37452e7501d5",
+      "asset_sha256": "116b532339f0440192b1b4ebef3fdea83a722d53444c3afb5c1ae8a93e19ee5c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/116b532339f0440192b1b4ebef3fdea83a722d53444c3afb5c1ae8a93e19ee5c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5ef6be77826ded0e4c0fb51889bbddecdd1cfb40c0b3d5099b6975b4cf5a4ffe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange dress, standing with her hands open and palms facing forward.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "moving",
+          "rest",
+          "application of force",
+          "effect on objects"
+        ],
+        "context_relation": "The image is related to the text discussing the effects of force on objects in everyday life.",
+        "limitations": [
+          "The image does not provide specific details about the force or the objects involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:18:23Z"
     }
   ]
 }
