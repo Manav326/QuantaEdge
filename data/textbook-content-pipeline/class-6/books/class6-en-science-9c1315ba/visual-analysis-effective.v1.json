@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c417b87c0672f09c968ba3318992355eff28af007f19e35c38a075fc3e5777b8",
+  "raw_analysis_sha256": "000a7d8c644e3a65dd71a6976e749669b15bb2d2466c4b65dcfb0537ab4f3cc3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:40:41Z",
+      "checkpointed_at": "2026-10-20T20:45:45Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:41:36Z",
+      "checkpointed_at": "2026-10-20T20:46:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:42:47Z",
+      "checkpointed_at": "2026-10-20T20:47:49Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:43:30Z",
+      "checkpointed_at": "2026-10-20T20:48:31Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64714,6 +64714,58 @@
         "context_relation": "The image is related to the educational content about opaque and translucent materials.",
         "limitations": [
           "The image does not provide specific details about the nature of the materials used by each individual."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4acbd1f58dc33cd1ead4736a",
+      "asset_sha256": "3261e652be6ed16ee9a7a49b121d90f6bceda14828abdb15da46440657f2d6c9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/3261e652be6ed16ee9a7a49b121d90f6bceda14828abdb15da46440657f2d6c9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing four different materials, labeled A, B, C, and D, representing opaque, translucent, and transparent materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.5: Identify the nature of materials used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s brother (D)."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text, which describes the properties of different materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each person, only their labels (A, B, C, and D)."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:49:45Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing four different materials, labeled A, B, C, and D, representing opaque, translucent, and transparent materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.5: Identify the nature of materials used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s brother (D)."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text, which describes the properties of different materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each person, only their labels (A, B, C, and D)."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

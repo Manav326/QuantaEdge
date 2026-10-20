@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1307,
-    "successful_visual_analyses": 1284,
-    "missing_visual_analyses": 771,
+    "raw_analysis_result_rows": 1308,
+    "successful_visual_analyses": 1285,
+    "missing_visual_analyses": 770,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 794,
+    "unresolved_count": 793,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49369,9 +49369,24 @@
       "asset_path": "assets/3261e652be6ed16ee9a7a49b121d90f6bceda14828abdb15da46440657f2d6c9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing four different materials, labeled A, B, C, and D, representing opaque, translucent, and transparent materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.5: Identify the nature of materials used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s brother (D)."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text, which describes the properties of different materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each person, only their labels (A, B, C, and D)."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
