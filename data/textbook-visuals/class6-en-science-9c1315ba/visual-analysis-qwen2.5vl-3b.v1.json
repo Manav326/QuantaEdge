@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1285,
+    "assets_selected": 1286,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1281,
-    "assets_remaining": 797,
-    "assets_completion_percent": 61.6,
+    "assets_analyzed": 1282,
+    "assets_remaining": 796,
+    "assets_completion_percent": 61.7,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1280,
+    "assets_skipped_from_checkpoint": 1281,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:45:45Z"
+      "checkpointed_at": "2026-10-20T20:50:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:46:39Z"
+      "checkpointed_at": "2026-10-20T20:51:44Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:47:49Z"
+      "checkpointed_at": "2026-10-20T20:52:54Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:48:31Z"
+      "checkpointed_at": "2026-10-20T20:53:37Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42841,6 +42841,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T20:49:45Z"
+    },
+    {
+      "asset_id": "6898817b3f5e21faa0425361",
+      "asset_sha256": "23de9b3d541a1dff0e9fe5bc0b8d9d2054a070e2dac190cb944a354fcb66ef71",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/23de9b3d541a1dff0e9fe5bc0b8d9d2054a070e2dac190cb944a354fcb66ef71.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing four labeled points A, B, C, and D.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "D",
+          "C",
+          "B",
+          "A"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials"
+        ],
+        "context_relation": "The diagram is related to the identification of materials based on their transparency properties.",
+        "limitations": [
+          "The image does not provide specific details about the nature of the materials used by each person or their transparency properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:54:45Z"
     }
   ]
 }

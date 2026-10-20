@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1308,
-    "successful_visual_analyses": 1285,
-    "missing_visual_analyses": 770,
+    "raw_analysis_result_rows": 1309,
+    "successful_visual_analyses": 1286,
+    "missing_visual_analyses": 769,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 793,
+    "unresolved_count": 792,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49402,9 +49402,26 @@
       "asset_path": "assets/23de9b3d541a1dff0e9fe5bc0b8d9d2054a070e2dac190cb944a354fcb66ef71.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing four labeled points A, B, C, and D.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "D",
+          "C",
+          "B",
+          "A"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials"
+        ],
+        "context_relation": "The diagram is related to the identification of materials based on their transparency properties.",
+        "limitations": [
+          "The image does not provide specific details about the nature of the materials used by each person or their transparency properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
