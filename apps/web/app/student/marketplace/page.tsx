@@ -132,11 +132,12 @@ export default function StudentMarketplacePage() {
         orderId: String(value.orderId || ''),
         signature: String(value.signature || ''),
       };
+      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
+      const callbackIsValid = !hasPaymentCallback ||
+        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
       if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
           && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
-          && /^pay_[A-Za-z0-9]+$/.test(draft.paymentId)
-          && /^order_[A-Za-z0-9]+$/.test(draft.orderId)
-          && /^[A-Fa-f0-9]{64}$/.test(draft.signature)) {
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
         setPendingVerify(draft);
       } else {
         window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
@@ -181,6 +182,43 @@ export default function StudentMarketplacePage() {
     }
   }, [loadOffers, loadPurchaseRequests, router]);
 
+  const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
+    setVerifying(true);
+    setStatus('');
+    setPendingVerify(draft);
+    try {
+      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // In-page recovery remains available if browser storage is blocked.
+    }
+    try {
+      const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
+      }));
+      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+        setPendingVerify(null);
+        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        setStatus('Payment verified. Your course is now in All Courses.');
+        await loadOffers();
+        await loadPurchaseRequests();
+        router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
+        return;
+      }
+      if (result.canRetryCheckout === true) {
+        setPendingVerify(null);
+        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+      }
+      setStatus(String(result.message || 'Payment status is still being reconciled. Do not pay again while verification is pending.'));
+      await loadOffers();
+    } catch (error: any) {
+      setPendingVerify(draft);
+      setStatus(error?.message || 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.');
+    } finally {
+      setVerifying(false);
+      setBusyCourseId(null);
+    }
+  }, [loadOffers, loadPurchaseRequests, router]);
+
   async function buyCourse(courseId: number) {
     if (pendingVerify) {
       setStatus('A previous payment still needs verification. Retry verification before starting another checkout.');
@@ -207,6 +245,16 @@ export default function StudentMarketplacePage() {
           !order.keyId || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0 || order.currency !== 'INR') {
         throw new Error('The course order could not be prepared. Please retry.');
       }
+      const recoverableDraft: VerifyDraft = {
+        courseId,
+        localOrderId: Number(order.localOrderId),
+        paymentId: '',
+        orderId: String(order.orderId),
+        signature: '',
+      };
+      setPendingVerify(recoverableDraft);
+      try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
+      catch { /* In-page recovery still works when storage is disabled. */ }
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error('Payment checkout is not available. Please retry.');
@@ -227,7 +275,9 @@ export default function StudentMarketplacePage() {
             signature: String(response.razorpay_signature || ''),
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== order.orderId) {
-            setStatus('The payment confirmation did not match this order. Retry verification or contact support if money was deducted.');
+            setStatus('The payment confirmation did not match this order. Reconcile this order before starting another checkout.');
+            setPendingVerify(recoverableDraft);
+            try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusyCourseId(null);
             return;
           }
@@ -327,7 +377,7 @@ export default function StudentMarketplacePage() {
       {pendingVerify && (
         <section className={styles.verifyCard} aria-label="Retry payment verification">
           <div><strong>Complete course access</strong><p>The checkout response is saved for retry. Verify this payment before starting another checkout.</p></div>
-          <button type="button" disabled={verifying} onClick={() => void verifyPurchase(pendingVerify)}>
+          <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(pendingVerify)}>
             {verifying ? 'Verifying…' : 'Retry verification'}
           </button>
         </section>
