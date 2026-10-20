@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1064,
-    "successful_visual_analyses": 1048,
-    "missing_visual_analyses": 1227,
+    "raw_analysis_result_rows": 1066,
+    "successful_visual_analyses": 1050,
+    "missing_visual_analyses": 1225,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1243,
+    "unresolved_count": 1241,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40246,9 +40246,18 @@
       "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a person climbing a staircase, with one hand outstretched as if to balance or support themselves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or educational content related to the textbook.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the educational content editor to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40264,9 +40273,29 @@
       "asset_path": "assets/fbdf0763543b4de472f35ef33f8e307b9e919642d0d47097ec87cb4562f683b7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration showing a compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "51",
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Compass needle",
+          "Magnetic poles",
+          "North–South attraction"
+        ],
+        "context_relation": "The image illustrates the interaction between a compass needle and an electromagnet, explaining the concept of magnetic poles and attraction.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's construction or the compass needle's position."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
