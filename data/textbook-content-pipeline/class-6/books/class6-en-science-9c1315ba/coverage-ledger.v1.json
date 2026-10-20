@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1198,
-    "successful_visual_analyses": 1175,
-    "missing_visual_analyses": 880,
+    "raw_analysis_result_rows": 1200,
+    "successful_visual_analyses": 1177,
+    "missing_visual_analyses": 878,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 903,
+    "unresolved_count": 901,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45487,9 +45487,22 @@
       "asset_path": "assets/8969028921826bddaeb1b329a4a178942e77e8b9938670e31fadeaecd0aa9c94.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a blue tape measure with a yellow handle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tape measure",
+          "blue",
+          "yellow",
+          "handle",
+          "reference point"
+        ],
+        "context_relation": "The image is an illustration of a tape measure, which is used to measure distances.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45505,9 +45518,32 @@
       "asset_path": "assets/21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children are planting seeds in a garden, with one child watering the seeds.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Who do you think is correct? All of them are correct",
+          "(Fig. 5.9). Then, why are their observations different? They",
+          "are locating the distances of the school and garden from their",
+          "houses. If, instead, each of them had thought of distances",
+          "from a same object or point, say, the bus stand, then their",
+          "observations would have been the same.",
+          "When distance is stated with respect to a fixed object or point, then this point is called a reference point.",
+          "A few days later, Harde"
+        ],
+        "concepts": [
+          "Reference point",
+          "Distance",
+          "Observations",
+          "Fixed object or point"
+        ],
+        "context_relation": "The image illustrates the concept of a reference point in relation to distances.",
+        "limitations": [
+          "The image does not provide specific details about the distances or the objects being observed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

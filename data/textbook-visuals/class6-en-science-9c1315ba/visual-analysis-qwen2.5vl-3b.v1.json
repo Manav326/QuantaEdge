@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1175,
+    "assets_selected": 1177,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1172,
-    "assets_remaining": 906,
-    "assets_completion_percent": 56.4,
+    "assets_analyzed": 1174,
+    "assets_remaining": 904,
+    "assets_completion_percent": 56.5,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1170,
+    "assets_skipped_from_checkpoint": 1172,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:20:47Z"
+      "checkpointed_at": "2026-10-20T02:28:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:21:45Z"
+      "checkpointed_at": "2026-10-20T02:29:47Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:22:34Z"
+      "checkpointed_at": "2026-10-20T02:30:36Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38816,6 +38816,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T02:27:39Z"
+    },
+    {
+      "asset_id": "6000c9732b9779256785c5ec",
+      "asset_sha256": "8969028921826bddaeb1b329a4a178942e77e8b9938670e31fadeaecd0aa9c94",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/8969028921826bddaeb1b329a4a178942e77e8b9938670e31fadeaecd0aa9c94.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "734b116b1c4368447ac310dbdeb581a6ef78406574ecec11e957e5984d700b44",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a blue tape measure with a yellow handle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tape measure",
+          "blue",
+          "yellow",
+          "handle",
+          "reference point"
+        ],
+        "context_relation": "The image is an illustration of a tape measure, which is used to measure distances.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:32:09Z"
+    },
+    {
+      "asset_id": "d6ca81c8376d8d8aee42f124",
+      "asset_sha256": "21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "734b116b1c4368447ac310dbdeb581a6ef78406574ecec11e957e5984d700b44",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children are planting seeds in a garden, with one child watering the seeds.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Who do you think is correct? All of them are correct",
+          "(Fig. 5.9). Then, why are their observations different? They",
+          "are locating the distances of the school and garden from their",
+          "houses. If, instead, each of them had thought of distances",
+          "from a same object or point, say, the bus stand, then their",
+          "observations would have been the same.",
+          "When distance is stated with respect to a fixed object or point, then this point is called a reference point.",
+          "A few days later, Harde"
+        ],
+        "concepts": [
+          "Reference point",
+          "Distance",
+          "Observations",
+          "Fixed object or point"
+        ],
+        "context_relation": "The image illustrates the concept of a reference point in relation to distances.",
+        "limitations": [
+          "The image does not provide specific details about the distances or the objects being observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:33:55Z"
     }
   ]
 }
