@@ -261,7 +261,7 @@ export default function PracticePage(){
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.da5d2bd3" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+'&courseId='+encodeURIComponent(courseKey):'/student/learn'+(courseKey?'?courseId='+encodeURIComponent(courseKey):'')} className="text-link"><UiText message="legacy.web.chapter.lessons.13ec05a5" /></Link><Link href={'/student/progress'+(courseId!==null?'?courseId='+courseId:programCode?'?programCode='+encodeURIComponent(programCode):'')} className="button button-dark"><UiText message="legacy.web.view.progress.bce928bc" /></Link></div>
+      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+'&courseId='+encodeURIComponent(courseKey):'/student/learn'+(courseKey?'?courseId='+encodeURIComponent(courseKey):'')} className="text-link"><UiText message="legacy.web.chapter.lessons.13ec05a5" /></Link><Link href={'/student/progress'+(courseKey?'?courseId='+encodeURIComponent(courseKey):'')} className="button button-dark"><UiText message="legacy.web.view.progress.bce928bc" /></Link></div>
     </section>
   </main>;
 
