@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a180531a13bb7095f760ae745e8a79639cfded2757137ca19bdac1e65d7ea2c1",
+  "raw_analysis_sha256": "b5b248e4df62cc6a50ce7d19fe21f7bf185d4aa37633a6236462bd8be2ca9ed4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:55:37Z",
+      "checkpointed_at": "2026-10-20T10:01:06Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:56:36Z",
+      "checkpointed_at": "2026-10-20T10:02:07Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:57:27Z",
+      "checkpointed_at": "2026-10-20T10:03:02Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:58:17Z",
+      "checkpointed_at": "2026-10-20T10:03:51Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62044,6 +62044,72 @@
         "context_relation": "The image is a close-up of a green, crumpled piece of paper or fabric.",
         "limitations": [
           "The image does not provide any additional context or information beyond the close-up of the crumpled material."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7850e91ee2e207c50f0f1ad2",
+      "asset_sha256": "ea5d0103c1b4ec3a3bd4d0c01dc7234a85ec4dccabb0f733cb80182544f661f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/ea5d0103c1b4ec3a3bd4d0c01dc7234a85ec4dccabb0f733cb80182544f661f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ba824eb919a0214ac7e039b493594f10eceb9afc3804568ea0652486f4010b1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two students, Ghulan and Sheeta, are in a classroom. Ghulan is holding a green book and a pen, while Sheeta is holding a yellow book and a pen. They are smiling and talking.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ghulan and Sheeta are thrilled to go to their new class after the summer break.",
+          "They enter their classroom and start talking.",
+          "‘What have you brought to school today?’ asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Classroom",
+          "Students",
+          "Books",
+          "Pens",
+          "Summer break",
+          "New class"
+        ],
+        "context_relation": "The image shows a conversation between two students in a classroom setting.",
+        "limitations": [
+          "The image does not provide specific details about the subjects or topics covered in the books."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:05:35Z",
+      "effective_analysis": {
+        "visual_summary": "Two students, Ghulan and Sheeta, are in a classroom. Ghulan is holding a green book and a pen, while Sheeta is holding a yellow book and a pen. They are smiling and talking.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ghulan and Sheeta are thrilled to go to their new class after the summer break.",
+          "They enter their classroom and start talking.",
+          "‘What have you brought to school today?’ asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Classroom",
+          "Students",
+          "Books",
+          "Pens",
+          "Summer break",
+          "New class"
+        ],
+        "context_relation": "The image shows a conversation between two students in a classroom setting.",
+        "limitations": [
+          "The image does not provide specific details about the subjects or topics covered in the books."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

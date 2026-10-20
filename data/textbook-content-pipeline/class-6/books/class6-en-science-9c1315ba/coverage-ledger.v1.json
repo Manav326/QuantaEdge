@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1264,
-    "successful_visual_analyses": 1239,
-    "missing_visual_analyses": 814,
+    "raw_analysis_result_rows": 1265,
+    "successful_visual_analyses": 1240,
+    "missing_visual_analyses": 813,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 839,
+    "unresolved_count": 838,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47735,9 +47735,31 @@
       "asset_path": "assets/ea5d0103c1b4ec3a3bd4d0c01dc7234a85ec4dccabb0f733cb80182544f661f2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two students, Ghulan and Sheeta, are in a classroom. Ghulan is holding a green book and a pen, while Sheeta is holding a yellow book and a pen. They are smiling and talking.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ghulan and Sheeta are thrilled to go to their new class after the summer break.",
+          "They enter their classroom and start talking.",
+          "‘What have you brought to school today?’ asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Classroom",
+          "Students",
+          "Books",
+          "Pens",
+          "Summer break",
+          "New class"
+        ],
+        "context_relation": "The image shows a conversation between two students in a classroom setting.",
+        "limitations": [
+          "The image does not provide specific details about the subjects or topics covered in the books."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

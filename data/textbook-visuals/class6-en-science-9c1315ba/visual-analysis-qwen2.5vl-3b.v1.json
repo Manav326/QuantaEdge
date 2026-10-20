@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1239,
+    "assets_selected": 1240,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1235,
-    "assets_remaining": 843,
-    "assets_completion_percent": 59.4,
+    "assets_analyzed": 1236,
+    "assets_remaining": 842,
+    "assets_completion_percent": 59.5,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1234,
+    "assets_skipped_from_checkpoint": 1235,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:55:37Z"
+      "checkpointed_at": "2026-10-20T10:01:06Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:56:36Z"
+      "checkpointed_at": "2026-10-20T10:02:07Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:57:27Z"
+      "checkpointed_at": "2026-10-20T10:03:02Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:58:17Z"
+      "checkpointed_at": "2026-10-20T10:03:51Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41126,6 +41126,47 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T09:59:53Z"
+    },
+    {
+      "asset_id": "7850e91ee2e207c50f0f1ad2",
+      "asset_sha256": "ea5d0103c1b4ec3a3bd4d0c01dc7234a85ec4dccabb0f733cb80182544f661f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/ea5d0103c1b4ec3a3bd4d0c01dc7234a85ec4dccabb0f733cb80182544f661f2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ba824eb919a0214ac7e039b493594f10eceb9afc3804568ea0652486f4010b1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two students, Ghulan and Sheeta, are in a classroom. Ghulan is holding a green book and a pen, while Sheeta is holding a yellow book and a pen. They are smiling and talking.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ghulan and Sheeta are thrilled to go to their new class after the summer break.",
+          "They enter their classroom and start talking.",
+          "‘What have you brought to school today?’ asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Classroom",
+          "Students",
+          "Books",
+          "Pens",
+          "Summer break",
+          "New class"
+        ],
+        "context_relation": "The image shows a conversation between two students in a classroom setting.",
+        "limitations": [
+          "The image does not provide specific details about the subjects or topics covered in the books."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:05:35Z"
     }
   ]
 }
