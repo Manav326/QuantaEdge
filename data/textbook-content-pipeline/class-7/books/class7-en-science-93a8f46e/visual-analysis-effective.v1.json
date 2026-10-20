@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "24982682555259727af64d6b10ce648cbc03d37ccc36063ca2858b7d65b0a377",
+  "raw_analysis_sha256": "04750ed820c2148c500e30471be4d9d5dd47f968a8bc5dbdb577d82f9f166f03",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14766,7 +14766,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14775,10 +14775,8 @@
         ],
         "concepts": [
           "science",
-          "exploration",
           "curiosity",
-          "questions",
-          "unknown",
+          "open-mindedness",
           "process",
           "environment",
           "society",
@@ -14787,26 +14785,20 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnected",
-          "scientific ideas",
-          "discoveries",
-          "questions",
-          "environment",
-          "society",
-          "human activities"
+          "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The page does not provide specific examples or activities for the reader to engage with."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T17:13:32Z",
+      "checkpointed_at": "2026-10-20T17:14:17Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14815,10 +14807,8 @@
         ],
         "concepts": [
           "science",
-          "exploration",
           "curiosity",
-          "questions",
-          "unknown",
+          "open-mindedness",
           "process",
           "environment",
           "society",
@@ -14827,17 +14817,11 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnected",
-          "scientific ideas",
-          "discoveries",
-          "questions",
-          "environment",
-          "society",
-          "human activities"
+          "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The page does not provide specific examples or activities for the reader to engage with."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -18342,9 +18326,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
+      "run_id": "39461594059",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -19908,21 +19892,65 @@
     {
       "asset_id": "e16d4a62f7889b707898ea77",
       "asset_sha256": "ff62d9e1ae71752cc5f7a797bf0d6fadcbd8d4748f021e98609919142f00dad0",
-      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 25,
       "asset_path": "page-0025.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer"
+        ],
+        "concepts": [
+          "eclipse",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
+        ],
+        "context_relation": "Introduction to scientific concepts and experiments",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T17:18:14Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer"
+        ],
+        "concepts": [
+          "eclipse",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
+        ],
+        "context_relation": "Introduction to scientific concepts and experiments",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -39026,7 +39054,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
+      "run_id": "39461594059",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -57154,7 +57182,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
+      "run_id": "39461594059",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
