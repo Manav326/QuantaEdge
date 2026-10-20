@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "acbf204244497c8107c29ef352f3b3027676dfd97897a46038c539c6295d1bbe",
+  "raw_analysis_sha256": "1b4def526d1983f768eae7821fdc68ecbf7141c3c15c890b83c01c75eb660992",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:28:57Z",
+      "checkpointed_at": "2026-10-20T03:33:13Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:29:30Z",
+      "checkpointed_at": "2026-10-20T03:33:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:29:52Z",
+      "checkpointed_at": "2026-10-20T03:34:09Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47805,6 +47805,84 @@
           "The image does not show any text or data related to the textbook content.",
           "The image does not depict any specific educational content or question from the textbook."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97c97bdfb26a4578cd98ccee",
+      "asset_sha256": "71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a pen and a notepad, possibly taking notes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a standalone illustration, not related to the table of dengue cases.",
+        "limitations": [
+          "The image does not provide any specific information or data related to the table of dengue cases.",
+          "The image is a cartoon illustration and may not represent real-life scenarios or data accurately."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:34:47Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a pen and a notepad, possibly taking notes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a standalone illustration, not related to the table of dengue cases.",
+        "limitations": [
+          "The image does not provide any specific information or data related to the table of dengue cases.",
+          "The image is a cartoon illustration and may not represent real-life scenarios or data accurately."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "10345a54840de1d1cdeba07c",
+      "asset_sha256": "591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl holding a book and a pencil, wearing a school uniform.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:35:22Z",
+      "effective_analysis": {
+        "visual_summary": "A girl holding a book and a pencil, wearing a school uniform.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

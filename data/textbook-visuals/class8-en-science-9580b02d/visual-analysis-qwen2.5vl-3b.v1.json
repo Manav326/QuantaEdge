@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1003,
+    "assets_selected": 1005,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1000,
-    "assets_remaining": 1291,
-    "assets_completion_percent": 43.6,
+    "assets_analyzed": 1002,
+    "assets_remaining": 1289,
+    "assets_completion_percent": 43.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 998,
+    "assets_skipped_from_checkpoint": 1000,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:28:57Z"
+      "checkpointed_at": "2026-10-20T03:33:13Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:29:30Z"
+      "checkpointed_at": "2026-10-20T03:33:47Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:29:52Z"
+      "checkpointed_at": "2026-10-20T03:34:09Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32034,6 +32034,61 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:32:29Z"
+    },
+    {
+      "asset_id": "97c97bdfb26a4578cd98ccee",
+      "asset_sha256": "71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a pen and a notepad, possibly taking notes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a standalone illustration, not related to the table of dengue cases.",
+        "limitations": [
+          "The image does not provide any specific information or data related to the table of dengue cases.",
+          "The image is a cartoon illustration and may not represent real-life scenarios or data accurately."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:34:47Z"
+    },
+    {
+      "asset_id": "10345a54840de1d1cdeba07c",
+      "asset_sha256": "591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl holding a book and a pencil, wearing a school uniform.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:35:22Z"
     }
   ]
 }
