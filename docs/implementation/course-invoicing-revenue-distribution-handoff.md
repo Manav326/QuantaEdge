@@ -283,3 +283,11 @@ Verification at this checkpoint:
 - Added validation tests for individual and business profiles, GSTIN/state mismatch, incomplete business address, invalid GSTIN and invalid email.
 - Course-order creation now persists the purchaser's billing profile snapshot and beneficiary name together with list-price and zero-discount values. Later profile edits cannot rewrite an already-verified order snapshot (database guard from V151).
 - No customer-facing invoice issuance is enabled yet: the course order still needs an approved tax-profile snapshot, legal document selection/numbering, immutable fiscal document + line creation and private PDF storage. Coupons/offers integration remains to be audited/implemented before claiming discounted checkouts work.
+
+
+### 2026-10-20 — Student/parent billing profile UI
+
+- Added a reusable `BillingProfileEditor` to student and parent course marketplace pages. It loads the authenticated purchaser's server-side profile and lets them save individual/business billing name, optional GSTIN/state code, postal address, billing email and phone.
+- The parent editor uses the parent workspace endpoint and keeps purchaser identity separate from the child beneficiary; the student editor uses the student workspace endpoint. English/Hinglish labels are supported on the parent screen.
+- Profile-save errors remain in the editor and do not block browsing the marketplace. Existing orders retain their saved buyer snapshot; profile changes apply to future order snapshots.
+- This UI does not yet apply a tax calculation or issue invoices; those integration steps remain controlled by the approved seller/tax configuration.

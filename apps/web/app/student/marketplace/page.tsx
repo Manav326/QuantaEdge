@@ -10,6 +10,7 @@ import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBr
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { UiText } from '../../i18n/useUiTranslation';
 import StudentEmptyState from '../components/StudentEmptyState';
+import BillingProfileEditor from '../../components/BillingProfileEditor';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
@@ -351,6 +352,7 @@ export default function StudentMarketplacePage() {
       </header>
 
       {status && <p className={styles.status} role="status">{status}</p>}
+      <BillingProfileEditor workspace="STUDENT" english />
       {purchaseRequests.length > 0 && (
         <section className={styles.requestHistory} aria-labelledby="qe-purchase-request-history">
           <div className={styles.requestHistoryHeading}>
