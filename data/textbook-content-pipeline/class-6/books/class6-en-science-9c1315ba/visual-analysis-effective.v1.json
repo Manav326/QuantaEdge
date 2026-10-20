@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "098daefe896cb9d3c0ad340f697a33c4ec0053cb28b345c124b64a06307c0c23",
+  "raw_analysis_sha256": "ae288d6367bf52161158affe2cf6b6cfd0fd3a65bac0af6f1158b69bbe852932",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:22:32Z",
+      "checkpointed_at": "2026-10-20T01:29:30Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:23:29Z",
+      "checkpointed_at": "2026-10-20T01:30:27Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:24:18Z",
+      "checkpointed_at": "2026-10-20T01:31:15Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57464,6 +57464,68 @@
         "context_relation": "The image is a visual representation of a question about measuring length using a metre scale, with a response about the correct way to use a scale.",
         "limitations": [
           "The image does not provide specific measurements or examples of incorrect ways to use a scale."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2104ecb647e20f98cb93ca2e",
+      "asset_sha256": "78927ddd33b53c3132bd1125fcb4c6e47c14bc96a142353245ad1e81074ee454",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/78927ddd33b53c3132bd1125fcb4c6e47c14bc96a142353245ad1e81074ee454.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f994f5f91fe0e9aa7d7e3e98",
+      "asset_sha256": "19a64b0fc3d5b04d6c2144f26aa56f0c315adea2e06d90b89cb1b8cff50d701d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/19a64b0fc3d5b04d6c2144f26aa56f0c315adea2e06d90b89cb1b8cff50d701d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of torn paper or fabric.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single object with no additional context or elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:35:38Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of torn paper or fabric.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single object with no additional context or elements."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
