@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1206,
-    "successful_visual_analyses": 1183,
-    "missing_visual_analyses": 872,
+    "raw_analysis_result_rows": 1208,
+    "successful_visual_analyses": 1185,
+    "missing_visual_analyses": 870,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 895,
+    "unresolved_count": 893,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45770,9 +45770,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A kilometre stone indicating the distance to Delhi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 5.12:",
+          "A kilometre stone",
+          "Delhi 70 km",
+          "Further on, the next kilometre stone",
+          "read ‘Delhi 60 km’. Each kilometre stone",
+          "indicated that she was getting closer to her",
+          "grandparents’ house."
+        ],
+        "concepts": [
+          "kilometre stone",
+          "distance to Delhi",
+          "traveling by bus",
+          "reading kilometre stones"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text.",
+          "The image does not show any other objects or people."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45788,9 +45811,31 @@
       "asset_path": "page-0107.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing a diagram of a kilometre stone and a question about it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "After a few days, Padma was travelling\nby bus to visit her grandparents in Delhi.\nShe was eager to reach Delhi and was\nreading the kilometre stones on the side of\nthe road. On one of the kilometre stones, it\nwas written ‘Delhi 70 km’ (Fig. 5.12).\nFurther on, the next kilometre stone\nread ‘Delhi 60 k",
+          "Fig. 5.12: A kilometre stone",
+          "What do such\nkilometre stones\nindicate? How could\nPadma conclude that\nshe was getting closer\nto her destination?",
+          "Fig. 5.13: Positions of kilometre stones with respect to Delhi as a reference point",
+          "If the kilometre stone reads ‘Delhi 70 km’ as shown in\nFig. 5.13, we can say that the position of Padma is 70 km\nfrom Delhi. When the kilometre stone reads ‘Delhi 60 km’,\nthe position of Padma is 60 km from Delhi.",
+          "Does this mean that the position of\nPadma, with respect to the reference\npoint, is changing with time? When\ndoes the position of an object change\nwith respect to a reference point? Does\nit change when an object is moving?"
+        ],
+        "concepts": [
+          "kilometre stones",
+          "reference point",
+          "position",
+          "distance",
+          "moving object"
+        ],
+        "context_relation": "The page is discussing the concept of kilometre stones and their use in determining distance and position.",
+        "limitations": [
+          "The page does not provide a diagram of the kilometre stone or its position."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

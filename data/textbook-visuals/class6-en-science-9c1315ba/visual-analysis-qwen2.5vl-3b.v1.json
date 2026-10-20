@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1183,
+    "assets_selected": 1185,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1180,
-    "assets_remaining": 898,
-    "assets_completion_percent": 56.8,
+    "assets_analyzed": 1182,
+    "assets_remaining": 896,
+    "assets_completion_percent": 56.9,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1178,
+    "assets_skipped_from_checkpoint": 1180,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:47:28Z"
+      "checkpointed_at": "2026-10-20T02:52:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:48:28Z"
+      "checkpointed_at": "2026-10-20T02:53:49Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:49:17Z"
+      "checkpointed_at": "2026-10-20T02:54:39Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39107,6 +39107,89 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T02:51:38Z"
+    },
+    {
+      "asset_id": "95fb780761d78184786b6499",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad1c06783cb79a28550afd83982c1a5b3e08449d1858c951fc7a8d2c40a30e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A kilometre stone indicating the distance to Delhi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 5.12:",
+          "A kilometre stone",
+          "Delhi 70 km",
+          "Further on, the next kilometre stone",
+          "read ‘Delhi 60 km’. Each kilometre stone",
+          "indicated that she was getting closer to her",
+          "grandparents’ house."
+        ],
+        "concepts": [
+          "kilometre stone",
+          "distance to Delhi",
+          "traveling by bus",
+          "reading kilometre stones"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text.",
+          "The image does not show any other objects or people."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:55:10Z"
+    },
+    {
+      "asset_id": "ab1f1d04d49095f28e15dd20",
+      "asset_sha256": "97f88de19186f0078e9fd92310e85d8514b30db74e828ba7e9216dcd1f3da394",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 107,
+      "asset_path": "page-0107.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ad1c06783cb79a28550afd83982c1a5b3e08449d1858c951fc7a8d2c40a30e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a diagram of a kilometre stone and a question about it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "After a few days, Padma was travelling\nby bus to visit her grandparents in Delhi.\nShe was eager to reach Delhi and was\nreading the kilometre stones on the side of\nthe road. On one of the kilometre stones, it\nwas written ‘Delhi 70 km’ (Fig. 5.12).\nFurther on, the next kilometre stone\nread ‘Delhi 60 k",
+          "Fig. 5.12: A kilometre stone",
+          "What do such\nkilometre stones\nindicate? How could\nPadma conclude that\nshe was getting closer\nto her destination?",
+          "Fig. 5.13: Positions of kilometre stones with respect to Delhi as a reference point",
+          "If the kilometre stone reads ‘Delhi 70 km’ as shown in\nFig. 5.13, we can say that the position of Padma is 70 km\nfrom Delhi. When the kilometre stone reads ‘Delhi 60 km’,\nthe position of Padma is 60 km from Delhi.",
+          "Does this mean that the position of\nPadma, with respect to the reference\npoint, is changing with time? When\ndoes the position of an object change\nwith respect to a reference point? Does\nit change when an object is moving?"
+        ],
+        "concepts": [
+          "kilometre stones",
+          "reference point",
+          "position",
+          "distance",
+          "moving object"
+        ],
+        "context_relation": "The page is discussing the concept of kilometre stones and their use in determining distance and position.",
+        "limitations": [
+          "The page does not provide a diagram of the kilometre stone or its position."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:59:44Z"
     }
   ]
 }
