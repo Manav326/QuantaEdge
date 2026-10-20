@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5a38def05ec4ed63a7ac3e44a1e2bce7e6d6f9c81ec01d83bb191c62ea846421",
+  "raw_analysis_sha256": "d20de6f816aaeca9edd7dc742e7c522c85d1634e1745ad0fd76ffdebdbe27cd4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:21:53Z",
+      "checkpointed_at": "2026-10-20T05:24:46Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:22:26Z",
+      "checkpointed_at": "2026-10-20T05:25:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:22:48Z",
+      "checkpointed_at": "2026-10-20T05:25:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:23:24Z",
+      "checkpointed_at": "2026-10-20T05:26:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -51592,6 +51592,54 @@
         "context_relation": "The image is a part of a textbook illustration showing different types of electric heating appliances.",
         "limitations": [
           "The image does not provide specific details about the heating elements or their operation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "60be979f4c640ea6eedabdc9",
+      "asset_sha256": "a1552cf67d3de9289ae94045989c967b70311b34be5216ead51c5829c53597b8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/a1552cf67d3de9289ae94045989c967b70311b34be5216ead51c5829c53597b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of an electric iron.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric iron",
+          "heating effect",
+          "electric heating appliances"
+        ],
+        "context_relation": "The image is a part of a textbook discussing simple household electric heating appliances.",
+        "limitations": [
+          "The image does not provide specific details about the iron's features or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:26:53Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of an electric iron.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric iron",
+          "heating effect",
+          "electric heating appliances"
+        ],
+        "context_relation": "The image is a part of a textbook discussing simple household electric heating appliances.",
+        "limitations": [
+          "The image does not provide specific details about the iron's features or functions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

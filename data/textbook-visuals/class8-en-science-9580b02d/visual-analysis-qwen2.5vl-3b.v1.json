@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1068,
+    "assets_selected": 1069,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1064,
-    "assets_remaining": 1227,
-    "assets_completion_percent": 46.4,
+    "assets_analyzed": 1065,
+    "assets_remaining": 1226,
+    "assets_completion_percent": 46.5,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1063,
+    "assets_skipped_from_checkpoint": 1064,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:21:53Z"
+      "checkpointed_at": "2026-10-20T05:24:46Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:22:26Z"
+      "checkpointed_at": "2026-10-20T05:25:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:22:48Z"
+      "checkpointed_at": "2026-10-20T05:25:41Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:23:24Z"
+      "checkpointed_at": "2026-10-20T05:26:17Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34476,6 +34476,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:24:01Z"
+    },
+    {
+      "asset_id": "60be979f4c640ea6eedabdc9",
+      "asset_sha256": "a1552cf67d3de9289ae94045989c967b70311b34be5216ead51c5829c53597b8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/a1552cf67d3de9289ae94045989c967b70311b34be5216ead51c5829c53597b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of an electric iron.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric iron",
+          "heating effect",
+          "electric heating appliances"
+        ],
+        "context_relation": "The image is a part of a textbook discussing simple household electric heating appliances.",
+        "limitations": [
+          "The image does not provide specific details about the iron's features or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:26:53Z"
     }
   ]
 }
