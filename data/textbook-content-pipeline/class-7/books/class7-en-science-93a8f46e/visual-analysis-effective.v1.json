@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5dfc9d847506ae16665fc174ad31e524f6581a74df76f96b2cb5451e39d3b148",
+  "raw_analysis_sha256": "a3d2cec0e80b322d354c386fc018d2aa4b4187bb27b189d9903b99c6e3c36471",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -108554,6 +108554,254 @@
         "limitations": [
           "The image does not show any visual representation of the items made by ironsmiths.",
           "The text does not provide specific details about the items made by ironsmiths."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f24e0a724cf2f8a80caa5c6",
+      "asset_sha256": "f42665d12e56006995fba1985f3affbfd52877468e2068033ff5208c0bccefdd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/f42665d12e56006995fba1985f3affbfd52877468e2068033ff5208c0bccefdd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden structure with a curved roof, possibly a traditional hut or shed, with a view of greenery in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wooden structure",
+          "curved roof",
+          "greenery",
+          "traditional hut",
+          "shed"
+        ],
+        "context_relation": "The image likely represents a traditional wooden structure, possibly a hut or shed, in a rural setting.",
+        "limitations": [
+          "The image does not provide specific details about the items made by the ironsmiths.",
+          "The image does not show the ironsmiths or their work.",
+          "The image does not indicate the location or time of day."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:38:24Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden structure with a curved roof, possibly a traditional hut or shed, with a view of greenery in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wooden structure",
+          "curved roof",
+          "greenery",
+          "traditional hut",
+          "shed"
+        ],
+        "context_relation": "The image likely represents a traditional wooden structure, possibly a hut or shed, in a rural setting.",
+        "limitations": [
+          "The image does not provide specific details about the items made by the ironsmiths.",
+          "The image does not show the ironsmiths or their work.",
+          "The image does not indicate the location or time of day."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d8cf0a02a63b7700c932afec",
+      "asset_sha256": "61c2230df7163166c995eb17cf8f2fd56cd3c641662f9d8927f98841b59b4766",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/61c2230df7163166c995eb17cf8f2fd56cd3c641662f9d8927f98841b59b4766.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a white vertical stripe in the center.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Sudarshan uncle",
+          "Yashwant and Anandi"
+        ],
+        "context_relation": "The image is a page from a textbook discussing a project about metals and non-metals.",
+        "limitations": [
+          "The image does not provide specific details about the items made by Sudarshan uncle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:40:16Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a white vertical stripe in the center.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Sudarshan uncle",
+          "Yashwant and Anandi"
+        ],
+        "context_relation": "The image is a page from a textbook discussing a project about metals and non-metals.",
+        "limitations": [
+          "The image does not provide specific details about the items made by Sudarshan uncle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "556437b79537c932c0a7b012",
+      "asset_sha256": "61c2230df7163166c995eb17cf8f2fd56cd3c641662f9d8927f98841b59b4766",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/61c2230df7163166c995eb17cf8f2fd56cd3c641662f9d8927f98841b59b4766.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f31b6dd0e97ce3aaf750a72b",
+      "asset_sha256": "c53a6a20fd1da3e454eb27da30b848f6b249d1637d24bc1d33bfcaa516470fed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c53a6a20fd1da3e454eb27da30b848f6b249d1637d24bc1d33bfcaa516470fed.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant, Anandi, and Sudarshan about making items of daily use.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "items of daily use",
+          "items made by ironsmiths"
+        ],
+        "context_relation": "The conversation is about the daily use items made by ironsmiths.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:43:45Z",
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant, Anandi, and Sudarshan about making items of daily use.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "items of daily use",
+          "items made by ironsmiths"
+        ],
+        "context_relation": "The conversation is about the daily use items made by ironsmiths.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a28dfd32a080e84452ed93c9",
+      "asset_sha256": "0b5e91b116b445b10f8822b99bdccc7a3ab48617f3940934b7d9cbbf863519e5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/0b5e91b116b445b10f8822b99bdccc7a3ab48617f3940934b7d9cbbf863519e5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a white vertical stripe in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements related to the content of the textbook.",
+          "The image does not provide any specific information about the content or structure of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:45:21Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a white vertical stripe in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements related to the content of the textbook.",
+          "The image does not provide any specific information about the content or structure of the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
