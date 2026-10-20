@@ -537,3 +537,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Android uses the same message intent through its selected-language phrase registry; surfaces and text use Material theme roles.
 - The student-navigation source contract now checks both catalogs, all four content pages, and the Android no-course routing/screen states.
 - Implementation is on `main`; CI and live-account QA remain verification gates.
+
+
+## Student route empty-state localization — 2026-10-20
+
+Added context-specific Marketplace, My Courses, learning, practice, progress, books, classes, tests/results, certificates, diagnostic and nested-lesson empty-state labels to both canonical English and Hinglish catalogs and mirrored them into the web, admin and People app-local catalog copies. Hinglish uses Devanagari Hindi with common English product terms. Copy explains the student's next step; source changes keep genuine API failures separate from empty results.
+
+The route implementation centralizes visual structure in `apps/web/app/student/components/StudentEmptyState.tsx` and its CSS module. The route contract will be expanded in the subsequent implementation commit. Source-contract checks and CI execution remain required; this milestone is not a claim that the full localization programme is complete.

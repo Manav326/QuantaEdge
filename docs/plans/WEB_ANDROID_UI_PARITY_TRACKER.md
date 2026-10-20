@@ -44,3 +44,12 @@ These counts describe the recorded tracker state, not a claim that full parity h
 - Web messages use the English/Hinglish catalogs; Android messages use the selected app language and Material theme semantic colors.
 - Added source-contract assertions in `apps/web/scripts/check-student-navigation.mjs` for the cross-platform empty states. Main application changes include `f482a00e2749512340fa6e23be10889a4e33a160`; contract coverage is recorded in `41677758e1147873d8be034a1bb7bc42725b0746`.
 - **Verification status:** Implementation is recorded on `main`; automated build/contract results and real-account end-to-end QA are pending. This is not marked as end-to-end passed.
+
+
+## Student empty-state coverage — 2026-10-20
+
+The agreed pattern is a shared responsive, accessible student empty-state component with a contextual line icon, heading, explanation and relevant next step. Scope includes Dashboard, My Courses, Marketplace, Structured Lessons and nested lesson detail, Practice, Tests & Results, Diagnostic, Live & Recorded Classes, Progress, Certificates, and Books/Chapters.
+
+Marketplace has a distinct no-published-offers fallback with retry and a link to My Courses. Loading and genuine request failures remain separate; empty catalogue copy must not imply an API failure is an empty result. Direct certificate lookup links remain usable when the student has no current enrolment. Empty content *within an enrolled course* (no published tests, released results, scheduled class, recording, PDF or issued certificate) stays contextual to that content.
+
+Implementation on main does not mean browser/device E2E is passed. Verify mobile layout, keyboard focus, action destinations, truly empty responses, API errors, and both interface languages before marking parity QA green.
