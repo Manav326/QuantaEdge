@@ -45,6 +45,8 @@ public class CourseOrderFinancialService {
   public record CheckoutSnapshot(
       long listedPricePaise,
       long discountPaise,
+      Long discountOfferId,
+      String discountCode,
       long payablePaise,
       long taxableValuePaise,
       long outputTaxPaise,
@@ -68,12 +70,62 @@ public class CourseOrderFinancialService {
     this.storage=storage;
   }
 
-  /** Prepare an immutable order quote before calling Razorpay. Currently no coupon is applied. */
+  /** Compatibility overload for callers that do not provide a code. */
   public CheckoutSnapshot prepareCheckout(
       long offerId,long institutionId,long listedPricePaise,String currency,
       String courseTitle,Map<String,Object> buyerSnapshot) {
+    return prepareCheckout(offerId,institutionId,listedPricePaise,currency,courseTitle,buyerSnapshot,null);
+  }
+
+  /** Resolve only an HRMS-approved and effective code; client-supplied amounts are never trusted. */
+  public CheckoutSnapshot prepareCheckout(
+      long offerId,long institutionId,long listedPricePaise,String currency,
+      String courseTitle,Map<String,Object> buyerSnapshot,String requestedDiscountCode) {
     if(listedPricePaise<=0) throw new IllegalArgumentException("A paid course needs a positive listed price.");
     if(!"INR".equalsIgnoreCase(currency)) throw new IllegalArgumentException("Financial checkout currently supports INR only.");
+    String normalizedCode=normalizeDiscountCode(requestedDiscountCode);
+    Long discountOfferId=null;
+    long discountPaise=0L;
+    Map<String,Object> discountSnapshot=new LinkedHashMap<>();
+    discountSnapshot.put("snapshotVersion",1);
+    discountSnapshot.put("discountType","NONE");
+    discountSnapshot.put("discountPaise",0L);
+    if(normalizedCode!=null) {
+      List<Map<String,Object>> discounts=jdbc.queryForList("""
+        select id,code,version,discount_type,percentage_basis_points,flat_amount_paise,
+          max_discount_paise,min_listed_price_paise,currency,effective_from,effective_until
+        from course_discount_offer
+        where institution_offer_id=? and upper(code)=? and currency=? and status='APPROVED'
+          and effective_from<=now() and (effective_until is null or effective_until>now())
+        order by version desc,id desc limit 2
+        """,offerId,normalizedCode,currency.toUpperCase(Locale.ROOT));
+      if(discounts.isEmpty()) throw new IllegalArgumentException(
+          "This offer code is not valid for the selected course or is not currently active.");
+      if(discounts.size()>1) throw new IllegalStateException(
+          "More than one approved version of this code is effective for this course. HRMS must resolve the overlap.");
+      Map<String,Object> offer=discounts.getFirst();
+      long minimum=number(offer.get("min_listed_price_paise"));
+      if(listedPricePaise<minimum) throw new IllegalArgumentException("This offer code requires a higher course list price.");
+      String type=string(offer.get("discount_type"));
+      Integer bps=nullableInteger(offer.get("percentage_basis_points"));
+      Long flat=nullableLong(offer.get("flat_amount_paise"));
+      Long cap=nullableLong(offer.get("max_discount_paise"));
+      discountPaise=CourseDiscountCalculator.calculate(listedPricePaise,type,bps,flat,cap);
+      if(discountPaise<=0||discountPaise>=listedPricePaise)
+        throw new IllegalArgumentException("This offer code must leave a positive payable balance. Ask HRMS to review the rule.");
+      discountOfferId=number(offer.get("id"));
+      discountSnapshot.put("discountOfferId",discountOfferId);
+      discountSnapshot.put("code",string(offer.get("code")));
+      discountSnapshot.put("version",number(offer.get("version")));
+      discountSnapshot.put("discountType",type);
+      discountSnapshot.put("percentageBasisPoints",bps);
+      discountSnapshot.put("flatAmountPaise",flat);
+      discountSnapshot.put("maxDiscountPaise",cap);
+      discountSnapshot.put("minListedPricePaise",minimum);
+      discountSnapshot.put("discountPaise",discountPaise);
+      discountSnapshot.put("effectiveFrom",String.valueOf(offer.get("effective_from")));
+      discountSnapshot.put("effectiveUntil",offer.get("effective_until")==null?null:String.valueOf(offer.get("effective_until")));
+    }
 
     LocalDate today=LocalDate.now(INDIA);
     List<Map<String,Object>> profiles=jdbc.queryForList("""
@@ -147,7 +199,7 @@ public class CourseOrderFinancialService {
     }
 
     CourseTaxCalculator.Result quote=CourseTaxCalculator.quote(
-        listedPricePaise,0L,treatment,gstRate,cessRate,priceIncludesTax);
+        listedPricePaise,discountPaise,treatment,gstRate,cessRate,priceIncludesTax);
     List<Map<String,Object>> taxComponents=taxComponents(
         quote,profileTaxComponents,placeRule,supplierStateCode,buyerStateCode);
     Map<String,Object> supplierSnapshot=new LinkedHashMap<>();
@@ -256,6 +308,8 @@ public class CourseOrderFinancialService {
     taxSnapshot.put("supplierStateCode",supplierStateCode);
     taxSnapshot.put("buyerStateCode",buyerStateCode);
     taxSnapshot.put("listedPricePaise",quote.listedPricePaise());
+    taxSnapshot.put("discountOfferId",discountOfferId);
+    taxSnapshot.put("discountCode",normalizedCode);
     taxSnapshot.put("discountPaise",quote.discountPaise());
     taxSnapshot.put("discountedPricePaise",quote.discountedPricePaise());
     taxSnapshot.put("taxableValuePaise",quote.taxableValuePaise());
@@ -282,9 +336,10 @@ public class CourseOrderFinancialService {
     shareSnapshot.put("recipients",recipientSnapshots);
 
     return new CheckoutSnapshot(
-        listedPricePaise,0L,quote.customerPayablePaise(),quote.taxableValuePaise(),quote.outputTaxPaise(),
-        number(profile.get("tax_profile_id")),number(profile.get("legal_entity_id")),gstRegistrationId,
-        policyId,templateVersionId,taxSnapshot,shareSnapshot,Map.of("discountPaise",0,"discountType","NONE"));
+        listedPricePaise,discountPaise,discountOfferId,normalizedCode,quote.customerPayablePaise(),
+        quote.taxableValuePaise(),quote.outputTaxPaise(),number(profile.get("tax_profile_id")),
+        number(profile.get("legal_entity_id")),gstRegistrationId,policyId,templateVersionId,
+        taxSnapshot,shareSnapshot,discountSnapshot);
   }
 
   /**
@@ -295,7 +350,8 @@ public class CourseOrderFinancialService {
   public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,long capturedAmountPaise) {
     List<Map<String,Object>> orders=jdbc.queryForList("""
       select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,institution_id,
-        institution_offer_id,offer_price_paise,currency,listed_price_paise,discount_amount_paise,
+        institution_offer_id,offer_price_paise,currency,listed_price_paise,discount_offer_id,discount_reference,
+        discount_amount_paise,discount_snapshot::text as discount_snapshot_json,
         tax_profile_id,taxable_value_paise,output_tax_paise,tax_calculation_snapshot::text as tax_snapshot_json,
         buyer_snapshot::text as buyer_snapshot_json,revenue_share_policy_id,
         revenue_share_policy_snapshot::text as share_snapshot_json,fiscal_document_id
@@ -319,6 +375,19 @@ public class CourseOrderFinancialService {
 
     long listed=number(order.get("listed_price_paise"));
     long discount=number(order.get("discount_amount_paise"));
+    Long storedOfferId=nullableLong(order.get("discount_offer_id"));
+    String storedCode=nullableString(order.get("discount_reference"));
+    Map<String,Object> storedDiscountSnapshot=parseObject(order.get("discount_snapshot_json"));
+    if(storedOfferId==null) {
+      if(discount!=0||storedCode!=null||number(taxSnapshot.get("discountOfferId"))!=0)
+        throw new IllegalStateException("This course order has an inconsistent discount snapshot.");
+    } else if(number(taxSnapshot.get("discountOfferId"))!=storedOfferId
+        ||!string(taxSnapshot.get("discountCode")).equals(storedCode)
+        ||number(storedDiscountSnapshot.get("discountOfferId"))!=storedOfferId
+        ||!string(storedDiscountSnapshot.get("code")).equals(storedCode)
+        ||number(storedDiscountSnapshot.get("discountPaise"))!=discount) {
+      throw new IllegalStateException("The approved discount snapshot does not match the saved course order.");
+    }
     CourseTaxCalculator.Treatment treatment=CourseTaxCalculator.Treatment.valueOf(string(taxSnapshot.get("taxTreatment")));
     int gstRate=integer(taxSnapshot.get("gstRateBasisPoints"));
     int cessRate=integer(taxSnapshot.get("cessRateBasisPoints"));
@@ -584,6 +653,14 @@ public class CourseOrderFinancialService {
     if(!FiscalDocumentStorage.sha256(bytes).equals(document.sha256())||bytes.length!=document.sizeBytes())
       throw new IllegalStateException("The stored invoice did not pass its integrity check.");
     return bytes;
+  }
+
+  private static String normalizeDiscountCode(String raw) {
+    if(raw==null||raw.isBlank()) return null;
+    String code=raw.trim().toUpperCase(Locale.ROOT);
+    if(!code.matches("[A-Z0-9][A-Z0-9_-]{2,39}"))
+      throw new IllegalArgumentException("Offer codes must be 3–40 letters, digits, hyphens or underscores.");
+    return code;
   }
 
   private long offerIdForOrder(long orderId) {

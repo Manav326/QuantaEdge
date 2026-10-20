@@ -335,3 +335,12 @@ Verification at this checkpoint:
 - Added targeted service tests for unreviewed sellers, sellers marked REQUIRED, and pass-through behavior for a reviewed NOT_REQUIRED seller.
 - The next implementation priorities are: (1) audit and wire coupon/offer pricing into the server quote, tax base and share calculation; (2) implement idempotent full/partial refund and credit/debit-note adjustment events tied to the original document/allocation; (3) exercise captured sale/retry/refund across at least three institution tenants, including parent purchases; and (4) verify Actions on the exact current main SHA before release.
 - Release remains **NOT READY** until end-to-end provider, refund, coupon, multi-tenant and statutory review tests pass.
+
+
+### 2026-10-20 — Approved course discount policy foundation
+
+- Added V156 for offer-scoped discount code rules, policy versions, immutable submitted terms, HRMS approval/retirement, redemption reservation status and financial snapshot locking.
+- Added integer-paise discount arithmetic for percentage (basis points, HALF_UP) and flat amount rules with optional maximum caps.
+- Student and parent checkout accepts an optional offer code. The server resolves only an effective approved rule for the exact institution offer, calculates the discount itself, and sends the same discounted amount through tax quote, Razorpay amount, invoice line/totals and distribution basis.
+- Unknown, expired, cross-offer, overlapping, or zero-payable codes fail closed. Redemptions remain auditable across reservation, verification, failure and retry. No coupon/rate/customer/payment data is seeded.
+- HRMS configuration screen and student/parent web + Android code-entry UI still need to be wired; this commit is the pricing/ledger foundation, not a release-ready coupon feature.

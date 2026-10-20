@@ -449,13 +449,15 @@ public class CourseMarketplaceController {
   public Map<String, Object> createOrder(
       @PathVariable long courseId,
       @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
+      @RequestBody(required = false) CourseOrderRequest request,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId = requireTenant(tenant).institutionId();
     String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
-    return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT", institutionId);
+    return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT", institutionId,
+        request==null?null:request.discountCode());
   }
 
   /** Parents can buy for their own learning profile or directly for a linked child. */
@@ -492,7 +494,15 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
     }
     return createOrderInternal(courseId, key, targetStudentId, context.userId(),
-        targetStudentId, orderRecipientType, institutionId);
+        targetStudentId, orderRecipientType, institutionId,request.discountCode());
+  }
+
+  private String normalizeDiscountCodeForRequest(String supplied) {
+    if(supplied==null||supplied.isBlank()) return null;
+    String code=supplied.trim().toUpperCase(Locale.ROOT);
+    if(!code.matches("[A-Z0-9][A-Z0-9_-]{2,39}"))
+      throw new IllegalArgumentException("Offer codes must be 3–40 letters, digits, hyphens or underscores.");
+    return code;
   }
 
   private String normalizeIdempotencyKey(String supplied) {
@@ -558,7 +568,8 @@ public class CourseMarketplaceController {
 
   private Map<String, Object> createOrderInternal(
       long courseId, String idempotencyKey, long targetStudentId,
-      Long purchaserUserId, Long targetStudentForOrder, String recipientType, long institutionId) {
+      Long purchaserUserId, Long targetStudentForOrder, String recipientType, long institutionId,
+      String requestedDiscountCode) {
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select p.id, o.id as institution_offer_id,
@@ -617,7 +628,7 @@ public class CourseMarketplaceController {
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
-          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          discount_reference,tax_calculation_snapshot::text as tax_calculation_snapshot_json,
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where student_id=? and institution_id=? and course_id=? and client_request_key=?
@@ -625,6 +636,10 @@ public class CourseMarketplaceController {
         """, targetStudentId, institutionId, courseId, idempotencyKey, purchaserUserId);
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
+      String previousCode=previous.get("discount_reference")==null?null:String.valueOf(previous.get("discount_reference"));
+      String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
+      if(!java.util.Objects.equals(previousCode,requestedCode))
+        throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
       String previousStatus = String.valueOf(previous.get("status"));
       if ("PENDING".equals(previousStatus)) {
         if (hasLockedFinancialSnapshots(previous)) {
@@ -676,7 +691,7 @@ public class CourseMarketplaceController {
     CourseOrderFinancialService.CheckoutSnapshot financialSnapshot =
         courseOrderFinancialService.prepareCheckout(
             ((Number)offer.get("institution_offer_id")).longValue(),
-            institutionId,listedPricePaise,currency,title,buyerSnapshot);
+            institutionId,listedPricePaise,currency,title,buyerSnapshot,requestedDiscountCode);
     amountPaise=financialSnapshot.payablePaise();
     String receipt = "qe_" + UUID.randomUUID().toString().replace("-", "");
     String buyerSnapshotJson;
@@ -697,17 +712,18 @@ public class CourseMarketplaceController {
           insert into course_payment_order(
             student_id,purchaser_user_id,target_student_id,recipient_type,
             course_id,institution_id,institution_offer_id,offer_price_paise,currency,
-            listed_price_paise,discount_amount_paise,discount_reference,discount_snapshot,
+            discount_offer_id,listed_price_paise,discount_amount_paise,discount_reference,discount_snapshot,
             tax_profile_id,taxable_value_paise,output_tax_paise,tax_calculation_snapshot,
             revenue_share_policy_id,revenue_share_policy_snapshot,buyer_snapshot,
             receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?,?,?,?::jsonb,?,?::jsonb,?::jsonb,?,?, 'CREATING')
+          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?,?,?,?::jsonb,?,?::jsonb,?::jsonb,?,?, 'CREATING')
           returning id
           """, Long.class, targetStudentId, purchaserUserId,
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
           courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
-          amountPaise, currency, financialSnapshot.listedPricePaise(),financialSnapshot.discountPaise(),
-          null,discountSnapshotJson,financialSnapshot.taxProfileId(),financialSnapshot.taxableValuePaise(),
+          amountPaise, currency, financialSnapshot.discountOfferId(),financialSnapshot.listedPricePaise(),
+          financialSnapshot.discountPaise(),financialSnapshot.discountCode(),discountSnapshotJson,
+          financialSnapshot.taxProfileId(),financialSnapshot.taxableValuePaise(),
           financialSnapshot.outputTaxPaise(),taxCalculationSnapshotJson,financialSnapshot.revenueSharePolicyId(),
           revenueShareSnapshotJson,buyerSnapshotJson,receipt,idempotencyKey);
     } catch (DuplicateKeyException conflict) {
@@ -719,6 +735,25 @@ public class CourseMarketplaceController {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
       }
       throw new IllegalArgumentException("This checkout request has already been used or another checkout is open. Reload the marketplace and try again.", conflict);
+    }
+
+    if(financialSnapshot.discountOfferId()!=null) {
+      try {
+        jdbc.update("""
+          insert into course_discount_redemption(
+            discount_offer_id,course_payment_order_id,purchaser_user_account_id,institution_offer_id,
+            code_snapshot,discount_amount_paise,status
+          ) values(?,?,?,?,?,?,'RESERVED')
+          """,financialSnapshot.discountOfferId(),localOrderId,purchaserAccountId,
+          ((Number)offer.get("institution_offer_id")).longValue(),financialSnapshot.discountCode(),
+          financialSnapshot.discountPaise());
+      } catch(Exception reservationFailure) {
+        jdbc.update("""
+          update course_payment_order set status='FAILED',failure_code='DISCOUNT_SNAPSHOT_FAILED',updated_at=now()
+          where id=? and status='CREATING'
+          """,localOrderId);
+        throw new IllegalStateException("The approved offer code could not be recorded safely. No Razorpay order was created.",reservationFailure);
+      }
     }
 
     try {
@@ -755,7 +790,11 @@ public class CourseMarketplaceController {
       if (updated != 1) {
         throw new IllegalStateException("This checkout expired while it was being prepared. Please start checkout again.");
       }
-      return checkoutResponse(localOrderId, providerOrderId, amountPaise, currency, courseId, title, institutionDisplayName);
+      Map<String,Object> checkout=checkoutResponse(localOrderId, providerOrderId, amountPaise, currency, courseId, title, institutionDisplayName);
+      checkout.put("listedPricePaise",financialSnapshot.listedPricePaise());
+      checkout.put("discountPaise",financialSnapshot.discountPaise());
+      checkout.put("discountCode",financialSnapshot.discountCode());
+      return checkout;
     } catch (Exception exception) {
       jdbc.update("""
           update course_payment_order set status='FAILED',failure_code='ORDER_CREATE_FAILED',updated_at=now()
@@ -1478,6 +1517,9 @@ public class CourseMarketplaceController {
   }
 
   public record VerifyCoursePaymentRequest(String paymentId, String orderId, String signature) {}
-  public record FamilyCourseOrderRequest(String recipientType, Long studentId) {}
+  public record CourseOrderRequest(String discountCode) {}
+  public record FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode) {
+    public FamilyCourseOrderRequest(String recipientType, Long studentId) { this(recipientType,studentId,null); }
+  }
   public record SaveCourseOfferRequest(String title, String description, long pricePaise, String currency, String status) {}
 }
