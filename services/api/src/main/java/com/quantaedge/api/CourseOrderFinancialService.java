@@ -714,6 +714,20 @@ public class CourseOrderFinancialService {
         string(row.get("storage_key")),string(row.get("sha256")),number(row.get("byte_length")));
   }
 
+  public DownloadableInvoice fiscalDocumentDownload(long fiscalDocumentId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select d.id,d.document_number,a.storage_key,a.sha256,a.byte_length
+      from fiscal_document d
+      join fiscal_document_asset a on a.fiscal_document_id=d.id and a.asset_type='PDF'
+      where d.id=?
+      order by a.created_at desc,a.id desc limit 1
+      """,fiscalDocumentId);
+    if(rows.isEmpty()) throw new IllegalArgumentException("An issued fiscal-document PDF is not available.");
+    Map<String,Object> row=rows.getFirst();
+    return new DownloadableInvoice(number(row.get("id")),string(row.get("document_number")),
+        string(row.get("storage_key")),string(row.get("sha256")),number(row.get("byte_length")));
+  }
+
   public byte[] readInvoice(DownloadableInvoice document) {
     byte[] bytes=storage.readPdf(document.storageKey());
     if(!FiscalDocumentStorage.sha256(bytes).equals(document.sha256())||bytes.length!=document.sizeBytes())
