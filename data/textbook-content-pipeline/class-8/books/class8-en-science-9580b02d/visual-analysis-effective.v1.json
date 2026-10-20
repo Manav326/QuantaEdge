@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "98c8927dd7293c5b8a8a1fca51e6257099ed475e1f284ee01474e44e7662bafc",
+  "raw_analysis_sha256": "d387a7f3ff9955807c9812aeec7c8c3a2e8be2e0942a3ae2224127bf9656260b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:43:51Z",
+      "checkpointed_at": "2026-10-20T16:50:19Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:44:36Z",
+      "checkpointed_at": "2026-10-20T16:51:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:45:06Z",
+      "checkpointed_at": "2026-10-20T16:51:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:45:55Z",
+      "checkpointed_at": "2026-10-20T16:52:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55972,6 +55972,56 @@
         "context_relation": "exploring forces",
         "limitations": [
           "The text does not provide specific images or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d2e44ce25f23b826aedbe38b",
+      "asset_sha256": "8427f189ec86d1f8e4b91978b797cf6a514841da0dd750162ed75483969b3bed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/8427f189ec86d1f8e4b91978b797cf6a514841da0dd750162ed75483969b3bed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "686f3a6ba10c803f918bf7a5d43ac6572c12ff6705bcdb5f5a36cf8a902f4ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two fists are shown, one pulling on the other with a red string.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect"
+        ],
+        "context_relation": "The image represents a physical interaction between two forces, one pulling the other.",
+        "limitations": [
+          "The image does not provide specific details about the forces or their effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:53:29Z",
+      "effective_analysis": {
+        "visual_summary": "Two fists are shown, one pulling on the other with a red string.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect"
+        ],
+        "context_relation": "The image represents a physical interaction between two forces, one pulling the other.",
+        "limitations": [
+          "The image does not provide specific details about the forces or their effects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

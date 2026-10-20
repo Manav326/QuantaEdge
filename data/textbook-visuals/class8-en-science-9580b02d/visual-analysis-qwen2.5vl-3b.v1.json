@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1142,
+    "assets_selected": 1143,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1138,
-    "assets_remaining": 1153,
+    "assets_analyzed": 1139,
+    "assets_remaining": 1152,
     "assets_completion_percent": 49.7,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1137,
+    "assets_skipped_from_checkpoint": 1138,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:43:51Z"
+      "checkpointed_at": "2026-10-20T16:50:19Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:44:36Z"
+      "checkpointed_at": "2026-10-20T16:51:04Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:45:06Z"
+      "checkpointed_at": "2026-10-20T16:51:34Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:45:55Z"
+      "checkpointed_at": "2026-10-20T16:52:23Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37293,6 +37293,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:49:20Z"
+    },
+    {
+      "asset_id": "d2e44ce25f23b826aedbe38b",
+      "asset_sha256": "8427f189ec86d1f8e4b91978b797cf6a514841da0dd750162ed75483969b3bed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/8427f189ec86d1f8e4b91978b797cf6a514841da0dd750162ed75483969b3bed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "686f3a6ba10c803f918bf7a5d43ac6572c12ff6705bcdb5f5a36cf8a902f4ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two fists are shown, one pulling on the other with a red string.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect"
+        ],
+        "context_relation": "The image represents a physical interaction between two forces, one pulling the other.",
+        "limitations": [
+          "The image does not provide specific details about the forces or their effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:53:29Z"
     }
   ]
 }
