@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 981,
+    "assets_selected": 983,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 978,
-    "assets_remaining": 1313,
-    "assets_completion_percent": 42.7,
+    "assets_analyzed": 980,
+    "assets_remaining": 1311,
+    "assets_completion_percent": 42.8,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 976,
+    "assets_skipped_from_checkpoint": 978,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:51:26Z"
+      "checkpointed_at": "2026-10-20T02:55:02Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:52:00Z"
+      "checkpointed_at": "2026-10-20T02:55:36Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:52:22Z"
+      "checkpointed_at": "2026-10-20T02:55:59Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31208,6 +31208,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:54:16Z"
+    },
+    {
+      "asset_id": "8229c367f4e83c8574fa1ea1",
+      "asset_sha256": "75ec124e7bab4563e59fee464a1f91bc7b58130f645314593fa9539b64f72242",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/75ec124e7bab4563e59fee464a1f91bc7b58130f645314593fa9539b64f72242.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene in a pharmacy where a customer is purchasing medication, while a pharmacist and a woman in a yellow saree are present.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pharmacy",
+          "customer",
+          "pharmacist",
+          "woman",
+          "medication",
+          "antibiotics",
+          "prescription",
+          "healthcare",
+          "pharmacy scene"
+        ],
+        "context_relation": "The image depicts a typical pharmacy setting where a customer is interacting with a pharmacist, likely purchasing medication.",
+        "limitations": [
+          "The image does not provide specific details about the types of medication or the exact actions of the characters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:56:40Z"
+    },
+    {
+      "asset_id": "616bdec0c1b17a2cfc0eba88",
+      "asset_sha256": "e6dfc96cfa88bd2a67bd44143f84449ae477b161e476e487e065da38425257bc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/e6dfc96cfa88bd2a67bd44143f84449ae477b161e476e487e065da38425257bc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman standing next to a cow, with the woman holding a jar labeled 'Lean Dames'.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "LEAN DAMES"
+        ],
+        "concepts": [
+          "cartoon illustration",
+          "man and woman",
+          "cow",
+          "jar labeled 'Lean Dames'"
+        ],
+        "context_relation": "The image is a part of an educational content about health and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the context or the educational content it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:57:19Z"
     }
   ]
 }

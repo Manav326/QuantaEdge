@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0cf62a5eae0fc73c11399aa32d9f223a0be3356b74103dbcf8d9c646b955952c",
+  "raw_analysis_sha256": "49672ee8198abfcb243186fd3559aa3beb2aff941f29d0c79f8929b1873d830f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:51:26Z",
+      "checkpointed_at": "2026-10-20T02:55:02Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:52:00Z",
+      "checkpointed_at": "2026-10-20T02:55:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:52:22Z",
+      "checkpointed_at": "2026-10-20T02:55:59Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -46532,6 +46532,120 @@
         "context_relation": "The image explains the discovery of penicillin and its subsequent impact on antibiotic resistance, highlighting the spread of antibiotic-resistant bacteria in the community.",
         "limitations": [
           "The image does not provide specific details about the mechanisms of antibiotic resistance or the specific bacteria involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8229c367f4e83c8574fa1ea1",
+      "asset_sha256": "75ec124e7bab4563e59fee464a1f91bc7b58130f645314593fa9539b64f72242",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/75ec124e7bab4563e59fee464a1f91bc7b58130f645314593fa9539b64f72242.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene in a pharmacy where a customer is purchasing medication, while a pharmacist and a woman in a yellow saree are present.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pharmacy",
+          "customer",
+          "pharmacist",
+          "woman",
+          "medication",
+          "antibiotics",
+          "prescription",
+          "healthcare",
+          "pharmacy scene"
+        ],
+        "context_relation": "The image depicts a typical pharmacy setting where a customer is interacting with a pharmacist, likely purchasing medication.",
+        "limitations": [
+          "The image does not provide specific details about the types of medication or the exact actions of the characters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:56:40Z",
+      "effective_analysis": {
+        "visual_summary": "A scene in a pharmacy where a customer is purchasing medication, while a pharmacist and a woman in a yellow saree are present.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pharmacy",
+          "customer",
+          "pharmacist",
+          "woman",
+          "medication",
+          "antibiotics",
+          "prescription",
+          "healthcare",
+          "pharmacy scene"
+        ],
+        "context_relation": "The image depicts a typical pharmacy setting where a customer is interacting with a pharmacist, likely purchasing medication.",
+        "limitations": [
+          "The image does not provide specific details about the types of medication or the exact actions of the characters."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "616bdec0c1b17a2cfc0eba88",
+      "asset_sha256": "e6dfc96cfa88bd2a67bd44143f84449ae477b161e476e487e065da38425257bc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/e6dfc96cfa88bd2a67bd44143f84449ae477b161e476e487e065da38425257bc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman standing next to a cow, with the woman holding a jar labeled 'Lean Dames'.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "LEAN DAMES"
+        ],
+        "concepts": [
+          "cartoon illustration",
+          "man and woman",
+          "cow",
+          "jar labeled 'Lean Dames'"
+        ],
+        "context_relation": "The image is a part of an educational content about health and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the context or the educational content it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:57:19Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman standing next to a cow, with the woman holding a jar labeled 'Lean Dames'.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "LEAN DAMES"
+        ],
+        "concepts": [
+          "cartoon illustration",
+          "man and woman",
+          "cow",
+          "jar labeled 'Lean Dames'"
+        ],
+        "context_relation": "The image is a part of an educational content about health and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the context or the educational content it is related to."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

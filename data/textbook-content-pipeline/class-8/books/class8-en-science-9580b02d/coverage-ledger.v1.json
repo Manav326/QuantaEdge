@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 992,
-    "successful_visual_analyses": 981,
-    "missing_visual_analyses": 1299,
+    "raw_analysis_result_rows": 994,
+    "successful_visual_analyses": 983,
+    "missing_visual_analyses": 1297,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1310,
+    "unresolved_count": 1308,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37770,9 +37770,28 @@
       "asset_path": "assets/75ec124e7bab4563e59fee464a1f91bc7b58130f645314593fa9539b64f72242.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scene in a pharmacy where a customer is purchasing medication, while a pharmacist and a woman in a yellow saree are present.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pharmacy",
+          "customer",
+          "pharmacist",
+          "woman",
+          "medication",
+          "antibiotics",
+          "prescription",
+          "healthcare",
+          "pharmacy scene"
+        ],
+        "context_relation": "The image depicts a typical pharmacy setting where a customer is interacting with a pharmacist, likely purchasing medication.",
+        "limitations": [
+          "The image does not provide specific details about the types of medication or the exact actions of the characters."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37788,9 +37807,25 @@
       "asset_path": "assets/e6dfc96cfa88bd2a67bd44143f84449ae477b161e476e487e065da38425257bc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman standing next to a cow, with the woman holding a jar labeled 'Lean Dames'.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "LEAN DAMES"
+        ],
+        "concepts": [
+          "cartoon illustration",
+          "man and woman",
+          "cow",
+          "jar labeled 'Lean Dames'"
+        ],
+        "context_relation": "The image is a part of an educational content about health and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the context or the educational content it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
