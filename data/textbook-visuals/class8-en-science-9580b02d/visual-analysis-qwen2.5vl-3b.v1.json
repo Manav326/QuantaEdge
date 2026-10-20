@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1136,
+    "assets_selected": 1137,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1132,
-    "assets_remaining": 1159,
-    "assets_completion_percent": 49.4,
+    "assets_analyzed": 1133,
+    "assets_remaining": 1158,
+    "assets_completion_percent": 49.5,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1131,
+    "assets_skipped_from_checkpoint": 1132,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:18:08Z"
+      "checkpointed_at": "2026-10-20T16:24:01Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:18:53Z"
+      "checkpointed_at": "2026-10-20T16:24:46Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:19:23Z"
+      "checkpointed_at": "2026-10-20T16:25:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:20:12Z"
+      "checkpointed_at": "2026-10-20T16:26:04Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37050,6 +37050,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:23:01Z"
+    },
+    {
+      "asset_id": "de656ea1662f550745d35ec4",
+      "asset_sha256": "018ebdf96baff712e08ee3adc101db385497fe635eb29d5149298c97ac758aec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/018ebdf96baff712e08ee3adc101db385497fe635eb29d5149298c97ac758aec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is pushing a large box with both hands.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pushing",
+          "box",
+          "person",
+          "lifting",
+          "physical activity"
+        ],
+        "context_relation": "The image shows a person performing a physical task, which is related to the concept of pushing and lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the person's actions or the environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:27:13Z"
     }
   ]
 }

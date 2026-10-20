@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b5ef3856621197fa6dc5da6599429027cd285579cb2ffc7c2d0c70070b42d2b1",
+  "raw_analysis_sha256": "8fe1a2fedd823a172209323069401bb23b535bd8753a746bd164df4be86eb92d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:18:08Z",
+      "checkpointed_at": "2026-10-20T16:24:01Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:18:53Z",
+      "checkpointed_at": "2026-10-20T16:24:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:19:23Z",
+      "checkpointed_at": "2026-10-20T16:25:15Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:20:12Z",
+      "checkpointed_at": "2026-10-20T16:26:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55582,6 +55582,58 @@
         "context_relation": "The page is part of a science textbook focusing on forces and their effects on different surfaces and situations.",
         "limitations": [
           "The image does not provide specific answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "de656ea1662f550745d35ec4",
+      "asset_sha256": "018ebdf96baff712e08ee3adc101db385497fe635eb29d5149298c97ac758aec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/018ebdf96baff712e08ee3adc101db385497fe635eb29d5149298c97ac758aec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is pushing a large box with both hands.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pushing",
+          "box",
+          "person",
+          "lifting",
+          "physical activity"
+        ],
+        "context_relation": "The image shows a person performing a physical task, which is related to the concept of pushing and lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the person's actions or the environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:27:13Z",
+      "effective_analysis": {
+        "visual_summary": "A person is pushing a large box with both hands.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pushing",
+          "box",
+          "person",
+          "lifting",
+          "physical activity"
+        ],
+        "context_relation": "The image shows a person performing a physical task, which is related to the concept of pushing and lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the person's actions or the environment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
