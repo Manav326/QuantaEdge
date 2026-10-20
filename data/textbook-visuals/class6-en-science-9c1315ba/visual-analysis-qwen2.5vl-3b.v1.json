@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1270,
+    "assets_selected": 1271,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1266,
-    "assets_remaining": 812,
-    "assets_completion_percent": 60.9,
+    "assets_analyzed": 1267,
+    "assets_remaining": 811,
+    "assets_completion_percent": 61.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1265,
+    "assets_skipped_from_checkpoint": 1266,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:28:30Z"
+      "checkpointed_at": "2026-10-20T19:35:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:29:23Z"
+      "checkpointed_at": "2026-10-20T19:36:01Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:30:32Z"
+      "checkpointed_at": "2026-10-20T19:37:12Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:31:14Z"
+      "checkpointed_at": "2026-10-20T19:37:56Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42252,6 +42252,56 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T19:34:04Z"
+    },
+    {
+      "asset_id": "95a8b39ff72bc91986bf2f60",
+      "asset_sha256": "59b892449eac19cfe7d88113dd0fd3c3b6eae608ce2f634dbe03dc0af7f00403",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 124,
+      "asset_path": "assets/59b892449eac19cfe7d88113dd0fd3c3b6eae608ce2f634dbe03dc0af7f00403.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "362541507acd1269b9f44f1df9d8475c895e7ba18aceffe848c73fab88ba6ca3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A collection of various geometric shapes in different colors.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Book ID: ncert-c6-english-fecu1",
+          "Source PDF page: 124",
+          "Asset kind: embedded_image",
+          "Nearby extracted page text (possibly incomplete):",
+          "Discuss in class other properties of sports balls, such as size,",
+          "colour, texture and how high they bounce and understand",
+          "why balls are made up of specific materials for specific sports.",
+          "Observe Fig. 6.4 and group the objects in as many different",
+          "ways as possible.",
+          "You might have grouped",
+          "these objects according to",
+          "their shapes or by their",
+          "colour or materials they are",
+          "made up of.",
+          "We have learnt that",
+          "materials"
+        ],
+        "concepts": [
+          "Geometric shapes",
+          "Sports balls",
+          "Properties of materials",
+          "Grouping objects"
+        ],
+        "context_relation": "The image is a visual aid for a lesson on the properties of sports balls, specifically focusing on the shapes and materials used.",
+        "limitations": [
+          "The image does not provide specific details about the shapes or materials of the objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T19:39:17Z"
     }
   ]
 }
