@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1046,
+    "assets_selected": 1048,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1043,
-    "assets_remaining": 1248,
-    "assets_completion_percent": 45.5,
+    "assets_analyzed": 1045,
+    "assets_remaining": 1246,
+    "assets_completion_percent": 45.6,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1041,
+    "assets_skipped_from_checkpoint": 1043,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:44:43Z"
+      "checkpointed_at": "2026-10-20T04:46:40Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:45:17Z"
+      "checkpointed_at": "2026-10-20T04:47:15Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:45:40Z"
+      "checkpointed_at": "2026-10-20T04:47:40Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33677,6 +33677,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:45:53Z"
+    },
+    {
+      "asset_id": "29927b91349b8225478d04f0",
+      "asset_sha256": "4a5ca50b902bc0726f918704ee344acb5670afb5bd8b416f4913b83f31f1109c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "page-0070.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving a cylindrical coil, compasses, and a cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Place the compasses near the two ends of the cylindrical coil (Fig. 4.3b).",
+          "Connect the two ends of the coil with the terminals of the cell as shown in Fig. 4.3c and observe the magnetic compasses. Do you find any deflection in the needles of the compasses?",
+          "Disconnect the wire from the cell. Do the needles of the compasses come back to their original positions?",
+          "Insert an iron nail in the paper cylinder (Fig. 4.3d) and repeat the steps. Is there any difference in the deflection of the compass needles?",
+          "Place some iron paper clips near the two ends of the nail. Are the clips attracted to the ends of the nail?"
+        ],
+        "concepts": [
+          "cylindrical coil",
+          "compasses",
+          "cell",
+          "magnetic compasses",
+          "iron nail",
+          "paper clips",
+          "electromagnet",
+          "magnetic effect"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:49:17Z"
+    },
+    {
+      "asset_id": "daa77308df28bfda3e83d351",
+      "asset_sha256": "93f110e34081a8c737d3c749290e7f86604e59c02dfe7331bd31bbc5457b60dd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/93f110e34081a8c737d3c749290e7f86604e59c02dfe7331bd31bbc5457b60dd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a telescope to observe something.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation and use of a telescope",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:49:50Z"
     }
   ]
 }
