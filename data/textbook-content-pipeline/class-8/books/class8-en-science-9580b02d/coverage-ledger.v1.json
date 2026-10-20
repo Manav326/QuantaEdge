@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1116,
-    "successful_visual_analyses": 1098,
-    "missing_visual_analyses": 1175,
+    "raw_analysis_result_rows": 1117,
+    "successful_visual_analyses": 1099,
+    "missing_visual_analyses": 1174,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1193,
+    "unresolved_count": 1192,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42017,9 +42017,26 @@
       "asset_path": "assets/d432ae42767a440cd1805ee80b0793de5f5e72a6816bd27bc54e2c9dc92ec314.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a dry cell with a red casing and a metal cap.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte",
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific quantities or formulas are provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
