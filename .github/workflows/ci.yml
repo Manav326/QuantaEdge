@@ -196,7 +196,7 @@ jobs:
         run: node scripts/check-android-ui-localization.mjs
       - name: Run Android unit tests and build debug APK for verification
         env:
-          QUANTAEDGE_API_BASE_URL: http://192.168.31.47:8080/
+          QUANTAEDGE_API_BASE_URL: ${{ vars.QUANTAEDGE_LOCAL_API_BASE_URL || 'http://192.168.31.47:8080/' }}
           QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
           QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
           QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
@@ -210,7 +210,7 @@ jobs:
             -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
             -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
             --no-daemon --build-cache
-      - name: Build stable signed installable APK
+      - name: Build stable signed installable APK for local network
         if: steps.signing.outputs.configured == 'true'
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -223,7 +223,7 @@ jobs:
           QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
         run: |
           set -euo pipefail
-          gradle -p apps/android assembleRelease \
+          gradle -p apps/android assembleLocal \
             -PquantaedgeApiBaseUrl="$QUANTAEDGE_API_BASE_URL" \
             -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
             -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
