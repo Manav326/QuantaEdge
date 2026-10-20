@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
+import { UiText } from '../../i18n/useUiTranslation';
+import StudentEmptyState from '../components/StudentEmptyState';
 import styles from './courses.module.css';
 
 type Subject = {
