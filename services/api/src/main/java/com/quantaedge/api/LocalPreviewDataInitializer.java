@@ -52,7 +52,9 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
       select ?, ?, l.id, 'COMPLETED', 100, now(), now(), now()
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
-      on conflict (institution_id,student_id,lesson_id) do update set
+      on conflict (institution_id,student_id,lesson_id)
+        where institution_id is not null and course_id is null
+      do update set
         status='COMPLETED', progress_percent=100,
         started_at=coalesce(student_lesson_progress.started_at, excluded.started_at),
         completed_at=coalesce(student_lesson_progress.completed_at, excluded.completed_at),
