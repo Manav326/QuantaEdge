@@ -171,10 +171,18 @@ jobs:
       - name: Run Android unit tests and build debug APK
         env:
           QUANTAEDGE_API_BASE_URL: http://192.168.31.47:8080/
+          QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
+          QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
+          QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
+          QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
         run: |
           set -euo pipefail
           test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
-          gradle -p apps/android testDebugUnitTest assembleDebug
+          gradle -p apps/android testDebugUnitTest assembleDebug \
+            -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
+            -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
+            -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID"
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:

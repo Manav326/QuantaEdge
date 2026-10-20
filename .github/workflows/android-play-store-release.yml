@@ -83,6 +83,10 @@ jobs:
           QUANTAEDGE_API_BASE_URL: ${{ inputs.api_base_url }}
           QUANTAEDGE_VERSION_CODE: ${{ inputs.version_code }}
           QUANTAEDGE_VERSION_NAME: ${{ inputs.version_name }}
+          QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
+          QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
+          QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
+          QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
         shell: bash
         run: |
           set -euo pipefail
@@ -90,6 +94,10 @@ jobs:
             -PquantaedgeApiBaseUrl="$QUANTAEDGE_API_BASE_URL" \
             -PquantaedgeVersionCode="$QUANTAEDGE_VERSION_CODE" \
             -PquantaedgeVersionName="$QUANTAEDGE_VERSION_NAME" \
+            -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
+            -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
+            -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
             --no-daemon --build-cache
 
       - name: Upload Play Store release artifacts
