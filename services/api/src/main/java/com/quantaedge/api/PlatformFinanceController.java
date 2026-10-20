@@ -490,8 +490,12 @@ public class PlatformFinanceController {
     if(row.isEmpty()) throw notFound("Discount offer not found.");
     if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status"))))
       throw bad("Only a pending discount offer can be approved.");
-    Instant starts=toInstant(row.get("effective_from"));
-    Instant ends=row.get("effective_until")==null?null:toInstant(row.get("effective_until"));
+    // Serialize approvals for the same course offer so two concurrent approvals cannot
+    // both pass an overlap check against an empty set.
+    jdbc.queryForObject("select id from institution_marketplace_offer where id=? for update",
+        Long.class,number(row.get("institution_offer_id")));
+    Instant starts=asInstant(row.get("effective_from"));
+    Instant ends=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
     Boolean overlap=jdbc.queryForObject("""
       select exists(
         select 1 from course_discount_offer other
