@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27a4287f08bf22fba25de6f6007b0c7fdbffc1be3ce6c53189552573e41b29da",
+  "raw_analysis_sha256": "eabe461cd1c3900f2cfcd207900128db282f2ec222dd791f34b4b73f2fe012d4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:36:36Z",
+      "checkpointed_at": "2026-10-20T06:39:29Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:37:09Z",
+      "checkpointed_at": "2026-10-20T06:40:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:37:31Z",
+      "checkpointed_at": "2026-10-20T06:40:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:38:07Z",
+      "checkpointed_at": "2026-10-20T06:41:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -52942,6 +52942,66 @@
         "limitations": [
           "The image does not provide any information about the function or purpose of the device.",
           "The image does not show the electrolyte or the components inside the cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "29b4bd1715fcec19181871ee",
+      "asset_sha256": "1ad2707ae47a48817714d6ca750a655e1b6de91a0c5e84d1a1e5cb66dfbe7021",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/1ad2707ae47a48817714d6ca750a655e1b6de91a0c5e84d1a1e5cb66dfbe7021.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A dry cell battery with a metal cap, carbon rod, and electrolyte paste.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Electrolyte paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Voltaic cell",
+          "Electrolyte paste",
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "context_relation": "The image is a visual representation of a dry cell battery, which is a type of voltaic cell.",
+        "limitations": [
+          "The image does not provide specific details about the battery's capacity or voltage."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:41:38Z",
+      "effective_analysis": {
+        "visual_summary": "A dry cell battery with a metal cap, carbon rod, and electrolyte paste.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Electrolyte paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Voltaic cell",
+          "Electrolyte paste",
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "context_relation": "The image is a visual representation of a dry cell battery, which is a type of voltaic cell.",
+        "limitations": [
+          "The image does not provide specific details about the battery's capacity or voltage."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
