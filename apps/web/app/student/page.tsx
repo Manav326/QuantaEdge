@@ -5,6 +5,7 @@ import { apiFetch } from '../components/apiClient';
 import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
 import { useTenantBranding } from '../components/TenantBrandingProvider';
+import StudentEmptyState from './components/StudentEmptyState';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import { formatUserTimestamp } from '../components/formatUserTimestamp';
