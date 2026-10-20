@@ -174,6 +174,40 @@ public class PlatformFinanceController {
     return Map.of("id",legalEntityId,"invoiceSeriesCode",series);
   }
 
+  @PutMapping("/legal-entities/{legalEntityId}/einvoice-applicability")
+  @Transactional
+  public Map<String,Object> reviewEinvoiceApplicability(
+      @PathVariable long legalEntityId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    String applicability=requiredText(body,"applicability").toUpperCase(Locale.ROOT);
+    if(!List.of("NOT_REQUIRED","REQUIRED").contains(applicability))
+      throw bad("Choose either NOT_REQUIRED or REQUIRED after the legal seller's e-invoice applicability has been reviewed.");
+    String reviewNote=requiredText(body,"reviewNote");
+    if(reviewNote.length()<20 || reviewNote.length()>1000)
+      throw bad("Record a review rationale or tax-adviser reference between 20 and 1,000 characters.");
+    Map<String,Object> entity=one(
+        "select id,institution_id,legal_name,einvoice_applicability from billing_legal_entity where id=?",
+        legalEntityId);
+    if(entity.isEmpty()) throw notFound("Legal entity not found.");
+    Long institutionId=optionalLong(entity.get("institution_id"));
+    int changed=jdbc.update("""
+      update billing_legal_entity
+      set einvoice_applicability=?,einvoice_applicability_reviewed_by_staff_id=?,
+          einvoice_applicability_reviewed_at=now(),einvoice_applicability_review_note=?,
+          updated_by_staff_id=?,updated_at=now()
+      where id=?
+      """,applicability,context.staffId(),reviewNote,context.staffId(),legalEntityId);
+    if(changed!=1) throw bad("The legal seller changed while the e-invoice review was being saved. Reload and retry.");
+    audit(legalEntityId,institutionId,context,"EINVOICE_APPLICABILITY_REVIEWED",
+        "BILLING_LEGAL_ENTITY",Long.toString(legalEntityId),
+        Map.of("previousApplicability",String.valueOf(entity.get("einvoice_applicability")),
+            "applicability",applicability,"reviewNote",reviewNote));
+    return Map.of("id",legalEntityId,"einvoiceApplicability",applicability,
+        "reviewedByStaffId",context.staffId(),"message",
+        "Human review recorded. This does not validate applicability with a GST portal or replace professional tax advice.");
+  }
+
   @PostMapping("/legal-entities/{legalEntityId}/gst-registrations")
   @Transactional
   public Map<String,Object> addGstRegistration(@PathVariable long legalEntityId,@RequestBody Map<String,Object> body,
@@ -804,7 +838,9 @@ public class PlatformFinanceController {
   private List<Map<String,Object>> legalEntityRows() {
     return jdbc.queryForList("""
       select e.id,e.entity_kind,e.institution_id,t.display_name as institution_name,e.legal_name,e.trade_name,
-        e.contact_email,e.contact_phone,e.invoice_series_code,e.registered_address::text as registered_address_json,e.status,e.created_at,
+        e.contact_email,e.contact_phone,e.invoice_series_code,e.einvoice_applicability,
+        e.einvoice_applicability_reviewed_at,e.einvoice_applicability_review_note,
+        e.registered_address::text as registered_address_json,e.status,e.created_at,
         (select count(*) from billing_gst_registration g where g.legal_entity_id=e.id and g.status='ACTIVE') as active_gst_registrations
       from billing_legal_entity e left join institution_tenant t on t.id=e.institution_id
       order by e.created_at desc,e.id desc
