@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1077,
+    "assets_selected": 1078,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1073,
-    "assets_remaining": 1218,
-    "assets_completion_percent": 46.8,
+    "assets_analyzed": 1074,
+    "assets_remaining": 1217,
+    "assets_completion_percent": 46.9,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1072,
+    "assets_skipped_from_checkpoint": 1073,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:52:00Z"
+      "checkpointed_at": "2026-10-20T05:54:53Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:52:34Z"
+      "checkpointed_at": "2026-10-20T05:55:28Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:52:57Z"
+      "checkpointed_at": "2026-10-20T05:55:50Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:53:33Z"
+      "checkpointed_at": "2026-10-20T05:56:27Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34798,6 +34798,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:54:09Z"
+    },
+    {
+      "asset_id": "c25d17efbb6ca1dc33778659",
+      "asset_sha256": "91f4e299ed8f4d82e29e2dc4f6b3082289d1cbf0922e55cc1680f7f973c79bf2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/91f4e299ed8f4d82e29e2dc4f6b3082289d1cbf0922e55cc1680f7f973c79bf2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aea6c47d87dc8df6f932d601b41adf4e16f8caed0f597f02df9e63a986e4a3ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a blue vest and a white shirt, with her hands raised in a gesture of explanation or inquiry.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate a concept related to electricity or batteries, possibly explaining the components or effects of these portable sources.",
+        "limitations": [
+          "The image does not provide specific details about the components of cells and batteries, nor does it show the magnetic or heating effects mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:57:04Z"
     }
   ]
 }
