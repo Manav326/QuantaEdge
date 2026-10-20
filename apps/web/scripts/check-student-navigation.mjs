@@ -596,9 +596,11 @@ assert.ok(androidAllCoursesScreen.includes('if (programsLoadFailed)') &&
   'Android My Courses must keep course-fetch failures separate from a successfully empty enrolment list.');
 assert.ok(androidClassesScreen.includes('noEnrolledCourses: Boolean = false') &&
   androidClassesScreen.includes('StudentEnrollmentEmptyState') &&
-  androidCertificatesScreen.includes('if (noEnrolledCourses)') &&
+  androidCertificatesScreen.includes('if (noEnrolledCourses && !showScanner') &&
+  androidCertificatesScreen.includes('secondaryLabel = localizedUiText("Scan certificate")') &&
+  androidCertificatesScreen.includes('verificationCode.isBlank()') &&
   androidCertificatesScreen.includes('courseAccessLoadError'),
-  'Android live/recorded classes and certificates must offer a deliberate no-enrolment state and preserve course lookup errors.');
+  'Android live/recorded classes and certificates must offer a deliberate no-enrolment state, preserve course lookup errors, and keep public certificate scanning/verification usable without enrolment.');
 assert.ok(androidLocalization.includes('empty_leaderboard_title') &&
   androidLocalization.includes('empty_course_access_load_error') &&
   androidLocalization.includes('empty_marketplace_title'),
