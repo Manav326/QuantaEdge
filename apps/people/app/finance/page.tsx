@@ -15,6 +15,7 @@ type DiscountOffer = { id:number; institution_offer_id:number; code:string; vers
 type PolicyDetail = Policy & { recipients:PolicyRecipient[] };
 type Template = { id:number; scope:string; legal_entity_id?:number|null; internal_name:string; template_version_id?:number|null; version_no?:number|null; version_status?:string; design_definition_json?:string|null; published_at?:string|null };
 type FinancialDocument = { id:number; document_type:string; document_number:string; issued_at:string; currency:string; total_value_paise:number; tax_value_paise:number; source_type:string; source_record_key:string; pdf_available:boolean };
+type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
 type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
@@ -34,6 +35,13 @@ async function api<T>(path:string, init:RequestInit={}):Promise<T>{
 }
 const rupees=(paise:number|undefined,currency='INR')=>typeof paise!=='number'?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency}).format(paise/100);
 const asIso=(value:string)=>new Date(value).toISOString();
+function parseRupeesPaise(raw:string):number|null{
+  const value=raw.trim();
+  if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value))return null;
+  const parts=value.split('.');
+  const paise=Number(parts[0])*100+Number(((parts[1]||'')+'00').slice(0,2));
+  return Number.isSafeInteger(paise)&&paise>=100?paise:null;
+}
 function parseDesign(value?:string|null):Design{
   try { const raw=value?JSON.parse(value):{}; return {...DEFAULT_DESIGN,...raw}; } catch { return {...DEFAULT_DESIGN}; }
 }
@@ -50,6 +58,13 @@ export default function FinancePage(){
   const [einvoiceDrafts,setEinvoiceDrafts]=useState<Record<string,string>>({});
   const [einvoiceNotes,setEinvoiceNotes]=useState<Record<string,string>>({});
   const [downloadingDocumentId,setDownloadingDocumentId]=useState<number|null>(null);
+  const [selectedRefundDocId,setSelectedRefundDocId]=useState<number|null>(null);
+  const [refundDraft,setRefundDraft]=useState({amountRupees:'',reason:''});
+  const [refundIdempotencyKey,setRefundIdempotencyKey]=useState('');
+  const [refundHistory,setRefundHistory]=useState<RefundRecord[]>([]);
+  const [refundResult,setRefundResult]=useState<RefundRecord|null>(null);
+  const [refundBusy,setRefundBusy]=useState(false);
+  const [refundHistoryLoading,setRefundHistoryLoading]=useState(false);
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -176,6 +191,85 @@ export default function FinancePage(){
       setNotice('Invoice PDF downloaded.');
     }catch(e){setError(e instanceof Error?e.message:'Invoice PDF could not be downloaded.');}
     finally{setDownloadingDocumentId(null);}
+  };
+  const selectedRefundDocument=documents.find(d=>d.id===selectedRefundDocId)??null;
+  const loadRefundHistory=async(orderId:number)=>{
+    setRefundHistoryLoading(true);
+    try{
+      const rows=await api<RefundRecord[]>(BASE+'/orders/'+orderId+'/refunds');
+      setRefundHistory(Array.isArray(rows)?rows:[]);
+    }catch(e){setError(e instanceof Error?e.message:'Refund history could not be loaded.');}
+    finally{setRefundHistoryLoading(false);}
+  };
+  const selectRefundDocument=(doc:FinancialDocument)=>{
+    if(doc.source_type!=='COURSE_ORDER'||!['TAX_INVOICE','BILL_OF_SUPPLY'].includes(doc.document_type)){
+      setError('Refunds can only be started from an original course-sale invoice.');return;
+    }
+    const orderId=Number(doc.source_record_key);
+    if(!Number.isSafeInteger(orderId)||orderId<=0){setError('The invoice does not contain a valid course order reference.');return;}
+    setSelectedRefundDocId(doc.id);
+    setRefundDraft({amountRupees:'',reason:''});
+    setRefundIdempotencyKey(crypto.randomUUID());
+    setRefundResult(null);setError('');setNotice('');
+    void loadRefundHistory(orderId);
+  };
+  const submitRefund=async()=>{
+    if(!selectedRefundDocument)return;
+    const orderId=Number(selectedRefundDocument.source_record_key);
+    const amountPaise=parseRupeesPaise(refundDraft.amountRupees);
+    const reason=refundDraft.reason.trim();
+    if(amountPaise===null){setError('Enter a refund amount of at least ₹1.00, with no more than two decimal places.');return;}
+    if(reason.length<10||reason.length>500){setError('Refund reason must contain 10–500 characters.');return;}
+    const key=refundIdempotencyKey||crypto.randomUUID();
+    setRefundIdempotencyKey(key);setRefundBusy(true);setError('');setNotice('');
+    try{
+      const result=await api<RefundRecord>(BASE+'/orders/'+orderId+'/refunds',{
+        method:'POST',headers:{'Idempotency-Key':key},
+        body:JSON.stringify({amountPaise,reason})
+      });
+      setRefundResult(result);
+      const status=String(result.status||'').toUpperCase();
+      if(status==='PROCESSED'){
+        setNotice('Refund processed. Credit note '+String(result.credit_note_number||'')+' has been issued and institutional allocations reversed.');
+        await loadAll();
+      }else if(status==='FAILED'){
+        setNotice('The provider reports that this refund failed. Start a new request only after reviewing the saved status.');
+        setRefundIdempotencyKey(crypto.randomUUID());
+      }else{
+        setNotice('Refund is not yet confirmed as processed. Its balance remains reserved; use the same request to retry or reconcile.');
+      }
+      await loadRefundHistory(orderId);
+    }catch(e){
+      setError((e instanceof Error?e.message:'Refund request could not be confirmed.')+' Keep the same amount/reason and retry; the server/provider idempotency key prevents a duplicate refund.');
+    }finally{setRefundBusy(false);}
+  };
+  const refreshRefund=async(refund:RefundRecord)=>{
+    if(!selectedRefundDocument)return;
+    const orderId=Number(selectedRefundDocument.source_record_key);
+    setRefundBusy(true);setError('');
+    try{
+      const result=await api<RefundRecord>(BASE+'/orders/'+orderId+'/refunds/'+refund.id);
+      setRefundResult(result);
+      if(String(result.status).toUpperCase()==='PROCESSED')await loadAll();
+      await loadRefundHistory(orderId);
+    }catch(e){setError(e instanceof Error?e.message:'Provider refund status could not be refreshed.');}
+    finally{setRefundBusy(false);}
+  };
+  const retryRefund=async(refund:RefundRecord)=>{
+    if(!selectedRefundDocument)return;
+    const orderId=Number(selectedRefundDocument.source_record_key);
+    setRefundBusy(true);setError('');
+    try{
+      const result=await api<RefundRecord>(BASE+'/orders/'+orderId+'/refunds/'+refund.id+'/retry',{method:'POST'});
+      setRefundResult(result);
+      const status=String(result.status||'').toUpperCase();
+      setNotice(status==='PROCESSED'
+        ?'Refund processed and credit note issued: '+String(result.credit_note_number||'')
+        :'Provider still has not confirmed the refund as processed. The same saved provider idempotency key was reused.');
+      if(status==='PROCESSED')await loadAll();
+      await loadRefundHistory(orderId);
+    }catch(e){setError(e instanceof Error?e.message:'Refund retry could not be confirmed.');}
+    finally{setRefundBusy(false);}
   };
   const createRegistration=(event:FormEvent)=>{
     event.preventDefault();
@@ -506,7 +600,18 @@ export default function FinancePage(){
         </section>
       </section>}
       {tab==='documents'&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Issued fiscal documents</h2><p>HRMS audit view for issued documents. Download the stored, hash-verified PDF or open its transaction snapshot.</p></div><button className={styles.secondary} onClick={()=>void loadAll()} disabled={busy}>Refresh records</button></div>
-        {documents.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Document</th><th>Issued</th><th>Tax</th><th>Total</th><th>PDF</th></tr></thead><tbody>{documents.map(d=><tr key={d.id}><td><b>{d.document_number}</b><small>{d.document_type} · {d.source_type}</small></td><td>{new Date(d.issued_at).toLocaleDateString('en-IN')}</td><td>{rupees(d.tax_value_paise,d.currency)}</td><td>{rupees(d.total_value_paise,d.currency)}</td><td>{d.pdf_available?<button type="button" className={styles.secondarySmall} disabled={downloadingDocumentId!==null} onClick={()=>void downloadDocument(d)}>{downloadingDocumentId===d.id?'Preparing…':'Download PDF'}</button>:'Not rendered'}</td></tr>)}</tbody></table></div>:<div className={styles.emptyLarge}><span>▤</span><b>No fiscal documents issued yet</b><p>Only invoices created by the captured-payment finalizer appear here. The live Studio preview never consumes a legal number or creates an issued invoice.</p></div>}
+        {documents.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Document</th><th>Issued</th><th>Tax</th><th>Total</th><th>Actions</th></tr></thead><tbody>{documents.map(d=><tr key={d.id}><td><b>{d.document_number}</b><small>{d.document_type} · {d.source_type}</small></td><td>{new Date(d.issued_at).toLocaleDateString('en-IN')}</td><td>{rupees(d.tax_value_paise,d.currency)}</td><td>{rupees(d.total_value_paise,d.currency)}</td><td><div className={styles.documentActions}>{d.pdf_available?<button type="button" className={styles.secondarySmall} disabled={downloadingDocumentId!==null} onClick={()=>void downloadDocument(d)}>{downloadingDocumentId===d.id?'Preparing…':'Download PDF'}</button>:'Not rendered'}{d.source_type==='COURSE_ORDER'&&['TAX_INVOICE','BILL_OF_SUPPLY'].includes(d.document_type)&&<button type="button" className={styles.secondarySmall} onClick={()=>selectRefundDocument(d)}>Refund / credit note</button>}</div></td></tr>)}</tbody></table></div>:<div className={styles.emptyLarge}><span>▤</span><b>No fiscal documents issued yet</b><p>Only invoices created by the captured-payment finalizer appear here. The live Studio preview never consumes a legal number or creates an issued invoice.</p></div>}
+        {selectedRefundDocument&&<section className={styles.refundPanel}>
+          <div className={styles.panelHead}><div><h2>Refund & credit note</h2><p>{selectedRefundDocument.document_number} · order {selectedRefundDocument.source_record_key}. Only a provider-confirmed processed refund creates a credit note.</p></div><button type="button" className={styles.secondarySmall} onClick={()=>{setSelectedRefundDocId(null);setRefundHistory([]);setRefundResult(null);}} disabled={refundBusy}>Close</button></div>
+          <form className={styles.refundForm} onSubmit={event=>{event.preventDefault();void submitRefund();}}>
+            <label>Refund amount (₹)<input inputMode="decimal" autoComplete="off" maxLength={12} value={refundDraft.amountRupees} onChange={event=>setRefundDraft(v=>({...v,amountRupees:event.target.value}))} placeholder="e.g. 499.00" required disabled={refundBusy}/></label>
+            <label>Reason for refund<input maxLength={500} value={refundDraft.reason} onChange={event=>setRefundDraft(v=>({...v,reason:event.target.value}))} placeholder="Explain the approved refund reason" required disabled={refundBusy}/></label>
+            <button type="submit" className={styles.primary} disabled={refundBusy}>{refundBusy?'Submitting…':'Submit / retry refund'}</button>
+          </form>
+          {refundResult&&<p className={styles.refundNote} role="status">Latest result: <b>{refundResult.status}</b>{refundResult.provider_status?' · Provider: '+refundResult.provider_status:''}{refundResult.credit_note_number?' · Credit note '+refundResult.credit_note_number:''}{refundResult.message?' · '+refundResult.message:''}</p>}
+          <div className={styles.panelHead}><div><h3>Refund history</h3><p>Amounts in this list remain reserved until processed or conclusively failed.</p></div><button type="button" className={styles.secondarySmall} onClick={()=>void loadRefundHistory(Number(selectedRefundDocument.source_record_key))} disabled={refundHistoryLoading||refundBusy}>{refundHistoryLoading?'Refreshing…':'Refresh history'}</button></div>
+          {refundHistory.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Requested</th><th>Amount</th><th>Status</th><th>Credit note</th><th>Recovery</th></tr></thead><tbody>{refundHistory.map(refund=><tr key={refund.id}><td>{new Date(refund.requested_at).toLocaleString('en-IN')}<small>{refund.reason}</small></td><td>{rupees(refund.requested_amount_paise,refund.currency)}</td><td><b>{refund.status}</b><small>{refund.provider_status||'Provider state not yet confirmed'}</small></td><td>{refund.credit_note_number||'Not issued'}</td><td><div className={styles.documentActions}>{['PROCESSING','PENDING','RECONCILIATION_REQUIRED'].includes(String(refund.status).toUpperCase())&&<><button type="button" className={styles.secondarySmall} onClick={()=>void refreshRefund(refund)} disabled={refundBusy}>Refresh status</button><button type="button" className={styles.secondarySmall} onClick={()=>void retryRefund(refund)} disabled={refundBusy}>Retry safely</button></>}</div></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No refund requests for this order yet.</p>}
+        </section>}
       </section>}
     </>}
   </main>;
