@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1141,
+    "assets_selected": 1142,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1137,
-    "assets_remaining": 1154,
-    "assets_completion_percent": 49.6,
+    "assets_analyzed": 1138,
+    "assets_remaining": 1153,
+    "assets_completion_percent": 49.7,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1136,
+    "assets_skipped_from_checkpoint": 1137,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:40:14Z"
+      "checkpointed_at": "2026-10-20T16:43:51Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:40:59Z"
+      "checkpointed_at": "2026-10-20T16:44:36Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:41:29Z"
+      "checkpointed_at": "2026-10-20T16:45:06Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:42:18Z"
+      "checkpointed_at": "2026-10-20T16:45:55Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37227,6 +37227,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:42:51Z"
+    },
+    {
+      "asset_id": "f17b2e8e8798635a9b50deae",
+      "asset_sha256": "42c32e6d77e80d46e6115bd5f83c62aff906e3b907fb9e93596f7ca4ff581fd3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "page-0083.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing forces and motion, with images of people pushing and pulling a box.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go",
+          "cycling. Their summer vacation had just begun, and they wanted",
+          "to explore the beautiful landscapes around their village. After",
+          "pumping air into their bicycle tyres, they set off. As they rode",
+          "through the village, the wind rushed past them. “Oh no! The",
+          "wind is pushing me hard!” said Ragini. Smiling, Sonali replied,",
+          "“We are riding against the wind. We must push our pedals harder",
+          "to move faster.”",
+          "Their ride took them up a long path to a h",
+          "illtop. Some parts",
+          "of the road were rough where they found it hard to pedal, while",
+          "other parts were smoother. When they reached the top and were",
+          "enjoying the view, they heard thunder and saw flashes of lightning",
+          "at a distance. Even though it looked beautiful, they decided to",
+          "head back immediately. On the way back, while passing a herd of",
+          "sheep, they pressed their bicycle bells and turned the handles to",
+          "change direction.",
+          "As they were coming down the slope of the hill, they realised",
+          "that their bicycles were moving down at a great speed even",
+          "though they were not pedalling! Sonali yelled, “It’s thrilling! It",
+          "seems something is pulling us downhill, what could it be?”",
+          "5.1 What Is a Force?",
+          "Let us try to experience the push and the pull.",
+          "Activity 5.1: Let us explore",
+          "• Take a large cardboard box.",
+          "• Try moving the box in as many different ways as you can",
+          "think of.",
+          "Fig. 5.1: Moving a box in different ways (a) Pushing; (b) Pulling;"
+        ],
+        "concepts": [
+          "forces",
+          "motion",
+          "pushing",
+          "pulling",
+          "lifting",
+          "force in science"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The text does not provide specific images or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:49:20Z"
     }
   ]
 }
