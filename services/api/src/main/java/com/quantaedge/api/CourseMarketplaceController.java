@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -600,13 +601,6 @@ public class CourseMarketplaceController {
     if(institutionDisplayName==null || institutionDisplayName.isBlank())
       throw new IllegalStateException("Institution payment branding is not configured.");
 
-    jdbc.update("""
-        update course_payment_order set status='EXPIRED',updated_at=now()
-        where student_id=? and institution_id=? and course_id=? and purchaser_user_id is not distinct from ?
-          and status in ('CREATING','PENDING')
-          and created_at < now() - (? * interval '1 minute')
-        """, targetStudentId, institutionId, courseId, purchaserUserId, ORDER_EXPIRY_MINUTES);
-
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status
         from course_payment_order
@@ -627,9 +621,25 @@ public class CourseMarketplaceController {
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
-        return checkoutResponse(prior, courseId, title, institutionDisplayName);
+        String providerState = inspectProviderOrderForNewAttempt(prior);
+        if ("PAID".equals(providerState)) {
+          throw new IllegalStateException(
+              "Razorpay reports that this course order is already paid. Retry payment verification; do not start another checkout.");
+        }
+        if (!"RETRYABLE".equals(providerState)) {
+          throw new IllegalStateException(
+              "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
+        }
+        int expired = jdbc.update("""
+            update course_payment_order set status='EXPIRED',updated_at=now()
+            where id=? and institution_id=? and status='PENDING'
+            """, ((Number) prior.get("id")).longValue(), institutionId);
+        if (expired != 1) {
+          throw new IllegalStateException("The previous checkout changed while being retried. Refresh and retry safely.");
+        }
+      } else {
+        throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
-      throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
     }
 
     String receipt = "qe_" + UUID.randomUUID().toString().replace("-", "");
@@ -666,16 +676,7 @@ public class CourseMarketplaceController {
       notes.put("quantaedge_institution_offer_id", String.valueOf(offer.get("institution_offer_id")));
       if (purchaserUserId != null) notes.put("quantaedge_purchaser_user_id", Long.toString(purchaserUserId));
       String requestJson = objectMapper.writeValueAsString(Map.of(
-          "amount", amountPaise,
-          "currency", currency,
-          "receipt", receipt,
-          "notes", notes,
-          "payment", Map.of(
-              "capture", "automatic",
-              "capture_options", Map.of(
-                  "automatic_expiry_period", 12,
-                  "manual_expiry_period", 7200,
-                  "refund_speed", "normal"))));
+          "amount", amountPaise, "currency", currency, "receipt", receipt, "notes", notes));
       JsonNode providerOrder = razorpayRequest("POST", "/orders", requestJson);
       String providerOrderId = providerOrder.path("id").asText("");
       long providerAmount = providerOrder.path("amount").asLong(-1);
@@ -797,6 +798,150 @@ public class CourseMarketplaceController {
     return verifyOrderInternal(localOrderId, request, null, context.userId(), requireTenant(tenant).institutionId());
   }
 
+  /** Reconcile a saved student order directly with Razorpay when a checkout callback is missing. */
+  @PostMapping("/orders/{localOrderId}/reconcile")
+  @Transactional
+  public Map<String, Object> reconcileOrder(
+      @PathVariable long localOrderId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    context = authorization.requireStudent(context);
+    return reconcileOrderInternal(localOrderId, context.studentId(), null, requireTenant(tenant).institutionId());
+  }
+
+  /** Parent reconciliation stays bound to the authenticated purchaser and their institution. */
+  @PostMapping("/family/orders/{localOrderId}/reconcile")
+  @Transactional
+  public Map<String, Object> reconcileFamilyOrder(
+      @PathVariable long localOrderId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    context = authorization.requireParent(context);
+    return reconcileOrderInternal(localOrderId, null, context.userId(), requireTenant(tenant).institutionId());
+  }
+
+  private Map<String, Object> reconcileOrderInternal(
+      long localOrderId, Long callerStudentId, Long callerUserId, long institutionId) {
+    requireConfigured();
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
+          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status
+        from course_payment_order
+        where id=? and institution_id=? and (student_id=? or purchaser_user_id=?)
+        for update
+        """, localOrderId, institutionId, callerStudentId, callerUserId);
+    if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
+    Map<String,Object> order = rows.getFirst();
+    String state = String.valueOf(order.get("status"));
+    long courseId = ((Number) order.get("course_id")).longValue();
+    String savedPaymentId = String.valueOf(order.getOrDefault("provider_payment_id", ""));
+    if ("VERIFIED".equals(state)) return verifiedResult(localOrderId, courseId);
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException("This payment order is not available for reconciliation.");
+    }
+
+    String providerOrderId = String.valueOf(order.get("provider_order_id"));
+    if (!providerOrderId.matches("order_[A-Za-z0-9]+")) {
+      throw new IllegalStateException(
+          "The saved order has no verified Razorpay order reference. Do not pay again; contact support.");
+    }
+    long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
+    String expectedCurrency = String.valueOf(order.get("currency"));
+    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
+    if (!providerOrderId.equals(providerOrder.path("id").asText(""))
+        || providerOrder.path("amount").asLong(-1) != expectedAmount
+        || !expectedCurrency.equalsIgnoreCase(providerOrder.path("currency").asText(""))) {
+      throw new IllegalStateException(
+          "Razorpay order details do not match the saved course order. Do not pay again; contact support.");
+    }
+
+    JsonNode paymentList = razorpayRequest("GET", "/orders/" + providerOrderId + "/payments", null);
+    JsonNode items = paymentList.path("items");
+    JsonNode captured = null;
+    JsonNode authorised = null;
+    boolean paymentInProgress = false;
+    if (items.isArray()) {
+      for (JsonNode candidate : items) {
+        String candidateId = candidate.path("id").asText("");
+        if (!candidateId.matches("pay_[A-Za-z0-9]+")
+            || !isPaymentForExactOrder(candidate, candidateId, providerOrderId, expectedAmount, expectedCurrency)) {
+          continue;
+        }
+        String paymentStatus = candidate.path("status").asText("").toLowerCase(Locale.ROOT);
+        if ("captured".equals(paymentStatus)) {
+          captured = candidate;
+          break;
+        }
+        if ("authorized".equals(paymentStatus)) authorised = candidate;
+        else if (Set.of("created", "processing").contains(paymentStatus)) paymentInProgress = true;
+      }
+    }
+
+    JsonNode selected = captured != null ? captured : authorised;
+    if (selected != null) {
+      String paymentId = selected.path("id").asText("");
+      // The provider API confirms the exact persisted order, amount and currency. Generate
+      // the same callback HMAC server-side only after those authenticated provider checks.
+      String signature = hmacSha256(providerOrderId + "|" + paymentId, keySecret);
+      return verifyOrderInternal(localOrderId,
+          new VerifyCoursePaymentRequest(paymentId, providerOrderId, signature),
+          callerStudentId, callerUserId, institutionId);
+    }
+
+    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
+      throw new IllegalStateException(
+          "Razorpay says this order is paid, but its exact payment is not available for safe reconciliation. Do not pay again; contact support.");
+    }
+
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("status", paymentInProgress ? "PAYMENT_PROCESSING" : "AWAITING_PAYMENT");
+    result.put("entitled", false);
+    result.put("canRetryCheckout", !paymentInProgress);
+    result.put("orderId", localOrderId);
+    result.put("courseId", courseId);
+    result.put("message", paymentInProgress
+        ? "Razorpay is still processing the payment. Retry verification shortly; do not pay again."
+        : "No authorised or captured payment was found for this order. It is safe to retry checkout; a new Razorpay order will be created.");
+    return result;
+  }
+
+  private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
+    String providerOrderId = String.valueOf(localOrder.get("provider_order_id"));
+    if (!providerOrderId.matches("order_[A-Za-z0-9]+")) return "IN_FLIGHT";
+    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
+    long expectedAmount = ((Number) localOrder.get("offer_price_paise")).longValue();
+    String currency = String.valueOf(localOrder.get("currency"));
+    if (!providerOrderId.equals(providerOrder.path("id").asText(""))
+        || providerOrder.path("amount").asLong(-1) != expectedAmount
+        || !currency.equalsIgnoreCase(providerOrder.path("currency").asText(""))) {
+      return "IN_FLIGHT";
+    }
+    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) return "PAID";
+
+    JsonNode response = razorpayRequest("GET", "/orders/" + providerOrderId + "/payments", null);
+    JsonNode items = response.path("items");
+    if (!items.isArray()) return "IN_FLIGHT";
+    boolean matchingPayment = false;
+    for (JsonNode payment : items) {
+      String paymentId = payment.path("id").asText("");
+      if (!paymentId.matches("pay_[A-Za-z0-9]+")
+          || !isPaymentForExactOrder(payment, paymentId, providerOrderId, expectedAmount, currency)) continue;
+      matchingPayment = true;
+      String status = payment.path("status").asText("").toLowerCase(Locale.ROOT);
+      if (!Set.of("failed", "refunded", "cancelled", "voided").contains(status)) {
+        return "IN_FLIGHT";
+      }
+    }
+    if (!matchingPayment && providerOrder.path("attempts").asInt(0) > 0) return "IN_FLIGHT";
+    String providerStatus = providerOrder.path("status").asText("").toLowerCase(Locale.ROOT);
+    if (!Set.of("created", "attempted").contains(providerStatus)) return "IN_FLIGHT";
+    return "RETRYABLE";
+  }
+
   private Map<String,Object> verifyOrderInternal(
       long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
     requireConfigured();
@@ -822,7 +967,9 @@ public class CourseMarketplaceController {
       if (paymentId.equals(savedPaymentId)) return verifiedResult(localOrderId, courseId);
       throw new IllegalArgumentException("This order has already been verified against a different payment.");
     }
-    if (!"PENDING".equals(state)) throw new IllegalArgumentException("This payment order is no longer payable.");
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException("This payment order is no longer payable.");
+    }
     Boolean offerStillPublished = jdbc.queryForObject("""
         select exists(
           select 1 from institution_marketplace_offer offer
@@ -965,7 +1112,7 @@ public class CourseMarketplaceController {
     jdbc.update("""
         update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
           verified_at=now(),updated_at=now()
-        where id=? and institution_id=? and status='PENDING'
+        where id=? and institution_id=? and status in ('PENDING','EXPIRED')
         """, paymentId, signature, localOrderId, institutionId);
     Map<String,Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
     result.put("purchasedFor", "CHILD".equals(recipientType) ? "CHILD"
