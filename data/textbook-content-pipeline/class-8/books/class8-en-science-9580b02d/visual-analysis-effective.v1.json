@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b1343f4e545db40ef35b212f1680c928bd4ea152e01fefb7453941d5364a45fb",
+  "raw_analysis_sha256": "c7cfd7c4e797ff07224fee5729bae1ee03f7b9f1209cc33f17773616e96922bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:02:37Z",
+      "checkpointed_at": "2026-10-20T07:05:03Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:03:11Z",
+      "checkpointed_at": "2026-10-20T07:05:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:03:34Z",
+      "checkpointed_at": "2026-10-20T07:06:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:04:11Z",
+      "checkpointed_at": "2026-10-20T07:06:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53430,6 +53430,90 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "59f25865d518fb56043075c6",
+      "asset_sha256": "f5aa85fa34d2cd176688dac719b0214aa0bd263d1ecf6bbdaeabb05cbe162004",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "page-0077.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a dry cell and its internal structure, along with images of different types of rechargeable batteries.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.3.2 Dry cells",
+          "Voltaic cells were an important discovery, but they are not convenient for everyday use. Instead, dry cells are one of the most widely used electric cells today. They are called ‘dry’ because the electrolyte is not a liquid but a thick moist paste. The structure of a dry cell is shown in Fig. 4.9. I",
+          "The dry cell is a single use cell, meaning once it is used up, it has to be disposed of. For several applications, rechargeable batteries are increasingly being used now.",
+          "Rechargeable batteries can be recharged and reused multiple times. This prevents wastage and saves money over time as well.",
+          "Fig. 4.10: Typical rechargeable batteries used in (a) Laptops; (b) Mobile phones; (c) Camera; (d) Inverter; (e) Vehicles",
+          "Fig. 4.11: Charging a mobile phone",
+          "Oh, so this is the reason why after a year or two, the phone battery requires charging more often!"
+        ],
+        "concepts": [
+          "dry cells",
+          "electrolyte",
+          "zinc container",
+          "carbon rod",
+          "metal cap",
+          "rechargeable batteries",
+          "laptops",
+          "mobile phones",
+          "cameras",
+          "inverters",
+          "electric vehicles",
+          "battery life",
+          "charging"
+        ],
+        "context_relation": "The text describes the structure and usage of dry cells and rechargeable batteries, providing examples of their applications.",
+        "limitations": [
+          "The text does not provide specific details about the chemical composition or working principle of the dry cells or rechargeable batteries."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T07:08:22Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a dry cell and its internal structure, along with images of different types of rechargeable batteries.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.3.2 Dry cells",
+          "Voltaic cells were an important discovery, but they are not convenient for everyday use. Instead, dry cells are one of the most widely used electric cells today. They are called ‘dry’ because the electrolyte is not a liquid but a thick moist paste. The structure of a dry cell is shown in Fig. 4.9. I",
+          "The dry cell is a single use cell, meaning once it is used up, it has to be disposed of. For several applications, rechargeable batteries are increasingly being used now.",
+          "Rechargeable batteries can be recharged and reused multiple times. This prevents wastage and saves money over time as well.",
+          "Fig. 4.10: Typical rechargeable batteries used in (a) Laptops; (b) Mobile phones; (c) Camera; (d) Inverter; (e) Vehicles",
+          "Fig. 4.11: Charging a mobile phone",
+          "Oh, so this is the reason why after a year or two, the phone battery requires charging more often!"
+        ],
+        "concepts": [
+          "dry cells",
+          "electrolyte",
+          "zinc container",
+          "carbon rod",
+          "metal cap",
+          "rechargeable batteries",
+          "laptops",
+          "mobile phones",
+          "cameras",
+          "inverters",
+          "electric vehicles",
+          "battery life",
+          "charging"
+        ],
+        "context_relation": "The text describes the structure and usage of dry cells and rechargeable batteries, providing examples of their applications.",
+        "limitations": [
+          "The text does not provide specific details about the chemical composition or working principle of the dry cells or rechargeable batteries."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
