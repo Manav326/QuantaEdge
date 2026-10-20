@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a908d4ccab93f9489c64037b41d0ed8867350f1d9a3eb01711a1ed21ce690fe6",
+  "raw_analysis_sha256": "344c6b1d769168eda5b8344fce785ad556254510033a6ef38f1e2c1a758fc6e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:35:14Z",
+      "checkpointed_at": "2026-10-20T21:37:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:35:34Z",
+      "checkpointed_at": "2026-10-20T21:37:49Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -114647,6 +114647,170 @@
         "concepts": [],
         "context_relation": "The image is not directly related to the text.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0eae4b9a02e661380c1638bd",
+      "asset_sha256": "e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:37:52Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b4f19241315fe426d9ddf82",
+      "asset_sha256": "e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "furnace",
+          "iron",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text.",
+        "limitations": [
+          "The image does not show the entire scene or the surrounding environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:38:36Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "furnace",
+          "iron",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text.",
+        "limitations": [
+          "The image does not show the entire scene or the surrounding environment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a292810f0d40622baba2fd0c",
+      "asset_sha256": "c91054f5fd97144004139f354819bfc12a6f2d6c9218ee1a7b6b0cd115be7e1d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/c91054f5fd97144004139f354819bfc12a6f2d6c9218ee1a7b6b0cd115be7e1d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "iron",
+          "furnace",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text discussing the process of making iron items.",
+        "limitations": [
+          "The image is a close-up, so the full context of the scene is not visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:39:22Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "iron",
+          "furnace",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text discussing the process of making iron items.",
+        "limitations": [
+          "The image is a close-up, so the full context of the scene is not visible."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

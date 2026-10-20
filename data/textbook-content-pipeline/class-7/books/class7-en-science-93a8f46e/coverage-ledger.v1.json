@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2024,
-    "successful_visual_analyses": 1916,
-    "missing_visual_analyses": 5464,
+    "raw_analysis_result_rows": 2027,
+    "successful_visual_analyses": 1919,
+    "missing_visual_analyses": 5461,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5572,
+    "unresolved_count": 5569,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -83505,9 +83505,16 @@
       "asset_path": "assets/e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83523,9 +83530,30 @@
       "asset_path": "assets/e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "furnace",
+          "iron",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text.",
+        "limitations": [
+          "The image does not show the entire scene or the surrounding environment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83541,9 +83569,30 @@
       "asset_path": "assets/c91054f5fd97144004139f354819bfc12a6f2d6c9218ee1a7b6b0cd115be7e1d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being heated in a furnace.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "iron",
+          "furnace",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image is a close-up of an iron block being heated in a furnace, which is part of the context of the text discussing the process of making iron items.",
+        "limitations": [
+          "The image is a close-up, so the full context of the scene is not visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
