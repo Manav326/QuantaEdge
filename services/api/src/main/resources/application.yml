@@ -42,6 +42,9 @@ app:
     fixture-password: ${APP_QA_FIXTURE_PASSWORD:}
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
+  education-admin:
+    # Education Admin is the QuantaEdge tenant workspace; do not resolve it from a browser header.
+    institution-code: ${APP_EDUCATION_ADMIN_INSTITUTION_CODE:QUANTA-EDGE}
   institution:
     # Generic tenant context policy. Keep the default blank for a shared routed deployment.
     # A deployment default is a selector fallback, not a membership or entitlement grant.

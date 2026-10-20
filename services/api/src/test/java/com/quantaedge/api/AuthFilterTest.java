@@ -169,6 +169,36 @@ class AuthFilterTest {
   }
 
   @Test
+  void educationAdminRequestGetsConfiguredTenantAndIgnoresBrowserTenantSelector() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
+        Map.<String,Object>of("id", 91L, "tenant_code", "QUANTA-EDGE", "display_name", "QuantaEdge")));
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "GET", "/api/v1/admin/content/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "EDUCATION_ADMIN");
+    request.addHeader("Origin", "http://localhost:3001");
+    // A client cannot redirect Education Admin course retrieval to another institution.
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "SCHOOL-B");
+    request.setCookies(new Cookie(
+        AuthService.sessionCookieForWorkspace("EDUCATION_ADMIN"), "admin-session"));
+    when(auth.currentForWorkspace("admin-session", "EDUCATION_ADMIN"))
+        .thenReturn(new AuthContext(null, null, 999L, "ADMIN", "QE Admin", "EDUCATION_ADMIN"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+    assertEquals(new InstitutionTenantContext(91L, "QUANTA-EDGE", "QuantaEdge"),
+        request.getAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE));
+  }
+
+  @Test
   void tenantScopedCourseCatalogueRejectsMissingInstitutionContext() throws Exception {
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);

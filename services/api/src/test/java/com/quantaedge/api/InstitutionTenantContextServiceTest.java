@@ -127,6 +127,29 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void educationAdminInstitutionIsResolvedFromTrustedServerConfiguration() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
+        Map.<String,Object>of("id", 91L, "tenant_code", "QUANTA-EDGE", "display_name", "QuantaEdge")));
+    InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, "", "ROUTED");
+
+    InstitutionTenantContext resolved = service.requireEducationAdminInstitution();
+
+    assertEquals(new InstitutionTenantContext(91L, "QUANTA-EDGE", "QuantaEdge"), resolved);
+    verify(jdbc).queryForList(anyString(), any(Object[].class));
+  }
+
+  @Test
+  void educationAdminInstitutionCodeMustBeConfiguredAndValid() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    assertThrows(IllegalArgumentException.class,
+        () -> new InstitutionTenantContextService(jdbc, "", "ROUTED", "not a code"));
+    assertThrows(IllegalArgumentException.class,
+        () -> new InstitutionTenantContextService(jdbc, "", "ROUTED", ""));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
   void routedModeUsesConfiguredDefaultOnlyWhenNoExplicitTenantIsSelected() {
     JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
     InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, " school-a ", " routed ");

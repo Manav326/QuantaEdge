@@ -59,12 +59,14 @@ public class InstitutionTenantContextService {
   private final JdbcTemplate jdbc;
   private final String defaultInstitutionCode;
   private final String contextMode;
+  private final String educationAdminInstitutionCode;
 
   @Autowired
   public InstitutionTenantContextService(
       JdbcTemplate jdbc,
       @Value("${app.institution.default-code:}") String configuredDefaultCode,
-      @Value("${app.institution.context-mode:ROUTED}") String configuredContextMode) {
+      @Value("${app.institution.context-mode:ROUTED}") String configuredContextMode,
+      @Value("${app.education-admin.institution-code:QUANTA-EDGE}") String configuredEducationAdminInstitutionCode) {
     this.jdbc = jdbc;
     String mode = configuredContextMode == null ? "ROUTED" : configuredContextMode.trim().toUpperCase(Locale.ROOT);
     if (!mode.equals("ROUTED") && !mode.equals("FIXED")) {
@@ -72,6 +74,8 @@ public class InstitutionTenantContextService {
     }
     this.contextMode = mode;
     this.defaultInstitutionCode = normalizeOptionalCode(configuredDefaultCode, "default institution code");
+    this.educationAdminInstitutionCode =
+        normalizeRequiredCode(configuredEducationAdminInstitutionCode, "Education Admin institution code");
     if ("FIXED".equals(this.contextMode) && this.defaultInstitutionCode == null) {
       throw new IllegalArgumentException(
           "APP_DEFAULT_INSTITUTION_CODE is required when APP_INSTITUTION_CONTEXT_MODE=FIXED.");
@@ -80,7 +84,12 @@ public class InstitutionTenantContextService {
 
   /** Keeps existing focused unit tests source-compatible with a routed, no-default deployment. */
   public InstitutionTenantContextService(JdbcTemplate jdbc) {
-    this(jdbc, "", "ROUTED");
+    this(jdbc, "", "ROUTED", "QUANTA-EDGE");
+  }
+
+  /** Source-compatible constructor for focused tests and explicit routed/fixed tenant policies. */
+  public InstitutionTenantContextService(JdbcTemplate jdbc, String configuredDefaultCode, String configuredContextMode) {
+    this(jdbc, configuredDefaultCode, configuredContextMode, "QUANTA-EDGE");
   }
 
   private static String normalizeOptionalCode(String raw, String settingName) {
@@ -88,6 +97,14 @@ public class InstitutionTenantContextService {
     String normalized = raw.trim().toUpperCase(Locale.ROOT);
     if (!TENANT_CODE.matcher(normalized).matches()) {
       throw new IllegalArgumentException("Configured " + settingName + " is invalid.");
+    }
+    return normalized;
+  }
+
+  private static String normalizeRequiredCode(String raw, String settingName) {
+    String normalized = normalizeOptionalCode(raw, settingName);
+    if (normalized == null) {
+      throw new IllegalArgumentException("Configured " + settingName + " is required.");
     }
     return normalized;
   }
@@ -125,7 +142,21 @@ public class InstitutionTenantContextService {
   public String contextMode() { return contextMode; }
   public String defaultInstitutionCode() { return defaultInstitutionCode; }
 
-  /** Returns null only when the request did not select a tenant; it never guesses a default. */
+  /**
+   * Resolves the fixed institution owned by the Education Admin workspace from server configuration.
+   * Unlike learner tenant routing, this context is not selected by a browser-supplied institution header.
+   */
+  public InstitutionTenantContext requireEducationAdminInstitution() {
+    InstitutionTenantContext tenant = resolve(educationAdminInstitutionCode);
+    if (tenant == null) {
+      throw new InvalidInstitutionContextException(
+          403, "EDUCATION_ADMIN_INSTITUTION_REQUIRED",
+          "The Education Admin institution is not configured.");
+    }
+    return tenant;
+  }
+
+  /** Returns null only when the request did not select a tenant; it never guesses a tenant. */
   public InstitutionTenantContext resolve(String requestedCode) {
 
     // Header is intentionally optional at this low-level resolver. Protected endpoints call

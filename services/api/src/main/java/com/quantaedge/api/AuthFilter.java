@@ -286,6 +286,22 @@ public class AuthFilter extends OncePerRequestFilter {
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
           token != null, workspace, context != null);
       if (context != null) {
+        // Education Admin is scoped to its configured QuantaEdge institution. Resolve this
+        // server-side rather than trusting a browser selector; the controller still enforces
+        // CONTENT_VIEW and queries only courses assigned to this institution.
+        if (institutionTenantContextService != null
+            && "EDUCATION_ADMIN".equals(workspace)
+            && (uri.equals("/api/v1/admin") || uri.startsWith("/api/v1/admin/"))) {
+          try {
+            InstitutionTenantContext adminTenant =
+                institutionTenantContextService.requireEducationAdminInstitution();
+            request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, adminTenant);
+          } catch (InstitutionTenantContextService.InvalidInstitutionContextException ex) {
+            writeJsonError(response, ex.statusCode(), ex.errorCode(), ex.getMessage());
+            return;
+          }
+        }
+
         // Resolve a learner-request tenant selector centrally. The resulting context is routing
         // metadata only; endpoint/service authorization must still enforce membership, assignment,
         // offer publication and course entitlement for that exact institution.
