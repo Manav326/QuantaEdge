@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "75f538c12582e532233e1992dfb3bf0018851a4ac946a55c36e9167afc81d840",
+  "raw_analysis_sha256": "1fd6e163b18ac41cd7fb9d1fa0c378083a072f02625a4d96dd3f31c70a29e9f6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:28:26Z",
+      "checkpointed_at": "2026-10-20T02:32:17Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:29:01Z",
+      "checkpointed_at": "2026-10-20T02:32:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:29:24Z",
+      "checkpointed_at": "2026-10-20T02:33:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -45744,6 +45744,126 @@
         "context_relation": "The image is a page from a textbook discussing vaccines and their role in protecting people against serious diseases. It mentions that vaccines are preventive and can help prevent illnesses, reduce the spread of infections, and save millions of lives every year. It also highlights India's role in vaccine production and the contributions of scientists like Maharaj Kishan Bhan.",
         "limitations": [
           "The image does not provide specific details about the content of the textbook beyond the visible text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "440e6f6a506421b9426fbe0f",
+      "asset_sha256": "b1865aecc47c76d990bbff4a9b731fea157e26738f47521a8de2aafd6ab4a2bc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/b1865aecc47c76d990bbff4a9b731fea157e26738f47521a8de2aafd6ab4a2bc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a man wearing a bow tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discovery of Penicillin by Alexander Fleming.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:33:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a man wearing a bow tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discovery of Penicillin by Alexander Fleming.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "72501699bfd48a98304ffd2f",
+      "asset_sha256": "9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope to study bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Think like a scientist",
+          "Discovery of the first antibiotic, Penicillin",
+          "Penicillin was discovered in 1928 by Alexander Fleming",
+          "a bacteriologist from London",
+          "While studying harmful bacteria",
+          "he noticed that a mould on a discarded petri dish stopped the bacteria from growing",
+          "He realized the mould released a substance that killed the bacteria",
+          "This chance discovery led to the discovery of penicillin"
+        ],
+        "concepts": [
+          "Penicillin",
+          "Alexander Fleming",
+          "bacteriologist",
+          "discovery",
+          "antibiotic",
+          "microscope",
+          "bacteria",
+          "mould",
+          "petri dish",
+          "substance",
+          "killed",
+          "discovery"
+        ],
+        "context_relation": "The image illustrates the discovery of Penicillin by Alexander Fleming, a scientist using a microscope to study bacteria.",
+        "limitations": [
+          "The image does not show the actual discovery process or the laboratory setting."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:34:36Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope to study bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Think like a scientist",
+          "Discovery of the first antibiotic, Penicillin",
+          "Penicillin was discovered in 1928 by Alexander Fleming",
+          "a bacteriologist from London",
+          "While studying harmful bacteria",
+          "he noticed that a mould on a discarded petri dish stopped the bacteria from growing",
+          "He realized the mould released a substance that killed the bacteria",
+          "This chance discovery led to the discovery of penicillin"
+        ],
+        "concepts": [
+          "Penicillin",
+          "Alexander Fleming",
+          "bacteriologist",
+          "discovery",
+          "antibiotic",
+          "microscope",
+          "bacteria",
+          "mould",
+          "petri dish",
+          "substance",
+          "killed",
+          "discovery"
+        ],
+        "context_relation": "The image illustrates the discovery of Penicillin by Alexander Fleming, a scientist using a microscope to study bacteria.",
+        "limitations": [
+          "The image does not show the actual discovery process or the laboratory setting."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

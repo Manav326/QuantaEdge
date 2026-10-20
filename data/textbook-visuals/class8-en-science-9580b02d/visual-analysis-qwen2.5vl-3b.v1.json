@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 965,
+    "assets_selected": 967,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 962,
-    "assets_remaining": 1329,
-    "assets_completion_percent": 42.0,
+    "assets_analyzed": 964,
+    "assets_remaining": 1327,
+    "assets_completion_percent": 42.1,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 960,
+    "assets_skipped_from_checkpoint": 962,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:28:26Z"
+      "checkpointed_at": "2026-10-20T02:32:17Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:29:01Z"
+      "checkpointed_at": "2026-10-20T02:32:51Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:29:24Z"
+      "checkpointed_at": "2026-10-20T02:33:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30686,6 +30686,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:31:30Z"
+    },
+    {
+      "asset_id": "440e6f6a506421b9426fbe0f",
+      "asset_sha256": "b1865aecc47c76d990bbff4a9b731fea157e26738f47521a8de2aafd6ab4a2bc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/b1865aecc47c76d990bbff4a9b731fea157e26738f47521a8de2aafd6ab4a2bc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a man wearing a bow tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discovery of Penicillin by Alexander Fleming.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:33:50Z"
+    },
+    {
+      "asset_id": "72501699bfd48a98304ffd2f",
+      "asset_sha256": "9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope to study bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Think like a scientist",
+          "Discovery of the first antibiotic, Penicillin",
+          "Penicillin was discovered in 1928 by Alexander Fleming",
+          "a bacteriologist from London",
+          "While studying harmful bacteria",
+          "he noticed that a mould on a discarded petri dish stopped the bacteria from growing",
+          "He realized the mould released a substance that killed the bacteria",
+          "This chance discovery led to the discovery of penicillin"
+        ],
+        "concepts": [
+          "Penicillin",
+          "Alexander Fleming",
+          "bacteriologist",
+          "discovery",
+          "antibiotic",
+          "microscope",
+          "bacteria",
+          "mould",
+          "petri dish",
+          "substance",
+          "killed",
+          "discovery"
+        ],
+        "context_relation": "The image illustrates the discovery of Penicillin by Alexander Fleming, a scientist using a microscope to study bacteria.",
+        "limitations": [
+          "The image does not show the actual discovery process or the laboratory setting."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:34:36Z"
     }
   ]
 }
