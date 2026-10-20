@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1063,
+    "assets_selected": 1065,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1060,
-    "assets_remaining": 1231,
-    "assets_completion_percent": 46.3,
+    "assets_analyzed": 1062,
+    "assets_remaining": 1229,
+    "assets_completion_percent": 46.4,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1058,
+    "assets_skipped_from_checkpoint": 1060,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:12:46Z"
+      "checkpointed_at": "2026-10-20T05:15:50Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:13:20Z"
+      "checkpointed_at": "2026-10-20T05:16:24Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:13:42Z"
+      "checkpointed_at": "2026-10-20T05:16:46Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34312,6 +34312,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:15:05Z"
+    },
+    {
+      "asset_id": "903f0b8ff95465d4c26ea8f4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:16:53Z"
+    },
+    {
+      "asset_id": "201561eb9b7e6cb35563bdbd",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:16:59Z"
     }
   ]
 }
