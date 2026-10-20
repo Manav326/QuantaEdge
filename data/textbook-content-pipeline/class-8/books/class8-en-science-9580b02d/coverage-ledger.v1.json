@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 978,
-    "successful_visual_analyses": 967,
-    "missing_visual_analyses": 1313,
+    "raw_analysis_result_rows": 980,
+    "successful_visual_analyses": 969,
+    "missing_visual_analyses": 1311,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1324,
+    "unresolved_count": 1322,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37338,9 +37338,23 @@
       "asset_path": "assets/42ec60a3f5ddafd64e0403335221d59b0a3fb5efbd3cc051aae32a82fd598052.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A family portrait with grandparents, parents, and two children.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "family portrait",
+          "grandparents",
+          "parents",
+          "children"
+        ],
+        "context_relation": "The image is a family portrait, not related to the text about Penicillin.",
+        "limitations": [
+          "The image does not provide any information about the text about Penicillin."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37356,9 +37370,18 @@
       "asset_path": "assets/66e25b9ab241b8a84b4f7d2c602cdee2e67851e5ed9d04d8380b4d2d63bb2cf3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a plant with green leaves and purple flowers.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about Penicillin discovery.",
+        "limitations": [
+          "The image does not provide any specific information about Penicillin or its discovery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
