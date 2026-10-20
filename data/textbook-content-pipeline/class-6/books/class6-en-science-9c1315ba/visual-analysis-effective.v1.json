@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f752d45b10a2e3fd7b8711deb63bf7f18d25dcdbbb9ec64576e9b8abc98d15f5",
+  "raw_analysis_sha256": "8d698d498e47bb68c9e0fb040f8c76d28fcb69fd4ae5d516fad593671bd9a045",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:30:41Z",
+      "checkpointed_at": "2026-10-20T20:35:42Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:31:35Z",
+      "checkpointed_at": "2026-10-20T20:36:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:32:45Z",
+      "checkpointed_at": "2026-10-20T20:37:46Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:33:28Z",
+      "checkpointed_at": "2026-10-20T20:38:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64606,6 +64606,56 @@
         "context_relation": "The image illustrates the difference between opaque and translucent materials.",
         "limitations": [
           "The image does not provide specific details about the materials used by each character."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e037ee395a14ea0fa37b01ad",
+      "asset_sha256": "ab312d8c6993571db57b0b027b25f762008a817229ce65a52e6be46f1d8bd5aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/ab312d8c6993571db57b0b027b25f762008a817229ce65a52e6be46f1d8bd5aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A clear, empty glass cup.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "glass",
+          "cup",
+          "empty",
+          "clear"
+        ],
+        "context_relation": "The image is a visual representation of a glass cup, which is a common object used in everyday life.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the glass cup itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:39:37Z",
+      "effective_analysis": {
+        "visual_summary": "A clear, empty glass cup.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "glass",
+          "cup",
+          "empty",
+          "clear"
+        ],
+        "context_relation": "The image is a visual representation of a glass cup, which is a common object used in everyday life.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the glass cup itself."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
