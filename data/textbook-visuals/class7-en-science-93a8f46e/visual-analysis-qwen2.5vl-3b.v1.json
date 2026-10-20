@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1840,
+    "assets_selected": 1841,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1836,
-    "assets_remaining": 5652,
+    "assets_analyzed": 1838,
+    "assets_remaining": 5650,
     "assets_completion_percent": 24.5,
-    "assets_failed": 93,
-    "assets_skipped_from_checkpoint": 1835,
+    "assets_failed": 95,
+    "assets_skipped_from_checkpoint": 1836,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -69949,7 +69949,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338690203",
+      "run_id": "39381362765",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -69997,6 +69997,121 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338690203",
       "checkpointed_at": "2026-10-20T04:58:41Z"
+    },
+    {
+      "asset_id": "0f7e0cbc12ef9b162eb4e4f1",
+      "asset_sha256": "c8734ee5806e2290960704802136a106818c59ab70175a5afa9a8833ed11a841",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c8734ee5806e2290960704802136a106818c59ab70175a5afa9a8833ed11a841.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381362765",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "7c5e31f174b4bd54ce913a4c",
+      "asset_sha256": "6fe5298e3102bda6efc07ac11731a05f13a86e40fe33a8a3e53041e7b3aa36c8",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/6fe5298e3102bda6efc07ac11731a05f13a86e40fe33a8a3e53041e7b3aa36c8.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381362765",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "5a995c25c47ff48312dba3bf",
+      "asset_sha256": "6fe5298e3102bda6efc07ac11731a05f13a86e40fe33a8a3e53041e7b3aa36c8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/6fe5298e3102bda6efc07ac11731a05f13a86e40fe33a8a3e53041e7b3aa36c8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson, Sudarshan uncle, is discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Rajasthan",
+          "school project",
+          "diﬀerent items",
+          "elderly craftsperson",
+          "Sudarshan uncle",
+          "items of daily use",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about ironsmiths and their work.",
+        "limitations": [
+          "The image does not show the ironsmiths making the items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381362765",
+      "checkpointed_at": "2026-10-20T11:38:49Z"
+    },
+    {
+      "asset_id": "0d62a227f82e1764b0f84d7b",
+      "asset_sha256": "34ad3c6605ca7f808c682e229e96b8ac15847312707b480b161266a3130fd0d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/34ad3c6605ca7f808c682e229e96b8ac15847312707b480b161266a3130fd0d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people, including children and an elderly man, interacting with a goat in a rural setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "rural setting",
+          "interaction",
+          "children",
+          "elderly man",
+          "goat"
+        ],
+        "context_relation": "The image depicts a rural scene where children and an elderly man are interacting with a goat, possibly during a visit to a local ironsmiths' workshop.",
+        "limitations": [
+          "The text in the image does not provide specific details about the interaction or the context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381362765",
+      "checkpointed_at": "2026-10-20T11:40:28Z"
     }
   ]
 }
