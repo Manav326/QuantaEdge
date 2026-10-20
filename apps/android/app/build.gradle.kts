@@ -148,6 +148,18 @@ android {
             manifestPlaceholders["allowCleartextTraffic"] = "false"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        // Optimized, stable-signed APK for local development on a physical device.
+        // Keep the release application ID/signature so Google OAuth remains registered,
+        // but permit the explicitly validated private-LAN HTTP API endpoint.
+        create("local") {
+            initWith(getByName("release"))
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            if (releaseSigningConfigured) signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["allowCleartextTraffic"] = "true"
+            matchingFallbacks += listOf("release")
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     compileOptions {
@@ -243,6 +255,25 @@ tasks.register("verifyReleaseApiConfiguration") {
         }
     }
 }
+tasks.register("verifyLocalApiConfiguration") {
+    group = "verification"
+    description = "Ensures the installable local APK targets a private-LAN HTTP API, not production."
+    doLast {
+        val apiUri = java.net.URI(configuredApiBaseUrl)
+        val host = apiUri.host?.lowercase()
+        check(apiUri.scheme == "http" && !host.isNullOrBlank()) {
+            "The local APK requires an HTTP API URL reachable from the Android device."
+        }
+        val privateIpv4 = host.startsWith("192.168.") ||
+            host.startsWith("10.") ||
+            Regex("^172\\.(1[6-9]|2[0-9]|3[01])\\..+$").matches(host)
+        val localName = host == "localhost" || host == "127.0.0.1" ||
+            host == "10.0.2.2" || host.endsWith(".local")
+        check(privateIpv4 || localName) {
+            "The local APK must use a private-LAN/local API host, not a public production endpoint. Configure QUANTAEDGE_LOCAL_API_BASE_URL."
+        }
+    }
+}
 tasks.register("verifyPlayStoreSigning") {
     group = "verification"
     description = "Requires the private upload key before producing a Play Store release."
@@ -258,5 +289,8 @@ tasks.register("verifyPlayStoreSigning") {
 tasks.configureEach {
     if (name == "assembleRelease" || name == "bundleRelease") {
         dependsOn("verifyReleaseApiConfiguration", "verifyPlayStoreSigning")
+    }
+    if (name == "assembleLocal") {
+        dependsOn("verifyLocalApiConfiguration", "verifyPlayStoreSigning")
     }
 }
