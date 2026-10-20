@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 970,
-    "successful_visual_analyses": 956,
+    "successful_visual_analyses": 957,
     "missing_visual_analyses": 1321,
-    "failed_visual_analyses": 14,
+    "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1335,
+    "unresolved_count": 1334,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35277,9 +35277,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Comparison of two playgrounds, one clean and well-maintained, the other polluted and unhygienic.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.2.2 Keep the environment clean",
+          "Activity 3.3: Let us compare",
+          "z Look at Fig. 3.3a and Fig. 3.3b. Which playground would you",
+          "z Most of us would like to play in the playground shown in Fig. 3.3a as it is clean, well-maintained, and looks beautiful. The playground in Fig. 3.3b is polluted, dirty, unhygienic, and full of flies and mosquitos.",
+          "z In addition to inculcating good habits and",
+          "31"
+        ],
+        "concepts": [
+          "clean playground",
+          "polluted playground",
+          "unhygienic playground",
+          "flies",
+          "mosquitos",
+          "good habits"
+        ],
+        "context_relation": "Comparison of playground environments",
+        "limitations": [
+          "No specific figures are mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

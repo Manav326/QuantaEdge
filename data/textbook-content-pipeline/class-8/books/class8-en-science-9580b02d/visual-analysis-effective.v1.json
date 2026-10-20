@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "48d8edcba98bf51c60aa8ee6b05b0d4e5b346137da713d2feb917ace8cd4379c",
+  "raw_analysis_sha256": "e31c7e4ab01ab6484db7eabcc618f100751ee27d4ce77cee6d2c5584c4f6e312",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:01:32Z",
+      "checkpointed_at": "2026-10-20T02:09:53Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:02:06Z",
+      "checkpointed_at": "2026-10-20T02:10:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:02:29Z",
+      "checkpointed_at": "2026-10-20T02:10:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -42484,9 +42484,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39260167363",
+      "run_id": "39353199646",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -42608,21 +42608,71 @@
     {
       "asset_id": "0a564647931af1b141729e6e",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 51,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39260167363",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Comparison of two playgrounds, one clean and well-maintained, the other polluted and unhygienic.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.2.2 Keep the environment clean",
+          "Activity 3.3: Let us compare",
+          "z Look at Fig. 3.3a and Fig. 3.3b. Which playground would you",
+          "z Most of us would like to play in the playground shown in Fig. 3.3a as it is clean, well-maintained, and looks beautiful. The playground in Fig. 3.3b is polluted, dirty, unhygienic, and full of flies and mosquitos.",
+          "z In addition to inculcating good habits and",
+          "31"
+        ],
+        "concepts": [
+          "clean playground",
+          "polluted playground",
+          "unhygienic playground",
+          "flies",
+          "mosquitos",
+          "good habits"
+        ],
+        "context_relation": "Comparison of playground environments",
+        "limitations": [
+          "No specific figures are mentioned in the text."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:13:46Z",
+      "effective_analysis": {
+        "visual_summary": "Comparison of two playgrounds, one clean and well-maintained, the other polluted and unhygienic.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.2.2 Keep the environment clean",
+          "Activity 3.3: Let us compare",
+          "z Look at Fig. 3.3a and Fig. 3.3b. Which playground would you",
+          "z Most of us would like to play in the playground shown in Fig. 3.3a as it is clean, well-maintained, and looks beautiful. The playground in Fig. 3.3b is polluted, dirty, unhygienic, and full of flies and mosquitos.",
+          "z In addition to inculcating good habits and",
+          "31"
+        ],
+        "concepts": [
+          "clean playground",
+          "polluted playground",
+          "unhygienic playground",
+          "flies",
+          "mosquitos",
+          "good habits"
+        ],
+        "context_relation": "Comparison of playground environments",
+        "limitations": [
+          "No specific figures are mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
