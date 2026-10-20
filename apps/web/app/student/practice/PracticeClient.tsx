@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStudentCourseScope } from '../CourseScope';
+import { apiFetch } from '../../components/apiClient';
 
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
@@ -98,7 +99,7 @@ export default function PracticePage(){
       if(loadingCourses)return;
       if(selectedCourseId===null){setError(courseError||tx('इस अभ्यास के लिए नामांकित कोर्स चुनें।','Select an enrolled course for this practice session.'));setLoading(false);return;}
       try{
-        const me=await fetch('/api/v1/students/me?courseId='+selectedCourseId,{cache:'no-store'});
+        const me=await apiFetch('/api/v1/students/me?courseId='+selectedCourseId,{cache:'no-store'});
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const studentBody=await readBody(me);
         if(!me.ok)throw new Error(studentBody.detail||studentBody.message||translateUi(locale, 'legacy.web.student.profile.was.not.found.f6a78e13'));
@@ -107,7 +108,7 @@ export default function PracticePage(){
         let lessonBody:LessonDetail|null=null;
         if(lessonId){
           const language=learningLanguage;
-          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId+'?language='+language+courseQuery,{cache:'no-store'});
+          const lessonResponse=await apiFetch('/api/v1/learning/lessons/'+lessonId+'?language='+language+courseQuery,{cache:'no-store'});
           const body=await readBody(lessonResponse);
           if(!lessonResponse.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.this.lesson.is.unavailable.ae825be0'));
           lessonBody=body as LessonDetail;
@@ -115,7 +116,7 @@ export default function PracticePage(){
         }
 
         if(requestedSessionId){
-          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?courseId='+selectedCourseId+'&language='+learningLanguage,{cache:'no-store'});
+          const sessionResponse=await apiFetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?courseId='+selectedCourseId+'&language='+learningLanguage,{cache:'no-store'});
           const body=await readBody(sessionResponse);
           if(!sessionResponse.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.could.not.reopen.this.practice.session.ef2cc8c0'));
           if(!active)return;
@@ -140,7 +141,7 @@ export default function PracticePage(){
         }
 
         if(!lessonId)throw new Error(translateUi(locale, 'legacy.web.open.a.lesson.before.starting.practice.41e2102e'));
-        const startResponse=await fetch('/api/v1/learning/practice/sessions/from-lesson',{
+        const startResponse=await apiFetch('/api/v1/learning/practice/sessions/from-lesson',{
           method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({lessonId,language:learningLanguage,courseId:selectedCourseId})
         });
@@ -185,7 +186,7 @@ export default function PracticePage(){
     if(!serialized.trim())return;
     setSaving(true);setAnswerError('');setError('');setSelected(serialized);setResult(null);
     try{
-      const response=await fetch('/api/v1/learning/questions/'+current.id+'/answer?language='+learningLanguage+'&courseId='+selectedCourseId,{
+      const response=await apiFetch('/api/v1/learning/questions/'+current.id+'/answer?language='+learningLanguage+'&courseId='+selectedCourseId,{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({answer:value,practiceSessionId:sessionId})
       });
@@ -194,7 +195,7 @@ export default function PracticePage(){
       setResult(body);
       setAttemptReset(old=>old+1);
       setScoreByQuestion(old=>({...old,[current.id]:body}));
-      const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionId+'?courseId='+selectedCourseId+'&language='+learningLanguage,{cache:'no-store'});
+      const sessionResponse=await apiFetch('/api/v1/learning/practice/sessions/'+sessionId+'?courseId='+selectedCourseId+'&language='+learningLanguage,{cache:'no-store'});
       if(sessionResponse.ok){
         const sessionBody=await readBody(sessionResponse);
         setSessionStatus(String(sessionBody.status||'IN_PROGRESS'));
