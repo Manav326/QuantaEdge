@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ca94684e64f63b7c0c9f0e4e20c24eb1a0297852c3dd1d8a504406350c870ddc",
+  "raw_analysis_sha256": "133f335c9783470b073236315d69870f748a0b7b88456a0d40181bdea8323a3c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:06:54Z",
+      "checkpointed_at": "2026-10-20T16:11:07Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:07:39Z",
+      "checkpointed_at": "2026-10-20T16:11:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:08:09Z",
+      "checkpointed_at": "2026-10-20T16:12:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:08:57Z",
+      "checkpointed_at": "2026-10-20T16:13:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55366,6 +55366,78 @@
         "context_relation": "The QR code is likely related to the content of the textbook, possibly a question or exercise.",
         "limitations": [
           "The image does not provide specific details about the textbook content or the QR code's purpose."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f128b623d101aa81b033177d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a question asking why it feels harder to pedal a bicycle when going uphill than on flat ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Why does it feel harder to pedal a bicycle when going uphill\nthan on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our\nswing reaches its highest point and begins to come down?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "forces",
+          "bicycle",
+          "uphill",
+          "flat ground",
+          "slip",
+          "wet surface",
+          "swing",
+          "highest point",
+          "coming down",
+          "feelings"
+        ],
+        "context_relation": "The image is a question from a textbook about forces and sensations.",
+        "limitations": [
+          "The image does not show any visual elements related to the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:13:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with a question asking why it feels harder to pedal a bicycle when going uphill than on flat ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Why does it feel harder to pedal a bicycle when going uphill\nthan on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our\nswing reaches its highest point and begins to come down?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "forces",
+          "bicycle",
+          "uphill",
+          "flat ground",
+          "slip",
+          "wet surface",
+          "swing",
+          "highest point",
+          "coming down",
+          "feelings"
+        ],
+        "context_relation": "The image is a question from a textbook about forces and sensations.",
+        "limitations": [
+          "The image does not show any visual elements related to the question."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

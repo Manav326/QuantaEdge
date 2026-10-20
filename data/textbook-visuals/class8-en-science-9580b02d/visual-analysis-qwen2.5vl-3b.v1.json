@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1133,
+    "assets_selected": 1134,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1129,
-    "assets_remaining": 1162,
+    "assets_analyzed": 1130,
+    "assets_remaining": 1161,
     "assets_completion_percent": 49.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1128,
+    "assets_skipped_from_checkpoint": 1129,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:06:54Z"
+      "checkpointed_at": "2026-10-20T16:11:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:07:39Z"
+      "checkpointed_at": "2026-10-20T16:11:52Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:08:09Z"
+      "checkpointed_at": "2026-10-20T16:12:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:08:57Z"
+      "checkpointed_at": "2026-10-20T16:13:11Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36918,6 +36918,50 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:10:08Z"
+    },
+    {
+      "asset_id": "f128b623d101aa81b033177d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a question asking why it feels harder to pedal a bicycle when going uphill than on flat ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "z Why does it feel harder to pedal a bicycle when going uphill\nthan on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our\nswing reaches its highest point and begins to come down?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "forces",
+          "bicycle",
+          "uphill",
+          "flat ground",
+          "slip",
+          "wet surface",
+          "swing",
+          "highest point",
+          "coming down",
+          "feelings"
+        ],
+        "context_relation": "The image is a question from a textbook about forces and sensations.",
+        "limitations": [
+          "The image does not show any visual elements related to the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:13:37Z"
     }
   ]
 }
