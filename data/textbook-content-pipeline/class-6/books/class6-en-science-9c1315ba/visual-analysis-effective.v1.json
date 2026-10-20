@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "702aa55ccfbf6068ee5645b19834a551542e3e9052fe1418d40f10899d64c884",
+  "raw_analysis_sha256": "558b793b511268d0328df8232ff17d2131bf72d9bb6ff6ae795ade99937e1c14",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:59:21Z",
+      "checkpointed_at": "2026-10-20T12:05:11Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:00:26Z",
+      "checkpointed_at": "2026-10-20T12:06:14Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:01:23Z",
+      "checkpointed_at": "2026-10-20T12:07:08Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:02:14Z",
+      "checkpointed_at": "2026-10-20T12:07:59Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -63322,6 +63322,62 @@
           "The image does not provide information about the materials used for the balls.",
           "The image does not show the balls being dropped from a fixed height.",
           "The image does not show the bounce height of the balls."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "76c35f0537e47d5843af25ab",
+      "asset_sha256": "c8c928abbbef77f413255cd4716ad39d22d7fdf4ef0dfd58b7d7454c06c0662e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/c8c928abbbef77f413255cd4716ad39d22d7fdf4ef0dfd58b7d7454c06c0662e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red cricket ball with a white seam running around its circumference.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cricket ball",
+          "materials used for making balls",
+          "different materials for various sports",
+          "activity 6.4",
+          "fig. 6.3",
+          "table 6.2"
+        ],
+        "context_relation": "The image is related to the activity and figure mentioned in the text.",
+        "limitations": [
+          "The image does not show the balls being dropped from a fixed height or the results of the experiment.",
+          "The image does not provide information about the materials used for making the balls."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T12:09:43Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red cricket ball with a white seam running around its circumference.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cricket ball",
+          "materials used for making balls",
+          "different materials for various sports",
+          "activity 6.4",
+          "fig. 6.3",
+          "table 6.2"
+        ],
+        "context_relation": "The image is related to the activity and figure mentioned in the text.",
+        "limitations": [
+          "The image does not show the balls being dropped from a fixed height or the results of the experiment.",
+          "The image does not provide information about the materials used for making the balls."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

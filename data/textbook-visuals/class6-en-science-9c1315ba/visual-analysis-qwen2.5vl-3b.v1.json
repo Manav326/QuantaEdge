@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1261,
+    "assets_selected": 1262,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1257,
-    "assets_remaining": 821,
+    "assets_analyzed": 1258,
+    "assets_remaining": 820,
     "assets_completion_percent": 60.5,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1256,
+    "assets_skipped_from_checkpoint": 1257,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:59:21Z"
+      "checkpointed_at": "2026-10-20T12:05:11Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:00:26Z"
+      "checkpointed_at": "2026-10-20T12:06:14Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:01:23Z"
+      "checkpointed_at": "2026-10-20T12:07:08Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:02:14Z"
+      "checkpointed_at": "2026-10-20T12:07:59Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41941,6 +41941,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T12:03:56Z"
+    },
+    {
+      "asset_id": "76c35f0537e47d5843af25ab",
+      "asset_sha256": "c8c928abbbef77f413255cd4716ad39d22d7fdf4ef0dfd58b7d7454c06c0662e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/c8c928abbbef77f413255cd4716ad39d22d7fdf4ef0dfd58b7d7454c06c0662e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red cricket ball with a white seam running around its circumference.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cricket ball",
+          "materials used for making balls",
+          "different materials for various sports",
+          "activity 6.4",
+          "fig. 6.3",
+          "table 6.2"
+        ],
+        "context_relation": "The image is related to the activity and figure mentioned in the text.",
+        "limitations": [
+          "The image does not show the balls being dropped from a fixed height or the results of the experiment.",
+          "The image does not provide information about the materials used for making the balls."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T12:09:43Z"
     }
   ]
 }
