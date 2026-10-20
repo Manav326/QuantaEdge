@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 997,
+    "assets_selected": 999,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 994,
-    "assets_remaining": 1297,
-    "assets_completion_percent": 43.4,
+    "assets_analyzed": 996,
+    "assets_remaining": 1295,
+    "assets_completion_percent": 43.5,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 992,
+    "assets_skipped_from_checkpoint": 994,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:20:43Z"
+      "checkpointed_at": "2026-10-20T03:23:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:21:17Z"
+      "checkpointed_at": "2026-10-20T03:23:43Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:21:39Z"
+      "checkpointed_at": "2026-10-20T03:24:09Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31799,6 +31799,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:22:22Z"
+    },
+    {
+      "asset_id": "3c16524e1e33f802feb0997f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:24:15Z"
+    },
+    {
+      "asset_id": "a4b348db9b8ce0305ae81b6d",
+      "asset_sha256": "39cbe66cfa55fbf3391e2733aa6e4271500f1df407ecf4fc3d258f174250bc88",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "page-0062.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing health and wellness, including non-communicable diseases and their management.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and minerals for managing illnesses and promoting recovery, and focus on a healthy lifestyle and balanced diet. While these systems can help with some conditions, and are useful for everyday well-being, they may not be effective for all diseases and at all stages.",
+          "Therapies for non-communicable diseases focus on managing symptoms and improving quality of life through medication, lifestyle changes, and rehabilitation. Early diagnosis and continuous care are key to control the disease progression and prevent complications.",
+          "Health means complete physical, mental, and social well-being—not just the absence of disease.",
+          "Being happy helps us stay active and healthy, and good health also improves our mood. Health and happiness are closely related.",
+          "A disease affects the normal working of the body or mind.",
+          "Symptoms are what we feel (like pain or tiredness); signs are what can be seen or measured (like fever or rash).",
+          "Non-communicable diseases like diabetes and heart disease are caused by lifestyle and environmental factors, not germs. They can often be prevented with healthy habits, lifestyle changes, and regular exercise.",
+          "Infectious diseases are caused by pathogens like bacteria, viruses, or worms.",
+          "Our immune system helps protect us from harmful pathogens.",
+          "Vaccines train the immune system using dead, weakened, or harmless parts of a germ to prevent disease.",
+          "Diagnosis and treatment are important for managing and curing diseases."
+        ],
+        "concepts": [
+          "health",
+          "wellness",
+          "non-communicable diseases",
+          "symptoms",
+          "quality of life",
+          "medication",
+          "lifestyle changes",
+          "rehabilitation",
+          "diagnosis",
+          "continuous care",
+          "physical well-being",
+          "mental well-being",
+          "social well-being",
+          "happiness",
+          "immune system",
+          "pathogens",
+          "vaccines",
+          "diabetes",
+          "heart disease",
+          "lifestyle"
+        ],
+        "context_relation": "The page discusses the importance of health, wellness, and the management of non-communicable diseases, including their symptoms, causes, and treatments.",
+        "limitations": [
+          "The page does not provide specific examples or case studies to illustrate the concepts discussed.",
+          "The page does not include any visual aids or diagrams to help explain the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:26:13Z"
     }
   ]
 }
