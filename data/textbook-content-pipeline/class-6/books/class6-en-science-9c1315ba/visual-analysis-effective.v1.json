@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f3f77ecdfd6fa9ec45cfd4cbbfa01c38d9122ed1cf72230a026ae624a246f800",
+  "raw_analysis_sha256": "381de2a9d92ef1c4d3df662cca17c84391dec43ccd80d4cc719e5c1272dd45dc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:39:00Z",
+      "checkpointed_at": "2026-10-20T03:42:36Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:40:02Z",
+      "checkpointed_at": "2026-10-20T03:43:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:40:53Z",
+      "checkpointed_at": "2026-10-20T03:44:24Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59713,6 +59713,148 @@
         "concepts": [],
         "context_relation": "unclear",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c196b64d4a61fbe2099532c5",
+      "asset_sha256": "21f6e98bc035b6b32efd1b9b1523b8377253713d2ba1b165c721547e60d31bd1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "page-0110.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining linear motion and asking students to identify examples of linear motion in their surroundings.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "When an object moves along a straight line, its motion is called linear motion. Identify such linear motion in your surroundings.",
+          "Fig. 5.14: Linear motion",
+          "But do things always move along a straight line? You might have enjoyed playing on swings and merry-go-rounds. Are these types of motion also linear motion?",
+          "Activity 5.4: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hold the other end of the thread with your hand and whirl it (Fig. 5.15).",
+          "Observe its motion.",
+          "Is the motion of the eraser the same as that of a merry-go-round?",
+          "When an object moves along a circular path, its motion is called circular motion."
+        ],
+        "concepts": [
+          "linear motion",
+          "straight line",
+          "swings",
+          "merry-go-rounds",
+          "Activity 5.4"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "The image does not show the actual activity of tying an eraser to a thread and observing its motion.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:48:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining linear motion and asking students to identify examples of linear motion in their surroundings.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "When an object moves along a straight line, its motion is called linear motion. Identify such linear motion in your surroundings.",
+          "Fig. 5.14: Linear motion",
+          "But do things always move along a straight line? You might have enjoyed playing on swings and merry-go-rounds. Are these types of motion also linear motion?",
+          "Activity 5.4: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hold the other end of the thread with your hand and whirl it (Fig. 5.15).",
+          "Observe its motion.",
+          "Is the motion of the eraser the same as that of a merry-go-round?",
+          "When an object moves along a circular path, its motion is called circular motion."
+        ],
+        "concepts": [
+          "linear motion",
+          "straight line",
+          "swings",
+          "merry-go-rounds",
+          "Activity 5.4"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "The image does not show the actual activity of tying an eraser to a thread and observing its motion.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4aaa1ed9e8661d02da73caeb",
+      "asset_sha256": "84a0b2013d2a367b62c45e7e73e004bc26bc9273bb2dbe74c41e5e5e6f5e222f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/84a0b2013d2a367b62c45e7e73e004bc26bc9273bb2dbe74c41e5e5e6f5e222f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a thread with an eraser attached at the other end, demonstrating oscillatory motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.15: Circular motion",
+          "Activity 5.5: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hang the eraser by holding the other end of the thread",
+          "(Fig. 5.16). Keep your hand steady.",
+          "Using the other hand, take the eraser slightly to one side and then release (Fig. 5.16).",
+          "Does it start moving to and fro? Is its motion similar to the motion of a swing?",
+          "When an object moves to and fro about some fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "Oscillatory motion",
+          "Circular motion",
+          "Circular motion"
+        ],
+        "context_relation": "The image illustrates the concept of oscillatory motion, which is a type of circular motion.",
+        "limitations": [
+          "The image does not show the actual motion of the eraser, only the setup.",
+          "The image does not show the eraser moving to and fro, only the initial setup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:50:23Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a thread with an eraser attached at the other end, demonstrating oscillatory motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.15: Circular motion",
+          "Activity 5.5: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hang the eraser by holding the other end of the thread",
+          "(Fig. 5.16). Keep your hand steady.",
+          "Using the other hand, take the eraser slightly to one side and then release (Fig. 5.16).",
+          "Does it start moving to and fro? Is its motion similar to the motion of a swing?",
+          "When an object moves to and fro about some fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "Oscillatory motion",
+          "Circular motion",
+          "Circular motion"
+        ],
+        "context_relation": "The image illustrates the concept of oscillatory motion, which is a type of circular motion.",
+        "limitations": [
+          "The image does not show the actual motion of the eraser, only the setup.",
+          "The image does not show the eraser moving to and fro, only the initial setup."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
