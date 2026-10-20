@@ -37,27 +37,31 @@ public class TutorService {
   }
 
   public Map<String,Object> startSession(AuthContext context,long lessonId,boolean newChat,long institutionId){
+    throw missingCourseContext();
+  }
+
+  public Map<String,Object> startSession(AuthContext context,long lessonId,boolean newChat,long institutionId,long courseId){
     context=authorization.requireStudent(context);
-    ensureLessonAccess(context.studentId(),lessonId,institutionId);
+    ensureLessonAccess(context.studentId(),lessonId,institutionId,courseId);
     if(!newChat){
       var rows=jdbc.query("""
         select id,public_id from tutor_session
-        where student_id=? and institution_id=? and lesson_id=?
+        where student_id=? and institution_id=? and course_id=? and lesson_id=?
           and ended_at is null and created_at>now()-interval '24 hours'
         order by created_at desc limit 1
         """,(rs,n)->Map.of("id",rs.getLong(1),"public_id",rs.getObject(2)),
-          context.studentId(),institutionId,lessonId);
+          context.studentId(),institutionId,courseId,lessonId);
       if(!rows.isEmpty()){
         var row=rows.getFirst();
         return Map.of("available",provider.isAvailable(),"sessionId",row.get("id"),
-            "publicId",row.get("public_id"),"reused",true);
+            "publicId",row.get("public_id"),"courseId",courseId,"reused",true);
       }
     }
     Long id=jdbc.queryForObject("""
-        insert into tutor_session(public_id,student_id,institution_id,lesson_id)
-        values(gen_random_uuid(),?,?,?) returning id
-        """,Long.class,context.studentId(),institutionId,lessonId);
-    return Map.of("available",provider.isAvailable(),"sessionId",id,"reused",false);
+        insert into tutor_session(public_id,student_id,institution_id,course_id,lesson_id)
+        values(gen_random_uuid(),?,?,?,?) returning id
+        """,Long.class,context.studentId(),institutionId,courseId,lessonId);
+    return Map.of("available",provider.isAvailable(),"sessionId",id,"courseId",courseId,"reused",false);
   }
 
   public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId){
