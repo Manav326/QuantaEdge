@@ -11,10 +11,10 @@
     "assets_selected": 1151,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1146,
-    "assets_remaining": 932,
-    "assets_completion_percent": 55.1,
-    "assets_failed": 27,
+    "assets_analyzed": 1147,
+    "assets_remaining": 931,
+    "assets_completion_percent": 55.2,
+    "assets_failed": 26,
     "assets_skipped_from_checkpoint": 1146,
     "batch_limit": 5,
     "publication_allowed": false
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:14:52Z"
+      "checkpointed_at": "2026-10-20T00:29:16Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:15:51Z"
+      "checkpointed_at": "2026-10-20T00:30:15Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -34758,7 +34758,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -36102,9 +36102,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -36565,19 +36565,33 @@
     {
       "asset_id": "ae7c7614e607782d3ca28330",
       "asset_sha256": "4a47e23e50b5c3901b31993ac6a78a7f4484bf8869bc59a3d3bd300c723ff373",
-      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 96,
       "asset_path": "assets/4a47e23e50b5c3901b31993ac6a78a7f4484bf8869bc59a3d3bd300c723ff373.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cylindrical magnet with a red top and blue bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "cylinder",
+          "color",
+          "shape"
+        ],
+        "context_relation": "The image illustrates a cylindrical magnet with a red top and blue bottom, which is part of a larger discussion about magnets.",
+        "limitations": []
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T00:39:38Z"
     },
     {
       "asset_id": "a5bafad4ef908230a4478dde",
