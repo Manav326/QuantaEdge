@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1246,
+    "assets_selected": 1247,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1242,
-    "assets_remaining": 836,
+    "assets_analyzed": 1243,
+    "assets_remaining": 835,
     "assets_completion_percent": 59.8,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1241,
+    "assets_skipped_from_checkpoint": 1242,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:34:28Z"
+      "checkpointed_at": "2026-10-20T10:40:02Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:35:29Z"
+      "checkpointed_at": "2026-10-20T10:41:05Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:36:22Z"
+      "checkpointed_at": "2026-10-20T10:41:57Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:37:11Z"
+      "checkpointed_at": "2026-10-20T10:42:46Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41371,6 +41371,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T10:38:46Z"
+    },
+    {
+      "asset_id": "d45b1021893ddcd9f2c02d69",
+      "asset_sha256": "ae5ef1869fb0d020e5219de08aa835a032de45c1cd1096793cea2c9a7a7f6ab4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/ae5ef1869fb0d020e5219de08aa835a032de45c1cd1096793cea2c9a7a7f6ab4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "131615122ceabfc036819a3f59dd1d30fb60ce77227cc5d66ae211a6c160e1f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A set of red ceramic vessels, including a large jar, a tall vase, and several smaller containers.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "ceramic vessels",
+          "red color",
+          "vase",
+          "jar",
+          "containers"
+        ],
+        "context_relation": "The image is related to the topic of materials used in crafting objects.",
+        "limitations": [
+          "The image does not provide specific information about the materials used in the vessels.",
+          "The image does not include any text or labels that would indicate the materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:44:24Z"
     }
   ]
 }
