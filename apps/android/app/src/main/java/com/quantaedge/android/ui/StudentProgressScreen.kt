@@ -25,6 +25,7 @@ import org.json.JSONObject
 
 @Composable
 fun StudentProgressScreen(
+    noEnrolledCourses: Boolean,
     data: JSONObject,
     language: String,
     busy: Boolean,
@@ -35,6 +36,18 @@ fun StudentProgressScreen(
     onViewCertificate: (Long) -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
+    if (noEnrolledCourses) {
+        Column(
+            modifier = Modifier.fillMaxSize().widthIn(max = 1000.dp).padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(t("My learning progress", "मेरी सीखने की प्रगति"),
+                style = MaterialTheme.typography.headlineSmall)
+            Text(localizedUiText("Your learning progress will appear here once you enroll in a course."),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        return
+    }
     val compact = LocalConfiguration.current.screenWidthDp < 390
     val lessons = data.optJSONObject("lessonStats") ?: JSONObject()
     val questions = data.optJSONObject("questionStats") ?: JSONObject()
