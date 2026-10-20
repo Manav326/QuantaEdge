@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "edb361d01f48ca3505696e9383e334a731625ca16be1cdca6d0f4c4947d233ca",
+  "raw_analysis_sha256": "258308720b11e49955817a41cf4d517fecdd5e3a452f7bf968319fed0cde1679",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:18:18Z",
+      "checkpointed_at": "2026-10-20T03:26:17Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:19:18Z",
+      "checkpointed_at": "2026-10-20T03:27:16Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:20:11Z",
+      "checkpointed_at": "2026-10-20T03:28:06Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59431,6 +59431,112 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "332c364ac43d3ed344326731",
+      "asset_sha256": "ca5049ea6605e6d0ac718b33fe932ad7003fcf571e873184632f338af5b2e0c5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/ca5049ea6605e6d0ac718b33fe932ad7003fcf571e873184632f338af5b2e0c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "oranges",
+          "growth",
+          "fruit",
+          "plant",
+          "nutrition",
+          "environment",
+          "ecology"
+        ],
+        "context_relation": "The image is related to the topic of plant growth and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the tree or oranges.",
+          "The image does not show any specific activity or experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:29:45Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "oranges",
+          "growth",
+          "fruit",
+          "plant",
+          "nutrition",
+          "environment",
+          "ecology"
+        ],
+        "context_relation": "The image is related to the topic of plant growth and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the tree or oranges.",
+          "The image does not show any specific activity or experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9a05a92dfb504aa2ea99ec5a",
+      "asset_sha256": "00ab59a075ba3658e101a2cc755ed1f9db293b730f82d17ba2ce32ff4d9988f5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/00ab59a075ba3658e101a2cc755ed1f9db293b730f82d17ba2ce32ff4d9988f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people in red uniforms performing a synchronized movement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Synchronized movement"
+        ],
+        "context_relation": "The image is related to the concept of linear motion and synchronized movement.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their positions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:31:25Z",
+      "effective_analysis": {
+        "visual_summary": "A group of people in red uniforms performing a synchronized movement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Synchronized movement"
+        ],
+        "context_relation": "The image is related to the concept of linear motion and synchronized movement.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their positions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],

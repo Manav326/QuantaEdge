@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1193,
+    "assets_selected": 1194,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1189,
-    "assets_remaining": 889,
-    "assets_completion_percent": 57.2,
+    "assets_analyzed": 1191,
+    "assets_remaining": 887,
+    "assets_completion_percent": 57.3,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1188,
+    "assets_skipped_from_checkpoint": 1189,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:18:18Z"
+      "checkpointed_at": "2026-10-20T03:26:17Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:19:18Z"
+      "checkpointed_at": "2026-10-20T03:27:16Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:20:11Z"
+      "checkpointed_at": "2026-10-20T03:28:06Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39435,6 +39435,75 @@
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "332c364ac43d3ed344326731",
+      "asset_sha256": "ca5049ea6605e6d0ac718b33fe932ad7003fcf571e873184632f338af5b2e0c5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/ca5049ea6605e6d0ac718b33fe932ad7003fcf571e873184632f338af5b2e0c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "oranges",
+          "growth",
+          "fruit",
+          "plant",
+          "nutrition",
+          "environment",
+          "ecology"
+        ],
+        "context_relation": "The image is related to the topic of plant growth and nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the tree or oranges.",
+          "The image does not show any specific activity or experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:29:45Z"
+    },
+    {
+      "asset_id": "9a05a92dfb504aa2ea99ec5a",
+      "asset_sha256": "00ab59a075ba3658e101a2cc755ed1f9db293b730f82d17ba2ce32ff4d9988f5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/00ab59a075ba3658e101a2cc755ed1f9db293b730f82d17ba2ce32ff4d9988f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people in red uniforms performing a synchronized movement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Synchronized movement"
+        ],
+        "context_relation": "The image is related to the concept of linear motion and synchronized movement.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their positions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:31:25Z"
     }
   ]
 }
