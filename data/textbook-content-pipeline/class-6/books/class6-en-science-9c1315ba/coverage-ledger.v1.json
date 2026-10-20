@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1204,
-    "successful_visual_analyses": 1181,
-    "missing_visual_analyses": 874,
+    "raw_analysis_result_rows": 1206,
+    "successful_visual_analyses": 1183,
+    "missing_visual_analyses": 872,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 897,
+    "unresolved_count": 895,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45688,9 +45688,24 @@
       "asset_path": "assets/0b992cb5cf08923bc0db5ca0dc654e7868db8c404607f343c5de854d3dd57757.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a road with a milestone indicating 'Delhi 70 km' and 'Delhi 60 km'.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "DELHI 70 km",
+          "DELHI 60 km"
+        ],
+        "concepts": [
+          "kilometre stones",
+          "distance to Delhi"
+        ],
+        "context_relation": "The image is related to the text about Padma's journey to visit her grandparents in Delhi.",
+        "limitations": [
+          "The image does not show the actual distance to Delhi, only the distance to the next milestone."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45706,9 +45721,40 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A kilometre stone indicating the distance to Delhi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 5.12:",
+          "After a few days, Padma was travelling",
+          "by bus to visit her grandparents in Delhi.",
+          "She was eager to reach Delhi and was",
+          "reading the kilometre stones on the side of",
+          "the road. On one of the kilometre stones, it",
+          "was written ‘Delhi 70 km’ (Fig. 5.12).",
+          "Further on, the next kilometre stone",
+          "read ‘Delhi 60 km’. Each kilometre stone",
+          "indicated that she was getting closer to her",
+          "grandparents’ house.",
+          "These kilometre stones i"
+        ],
+        "concepts": [
+          "kilometre stone",
+          "distance to Delhi",
+          "traveling by bus",
+          "eager to reach",
+          "reading kilometre stones",
+          "getting closer to grandparents' house"
+        ],
+        "context_relation": "The image is a visual representation of the text describing Padma's journey to visit her grandparents in Delhi.",
+        "limitations": [
+          "The image does not show the actual kilometre stones or the road.",
+          "The image does not show the distance to Delhi.",
+          "The image does not show Padma's journey by bus."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
