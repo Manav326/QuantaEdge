@@ -292,7 +292,7 @@ public class PracticeController {
     return result;
   }
 
-  private List<Long> selectAutoPracticeQuestions(long studentId,long institutionId,long chapterId,List<String> types,
+  private List<Long> selectAutoPracticeQuestions(long studentId,long institutionId,long courseId,long chapterId,List<String> types,
       String scopeFilter,List<Object> scopeArgs,long currentLessonId,int requestedCount,
       boolean excludeCurrentLesson,boolean missedOnly) {
     if(types.isEmpty()) return List.of();
@@ -306,19 +306,18 @@ public class PracticeController {
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=st.id and m.institution_id=(select institution_id from tenant_scope)
+        and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+        and spe.program_id=p.id and spe.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where ch.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
-        and (
-          (s.program_id is null and c.code=st.class_code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
-        )
-        and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
-                      and ste.subject_id=s.id and ste.status='ACTIVE')
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
         and q.question_type in (__TYPE_PLACEHOLDERS__)
         and (__SCOPE_FILTER__)
       """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders).replace("__SCOPE_FILTER__",scopeFilter);
@@ -327,10 +326,12 @@ public class PracticeController {
         and exists(
           select 1 from student_question_attempt prior
           where prior.student_id=st.id and prior.institution_id=(select institution_id from tenant_scope)
-              and prior.question_id=q.id and prior.activity_kind in ('LESSON_INLINE','PRACTICE') and prior.correct=false
+              and prior.course_id=? and prior.question_id=q.id
+              and prior.activity_kind in ('LESSON_INLINE','PRACTICE') and prior.correct=false
             and not exists(
               select 1 from student_question_attempt newer
               where newer.student_id=prior.student_id and newer.institution_id=(select institution_id from tenant_scope)
+                  and newer.course_id=prior.course_id
                   and newer.question_id=prior.question_id and newer.activity_kind in ('LESSON_INLINE','PRACTICE')
                 and (newer.answered_at>prior.answered_at
                   or (newer.answered_at=prior.answered_at and newer.id>prior.id))
@@ -342,7 +343,7 @@ public class PracticeController {
         and not exists(
           select 1 from student_question_attempt tried
           where tried.student_id=st.id and tried.institution_id=(select institution_id from tenant_scope)
-              and tried.question_id=q.id and tried.activity_kind in ('LESSON_INLINE','PRACTICE')
+              and tried.course_id=? and tried.question_id=q.id and tried.activity_kind in ('LESSON_INLINE','PRACTICE')
         )
         """;
     }
@@ -351,9 +352,11 @@ public class PracticeController {
     List<Object> args=new ArrayList<>();
     args.add(institutionId);
     args.add(studentId);
+    args.add(courseId);
     args.add(chapterId);
     args.addAll(types);
     args.addAll(scopeArgs);
+    args.add(courseId);
     if(excludeCurrentLesson) args.add(currentLessonId);
     args.add(requestedCount);
     return jdbc.queryForList(sql,Long.class,args.toArray());
