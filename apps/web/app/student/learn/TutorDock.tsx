@@ -71,7 +71,7 @@ async function recoverPersistedTutorTurn(sessionId: number, userMessage: string)
   for (let attempt = 0; attempt < TUTOR_RECOVERY_ATTEMPTS; attempt += 1) {
     if (attempt > 0) await new Promise(resolve => window.setTimeout(resolve, TUTOR_RECOVERY_INTERVAL_MS));
     try {
-      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30', {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?courseId=' + encodeURIComponent(String(courseId)) + '&limit=30', {
         credentials: 'same-origin',
         cache: 'no-store',
       });
@@ -250,8 +250,9 @@ function TutorMessageBody({ message, locale }: { message: string; locale: string
   </div>;
 }
 
-export default function TutorDock({ lessonId, open, onClose, currentQuestionId }: {
+export default function TutorDock({ lessonId, courseId, open, onClose, currentQuestionId }: {
   lessonId: number;
+  courseId: number;
   open: boolean;
   onClose: () => void;
   currentQuestionId?: number;
@@ -312,7 +313,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ lessonId, language: languageRef.current.responseLanguage }),
+          body: JSON.stringify({ lessonId, courseId, language: languageRef.current.responseLanguage }),
         });
         const body = await readBody(response);
         if (cancelled) return;
@@ -334,7 +335,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
           setError(translateUi(languageRef.current.locale, 'legacy.web.ai.tutor.is.not.enabled.for.this.envir.fee73b3a'));
           return;
         }
-        const historyResponse = await apiFetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?limit=30', {
+        const historyResponse = await apiFetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?courseId=' + encodeURIComponent(String(courseId)) + '&limit=30', {
           credentials: 'same-origin',
         });
         const historyBody = await readBody(historyResponse);
@@ -502,7 +503,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setLoadingOlder(true);
     setError('');
     try {
-      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30&beforeId=' + olderBeforeId, {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?courseId=' + encodeURIComponent(String(courseId)) + '&limit=30&beforeId=' + olderBeforeId, {
         credentials: 'same-origin',
       });
       const body = await readBody(response);
@@ -532,7 +533,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ lessonId, language: languageRef.current.responseLanguage, newChat: true }),
+        body: JSON.stringify({ lessonId, courseId, language: languageRef.current.responseLanguage, newChat: true }),
       });
       const body = await readBody(response);
       const nextSessionId = Number(body.sessionId);
@@ -574,7 +575,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setError('');
     setMessages(current => [...current, { clientId: optimisticMessageId, role: 'USER', mode: selectedMode, message, created_at: new Date().toISOString() }]);
     try {
-      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages', {
+      const response = await apiFetch('/api/v1/tutor/sessions/' + sessionId + '/messages?courseId=' + encodeURIComponent(String(courseId)), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
