@@ -51,9 +51,30 @@ public final class CourseTaxCalculator {
       int cessRateBasisPoints,
       boolean priceIncludesTax,
       long actualPaidPaise) {
+    Result quoted = quote(
+        listedPricePaise, discountPaise, treatment, gstRateBasisPoints,
+        cessRateBasisPoints, priceIncludesTax);
+    if (actualPaidPaise != quoted.customerPayablePaise()) {
+      throw new IllegalArgumentException(
+          "Captured payment does not match the approved course price and tax calculation.");
+    }
+    return quoted;
+  }
 
-    if (listedPricePaise < 0 || discountPaise < 0 || actualPaidPaise < 0) {
-      throw new IllegalArgumentException("Price, discount and payment amounts cannot be negative.");
+  /**
+   * Produces a pre-checkout quote from an already-approved tax profile. It does not claim that
+   * money has been captured. The caller must compare customerPayablePaise with the provider's
+   * exact captured amount before recording a sale.
+   */
+  public static Result quote(
+      long listedPricePaise,
+      long discountPaise,
+      Treatment treatment,
+      int gstRateBasisPoints,
+      int cessRateBasisPoints,
+      boolean priceIncludesTax) {
+    if (listedPricePaise < 0 || discountPaise < 0) {
+      throw new IllegalArgumentException("Price and discount amounts cannot be negative.");
     }
     if (discountPaise > listedPricePaise) {
       throw new IllegalArgumentException("Discount cannot exceed the listed price.");
@@ -96,11 +117,6 @@ public final class CourseTaxCalculator {
       long cess = percentageOf(taxable, cessRateBasisPoints);
       tax = Math.addExact(gst, cess);
       payable = Math.addExact(taxable, tax);
-    }
-
-    if (actualPaidPaise != payable) {
-      throw new IllegalArgumentException(
-          "Captured payment does not match the approved course price and tax calculation.");
     }
 
     return new Result(
