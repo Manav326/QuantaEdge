@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1007,
+    "assets_selected": 1009,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1004,
-    "assets_remaining": 1287,
-    "assets_completion_percent": 43.8,
+    "assets_analyzed": 1006,
+    "assets_remaining": 1285,
+    "assets_completion_percent": 43.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1002,
+    "assets_skipped_from_checkpoint": 1004,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:36:05Z"
+      "checkpointed_at": "2026-10-20T03:38:44Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:36:38Z"
+      "checkpointed_at": "2026-10-20T03:39:16Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:37:00Z"
+      "checkpointed_at": "2026-10-20T03:39:38Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32158,6 +32158,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:37:59Z"
+    },
+    {
+      "asset_id": "3791e173898e522dce0b39da",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a period of one year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number",
+          "of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "number of cases",
+          "month",
+          "year"
+        ],
+        "context_relation": "The table provides data on the number of dengue cases reported in a hospital over a year, which can be used to analyze trends and patterns.",
+        "limitations": [
+          "The table only covers data for one year and does not include data for subsequent years.",
+          "The table does not provide information on the source of the data or the methodology used to collect the data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:40:02Z"
+    },
+    {
+      "asset_id": "e25dd28280baa8f887011edc",
+      "asset_sha256": "5c685834e035d9c8095ec89673f96119ec770f82b9f945600e93eafcfae6b564",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "page-0064.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December",
+          "No. of dengue                        65        65        65        30        30        20"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "year",
+          "months",
+          "cases",
+          "numbers"
+        ],
+        "context_relation": "The table provides data for critical analysis of dengue cases over a year.",
+        "limitations": [
+          "The table does not include information about the months in which the cases were reported."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:41:40Z"
     }
   ]
 }

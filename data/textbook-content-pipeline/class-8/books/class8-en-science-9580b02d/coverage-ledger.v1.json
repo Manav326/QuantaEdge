@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1020,
-    "successful_visual_analyses": 1007,
-    "missing_visual_analyses": 1271,
+    "raw_analysis_result_rows": 1022,
+    "successful_visual_analyses": 1009,
+    "missing_visual_analyses": 1269,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1284,
+    "unresolved_count": 1282,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38696,9 +38696,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a period of one year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number",
+          "of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "number of cases",
+          "month",
+          "year"
+        ],
+        "context_relation": "The table provides data on the number of dengue cases reported in a hospital over a year, which can be used to analyze trends and patterns.",
+        "limitations": [
+          "The table only covers data for one year and does not include data for subsequent years.",
+          "The table does not provide information on the source of the data or the methodology used to collect the data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38714,9 +38738,33 @@
       "asset_path": "page-0064.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December",
+          "No. of dengue                        65        65        65        30        30        20"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "year",
+          "months",
+          "cases",
+          "numbers"
+        ],
+        "context_relation": "The table provides data for critical analysis of dengue cases over a year.",
+        "limitations": [
+          "The table does not include information about the months in which the cases were reported."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
