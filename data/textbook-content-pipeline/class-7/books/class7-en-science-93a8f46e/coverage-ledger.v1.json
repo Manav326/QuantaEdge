@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2063,
-    "successful_visual_analyses": 1955,
-    "missing_visual_analyses": 5425,
+    "raw_analysis_result_rows": 2066,
+    "successful_visual_analyses": 1958,
+    "missing_visual_analyses": 5422,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5533,
+    "unresolved_count": 5530,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -84868,9 +84868,32 @@
       "asset_path": "assets/d2d914255d41578190bdd53489c07f722ab1edaba67add6fdd19221f1a5d213e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the properties of coal, sulfur, wood, and iron.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
+          "The impact of iron on the progress of civilisation of India",
+          "In the Grade 6 Social Science textbook Exploring Society India and Beyond, you learnt about the Harappans."
+        ],
+        "concepts": [
+          "properties of coal and sulfur",
+          "properties of wood",
+          "properties of iron",
+          "impact of iron on civilisation",
+          "Harappans"
+        ],
+        "context_relation": "The text discusses the physical properties of different materials and their impact on the development of civilisation.",
+        "limitations": [
+          "The text does not provide specific examples or details about the properties of coal, sulfur, and wood.",
+          "The text does not provide specific details about the impact of iron on civilisation.",
+          "The text does not provide specific details about the Harappans.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84886,9 +84909,28 @@
       "asset_path": "assets/151c9212f89007f0ba45dbc235e0c88ccc912cddafa0b3b7cafbc5e869483e09.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "properties of materials"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically coal, sulfur, and wood.",
+        "limitations": [
+          "The text does not provide specific examples or measurements.",
+          "The text does not include any visual aids or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84904,9 +84946,32 @@
       "asset_path": "assets/06a9241b7d3b1b1062ef734caceb2072744c922e21b2c9be7a2d9a38597648fc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the properties of coal, sulfur, and wood, and contrasting them with iron's impact on Indian civilization.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
+          "The impact of iron on the progress of civilisation of India",
+          "In the Grade 6 Social Science textbook Exploring Society India and Beyond, you learnt about the Harappans."
+        ],
+        "concepts": [
+          "properties of coal, sulfur, and wood",
+          "malleability",
+          "brittleness",
+          "impact of iron on Indian civilization",
+          "Harappans"
+        ],
+        "context_relation": "The text discusses the properties of different materials and their impact on the development of Indian civilization, specifically focusing on the Harappans.",
+        "limitations": [
+          "The text does not provide specific details about the properties of coal, sulfur, and wood.",
+          "The text does not provide specific details about the impact of iron on Indian civilization.",
+          "The text does not provide specific details about the Harappans.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
