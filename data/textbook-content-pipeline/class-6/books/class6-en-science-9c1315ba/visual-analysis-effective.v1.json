@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "34c739c5f789822d3806e6ad28b6bd24e9df18e7ed094e723bbbd79c920bad29",
+  "raw_analysis_sha256": "23f35cbf876c8d4793afa63a0e0fa0e36166d4605aa68d78e0a0c23d83387bef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:55:25Z",
+      "checkpointed_at": "2026-10-20T10:59:35Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:56:26Z",
+      "checkpointed_at": "2026-10-20T11:00:36Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:57:19Z",
+      "checkpointed_at": "2026-10-20T11:01:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:58:09Z",
+      "checkpointed_at": "2026-10-20T11:02:19Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62609,6 +62609,70 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0636c0905f1932d239cbc427",
+      "asset_sha256": "08e27e3eb540c2c3b1072d650d3491a69915a396fb1721a2e211d1ee6ef65bf0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "asset_path": "page-0120.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "131615122ceabfc036819a3f59dd1d30fb60ce77227cc5d66ae211a6c160e1f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing materials and objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "others?” All things are made up of some materials like paper,\nwood, cloth, glass, metal, plastic, clay, and so on.\nAny substance that is used to create an object is referred to\nas material.",
+          "Activity 6.1: Let us identify",
+          "Make a list of objects you see around and also write the\nnames of the materials they are made up of in Table 6.1.",
+          "Table 6.1: Identify materials",
+          "I observe",
+          "Materials they are\nmade up of"
+        ],
+        "concepts": [
+          "materials",
+          "objects",
+          "Table 6.1",
+          "identify materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:06:33Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing materials and objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "others?” All things are made up of some materials like paper,\nwood, cloth, glass, metal, plastic, clay, and so on.\nAny substance that is used to create an object is referred to\nas material.",
+          "Activity 6.1: Let us identify",
+          "Make a list of objects you see around and also write the\nnames of the materials they are made up of in Table 6.1.",
+          "Table 6.1: Identify materials",
+          "I observe",
+          "Materials they are\nmade up of"
+        ],
+        "concepts": [
+          "materials",
+          "objects",
+          "Table 6.1",
+          "identify materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

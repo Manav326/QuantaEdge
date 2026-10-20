@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1250,
+    "assets_selected": 1251,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1246,
-    "assets_remaining": 832,
+    "assets_analyzed": 1247,
+    "assets_remaining": 831,
     "assets_completion_percent": 60.0,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1245,
+    "assets_skipped_from_checkpoint": 1246,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:55:25Z"
+      "checkpointed_at": "2026-10-20T10:59:35Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:56:26Z"
+      "checkpointed_at": "2026-10-20T11:00:36Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:57:19Z"
+      "checkpointed_at": "2026-10-20T11:01:29Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:58:09Z"
+      "checkpointed_at": "2026-10-20T11:02:19Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41496,6 +41496,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T10:58:22Z"
+    },
+    {
+      "asset_id": "0636c0905f1932d239cbc427",
+      "asset_sha256": "08e27e3eb540c2c3b1072d650d3491a69915a396fb1721a2e211d1ee6ef65bf0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "asset_path": "page-0120.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "131615122ceabfc036819a3f59dd1d30fb60ce77227cc5d66ae211a6c160e1f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing materials and objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "others?” All things are made up of some materials like paper,\nwood, cloth, glass, metal, plastic, clay, and so on.\nAny substance that is used to create an object is referred to\nas material.",
+          "Activity 6.1: Let us identify",
+          "Make a list of objects you see around and also write the\nnames of the materials they are made up of in Table 6.1.",
+          "Table 6.1: Identify materials",
+          "I observe",
+          "Materials they are\nmade up of"
+        ],
+        "concepts": [
+          "materials",
+          "objects",
+          "Table 6.1",
+          "identify materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:06:33Z"
     }
   ]
 }
