@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "87fe9b56771b9fad331f796b6285a753ff33add188b7dcbc07a61d71f469e364",
+  "raw_analysis_sha256": "e6a95169227e307c4e733de5fa474a70fda4e7a732e937ce3226279db895b4f4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:18:21Z",
+      "checkpointed_at": "2026-10-20T11:23:01Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:19:24Z",
+      "checkpointed_at": "2026-10-20T11:24:03Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:20:18Z",
+      "checkpointed_at": "2026-10-20T11:24:56Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:21:08Z",
+      "checkpointed_at": "2026-10-20T11:25:45Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62912,6 +62912,78 @@
         "context_relation": "educational",
         "limitations": [
           "The image does not show the objects or the grouping process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ed42d9042c50bef5b15628a",
+      "asset_sha256": "9d89a669bea6b3fe002fbf7cc71b26e83a07f722e9eda35b424178d6503e432d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 121,
+      "asset_path": "page-0121.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2bd81e073acc473b8a7e0b5596658e3f5709fa29fa74c86943b8391b0c7d49a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing how to group materials based on their properties, with a figure of various objects and questions for students to answer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Let us explore materials further.",
+          "6.2 How to Group Materials?",
+          "Activity 6.2: Let us group",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of.",
+          "Fig. 6.1: Objects around us",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials can be used to make more than one object.",
+          "The method of arranging the objects into groups is called classification. Objects can be classified on the basis of a common property that they have.",
+          "Similarly, we can classify materials based on certain properties."
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "materials"
+        ],
+        "context_relation": "exploring materials",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:29:56Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing how to group materials based on their properties, with a figure of various objects and questions for students to answer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Let us explore materials further.",
+          "6.2 How to Group Materials?",
+          "Activity 6.2: Let us group",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of.",
+          "Fig. 6.1: Objects around us",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials can be used to make more than one object.",
+          "The method of arranging the objects into groups is called classification. Objects can be classified on the basis of a common property that they have.",
+          "Similarly, we can classify materials based on certain properties."
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "materials"
+        ],
+        "context_relation": "exploring materials",
+        "limitations": [
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
