@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1298,
+    "assets_selected": 1299,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1294,
-    "assets_remaining": 784,
+    "assets_analyzed": 1295,
+    "assets_remaining": 783,
     "assets_completion_percent": 62.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1293,
+    "assets_skipped_from_checkpoint": 1294,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:50:23Z"
+      "checkpointed_at": "2026-10-20T21:54:36Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:51:16Z"
+      "checkpointed_at": "2026-10-20T21:55:29Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:52:25Z"
+      "checkpointed_at": "2026-10-20T21:56:38Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:53:06Z"
+      "checkpointed_at": "2026-10-20T21:57:20Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43331,6 +43331,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:53:30Z"
+    },
+    {
+      "asset_id": "d0799d0a5f98a2caadbd467f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 129,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "639e0eeefb7ad11a739f4b551820b316d64b89d7df947c37078501bcc668fadc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the behavior of different materials when mixed with water.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.5: Mixing different materials in water",
+          "Prediction",
+          "Observation",
+          "Will disappear",
+          "Disappears in water/will not disappear in water",
+          "Material",
+          "Sugar",
+          "Salt",
+          "Chalk powder",
+          "Sand",
+          "Sawdust",
+          "Any other"
+        ],
+        "concepts": [
+          "dissolving",
+          "soluble",
+          "water"
+        ],
+        "context_relation": "The table compares the behavior of different materials when mixed with water, indicating whether they dissolve or not.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each material's behavior."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:57:43Z"
     }
   ]
 }
