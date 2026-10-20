@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1150,
-    "successful_visual_analyses": 1128,
-    "missing_visual_analyses": 1141,
+    "raw_analysis_result_rows": 1151,
+    "successful_visual_analyses": 1129,
+    "missing_visual_analyses": 1140,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1163,
+    "unresolved_count": 1162,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43154,9 +43154,31 @@
       "asset_path": "assets/e6b553eb497fb7d6286c1f89ba73b06942e0dfd04a98e4709aa374c10c102803.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two people riding bicycles on a rural road with a shepherd and sheep in the background, under a stormy sky with lightning.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Exploring Forces",
+          "5",
+          "z Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our swing reaches its highest point and begins to come down?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycling",
+          "Wet surfaces",
+          "Swing dynamics"
+        ],
+        "context_relation": "The image is related to the textbook's content on exploring forces and their effects on different surfaces and situations.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed in the visible text.",
+          "The image does not show the actual forces at play in the scenarios mentioned in the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

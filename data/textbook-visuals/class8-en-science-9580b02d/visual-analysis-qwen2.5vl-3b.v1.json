@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1128,
+    "assets_selected": 1129,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1124,
-    "assets_remaining": 1167,
+    "assets_analyzed": 1125,
+    "assets_remaining": 1166,
     "assets_completion_percent": 49.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1123,
+    "assets_skipped_from_checkpoint": 1124,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:42:38Z"
+      "checkpointed_at": "2026-10-20T15:49:14Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:43:23Z"
+      "checkpointed_at": "2026-10-20T15:49:59Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:43:52Z"
+      "checkpointed_at": "2026-10-20T15:50:29Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:44:41Z"
+      "checkpointed_at": "2026-10-20T15:51:18Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36728,6 +36728,47 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T15:48:14Z"
+    },
+    {
+      "asset_id": "ef4f43c5cb8c0f446f4a4446",
+      "asset_sha256": "e6b553eb497fb7d6286c1f89ba73b06942e0dfd04a98e4709aa374c10c102803",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/e6b553eb497fb7d6286c1f89ba73b06942e0dfd04a98e4709aa374c10c102803.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two people riding bicycles on a rural road with a shepherd and sheep in the background, under a stormy sky with lightning.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Exploring Forces",
+          "5",
+          "z Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our swing reaches its highest point and begins to come down?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycling",
+          "Wet surfaces",
+          "Swing dynamics"
+        ],
+        "context_relation": "The image is related to the textbook's content on exploring forces and their effects on different surfaces and situations.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed in the visible text.",
+          "The image does not show the actual forces at play in the scenarios mentioned in the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:53:00Z"
     }
   ]
 }
