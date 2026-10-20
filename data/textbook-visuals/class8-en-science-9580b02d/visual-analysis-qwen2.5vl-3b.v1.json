@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1163,
+    "assets_selected": 1164,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 1159,
     "assets_remaining": 1132,
     "assets_completion_percent": 50.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1158,
+    "assets_skipped_from_checkpoint": 1159,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:31:58Z"
+      "checkpointed_at": "2026-10-20T22:37:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:32:47Z"
+      "checkpointed_at": "2026-10-20T22:38:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:33:27Z"
+      "checkpointed_at": "2026-10-20T22:38:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:34:30Z"
+      "checkpointed_at": "2026-10-20T22:39:52Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36153,7 +36153,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
