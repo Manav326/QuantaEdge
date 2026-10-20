@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1312,
-    "successful_visual_analyses": 1289,
-    "missing_visual_analyses": 766,
+    "raw_analysis_result_rows": 1313,
+    "successful_visual_analyses": 1290,
+    "missing_visual_analyses": 765,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 789,
+    "unresolved_count": 788,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49545,9 +49545,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing four different materials used by four individuals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "D",
+          "C",
+          "B",
+          "A"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "materials used by individuals"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
