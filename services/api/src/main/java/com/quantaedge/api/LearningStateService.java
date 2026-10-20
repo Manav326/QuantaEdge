@@ -33,19 +33,32 @@ public class LearningStateService {
       jdbc.update("""
         insert into student_lesson_progress(student_id,lesson_id,status,progress_percent,started_at,last_opened_at)
         values(?,?,'IN_PROGRESS',0,now(),now())
-        on conflict(student_id,lesson_id) do update set
+        on conflict(student_id,lesson_id) where institution_id is null and course_id is null do update set
           status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else 'IN_PROGRESS' end,
           started_at=coalesce(student_lesson_progress.started_at,now()),last_opened_at=now()
         """,studentId,lessonId);
-    } else {
+    } else if(courseId==null) {
       jdbc.update("""
         insert into student_lesson_progress(
           student_id,institution_id,lesson_id,status,progress_percent,started_at,last_opened_at
         ) values(?,?,?,'IN_PROGRESS',0,now(),now())
-        on conflict(institution_id,student_id,lesson_id) do update set
+        on conflict(institution_id,student_id,lesson_id)
+          where institution_id is not null and course_id is null
+        do update set
           status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else 'IN_PROGRESS' end,
           started_at=coalesce(student_lesson_progress.started_at,now()),last_opened_at=now()
         """,studentId,institutionId,lessonId);
+    } else {
+      jdbc.update("""
+        insert into student_lesson_progress(
+          student_id,institution_id,course_id,lesson_id,status,progress_percent,started_at,last_opened_at
+        ) values(?,?,?,?, 'IN_PROGRESS',0,now(),now())
+        on conflict(institution_id,student_id,course_id,lesson_id)
+          where institution_id is not null and course_id is not null
+        do update set
+          status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else 'IN_PROGRESS' end,
+          started_at=coalesce(student_lesson_progress.started_at,now()),last_opened_at=now()
+        """,studentId,institutionId,courseId,lessonId);
     }
   }
 
@@ -121,9 +134,9 @@ public class LearningStateService {
     } else {
       jdbc.update("""
         insert into student_question_attempt(
-          student_id,institution_id,question_id,selected_option,answer_text,correct,answered_at,practice_session_id,activity_kind
-        ) values(?,?,?,?,?,?,now(),?,?)
-        """,studentId,institutionId,questionId,selected,answer,correct,practiceSessionId,source);
+          student_id,institution_id,course_id,question_id,selected_option,answer_text,correct,answered_at,practice_session_id,activity_kind
+        ) values(?,?,?,?,?,?,?,?,now(),?,?)
+        """,studentId,institutionId,courseId,questionId,selected,answer,correct,practiceSessionId,source);
     }
 
     if(practiceSessionId!=null) {
