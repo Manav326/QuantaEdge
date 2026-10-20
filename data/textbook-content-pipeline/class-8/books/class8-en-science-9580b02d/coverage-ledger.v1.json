@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1050,
-    "successful_visual_analyses": 1034,
-    "missing_visual_analyses": 1241,
+    "raw_analysis_result_rows": 1052,
+    "successful_visual_analyses": 1036,
+    "missing_visual_analyses": 1239,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1257,
+    "unresolved_count": 1255,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39772,9 +39772,19 @@
       "asset_path": "assets/d7ce6b358a8a161fe59db8c75aba04cbef651ab10588972481ae0fa5ec80ff66.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a light blue shirt, holding their chin with their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electricity and its applications, specifically focusing on electromagnets.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the content of the textbook page.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39790,9 +39800,33 @@
       "asset_path": "assets/50c328b0dea8860cb78c931110989b41f5f34c193ca1aacad63bf2574cd8e028.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a battery connected to a wire loop with paper clips at both ends.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take around 50 cm long length of a flexible\ninsulated wire, an iron nail, an electric cell, and\nfew iron paper clips.",
+          "Tightly wrap the wire around the nail in the form\nof",
+          "A hand holding a battery connected to a wire loop with paper clips at both ends."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Electric current",
+          "Magnetic effect",
+          "Practical applications of electric current",
+          "Electromagnets",
+          "Electric bells",
+          "Motors",
+          "Fans",
+          "Loudspeakers"
+        ],
+        "context_relation": "Exploring the magnetic effect of electric current",
+        "limitations": [
+          "The image does not show the actual setup or the magnetic field produced.",
+          "The image does not show the interaction between the wire and the paper clips."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

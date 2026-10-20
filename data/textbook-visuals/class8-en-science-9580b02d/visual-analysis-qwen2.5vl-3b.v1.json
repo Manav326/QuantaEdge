@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1035,
+    "assets_selected": 1036,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1031,
-    "assets_remaining": 1260,
-    "assets_completion_percent": 45.0,
+    "assets_analyzed": 1033,
+    "assets_remaining": 1258,
+    "assets_completion_percent": 45.1,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1030,
+    "assets_skipped_from_checkpoint": 1031,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:23:50Z"
+      "checkpointed_at": "2026-10-20T04:29:16Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:24:26Z"
+      "checkpointed_at": "2026-10-20T04:29:52Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:24:50Z"
+      "checkpointed_at": "2026-10-20T04:30:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33258,6 +33258,78 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "c50cc7f9d235197be5fbdd86",
+      "asset_sha256": "d7ce6b358a8a161fe59db8c75aba04cbef651ab10588972481ae0fa5ec80ff66",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/d7ce6b358a8a161fe59db8c75aba04cbef651ab10588972481ae0fa5ec80ff66.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a light blue shirt, holding their chin with their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electricity and its applications, specifically focusing on electromagnets.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the content of the textbook page.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:30:54Z"
+    },
+    {
+      "asset_id": "b61d65555e2ee2f8d5adef64",
+      "asset_sha256": "50c328b0dea8860cb78c931110989b41f5f34c193ca1aacad63bf2574cd8e028",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/50c328b0dea8860cb78c931110989b41f5f34c193ca1aacad63bf2574cd8e028.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a battery connected to a wire loop with paper clips at both ends.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take around 50 cm long length of a flexible\ninsulated wire, an iron nail, an electric cell, and\nfew iron paper clips.",
+          "Tightly wrap the wire around the nail in the form\nof",
+          "A hand holding a battery connected to a wire loop with paper clips at both ends."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Electric current",
+          "Magnetic effect",
+          "Practical applications of electric current",
+          "Electromagnets",
+          "Electric bells",
+          "Motors",
+          "Fans",
+          "Loudspeakers"
+        ],
+        "context_relation": "Exploring the magnetic effect of electric current",
+        "limitations": [
+          "The image does not show the actual setup or the magnetic field produced.",
+          "The image does not show the interaction between the wire and the paper clips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:31:40Z"
     }
   ]
 }
