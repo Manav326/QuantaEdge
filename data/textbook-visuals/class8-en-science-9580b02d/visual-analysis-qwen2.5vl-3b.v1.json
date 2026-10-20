@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1162,
+    "assets_selected": 1163,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1158,
-    "assets_remaining": 1133,
-    "assets_completion_percent": 50.5,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1157,
+    "assets_analyzed": 1159,
+    "assets_remaining": 1132,
+    "assets_completion_percent": 50.6,
+    "assets_failed": 19,
+    "assets_skipped_from_checkpoint": 1158,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:26:17Z"
+      "checkpointed_at": "2026-10-20T22:31:58Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:27:05Z"
+      "checkpointed_at": "2026-10-20T22:32:47Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:27:44Z"
+      "checkpointed_at": "2026-10-20T22:33:27Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:28:43Z"
+      "checkpointed_at": "2026-10-20T22:34:30Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36088,19 +36088,31 @@
     {
       "asset_id": "3b48be41f6d9d92459c9d31f",
       "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
-      "page_text_context_sha256": "977e597ed500e18523cf7c790cab2db92414b1d95dbc42a7bbe907cc618e6139",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 79,
       "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977e597ed500e18523cf7c790cab2db92414b1d95dbc42a7bbe907cc618e6139",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising a hand in class, with another student in a wheelchair beside them.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a general illustration and does not represent any specific educational concept or question from the textbook."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T22:36:07Z"
     },
     {
       "asset_id": "a9ae9a5cd289743070d326b6",
