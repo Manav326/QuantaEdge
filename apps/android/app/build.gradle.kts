@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.Copy
+import java.net.URI
 import java.security.MessageDigest
 
 plugins {
@@ -259,7 +260,7 @@ tasks.register("verifyLocalApiConfiguration") {
     group = "verification"
     description = "Ensures the installable local APK targets a private-LAN HTTP API, not production."
     doLast {
-        val apiUri = java.net.URI(configuredApiBaseUrl)
+        val apiUri = URI(configuredApiBaseUrl)
         val host = apiUri.host?.lowercase()
         check(apiUri.scheme == "http" && !host.isNullOrBlank()) {
             "The local APK requires an HTTP API URL reachable from the Android device."
