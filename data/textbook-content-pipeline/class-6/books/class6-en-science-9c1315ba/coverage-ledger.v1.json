@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1290,
-    "successful_visual_analyses": 1265,
-    "missing_visual_analyses": 788,
+    "raw_analysis_result_rows": 1291,
+    "successful_visual_analyses": 1266,
+    "missing_visual_analyses": 787,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 813,
+    "unresolved_count": 812,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48666,9 +48666,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A variety of balls of the same size but made of different materials are shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce."
+        ],
+        "concepts": [
+          "Variety of balls",
+          "Different materials",
+          "Fixed height",
+          "Bounce height",
+          "Table 6.2"
+        ],
+        "context_relation": "The image is related to the activity 6.4 and the question about tennis balls.",
+        "limitations": [
+          "The image does not show the balls being dropped or the bounce heights recorded."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

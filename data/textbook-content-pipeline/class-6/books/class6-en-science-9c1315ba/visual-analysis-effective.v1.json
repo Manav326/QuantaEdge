@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bd71c9b7935ac06af74616afaa8f3d6d29e42133f6d1d7e0db14fa7bb146aec2",
+  "raw_analysis_sha256": "a96ea3f7bf54d2e7fbe94e753829142c5f3542cd3880e3365e1828eaf591ff3c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:22:30Z",
+      "checkpointed_at": "2026-10-20T12:28:15Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:23:33Z",
+      "checkpointed_at": "2026-10-20T12:29:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:24:26Z",
+      "checkpointed_at": "2026-10-20T12:30:12Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:25:17Z",
+      "checkpointed_at": "2026-10-20T12:31:03Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -63542,6 +63542,68 @@
         "context_relation": "The image is related to the activity and figure mentioned in the text.",
         "limitations": [
           "The image does not show the balls being dropped or the results of the bounce comparison."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b0aaec34003d435caa8a356f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A variety of balls of the same size but made of different materials are shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce."
+        ],
+        "concepts": [
+          "Variety of balls",
+          "Different materials",
+          "Fixed height",
+          "Bounce height",
+          "Table 6.2"
+        ],
+        "context_relation": "The image is related to the activity 6.4 and the question about tennis balls.",
+        "limitations": [
+          "The image does not show the balls being dropped or the bounce heights recorded."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T12:31:35Z",
+      "effective_analysis": {
+        "visual_summary": "A variety of balls of the same size but made of different materials are shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce."
+        ],
+        "concepts": [
+          "Variety of balls",
+          "Different materials",
+          "Fixed height",
+          "Bounce height",
+          "Table 6.2"
+        ],
+        "context_relation": "The image is related to the activity 6.4 and the question about tennis balls.",
+        "limitations": [
+          "The image does not show the balls being dropped or the bounce heights recorded."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
