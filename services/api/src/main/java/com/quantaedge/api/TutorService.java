@@ -617,61 +617,46 @@ public class TutorService {
   }
 
   private void ensureSessionOwner(long studentId,long sessionId,long institutionId){
+    throw missingCourseContext();
+  }
+
+  private void ensureSessionOwner(long studentId,long sessionId,long institutionId,long courseId){
     Long count=jdbc.queryForObject("""
-        select count(*) from tutor_session
-        where id=? and student_id=? and institution_id=? and ended_at is null
-        """,Long.class,sessionId,studentId,institutionId);
-    if(count==null||count==0)throw new SecurityException("Tutor session access denied");
+      select count(*) from tutor_session
+      where id=? and student_id=? and institution_id=? and course_id=? and ended_at is null
+      """,Long.class,sessionId,studentId,institutionId,courseId);
+    if(count==null||count==0)throw new SecurityException("Tutor session access denied for this course");
   }
 
   private void ensureLessonAccess(long studentId,long lessonId,long institutionId){
-    Long count=jdbc.queryForObject("""
-      select count(*) from lesson l
-      join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id
-      join curriculum_class c on c.id=s.class_id
-      where l.id=? and l.active=true and l.status='PUBLISHED'
-        and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
-        and exists(select 1 from institution_membership m
-                   join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-                   where m.institution_id=? and m.student_id=? and m.status='ACTIVE')
-        and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=? and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
-        and (
-          (s.program_id is null and c.code=(select class_code from student where id=? and active=true)
-            and (c.code not in ('6','7','8') or exists(
-              select 1
-              from curriculum_program class_course
-              join student_program_enrollment spe on spe.program_id=class_course.id
-                and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-              join curriculum_program_subject cps on cps.program_id=class_course.id
-                and cps.class_id=c.id and cps.subject_id=s.id
-              where class_course.class_id=c.id and class_course.code='CLASS_' || c.code
-                and class_course.curriculum_version='CURRENT' and class_course.status='ACTIVE'
-            )))
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=? and spe.institution_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
-        )
-      """,Long.class,lessonId,institutionId,studentId,studentId,institutionId,
-        studentId,studentId,institutionId,studentId,institutionId);
-    if(count==null||count==0)throw new SecurityException("Tutor lesson access denied");
-    Long programId=jdbc.queryForObject("""
-      select coalesce(s.program_id,(
-        select class_course.id from curriculum_program class_course
-        where class_course.class_id=c.id and class_course.code='CLASS_' || c.code
-          and class_course.curriculum_version='CURRENT' and class_course.status='ACTIVE'
-          and c.code in ('6','7','8') limit 1
-      ))
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.id=?
-      """,Long.class,lessonId);
-    if(programId!=null) assertCourseEntitlement(studentId,institutionId,programId);
+    throw missingCourseContext();
   }
 
+  private void ensureLessonAccess(long studentId,long lessonId,long institutionId,long courseId){
+    Long count=jdbc.queryForObject("""
+      select count(*)
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join curriculum_program_subject cps on cps.program_id=p.id
+        and cps.subject_id=s.id and cps.class_id=s.class_id
+      join institution_membership m on m.student_id=? and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=m.student_id
+        and spe.institution_id=m.institution_id and spe.program_id=p.id and spe.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=p.id
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED' and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """,Long.class,courseId,studentId,institutionId,lessonId);
+    if(count==null||count==0)throw new SecurityException("Tutor lesson is not mapped to the selected institution course");
+    assertCourseEntitlement(studentId,institutionId,courseId);
+  }
   private void assertCourseEntitlement(long studentId,long institutionId,long programId){
     Boolean allowed=jdbc.queryForObject("""
       select exists(
@@ -700,6 +685,12 @@ public class TutorService {
       """,Boolean.class,studentId,institutionId,programId,programId,programId,programId);
     if(!Boolean.TRUE.equals(allowed)) throw new SecurityException(
         "Tutor course access is not authorised for the selected institution.");
+  }
+
+  private InstitutionTenantContextService.InvalidInstitutionContextException missingCourseContext(){
+    return new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_COURSE_REQUIRED",
+        "Tutor requests must supply the selected institution course.");
   }
 
   private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext(){
