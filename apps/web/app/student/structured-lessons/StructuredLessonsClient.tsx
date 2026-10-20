@@ -69,6 +69,12 @@ export default function StructuredLessonsClient() {
     if (value === 'ALL') params.delete('subjectCode'); else params.set('subjectCode', value);
     window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
   }
+  const noEnrolledCourses = !loadingCourses && !courseError && courses.length === 0;
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading"><h1><UiText message="web.navigation.student.structuredLessons" /></h1></header>
+    <p className="auth-card" role="status"><UiText message="student.empty.learn.message" /></p>
+  </section></div></main>;
+
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading qe-lesson-list-header"><div>
       <span className="eyebrow"><UiText message="legacy.web.bilingual.lesson.format.349a3c45" /></span>
