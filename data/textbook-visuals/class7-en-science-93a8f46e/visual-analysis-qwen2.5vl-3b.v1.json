@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1890,
+    "assets_selected": 1892,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1887,
-    "assets_remaining": 5601,
+    "assets_analyzed": 1888,
+    "assets_remaining": 5600,
     "assets_completion_percent": 25.2,
-    "assets_failed": 81,
-    "assets_skipped_from_checkpoint": 1885,
+    "assets_failed": 83,
+    "assets_skipped_from_checkpoint": 1887,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T20:17:37Z"
+      "checkpointed_at": "2026-10-20T20:21:55Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T20:17:58Z"
+      "checkpointed_at": "2026-10-20T20:22:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -71960,6 +71960,68 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/23c27571e5f95fbb030b8f819eb4b8966e4b8110f61fb08426e6e9075cd277f4.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9da92318ab0a33f9566b70b7",
+      "asset_sha256": "76cde521fbfd5e23d1cd08fa245a525e7df07ba41c33ac82693a9d68c70ce94e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/76cde521fbfd5e23d1cd08fa245a525e7df07ba41c33ac82693a9d68c70ce94e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's feet walking on grass, with a red skirt and black shoes visible.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any context or information related to the text.",
+        "limitations": [
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T20:22:54Z"
+    },
+    {
+      "asset_id": "5fec27d42ec85fb99af9c574",
+      "asset_sha256": "be9fb8776ec06fd841cdcaf85d262c3ff3d57622a6bde3a888d5215e26abafc6",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/be9fb8776ec06fd841cdcaf85d262c3ff3d57622a6bde3a888d5215e26abafc6.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "cddc602827294da71d269add",
+      "asset_sha256": "ced6e17d9e59697680e2e35ae75bf254dbe84cdb45a91b39dd3f47d751b45649",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/ced6e17d9e59697680e2e35ae75bf254dbe84cdb45a91b39dd3f47d751b45649.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
