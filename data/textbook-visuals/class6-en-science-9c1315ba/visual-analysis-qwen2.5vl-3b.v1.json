@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1294,
+    "assets_selected": 1295,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1290,
-    "assets_remaining": 788,
+    "assets_analyzed": 1291,
+    "assets_remaining": 787,
     "assets_completion_percent": 62.1,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1289,
+    "assets_skipped_from_checkpoint": 1290,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:29:33Z"
+      "checkpointed_at": "2026-10-20T21:33:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:30:26Z"
+      "checkpointed_at": "2026-10-20T21:34:25Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:31:36Z"
+      "checkpointed_at": "2026-10-20T21:35:34Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:32:18Z"
+      "checkpointed_at": "2026-10-20T21:36:16Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43158,6 +43158,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:32:29Z"
+    },
+    {
+      "asset_id": "29e0ba550cc35d7f78c440cb",
+      "asset_sha256": "331f25546c990dd57d5750cff6bb3a64d28eaf2bf979348d1e14b8d43c31f7d4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 128,
+      "asset_path": "page-0128.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "82279822b9b8f23dc0029dab5c76dc7a3e258c04fca8a978b64d11cfa7634d77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table 6.4: Classification of objects, followed by a paragraph about Ghulan and his mother making lemonade, and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Table 6.4: Classification of objects",
+          "Is water",
+          "transparent?",
+          "Can it",
+          "be made",
+          "opaque?",
+          "Transparent",
+          "Translucent",
+          "Opaque",
+          "6.3.4 What is soluble in water; what is not?",
+          "Ghulan was sweating when he came home after",
+          "playing in the evening. He was feeling tired and",
+          "thirsty. Ghulan’s mother mixed a spoonful of sugar,",
+          "a pinch of salt and some lemon juice in a glass",
+          "tumbler of water and offered him this shikanji",
+          "(lemonade) to drink.",
+          "Ghulan noticed that while his mother was",
+          "mixing sugar and salt in water, the salt and the",
+          "sugar disappeared after a while.",
+          "Let us try a simple activity to explore how",
+          "different materials behave when we mix them",
+          "in water!",
+          "Activity 6.7: Let us explore",
+          "Collect small amounts of sugar, salt, chalk powder, sand",
+          "and sawdust.",
+          "Take five glass tumblers and fill them about two-third",
+          "with water.",
+          "Put a teaspoonful of sugar in the first glass tumbler, salt",
+          "in the second one, chalk powder in the third, sand in the",
+          "fourth and sawdust in the fifth glass tumbler."
+        ],
+        "concepts": [
+          "Classification of objects",
+          "Solubility in water",
+          "Mixing materials in water"
+        ],
+        "context_relation": "The image is a page from a textbook that explains the classification of objects based on their transparency and provides instructions for an activity to explore the solubility of different materials in water.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are soluble or insoluble in water.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:39:29Z"
     }
   ]
 }
