@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 979,
+    "assets_selected": 981,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 976,
-    "assets_remaining": 1315,
-    "assets_completion_percent": 42.6,
+    "assets_analyzed": 978,
+    "assets_remaining": 1313,
+    "assets_completion_percent": 42.7,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 974,
+    "assets_skipped_from_checkpoint": 976,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:49:03Z"
+      "checkpointed_at": "2026-10-20T02:51:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:49:37Z"
+      "checkpointed_at": "2026-10-20T02:52:00Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:49:59Z"
+      "checkpointed_at": "2026-10-20T02:52:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31129,6 +31129,85 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:50:42Z"
+    },
+    {
+      "asset_id": "8abcc765d85d257d23779cc1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:52:30Z"
+    },
+    {
+      "asset_id": "91ae1d28809668c1d4e85c0b",
+      "asset_sha256": "a06372a301d110d5e095605cfe0a4e35bbce62d1667b5f8d5aadecfdbf757c46",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "page-0060.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration explaining the discovery of penicillin and its impact on antibiotic resistance.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Discovery of the first antibiotic, Penicillin",
+          "Penicillin was discovered in 1928 by Alexander Fleming, a bacteriologist from London. While studying harmful bacteria, he noticed that a mould on a discarded petri dish stopped the bacteria from growing. He realized the mould released a substance that killed the bacteria. This chance discovery led t",
+          "How antibiotic resistance spreads in the community?",
+          "Taking antibiotics when they are not required or taking incomplete dose",
+          "Development of resistance in bacteria in animals",
+          "Exposure through animal food products",
+          "How resistant bacteria spread through plants and animal products",
+          "It reaches human digestive system through crop produce",
+          "Development of resistance in bacteria in a human body",
+          "Antibiotics",
+          "How resistant bacteria spread through humans",
+          "May have serious illness and gets care at a hospital",
+          "Spread directly to other patients or indirectly through healthcare workers",
+          "Spread in hospital through dirty surface",
+          "Spread through soil in a crop field via manure/animal faeces",
+          "Patients go home",
+          "Fig. 3.5 (a): Spread of antibiotic-resistant bacteria in community"
+        ],
+        "concepts": [
+          "Discovery of penicillin",
+          "Antibiotic resistance",
+          "Impact of antibiotics on bacteria",
+          "Spread of antibiotic-resistant bacteria"
+        ],
+        "context_relation": "The image explains the discovery of penicillin and its subsequent impact on antibiotic resistance, highlighting the spread of antibiotic-resistant bacteria in the community.",
+        "limitations": [
+          "The image does not provide specific details about the mechanisms of antibiotic resistance or the specific bacteria involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:54:16Z"
     }
   ]
 }
