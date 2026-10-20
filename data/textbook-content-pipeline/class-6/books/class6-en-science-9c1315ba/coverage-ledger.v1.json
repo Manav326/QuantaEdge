@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1280,
-    "successful_visual_analyses": 1255,
-    "missing_visual_analyses": 798,
+    "raw_analysis_result_rows": 1281,
+    "successful_visual_analyses": 1256,
+    "missing_visual_analyses": 797,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 823,
+    "unresolved_count": 822,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48317,9 +48317,31 @@
       "asset_path": "assets/1f515a6d030bc08ca493614340f239478de34e544917bfd5f399efb5f6c744bf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a diagram with four colored pencils connected to long, dashed lines representing materials used to make a tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Tumbler",
+          "Materials used to make a tumbler",
+          "Fig. 6.2: Materials used to make a tumbler",
+          "Would it be a",
+          "good idea to",
+          "use paper-like",
+          "cloth be used for",
+          "tumbler made of"
+        ],
+        "concepts": [
+          "Materials for making a tumbler",
+          "Paper-like materials",
+          "Cloth materials"
+        ],
+        "context_relation": "The image is related to the textbook content about materials used to make a tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the materials used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
