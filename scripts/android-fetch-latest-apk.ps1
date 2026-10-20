@@ -155,7 +155,8 @@ try {
         $null = New-Item -ItemType Directory -Path $runDir -Force
         Write-Status ("Checking latest candidate: run {0}, branch {1}, commit {2}, result {3}..." -f $run.databaseId, $run.headBranch, $run.headSha, $run.conclusion) "Cyan"
 
-        # Download the stable-signed installable APK only from a successful run for this exact HEAD.
+        # Download only the named installable APK artifact from this candidate run.
+        # Candidate selection is based on newest available APK, not the current branch HEAD.
         $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
         $previousErrorActionPreference = $ErrorActionPreference
         try {
