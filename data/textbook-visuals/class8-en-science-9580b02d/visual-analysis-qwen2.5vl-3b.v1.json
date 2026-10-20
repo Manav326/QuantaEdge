@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1085,
+    "assets_selected": 1086,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1081,
-    "assets_remaining": 1210,
+    "assets_analyzed": 1082,
+    "assets_remaining": 1209,
     "assets_completion_percent": 47.2,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1080,
+    "assets_skipped_from_checkpoint": 1081,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:15:23Z"
+      "checkpointed_at": "2026-10-20T06:18:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:15:57Z"
+      "checkpointed_at": "2026-10-20T06:18:53Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:16:20Z"
+      "checkpointed_at": "2026-10-20T06:19:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:16:56Z"
+      "checkpointed_at": "2026-10-20T06:19:50Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35056,6 +35056,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T06:17:36Z"
+    },
+    {
+      "asset_id": "3d97343bd166aa106bf1574e",
+      "asset_sha256": "4b051cca89a51acd79ce0f7a64749d958bc007ec02716bb7f817a818ebd38404",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/4b051cca89a51acd79ce0f7a64749d958bc007ec02716bb7f817a818ebd38404.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "67bdd6cd75cbf6940af60e45244d1822a46e97cd3aaefc53e78d353bac94fdb4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the construction of a Voltaic cell using lemons, copper wires, iron nails, and an LED.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 4.6: Let us construct",
+          "z Take five or six juicy lemons, copper wires/",
+          "Can we also make",
+          "our own Voltaic",
+          "cell using easily",
+          "available materials?",
+          "z Insert the copper wire and the iron nail in one",
+          "of the lemons keeping them apart by a small",
+          "distance."
+        ],
+        "concepts": [
+          "Voltaic cell",
+          "construction",
+          "lemons",
+          "copper wires",
+          "iron nails",
+          "LED",
+          "distance"
+        ],
+        "context_relation": "construction",
+        "limitations": [
+          "distance between copper wire and iron nail",
+          "construction of Voltaic cell"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:20:34Z"
     }
   ]
 }
