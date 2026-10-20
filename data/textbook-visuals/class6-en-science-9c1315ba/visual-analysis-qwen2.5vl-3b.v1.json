@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1252,
+    "assets_selected": 1253,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1248,
-    "assets_remaining": 830,
+    "assets_analyzed": 1249,
+    "assets_remaining": 829,
     "assets_completion_percent": 60.1,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1247,
+    "assets_skipped_from_checkpoint": 1248,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:07:48Z"
+      "checkpointed_at": "2026-10-20T11:13:46Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:08:51Z"
+      "checkpointed_at": "2026-10-20T11:14:46Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:09:44Z"
+      "checkpointed_at": "2026-10-20T11:15:38Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:10:33Z"
+      "checkpointed_at": "2026-10-20T11:16:27Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41598,6 +41598,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T11:12:36Z"
+    },
+    {
+      "asset_id": "f56bdd0269815d534160f03b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2bd81e073acc473b8a7e0b5596658e3f5709fa29fa74c86943b8391b0c7d49a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Objects around us, grouped based on properties like shape, colour, hardness, softness, shine, and materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.1: Objects around us",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of.",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials"
+        ],
+        "concepts": [
+          "Grouping objects",
+          "Properties of objects",
+          "Materials",
+          "Activity 6.2"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not show the objects or the grouping process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:17:04Z"
     }
   ]
 }
