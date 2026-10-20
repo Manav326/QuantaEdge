@@ -59,7 +59,13 @@ public class FiscalDocumentRenderer {
     };
     boolean showLogo=Boolean.TRUE.equals(style.getOrDefault("showLogo",Boolean.TRUE));
     String footer=safe(style.getOrDefault("footerText","Thank you for learning with us.").toString(),180);
-    String heading="BILL_OF_SUPPLY".equals(documentType)?"BILL OF SUPPLY":"TAX INVOICE";
+    boolean creditNote="CREDIT_NOTE".equals(documentType);
+    String heading=switch(documentType) {
+      case "BILL_OF_SUPPLY" -> "BILL OF SUPPLY";
+      case "CREDIT_NOTE" -> "CREDIT NOTE";
+      case "DEBIT_NOTE" -> "DEBIT NOTE";
+      default -> "TAX INVOICE";
+    };
 
     BufferedImage image=new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
     Graphics2D g=image.createGraphics();
@@ -109,6 +115,9 @@ public class FiscalDocumentRenderer {
       if(!beneficiary.isBlank()) draw(g,Font.PLAIN,12,"Learner / beneficiary: "+beneficiary,650,363,500,MUTED);
       draw(g,Font.PLAIN,12,"Institution: "+value(transaction,"institutionName",""),650,387,500,MUTED);
       draw(g,Font.PLAIN,12,"Payment reference: "+value(transaction,"paymentReference",""),650,411,500,MUTED);
+      String originalDocument=value(transaction,"originalDocumentNumber","");
+      if(!originalDocument.isBlank())
+        draw(g,Font.BOLD,12,"Original invoice: "+originalDocument,650,435,500,accent);
 
       int top=452;
       g.setColor(NAVY);g.fillRoundRect(52,top,1136,50,9,9);
@@ -164,18 +173,18 @@ public class FiscalDocumentRenderer {
       totalRow(g,"Taxable value",money(transaction.get("taxableValuePaise")),totalsX,totalsY,500,INK);totalsY+=32;
       totalRow(g,"Total tax",money(transaction.get("taxValuePaise")),totalsX,totalsY,500,INK);totalsY+=41;
       g.setColor(primary);g.fillRoundRect(totalsX-13,totalsY-22,538,60,12,12);
-      totalRow(g,"TOTAL PAID",money(transaction.get("amountPaidPaise")),totalsX,totalsY+7,500,Color.WHITE);
+      totalRow(g,creditNote?"TOTAL CREDIT":"TOTAL PAID",money(transaction.get("amountPaidPaise")),totalsX,totalsY+7,500,Color.WHITE);
       totalsY+=77;
-      totalRow(g,"Payment status","CAPTURED",totalsX,totalsY,500,accent);
+      totalRow(g,"Payment status",value(transaction,"paymentStatus","CAPTURED"),totalsX,totalsY,500,accent);
 
       int footerY=Math.max(taxY+50,totalsY+55);
       footerY=Math.min(footerY,1485);
       g.setColor(LINE);g.drawLine(52,footerY,1188,footerY);
       draw(g,Font.BOLD,14,footer,78,footerY+33,1080,NAVY);
-      drawWrapped(g,Font.PLAIN,11,
-          "This document reflects the transaction, seller, recipient and tax details captured when the order was verified. "
-              +"Retain this invoice and contact the seller for correction or refund requests.",
-          78,footerY+58,1080,17,MUTED);
+      String footerNote=creditNote
+          ?"This credit note is linked to the original invoice and a provider-confirmed customer refund. Retain both documents for accounting and tax records."
+          :"This document reflects the transaction, seller, recipient and tax details captured when the order was verified. Retain this invoice and contact the seller for correction or refund requests.";
+      drawWrapped(g,Font.PLAIN,11,footerNote,78,footerY+58,1080,17,MUTED);
       g.setColor(MUTED);draw(g,Font.PLAIN,10,"QuantaEdge · Electronically generated fiscal document",78,HEIGHT-55,1080,MUTED);
       g.setColor(accent);drawRight(g,Font.BOLD,11,documentNumber,1170,HEIGHT-55,300,accent);
     } finally {g.dispose();}
