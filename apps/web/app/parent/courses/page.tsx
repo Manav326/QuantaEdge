@@ -128,11 +128,12 @@ export default function ParentCoursesPage() {
         orderId: String(value.orderId || ''),
         signature: String(value.signature || ''),
       };
+      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
+      const callbackIsValid = !hasPaymentCallback ||
+        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
       if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
           && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
-          && /^pay_[A-Za-z0-9]+$/.test(draft.paymentId)
-          && /^order_[A-Za-z0-9]+$/.test(draft.orderId)
-          && /^[A-Fa-f0-9]{64}$/.test(draft.signature)) {
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
         setPendingVerify(draft);
       } else {
         window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
@@ -171,6 +172,42 @@ export default function ParentCoursesPage() {
     } finally { setBusy(''); }
   }
 
+  async function reconcilePayment(draft: VerifyDraft) {
+    setBusy('verify');
+    setError('');
+    setNotice('');
+    setPendingVerify(draft);
+    try {
+      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // In-page recovery remains available if browser storage is blocked.
+    }
+    try {
+      const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' }, body: '{}',
+      }));
+      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+        setPendingVerify(null);
+        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
+        await load();
+        return;
+      }
+      if (result.canRetryCheckout === true) {
+        setPendingVerify(null);
+        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+      }
+      setError(String(result.message || 'Payment status is still being reconciled. Do not pay again while verification is pending.'));
+      await load();
+    } catch (e) {
+      setPendingVerify(draft);
+      setError(e instanceof Error ? e.message : 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.');
+    } finally {
+      setBusy('');
+    }
+  }
+
   async function startPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId?: number) {
     if (pendingVerify) {
       setError(english
@@ -195,6 +232,16 @@ export default function ParentCoursesPage() {
           || !body.keyId || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0 || body.currency !== 'INR') {
         throw new Error('The course order could not be prepared. Please retry.');
       }
+      const recoverableDraft: VerifyDraft = {
+        courseId,
+        localOrderId: Number(body.localOrderId),
+        paymentId: '',
+        orderId: String(body.orderId),
+        signature: '',
+      };
+      setPendingVerify(recoverableDraft);
+      try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
+      catch { /* Keep in-memory recovery when session storage is blocked. */ }
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error('Payment checkout is not available. Please retry.');
@@ -215,7 +262,9 @@ export default function ParentCoursesPage() {
             signature: String(response.razorpay_signature || ''),
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== body.orderId) {
-            setError('The payment confirmation did not match this order. Do not pay again; contact support if money was deducted.');
+            setError('The payment confirmation did not match this order. Reconcile this order before starting another checkout.');
+            setPendingVerify(recoverableDraft);
+            try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusy('');
             return;
           }
@@ -329,7 +378,7 @@ export default function ParentCoursesPage() {
           <div><strong><LocaleText hinglish="भुगतान पुष्टि बाकी है" english="Payment verification is pending" /></strong>
             <p><LocaleText hinglish="दोबारा भुगतान न करें। इसी order की पुष्टि फिर से करें।" english="Do not pay again. Retry verification for this same order." /></p></div>
           <button className="button button-dark button-small" type="button" disabled={busy !== ''}
-            onClick={() => void verifyPayment(pendingVerify)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
+            onClick={() => void reconcilePayment(pendingVerify)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
         </section>}
 
         <section className="parent-courses-page__section">
