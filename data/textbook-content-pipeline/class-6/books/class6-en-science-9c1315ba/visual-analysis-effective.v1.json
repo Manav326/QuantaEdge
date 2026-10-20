@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b766953f1f5927c259235c6ecafc10dacabf0a83a3289c97ae78c041d3d6507a",
+  "raw_analysis_sha256": "57002dec9eb4e522c0e39f2a95770305c24e62036a7f62cdb03d32dfcde55b89",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T18:55:59Z",
+      "checkpointed_at": "2026-10-20T19:02:02Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T18:56:52Z",
+      "checkpointed_at": "2026-10-20T19:02:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T18:58:02Z",
+      "checkpointed_at": "2026-10-20T19:04:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T18:58:44Z",
+      "checkpointed_at": "2026-10-20T19:04:49Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -58284,21 +58284,59 @@
     {
       "asset_id": "08c40aa8571e7f7942ee8ca1",
       "asset_sha256": "052f5ed2d8dae4abb2dd4b9f683d91961958ceb7c26f1cf3f324eb6ee3cf6837",
-      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 105,
       "asset_path": "assets/052f5ed2d8dae4abb2dd4b9f683d91961958ceb7c26f1cf3f324eb6ee3cf6837.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381360674",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A line with various buildings and trees along it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "BUS STAND",
+          "SCHOOL",
+          "Houses",
+          "Trees"
+        ],
+        "concepts": [
+          "Buildings",
+          "Trees",
+          "Line"
+        ],
+        "context_relation": "The image represents a line with various buildings and trees along it.",
+        "limitations": [
+          "The image does not provide specific measurements or distances."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T19:06:00Z",
+      "effective_analysis": {
+        "visual_summary": "A line with various buildings and trees along it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "BUS STAND",
+          "SCHOOL",
+          "Houses",
+          "Trees"
+        ],
+        "concepts": [
+          "Buildings",
+          "Trees",
+          "Line"
+        ],
+        "context_relation": "The image represents a line with various buildings and trees along it.",
+        "limitations": [
+          "The image does not provide specific measurements or distances."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
