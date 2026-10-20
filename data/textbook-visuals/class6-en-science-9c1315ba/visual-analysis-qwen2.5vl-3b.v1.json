@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1214,
+    "assets_selected": 1216,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1211,
-    "assets_remaining": 867,
-    "assets_completion_percent": 58.3,
+    "assets_analyzed": 1213,
+    "assets_remaining": 865,
+    "assets_completion_percent": 58.4,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1209,
+    "assets_skipped_from_checkpoint": 1211,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:30:52Z"
+      "checkpointed_at": "2026-10-20T04:34:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:31:52Z"
+      "checkpointed_at": "2026-10-20T04:35:33Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:32:43Z"
+      "checkpointed_at": "2026-10-20T04:36:25Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40238,6 +40238,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T04:33:23Z"
+    },
+    {
+      "asset_id": "d543acf62ab3bec2f98c03df",
+      "asset_sha256": "af8157a430d0d61ceecf1df157c3e27c932aaf4f5ae7c5515e3b62a7abaec1de",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 113,
+      "asset_path": "page-0113.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "dd50592391f4dded6552901d509d10248cd9876f76c35fd734ad1e3ee7719995",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of children playing in a playground, showing various types of motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children’s park",
+          "Table 5.4: Types of Motion",
+          "Swing",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Moving to and fro"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Children's playground"
+        ],
+        "context_relation": "The image illustrates the types of motion observed in a children's playground, corresponding to the table.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for each type of motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:40:18Z"
+    },
+    {
+      "asset_id": "16f56ede15b1f9afc952c041",
+      "asset_sha256": "9f5d990df7d3ff4155ed24efcf50f82545fe6d51168db7855c6c342dc6ebafd5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/9f5d990df7d3ff4155ed24efcf50f82545fe6d51168db7855c6c342dc6ebafd5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A green rectangular banner with a magnifying glass on the left side."
+        ],
+        "concepts": [
+          "magnifying glass",
+          "green banner"
+        ],
+        "context_relation": "The banner is likely used to highlight or emphasize a specific point or topic related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:41:56Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fc814b6056211414ff7b3beb52ce88ba229bb497aba6782c2eb07d1ffc83122b",
+  "raw_analysis_sha256": "f27d3c49d38cb98e2e618f41694ee9a570d926acd6d5b035cb357a0cb14bb956",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:30:52Z",
+      "checkpointed_at": "2026-10-20T04:34:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:31:52Z",
+      "checkpointed_at": "2026-10-20T04:35:33Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:32:43Z",
+      "checkpointed_at": "2026-10-20T04:36:25Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60682,6 +60682,124 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d543acf62ab3bec2f98c03df",
+      "asset_sha256": "af8157a430d0d61ceecf1df157c3e27c932aaf4f5ae7c5515e3b62a7abaec1de",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 113,
+      "asset_path": "page-0113.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "dd50592391f4dded6552901d509d10248cd9876f76c35fd734ad1e3ee7719995",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of children playing in a playground, showing various types of motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children’s park",
+          "Table 5.4: Types of Motion",
+          "Swing",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Moving to and fro"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Children's playground"
+        ],
+        "context_relation": "The image illustrates the types of motion observed in a children's playground, corresponding to the table.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for each type of motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:40:18Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of children playing in a playground, showing various types of motion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children’s park",
+          "Table 5.4: Types of Motion",
+          "Swing",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Moving to and fro"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Children's playground"
+        ],
+        "context_relation": "The image illustrates the types of motion observed in a children's playground, corresponding to the table.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for each type of motion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16f56ede15b1f9afc952c041",
+      "asset_sha256": "9f5d990df7d3ff4155ed24efcf50f82545fe6d51168db7855c6c342dc6ebafd5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/9f5d990df7d3ff4155ed24efcf50f82545fe6d51168db7855c6c342dc6ebafd5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A green rectangular banner with a magnifying glass on the left side."
+        ],
+        "concepts": [
+          "magnifying glass",
+          "green banner"
+        ],
+        "context_relation": "The banner is likely used to highlight or emphasize a specific point or topic related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:41:56Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A green rectangular banner with a magnifying glass on the left side."
+        ],
+        "concepts": [
+          "magnifying glass",
+          "green banner"
+        ],
+        "context_relation": "The banner is likely used to highlight or emphasize a specific point or topic related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
