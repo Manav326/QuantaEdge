@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1304,
-    "successful_visual_analyses": 1281,
-    "missing_visual_analyses": 774,
+    "raw_analysis_result_rows": 1305,
+    "successful_visual_analyses": 1282,
+    "missing_visual_analyses": 773,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 797,
+    "unresolved_count": 796,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49266,9 +49266,26 @@
       "asset_path": "assets/407030bc6445606aa5302bae7d881b5ca9cd6d0759ac5df52858445a3dcf014d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration showing a girl peeking through a tree, while another girl is seen through a window, and a boy is seen through a door.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials"
+        ],
+        "context_relation": "The image illustrates the difference between opaque and translucent materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each character."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

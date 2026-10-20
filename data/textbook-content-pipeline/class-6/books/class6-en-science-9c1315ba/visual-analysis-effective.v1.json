@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "84515f01d3cb19f33010bc04eef32a80f2fdcd943b45268b666ba2d95890149b",
+  "raw_analysis_sha256": "f752d45b10a2e3fd7b8711deb63bf7f18d25dcdbbb9ec64576e9b8abc98d15f5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:24:08Z",
+      "checkpointed_at": "2026-10-20T20:30:41Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:25:01Z",
+      "checkpointed_at": "2026-10-20T20:31:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:26:10Z",
+      "checkpointed_at": "2026-10-20T20:32:45Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:26:52Z",
+      "checkpointed_at": "2026-10-20T20:33:28Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64550,6 +64550,62 @@
         "context_relation": "Observing and comparing properties of materials",
         "limitations": [
           "No specific questions or tasks are provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7079c2cec243b795768543b9",
+      "asset_sha256": "407030bc6445606aa5302bae7d881b5ca9cd6d0759ac5df52858445a3dcf014d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/407030bc6445606aa5302bae7d881b5ca9cd6d0759ac5df52858445a3dcf014d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration showing a girl peeking through a tree, while another girl is seen through a window, and a boy is seen through a door.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials"
+        ],
+        "context_relation": "The image illustrates the difference between opaque and translucent materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each character."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:34:38Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration showing a girl peeking through a tree, while another girl is seen through a window, and a boy is seen through a door.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials"
+        ],
+        "context_relation": "The image illustrates the difference between opaque and translucent materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials used by each character."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
