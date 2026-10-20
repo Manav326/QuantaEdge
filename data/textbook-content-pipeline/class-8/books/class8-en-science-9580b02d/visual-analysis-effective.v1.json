@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "eab101ae235e6acdbd9d157ff0472710180ce085e5eda036f6e776815b36e041",
+  "raw_analysis_sha256": "eed2bf126173afc8f522039ddd092a9d3e6cd0a62375ab05ff6192f2e6c4ef40",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:09:58Z",
+      "checkpointed_at": "2026-10-20T03:14:47Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:10:32Z",
+      "checkpointed_at": "2026-10-20T03:15:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:10:55Z",
+      "checkpointed_at": "2026-10-20T03:15:43Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47129,6 +47129,116 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "273d001807b4c830d75f4034",
+      "asset_sha256": "802cb1de998c7be5789f4ae6746039bcfd87ea3c8e951dbdb2346b041d283027",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/802cb1de998c7be5789f4ae6746039bcfd87ea3c8e951dbdb2346b041d283027.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is sneezing into a tissue.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "sneezing",
+          "tissue",
+          "cartoon character"
+        ],
+        "context_relation": "The image is not directly related to the text about non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:16:20Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is sneezing into a tissue.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "sneezing",
+          "tissue",
+          "cartoon character"
+        ],
+        "context_relation": "The image is not directly related to the text about non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d25fbf4d54ba0b97ad5783ea",
+      "asset_sha256": "feed065ebb18ea5c3c45778c6d4926ee4970addfbb42883c8107d9d5bfbaf07c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/feed065ebb18ea5c3c45778c6d4926ee4970addfbb42883c8107d9d5bfbaf07c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a yellow shirt with visible arm rash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness management",
+          "balanced diet",
+          "healthy lifestyle",
+          "non-communicable diseases",
+          "symptom management",
+          "quality of life",
+          "medication",
+          "lifestyle changes",
+          "rehabilitation",
+          "early diagnosis"
+        ],
+        "context_relation": "The image is related to the text discussing the management of illnesses and promoting recovery through lifestyle changes and balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the conditions or treatments mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:16:59Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a yellow shirt with visible arm rash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness management",
+          "balanced diet",
+          "healthy lifestyle",
+          "non-communicable diseases",
+          "symptom management",
+          "quality of life",
+          "medication",
+          "lifestyle changes",
+          "rehabilitation",
+          "early diagnosis"
+        ],
+        "context_relation": "The image is related to the text discussing the management of illnesses and promoting recovery through lifestyle changes and balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the conditions or treatments mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],

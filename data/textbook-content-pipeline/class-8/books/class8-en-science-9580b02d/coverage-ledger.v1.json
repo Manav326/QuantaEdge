@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1004,
-    "successful_visual_analyses": 991,
-    "missing_visual_analyses": 1287,
+    "raw_analysis_result_rows": 1006,
+    "successful_visual_analyses": 993,
+    "missing_visual_analyses": 1285,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1300,
+    "unresolved_count": 1298,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38153,9 +38153,22 @@
       "asset_path": "assets/802cb1de998c7be5789f4ae6746039bcfd87ea3c8e951dbdb2346b041d283027.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is sneezing into a tissue.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "sneezing",
+          "tissue",
+          "cartoon character"
+        ],
+        "context_relation": "The image is not directly related to the text about non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38171,9 +38184,29 @@
       "asset_path": "assets/feed065ebb18ea5c3c45778c6d4926ee4970addfbb42883c8107d9d5bfbaf07c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a yellow shirt with visible arm rash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness management",
+          "balanced diet",
+          "healthy lifestyle",
+          "non-communicable diseases",
+          "symptom management",
+          "quality of life",
+          "medication",
+          "lifestyle changes",
+          "rehabilitation",
+          "early diagnosis"
+        ],
+        "context_relation": "The image is related to the text discussing the management of illnesses and promoting recovery through lifestyle changes and balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the conditions or treatments mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
