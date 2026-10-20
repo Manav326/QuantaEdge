@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 998,
-    "successful_visual_analyses": 986,
-    "missing_visual_analyses": 1293,
+    "raw_analysis_result_rows": 1000,
+    "successful_visual_analyses": 988,
+    "missing_visual_analyses": 1291,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1305,
+    "unresolved_count": 1303,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37949,9 +37949,24 @@
       "asset_path": "assets/0ecc68ec16a4721d81117c91c24fcf3ff01d8150176d342820fc6837a620a7c4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of red bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacterial pathogens.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37967,9 +37982,26 @@
       "asset_path": "assets/9e37808a771af33e7517781ef47e27415ac8b589e6aa91ebbcd86cc9476d5254.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of bacteria, with one red and several green ones.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "doctor's prescription"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance and its implications.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

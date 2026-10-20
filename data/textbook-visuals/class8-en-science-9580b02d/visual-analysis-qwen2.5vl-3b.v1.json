@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 986,
+    "assets_selected": 988,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 983,
-    "assets_remaining": 1308,
-    "assets_completion_percent": 42.9,
+    "assets_analyzed": 985,
+    "assets_remaining": 1306,
+    "assets_completion_percent": 43.0,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 981,
+    "assets_skipped_from_checkpoint": 983,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:01:53Z"
+      "checkpointed_at": "2026-10-20T03:04:44Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:02:26Z"
+      "checkpointed_at": "2026-10-20T03:05:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:02:48Z"
+      "checkpointed_at": "2026-10-20T03:05:42Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31391,6 +31391,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:03:58Z"
+    },
+    {
+      "asset_id": "1c50c47a022eacf1cfc76686",
+      "asset_sha256": "0ecc68ec16a4721d81117c91c24fcf3ff01d8150176d342820fc6837a620a7c4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/0ecc68ec16a4721d81117c91c24fcf3ff01d8150176d342820fc6837a620a7c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of red bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacterial pathogens.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:06:20Z"
+    },
+    {
+      "asset_id": "e7e2fbd89845003e93f3f2c4",
+      "asset_sha256": "9e37808a771af33e7517781ef47e27415ac8b589e6aa91ebbcd86cc9476d5254",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/9e37808a771af33e7517781ef47e27415ac8b589e6aa91ebbcd86cc9476d5254.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of bacteria, with one red and several green ones.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "doctor's prescription"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance and its implications.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:07:00Z"
     }
   ]
 }

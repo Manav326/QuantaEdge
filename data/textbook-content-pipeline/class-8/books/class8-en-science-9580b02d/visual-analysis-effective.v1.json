@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "469ebf5961528524b45f10a26937931966c44eee1c71b1f553af8200a66d902d",
+  "raw_analysis_sha256": "cb016017dcee1a6fd6c21acf5a30ea0c6443c9deff1b59bc06e3612bf70753f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:01:53Z",
+      "checkpointed_at": "2026-10-20T03:04:44Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:02:26Z",
+      "checkpointed_at": "2026-10-20T03:05:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:02:48Z",
+      "checkpointed_at": "2026-10-20T03:05:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -46804,6 +46804,114 @@
         "context_relation": "The image is related to the discussion of antibiotic resistance and precautions to reduce it.",
         "limitations": [
           "No specific text or data is provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1c50c47a022eacf1cfc76686",
+      "asset_sha256": "0ecc68ec16a4721d81117c91c24fcf3ff01d8150176d342820fc6837a620a7c4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/0ecc68ec16a4721d81117c91c24fcf3ff01d8150176d342820fc6837a620a7c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of red bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacterial pathogens.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:06:20Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of red bacteria.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacterial pathogens.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e7e2fbd89845003e93f3f2c4",
+      "asset_sha256": "9e37808a771af33e7517781ef47e27415ac8b589e6aa91ebbcd86cc9476d5254",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/9e37808a771af33e7517781ef47e27415ac8b589e6aa91ebbcd86cc9476d5254.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of bacteria, with one red and several green ones.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "doctor's prescription"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance and its implications.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:07:00Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of bacteria, with one red and several green ones.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "doctor's prescription"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance and its implications.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or their resistance.",
+          "The image does not show the precautions mentioned in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
