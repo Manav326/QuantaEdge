@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 969,
+    "assets_selected": 971,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 966,
-    "assets_remaining": 1325,
-    "assets_completion_percent": 42.2,
+    "assets_analyzed": 968,
+    "assets_remaining": 1323,
+    "assets_completion_percent": 42.3,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 964,
+    "assets_skipped_from_checkpoint": 966,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:35:23Z"
+      "checkpointed_at": "2026-10-20T02:38:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:35:57Z"
+      "checkpointed_at": "2026-10-20T02:38:56Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:36:19Z"
+      "checkpointed_at": "2026-10-20T02:39:18Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30823,6 +30823,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:37:35Z"
+    },
+    {
+      "asset_id": "a7533f6a9b32a931308c898d",
+      "asset_sha256": "66e25b9ab241b8a84b4f7d2c602cdee2e67851e5ed9d04d8380b4d2d63bb2cf3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/66e25b9ab241b8a84b4f7d2c602cdee2e67851e5ed9d04d8380b4d2d63bb2cf3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with green leaves and purple flowers.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about Penicillin discovery.",
+        "limitations": [
+          "The image does not provide any specific information about Penicillin or its discovery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:39:23Z"
+    },
+    {
+      "asset_id": "1e459d4c10c029cb9b29e496",
+      "asset_sha256": "66e25b9ab241b8a84b4f7d2c602cdee2e67851e5ed9d04d8380b4d2d63bb2cf3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/66e25b9ab241b8a84b4f7d2c602cdee2e67851e5ed9d04d8380b4d2d63bb2cf3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with green leaves and purple flowers.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about Penicillin discovery.",
+        "limitations": [
+          "The image does not provide any specific information about Penicillin or its discovery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:39:27Z"
     }
   ]
 }
