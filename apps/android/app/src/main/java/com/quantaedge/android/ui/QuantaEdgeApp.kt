@@ -471,6 +471,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var marketplaceLoading by remember { mutableStateOf(false) }
     var marketplaceLoadFailed by remember { mutableStateOf(false) }
     var marketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var pendingStudentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
+    var pendingParentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var studentTextbookDocumentsLoadFailed by remember { mutableStateOf(false) }
     var accountLifecycle by remember { mutableStateOf(JSONObject()) }
@@ -914,6 +916,60 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         dashboardClassesLoaded = true
     }
 
+    fun paymentWorkspaceIdentity(): String =
+        auth.textAny("user_id", "userId", "id", "account_id", "mobile_e164").trim()
+
+    fun pendingPaymentPreferenceKey(workspace: String): String {
+        val tenantKey = activeTenantCode.trim().uppercase().ifBlank { "ROOT" }
+            .replace(Regex("[^A-Z0-9_-]"), "_")
+        val identityKey = paymentWorkspaceIdentity().ifBlank { "UNKNOWN" }
+            .replace(Regex("[^A-Za-z0-9_@.+-]"), "_")
+        return "qe.pendingCoursePayment.v1.$tenantKey.${workspace.uppercase()}.$identityKey"
+    }
+
+    fun setPendingCoursePayment(workspace: String, draft: JSONObject?) {
+        val normalizedWorkspace = workspace.uppercase()
+        val key = pendingPaymentPreferenceKey(normalizedWorkspace)
+        if (draft == null) {
+            preferences.edit().remove(key).apply()
+            if (normalizedWorkspace == "PARENT") pendingParentPaymentVerification = null
+            else pendingStudentPaymentVerification = null
+            return
+        }
+        val saved = JSONObject(draft.toString())
+            .put("_qe_workspace", normalizedWorkspace)
+            .put("_qe_tenant_code", activeTenantCode.trim().uppercase())
+            .put("_qe_identity", paymentWorkspaceIdentity())
+        preferences.edit().putString(key, saved.toString()).apply()
+        if (normalizedWorkspace == "PARENT") pendingParentPaymentVerification = saved
+        else pendingStudentPaymentVerification = saved
+    }
+
+    fun restorePendingCoursePayment() {
+        pendingStudentPaymentVerification = null
+        pendingParentPaymentVerification = null
+        val role = auth.textAny("role").uppercase()
+        val workspace = when {
+            role.contains("PARENT") || role.contains("GUARDIAN") -> "PARENT"
+            role.contains("STUDENT") || role.contains("LEARNER") -> "STUDENT"
+            else -> return
+        }
+        val identity = paymentWorkspaceIdentity()
+        if (identity.isBlank()) return
+        val stored = preferences.getString(pendingPaymentPreferenceKey(workspace), null) ?: return
+        val parsed = runCatching { JSONObject(stored) }.getOrNull() ?: return
+        val valid = parsed.optString("_qe_workspace") == workspace &&
+            parsed.optString("_qe_tenant_code") == activeTenantCode.trim().uppercase() &&
+            parsed.optString("_qe_identity") == identity &&
+            parsed.optLong("courseId", 0L) > 0L &&
+            parsed.optLong("localOrderId", 0L) > 0L &&
+            parsed.optString("orderId").matches(Regex("order_[A-Za-z0-9]+"))
+        if (valid) {
+            if (workspace == "PARENT") pendingParentPaymentVerification = parsed
+            else pendingStudentPaymentVerification = parsed
+        }
+    }
+
     fun studentHasCourseAccess(): Boolean = studentPrograms.any {
         it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
     }
@@ -979,6 +1035,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     suspend fun refreshUser() {
         val user = ApiClient.getObject("/api/v1/auth/me")
         enterSignedInHome(user)
+    }
+
+    LaunchedEffect(auth, activeTenantCode) {
+        restorePendingCoursePayment()
     }
 
     LaunchedEffect(Unit) {
