@@ -247,6 +247,10 @@ public class CourseOrderFinancialService {
     taxSnapshot.put("outputTaxPaise",quote.outputTaxPaise());
     taxSnapshot.put("customerPayablePaise",quote.customerPayablePaise());
     taxSnapshot.put("components",taxComponents);
+    taxSnapshot.put("courseTitle",courseTitle);
+    taxSnapshot.put("institutionId",institutionId);
+    taxSnapshot.put("institutionOfferId",offerId);
+    taxSnapshot.put("institutionName",institutionName(institutionId));
     taxSnapshot.put("supplierSnapshot",supplierSnapshot);
     taxSnapshot.put("invoiceTemplateVersionId",templateVersionId);
     taxSnapshot.put("invoiceTemplateDesignSnapshot",designSnapshot);
@@ -453,9 +457,9 @@ public class CourseOrderFinancialService {
     transaction.put("coursePaymentOrderId",orderId);
     transaction.put("orderReference","QE-ORDER-"+orderId);
     transaction.put("courseId",number(order.get("course_id")));
-    transaction.put("courseTitle",courseTitle(number(order.get("course_id"))));
-    transaction.put("institutionId",number(order.get("institution_id")));
-    transaction.put("institutionName",institutionName(number(order.get("institution_id"))));
+    transaction.put("courseTitle",value(taxSnapshot,"courseTitle","Course access"));
+    transaction.put("institutionId",number(taxSnapshot.get("institutionId")));
+    transaction.put("institutionName",value(taxSnapshot,"institutionName",""));
     transaction.put("purchaserUserId",order.get("purchaser_user_id"));
     transaction.put("beneficiaryStudentId",number(order.get("student_id")));
     transaction.put("paymentReference",paymentId);
@@ -468,7 +472,7 @@ public class CourseOrderFinancialService {
 
     List<Map<String,Object>> lineRows=new ArrayList<>();
     Map<String,Object> line=new LinkedHashMap<>();
-    line.put("description",courseTitle(number(order.get("course_id"))));
+    line.put("description",value(taxSnapshot,"courseTitle","Course access"));
     line.put("serviceClassificationCode",taxSnapshot.get("serviceClassificationCode"));
     line.put("quantity",BigDecimal.ONE);
     line.put("unitPricePaise",taxResult.listedPricePaise());
@@ -571,8 +575,13 @@ public class CourseOrderFinancialService {
   }
 
   private String institutionName(long institutionId) {
-    String name=jdbc.queryForObject("select display_name from institution_tenant where id=?",String.class,institutionId);
-    return name==null?"":name;
+    String name=jdbc.queryForObject("""
+      select coalesce(nullif(b.display_name,''),t.display_name)
+      from institution_tenant t left join institution_branding b on b.institution_id=t.id
+      where t.id=? and t.status='ACTIVE'
+      """,String.class,institutionId);
+    if(name==null||name.isBlank())throw new IllegalStateException("The course institution branding could not be resolved.");
+    return name;
   }
 
   private static List<Map<String,Object>> taxComponents(

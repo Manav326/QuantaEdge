@@ -310,3 +310,11 @@ Verification at this checkpoint:
 - Added purchaser-scoped student/parent invoice list and download endpoints. Downloads verify order ownership and tenant scope, hash-check the private PDF, and append a download-audit event. Student Marketplace and Parent Courses now include an “Invoices & payments” section with a PDF download action.
 - Discount amount is currently zero because a coupon/offer-code pricing engine has not been found or integrated into this purchase path. The schema and invoice math are prepared to snapshot discounts, but offers must not be represented as working until the coupon source is audited and wired into the quote flow.
 - Next: check the exact latest Actions results and fix compilation/migration issues; add tests for the complete financial snapshot/finalization contract; then surface a download link in HRMS Finance & Billing, implement adjustment/credit-note reversals and exercise the full flow against a test Razorpay order and three institution tenants.
+
+
+### 2026-10-20 — Invoice issue/download controls
+
+- HRMS Finance & Billing exposes the legal invoice-series prefix per seller, audit-logs series changes, and provides an authenticated PDF download action in Issued Documents.
+- Student Marketplace and Parent Courses display verified invoice history and download PDFs through the same-origin API client, preserving tenant/workspace context. The API enforces purchaser ownership and records every download.
+- The invoice renderer now uses the course title and institution branding stored at checkout rather than looking those values up again at issue time. A sale's descriptive text therefore stays anchored to the checkout snapshot.
+- Recent Actions identified a missing Spring HttpHeaders constant on the new download endpoint; this was corrected to the literal standard header name. Run the latest CI before treating the finance flow as build-verified.
