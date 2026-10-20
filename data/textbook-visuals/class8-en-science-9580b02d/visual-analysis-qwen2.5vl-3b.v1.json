@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1167,
+    "assets_selected": 1168,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 1163,
     "assets_remaining": 1128,
     "assets_completion_percent": 50.8,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1162,
+    "assets_skipped_from_checkpoint": 1163,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T23:10:06Z"
+      "checkpointed_at": "2026-10-20T23:13:58Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T23:10:55Z"
+      "checkpointed_at": "2026-10-20T23:14:46Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T23:11:33Z"
+      "checkpointed_at": "2026-10-20T23:15:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T23:12:32Z"
+      "checkpointed_at": "2026-10-20T23:16:27Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -38043,6 +38043,47 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
       "checkpointed_at": "2026-10-20T23:12:50Z"
+    },
+    {
+      "asset_id": "f492c50e9c7d7ef8d140ae06",
+      "asset_sha256": "a7af291e2290748a96224817655752fbfc27ba3bc7e0108999cc4c6c4b34bfe1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "page-0086.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A step further",
+          "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
+          "5.4 What Are the Different Types of Forces?",
+          "5.4.1 Contact forces",
+          "In many situations, we find that to apply a force on an object, physical contact is necessary between our body and the object. This contact can be direct, such as using our hands or other body parts, or indirect, such as using a stick or rope. Forces of this type which act only when there is physica",
+          "Muscular force",
+          "An example of contact force is muscular force. When we perform any physical activity, such as walking, running, lifting, pushing, jumping, or stretching, the force is caused by the action of muscles in our body. The force resulting due to the action of muscles is known as muscular force. Muscular fo",
+          "Animals, birds, fish, and insects use muscular forces for movement and survival (Fig. 5.3).",
+          "Fig. 5.3: Use of muscular force by living beings"
+        ],
+        "concepts": [
+          "contact forces",
+          "muscular force"
+        ],
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "limitations": [
+          "The image does not provide specific examples or illustrations for the concepts discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T23:20:46Z"
     }
   ]
 }
