@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1136,
-    "successful_visual_analyses": 1115,
-    "missing_visual_analyses": 1155,
+    "raw_analysis_result_rows": 1137,
+    "successful_visual_analyses": 1116,
+    "missing_visual_analyses": 1154,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1176,
+    "unresolved_count": 1175,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42695,9 +42695,26 @@
       "asset_path": "assets/4492300ce2a0cef416cd1ca5008184e86521f4627f336cc17ecac54853cfb469.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of an electromagnet with a switch connected to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "+",
+          "-",
+          ">"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Switch",
+          "Current flow"
+        ],
+        "context_relation": "The image is related to the textbook's content about electromagnets and their operation.",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1115,
+    "assets_selected": 1116,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1111,
-    "assets_remaining": 1180,
+    "assets_analyzed": 1112,
+    "assets_remaining": 1179,
     "assets_completion_percent": 48.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1110,
+    "assets_skipped_from_checkpoint": 1111,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:45:19Z"
+      "checkpointed_at": "2026-10-20T14:49:34Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:46:04Z"
+      "checkpointed_at": "2026-10-20T14:50:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:46:34Z"
+      "checkpointed_at": "2026-10-20T14:50:49Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:47:23Z"
+      "checkpointed_at": "2026-10-20T14:51:38Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36257,6 +36257,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T14:48:30Z"
+    },
+    {
+      "asset_id": "2712e0ac2c190ec1672bb078",
+      "asset_sha256": "4492300ce2a0cef416cd1ca5008184e86521f4627f336cc17ecac54853cfb469",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/4492300ce2a0cef416cd1ca5008184e86521f4627f336cc17ecac54853cfb469.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of an electromagnet with a switch connected to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "+",
+          "-",
+          ">"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Switch",
+          "Current flow"
+        ],
+        "context_relation": "The image is related to the textbook's content about electromagnets and their operation.",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:52:45Z"
     }
   ]
 }
