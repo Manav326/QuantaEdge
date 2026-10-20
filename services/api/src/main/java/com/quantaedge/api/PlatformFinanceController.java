@@ -364,6 +364,191 @@ public class PlatformFinanceController {
     return Map.of("id",profileId,"status","APPROVED");
   }
 
+  @GetMapping("/discounts")
+  public List<Map<String,Object>> discountOffers(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    return jdbc.queryForList("""
+      select d.id,d.public_id,d.institution_offer_id,d.code,d.version,d.currency,d.discount_type,
+        d.percentage_basis_points,d.flat_amount_paise,d.max_discount_paise,d.min_listed_price_paise,
+        d.max_redemptions,d.max_redemptions_per_purchaser,d.effective_from,d.effective_until,d.status,
+        d.created_at,d.approved_at,d.retired_at,o.institution_id,t.display_name as institution_name,
+        coalesce(nullif(o.title_override,''),p.display_name) as course_name,o.price_paise as offer_price_paise,
+        (select count(*) from course_discount_redemption r
+          where r.discount_offer_id=d.id and r.status in ('RESERVED','REDEEMED')) as redemption_count
+      from course_discount_offer d
+      join institution_marketplace_offer o on o.id=d.institution_offer_id
+      join institution_tenant t on t.id=o.institution_id
+      join curriculum_program p on p.id=o.course_id
+      order by d.created_at desc,d.id desc
+      """);
+  }
+
+  @PostMapping("/discounts")
+  @Transactional
+  public Map<String,Object> createDiscountOffer(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    long offerId=requiredLong(body,"institutionOfferId");
+    long institutionId=offerInstitution(offerId);
+    Map<String,Object> offer=one("""
+      select o.id,o.price_paise,o.currency,o.status
+      from institution_marketplace_offer o
+      join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
+      where o.id=?
+      """,offerId);
+    if(offer.isEmpty()||"ARCHIVED".equals(String.valueOf(offer.get("status"))))
+      throw notFound("Course offer not found or archived.");
+    String currency=optionalText(body.get("currency"))==null
+        ?String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT)
+        :requiredText(body,"currency").toUpperCase(Locale.ROOT);
+    if(!"INR".equals(currency)||!currency.equalsIgnoreCase(String.valueOf(offer.get("currency"))))
+      throw bad("Course discounts currently support INR only and must use the offer currency.");
+    String code=requiredText(body,"code").toUpperCase(Locale.ROOT);
+    if(!code.matches("[A-Z0-9][A-Z0-9_-]{2,39}"))
+      throw bad("Offer codes must be 3–40 letters, digits, hyphens or underscores.");
+    String type=requiredText(body,"discountType").toUpperCase(Locale.ROOT);
+    Integer percentageBps=null;
+    Long flatPaise=null;
+    if("PERCENTAGE".equals(type)) {
+      java.math.BigDecimal percentage;
+      try { percentage=new java.math.BigDecimal(requiredText(body,"percentage")); }
+      catch(Exception ex) { throw bad("Enter a valid discount percentage."); }
+      try { percentageBps=percentage.multiply(java.math.BigDecimal.valueOf(100)).intValueExact(); }
+      catch(Exception ex) { throw bad("Percentage must use no more than two decimal places."); }
+      if(percentageBps<1||percentageBps>10_000) throw bad("Discount percentage must be greater than 0 and no more than 100.");
+    } else if("FLAT".equals(type)) {
+      flatPaise=moneyPaise(body.get("flatAmountRupees"),"flatAmountRupees",false);
+    } else throw bad("Discount type must be PERCENTAGE or FLAT.");
+    Long cap=moneyPaise(body.get("maxDiscountRupees"),"maxDiscountRupees",true);
+    Long minimum=moneyPaise(body.get("minListedPriceRupees"),"minListedPriceRupees",true);
+    if(minimum==null) minimum=0L;
+    Long maxRedemptions=optionalLong(body.get("maxRedemptions"));
+    if(maxRedemptions!=null&&maxRedemptions<=0) throw bad("Maximum redemptions must be positive when configured.");
+    Integer maxPer=optionalPositiveInteger(body.get("maxRedemptionsPerPurchaser"),"maxRedemptionsPerPurchaser");
+    Instant starts=optionalText(body.get("effectiveFrom"))==null?Instant.now():instant(body,"effectiveFrom");
+    Instant ends=optionalInstant(body.get("effectiveUntil"));
+    if(ends!=null&&!ends.isAfter(starts)) throw bad("Offer end must be after its start.");
+    Integer version=jdbc.queryForObject("""
+      select coalesce(max(version),0)+1 from course_discount_offer
+      where institution_offer_id=? and upper(code)=?
+      """,Integer.class,offerId,code);
+    long listedPrice=number(offer.get("price_paise"));
+    if(listedPrice>0&&listedPrice>=minimum) {
+      long discount=CourseDiscountCalculator.calculate(listedPrice,type,percentageBps,flatPaise,cap);
+      if(discount>=listedPrice) throw bad("At the current course price this discount would make the balance zero. Reduce the discount or add a valid minimum price.");
+    }
+    long id=jdbc.queryForObject("""
+      insert into course_discount_offer(
+        institution_offer_id,code,version,currency,discount_type,percentage_basis_points,
+        flat_amount_paise,max_discount_paise,min_listed_price_paise,max_redemptions,
+        max_redemptions_per_purchaser,effective_from,effective_until,status,created_by_staff_id
+      ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?) returning id
+      """,Long.class,offerId,code,version,currency,type,percentageBps,flatPaise,cap,minimum,
+        maxRedemptions,maxPer,dbInstant(starts),dbInstant(ends),context.staffId());
+    audit(null,institutionId,context,"COURSE_DISCOUNT_CREATED","COURSE_DISCOUNT_OFFER",
+        Long.toString(id),Map.of("offerId",offerId,"code",code,"version",version,"discountType",type));
+    return Map.of("id",id,"version",version,"status","DRAFT","code",code);
+  }
+
+  @PostMapping("/discounts/{discountId}/submit")
+  @Transactional
+  public Map<String,Object> submitDiscountOffer(@PathVariable long discountId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select d.id,d.institution_offer_id,d.code,d.version,d.status,o.institution_id
+      from course_discount_offer d join institution_marketplace_offer o on o.id=d.institution_offer_id
+      where d.id=?
+      """,discountId);
+    if(row.isEmpty()) throw notFound("Discount offer not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status"))))
+      throw bad("Only a draft discount offer can be submitted for approval.");
+    int changed=jdbc.update("""
+      update course_discount_offer set status='PENDING_APPROVAL',updated_at=now()
+      where id=? and status='DRAFT'
+      """,discountId);
+    if(changed!=1) throw bad("The discount changed while being submitted. Reload and retry.");
+    audit(null,number(row.get("institution_id")),context,"COURSE_DISCOUNT_SUBMITTED",
+        "COURSE_DISCOUNT_OFFER",Long.toString(discountId),
+        Map.of("code",String.valueOf(row.get("code")),"version",number(row.get("version"))));
+    return Map.of("id",discountId,"status","PENDING_APPROVAL");
+  }
+
+  @PostMapping("/discounts/{discountId}/approve")
+  @Transactional
+  public Map<String,Object> approveDiscountOffer(@PathVariable long discountId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select d.*,o.institution_id,o.price_paise as offer_price_paise
+      from course_discount_offer d
+      join institution_marketplace_offer o on o.id=d.institution_offer_id
+      join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
+      where d.id=? for update of d
+      """,discountId);
+    if(row.isEmpty()) throw notFound("Discount offer not found.");
+    if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status"))))
+      throw bad("Only a pending discount offer can be approved.");
+    Instant starts=toInstant(row.get("effective_from"));
+    Instant ends=row.get("effective_until")==null?null:toInstant(row.get("effective_until"));
+    Boolean overlap=jdbc.queryForObject("""
+      select exists(
+        select 1 from course_discount_offer other
+        where other.institution_offer_id=? and upper(other.code)=upper(?) and other.currency=?
+          and other.status='APPROVED' and other.id<>?
+          and other.effective_from < coalesce(?::timestamptz,'infinity'::timestamptz)
+          and coalesce(other.effective_until,'infinity'::timestamptz)>?::timestamptz
+      )
+      """,Boolean.class,row.get("institution_offer_id"),row.get("code"),row.get("currency"),
+        discountId,dbInstant(ends),dbInstant(starts));
+    if(Boolean.TRUE.equals(overlap))
+      throw bad("Another approved version of this code overlaps the requested effective period. Retire it or adjust the dates.");
+    long listed=number(row.get("offer_price_paise"));
+    long minimum=number(row.get("min_listed_price_paise"));
+    if(listed>0&&listed>=minimum) {
+      long discount=CourseDiscountCalculator.calculate(listed,String.valueOf(row.get("discount_type")),
+          nullableInteger(row.get("percentage_basis_points")),nullableLong(row.get("flat_amount_paise")),
+          nullableLong(row.get("max_discount_paise")));
+      if(discount<=0||discount>=listed)
+        throw bad("At the current course price the discount must leave a positive payable balance.");
+    }
+    int changed=jdbc.update("""
+      update course_discount_offer set status='APPROVED',approved_by_staff_id=?,approved_at=now(),updated_at=now()
+      where id=? and status='PENDING_APPROVAL'
+      """,context.staffId(),discountId);
+    if(changed!=1) throw bad("The discount changed while being approved. Reload and retry.");
+    audit(null,number(row.get("institution_id")),context,"COURSE_DISCOUNT_APPROVED",
+        "COURSE_DISCOUNT_OFFER",Long.toString(discountId),
+        Map.of("code",String.valueOf(row.get("code")),"version",number(row.get("version"))));
+    return Map.of("id",discountId,"status","APPROVED");
+  }
+
+  @PostMapping("/discounts/{discountId}/retire")
+  @Transactional
+  public Map<String,Object> retireDiscountOffer(@PathVariable long discountId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select d.id,d.code,d.version,d.status,o.institution_id
+      from course_discount_offer d join institution_marketplace_offer o on o.id=d.institution_offer_id
+      where d.id=?
+      """,discountId);
+    if(row.isEmpty()) throw notFound("Discount offer not found.");
+    String oldStatus=String.valueOf(row.get("status"));
+    if(!List.of("DRAFT","PENDING_APPROVAL","APPROVED").contains(oldStatus))
+      throw bad("This discount offer cannot be retired from its current status.");
+    int changed=jdbc.update("""
+      update course_discount_offer set status='RETIRED',retired_by_staff_id=?,retired_at=now(),updated_at=now()
+      where id=? and status=?
+      """,context.staffId(),discountId,oldStatus);
+    if(changed!=1) throw bad("The discount changed while being retired. Reload and retry.");
+    audit(null,number(row.get("institution_id")),context,"COURSE_DISCOUNT_RETIRED",
+        "COURSE_DISCOUNT_OFFER",Long.toString(discountId),
+        Map.of("previousStatus",oldStatus,"code",String.valueOf(row.get("code"))));
+    return Map.of("id",discountId,"status","RETIRED");
+  }
+
   @GetMapping("/revenue-share/policies")
   public List<Map<String,Object>> policies(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireOwner(context);
@@ -906,6 +1091,24 @@ public class PlatformFinanceController {
       catch(Exception ignored) { }
     }
     throw bad(key+" must be a positive integer.");
+  }
+  private static Long moneyPaise(Object raw,String key,boolean allowZero) {
+    if(raw==null||String.valueOf(raw).trim().isEmpty()) return null;
+    try {
+      java.math.BigDecimal amount=new java.math.BigDecimal(String.valueOf(raw).trim()).setScale(2,java.math.RoundingMode.UNNECESSARY);
+      if(amount.signum()<0||(!allowZero&&amount.signum()<=0)) throw new ArithmeticException();
+      return amount.movePointRight(2).longValueExact();
+    } catch(Exception ex) {
+      throw bad(key+(allowZero?" must be a non-negative amount with at most two decimals.":" must be a positive amount with at most two decimals."));
+    }
+  }
+  private static Integer optionalPositiveInteger(Object raw,String key) {
+    if(raw==null||String.valueOf(raw).trim().isEmpty()) return null;
+    try {
+      int value=new java.math.BigDecimal(String.valueOf(raw).trim()).intValueExact();
+      if(value>0) return value;
+    } catch(Exception ignored) { }
+    throw bad(key+" must be a positive whole number when configured.");
   }
   private static Long optionalLong(Object raw) {
     if(raw==null)return null;
