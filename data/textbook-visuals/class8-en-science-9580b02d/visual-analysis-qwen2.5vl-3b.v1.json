@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1109,
+    "assets_selected": 1110,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1105,
-    "assets_remaining": 1186,
-    "assets_completion_percent": 48.2,
+    "assets_analyzed": 1106,
+    "assets_remaining": 1185,
+    "assets_completion_percent": 48.3,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1104,
+    "assets_skipped_from_checkpoint": 1105,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T13:59:32Z"
+      "checkpointed_at": "2026-10-20T14:03:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:00:17Z"
+      "checkpointed_at": "2026-10-20T14:04:29Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:00:47Z"
+      "checkpointed_at": "2026-10-20T14:04:59Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:01:35Z"
+      "checkpointed_at": "2026-10-20T14:05:47Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35976,6 +35976,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T14:02:44Z"
+    },
+    {
+      "asset_id": "6d3fb8bcd86ea3062d811bb6",
+      "asset_sha256": "71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977e597ed500e18523cf7c790cab2db92414b1d95dbc42a7bbe907cc618e6139",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a person holding a pen and a notepad, possibly taking notes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon and may not accurately represent the educational content.",
+          "The image does not show any specific educational content or questions from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:06:58Z"
     }
   ]
 }
