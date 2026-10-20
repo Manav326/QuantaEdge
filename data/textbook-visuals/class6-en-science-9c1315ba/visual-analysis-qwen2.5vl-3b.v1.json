@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1170,
+    "assets_selected": 1172,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1167,
-    "assets_remaining": 911,
-    "assets_completion_percent": 56.2,
+    "assets_analyzed": 1169,
+    "assets_remaining": 909,
+    "assets_completion_percent": 56.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1165,
+    "assets_skipped_from_checkpoint": 1167,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:00:31Z"
+      "checkpointed_at": "2026-10-20T02:08:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:01:29Z"
+      "checkpointed_at": "2026-10-20T02:09:10Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:02:18Z"
+      "checkpointed_at": "2026-10-20T02:10:06Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38583,6 +38583,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T02:06:47Z"
+    },
+    {
+      "asset_id": "5657ef8005996fbd102c61f9",
+      "asset_sha256": "01c01ed6b2aeeb263047b576434c520718261780c38718294eb2111a7b089d49",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/01c01ed6b2aeeb263047b576434c520718261780c38718294eb2111a7b089d49.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a house with three arches and string lights on top.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Anish and his parents fixed electric string lights on the arches of the verandah of their house, as shown in Fig. 5.7, for a celebration at home. How would they have measured the required length of string lights?",
+          "In the case of a curved line, measurements can be made with the help of a flexible measuring tape or by using a thread as shown in Fig. 5.8."
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring curved lines"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:11:48Z"
+    },
+    {
+      "asset_id": "1be9e7882beb45ee3b56ee03",
+      "asset_sha256": "d36b1bef88b0b40862d07adb37f8e3d5cb65c616a32b135d23d09120bc3723f6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/d36b1bef88b0b40862d07adb37f8e3d5cb65c616a32b135d23d09120bc3723f6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "966cd3c8dd5af4b158750e57187933239dc2236e81e5d630a378ffd91599a686",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a thread to measure a curved line.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish and his parents fixed electric string lights on the arches of the verandah of their house, as shown in Fig. 5.7, for a celebration at home. How would they have measured the required length of string lights?",
+          "In the case of a curved line, measurements can be made with the help of a flexible measuring tape or by using a thread as shown in Fig. 5.8.",
+          "The thread can then",
+          "Fig. 5.7: House decorated with string lights"
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring",
+          "Electric string lights",
+          "Celebration at home"
+        ],
+        "context_relation": "The image illustrates a method for measuring the length of a curved line using a thread, as described in the text.",
+        "limitations": [
+          "The image does not show the actual measurement process.",
+          "The image does not include a flexible measuring tape."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:13:33Z"
     }
   ]
 }

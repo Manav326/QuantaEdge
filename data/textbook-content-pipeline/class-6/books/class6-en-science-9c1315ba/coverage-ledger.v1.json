@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1192,
-    "successful_visual_analyses": 1170,
-    "missing_visual_analyses": 886,
+    "raw_analysis_result_rows": 1194,
+    "successful_visual_analyses": 1172,
+    "missing_visual_analyses": 884,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 908,
+    "unresolved_count": 906,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45258,9 +45258,25 @@
       "asset_path": "assets/01c01ed6b2aeeb263047b576434c520718261780c38718294eb2111a7b089d49.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a house with three arches and string lights on top.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Anish and his parents fixed electric string lights on the arches of the verandah of their house, as shown in Fig. 5.7, for a celebration at home. How would they have measured the required length of string lights?",
+          "In the case of a curved line, measurements can be made with the help of a flexible measuring tape or by using a thread as shown in Fig. 5.8."
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring curved lines"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45276,9 +45292,30 @@
       "asset_path": "assets/d36b1bef88b0b40862d07adb37f8e3d5cb65c616a32b135d23d09120bc3723f6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a thread to measure a curved line.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish and his parents fixed electric string lights on the arches of the verandah of their house, as shown in Fig. 5.7, for a celebration at home. How would they have measured the required length of string lights?",
+          "In the case of a curved line, measurements can be made with the help of a flexible measuring tape or by using a thread as shown in Fig. 5.8.",
+          "The thread can then",
+          "Fig. 5.7: House decorated with string lights"
+        ],
+        "concepts": [
+          "Measuring curved lines",
+          "Flexible measuring tape",
+          "Thread for measuring",
+          "Electric string lights",
+          "Celebration at home"
+        ],
+        "context_relation": "The image illustrates a method for measuring the length of a curved line using a thread, as described in the text.",
+        "limitations": [
+          "The image does not show the actual measurement process.",
+          "The image does not include a flexible measuring tape."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
