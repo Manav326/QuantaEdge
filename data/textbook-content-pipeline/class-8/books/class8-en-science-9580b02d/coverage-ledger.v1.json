@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1089,
-    "successful_visual_analyses": 1072,
-    "missing_visual_analyses": 1202,
+    "raw_analysis_result_rows": 1090,
+    "successful_visual_analyses": 1073,
+    "missing_visual_analyses": 1201,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1219,
+    "unresolved_count": 1218,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41083,9 +41083,22 @@
       "asset_path": "assets/9c310aeb5ad5d32334bafb74019b38867c75af676ba53ab153ba0c02995e02b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of an electric heating rod used for water heating.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric heating rod",
+          "water heating",
+          "electric heating appliances"
+        ],
+        "context_relation": "The image is a part of a textbook discussing different types of electric heating appliances.",
+        "limitations": [
+          "The image does not provide specific details about the heating rod's function or components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
