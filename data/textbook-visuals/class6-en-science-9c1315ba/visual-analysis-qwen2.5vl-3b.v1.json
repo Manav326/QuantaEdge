@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1300,
+    "assets_selected": 1301,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1296,
-    "assets_remaining": 782,
+    "assets_analyzed": 1297,
+    "assets_remaining": 781,
     "assets_completion_percent": 62.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1295,
+    "assets_skipped_from_checkpoint": 1296,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:58:46Z"
+      "checkpointed_at": "2026-10-20T22:05:19Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:59:39Z"
+      "checkpointed_at": "2026-10-20T22:06:13Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:00:48Z"
+      "checkpointed_at": "2026-10-20T22:07:23Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:01:30Z"
+      "checkpointed_at": "2026-10-20T22:08:05Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43421,6 +43421,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T22:04:15Z"
+    },
+    {
+      "asset_id": "e07ab3b85d313c2f6b8abb62",
+      "asset_sha256": "1bedc0bd7c0a4453a393c1179aa1b804eb358a7fe576261bc217a7fb6e145452",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 130,
+      "asset_path": "assets/1bedc0bd7c0a4453a393c1179aa1b804eb358a7fe576261bc217a7fb6e145452.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "05028d1d8bb54afbeda7c134dd787bec678db6f5981cc9647868c5ab67bee3bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with a thoughtful expression, wearing a plaid shirt and holding their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about ORS packets.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T22:09:14Z"
     }
   ]
 }
