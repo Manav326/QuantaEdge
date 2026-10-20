@@ -887,6 +887,16 @@ public class CourseMarketplaceController {
     result.put("courseId", courseId);
     result.put("name", institutionDisplayName);
     result.put("description", title == null || title.isBlank() ? "Course access" : title);
+    List<Map<String,Object>> pricingRows=jdbc.queryForList("""
+      select discount_amount_paise,discount_reference
+      from course_payment_order where id=?
+      """,localOrderId);
+    if(pricingRows.isEmpty()) throw new IllegalStateException("The local course order could not be loaded.");
+    Map<String,Object> pricing=pricingRows.getFirst();
+    Object discountRaw=pricing.get("discount_amount_paise");
+    result.put("discountPaise",discountRaw instanceof Number n?n.longValue():0L);
+    Object codeRaw=pricing.get("discount_reference");
+    if(codeRaw!=null&&!String.valueOf(codeRaw).isBlank()) result.put("discountCode",String.valueOf(codeRaw));
     return result;
   }
 
