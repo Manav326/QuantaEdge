@@ -20,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -68,7 +69,7 @@ fun ParentCourseMarketplaceScreen(
     error: String,
     status: String,
     onRefresh: () -> Unit,
-    onBuy: (Long, String, Long) -> Unit,
+    onBuy: (Long, String, Long, String) -> Unit,
     onAddFree: (Long, String, Long) -> Unit,
     onDismissRequest: (Long) -> Unit,
     onTransfer: (Long, Long) -> Unit,
@@ -79,6 +80,7 @@ fun ParentCourseMarketplaceScreen(
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingTransfer by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    var discountCode by remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
@@ -97,6 +99,21 @@ fun ParentCourseMarketplaceScreen(
             "Choose the recipient before checkout. A course you own can be transferred once to a linked child; that transfer is permanent.",
             "भुगतान से पहले प्राप्तकर्ता चुनें। आपके स्वामित्व वाला कोर्स एक बार जुड़े बच्चे को दिया जा सकता है; ट्रांसफर स्थायी है।"
         ), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        OutlinedTextField(
+            value = discountCode,
+            onValueChange = { discountCode = it.uppercase(Locale.ROOT) },
+            label = { Text(t("Offer code (optional)", "Offer code (वैकल्पिक)")) },
+            placeholder = { Text(t("Code supplied by your institution", "संस्था द्वारा दिया गया code")) },
+            singleLine = true,
+            enabled = !busy && !pendingVerification,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            t("Codes only work for the course approved by HRMS. The server calculates the discount and tax.",
+              "Code केवल HRMS-approved course पर लागू होगा। छूट और tax की गणना server करता है।"),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
             Button(onClick = onMyLearning, enabled = !busy, modifier = Modifier.weight(1f)) {
                 Text(t("My learning", "मेरी पढ़ाई"))
@@ -157,7 +174,7 @@ fun ParentCourseMarketplaceScreen(
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                                 Button(onClick = {
                                     if (price == 0L) onAddFree(courseId, "CHILD", studentId)
-                                    else onBuy(courseId, "CHILD", studentId)
+                                    else onBuy(courseId, "CHILD", studentId, discountCode.trim())
                                 }, enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && studentId > 0L, modifier = Modifier.weight(1f)) {
                                     Text(t("Buy for this child", "इस बच्चे के लिए"))
                                 }
@@ -207,7 +224,7 @@ fun ParentCourseMarketplaceScreen(
                                     "यह कोर्स पहले से आपके पास है। दोबारा भुगतान करने के बजाय नीचे से स्थायी ट्रांसफर करें।"),
                                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             } else {
-                                Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else onBuy(courseId, "SELF", 0L) },
+                                Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else onBuy(courseId, "SELF", 0L, discountCode.trim()) },
                                     enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L, modifier = Modifier.fillMaxWidth()) {
                                     Text(if (price == 0L) t("Add free course for me", "अपने लिए निःशुल्क कोर्स") else t("Buy for me", "अपने लिए खरीदें"))
                                 }
@@ -225,7 +242,7 @@ fun ParentCourseMarketplaceScreen(
                                                     style = MaterialTheme.typography.labelSmall, color = LocalQuantaEdgeSemanticColors.current.success)
                                             }
                                             TextButton(
-                                                onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else onBuy(courseId, "CHILD", childId) },
+                                                onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else onBuy(courseId, "CHILD", childId, discountCode.trim()) },
                                                 enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && childId > 0L && !alreadyOwned && price >= 0L
                                             ) { Text(t(if (price == 0L) "Add" else "Buy", if (price == 0L) "जोड़ें" else "खरीदें")) }
                                         }
