@@ -11,8 +11,8 @@
     "assets_selected": 1125,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1120,
-    "assets_remaining": 1171,
+    "assets_analyzed": 1121,
+    "assets_remaining": 1170,
     "assets_completion_percent": 48.9,
     "assets_failed": 22,
     "assets_skipped_from_checkpoint": 1120,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:27:28Z"
+      "checkpointed_at": "2026-10-20T15:31:55Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:28:13Z"
+      "checkpointed_at": "2026-10-20T15:32:40Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:28:43Z"
+      "checkpointed_at": "2026-10-20T15:33:10Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:29:32Z"
+      "checkpointed_at": "2026-10-20T15:33:59Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36568,6 +36568,36 @@
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "75d096e943e0aa1cc4b83d52",
+      "asset_sha256": "7f3a9874bf1b76ecf4a2966f3d32a6879b1662222210e86f79173d01fb97e14d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/7f3a9874bf1b76ecf4a2966f3d32a6879b1662222210e86f79173d01fb97e14d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or educational content related to the textbook.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the textbook content.",
+          "The image is a cartoon and may not accurately represent the educational material.",
+          "The image does not show any specific educational content or question related to the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:35:08Z"
     }
   ]
 }
