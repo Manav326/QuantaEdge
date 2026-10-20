@@ -46,16 +46,27 @@ public class NotificationDeviceController {
     String kind=context.studentId()!=null?"STUDENT":"USER_ACCOUNT";
     Long studentId=context.studentId(), userId=context.isParent()?context.userId():null;
     String tokenHash=AndroidPushService.sha256(token);
+    // A rotated token can already be associated with another installation. Revoke that binding,
+    // then update this installation in place so launches do not accumulate stale registration rows.
     jdbc.update("""
       update notification_device_registration set status='REVOKED',revoked_at=now(),updated_at=now()
-      where status='ACTIVE' and (device_id=?::uuid or token_hash=?)
-      """,deviceId,tokenHash);
-    jdbc.update("""
-      insert into notification_device_registration(
-        device_id,identity_kind,student_id,user_account_id,institution_id,device_token,token_hash,
-        platform,package_name,app_version,status,registered_at,last_seen_at,updated_at)
-      values (?::uuid,?,?,?,?,?,?,'ANDROID',?,?,'ACTIVE',now(),now(),now())
-      """,deviceId,kind,studentId,userId,selected.institutionId(),token,tokenHash,packageName,appVersion);
+      where status='ACTIVE' and token_hash=? and device_id<>?::uuid
+      """,tokenHash,deviceId);
+    int refreshed=jdbc.update("""
+      update notification_device_registration
+      set identity_kind=?,student_id=?,user_account_id=?,institution_id=?,device_token=?,token_hash=?,
+          platform='ANDROID',package_name=?,app_version=?,status='ACTIVE',revoked_at=null,
+          last_seen_at=now(),updated_at=now()
+      where device_id=?::uuid and status='ACTIVE'
+      """,kind,studentId,userId,selected.institutionId(),token,tokenHash,packageName,appVersion,deviceId);
+    if(refreshed==0) {
+      jdbc.update("""
+        insert into notification_device_registration(
+          device_id,identity_kind,student_id,user_account_id,institution_id,device_token,token_hash,
+          platform,package_name,app_version,status,registered_at,last_seen_at,updated_at)
+        values (?::uuid,?,?,?,?,?,?,'ANDROID',?,?,'ACTIVE',now(),now(),now())
+        """,deviceId,kind,studentId,userId,selected.institutionId(),token,tokenHash,packageName,appVersion);
+    }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("registered",true); result.put("deviceId",deviceId);
     result.put("institutionCode",selected.institutionCode()); result.put("providerConfigured",push.isConfigured());

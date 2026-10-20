@@ -24,7 +24,6 @@ object NotificationPushRegistration {
     const val OPEN_ACTION = "com.quantaedge.android.OPEN_NOTIFICATION"
     private const val PREFS = "qe_notification_push"
     private const val DEVICE_ID_KEY = "device_id"
-    private const val TOKEN_KEY = "fcm_token"
     private const val PERMISSION_REQUESTED_KEY = "permission_requested"
     private val backgroundScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -71,14 +70,12 @@ object NotificationPushRegistration {
         if (!canPostNotifications(context)) return
         val token = runCatching { FirebaseMessaging.getInstance(app).token.await() }.getOrNull()?.trim().orEmpty()
         if (token.isBlank()) return
-        saveToken(context, token)
         registerAuthenticatedDevice(context.applicationContext, token)
     }
 
     fun onNewToken(context: Context, token: String) {
         val cleanToken = token.trim()
         if (cleanToken.isBlank()) return
-        saveToken(context, cleanToken)
         if (!isFirebaseConfigured() || !canPostNotifications(context)) return
         backgroundScope.launch {
             runCatching { registerAuthenticatedDevice(context.applicationContext, cleanToken) }
@@ -117,7 +114,4 @@ object NotificationPushRegistration {
         return generated
     }
 
-    private fun saveToken(context: Context, token: String) {
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(TOKEN_KEY, token).apply()
-    }
 }

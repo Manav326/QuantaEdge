@@ -964,6 +964,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 route = AppRoute.STUDENT_HOME
             }
         } else {
+            runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
             ApiClient.postObject("/api/v1/auth/logout")
             ApiClient.clearSession()
             throw IOException("यह Android ऐप छात्र और अभिभावक खातों के लिए है।")
@@ -1033,7 +1034,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (!session.optBoolean("authenticated") ||
                 (!parentSessionConfirmed && !learnerSessionConfirmed) ||
                 !session.optBoolean("gmailVerified") || !gmailMethodVerified) {
-                // Preserve the session-validation error even if the best-effort logout call fails.
+                // Revoke the device binding before best-effort logout and local session clearing.
+                runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
                 runCatching { ApiClient.postObject("/api/v1/auth/logout", JSONObject()) }
                 ApiClient.clearSession()
                 throw IOException("The verified Google account could not be confirmed.")
@@ -1082,6 +1084,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.putObject("/api/v1/account/me/password", JSONObject()
                 .put("currentPassword", currentPassword)
                 .put("newPassword", newPassword))
+            runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
             ApiClient.clearSession()
             auth = JSONObject()
             accountIdentityProfile = JSONObject()
@@ -1157,6 +1160,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val session = ApiClient.postObject("/api/v1/auth/account-signup/verify-otp",
                 JSONObject().put("mobile", mobile.trim()).put("displayName", displayName.trim()).put("otp", otp.trim()))
             if (session.optString("workspace") != "STUDENT" || session.optLong("studentId") <= 0L) {
+                runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
                 ApiClient.postObject("/api/v1/auth/logout", JSONObject())
                 ApiClient.clearSession()
                 throw IOException("The learner account could not be confirmed.")
@@ -2864,6 +2868,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             ApiClient.postObject("/api/v1/account/me/transition-to-parent",
                 JSONObject().put("confirmParentTransition", true))
+            runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
             ApiClient.clearSession()
             preferences.edit().remove("institutionCode")
                 .remove("institutionDisplayName")
