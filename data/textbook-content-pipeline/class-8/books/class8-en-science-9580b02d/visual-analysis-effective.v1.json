@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3ba6594ff245d92d7fad4f013de97939258453ce77635078722f79a4c061cda7",
+  "raw_analysis_sha256": "0b9fc74b6f042abedc538ea910231463d17d3c0dd7511dc8771e10cc243b571b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:42:25Z",
+      "checkpointed_at": "2026-10-20T03:45:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:42:59Z",
+      "checkpointed_at": "2026-10-20T03:45:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:43:22Z",
+      "checkpointed_at": "2026-10-20T03:46:19Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -48221,6 +48221,82 @@
           "The image does not provide specific details about the immune response or the health diary.",
           "The text mentions specific Indian scientists, but the image does not show them."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1401cadae01eaf896167f3d3",
+      "asset_sha256": "2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf4ff399ba1e8098e044dc43875f59e9c54f5f89f2db1d245c82d04c050f3c49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Health education",
+        "limitations": [
+          "No specific text or labels are provided in the image. The focus is on the character and the object they are holding."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:46:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Health education",
+        "limitations": [
+          "No specific text or labels are provided in the image. The focus is on the character and the object they are holding."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "398521e1f3cfac2cf22831a0",
+      "asset_sha256": "0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf4ff399ba1e8098e044dc43875f59e9c54f5f89f2db1d245c82d04c050f3c49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large yellow sign.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:47:28Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large yellow sign.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
