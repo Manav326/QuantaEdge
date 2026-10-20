@@ -80,14 +80,9 @@ public class AndroidPushService {
 
   /** Called on a bounded schedule. Each row is a durable delivery attempt for one registered device. */
   public int dispatchPendingDeliveries() {
-    if (!isConfigured()) {
-      jdbc.update("""
-        update notification_delivery_attempt
-        set status='NOT_CONFIGURED',failure_code='FCM_NOT_CONFIGURED',attempted_at=now()
-        where channel='ANDROID_PUSH' and status in ('PENDING','RETRYING')
-        """);
-      return 0;
-    }
+    // Keep queued push attempts pending while configuration is absent. This lets a newly
+    // configured deployment deliver existing durable notifications without requiring a resend.
+    if (!isConfigured()) return 0;
 
     // Close attempts whose campaign expired, or whose installation/account binding was revoked.
     jdbc.update("""
