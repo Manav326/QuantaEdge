@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2d8fef286f319e435b007c3085fd0f6b36cab3a48fd362ddddda0413c966a936",
+  "raw_analysis_sha256": "784a8ecb8ce9461b42b573b946fa2388357b2d07d935f450d2b54bfbf25a746d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:29:35Z",
+      "checkpointed_at": "2026-10-20T06:33:44Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:30:10Z",
+      "checkpointed_at": "2026-10-20T06:34:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:30:34Z",
+      "checkpointed_at": "2026-10-20T06:34:38Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:31:12Z",
+      "checkpointed_at": "2026-10-20T06:35:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -52840,6 +52840,66 @@
         "context_relation": "educational",
         "limitations": [
           "The instructions assume that the reader has basic knowledge of electricity and circuits."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c2d4e097a7b25c622ecaf68c",
+      "asset_sha256": "697f8aa0c0359ca8682187a5a42474c03d6cc87892be3efeee9be63216a4f7cc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/697f8aa0c0359ca8682187a5a42474c03d6cc87892be3efeee9be63216a4f7cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rechargeable Li-ion battery with specifications.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Rechargeable",
+          "Li-ion Battery",
+          "3.7V",
+          "2575mAh"
+        ],
+        "concepts": [
+          "Rechargeable Battery",
+          "Li-ion Battery",
+          "Voltage",
+          "Capacity"
+        ],
+        "context_relation": "The image is related to the topic of batteries and their specifications.",
+        "limitations": [
+          "The image does not provide information about the structure or working principle of a dry cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:35:52Z",
+      "effective_analysis": {
+        "visual_summary": "A rechargeable Li-ion battery with specifications.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Rechargeable",
+          "Li-ion Battery",
+          "3.7V",
+          "2575mAh"
+        ],
+        "concepts": [
+          "Rechargeable Battery",
+          "Li-ion Battery",
+          "Voltage",
+          "Capacity"
+        ],
+        "context_relation": "The image is related to the topic of batteries and their specifications.",
+        "limitations": [
+          "The image does not provide information about the structure or working principle of a dry cell."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

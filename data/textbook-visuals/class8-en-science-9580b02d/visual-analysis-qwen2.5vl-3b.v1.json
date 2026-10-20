@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1090,
+    "assets_selected": 1091,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1086,
-    "assets_remaining": 1205,
+    "assets_analyzed": 1087,
+    "assets_remaining": 1204,
     "assets_completion_percent": 47.4,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1085,
+    "assets_skipped_from_checkpoint": 1086,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:29:35Z"
+      "checkpointed_at": "2026-10-20T06:33:44Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:30:10Z"
+      "checkpointed_at": "2026-10-20T06:34:16Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:30:34Z"
+      "checkpointed_at": "2026-10-20T06:34:38Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:31:12Z"
+      "checkpointed_at": "2026-10-20T06:35:14Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35283,6 +35283,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T06:32:59Z"
+    },
+    {
+      "asset_id": "c2d4e097a7b25c622ecaf68c",
+      "asset_sha256": "697f8aa0c0359ca8682187a5a42474c03d6cc87892be3efeee9be63216a4f7cc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/697f8aa0c0359ca8682187a5a42474c03d6cc87892be3efeee9be63216a4f7cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rechargeable Li-ion battery with specifications.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Rechargeable",
+          "Li-ion Battery",
+          "3.7V",
+          "2575mAh"
+        ],
+        "concepts": [
+          "Rechargeable Battery",
+          "Li-ion Battery",
+          "Voltage",
+          "Capacity"
+        ],
+        "context_relation": "The image is related to the topic of batteries and their specifications.",
+        "limitations": [
+          "The image does not provide information about the structure or working principle of a dry cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:35:52Z"
     }
   ]
 }
