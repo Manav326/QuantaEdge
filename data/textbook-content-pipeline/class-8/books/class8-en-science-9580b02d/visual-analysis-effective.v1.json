@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "dbcf0e561547b44c68c340e91bbce8891f3adfb666e62f10f1ed5073e6d07cdd",
+  "raw_analysis_sha256": "e44d4ff6b36871f4486f4c2a0b29078832fe5c34efc1f3b299804069a4fc7ff6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:34:18Z",
+      "checkpointed_at": "2026-10-20T17:41:21Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:35:03Z",
+      "checkpointed_at": "2026-10-20T17:42:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:35:32Z",
+      "checkpointed_at": "2026-10-20T17:42:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:36:21Z",
+      "checkpointed_at": "2026-10-20T17:43:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56539,6 +56539,56 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "128af77379936ffb2feb2aed",
+      "asset_sha256": "88117c1b6f61f6574c6db9d4ed08e65adb5b50c2eff82f19fc201ff86b835438",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/88117c1b6f61f6574c6db9d4ed08e65adb5b50c2eff82f19fc201ff86b835438.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A deer with spotted fur and antlers, running.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "deer",
+          "spotted fur",
+          "antlers",
+          "running"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific information about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:44:33Z",
+      "effective_analysis": {
+        "visual_summary": "A deer with spotted fur and antlers, running.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "deer",
+          "spotted fur",
+          "antlers",
+          "running"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific information about the educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
