@@ -1365,6 +1365,64 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
+    fun retryPendingCoursePayment(workspace: String) {
+        val normalizedWorkspace = workspace.uppercase()
+        val draft = if (normalizedWorkspace == "PARENT") pendingParentPaymentVerification
+            else pendingStudentPaymentVerification
+        if (draft == null) return
+        val courseId = draft.optLong("courseId", 0L)
+        if (courseId <= 0L || busy) return
+        error = ""
+        if (normalizedWorkspace == "PARENT") parentMarketplaceBusyCourseId = courseId
+        else marketplaceBusyCourseId = courseId
+        runTask {
+            try {
+                val localOrderId = draft.optLong("localOrderId", 0L)
+                if (localOrderId <= 0L) throw IOException("The saved course order is incomplete. Contact support before paying again.")
+                val path = if (normalizedWorkspace == "PARENT")
+                    "/api/v1/marketplace/family/orders/" + localOrderId + "/reconcile"
+                else "/api/v1/marketplace/orders/" + localOrderId + "/reconcile"
+                val result = ApiClient.postObject(path, JSONObject())
+                val resultStatus = result.optString("status").uppercase()
+                when {
+                    resultStatus == "VERIFIED" || result.optBoolean("entitled") -> {
+                        if (normalizedWorkspace == "PARENT") {
+                            loadParentMarketplaceData()
+                            setPendingCoursePayment("PARENT", null)
+                            route = AppRoute.PARENT_COURSES
+                        } else {
+                            currentCourseId = courseId
+                            refreshStudentPrograms()
+                            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+                            marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                            setPendingCoursePayment("STUDENT", null)
+                            route = AppRoute.STUDENT_HOME
+                        }
+                        status = result.optString("message").takeIf { it.isNotBlank() }
+                            ?: if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
+                            else "Payment verified. Course access has been updated."
+                    }
+                    result.optBoolean("canRetryCheckout") -> {
+                        setPendingCoursePayment(normalizedWorkspace, null)
+                        if (normalizedWorkspace == "PARENT") loadParentMarketplaceData()
+                        else marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                        status = result.optString("message").takeIf { it.isNotBlank() }
+                            ?: if (language == "hi") "पिछला भुगतान पूरा नहीं हुआ। अब नया checkout शुरू कर सकते हैं।"
+                            else "The previous payment did not complete. You can now start a new checkout."
+                    }
+                    else -> {
+                        status = result.optString("message").takeIf { it.isNotBlank() }
+                            ?: if (language == "hi") "भुगतान की पुष्टि अभी बाकी है। दोबारा जाँचें; फिर से भुगतान न करें।"
+                            else "Payment verification is still pending. Retry verification; do not pay again."
+                    }
+                }
+            } finally {
+                if (normalizedWorkspace == "PARENT") parentMarketplaceBusyCourseId = 0L
+                else marketplaceBusyCourseId = 0L
+            }
+        }
+    }
+
     fun addFreeFamilyCourse(courseId: Long, recipientType: String, studentId: Long = 0L) {
         if (courseId <= 0L || busy) return
         runTask {
@@ -1378,11 +1436,21 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L) {
+        if (pendingParentPaymentVerification != null) {
+            error = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
+                else "A previous payment still needs verification. Retry verification before starting another checkout."
+            return
+        }
         if (courseId <= 0L || parentMarketplaceBusyCourseId > 0L) return
         if (recipientType == "CHILD" && studentId <= 0L) {
             error = if (language == "hi") "पहले बच्चे का चयन करें।" else "Choose a child first."
             return
         }
+        val host = context as? RazorpayCourseCheckoutHost
+            ?: run {
+                error = "Razorpay checkout is not available on this device."
+                return
+            }
         parentMarketplaceBusyCourseId = courseId
         runTask {
             try {
@@ -1393,29 +1461,48 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     body,
                     mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
                 )
-                val host = context as? RazorpayCourseCheckoutHost
-                    ?: throw IOException("Razorpay checkout is not available on this device.")
                 val localOrderId = order.optLong("localOrderId", 0L)
-                if (localOrderId <= 0L) throw IOException("The course order could not be identified. Please retry.")
+                val providerOrderId = order.optString("orderId").trim()
+                if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
+                    throw IOException("The course order could not be identified. Retry verification before paying again.")
+                }
+                val recoverableDraft = JSONObject()
+                    .put("courseId", courseId)
+                    .put("localOrderId", localOrderId)
+                    .put("orderId", providerOrderId)
+                    .put("paymentId", "")
+                    .put("signature", "")
+                    .put("recipientType", recipientType)
+                    .put("studentId", studentId)
+                setPendingCoursePayment("PARENT", recoverableDraft)
                 host.launchCourseCheckout(order) { checkoutResult ->
                     val paymentId = checkoutResult.paymentId.orEmpty()
-                    val orderId = checkoutResult.orderId.orEmpty()
+                    val returnedOrderId = checkoutResult.orderId.orEmpty()
                     val signature = checkoutResult.signature.orEmpty()
                     if (!checkoutResult.userMessage.isNullOrBlank()) {
                         parentMarketplaceBusyCourseId = 0L
                         status = checkoutResult.userMessage.orEmpty()
-                    } else if (paymentId.isBlank() || orderId.isBlank() || signature.isBlank()) {
+                        // Keep the exact order for provider-side reconciliation, even if the
+                        // checkout was dismissed or its callback did not reach the API.
+                    } else if (paymentId.isBlank() || returnedOrderId != providerOrderId ||
+                        signature.isBlank()) {
                         parentMarketplaceBusyCourseId = 0L
-                        status = if (language == "hi") "भुगतान की पुष्टि अधूरी है। दोबारा प्रयास करें।"
-                            else "The payment confirmation is incomplete. Please retry."
+                        status = if (language == "hi")
+                            "भुगतान की पुष्टि अधूरी है। Retry verification दबाकर इसी order की जाँच करें; दोबारा भुगतान न करें।"
+                        else "The payment confirmation is incomplete. Retry verification for this same order; do not pay again."
                     } else {
+                        val callbackDraft = JSONObject(recoverableDraft.toString())
+                            .put("paymentId", paymentId).put("signature", signature)
+                        setPendingCoursePayment("PARENT", callbackDraft)
                         runTask {
                             try {
                                 ApiClient.postObject(
                                     "/api/v1/marketplace/family/orders/" + localOrderId + "/verify",
-                                    JSONObject().put("paymentId", paymentId).put("orderId", orderId).put("signature", signature)
+                                    JSONObject().put("paymentId", paymentId)
+                                        .put("orderId", returnedOrderId).put("signature", signature)
                                 )
                                 loadParentMarketplaceData()
+                                setPendingCoursePayment("PARENT", null)
                                 status = if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
                                     else "Payment verified. Course access has been updated."
                             } finally {
@@ -1454,7 +1541,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun purchaseMarketplaceCourse(courseId: Long) {
+        if (pendingStudentPaymentVerification != null) {
+            status = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
+                else "A previous payment still needs verification. Retry verification before starting another checkout."
+            return
+        }
         if (courseId <= 0L || marketplaceBusyCourseId > 0L) return
+        val host = context as? RazorpayCourseCheckoutHost
+            ?: run {
+                error = "Razorpay checkout is not available on this device."
+                return
+            }
         marketplaceBusyCourseId = courseId
         runTask {
             try {
@@ -1463,32 +1560,48 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     JSONObject(),
                     mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
                 )
-                val host = context as? RazorpayCourseCheckoutHost
-                    ?: throw IOException("Razorpay checkout is not available on this device.")
                 val localOrderId = order.optLong("localOrderId", 0L)
-                if (localOrderId <= 0L) throw IOException("The course order could not be identified. Please retry.")
+                val providerOrderId = order.optString("orderId").trim()
+                if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
+                    throw IOException("The course order could not be identified. Retry verification before paying again.")
+                }
+                val recoverableDraft = JSONObject()
+                    .put("courseId", courseId)
+                    .put("localOrderId", localOrderId)
+                    .put("orderId", providerOrderId)
+                    .put("paymentId", "")
+                    .put("signature", "")
+                setPendingCoursePayment("STUDENT", recoverableDraft)
                 host.launchCourseCheckout(order) { checkoutResult ->
                     val paymentId = checkoutResult.paymentId.orEmpty()
-                    val orderId = checkoutResult.orderId.orEmpty()
+                    val returnedOrderId = checkoutResult.orderId.orEmpty()
                     val signature = checkoutResult.signature.orEmpty()
                     if (!checkoutResult.userMessage.isNullOrBlank()) {
                         marketplaceBusyCourseId = 0L
                         status = checkoutResult.userMessage.orEmpty()
-                    } else if (paymentId.isBlank() || orderId.isBlank() || signature.isBlank()) {
+                        // Keep the order details so payment state can be checked with Razorpay.
+                    } else if (paymentId.isBlank() || returnedOrderId != providerOrderId ||
+                        signature.isBlank()) {
                         marketplaceBusyCourseId = 0L
-                        status = if (language == "hi") "भुगतान की पुष्टि अधूरी है। दोबारा प्रयास करें।"
-                            else "The payment confirmation is incomplete. Please retry."
+                        status = if (language == "hi")
+                            "भुगतान की पुष्टि अधूरी है। Retry verification दबाकर इसी order की जाँच करें; दोबारा भुगतान न करें।"
+                        else "The payment confirmation is incomplete. Retry verification for this same order; do not pay again."
                     } else {
+                        val callbackDraft = JSONObject(recoverableDraft.toString())
+                            .put("paymentId", paymentId).put("signature", signature)
+                        setPendingCoursePayment("STUDENT", callbackDraft)
                         runTask {
                             try {
                                 ApiClient.postObject(
                                     "/api/v1/marketplace/orders/" + localOrderId + "/verify",
-                                    JSONObject().put("paymentId", paymentId).put("orderId", orderId).put("signature", signature)
+                                    JSONObject().put("paymentId", paymentId)
+                                        .put("orderId", returnedOrderId).put("signature", signature)
                                 )
                                 currentCourseId = courseId
                                 refreshStudentPrograms()
                                 studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
                                 marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                                setPendingCoursePayment("STUDENT", null)
                                 route = AppRoute.STUDENT_HOME
                                 status = if (language == "hi") "भुगतान सत्यापित है। आपका course तैयार है।"
                                     else "Payment verified. Your course is ready."
