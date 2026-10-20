@@ -48,12 +48,12 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
   const money=(paise:number,currency:string)=>new Intl.NumberFormat(english?'en-IN':'hi-IN',{
     style:'currency',currency:currency||'INR',maximumFractionDigits:2
   }).format((Number(paise)||0)/100);
-  const download=async(id:number,documentNumber:string)=>{
-    setDownloading(id);setError('');
+  const download=async(orderId:number,documentId:number,documentNumber:string)=>{
+    setDownloading(documentId);setError('');
     try{
       const path=workspace==='PARENT'
-        ?'/api/v1/marketplace/family/orders/'+id+'/invoice.pdf'
-        :'/api/v1/marketplace/orders/'+id+'/invoice.pdf';
+        ?'/api/v1/marketplace/family/orders/'+orderId+'/documents/'+documentId+'.pdf'
+        :'/api/v1/marketplace/orders/'+orderId+'/documents/'+documentId+'.pdf';
       const response=await apiFetch(path,{
         method:'GET',credentials:'same-origin',cache:'no-store',
         headers:{'X-QE-Workspace':workspace,'Accept':'application/pdf'}
@@ -102,9 +102,9 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
           </div>
           <div className={styles.amount}>
             <strong>{money(invoice.total_value_paise,invoice.currency)}</strong>
-            <span>{t('Paid','भुगतान हुआ')}</span>
+            <span>{invoice.document_type==='CREDIT_NOTE'?t('Credit note','क्रेडिट नोट'):invoice.document_type==='DEBIT_NOTE'?t('Debit note','डेबिट नोट'):t('Paid','भुगतान हुआ')}</span>
           </div>
-          <button className={styles.download} type="button" disabled={downloading!==null} onClick={()=>void download(invoice.course_order_id,invoice.document_number)}>{downloading===invoice.course_order_id?t('Preparing…','तैयार हो रहा है…'):t('Download PDF','PDF डाउनलोड करें')} <span aria-hidden="true">↓</span></button>
+          <button className={styles.download} type="button" disabled={downloading!==null} onClick={()=>void download(invoice.course_order_id,invoice.invoice_document_id,invoice.document_number)}>{downloading===invoice.invoice_document_id?t('Preparing…','तैयार हो रहा है…'):t('Download PDF','PDF डाउनलोड करें')} <span aria-hidden="true">↓</span></button>
         </article>)}
       </div>}
   </section>;
