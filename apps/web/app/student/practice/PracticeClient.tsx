@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStudentCourseScope } from '../CourseScope';
 import { apiFetch } from '../../components/apiClient';
+import StudentEmptyState from '../../components/StudentEmptyState';
 
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
@@ -76,7 +77,7 @@ export default function PracticePage(){
   const lessonIdRaw=searchParams.get('lessonId')||'';
   const sessionIdRaw=searchParams.get('sessionId')||'';
   const rawCourseId=searchParams.get('courseId')||searchParams.get('programCode')||'';
-  const { activeCourse, courseId:selectedCourseId, loadingCourses, courseError } = useStudentCourseScope(rawCourseId || null);
+  const { courses, activeCourse, courseId:selectedCourseId, loadingCourses, courseError } = useStudentCourseScope(rawCourseId || null);
   const courseKey=String(activeCourse?.public_id || (selectedCourseId!==null ? selectedCourseId : ''));
   const courseQuery=selectedCourseId!==null?'&courseId='+selectedCourseId:'';
   const lessonId=/^\d+$/.test(lessonIdRaw)?Number(lessonIdRaw):0;
@@ -221,7 +222,26 @@ export default function PracticePage(){
     else setIndex(questions.length);
   }
 
-  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.preparing.practice.for.your.topic.920049af" /></div></section></main>;
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+
+  if(loading || loadingCourses)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.preparing.practice.for.your.topic.920049af" /></div></section></main>;
+
+  if(noEnrolledCourses)return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading"><h1><UiText message="legacy.web.learn.practise.bb602a9d" /></h1></header>
+    <StudentEmptyState icon="practice"
+      title={<UiText message="student.empty.practice.title" />}
+      message={<UiText message="student.empty.practice.message" />}
+      primaryActionHref="/student/marketplace"
+      primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student/courses"
+      secondaryActionLabel={<UiText message="web.navigation.student.allCourses" />} />
+  </section></div></main>;
+
+  if(courseError && !loadingCourses)return <main className="practice-page"><section className="practice-wrap">
+    <div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><UiText message="legacy.web.practice.could.not.be.opened.5bc74c45" /></strong><span>{courseError}</span></div>
+    <Link href="/student/courses" className="button button-dark" style={{marginTop:20}}><UiText message="web.navigation.student.allCourses" /></Link>
+  </section></main>;
 
   if(!lessonId&&!requestedSessionId)return <main className="practice-page">
     <section className="practice-wrap">
