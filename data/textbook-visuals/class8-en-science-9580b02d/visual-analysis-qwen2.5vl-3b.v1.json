@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1164,
+    "assets_selected": 1165,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 1160,
     "assets_remaining": 1131,
     "assets_completion_percent": 50.6,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1159,
+    "assets_skipped_from_checkpoint": 1160,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:47:48Z"
+      "checkpointed_at": "2026-10-20T22:53:01Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:48:37Z"
+      "checkpointed_at": "2026-10-20T22:53:49Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:49:15Z"
+      "checkpointed_at": "2026-10-20T22:54:28Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:50:13Z"
+      "checkpointed_at": "2026-10-20T22:55:26Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37751,9 +37751,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
