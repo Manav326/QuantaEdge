@@ -616,7 +616,9 @@ public class CourseMarketplaceController {
       throw new IllegalStateException("Institution payment branding is not configured.");
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
-        select id,offer_price_paise,currency,provider_order_id,status
+        select id,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
+          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where student_id=? and institution_id=? and course_id=? and client_request_key=?
           and purchaser_user_id is not distinct from ?
@@ -624,11 +626,26 @@ public class CourseMarketplaceController {
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
       String previousStatus = String.valueOf(previous.get("status"));
-      if ("PENDING".equals(previousStatus)) return checkoutResponse(previous, courseId, title, institutionDisplayName);
-      if ("CREATING".equals(previousStatus)) {
+      if ("PENDING".equals(previousStatus)) {
+        if (hasLockedFinancialSnapshots(previous)) {
+          return checkoutResponse(previous, courseId, title, institutionDisplayName);
+        }
+        // A pending order from before tax/share snapshots were required must never be reused
+        // for another checkout. Expire it only after the provider confirms it is retryable.
+        String providerState = inspectProviderOrderForNewAttempt(previous);
+        if (!"RETRYABLE".equals(providerState)) {
+          throw new IllegalStateException(
+              "This older checkout is being reconciled with Razorpay and cannot be reused. Retry verification for the saved order; do not pay again.");
+        }
+        jdbc.update("""
+          update course_payment_order set status='EXPIRED',updated_at=now()
+          where id=? and institution_id=? and status='PENDING'
+          """,previous.get("id"),institutionId);
+      } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
+      } else {
+        throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
       }
-      throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
     }
 
     List<Map<String, Object>> open = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
@@ -839,6 +856,16 @@ public class CourseMarketplaceController {
 
   static boolean isValidIdempotencyKey(String value) {
     return value != null && value.matches("[A-Za-z0-9_-]{16,64}");
+  }
+
+  private static boolean hasLockedFinancialSnapshots(Map<String,Object> order) {
+    if(order==null||order.get("tax_profile_id")==null||order.get("revenue_share_policy_id")==null) return false;
+    String tax=String.valueOf(order.get("tax_calculation_snapshot_json"));
+    String shares=String.valueOf(order.get("revenue_share_policy_snapshot_json"));
+    return tax.contains("\"customerPayablePaise\"")
+        && tax.contains("\"taxProfileId\"")
+        && shares.contains("\"policyId\"")
+        && shares.contains("\"recipients\"");
   }
 
   static boolean isReusablePendingOrder(Map<String, Object> order) {
