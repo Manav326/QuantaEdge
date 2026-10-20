@@ -262,3 +262,9 @@ Verification at this checkpoint:
 - Converted effective policy/tax-profile timestamps into JDBC-supported UTC `OffsetDateTime` values before PostgreSQL queries.
 - Policy approval now rejects combined percentage recipients exceeding 100% before activation. Flat amounts remain subject to the actual captured sale's distributable-pool validation.
 - This remains preview/design functionality, not a production-issued invoice. Next: verify the current exact-commit CI; then connect captured payment + approved tax snapshot + allocation + immutable fiscal-document issuance and secure downloads.
+
+
+### 2026-10-20 — Follow-up build correction
+
+- Actions run #4866 (`57bbfd8271a2c887bd5f4737a3c9a6e75291f1ed`) verified API, web, Admin, Android and content-import safeguards successfully, but the People Operations build failed TypeScript at `app/finance/page.tsx`: the Issued Documents table referenced `source_type` without declaring it on the `FinancialDocument` type. This field is returned by the controller and is now included in that client type.
+- The PDF renderer and preview endpoint are in commit `015ad5a8c578eb3437d6bde9d9710f6ebc0c6e23`; run #4867 is the first CI verification for that exact commit and must be checked after the UI type correction.
