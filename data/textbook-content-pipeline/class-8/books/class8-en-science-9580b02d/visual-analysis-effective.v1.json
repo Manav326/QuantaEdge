@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3b2762deab909d58368f53cc3fd15b7ae61145cdc19634251e8c378e8fcda14c",
+  "raw_analysis_sha256": "b98d03571f260a291e864803b32436da154ac62558a79ed2af29561c220afdb1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:42:23Z",
+      "checkpointed_at": "2026-10-20T06:45:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:42:57Z",
+      "checkpointed_at": "2026-10-20T06:45:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:43:20Z",
+      "checkpointed_at": "2026-10-20T06:46:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:43:57Z",
+      "checkpointed_at": "2026-10-20T06:46:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53064,6 +53064,84 @@
         "context_relation": "The image is a close-up of a battery, likely used to illustrate the characteristics of a rechargeable battery.",
         "limitations": [
           "The image does not provide information about the structure or components of a dry cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7d3a2cd61b5c0cc720e6c31",
+      "asset_sha256": "318d7b011da3a9406cc07f3965d32c39d846a51b7202358aeb60a6f5676780d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/318d7b011da3a9406cc07f3965d32c39d846a51b7202358aeb60a6f5676780d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rechargeable Li-ion battery pack with safety warnings and specifications.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Rechargeable Li-ion battery Pack",
+          "Made in India",
+          "Max Charge Voltage: 12.6V",
+          "Li-ion 10.8V, 4000mAh/43Wh",
+          "WARNING! To reduce risk of fire or burns, do not disassemble, crush or puncture; do not short external contacts; do not dispose of in fire or water.",
+          "STORE BETWEEN",
+          "0°C TO 60°C",
+          "32°F TO 140°F",
+          "CE",
+          "Li-ion",
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "concepts": [
+          "Rechargeable Li-ion battery",
+          "Safety warnings",
+          "Battery specifications",
+          "Temperature storage",
+          "Disposal instructions"
+        ],
+        "context_relation": "The image is a close-up of a rechargeable Li-ion battery pack, providing safety and operational instructions.",
+        "limitations": [
+          "The image does not provide information about the battery's capacity or usage."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:47:43Z",
+      "effective_analysis": {
+        "visual_summary": "A rechargeable Li-ion battery pack with safety warnings and specifications.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Rechargeable Li-ion battery Pack",
+          "Made in India",
+          "Max Charge Voltage: 12.6V",
+          "Li-ion 10.8V, 4000mAh/43Wh",
+          "WARNING! To reduce risk of fire or burns, do not disassemble, crush or puncture; do not short external contacts; do not dispose of in fire or water.",
+          "STORE BETWEEN",
+          "0°C TO 60°C",
+          "32°F TO 140°F",
+          "CE",
+          "Li-ion",
+          "Metal cap",
+          "Carbon rod"
+        ],
+        "concepts": [
+          "Rechargeable Li-ion battery",
+          "Safety warnings",
+          "Battery specifications",
+          "Temperature storage",
+          "Disposal instructions"
+        ],
+        "context_relation": "The image is a close-up of a rechargeable Li-ion battery pack, providing safety and operational instructions.",
+        "limitations": [
+          "The image does not provide information about the battery's capacity or usage."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
