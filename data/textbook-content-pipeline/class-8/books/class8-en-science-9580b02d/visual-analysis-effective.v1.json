@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0b14fa9900c8db672ac350918c2f5f7348dd751f5b366259664f9692b248b485",
+  "raw_analysis_sha256": "71d3017127cee7608cd52c95b8737ecda4597b0c1acc158f9d3d65a917640c33",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:12:48Z",
+      "checkpointed_at": "2026-10-20T06:15:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:13:23Z",
+      "checkpointed_at": "2026-10-20T06:15:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:13:47Z",
+      "checkpointed_at": "2026-10-20T06:16:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:14:24Z",
+      "checkpointed_at": "2026-10-20T06:16:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -52422,6 +52422,50 @@
           "The image does not show any formulas, quantities, or relationships.",
           "The image does not provide any specific educational content or activity.",
           "The image does not show any specific educational content or activity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e76fa367fcce7af2220ce26f",
+      "asset_sha256": "a8ffcdaf7d7803ac9d9b38766f0fe616c8a0eb427382cf1bf2c105676f66c7e0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/a8ffcdaf7d7803ac9d9b38766f0fe616c8a0eb427382cf1bf2c105676f66c7e0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "67bdd6cd75cbf6940af60e45244d1822a46e97cd3aaefc53e78d353bac94fdb4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a blue shirt and holding their chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or visible elements related to the textbook content.",
+          "The image is a cartoon illustration and does not represent a real-world scenario or experiment.",
+          "The image does not provide any information about the educational content being discussed in the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:17:36Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a blue shirt and holding their chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or visible elements related to the textbook content.",
+          "The image is a cartoon illustration and does not represent a real-world scenario or experiment.",
+          "The image does not provide any information about the educational content being discussed in the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

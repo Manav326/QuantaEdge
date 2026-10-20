@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1084,
+    "assets_selected": 1085,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1080,
-    "assets_remaining": 1211,
-    "assets_completion_percent": 47.1,
+    "assets_analyzed": 1081,
+    "assets_remaining": 1210,
+    "assets_completion_percent": 47.2,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1079,
+    "assets_skipped_from_checkpoint": 1080,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:12:48Z"
+      "checkpointed_at": "2026-10-20T06:15:23Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:13:23Z"
+      "checkpointed_at": "2026-10-20T06:15:57Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:13:47Z"
+      "checkpointed_at": "2026-10-20T06:16:20Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:14:24Z"
+      "checkpointed_at": "2026-10-20T06:16:56Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35026,6 +35026,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T06:14:38Z"
+    },
+    {
+      "asset_id": "e76fa367fcce7af2220ce26f",
+      "asset_sha256": "a8ffcdaf7d7803ac9d9b38766f0fe616c8a0eb427382cf1bf2c105676f66c7e0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/a8ffcdaf7d7803ac9d9b38766f0fe616c8a0eb427382cf1bf2c105676f66c7e0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "67bdd6cd75cbf6940af60e45244d1822a46e97cd3aaefc53e78d353bac94fdb4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a blue shirt and holding their chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or visible elements related to the textbook content.",
+          "The image is a cartoon illustration and does not represent a real-world scenario or experiment.",
+          "The image does not provide any information about the educational content being discussed in the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:17:36Z"
     }
   ]
 }
