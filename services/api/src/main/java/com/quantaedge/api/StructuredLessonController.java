@@ -27,13 +27,18 @@ public class StructuredLessonController {
   private final AuthorizationService authorization;
   private final StructuredLessonArtifactService artifacts;
   private final ObjectMapper mapper;
+  private final RelationalStructuredLessonService relationalLessons;
+  private final LearningController learningController;
 
   public StructuredLessonController(JdbcTemplate jdbc, AuthorizationService authorization,
-      StructuredLessonArtifactService artifacts, ObjectMapper mapper) {
+      StructuredLessonArtifactService artifacts, ObjectMapper mapper,
+      RelationalStructuredLessonService relationalLessons, LearningController learningController) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.artifacts = artifacts;
     this.mapper = mapper;
+    this.relationalLessons = relationalLessons;
+    this.learningController = learningController;
   }
 
   /** Lists only published structured lessons mapped to the learner's selected institution course and optional subject. */
@@ -52,6 +57,10 @@ public class StructuredLessonController {
     String locale = normalizeLanguage(language);
     String requestedSubject = subjectCode == null ? "" : subjectCode.trim();
     List<Map<String, Object>> result = new ArrayList<>();
+    // Published relational lessons reuse the canonical DB curriculum and share the same
+    // API contract with packaged structured artifacts. Draft DB rows remain excluded.
+    result.addAll(relationalLessons.catalogue(
+        context.studentId(), institutionId, resolvedCourseId, locale, requestedSubject));
     for (StructuredLessonArtifactService.PublishedArtifact artifact : artifacts.listPublishedArtifacts()) {
       if (!requestedSubject.isBlank()
           && !requestedSubject.equalsIgnoreCase(artifacts.subjectCode(artifact))) continue;
@@ -84,6 +93,13 @@ public class StructuredLessonController {
     long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     long resolvedCourseId = resolveCourseId(courseId);
+    if (RelationalStructuredLessonService.isDatabaseLessonId(artifactId)) {
+      RelationalStructuredLessonService.LoadedLesson lesson = relationalLessons.requirePublishedLesson(
+          artifactId, context.studentId(), institutionId, resolvedCourseId);
+      ObjectNode payload = lesson.payload().deepCopy();
+      payload.put("requested_language", locale);
+      return payload;
+    }
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
     ensureStudentCourseTrackAccess(context.studentId(),resolvedCourseId,artifact,institutionId);
     ObjectNode payload = artifacts.toStudentPayload(artifact);
@@ -113,6 +129,38 @@ public class StructuredLessonController {
     }
 
     long resolvedCourseId = resolveCourseId(courseId);
+    if (RelationalStructuredLessonService.isDatabaseLessonId(artifactId)) {
+      RelationalStructuredLessonService.LoadedLesson lesson = relationalLessons.requirePublishedLesson(
+          artifactId, context.studentId(), institutionId, resolvedCourseId);
+      Map<String, Object> validated = relationalLessons.validateStudentQuestionResponse(
+          lesson, questionId, body.get("response"));
+      @SuppressWarnings("unchecked")
+      Map<String, Object> saved = learningController.answer(
+          ((Number) validated.get("questionId")).longValue(), resolvedCourseId, locale,
+          Map.of("answer", validated.get("response")), context, tenant);
+      Boolean correct = saved.get("correct") instanceof Boolean value ? value : null;
+      boolean autoGraded = Boolean.TRUE.equals(saved.get("autoGraded"));
+      String status = !autoGraded || correct == null ? "pending_review" : (correct ? "correct" : "incorrect");
+      String feedbackEn = autoGraded
+          ? (Boolean.TRUE.equals(correct) ? "Correct. Review the explanation and continue." : "Not quite. Review the explanation and try again.")
+          : "Your response was saved for review.";
+      String feedbackHi = autoGraded
+          ? (Boolean.TRUE.equals(correct) ? "सही। व्याख्या दोबारा देखें और आगे बढ़ें।" : "अभी सही नहीं है। व्याख्या देखें और फिर प्रयास करें।")
+          : "आपका उत्तर जाँच के लिए सुरक्षित किया गया है।";
+      Map<String, Object> result = new LinkedHashMap<>();
+      result.put("questionId", questionId);
+      result.put("courseId", courseId);
+      result.put("saved", true);
+      result.put("autoGraded", autoGraded);
+      result.put("status", status);
+      if (autoGraded) {
+        result.put("score", Boolean.TRUE.equals(correct) ? 1 : 0);
+        result.put("maxScore", 1);
+      }
+      result.put("feedback", "en".equals(locale) ? feedbackEn : feedbackHi);
+      result.put("feedbackByLocale", Map.of("en", feedbackEn, "hi", feedbackHi));
+      return result;
+    }
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
     ensureStudentCourseTrackAccess(context.studentId(),resolvedCourseId,artifact,institutionId);
     JsonNode question = artifacts.questionForStudent(artifact, questionId);
@@ -166,6 +214,11 @@ public class StructuredLessonController {
     long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     long resolvedCourseId = resolveCourseId(courseId);
+    if (RelationalStructuredLessonService.isDatabaseLessonId(artifactId)) {
+      RelationalStructuredLessonService.LoadedLesson lesson = relationalLessons.requirePublishedLesson(
+          artifactId, context.studentId(), institutionId, resolvedCourseId);
+      return relationalLessons.savedResponses(lesson, context.studentId(), institutionId, locale);
+    }
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
     ensureStudentCourseTrackAccess(context.studentId(),resolvedCourseId,artifact,institutionId);
     Map<String, Object> questions = new LinkedHashMap<>();
@@ -199,9 +252,9 @@ public class StructuredLessonController {
     for (Map<String, Object> row : jdbc.queryForList("""
       select block_id, response::text as response
       from student_structured_activity_response
-      where institution_id=? and student_id=? and artifact_id=? and artifact_sha256=?
+      where institution_id=? and student_id=? and course_id=? and artifact_id=? and artifact_sha256=?
       order by last_saved_at, block_id
-      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256())) {
+      """,institutionId,context.studentId(),resolvedCourseId,artifact.artifactId(),artifact.sha256())) {
       String id = String.valueOf(row.get("block_id"));
       try {
         artifacts.activityBlockForStudent(artifact, id);
@@ -227,6 +280,12 @@ public class StructuredLessonController {
       throw new IllegalArgumentException("An activity response is required.");
     }
     long resolvedCourseId = resolveCourseId(courseId);
+    if (RelationalStructuredLessonService.isDatabaseLessonId(artifactId)) {
+      RelationalStructuredLessonService.LoadedLesson lesson = relationalLessons.requirePublishedLesson(
+          artifactId, context.studentId(), institutionId, resolvedCourseId);
+      relationalLessons.saveActivity(lesson, context.studentId(), institutionId, blockId, body.get("response"));
+      return Map.of("blockId", blockId, "saved", true, "courseId", courseId);
+    }
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
     ensureStudentCourseTrackAccess(context.studentId(),resolvedCourseId,artifact,institutionId);
     JsonNode response = artifacts.validateActivityResponse(artifact, blockId, body.get("response"));
