@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b28a2ac517af932515d6e4ceef70ffe93bfe60db920c18c2d9305aa7badee5e7",
+  "raw_analysis_sha256": "504ed47a7a3a144deff03e067b4da121adfd7f6462d042b17ceeb0505d33e171",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:09:36Z",
+      "checkpointed_at": "2026-10-20T15:12:50Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:10:21Z",
+      "checkpointed_at": "2026-10-20T15:13:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:10:51Z",
+      "checkpointed_at": "2026-10-20T15:14:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:11:40Z",
+      "checkpointed_at": "2026-10-20T15:14:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -54632,6 +54632,82 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e7141a43d4b036ff2420ed0",
+      "asset_sha256": "998a316ddeb946ae6d30463f09f3842c36962200c9f3eb20ec7442bcc8f8d1f1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "page-0080.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about electromagnets and circuits, including a diagram of a circuit with a lemon and copper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8. Suppose Sumana forgets to move the switch of her lifting electromagnet model to OFF position (in introduction story). After some time, the iron nail no longer picks up the iron paper clips, but the wire wrapped around the iron nail is still warm. Why did the lifting electromagnet stop lifting the",
+          "9. In Fig. 4.12, in which case the LED will glow when the switch is closed?",
+          "(a) Iron nail Copper strip Lemon juice",
+          "(b) Iron nail Copper strip Pure water",
+          "10. Neha keeps the coil exactly the same as in Activity 4.4 but slides the iron nail out, leaving only the coiled wire. Will the coil still deflect the compass? If yes, will the deflection be more or less than before?",
+          "11. We have four coils, of similar shape and size, made up from iron, copper, aluminium, and nichrome as shown in Fig. 4.13.",
+          "(a) Iron",
+          "(b) Copper",
+          "(c) Aluminium",
+          "(d) Nichrome",
+          "Reflect on the questions framed by your friends and try to answer..."
+        ],
+        "concepts": [
+          "electromagnets",
+          "circuits",
+          "LEDs",
+          "compasses",
+          "materials"
+        ],
+        "context_relation": "The questions are based on the content of the textbook, specifically the topics of electromagnets, circuits, and materials.",
+        "limitations": [
+          "The questions are based on a specific textbook and cannot be generalized."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:17:57Z",
+      "effective_analysis": {
+        "visual_summary": "Questions about electromagnets and circuits, including a diagram of a circuit with a lemon and copper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8. Suppose Sumana forgets to move the switch of her lifting electromagnet model to OFF position (in introduction story). After some time, the iron nail no longer picks up the iron paper clips, but the wire wrapped around the iron nail is still warm. Why did the lifting electromagnet stop lifting the",
+          "9. In Fig. 4.12, in which case the LED will glow when the switch is closed?",
+          "(a) Iron nail Copper strip Lemon juice",
+          "(b) Iron nail Copper strip Pure water",
+          "10. Neha keeps the coil exactly the same as in Activity 4.4 but slides the iron nail out, leaving only the coiled wire. Will the coil still deflect the compass? If yes, will the deflection be more or less than before?",
+          "11. We have four coils, of similar shape and size, made up from iron, copper, aluminium, and nichrome as shown in Fig. 4.13.",
+          "(a) Iron",
+          "(b) Copper",
+          "(c) Aluminium",
+          "(d) Nichrome",
+          "Reflect on the questions framed by your friends and try to answer..."
+        ],
+        "concepts": [
+          "electromagnets",
+          "circuits",
+          "LEDs",
+          "compasses",
+          "materials"
+        ],
+        "context_relation": "The questions are based on the content of the textbook, specifically the topics of electromagnets, circuits, and materials.",
+        "limitations": [
+          "The questions are based on a specific textbook and cannot be generalized."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

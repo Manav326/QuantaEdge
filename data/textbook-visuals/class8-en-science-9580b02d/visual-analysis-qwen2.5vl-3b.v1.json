@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1121,
+    "assets_selected": 1122,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1117,
-    "assets_remaining": 1174,
+    "assets_analyzed": 1118,
+    "assets_remaining": 1173,
     "assets_completion_percent": 48.8,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1116,
+    "assets_skipped_from_checkpoint": 1117,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:09:36Z"
+      "checkpointed_at": "2026-10-20T15:12:50Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:10:21Z"
+      "checkpointed_at": "2026-10-20T15:13:35Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:10:51Z"
+      "checkpointed_at": "2026-10-20T15:14:05Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:11:40Z"
+      "checkpointed_at": "2026-10-20T15:14:54Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36448,6 +36448,52 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T15:11:50Z"
+    },
+    {
+      "asset_id": "7e7141a43d4b036ff2420ed0",
+      "asset_sha256": "998a316ddeb946ae6d30463f09f3842c36962200c9f3eb20ec7442bcc8f8d1f1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "page-0080.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about electromagnets and circuits, including a diagram of a circuit with a lemon and copper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8. Suppose Sumana forgets to move the switch of her lifting electromagnet model to OFF position (in introduction story). After some time, the iron nail no longer picks up the iron paper clips, but the wire wrapped around the iron nail is still warm. Why did the lifting electromagnet stop lifting the",
+          "9. In Fig. 4.12, in which case the LED will glow when the switch is closed?",
+          "(a) Iron nail Copper strip Lemon juice",
+          "(b) Iron nail Copper strip Pure water",
+          "10. Neha keeps the coil exactly the same as in Activity 4.4 but slides the iron nail out, leaving only the coiled wire. Will the coil still deflect the compass? If yes, will the deflection be more or less than before?",
+          "11. We have four coils, of similar shape and size, made up from iron, copper, aluminium, and nichrome as shown in Fig. 4.13.",
+          "(a) Iron",
+          "(b) Copper",
+          "(c) Aluminium",
+          "(d) Nichrome",
+          "Reflect on the questions framed by your friends and try to answer..."
+        ],
+        "concepts": [
+          "electromagnets",
+          "circuits",
+          "LEDs",
+          "compasses",
+          "materials"
+        ],
+        "context_relation": "The questions are based on the content of the textbook, specifically the topics of electromagnets, circuits, and materials.",
+        "limitations": [
+          "The questions are based on a specific textbook and cannot be generalized."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:17:57Z"
     }
   ]
 }
