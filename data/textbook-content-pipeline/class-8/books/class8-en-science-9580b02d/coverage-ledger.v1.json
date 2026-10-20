@@ -40893,9 +40893,10 @@
           "Incandescent lamp",
           "Electric current in household appliances"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, emphasizing the importance of safety precautions and the scientific reasoning behind it.",
+        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
         "limitations": [
-          "The page does not provide specific instructions for the activity described, only general guidelines."
+          "The page does not provide specific instructions for the experiment described, only general guidelines.",
+          "The page does not include any visual aids or diagrams to support the explanation."
         ]
       },
       "chapter_id": null,

@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:05:22Z"
+      "checkpointed_at": "2026-10-20T22:17:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:06:12Z"
+      "checkpointed_at": "2026-10-20T22:18:27Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:06:51Z"
+      "checkpointed_at": "2026-10-20T22:19:05Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34424,16 +34424,17 @@
           "Incandescent lamp",
           "Electric current in household appliances"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, emphasizing the importance of safety precautions and the scientific reasoning behind it.",
+        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
         "limitations": [
-          "The page does not provide specific instructions for the activity described, only general guidelines."
+          "The page does not provide specific instructions for the experiment described, only general guidelines.",
+          "The page does not include any visual aids or diagrams to support the explanation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:16:25Z"
+      "checkpointed_at": "2026-10-20T22:20:06Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34785,9 +34786,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
