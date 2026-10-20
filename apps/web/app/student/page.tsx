@@ -89,7 +89,10 @@ export default function StudentHome(){
           setCourses(rows);
           setCourseCatalogReady(true);
           if(ownedRows.length===0) {
-            router.replace('/student/marketplace');
+            setActiveCourseId(null);
+            setCourseProgress({});
+            setCourseError('');
+            try { window.localStorage.removeItem('qe:student:activeCourseId'); } catch {}
             return;
           }
           let savedCourseId=0;
