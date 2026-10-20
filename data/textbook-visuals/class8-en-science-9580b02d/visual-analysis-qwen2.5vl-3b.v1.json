@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1074,
+    "assets_selected": 1075,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1070,
-    "assets_remaining": 1221,
+    "assets_analyzed": 1071,
+    "assets_remaining": 1220,
     "assets_completion_percent": 46.7,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1069,
+    "assets_skipped_from_checkpoint": 1070,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:39:08Z"
+      "checkpointed_at": "2026-10-20T05:42:14Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:39:41Z"
+      "checkpointed_at": "2026-10-20T05:42:48Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:40:06Z"
+      "checkpointed_at": "2026-10-20T05:43:11Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:40:47Z"
+      "checkpointed_at": "2026-10-20T05:43:47Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34668,6 +34668,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:41:27Z"
+    },
+    {
+      "asset_id": "b96e7332003331cbdd5bc53a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing various household electric heating appliances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(a)                                 (b)                                (c)",
+          "Fig. 4.6: Simple household electric heating appliances (a) Electric room heater;",
+          "(b) Electric stove; (c) Electric kettle; (d) Electric iron; (e) Water heating immersion rod; (f) Hair dryer",
+          "The heating effect of electric"
+        ],
+        "concepts": [
+          "electric heating appliances",
+          "electric room heater",
+          "electric stove",
+          "electric kettle",
+          "electric iron",
+          "water heating immersion rod",
+          "hair dryer",
+          "heating effect of electric"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show any specific labels or quantities.",
+          "The image does not depict any specific relationships or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:44:04Z"
     }
   ]
 }

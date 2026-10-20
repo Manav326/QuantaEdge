@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1091,
-    "successful_visual_analyses": 1074,
-    "missing_visual_analyses": 1200,
+    "raw_analysis_result_rows": 1092,
+    "successful_visual_analyses": 1075,
+    "missing_visual_analyses": 1199,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1217,
+    "unresolved_count": 1216,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41143,9 +41143,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing various household electric heating appliances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(a)                                 (b)                                (c)",
+          "Fig. 4.6: Simple household electric heating appliances (a) Electric room heater;",
+          "(b) Electric stove; (c) Electric kettle; (d) Electric iron; (e) Water heating immersion rod; (f) Hair dryer",
+          "The heating effect of electric"
+        ],
+        "concepts": [
+          "electric heating appliances",
+          "electric room heater",
+          "electric stove",
+          "electric kettle",
+          "electric iron",
+          "water heating immersion rod",
+          "hair dryer",
+          "heating effect of electric"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show any specific labels or quantities.",
+          "The image does not depict any specific relationships or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
