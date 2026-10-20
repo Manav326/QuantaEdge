@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1009,
+    "assets_selected": 1011,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1006,
-    "assets_remaining": 1285,
-    "assets_completion_percent": 43.9,
+    "assets_analyzed": 1008,
+    "assets_remaining": 1283,
+    "assets_completion_percent": 44.0,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1004,
+    "assets_skipped_from_checkpoint": 1006,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:38:44Z"
+      "checkpointed_at": "2026-10-20T03:42:25Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:39:16Z"
+      "checkpointed_at": "2026-10-20T03:42:59Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:39:38Z"
+      "checkpointed_at": "2026-10-20T03:43:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32244,6 +32244,68 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:41:40Z"
+    },
+    {
+      "asset_id": "f1f0848d728016cf9b951499",
+      "asset_sha256": "3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf4ff399ba1e8098e044dc43875f59e9c54f5f89f2db1d245c82d04c050f3c49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of five students standing in a line, each holding different items such as a notebook, a pen, a pencil, and a walking stick.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of health and hygiene, as it shows students maintaining a health diary.",
+        "limitations": [
+          "The image does not provide specific details about the health diary or the students' activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:44:00Z"
+    },
+    {
+      "asset_id": "adeb2f1fb630dbe6e1063a51",
+      "asset_sha256": "f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf4ff399ba1e8098e044dc43875f59e9c54f5f89f2db1d245c82d04c050f3c49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "health diary",
+          "pathogen",
+          "immune response",
+          "Indian scientists"
+        ],
+        "context_relation": "The image is related to the text about health and the immune response.",
+        "limitations": [
+          "The image does not provide specific details about the immune response or the health diary.",
+          "The text mentions specific Indian scientists, but the image does not show them."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:44:39Z"
     }
   ]
 }
