@@ -3647,5 +3647,6 @@
   "student.empty.diagnostic.title": "Enrolled course से शुरू करें",
   "student.empty.diagnostic.message": "आपके account में enrolled course उपलब्ध होने पर diagnostic यहाँ दिखाई देगा।",
   "student.empty.lesson.title": "यह lesson खोलने के लिए course चुनें",
-  "student.empty.lesson.message": "पहले course में enrol करें, फिर Learning catalogue से इस lesson को खोलें।"
+  "student.empty.lesson.message": "पहले course में enrol करें, फिर Learning catalogue से इस lesson को खोलें।",
+  "people.navigation.financeBilling": "Finance & Billing"
 }

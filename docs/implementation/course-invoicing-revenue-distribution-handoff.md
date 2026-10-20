@@ -232,3 +232,14 @@ Verification at this checkpoint:
 - GitHub Actions run #4863 for `989eaa3801df8e269148555a72777db7bb1b5db3` was pending when checked; check Actions again after this checkpoint.
 - Unit tests have been committed but not independently executed in this chat environment.
 - Still required next: tax calculation with discount-inclusive/exclusive prices; HRMS-authorized APIs and UI for legal entity/tax/policy/template configuration; live invoice preview; then payment-to-invoice/allocation integration and secure user/parent downloads.
+
+
+### 2026-10-20 — HRMS configuration and live-design-preview checkpoint
+
+- Added `CourseTaxCalculator` and unit tests. It calculates from an approved treatment/rate input, applies an eligible up-front discount before the tax base, supports inclusive/exclusive pricing and rejects a mismatch between computed customer payable and the server-verified paid amount. It does not choose a legal rate or determine exemption eligibility.
+- Added `PlatformFinanceController` under `/api/v1/hrms/platform/finance`; every route requires `QE_PLATFORM_OWNER` in HRMS. It covers legal-entity drafts/activation, GST registration review, offer tax-profile draft/submit/approval, percentage/flat policy drafts/recipient management/submission/approval, template draft/version/publish, read-only document listing/detail and overview.
+- Added a People Operations Finance & Billing workspace with legal entity/GST forms, tax-profile review, mixed percentage/flat revenue-share policy editor and a premium live invoice-template preview. The preview has an explicit sample/not-issued watermark and does not fabricate a GSTIN, tax rate or real invoice number. Published designs use a versioned schema and can start a new draft version.
+- Added navigation to Finance & Billing under the HRMS platform-owner section.
+- Added follow-up migration V150 for the tax-profile version uniqueness and to make platform-level audit actions representable while requiring an actor on every financial audit record.
+- Still not complete: real Razorpay-to-invoice/allocation orchestration, invoice PDF renderer/private download service, student/parent Orders & Payments screens, coupon integration audit, actual payout integration, provider/e-invoice integration, and runtime/integration verification.
+- CI status for the exact commit must be checked after this update; earlier commits triggered independent runs and some were cancelled as newer main commits were pushed. Do not treat cancellation as a product test failure or as successful verification.

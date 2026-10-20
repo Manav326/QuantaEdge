@@ -1,0 +1,712 @@
+package com.quantaedge.api;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+
+/**
+ * HRMS-owned financial configuration. This controller deliberately does not issue invoices,
+ * create payout instructions, or infer statutory tax treatment from user-entered data.
+ */
+@RestController
+@RequestMapping("/api/v1/hrms/platform/finance")
+public class PlatformFinanceController {
+  private final JdbcTemplate jdbc;
+  private final AuthorizationService authorization;
+  private final ObjectMapper objectMapper;
+
+  public PlatformFinanceController(JdbcTemplate jdbc, AuthorizationService authorization, ObjectMapper objectMapper) {
+    this.jdbc=jdbc;
+    this.authorization=authorization;
+    this.objectMapper=objectMapper;
+  }
+
+  @GetMapping("/overview")
+  public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    Map<String,Object> r=new LinkedHashMap<>();
+    r.put("legalEntities",count("select count(*) from billing_legal_entity"));
+    r.put("activeTaxProfiles",count("select count(*) from course_tax_profile where status='APPROVED'"));
+    r.put("pendingTaxProfiles",count("select count(*) from course_tax_profile where status='PENDING_APPROVAL'"));
+    r.put("approvedSharePolicies",count("select count(*) from revenue_share_policy where status='APPROVED'"));
+    r.put("pendingSharePolicies",count("select count(*) from revenue_share_policy where status='PENDING_APPROVAL'"));
+    r.put("issuedDocuments",count("select count(*) from fiscal_document"));
+    r.put("allocatedPaise",jdbc.queryForObject("""
+      select coalesce(sum(total_amount),0) from (
+        select course_payment_order_id,max(total_institution_allocated_paise) as total_amount
+        from revenue_share_allocation group by course_payment_order_id
+      ) allocated
+      """,Long.class));
+    return r;
+  }
+
+  @GetMapping("/catalog")
+  public Map<String,Object> catalog(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    List<Map<String,Object>> institutions=jdbc.queryForList("""
+      select id,tenant_code,display_name,status from institution_tenant
+      where status in ('ACTIVE','SUSPENDED') order by lower(display_name),id
+      """);
+    List<Map<String,Object>> offers=jdbc.queryForList("""
+      select o.id as offer_id,o.public_id,o.institution_id,t.display_name as institution_name,
+        p.code as course_code,coalesce(nullif(o.title_override,''),p.display_name) as course_name,
+        o.price_paise,o.currency,o.status as offer_status,
+        le.id as legal_entity_id,le.legal_name as legal_seller_name,
+        tp.id as latest_tax_profile_id,tp.status as tax_profile_status,tp.tax_treatment,
+        (select rp.status from revenue_share_policy rp where rp.institution_offer_id=o.id
+          order by rp.policy_version desc limit 1) as latest_share_policy_status
+      from institution_marketplace_offer o
+      join institution_tenant t on t.id=o.institution_id
+      join curriculum_program p on p.id=o.course_id
+      left join lateral (
+        select tax.id,tax.status,tax.tax_treatment,tax.legal_entity_id
+        from course_tax_profile tax where tax.institution_offer_id=o.id
+        order by tax.version desc limit 1
+      ) tp on true
+      left join billing_legal_entity le on le.id=tp.legal_entity_id
+      where o.status<>'ARCHIVED' order by t.display_name,p.display_name,o.id
+      """);
+    List<Map<String,Object>> registrations=jdbc.queryForList("""
+      select r.id,r.legal_entity_id,r.gstin,r.legal_name_snapshot,r.state_code,r.registration_type,
+        r.status,r.effective_from,r.effective_until,e.legal_name as legal_entity_name
+      from billing_gst_registration r join billing_legal_entity e on e.id=r.legal_entity_id
+      order by e.legal_name,r.created_at desc,r.id desc
+      """);
+    return Map.of("institutions",institutions,"legalEntities",legalEntityRows(),
+        "offers",offers,"registrations",registrations);
+  }
+
+  @PostMapping("/legal-entities")
+  @Transactional
+  public Map<String,Object> createLegalEntity(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    String kind=requiredText(body,"entityKind").toUpperCase(Locale.ROOT);
+    if(!List.of("PLATFORM","INSTITUTION").contains(kind)) throw bad("Choose PLATFORM or INSTITUTION as the legal-entity scope.");
+    Long institutionId=optionalLong(body.get("institutionId"));
+    if("PLATFORM".equals(kind) && institutionId!=null) throw bad("A PLATFORM legal entity must not be attached to a tenant institution.");
+    if("INSTITUTION".equals(kind) && (institutionId==null || !exists(
+        "select exists(select 1 from institution_tenant where id=?)",institutionId))) {
+      throw bad("Choose an existing institution for this legal entity.");
+    }
+    String name=requiredText(body,"legalName");
+    long id=jdbc.queryForObject("""
+      insert into billing_legal_entity(entity_kind,institution_id,legal_name,trade_name,contact_email,contact_phone,
+        registered_address,status,created_by_staff_id)
+      values(?,?,?,?,?,?,?::jsonb,'DRAFT',?) returning id
+      """,Long.class,kind,institutionId,name,optionalText(body.get("tradeName")),
+        optionalText(body.get("contactEmail")),optionalText(body.get("contactPhone")),
+        jsonObject(body.get("registeredAddress")),context.staffId());
+    audit(id,institutionId,context,"LEGAL_ENTITY_CREATED","BILLING_LEGAL_ENTITY",Long.toString(id),
+        Map.of("entityKind",kind,"legalName",name));
+    return Map.of("id",id,"status","DRAFT","message","Draft saved. Activate only after the legal identity and tax details are reviewed.");
+  }
+
+  @PostMapping("/legal-entities/{legalEntityId}/activate")
+  @Transactional
+  public Map<String,Object> activateLegalEntity(@PathVariable long legalEntityId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> e=one("select id,entity_kind,institution_id,status,legal_name from billing_legal_entity where id=?",legalEntityId);
+    if(e.isEmpty()) throw notFound("Legal entity not found.");
+    Long institutionId=optionalLong(e.get("institution_id"));
+    if("INSTITUTION".equals(String.valueOf(e.get("entity_kind"))) &&
+        !exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",institutionId)) {
+      throw bad("The institution must be active before its legal entity can be activated.");
+    }
+    jdbc.update("update billing_legal_entity set status='ACTIVE',updated_by_staff_id=?,updated_at=now() where id=?",
+        context.staffId(),legalEntityId);
+    audit(legalEntityId,institutionId,context,"LEGAL_ENTITY_ACTIVATED","BILLING_LEGAL_ENTITY",
+        Long.toString(legalEntityId),Map.of("legalName",String.valueOf(e.get("legal_name"))));
+    return Map.of("id",legalEntityId,"status","ACTIVE");
+  }
+
+  @PostMapping("/legal-entities/{legalEntityId}/gst-registrations")
+  @Transactional
+  public Map<String,Object> addGstRegistration(@PathVariable long legalEntityId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> e=one("select id,institution_id from billing_legal_entity where id=?",legalEntityId);
+    if(e.isEmpty()) throw notFound("Legal entity not found.");
+    String gstin=requiredText(body,"gstin").toUpperCase(Locale.ROOT);
+    if(!gstin.matches("[0-9A-Z]{15}")) throw bad("Enter a GSTIN in the expected 15-character format.");
+    String stateCode=requiredText(body,"stateCode");
+    if(!stateCode.matches("[0-9]{2}")) throw bad("GST state code must contain two digits.");
+    java.time.LocalDate start=localDate(body,"effectiveFrom");
+    java.time.LocalDate end=optionalLocalDate(body.get("effectiveUntil"));
+    if(end!=null && end.isBefore(start)) throw bad("GST registration end date cannot precede its start date.");
+    String regType=optionalText(body.get("registrationType"));
+    if(regType==null) regType="REGULAR";
+    regType=regType.toUpperCase(Locale.ROOT);
+    if(!List.of("REGULAR","COMPOSITION","SEZ","OTHER").contains(regType)) throw bad("Unsupported GST registration type.");
+    long id=jdbc.queryForObject("""
+      insert into billing_gst_registration(legal_entity_id,gstin,legal_name_snapshot,state_code,registered_address,
+        registration_type,status,effective_from,effective_until,created_by_staff_id)
+      values(?,?,?,?,?::jsonb,?,'PENDING',?,?,?) returning id
+      """,Long.class,legalEntityId,gstin,requiredText(body,"legalName"),stateCode,jsonObject(body.get("registeredAddress")),
+        regType,start,end,context.staffId());
+    audit(legalEntityId,optionalLong(e.get("institution_id")),context,"GST_REGISTRATION_CREATED",
+        "BILLING_GST_REGISTRATION",Long.toString(id),Map.of("gstinSuffix",gstin.substring(11),"status","PENDING"));
+    return Map.of("id",id,"status","PENDING","message","Registration saved pending HRMS verification.");
+  }
+
+  @PostMapping("/gst-registrations/{registrationId}/verify")
+  @Transactional
+  public Map<String,Object> verifyGstRegistration(@PathVariable long registrationId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select r.legal_entity_id,r.gstin,e.institution_id from billing_gst_registration r
+      join billing_legal_entity e on e.id=r.legal_entity_id where r.id=?
+      """,registrationId);
+    if(row.isEmpty()) throw notFound("GST registration not found.");
+    int changed=jdbc.update("""
+      update billing_gst_registration set status='ACTIVE',verified_by_staff_id=?,verified_at=now()
+      where id=? and status='PENDING'
+      """,context.staffId(),registrationId);
+    if(changed!=1) throw bad("Only a pending GST registration can be marked verified.");
+    audit(((Number)row.get("legal_entity_id")).longValue(),optionalLong(row.get("institution_id")),context,
+        "GST_REGISTRATION_VERIFIED","BILLING_GST_REGISTRATION",Long.toString(registrationId),
+        Map.of("gstinSuffix",String.valueOf(row.get("gstin")).substring(11),"verificationMethod","HRMS_REVIEW"));
+    return Map.of("id",registrationId,"status","ACTIVE");
+  }
+
+  @GetMapping("/offers/{offerId}/tax-profiles")
+  public List<Map<String,Object>> taxProfiles(@PathVariable long offerId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    return jdbc.queryForList("""
+      select id,institution_offer_id,legal_entity_id,version,service_classification_code,tax_treatment,
+        gst_rate_basis_points,cess_rate_basis_points,price_includes_tax,place_of_supply_rule,
+        rounding_rule,tax_components::text as tax_components_json,status,effective_from,effective_until,approved_at
+      from course_tax_profile where institution_offer_id=? order by version desc
+      """,offerId);
+  }
+
+  @PostMapping("/offers/{offerId}/tax-profiles")
+  @Transactional
+  public Map<String,Object> createTaxProfile(@PathVariable long offerId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    long institutionId=offerInstitution(offerId);
+    long entityId=requiredLong(body,"legalEntityId");
+    if(!exists("select exists(select 1 from billing_legal_entity where id=?)",entityId)) throw bad("Select an existing legal seller.");
+    String treatment=requiredText(body,"taxTreatment").toUpperCase(Locale.ROOT);
+    if(!List.of("TAXABLE","EXEMPT","NIL_RATED","NON_GST","COMPOSITION").contains(treatment)) throw bad("Unsupported tax treatment.");
+    int gst=integer(body,"gstRateBasisPoints",0),cess=integer(body,"cessRateBasisPoints",0);
+    if(gst<0||gst>10_000||cess<0||cess>10_000) throw bad("Rates must be basis points between 0 and 10000.");
+    if("TAXABLE".equals(treatment) && gst==0) throw bad("A taxable profile needs a positive, CA-approved GST rate.");
+    if(!"TAXABLE".equals(treatment) && (gst!=0||cess!=0)) throw bad("Non-taxable treatments cannot carry GST or cess rates.");
+    String place=requiredText(body,"placeOfSupplyRule").toUpperCase(Locale.ROOT);
+    if(!List.of("RECIPIENT_LOCATION","SUPPLIER_LOCATION","CA_APPROVED_CUSTOM").contains(place)) throw bad("Unsupported place-of-supply rule.");
+    Instant start=instant(body,"effectiveFrom"),end=optionalInstant(body.get("effectiveUntil"));
+    if(end!=null&&!end.isAfter(start)) throw bad("Tax profile end must be after its start.");
+    Integer version=jdbc.queryForObject("select coalesce(max(version),0)+1 from course_tax_profile where institution_offer_id=?",Integer.class,offerId);
+    long id=jdbc.queryForObject("""
+      insert into course_tax_profile(institution_offer_id,legal_entity_id,version,service_classification_code,
+        tax_treatment,gst_rate_basis_points,cess_rate_basis_points,price_includes_tax,place_of_supply_rule,
+        tax_components,status,effective_from,effective_until,created_by_staff_id)
+      values(?,?,?,?,?,?,?,?,?,?::jsonb,'DRAFT',?,?,?) returning id
+      """,Long.class,offerId,entityId,version,optionalText(body.get("serviceClassificationCode")),
+        treatment,gst,cess,bool(body,"priceIncludesTax",true),place,jsonObject(body.get("taxComponents")),
+        start,end,context.staffId());
+    audit(entityId,institutionId,context,"TAX_PROFILE_CREATED","COURSE_TAX_PROFILE",Long.toString(id),
+        Map.of("offerId",offerId,"version",version,"treatment",treatment));
+    return Map.of("id",id,"version",version,"status","DRAFT");
+  }
+
+  @PostMapping("/tax-profiles/{profileId}/submit")
+  @Transactional
+  public Map<String,Object> submitTaxProfile(@PathVariable long profileId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("select institution_offer_id,legal_entity_id,status from course_tax_profile where id=?",profileId);
+    if(row.isEmpty()) throw notFound("Tax profile not found.");
+    int n=jdbc.update("update course_tax_profile set status='PENDING_APPROVAL' where id=? and status='DRAFT'",profileId);
+    if(n!=1) throw bad("Only a draft tax profile can be submitted.");
+    long offerId=((Number)row.get("institution_offer_id")).longValue();
+    audit(((Number)row.get("legal_entity_id")).longValue(),offerInstitution(offerId),context,
+        "TAX_PROFILE_SUBMITTED","COURSE_TAX_PROFILE",Long.toString(profileId),Map.of());
+    return Map.of("id",profileId,"status","PENDING_APPROVAL");
+  }
+
+  @PostMapping("/tax-profiles/{profileId}/approve")
+  @Transactional
+  public Map<String,Object> approveTaxProfile(@PathVariable long profileId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select id,institution_offer_id,legal_entity_id,tax_treatment,effective_from,effective_until,status
+      from course_tax_profile where id=?
+      """,profileId);
+    if(row.isEmpty()) throw notFound("Tax profile not found.");
+    if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status")))) throw bad("Submit this tax profile before approval.");
+    long offerId=((Number)row.get("institution_offer_id")).longValue(),entityId=((Number)row.get("legal_entity_id")).longValue();
+    Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
+    if(!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",entityId)) {
+      throw bad("Activate the legal seller before approving its tax profile.");
+    }
+    boolean overlap=Boolean.TRUE.equals(jdbc.queryForObject("""
+      select exists(select 1 from course_tax_profile where institution_offer_id=? and status='APPROVED' and id<>?
+        and (?::timestamptz is null or effective_from < ?::timestamptz)
+        and (effective_until is null or effective_until > ?::timestamptz))
+      """,Boolean.class,offerId,profileId,end,end,start));
+    if(overlap) throw bad("Another approved tax profile overlaps this effective period.");
+    if("TAXABLE".equals(String.valueOf(row.get("tax_treatment")))) {
+      java.time.LocalDate date=java.time.LocalDate.ofInstant(start,java.time.ZoneId.of("Asia/Kolkata"));
+      if(!exists("""
+        select exists(select 1 from billing_gst_registration where legal_entity_id=? and status='ACTIVE'
+          and effective_from<=? and (effective_until is null or effective_until>=?))
+        """,entityId,date,date)) {
+        throw bad("Taxable supplies require an active HRMS-verified GST registration covering the effective date.");
+      }
+    }
+    jdbc.update("""
+      update course_tax_profile set status='APPROVED',approved_by_staff_id=?,approved_at=now()
+      where id=? and status='PENDING_APPROVAL'
+      """,context.staffId(),profileId);
+    audit(entityId,offerInstitution(offerId),context,"TAX_PROFILE_APPROVED","COURSE_TAX_PROFILE",
+        Long.toString(profileId),Map.of("offerId",offerId,"effectiveFrom",start.toString()));
+    return Map.of("id",profileId,"status","APPROVED");
+  }
+
+  @GetMapping("/revenue-share/policies")
+  public List<Map<String,Object>> policies(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    return jdbc.queryForList("""
+      select p.id,p.institution_offer_id,p.policy_version,p.currency,p.status,p.effective_from,p.effective_until,
+        p.contractual_reference,p.notes,p.submitted_at,p.approved_at,o.institution_id,
+        t.display_name as institution_name,coalesce(nullif(o.title_override,''),course.display_name) as course_name,
+        (select count(*) from revenue_share_policy_recipient r where r.policy_id=p.id) as recipient_count
+      from revenue_share_policy p join institution_marketplace_offer o on o.id=p.institution_offer_id
+      join institution_tenant t on t.id=o.institution_id join curriculum_program course on course.id=o.course_id
+      order by p.created_at desc,p.id desc
+      """);
+  }
+
+  @GetMapping("/revenue-share/policies/{policyId}")
+  public Map<String,Object> policyDetail(@PathVariable long policyId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    Map<String,Object> policy=one("""
+      select p.*,o.institution_id,t.display_name as institution_name,
+        coalesce(nullif(o.title_override,''),course.display_name) as course_name
+      from revenue_share_policy p join institution_marketplace_offer o on o.id=p.institution_offer_id
+      join institution_tenant t on t.id=o.institution_id join curriculum_program course on course.id=o.course_id
+      where p.id=?
+      """,policyId);
+    if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
+    policy.put("recipients",jdbc.queryForList("""
+      select r.id,r.institution_id,t.display_name as institution_name,r.calculation_type,
+        r.percentage_basis_points,r.flat_amount_paise
+      from revenue_share_policy_recipient r join institution_tenant t on t.id=r.institution_id
+      where r.policy_id=? order by t.display_name,r.id
+      """,policyId));
+    return policy;
+  }
+
+  @PostMapping("/revenue-share/offers/{offerId}/policies")
+  @Transactional
+  public Map<String,Object> createPolicy(@PathVariable long offerId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    long institutionId=offerInstitution(offerId);
+    String currency=optionalText(body.get("currency"))==null?"INR":requiredText(body,"currency").toUpperCase(Locale.ROOT);
+    if(!currency.matches("[A-Z]{3}")) throw bad("Currency must be a three-letter ISO code.");
+    Instant start=body.get("effectiveFrom")==null?Instant.now():instant(body,"effectiveFrom");
+    Instant end=optionalInstant(body.get("effectiveUntil"));
+    if(end!=null&&!end.isAfter(start)) throw bad("Policy end must be after its start.");
+    Integer version=jdbc.queryForObject("select coalesce(max(policy_version),0)+1 from revenue_share_policy where institution_offer_id=?",Integer.class,offerId);
+    long id=jdbc.queryForObject("""
+      insert into revenue_share_policy(institution_offer_id,policy_version,currency,status,effective_from,
+        effective_until,contractual_reference,notes,created_by_staff_id)
+      values(?,?,?,'DRAFT',?,?,?,?,?) returning id
+      """,Long.class,offerId,version,currency,start,end,optionalText(body.get("contractualReference")),
+        optionalText(body.get("notes")),context.staffId());
+    audit(null,institutionId,context,"REVENUE_SHARE_POLICY_CREATED","REVENUE_SHARE_POLICY",Long.toString(id),
+        Map.of("offerId",offerId,"version",version));
+    return Map.of("id",id,"policyVersion",version,"status","DRAFT");
+  }
+
+  @PutMapping("/revenue-share/policies/{policyId}/recipients")
+  @Transactional
+  public Map<String,Object> saveRecipients(@PathVariable long policyId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> policy=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
+    if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
+    if(!"DRAFT".equals(String.valueOf(policy.get("status")))) throw bad("Only draft policies can be edited.");
+    if(!(body.get("recipients") instanceof List<?> raw)) throw bad("Recipients must be a list.");
+    List<Map<String,Object>> normalized=new ArrayList<>();
+    List<RevenueDistributionCalculator.Share> validation=new ArrayList<>();
+    for(Object item:raw) {
+      if(!(item instanceof Map<?,?> map)) throw bad("Each recipient must be an object.");
+      long institutionId=requiredLong(map.get("institutionId"),"institutionId");
+      if(!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",institutionId)) {
+        throw bad("Every revenue recipient must be an active institution.");
+      }
+      String type=requiredText(map.get("calculationType"),"calculationType").toUpperCase(Locale.ROOT);
+      if("PERCENTAGE".equals(type)) {
+        int bps=Math.toIntExact(requiredLong(map.get("percentageBasisPoints"),"percentageBasisPoints"));
+        validation.add(RevenueDistributionCalculator.Share.percentage(institutionId,bps));
+        normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"percentageBasisPoints",bps));
+      } else if("FLAT".equals(type)) {
+        long paise=requiredLong(map.get("flatAmountPaise"),"flatAmountPaise");
+        validation.add(RevenueDistributionCalculator.Share.flat(institutionId,paise));
+        normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"flatAmountPaise",paise));
+      } else throw bad("Recipient calculation type must be PERCENTAGE or FLAT.");
+    }
+    long sourceInstitution=offerInstitution(((Number)policy.get("institution_offer_id")).longValue());
+    jdbc.update("delete from revenue_share_policy_recipient where policy_id=?",policyId);
+    for(Map<String,Object> r:normalized) {
+      jdbc.update("""
+        insert into revenue_share_policy_recipient(policy_id,institution_id,calculation_type,percentage_basis_points,flat_amount_paise)
+        values(?,?,?,?,?)
+        """,policyId,r.get("institutionId"),r.get("calculationType"),r.get("percentageBasisPoints"),r.get("flatAmountPaise"));
+    }
+    audit(null,sourceInstitution,context,"REVENUE_SHARE_RECIPIENTS_SAVED","REVENUE_SHARE_POLICY",
+        Long.toString(policyId),Map.of("recipientCount",normalized.size()));
+    return Map.of("policyId",policyId,"recipientCount",normalized.size(),"status","DRAFT");
+  }
+
+  @PostMapping("/revenue-share/policies/{policyId}/submit")
+  @Transactional
+  public Map<String,Object> submitPolicy(@PathVariable long policyId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
+    if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
+    if(count("select count(*) from revenue_share_policy_recipient where policy_id=?",policyId)<1) {
+      throw bad("Add at least one institution recipient before submitting this policy.");
+    }
+    int n=jdbc.update("""
+      update revenue_share_policy set status='PENDING_APPROVAL',submitted_by_staff_id=?,submitted_at=now()
+      where id=? and status='DRAFT'
+      """,context.staffId(),policyId);
+    if(n!=1) throw bad("Only a draft policy can be submitted.");
+    audit(null,offerInstitution(((Number)row.get("institution_offer_id")).longValue()),context,
+        "REVENUE_SHARE_POLICY_SUBMITTED","REVENUE_SHARE_POLICY",Long.toString(policyId),Map.of());
+    return Map.of("id",policyId,"status","PENDING_APPROVAL");
+  }
+
+  @PostMapping("/revenue-share/policies/{policyId}/approve")
+  @Transactional
+  public Map<String,Object> approvePolicy(@PathVariable long policyId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select institution_offer_id,status,effective_from,effective_until,policy_version
+      from revenue_share_policy where id=?
+      """,policyId);
+    if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
+    if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status")))) throw bad("Submit the policy before approval.");
+    long offerId=((Number)row.get("institution_offer_id")).longValue();
+    long sourceInstitution=offerInstitution(offerId);
+    Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
+    boolean sellerReady=exists("""
+      select exists(select 1 from institution_marketplace_offer o
+        join course_tax_profile tax on tax.institution_offer_id=o.id and tax.status='APPROVED'
+          and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
+        join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
+        where o.id=? and o.status in ('APPROVED','PUBLISHED'))
+      """,start,start,offerId);
+    if(!sellerReady) throw bad("Approval needs an active legal seller and an approved tax profile effective for this sale.");
+    Map<String,Object> tax=one("""
+      select tax.legal_entity_id,tax.tax_treatment from course_tax_profile tax
+      where tax.institution_offer_id=? and tax.status='APPROVED'
+        and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
+      order by tax.version desc limit 1
+      """,offerId,start,start);
+    if("TAXABLE".equals(String.valueOf(tax.get("tax_treatment")))) {
+      java.time.LocalDate date=java.time.LocalDate.ofInstant(start,java.time.ZoneId.of("Asia/Kolkata"));
+      if(!exists("""
+        select exists(select 1 from billing_gst_registration where legal_entity_id=? and status='ACTIVE'
+          and effective_from<=? and (effective_until is null or effective_until>=?))
+        """,((Number)tax.get("legal_entity_id")).longValue(),date,date)) {
+        throw bad("Taxable sales need an active, HRMS-verified GST registration covering the policy start date.");
+      }
+    }
+    boolean overlap=Boolean.TRUE.equals(jdbc.queryForObject("""
+      select exists(select 1 from revenue_share_policy where institution_offer_id=? and status='APPROVED' and id<>?
+        and (?::timestamptz is null or effective_from < ?::timestamptz)
+        and (effective_until is null or effective_until > ?::timestamptz))
+      """,Boolean.class,offerId,policyId,end,end,start));
+    if(overlap) throw bad("Another approved revenue-share policy overlaps this effective period.");
+    int n=jdbc.update("""
+      update revenue_share_policy set status='APPROVED',approved_by_staff_id=?,approved_at=now()
+      where id=? and status='PENDING_APPROVAL'
+      """,context.staffId(),policyId);
+    if(n!=1) throw bad("Policy changed during approval. Reload and try again.");
+    audit(null,sourceInstitution,context,"REVENUE_SHARE_POLICY_APPROVED","REVENUE_SHARE_POLICY",
+        Long.toString(policyId),Map.of("offerId",offerId,"policyVersion",row.get("policy_version")));
+    return Map.of("id",policyId,"status","APPROVED");
+  }
+
+  @GetMapping("/invoice-templates")
+  public List<Map<String,Object>> templates(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    return jdbc.queryForList("""
+      select t.id,t.scope,t.legal_entity_id,t.internal_name,v.id as template_version_id,
+        v.version_no,v.status as version_status,v.design_definition::text as design_definition_json,
+        v.preview_asset_key,v.published_at
+      from invoice_template t left join lateral (
+        select iv.id,iv.version_no,iv.status,iv.design_definition,iv.preview_asset_key,iv.published_at
+        from invoice_template_version iv where iv.template_id=t.id order by iv.version_no desc limit 1
+      ) v on true order by t.created_at desc,t.id desc
+      """);
+  }
+
+  @PostMapping("/invoice-templates")
+  @Transactional
+  public Map<String,Object> createTemplate(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    String scope=requiredText(body,"scope").toUpperCase(Locale.ROOT);
+    if(!List.of("PLATFORM","SELLER").contains(scope)) throw bad("Template scope must be PLATFORM or SELLER.");
+    Long entityId=optionalLong(body.get("legalEntityId"));
+    if("SELLER".equals(scope) && (entityId==null || !exists(
+        "select exists(select 1 from billing_legal_entity where id=?)",entityId))) {
+      throw bad("Choose a legal seller for a seller-specific invoice template.");
+    }
+    if("PLATFORM".equals(scope) && entityId!=null) throw bad("A PLATFORM template must not be pinned to a seller entity.");
+    Map<String,Object> design=normalizeDesign(body.get("designDefinition"));
+    String name=optionalText(body.get("internalName"));
+    if(name==null) name="QuantaEdge Course Invoice";
+    long templateId=jdbc.queryForObject("""
+      insert into invoice_template(scope,legal_entity_id,internal_name,created_by_staff_id)
+      values(?,?,?,?) returning id
+      """,Long.class,scope,entityId,name,context.staffId());
+    long versionId=jdbc.queryForObject("""
+      insert into invoice_template_version(template_id,version_no,status,design_definition,created_by_staff_id)
+      values(?,1,'DRAFT',?::jsonb,?) returning id
+      """,Long.class,templateId,json(design),context.staffId());
+    audit(entityId,null,context,"INVOICE_TEMPLATE_CREATED","INVOICE_TEMPLATE",Long.toString(templateId),
+        Map.of("scope",scope,"version",1));
+    return Map.of("id",templateId,"versionId",versionId,"versionNo",1,"status","DRAFT","designDefinition",design);
+  }
+
+  @PostMapping("/invoice-templates/{templateId}/versions")
+  @Transactional
+  public Map<String,Object> createTemplateVersion(@PathVariable long templateId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> template=one("select scope,legal_entity_id,internal_name from invoice_template where id=?",templateId);
+    if(template.isEmpty()) throw notFound("Invoice template not found.");
+    Map<String,Object> latest=one("""
+      select design_definition::text as definition from invoice_template_version
+      where template_id=? order by version_no desc limit 1
+      """,templateId);
+    if(latest.isEmpty()) throw bad("Template has no saved design version to copy.");
+    String definition=String.valueOf(latest.get("definition"));
+    Integer version=jdbc.queryForObject("select coalesce(max(version_no),0)+1 from invoice_template_version where template_id=?",Integer.class,templateId);
+    long versionId=jdbc.queryForObject("""
+      insert into invoice_template_version(template_id,version_no,status,design_definition,created_by_staff_id)
+      values(?,?,'DRAFT',?::jsonb,?) returning id
+      """,Long.class,templateId,version,definition,context.staffId());
+    Long entityId=optionalLong(template.get("legal_entity_id"));
+    audit(entityId,null,context,"INVOICE_TEMPLATE_VERSION_CREATED","INVOICE_TEMPLATE",Long.toString(templateId),Map.of("version",version));
+    return Map.of("id",templateId,"versionId",versionId,"versionNo",version,"status","DRAFT");
+  }
+
+  @PutMapping("/invoice-templates/{templateId}/versions/{versionNo}")
+  @Transactional
+  public Map<String,Object> saveTemplateDraft(@PathVariable long templateId,@PathVariable int versionNo,
+      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select v.id,v.status,t.legal_entity_id from invoice_template_version v
+      join invoice_template t on t.id=v.template_id where t.id=? and v.version_no=?
+      """,templateId,versionNo);
+    if(row.isEmpty()) throw notFound("Invoice-template version not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))) throw bad("Only a draft template version can be edited.");
+    Map<String,Object> design=normalizeDesign(body.get("designDefinition"));
+    jdbc.update("update invoice_template_version set design_definition=?::jsonb,preview_asset_key=null,preview_sha256=null where id=?",
+        json(design),row.get("id"));
+    audit(optionalLong(row.get("legal_entity_id")),null,context,"INVOICE_TEMPLATE_DRAFT_SAVED",
+        "INVOICE_TEMPLATE",Long.toString(templateId),Map.of("version",versionNo));
+    return Map.of("id",templateId,"versionNo",versionNo,"status","DRAFT","designDefinition",design);
+  }
+
+  @PostMapping("/invoice-templates/{templateId}/versions/{versionNo}/publish")
+  @Transactional
+  public Map<String,Object> publishTemplate(@PathVariable long templateId,@PathVariable int versionNo,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select v.id,v.status,t.scope,t.legal_entity_id from invoice_template_version v
+      join invoice_template t on t.id=v.template_id where t.id=? and v.version_no=?
+      """,templateId,versionNo);
+    if(row.isEmpty()) throw notFound("Invoice-template version not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))) throw bad("Only a draft template version can be published.");
+    Long entityId=optionalLong(row.get("legal_entity_id"));
+    if("SELLER".equals(String.valueOf(row.get("scope"))) && !exists(
+        "select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",entityId)) {
+      throw bad("Activate the legal seller before publishing its invoice template.");
+    }
+    jdbc.update("update invoice_template_version set status='RETIRED' where template_id=? and status='PUBLISHED'",templateId);
+    int n=jdbc.update("""
+      update invoice_template_version set status='PUBLISHED',approved_by_staff_id=?,approved_at=now(),
+        published_by_staff_id=?,published_at=now()
+      where template_id=? and version_no=? and status='DRAFT'
+      """,context.staffId(),context.staffId(),templateId,versionNo);
+    if(n!=1) throw bad("Template changed during publish. Reload and retry.");
+    audit(entityId,null,context,"INVOICE_TEMPLATE_PUBLISHED","INVOICE_TEMPLATE",Long.toString(templateId),Map.of("version",versionNo));
+    return Map.of("id",templateId,"versionNo",versionNo,"status","PUBLISHED");
+  }
+
+  @GetMapping("/documents")
+  public List<Map<String,Object>> documents(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    return jdbc.queryForList("""
+      select d.id,d.public_id,d.document_type,d.document_number,d.issued_at,d.currency,
+        d.taxable_value_paise,d.discount_value_paise,d.tax_value_paise,d.total_value_paise,d.amount_paid_paise,
+        d.source_type,d.source_record_key,
+        exists(select 1 from fiscal_document_asset a where a.fiscal_document_id=d.id
+          and a.asset_type in ('PDF','SIGNED_PDF')) as pdf_available
+      from fiscal_document d order by d.issued_at desc,d.id desc limit 250
+      """);
+  }
+
+  @GetMapping("/documents/{documentId}")
+  public Map<String,Object> documentDetail(@PathVariable long documentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    Map<String,Object> doc=one("""
+      select id,public_id,legal_entity_id,gst_registration_id,document_type,document_number,issued_at,currency,
+        source_type,source_record_key,supplier_snapshot::text as supplier_snapshot_json,
+        recipient_snapshot::text as recipient_snapshot_json,transaction_snapshot::text as transaction_snapshot_json,
+        tax_summary_snapshot::text as tax_summary_snapshot_json,taxable_value_paise,discount_value_paise,
+        tax_value_paise,total_value_paise,amount_paid_paise,template_version_id
+      from fiscal_document where id=?
+      """,documentId);
+    if(doc.isEmpty()) throw notFound("Fiscal document not found.");
+    doc.put("lines",jdbc.queryForList("""
+      select line_no,product_reference,description_snapshot,service_classification_code,quantity,unit_price_paise,
+        discount_value_paise,taxable_value_paise,tax_components_snapshot::text as tax_components_snapshot_json,
+        tax_value_paise,line_total_paise from fiscal_document_line
+      where fiscal_document_id=? order by line_no
+      """,documentId));
+    return doc;
+  }
+
+  private List<Map<String,Object>> legalEntityRows() {
+    return jdbc.queryForList("""
+      select e.id,e.entity_kind,e.institution_id,t.display_name as institution_name,e.legal_name,e.trade_name,
+        e.contact_email,e.contact_phone,e.registered_address::text as registered_address_json,e.status,e.created_at,
+        (select count(*) from billing_gst_registration g where g.legal_entity_id=e.id and g.status='ACTIVE') as active_gst_registrations
+      from billing_legal_entity e left join institution_tenant t on t.id=e.institution_id
+      order by e.created_at desc,e.id desc
+      """);
+  }
+
+  private Map<String,Object> normalizeDesign(Object raw) {
+    Map<?,?> in=raw instanceof Map<?,?> map?map:Map.of();
+    String primary=color(in.get("primaryColor"),"#F97316"),accent=color(in.get("accentColor"),"#0F766E");
+    String surface=optionalText(in.get("surfaceStyle")); if(surface==null) surface="WARM_PAPER"; surface=surface.toUpperCase(Locale.ROOT);
+    if(!List.of("WARM_PAPER","CLEAN_WHITE","SOFT_SLATE").contains(surface)) throw bad("Unsupported invoice surface style.");
+    String layout=optionalText(in.get("layout")); if(layout==null) layout="EDITORIAL"; layout=layout.toUpperCase(Locale.ROOT);
+    if(!List.of("CLASSIC","EDITORIAL").contains(layout)) throw bad("Unsupported invoice layout.");
+    String footer=optionalText(in.get("footerText")); if(footer==null) footer="Thank you for learning with us.";
+    if(footer.length()>500) throw bad("Invoice footer cannot exceed 500 characters.");
+    return Map.of("schemaVersion",1,"primaryColor",primary,"accentColor",accent,
+        "surfaceStyle",surface,"layout",layout,"showLogo",bool(in,"showLogo",true),"footerText",footer);
+  }
+
+  private String color(Object raw,String fallback) {
+    String value=optionalText(raw); if(value==null) return fallback;
+    if(!value.matches("#[0-9A-Fa-f]{6}")) throw bad("Invoice colours must be six-digit hexadecimal values.");
+    return value.toUpperCase(Locale.ROOT);
+  }
+
+  private AuthContext requireOwner(AuthContext context) {
+    return authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+  }
+  private long offerInstitution(long offerId) {
+    Long id=jdbc.queryForObject("select institution_id from institution_marketplace_offer where id=?",Long.class,offerId);
+    if(id==null) throw notFound("Course offer not found.");
+    return id;
+  }
+  private boolean exists(String sql,Object... args) { return Boolean.TRUE.equals(jdbc.queryForObject(sql,Boolean.class,args)); }
+  private long count(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
+  private Map<String,Object> one(String sql,Object... args) {
+    List<Map<String,Object>> rows=jdbc.queryForList(sql,args); return rows.isEmpty()?new LinkedHashMap<>():new LinkedHashMap<>(rows.getFirst());
+  }
+  private void audit(Long entityId,Long institutionId,AuthContext actor,String action,String targetType,String targetId,Map<String,Object> details) {
+    jdbc.update("""
+      insert into billing_financial_audit_log(legal_entity_id,institution_id,actor_staff_id,action,target_type,target_id,details)
+      values(?,?,?,?,?,?,?::jsonb)
+      """,entityId,institutionId,actor.staffId(),action,targetType,targetId,json(details));
+  }
+  private String json(Object value) {
+    try { return objectMapper.writeValueAsString(value==null?Map.of():value); }
+    catch(JsonProcessingException ex) { throw new IllegalArgumentException("Financial configuration could not be serialized.",ex); }
+  }
+  private String jsonObject(Object value) {
+    if(value==null) return "{}";
+    if(!(value instanceof Map<?,?>)) throw bad("Expected a JSON object.");
+    return json(value);
+  }
+  private static String requiredText(Map<String,Object> body,String key) { return requiredText(body==null?null:body.get(key),key); }
+  private static String requiredText(Object raw,String key) {
+    String value=raw==null?"":String.valueOf(raw).trim(); if(value.isBlank()) throw bad(key+" is required."); return value;
+  }
+  private static String optionalText(Object raw) { if(raw==null)return null; String v=String.valueOf(raw).trim(); return v.isBlank()?null:v; }
+  private static long requiredLong(Map<String,Object> body,String key) { return requiredLong(body==null?null:body.get(key),key); }
+  private static long requiredLong(Object raw,String key) {
+    if(raw instanceof Number n) {
+      try { long value=new java.math.BigDecimal(n.toString()).longValueExact(); if(value>0)return value; }
+      catch(Exception ignored) { }
+    }
+    throw bad(key+" must be a positive integer.");
+  }
+  private static Long optionalLong(Object raw) {
+    if(raw==null)return null;
+    if(raw instanceof Number n) return new java.math.BigDecimal(n.toString()).longValueExact();
+    String v=String.valueOf(raw).trim(); return v.isEmpty()?null:Long.valueOf(v);
+  }
+  private static int integer(Map<?,?> body,String key,int fallback) {
+    Object raw=body==null?null:body.get(key); if(raw==null)return fallback;
+    try { return new java.math.BigDecimal(raw.toString()).intValueExact(); }
+    catch(Exception ex) { throw bad(key+" must be an integer."); }
+  }
+  private static boolean bool(Map<?,?> body,String key,boolean fallback) {
+    Object raw=body==null?null:body.get(key); if(raw==null)return fallback;
+    if(raw instanceof Boolean b)return b;
+    String v=String.valueOf(raw);
+    if("true".equalsIgnoreCase(v))return true;
+    if("false".equalsIgnoreCase(v))return false;
+    throw bad(key+" must be true or false.");
+  }
+  private static Instant instant(Map<String,Object> body,String key) {
+    try { return Instant.parse(requiredText(body,key)); }
+    catch(Exception ex) { throw bad(key+" must be an ISO-8601 UTC timestamp."); }
+  }
+  private static Instant optionalInstant(Object raw) {
+    if(optionalText(raw)==null)return null;
+    try{return Instant.parse(String.valueOf(raw));}catch(Exception ex){throw bad("Effective end must be an ISO-8601 UTC timestamp.");}
+  }
+  private static Instant asInstant(Object raw) {
+    if(raw instanceof java.sql.Timestamp t)return t.toInstant();
+    if(raw instanceof java.time.OffsetDateTime d)return d.toInstant();
+    return Instant.parse(String.valueOf(raw));
+  }
+  private static java.time.LocalDate localDate(Map<String,Object> body,String key) {
+    try{return java.time.LocalDate.parse(requiredText(body,key));}catch(Exception ex){throw bad(key+" must be an ISO date.");}
+  }
+  private static java.time.LocalDate optionalLocalDate(Object raw) {
+    if(optionalText(raw)==null)return null;
+    try{return java.time.LocalDate.parse(String.valueOf(raw));}catch(Exception ex){throw bad("Effective end must be an ISO date.");}
+  }
+  private static ResponseStatusException bad(String message) { return new ResponseStatusException(HttpStatus.BAD_REQUEST,message); }
+  private static ResponseStatusException notFound(String message) { return new ResponseStatusException(HttpStatus.NOT_FOUND,message); }
+}
