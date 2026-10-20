@@ -337,13 +337,10 @@ Verification at this checkpoint:
 - Release remains **NOT READY** until end-to-end provider, refund, coupon, multi-tenant and statutory review tests pass.
 
 
-### 2026-10-20 — Approved course discount policy foundation
+### 2026-10-20 — Initial discount policy foundation (superseded checkpoint)
 
-- Added V156 for offer-scoped discount code rules, policy versions, immutable submitted terms, HRMS approval/retirement, redemption reservation status and financial snapshot locking.
-- Added integer-paise discount arithmetic for percentage (basis points, HALF_UP) and flat amount rules with optional maximum caps.
-- Student and parent checkout accepts an optional offer code. The server resolves only an effective approved rule for the exact institution offer, calculates the discount itself, and sends the same discounted amount through tax quote, Razorpay amount, invoice line/totals and distribution basis.
-- Unknown, expired, cross-offer, overlapping, or zero-payable codes fail closed. Redemptions remain auditable across reservation, verification, failure and retry. No coupon/rate/customer/payment data is seeded.
-- HRMS configuration screen and student/parent web + Android code-entry UI still need to be wired; this commit is the pricing/ledger foundation, not a release-ready coupon feature.
+- This early checkpoint described the first discount schema proposal. The final offer-scoped coupon migration is **V157**; **V156 is reserved for reviewed e-invoice applicability evidence**.
+- The later “Discount checkout and cross-client wiring checkpoint” below is authoritative for the implemented API, HRMS, web and Android state. Do not use this earlier checkpoint to infer that client wiring remains incomplete.
 
 
 ### 2026-10-20 — Discount checkout and cross-client wiring checkpoint
