@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f27d3c49d38cb98e2e618f41694ee9a570d926acd6d5b035cb357a0cb14bb956",
+  "raw_analysis_sha256": "62d0f8bce26580eb3c665eb5a45fb1f235636454713e1d55c702bfd6fa9bf042",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:34:34Z",
+      "checkpointed_at": "2026-10-20T04:43:10Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:35:33Z",
+      "checkpointed_at": "2026-10-20T04:44:09Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:36:25Z",
+      "checkpointed_at": "2026-10-20T04:44:59Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60800,6 +60800,92 @@
         "context_relation": "The banner is likely used to highlight or emphasize a specific point or topic related to the content of the textbook.",
         "limitations": [
           "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b0b6b5baa50320f8c5c29a16",
+      "asset_sha256": "62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual summary of key points.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:46:35Z",
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual summary of key points.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "054cc1e01d3f6e6861a98008",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:46:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content to analyze"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

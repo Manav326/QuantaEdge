@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1216,
+    "assets_selected": 1218,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1213,
-    "assets_remaining": 865,
-    "assets_completion_percent": 58.4,
+    "assets_analyzed": 1215,
+    "assets_remaining": 863,
+    "assets_completion_percent": 58.5,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1211,
+    "assets_skipped_from_checkpoint": 1213,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:34:34Z"
+      "checkpointed_at": "2026-10-20T04:43:10Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:35:33Z"
+      "checkpointed_at": "2026-10-20T04:44:09Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:36:25Z"
+      "checkpointed_at": "2026-10-20T04:44:59Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40313,6 +40313,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T04:41:56Z"
+    },
+    {
+      "asset_id": "b0b6b5baa50320f8c5c29a16",
+      "asset_sha256": "62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual summary of key points.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:46:35Z"
+    },
+    {
+      "asset_id": "054cc1e01d3f6e6861a98008",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:46:50Z"
     }
   ]
 }
