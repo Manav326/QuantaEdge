@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "381de2a9d92ef1c4d3df662cca17c84391dec43ccd80d4cc719e5c1272dd45dc",
+  "raw_analysis_sha256": "94e7d7b3c15a7577fd3b50a7d55b4654245d9ad0bb61de7c0d2ad641f42e9bef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:42:36Z",
+      "checkpointed_at": "2026-10-20T03:51:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:43:34Z",
+      "checkpointed_at": "2026-10-20T03:52:36Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:44:24Z",
+      "checkpointed_at": "2026-10-20T03:53:27Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59855,6 +59855,98 @@
           "The image does not show the actual motion of the eraser, only the setup.",
           "The image does not show the eraser moving to and fro, only the initial setup."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0d0f259280268fdd9f2e62de",
+      "asset_sha256": "b5ef5dca2db5dafd0653b491ca4d314aee7c5dcc7dd45fa6370630f9ac522411",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/b5ef5dca2db5dafd0653b491ca4d314aee7c5dcc7dd45fa6370630f9ac522411.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is swinging on a swing in a park.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "oscillatory motion",
+          "swing",
+          "park",
+          "person",
+          "swinging"
+        ],
+        "context_relation": "The image is related to the concept of oscillatory motion.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:55:04Z",
+      "effective_analysis": {
+        "visual_summary": "A person is swinging on a swing in a park.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "oscillatory motion",
+          "swing",
+          "park",
+          "person",
+          "swinging"
+        ],
+        "context_relation": "The image is related to the concept of oscillatory motion.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d4e0263b91cd93ebc1c57e13",
+      "asset_sha256": "bac963c026ba415f32aab6aa0d626962ce8f5fcc8d17c1fa059180a827343990",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/bac963c026ba415f32aab6aa0d626962ce8f5fcc8d17c1fa059180a827343990.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a thread with an eraser attached at one end, demonstrating circular motion.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Circular motion",
+          "Oscillatory motion",
+          "Thread with eraser"
+        ],
+        "context_relation": "The image illustrates the concept of circular motion and oscillatory motion as described in the textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:56:40Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a thread with an eraser attached at one end, demonstrating circular motion.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Circular motion",
+          "Oscillatory motion",
+          "Thread with eraser"
+        ],
+        "context_relation": "The image illustrates the concept of circular motion and oscillatory motion as described in the textbook.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
