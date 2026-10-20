@@ -70,6 +70,7 @@ fun StudentCertificatesScreen(
     initialAssessmentAttemptId: Long = 0L,
     noEnrolledCourses: Boolean = courseId <= 0L,
     onMarketplace: () -> Unit = {},
+    onAllCourses: () -> Unit = {},
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -134,6 +135,8 @@ fun StudentCertificatesScreen(
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { writeDownloadedFile(it) }
     val pngLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { writeDownloadedFile(it) }
 
+    val courseAccessLoadError = localizedUiText("Course information could not be confirmed. Open My Courses to refresh it.")
+
     suspend fun reload() {
         loading = true
         error = ""
@@ -143,8 +146,7 @@ fun StudentCertificatesScreen(
             eligibleAssessments = emptyList()
             selectedTrackKey = ""
             selectedAttemptId = ""
-            error = if (language == "hi") "प्रमाणपत्र देखने के लिए पहले enrolled course चुनें।"
-                else "Choose an enrolled course before viewing certificates."
+            error = if (noEnrolledCourses) "" else courseAccessLoadError
             loading = false
             return
         }
@@ -558,6 +560,11 @@ fun StudentCertificatesScreen(
                         style = MaterialTheme.typography.bodySmall)
                     TextButton(onClick = { scope.launch { reload() } }, enabled = !loading && !busy) {
                         Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+                    }
+                    if (courseId <= 0L && !noEnrolledCourses) {
+                        TextButton(onClick = onAllCourses, enabled = !busy) {
+                            Text(localizedUiText("My Courses"))
+                        }
                     }
                 }
             }
