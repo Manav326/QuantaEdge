@@ -11,8 +11,8 @@
     "assets_selected": 1077,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1072,
-    "assets_remaining": 1219,
+    "assets_analyzed": 1073,
+    "assets_remaining": 1218,
     "assets_completion_percent": 46.8,
     "assets_failed": 18,
     "assets_skipped_from_checkpoint": 1072,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:47:21Z"
+      "checkpointed_at": "2026-10-20T05:52:00Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:47:55Z"
+      "checkpointed_at": "2026-10-20T05:52:34Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:48:16Z"
+      "checkpointed_at": "2026-10-20T05:52:57Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:48:52Z"
+      "checkpointed_at": "2026-10-20T05:53:33Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34770,6 +34770,34 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "ea81c1bb75ba28fdb8d6ca27",
+      "asset_sha256": "02334a051c1da0351f1b0822eae1e2b4a5404482ecb90b758be1dcedf63e2122",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/02334a051c1da0351f1b0822eae1e2b4a5404482ecb90b758be1dcedf63e2122.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aea6c47d87dc8df6f932d601b41adf4e16f8caed0f597f02df9e63a986e4a3ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a light blue shirt, pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electricity and batteries.",
+        "limitations": [
+          "The image does not provide specific details about the internal components of cells and batteries."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:54:09Z"
     }
   ]
 }
