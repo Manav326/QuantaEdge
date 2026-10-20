@@ -104,4 +104,18 @@ class CourseMarketplaceControllerTest {
     assertNotEquals(expected, CourseMarketplaceController.hmacSha256("order_123|pay_999", "test_secret"));
     assertNotEquals(expected, CourseMarketplaceController.hmacSha256("order_123|pay_456", "different_secret"));
   }
+
+  @Test
+  void retryableCheckoutCanOnlyReuseTheSameLockedOfferCode() {
+    assertTrue(CourseMarketplaceController.discountCodeMatchesForRetry("save10", " SAVE10 "));
+    assertTrue(CourseMarketplaceController.discountCodeMatchesForRetry(null, "  "));
+    assertFalse(CourseMarketplaceController.discountCodeMatchesForRetry("SAVE10", "SAVE20"));
+    assertFalse(CourseMarketplaceController.discountCodeMatchesForRetry("SAVE10", null));
+  }
+
+  @Test
+  void retryOfferCodeValidationRejectsMalformedValues() {
+    org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+        () -> CourseMarketplaceController.discountCodeMatchesForRetry("SAVE10", "bad code"));
+  }
 }
