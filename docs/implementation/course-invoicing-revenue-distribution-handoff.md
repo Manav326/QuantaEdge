@@ -291,3 +291,11 @@ Verification at this checkpoint:
 - The parent editor uses the parent workspace endpoint and keeps purchaser identity separate from the child beneficiary; the student editor uses the student workspace endpoint. English/Hinglish labels are supported on the parent screen.
 - Profile-save errors remain in the editor and do not block browsing the marketplace. Existing orders retain their saved buyer snapshot; profile changes apply to future order snapshots.
 - This UI does not yet apply a tax calculation or issue invoices; those integration steps remain controlled by the approved seller/tax configuration.
+
+
+### 2026-10-20 — Template review checkpoint
+
+- Migration V152 adds a dedicated template-review ledger and immutable submitted/approved event records.
+- HRMS template actions are separate: submit, approve, then publish. The backend checks that the template design still matches the submitted snapshot before approval and publication.
+- Seller setup now requires a complete registered address. Tax-profile seller selection is limited to the platform or the institution that owns the course offer.
+- Remaining major work: attach approved tax snapshots to course orders, reconcile captured payment amount, issue and render invoices, persist revenue-share allocation snapshots, add secure customer/parent invoice downloads, audit discounts, and implement refund/credit-note adjustments.
