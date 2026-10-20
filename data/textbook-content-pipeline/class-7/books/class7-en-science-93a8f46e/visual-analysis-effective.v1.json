@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "51ce1bc5a3b09b45d2bfa8cc8063efe2c3b58e1440a734257e96f17138eae6ca",
+  "raw_analysis_sha256": "8b162d144c31a2e6ccc0a0d3e2f3d06ad348337eaba503129a1e9c931575a626",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T17:35:58Z",
+      "checkpointed_at": "2026-10-20T17:44:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T17:36:19Z",
+      "checkpointed_at": "2026-10-20T17:44:32Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -103642,21 +103642,59 @@
     {
       "asset_id": "a0a20008999527fde0411907",
       "asset_sha256": "1656c599fbfe1d42c01dc47416fe7822deec15cb699b4a65d6f6c6b59db12384",
-      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 60,
       "asset_path": "assets/1656c599fbfe1d42c01dc47416fe7822deec15cb699b4a65d6f6c6b59db12384.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) connected to a toy fan (Fig. 3.22b) via a circuit (Fig. 3.22c).",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
+          "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available."
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit",
+          "electrical items shop",
+          "types of cells"
+        ],
+        "context_relation": "The image is a visual representation of a practical activity related to electricity and solar energy.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells available in an electrical items shop."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T17:45:18Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) connected to a toy fan (Fig. 3.22b) via a circuit (Fig. 3.22c).",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
+          "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available."
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit",
+          "electrical items shop",
+          "types of cells"
+        ],
+        "context_relation": "The image is a visual representation of a practical activity related to electricity and solar energy.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells available in an electrical items shop."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -104708,21 +104746,63 @@
     {
       "asset_id": "3fbaabc78bef6da0638a6cb9",
       "asset_sha256": "e5a1ecb3367fe3ee462dbf0d4fae6819b7d224bbf5932ff63c285e0adaac9414",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/e5a1ecb3367fe3ee462dbf0d4fae6819b7d224bbf5932ff63c285e0adaac9414.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "items of daily use",
+          "items made by ironsmiths"
+        ],
+        "context_relation": "The conversation is about the items made by ironsmiths.",
+        "limitations": [
+          "The conversation is limited to the items made by ironsmiths.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T17:46:07Z",
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "items of daily use",
+          "items made by ironsmiths"
+        ],
+        "context_relation": "The conversation is about the items made by ironsmiths.",
+        "limitations": [
+          "The conversation is limited to the items made by ironsmiths.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -104884,7 +104964,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381362765",
+      "run_id": "39461594059",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
