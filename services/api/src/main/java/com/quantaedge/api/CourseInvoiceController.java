@@ -144,7 +144,7 @@ public class CourseInvoiceController {
       .contentType(MediaType.APPLICATION_PDF)
       .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")
       .header(HttpHeaders.CACHE_CONTROL,"private, no-store, max-age=0")
-      .header(HttpHeaders.X_CONTENT_TYPE_OPTIONS,"nosniff")
+      .header("X-Content-Type-Options","nosniff")
       .body(bytes);
   }
 
