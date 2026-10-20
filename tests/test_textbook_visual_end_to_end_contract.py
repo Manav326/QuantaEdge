@@ -152,9 +152,13 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn('--package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"', workflow)
         self.assertNotIn("ghcr.io/" + chr(92) + "${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals", workflow)
         self.assertIn('f"{bundle.name}:application/gzip"', pipeline)
-        self.assertIn('],cwd=sroot,check=True)', pipeline)
+        self.assertIn("push_oci_artifact_with_retry(", pipeline)
+        self.assertIn('cwd=sroot,description=', pipeline)
         self.assertIn('f"{raw.name}:application/json"', pipeline)
-        self.assertIn('],cwd=raw.parent,check=True)', pipeline)
+        self.assertIn('cwd=raw.parent,description=', pipeline)
+        batch_checkpoint = 'git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)]'
+        self.assertIn(batch_checkpoint, pipeline)
+        self.assertLess(pipeline.index(batch_checkpoint), pipeline.index('cwd=raw.parent,description='))
 
     def test_chapter_suggestions_are_ordered_contiguous_and_review_only(self):
         chapters = self.chapter_map["chapters"]
