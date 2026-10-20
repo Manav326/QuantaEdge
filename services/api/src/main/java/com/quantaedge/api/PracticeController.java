@@ -92,6 +92,8 @@ public class PracticeController {
     long institutionId=requireInstitution(tenant);
     String language=normalizeLanguage(body.get("language"));
     int lessonId=integer(body.get("lessonId"),"lessonId",1,Integer.MAX_VALUE);
+    long courseId=integer(body.get("courseId"),"courseId",1,Integer.MAX_VALUE);
+    ensureActiveEnrolledCourse(context.studentId(),institutionId,courseId);
 
     // Serialize concurrent starts for the same student. This also makes React's development
     // Strict Mode / a double click idempotent when the first request is still in flight.
@@ -102,12 +104,13 @@ public class PracticeController {
     String marker=json(List.of(Map.of("sourceLessonId",lessonId)));
     List<Map<String,Object>> existing=jdbc.queryForList("""
       select id from student_practice_session
-      where student_id=? and institution_id=? and status='IN_PROGRESS' and topic_selections @> ?::jsonb
+      where student_id=? and institution_id=? and course_id=? and status='IN_PROGRESS'
+        and topic_selections @> ?::jsonb
       order by created_at desc,id desc limit 1
-      """,context.studentId(),institutionId,marker);
+      """,context.studentId(),institutionId,courseId,marker);
     if(!existing.isEmpty()) {
       long existingId=((Number)existing.getFirst().get("id")).longValue();
-      return getSessionForTenant(existingId,language,context,institutionId);
+      return getSessionForTenant(existingId,language,context,institutionId,courseId);
     }
 
     List<Map<String,Object>> lessonRows=jdbc.queryForList("""
@@ -119,18 +122,19 @@ public class PracticeController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+        and spe.program_id=p.id and spe.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and s.active=true and c.active=true
-        and (
-          (s.program_id is null and c.code=st.class_code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=ste.institution_id and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
-        )
-      """,context.studentId(),institutionId,lessonId);
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """,context.studentId(),courseId,institutionId,lessonId);
     if(lessonRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson not found or unavailable.");
 
     Map<String,Object> lesson=lessonRows.getFirst();
@@ -215,14 +219,14 @@ public class PracticeController {
         "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
     // Prefer unseen approved questions. Previously missed questions are a deliberate revision
     // fallback, not mixed into a fresh set, and prior diagnostic answers do not consume practice.
-    List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
+    List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,courseId,chapterId,selectedTypes,
         scopeFilter,scopeArgs,lessonId,requestedCount,false,false);
 
     // If no fresh non-MCQ questions remain, use fresh MCQs from another lesson in the same
     // objective/concept scope; do not simply repeat the MCQs shown inline on this lesson.
     if(selectedIds.isEmpty()) {
       selectedTypes=List.of("MCQ");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,courseId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,true,false);
     }
 
@@ -232,12 +236,12 @@ public class PracticeController {
       selectedTypes=List.of(
           "TRUE_FALSE","INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
           "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,courseId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,false,true);
     }
     if(selectedIds.isEmpty()) {
       selectedTypes=List.of("MCQ");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,courseId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,true,true);
     }
     if(selectedIds.isEmpty()) {
@@ -252,9 +256,9 @@ public class PracticeController {
         "chapterName",chapterName,"topic",lessonTitle));
     Long sessionId=jdbc.queryForObject("""
       insert into student_practice_session(
-        student_id,institution_id,status,requested_question_count,selected_question_count,question_types,topic_selections
-      ) values(?,?,'IN_PROGRESS',?,?,?::jsonb,?::jsonb) returning id
-      """,Long.class,context.studentId(),institutionId,requestedCount,selectedIds.size(),json(selectedTypes),json(topicSelections));
+        student_id,institution_id,course_id,status,requested_question_count,selected_question_count,question_types,topic_selections
+      ) values(?,?,?,'IN_PROGRESS',?,?,?::jsonb,?::jsonb) returning id
+      """,Long.class,context.studentId(),institutionId,courseId,requestedCount,selectedIds.size(),json(selectedTypes),json(topicSelections));
 
     List<Map<String,Object>> questions=new ArrayList<>();
     int sequence=1;
