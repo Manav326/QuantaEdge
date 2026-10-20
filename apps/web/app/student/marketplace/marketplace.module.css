@@ -142,3 +142,17 @@ html[data-qe-appearance="dark"] .requestOther {
   background: var(--qe-color-disabled-background);
   color: var(--qe-color-disabled-text) !important;
 }
+
+.discountCodeBox{display:grid;gap:8px;margin:18px 0;padding:16px 18px;border:1px solid #f2d7c2;border-radius:15px;background:linear-gradient(135deg,#fffaf5,#fff);box-shadow:0 5px 20px rgba(109,61,24,.045)}
+.discountCodeBox>label{font-size:13px;font-weight:800;color:#273247}
+.discountCodeBox>label span{font-weight:500;color:#778195}
+.discountCodeEntry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+.discountCodeEntry input{width:100%;min-width:0;min-height:42px;border:1px solid #dfd6ce;border-radius:10px;padding:10px 12px;background:#fff;color:#20283a;font-size:14px;letter-spacing:.04em}
+.discountCodeEntry input:focus{outline:2px solid #f4b17f;outline-offset:1px}
+.discountCodeEntry span{font-size:11px;color:#718096}
+.discountCodeBox p{margin:0;color:#687386;font-size:12px;line-height:1.6}
+html[data-qe-appearance="dark"] .discountCodeBox{background:var(--qe-color-surface-elevated);border-color:var(--qe-color-border-subtle);box-shadow:none}
+html[data-qe-appearance="dark"] .discountCodeBox>label{color:var(--qe-color-text)}
+html[data-qe-appearance="dark"] .discountCodeBox>label span,html[data-qe-appearance="dark"] .discountCodeEntry span,html[data-qe-appearance="dark"] .discountCodeBox p{color:var(--qe-color-text-muted)}
+html[data-qe-appearance="dark"] .discountCodeEntry input{background:var(--qe-color-surface);border-color:var(--qe-color-border-subtle);color:var(--qe-color-text)}
+@media(max-width:560px){.discountCodeEntry{grid-template-columns:1fr;gap:5px}}
