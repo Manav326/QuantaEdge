@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1052,
+    "assets_selected": 1054,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1049,
-    "assets_remaining": 1242,
+    "assets_analyzed": 1050,
+    "assets_remaining": 1241,
     "assets_completion_percent": 45.8,
-    "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1047,
+    "assets_failed": 17,
+    "assets_skipped_from_checkpoint": 1049,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:53:37Z"
+      "checkpointed_at": "2026-10-20T04:56:15Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:54:11Z"
+      "checkpointed_at": "2026-10-20T04:56:48Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:54:33Z"
+      "checkpointed_at": "2026-10-20T04:57:10Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33887,6 +33887,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:55:30Z"
+    },
+    {
+      "asset_id": "845168e3f9e5bc5cd9dc11bb",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "The image illustrates the principle of attraction between unlike poles of magnets and how it can be applied to electromagnets.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's poles or the compass needle's position."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:57:28Z"
+    },
+    {
+      "asset_id": "acfb58f02fadc0623057c038",
+      "asset_sha256": "6163eff9673da7368edd8c06ec27710b3e57aedfe212cb543407681d81d8f00f",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "page-0071.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }

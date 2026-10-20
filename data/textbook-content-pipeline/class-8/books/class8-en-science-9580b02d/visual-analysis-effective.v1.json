@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "48596ae90cca210803370a05b5232f6c1fa531c53bac079fbba4cc6b9a274632",
+  "raw_analysis_sha256": "28a4e2d6bc9f3ec8d7c8c15a2b410eb90b81381b3eab8ed2eb069bf7feedd844",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:53:37Z",
+      "checkpointed_at": "2026-10-20T04:56:15Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:54:11Z",
+      "checkpointed_at": "2026-10-20T04:56:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:54:33Z",
+      "checkpointed_at": "2026-10-20T04:57:10Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -50687,6 +50687,84 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "845168e3f9e5bc5cd9dc11bb",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "The image illustrates the principle of attraction between unlike poles of magnets and how it can be applied to electromagnets.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's poles or the compass needle's position."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:57:28Z",
+      "effective_analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "The image illustrates the principle of attraction between unlike poles of magnets and how it can be applied to electromagnets.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's poles or the compass needle's position."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "acfb58f02fadc0623057c038",
+      "asset_sha256": "6163eff9673da7368edd8c06ec27710b3e57aedfe212cb543407681d81d8f00f",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "page-0071.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
