@@ -426,9 +426,7 @@ fun StudentCertificatesScreen(
                 title = localizedUiText("Your certificates are linked to courses"),
                 message = localizedUiText("Enrol in a course to see eligible achievements and issued certificates."),
                 primaryLabel = localizedUiText("Explore Marketplace"),
-                onPrimary = onMarketplace,
-                secondaryLabel = localizedUiText("My Courses"),
-                onSecondary = onBack
+                onPrimary = onMarketplace
             )
         }
         return
