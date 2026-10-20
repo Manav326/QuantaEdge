@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "16f08638d6089e7fd1352267cf18c8c96ffce66e5b72117478e152e46e8214a7",
+  "raw_analysis_sha256": "87fe9b56771b9fad331f796b6285a753ff33add188b7dcbc07a61d71f469e364",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:13:46Z",
+      "checkpointed_at": "2026-10-20T11:18:21Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:14:46Z",
+      "checkpointed_at": "2026-10-20T11:19:24Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:15:38Z",
+      "checkpointed_at": "2026-10-20T11:20:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:16:27Z",
+      "checkpointed_at": "2026-10-20T11:21:08Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62842,6 +62842,74 @@
           "Activity 6.2"
         ],
         "context_relation": "Educational content",
+        "limitations": [
+          "The image does not show the objects or the grouping process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a070d12980e9f9aad06de794",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2bd81e073acc473b8a7e0b5596658e3f5709fa29fa74c86943b8391b0c7d49a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Objects around us, grouped based on properties like shape, colour, hardness, softness, shine, and materials they are made up of.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.1: Objects around us",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials",
+          "6.2 How to Group Materials?",
+          "Activity 6.2: Let us group",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of."
+        ],
+        "concepts": [
+          "properties of objects",
+          "grouping objects",
+          "materials",
+          "properties of materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the objects or the grouping process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:21:46Z",
+      "effective_analysis": {
+        "visual_summary": "Objects around us, grouped based on properties like shape, colour, hardness, softness, shine, and materials they are made up of.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.1: Objects around us",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials",
+          "6.2 How to Group Materials?",
+          "Activity 6.2: Let us group",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of."
+        ],
+        "concepts": [
+          "properties of objects",
+          "grouping objects",
+          "materials",
+          "properties of materials"
+        ],
+        "context_relation": "educational",
         "limitations": [
           "The image does not show the objects or the grouping process."
         ]

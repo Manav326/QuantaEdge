@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1278,
-    "successful_visual_analyses": 1253,
-    "missing_visual_analyses": 800,
+    "raw_analysis_result_rows": 1279,
+    "successful_visual_analyses": 1254,
+    "missing_visual_analyses": 799,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 825,
+    "unresolved_count": 824,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48233,9 +48233,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Objects around us, grouped based on properties like shape, colour, hardness, softness, shine, and materials they are made up of.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.1: Objects around us",
+          "Which property did you use to group the objects in Activity 6.2?",
+          "Did your friends group objects based on similar properties?",
+          "What did you learn from this activity?",
+          "You must have noticed that an object can be made from different materials and some materials",
+          "6.2 How to Group Materials?",
+          "Activity 6.2: Let us group",
+          "Group the objects shown in Fig. 6.1 based on any common property, such as shape, colour, hardness, softness, shine, dullness or materials they are made up of."
+        ],
+        "concepts": [
+          "properties of objects",
+          "grouping objects",
+          "materials",
+          "properties of materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the objects or the grouping process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
