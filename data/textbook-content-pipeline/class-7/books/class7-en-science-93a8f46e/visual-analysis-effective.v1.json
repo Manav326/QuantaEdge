@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3e08934bc2fd0404bd04e8456093621342f967f8646f99ccdcd414301823b756",
+  "raw_analysis_sha256": "50866f4c20bc2ddec96579f7a9b37824609a6993f653942f3f592302b808b323",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:14:45Z",
+      "checkpointed_at": "2026-10-20T21:18:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:15:06Z",
+      "checkpointed_at": "2026-10-20T21:18:47Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -114145,6 +114145,110 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d412c892cc38af28d4061f29",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5ee56b21f0830e88558f6ff0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e34e9820123ccfeada0c877b",
+      "asset_sha256": "bd091435a33ab9b47f307b64d0a931d9593c1b0a56c1b56cc59b9c48d298ebb5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "page-0061.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene depicting an elderly ironsmith making various items, with children and an adult observing.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The World of Metals\n4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school\nhas assigned them a project to learn about craftspersons who\nwork with metals. They decide to visit the local ironsmiths who\npractise this craft. Yashwant and Anandi request their grandfather\nto accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat\npans (tawas), buckets (baltis), tongs (chimtas), and farming tools\nlike spades (phawras), axes (kulhadis), trowels (khurpis), and\nrakes (jelees).",
+          "Anandi: What materials are they made of?"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "daily life items"
+        ],
+        "context_relation": "The image shows an elderly ironsmith making various items, which is related to the project of learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the specific materials used to make the items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:28:24Z",
+      "effective_analysis": {
+        "visual_summary": "A scene depicting an elderly ironsmith making various items, with children and an adult observing.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The World of Metals\n4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school\nhas assigned them a project to learn about craftspersons who\nwork with metals. They decide to visit the local ironsmiths who\npractise this craft. Yashwant and Anandi request their grandfather\nto accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat\npans (tawas), buckets (baltis), tongs (chimtas), and farming tools\nlike spades (phawras), axes (kulhadis), trowels (khurpis), and\nrakes (jelees).",
+          "Anandi: What materials are they made of?"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "daily life items"
+        ],
+        "context_relation": "The image shows an elderly ironsmith making various items, which is related to the project of learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the specific materials used to make the items."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
