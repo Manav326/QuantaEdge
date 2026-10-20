@@ -20,6 +20,8 @@ import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Server-side course-sale financial orchestration.
@@ -516,6 +518,15 @@ public class CourseOrderFinancialService {
     FiscalDocumentRenderer.RenderedFiscalDocument rendered=renderer.render(
         documentType,docNumber,issueDate,supplier,buyerSnapshot,transaction,taxSummary,lineRows,templateDesign);
     FiscalDocumentStorage.StoredDocument asset=storage.storePdf(rendered.pdf());
+    // PDF storage is outside the SQL transaction. Remove the file if any later database
+    // write rolls back, so an unissued invoice cannot leave an orphaned artifact behind.
+    if(TransactionSynchronizationManager.isSynchronizationActive()) {
+      TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        @Override public void afterCompletion(int status) {
+          if(status!=STATUS_COMMITTED) storage.deleteQuietly(asset.storageKey());
+        }
+      });
+    }
     jdbc.update("""
       insert into fiscal_document_asset(
         fiscal_document_id,asset_type,storage_key,mime_type,sha256,byte_length
