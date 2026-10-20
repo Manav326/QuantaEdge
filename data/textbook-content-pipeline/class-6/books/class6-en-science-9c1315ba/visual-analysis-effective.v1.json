@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3f73c5bf24cdab3f57736671c5f36ebed0407db182b4bdff81e53aef2d12c65c",
+  "raw_analysis_sha256": "b7074b3fff679db45004d5f229fa7a0666ecfc78b2ee3da73a2276d255f505f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -631,14 +631,14 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:55:34Z",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T06:48:39Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -663,7 +663,7 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -1514,7 +1514,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -29276,9 +29276,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -31082,7 +31082,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -31222,7 +31222,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,

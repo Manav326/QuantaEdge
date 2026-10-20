@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1222,
+    "assets_selected": 1224,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 1219,
     "assets_remaining": 859,
     "assets_completion_percent": 58.7,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1217,
+    "assets_skipped_from_checkpoint": 1219,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -437,14 +437,14 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:55:34Z"
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T06:48:39Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -986,7 +986,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -20018,9 +20018,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -21184,7 +21184,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -21277,7 +21277,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
