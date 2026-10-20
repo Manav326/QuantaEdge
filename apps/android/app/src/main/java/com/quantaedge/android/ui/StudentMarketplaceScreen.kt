@@ -66,13 +66,15 @@ fun StudentMarketplaceScreen(
                 }
             }
         } else if (!loading && offers.isEmpty()) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(if (hi) "अभी कोई course खरीदने के लिए प्रकाशित नहीं है" else "No courses are currently listed for purchase", style = MaterialTheme.typography.titleMedium)
-                    Text(if (hi) "नई offers उपलब्ध होने पर वे यहाँ दिखेंगी।" else "Published course offers will appear here when available.",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
-                }
-            }
+            StudentEnrollmentEmptyState(
+                icon = "▦",
+                title = localizedUiText("No courses are available right now"),
+                message = localizedUiText("The Marketplace has no published course offers at the moment. Refresh to check again, or open My Courses to review your current enrolments."),
+                primaryLabel = localizedUiText("Refresh Marketplace"),
+                onPrimary = onRefresh,
+                secondaryLabel = localizedUiText("My Courses"),
+                onSecondary = onAllCourses
+            )
         }
         offers.forEach { offer ->
             val id = offer.optLong("course_id", offer.optLong("courseId"))

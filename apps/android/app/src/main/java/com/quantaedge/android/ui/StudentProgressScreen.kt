@@ -33,18 +33,20 @@ fun StudentProgressScreen(
     certificateEligibility: Map<Long, JSONObject>,
     onRefresh: () -> Unit,
     onIssueCertificate: (Long) -> Unit,
-    onViewCertificate: (Long) -> Unit
+    onViewCertificate: (Long) -> Unit,
+    onMarketplace: () -> Unit = {}
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     if (noEnrolledCourses) {
-        Column(
-            modifier = Modifier.fillMaxSize().widthIn(max = 1000.dp).padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(t("My learning progress", "मेरी सीखने की प्रगति"),
-                style = MaterialTheme.typography.headlineSmall)
-            Text(localizedUiText("Your learning progress will appear here once you enroll in a course."),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Column(modifier = Modifier.fillMaxSize().widthIn(max = 1000.dp).padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            StudentEnrollmentEmptyState(
+                icon = "↗",
+                title = localizedUiText("Your learning progress"),
+                message = localizedUiText("Your learning progress will appear here once you enroll in a course."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
         }
         return
     }

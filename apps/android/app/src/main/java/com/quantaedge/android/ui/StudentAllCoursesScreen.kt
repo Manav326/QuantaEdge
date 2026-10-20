@@ -53,32 +53,26 @@ fun StudentAllCoursesScreen(
             )
         }
         if (owned.isEmpty()) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        when {
-                            programsLoadFailed && hi -> "Courses लोड नहीं हो पाए"
-                            programsLoadFailed -> "Courses couldn't be loaded"
-                            hi -> "अभी कोई enrolled course नहीं है"
-                            else -> "No enrolled courses yet"
-                        },
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        if (hi) "Marketplace से course देखें या दोबारा प्रयास करें।"
-                        else "Explore the Marketplace to find your next course, or retry loading your courses.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = onMarketplace, enabled = !busy) {
-                            Text(if (hi) "Marketplace खोलें" else "Explore marketplace")
-                        }
+            if (programsLoadFailed) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(if (hi) "Courses लोड नहीं हो पाए" else "Courses couldn't be loaded",
+                            style = MaterialTheme.typography.titleMedium)
+                        Text(if (hi) "कनेक्शन जाँचें और फिर प्रयास करें।" else "Check your connection and retry.",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         OutlinedButton(onClick = onRefresh, enabled = !busy) {
                             Text(if (hi) "फिर प्रयास करें" else "Retry")
                         }
                     }
                 }
+            } else {
+                StudentEnrollmentEmptyState(
+                    icon = "▦",
+                    title = localizedUiText("No courses in your account yet"),
+                    message = localizedUiText("Explore the Marketplace to find a course. Once enrolment is confirmed, your lessons, practice, tests and progress will appear here."),
+                    primaryLabel = localizedUiText("Explore Marketplace"),
+                    onPrimary = onMarketplace
+                )
             }
         } else {
             owned.forEach { course ->
