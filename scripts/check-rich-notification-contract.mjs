@@ -50,6 +50,7 @@ for (const path of [
   'services/api/src/main/java/com/quantaedge/api/NotificationDispatchScheduler.java',
   'services/api/src/test/java/com/quantaedge/api/NotificationContentValidatorTest.java',
   'services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationTest.java',
+  'services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationIntegrationTest.java',
   'services/api/src/main/resources/db/migration/V142__rich_notification_platform.sql',
   'services/api/src/main/resources/db/migration/V143__rich_notification_template_versioning.sql',
   'services/api/src/main/resources/db/migration/V144__rich_notification_template_active_name.sql',
@@ -113,6 +114,15 @@ for (const required of [
   'staffTargetsFailClosedUntilCanonicalTenantMappingExists',
 ]) {
   assert.ok(audienceTests.includes(required), `P1 notification audience regression coverage is missing ${required}`);
+}
+
+const audienceIntegration = read('services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationIntegrationTest.java');
+for (const required of [
+  'qe.qa.lifecycle.integration', 'Flyway.configure()', 'TENANT_LEARNER_BOUNDARY_V1',
+  'institutionA', 'institutionB', 'institutionC', 'HRMS_PLATFORM', 'consent_status=\\'CONSENTED\\'',
+  'assertThrows(SecurityException.class',
+]) {
+  assert.ok(audienceIntegration.includes(required), `P1 notification database acceptance coverage is missing ${required}`);
 }
 
 console.log('Rich notification contract passed: shared sender studio, tenant-scoped inbox/media, safe rich content and Android/web entry points.');
