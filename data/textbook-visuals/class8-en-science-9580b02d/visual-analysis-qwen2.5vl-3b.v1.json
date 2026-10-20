@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 983,
+    "assets_selected": 985,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 980,
-    "assets_remaining": 1311,
+    "assets_analyzed": 981,
+    "assets_remaining": 1310,
     "assets_completion_percent": 42.8,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 978,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 980,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:02Z"
+      "checkpointed_at": "2026-10-20T02:58:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:36Z"
+      "checkpointed_at": "2026-10-20T02:58:39Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:59Z"
+      "checkpointed_at": "2026-10-20T02:59:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31281,6 +31281,57 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:57:19Z"
+    },
+    {
+      "asset_id": "9fac2ee8d692052acc85bf11",
+      "asset_sha256": "f5a97ff8c051b01fe07dc562cd1a4df8fa2dda1b9f6fe542034795dada210350",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/f5a97ff8c051b01fe07dc562cd1a4df8fa2dda1b9f6fe542034795dada210350.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people standing in front of a barn with a cow, discussing something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "farm",
+          "cow",
+          "people",
+          "discussion",
+          "barn"
+        ],
+        "context_relation": "The image is related to the chapter on health and the use of antibiotics.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the context of the health chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:59:40Z"
+    },
+    {
+      "asset_id": "dca29588e457e762592b2148",
+      "asset_sha256": "7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }

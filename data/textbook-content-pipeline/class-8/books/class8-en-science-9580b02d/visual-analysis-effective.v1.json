@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "49672ee8198abfcb243186fd3559aa3beb2aff941f29d0c79f8929b1873d830f",
+  "raw_analysis_sha256": "d31866c5e0050c0e242448ac9820ee26c9e5ef1b2ddc389f03a70a7113988468",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:02Z",
+      "checkpointed_at": "2026-10-20T02:58:05Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:36Z",
+      "checkpointed_at": "2026-10-20T02:58:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:55:59Z",
+      "checkpointed_at": "2026-10-20T02:59:02Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -46649,6 +46649,78 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9fac2ee8d692052acc85bf11",
+      "asset_sha256": "f5a97ff8c051b01fe07dc562cd1a4df8fa2dda1b9f6fe542034795dada210350",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/f5a97ff8c051b01fe07dc562cd1a4df8fa2dda1b9f6fe542034795dada210350.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people standing in front of a barn with a cow, discussing something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "farm",
+          "cow",
+          "people",
+          "discussion",
+          "barn"
+        ],
+        "context_relation": "The image is related to the chapter on health and the use of antibiotics.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the context of the health chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:59:40Z",
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in front of a barn with a cow, discussing something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "farm",
+          "cow",
+          "people",
+          "discussion",
+          "barn"
+        ],
+        "context_relation": "The image is related to the chapter on health and the use of antibiotics.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the context of the health chapter."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dca29588e457e762592b2148",
+      "asset_sha256": "7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
