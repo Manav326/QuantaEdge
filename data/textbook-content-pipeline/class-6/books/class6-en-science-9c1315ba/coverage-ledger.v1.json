@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1218,
-    "successful_visual_analyses": 1194,
-    "missing_visual_analyses": 860,
+    "raw_analysis_result_rows": 1220,
+    "successful_visual_analyses": 1196,
+    "missing_visual_analyses": 858,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 884,
+    "unresolved_count": 882,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46157,9 +46157,25 @@
       "asset_path": "assets/08419f0d9e6275f27bf3acc71daf5cd6cb9587847487228747b8f814b33a0956.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand is shown throwing an eraser upwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line",
+          "Swings",
+          "Merry-go-rounds",
+          "Investigation",
+          "Throwing an eraser"
+        ],
+        "context_relation": "The image illustrates an activity related to linear motion, where an object is thrown upwards.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the eraser."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46175,9 +46191,22 @@
       "asset_path": "assets/b53749fe775b3c68994552e77246b0ca5d385c9fdc727024225402626fdf7fb6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person pushing a large wooden block.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line motion",
+          "Activity 5.4: Investigating linear motion"
+        ],
+        "context_relation": "The image is related to the concept of linear motion, as it shows a person pushing a block along a straight line.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the block or the person."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

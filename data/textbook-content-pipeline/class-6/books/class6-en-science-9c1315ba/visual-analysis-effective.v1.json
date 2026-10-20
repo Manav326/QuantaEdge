@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "258308720b11e49955817a41cf4d517fecdd5e3a452f7bf968319fed0cde1679",
+  "raw_analysis_sha256": "8ae70fec2e36ef5d27496bb0fb9dfdf4616e31ab3e5e57d5bf77c04f231d0452",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:26:17Z",
+      "checkpointed_at": "2026-10-20T03:32:35Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:27:16Z",
+      "checkpointed_at": "2026-10-20T03:33:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:28:06Z",
+      "checkpointed_at": "2026-10-20T03:34:25Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59534,6 +59534,108 @@
         "context_relation": "The image is related to the concept of linear motion and synchronized movement.",
         "limitations": [
           "The image does not provide specific details about the objects or their positions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4caa70ca25f99a6755030b12",
+      "asset_sha256": "08419f0d9e6275f27bf3acc71daf5cd6cb9587847487228747b8f814b33a0956",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/08419f0d9e6275f27bf3acc71daf5cd6cb9587847487228747b8f814b33a0956.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand is shown throwing an eraser upwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line",
+          "Swings",
+          "Merry-go-rounds",
+          "Investigation",
+          "Throwing an eraser"
+        ],
+        "context_relation": "The image illustrates an activity related to linear motion, where an object is thrown upwards.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the eraser."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:36:04Z",
+      "effective_analysis": {
+        "visual_summary": "A hand is shown throwing an eraser upwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line",
+          "Swings",
+          "Merry-go-rounds",
+          "Investigation",
+          "Throwing an eraser"
+        ],
+        "context_relation": "The image illustrates an activity related to linear motion, where an object is thrown upwards.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the eraser."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cc96f618563ca45e8beb2ecd",
+      "asset_sha256": "b53749fe775b3c68994552e77246b0ca5d385c9fdc727024225402626fdf7fb6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/b53749fe775b3c68994552e77246b0ca5d385c9fdc727024225402626fdf7fb6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ebc6daf29db5c7067d2c5791591e900604e5eff4a3435999ee3986d6b78e80f8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person pushing a large wooden block.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line motion",
+          "Activity 5.4: Investigating linear motion"
+        ],
+        "context_relation": "The image is related to the concept of linear motion, as it shows a person pushing a block along a straight line.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the block or the person."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:37:46Z",
+      "effective_analysis": {
+        "visual_summary": "A person pushing a large wooden block.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Linear motion",
+          "Straight line motion",
+          "Activity 5.4: Investigating linear motion"
+        ],
+        "context_relation": "The image is related to the concept of linear motion, as it shows a person pushing a block along a straight line.",
+        "limitations": [
+          "The image does not provide specific details about the motion of the block or the person."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
