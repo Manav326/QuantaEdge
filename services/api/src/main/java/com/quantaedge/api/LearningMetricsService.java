@@ -164,7 +164,7 @@ public class LearningMetricsService {
       join curriculum_subject s on s.id=a.subject_id
       where att.student_id=? __TENANT_ATT__ and __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,assessmentArgs)));
 
     result.put("assessmentByType",jdbc.queryForList(tenantSql("""
       select a.assessment_type,count(att.id) filter(where att.status<>'ABANDONED') as attempts,
@@ -205,8 +205,8 @@ public class LearningMetricsService {
         and __COURSE_ATTEMPT_SCOPE__ and __SUBJECT_SCOPE__
       order by qa.answered_at desc,qa.id desc limit 20
       """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,
-          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,
+          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId})));
 
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
