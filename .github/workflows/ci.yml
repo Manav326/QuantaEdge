@@ -233,7 +233,6 @@ jobs:
       - name: Report installable APK package and Google OAuth signing fingerprint
         if: steps.signing.outputs.configured == 'true'
         shell: bash
-        env:
         run: |
           set -euo pipefail
           APK="apps/android/app/build/outputs/apk/release/app-release.apk"
@@ -251,7 +250,7 @@ jobs:
           SIGNER_DETAILS="$("$APKSIGNER" verify --print-certs "$APK")"
           ACTUAL_SHA1_RAW="$(printf '%s\n' "$SIGNER_DETAILS" | awk -F': ' '/Signer #1 certificate SHA-1 digest:/ { print $NF; exit }')"
           ACTUAL_SHA1="$(printf '%s' "$ACTUAL_SHA1_RAW" | tr '[:upper:]' '[:lower:]' | tr -d ':[:space:]')"
-          test "\${#ACTUAL_SHA1}" -eq 40 || { echo "::error::Could not determine a valid signed APK SHA-1 fingerprint."; exit 1; }
+          test "${#ACTUAL_SHA1}" -eq 40 || { echo "::error::Could not determine a valid signed APK SHA-1 fingerprint."; exit 1; }
           ACTUAL_SHA1_COLON="$(printf '%s' "$ACTUAL_SHA1" | sed 's/../&:/g; s/:$//' | tr '[:lower:]' '[:upper:]')"
           echo "Fixed Android signing certificate SHA-1 (register this one value in Google Cloud): $ACTUAL_SHA1_COLON"
           echo "Using the same protected Android signing keystore on every build keeps this certificate SHA-1 stable."
