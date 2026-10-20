@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b2fec6728b80a18c515fdba18e235dc2ed1aa30284c92a03fc6effb3bcf32d86",
+  "raw_analysis_sha256": "f20fb08da93f306909b5cc5d725aaf6c03d0c4f5700ed1110b01cfa05a371361",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:54:53Z",
+      "checkpointed_at": "2026-10-20T05:57:48Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:55:28Z",
+      "checkpointed_at": "2026-10-20T05:58:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:55:50Z",
+      "checkpointed_at": "2026-10-20T05:58:43Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:56:27Z",
+      "checkpointed_at": "2026-10-20T05:59:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -52118,6 +52118,50 @@
         "context_relation": "The image is likely used to illustrate a concept related to electricity or batteries, possibly explaining the components or effects of these portable sources.",
         "limitations": [
           "The image does not provide specific details about the components of cells and batteries, nor does it show the magnetic or heating effects mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a17d0bbb8f5afc70b9987466",
+      "asset_sha256": "2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aea6c47d87dc8df6f932d601b41adf4e16f8caed0f597f02df9e63a986e4a3ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl pointing upwards with one finger and holding her hand to her ear, possibly indicating a secret or important message.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:59:57Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl pointing upwards with one finger and holding her hand to her ear, possibly indicating a secret or important message.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the content of the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

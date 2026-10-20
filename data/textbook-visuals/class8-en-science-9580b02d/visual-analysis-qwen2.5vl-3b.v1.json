@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1078,
+    "assets_selected": 1079,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1074,
-    "assets_remaining": 1217,
+    "assets_analyzed": 1075,
+    "assets_remaining": 1216,
     "assets_completion_percent": 46.9,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1073,
+    "assets_skipped_from_checkpoint": 1074,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:54:53Z"
+      "checkpointed_at": "2026-10-20T05:57:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:55:28Z"
+      "checkpointed_at": "2026-10-20T05:58:21Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:55:50Z"
+      "checkpointed_at": "2026-10-20T05:58:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:56:27Z"
+      "checkpointed_at": "2026-10-20T05:59:20Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34826,6 +34826,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T05:57:04Z"
+    },
+    {
+      "asset_id": "a17d0bbb8f5afc70b9987466",
+      "asset_sha256": "2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aea6c47d87dc8df6f932d601b41adf4e16f8caed0f597f02df9e63a986e4a3ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl pointing upwards with one finger and holding her hand to her ear, possibly indicating a secret or important message.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:59:57Z"
     }
   ]
 }
