@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1097,
-    "successful_visual_analyses": 1079,
-    "missing_visual_analyses": 1194,
+    "raw_analysis_result_rows": 1098,
+    "successful_visual_analyses": 1080,
+    "missing_visual_analyses": 1193,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1212,
+    "unresolved_count": 1211,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41327,9 +41327,25 @@
       "asset_path": "assets/2102053e557328e0d89b62877be24a7781c3f9889a6fb5ef5de565c4888e8880.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a simple circuit with a light bulb connected to two electrodes in a beaker of water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A simple circuit with a light bulb connected to two electrodes in a beaker of water."
+        ],
+        "concepts": [
+          "Simple circuit",
+          "Electrodes",
+          "Light bulb",
+          "Water"
+        ],
+        "context_relation": "The image represents a basic electrical circuit where water acts as the electrolyte, demonstrating the principle of electrolysis.",
+        "limitations": [
+          "The image does not show the actual electrolysis process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
