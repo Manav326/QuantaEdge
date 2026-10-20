@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "701c0f815ec420f3cb5940fc264b0d996e0420f1688807d9169f1d059cf4fe29",
+  "raw_analysis_sha256": "0aefaa0d618a23938194df3ffdd4476aa221ddf83ddda885a629b13e4080f15f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:55:45Z",
+      "checkpointed_at": "2026-10-20T02:00:31Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:56:44Z",
+      "checkpointed_at": "2026-10-20T02:01:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:57:34Z",
+      "checkpointed_at": "2026-10-20T02:02:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57998,6 +57998,112 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible text or content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "37a412885e6f4dfcf33ad083",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "062c72d949c8302ac605d4d89484b106e744ba27502d471a9507bc90d363669c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:02:31Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "63be0d63ee065aa3bd0593cd",
+      "asset_sha256": "6d2a858c4e3e03449cf64b11417e8b3d70513209505e5a965f16b6ca8436981b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 104,
+      "asset_path": "page-0104.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "062c72d949c8302ac605d4d89484b106e744ba27502d471a9507bc90d363669c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 5.1: Measuring Lengths",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 5.1: Let us measure",
+          "Select some objects around you, such as a comb, a pen, a pencil, and an eraser to measure their lengths.",
+          "Measure their lengths one by one using a metre scale and note down the measurements in Table 5.2.",
+          "Table 5.2: Measuring lengths",
+          "Object Length of the object",
+          "Why are some length measuring devices made up of flexible materials?",
+          "While writing the length, do not forget to write the unit also. Thus, your result will consist of two parts—one part is a number and the other part is the unit of measurement.",
+          "Some of your friends in the class would have measured the length of the same objects. Compare the lengths measured by you with that of your friends. Are the measured lengths the same or slightly different? If not the same, discuss the possible reasons for the differences.",
+          "Units of length, such as kilometre, metre, centimetre and millimetre, begin with a lowercase letter, except at the beginning of a sentence. Their symbols km, m, cm and mm are also written in lowercase letters, and are never followed by 's' for the plural. Note that a full stop is not written after t"
+        ],
+        "concepts": [
+          "Measuring Lengths",
+          "Units of Length",
+          "Measurement"
+        ],
+        "context_relation": "Activity",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:06:47Z",
+      "effective_analysis": {
+        "visual_summary": "Activity 5.1: Measuring Lengths",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 5.1: Let us measure",
+          "Select some objects around you, such as a comb, a pen, a pencil, and an eraser to measure their lengths.",
+          "Measure their lengths one by one using a metre scale and note down the measurements in Table 5.2.",
+          "Table 5.2: Measuring lengths",
+          "Object Length of the object",
+          "Why are some length measuring devices made up of flexible materials?",
+          "While writing the length, do not forget to write the unit also. Thus, your result will consist of two parts—one part is a number and the other part is the unit of measurement.",
+          "Some of your friends in the class would have measured the length of the same objects. Compare the lengths measured by you with that of your friends. Are the measured lengths the same or slightly different? If not the same, discuss the possible reasons for the differences.",
+          "Units of length, such as kilometre, metre, centimetre and millimetre, begin with a lowercase letter, except at the beginning of a sentence. Their symbols km, m, cm and mm are also written in lowercase letters, and are never followed by 's' for the plural. Note that a full stop is not written after t"
+        ],
+        "concepts": [
+          "Measuring Lengths",
+          "Units of Length",
+          "Measurement"
+        ],
+        "context_relation": "Activity",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
