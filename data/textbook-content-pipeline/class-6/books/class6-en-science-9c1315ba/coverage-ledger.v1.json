@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1269,
-    "successful_visual_analyses": 1244,
-    "missing_visual_analyses": 809,
+    "raw_analysis_result_rows": 1270,
+    "successful_visual_analyses": 1245,
+    "missing_visual_analyses": 808,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 834,
+    "unresolved_count": 833,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47907,9 +47907,29 @@
       "asset_path": "page-0119.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing materials around us, including a quote about crucibles and a scene with students in a classroom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6\nMaterials Around Us",
+          "उपादानं भवेत्तस्ा (मूषाया:) मृत्ति‍का लोहमेव च।\n(रसरतनसमुच्चय–१०.३)\n\nThe materials used to make the crucible\n(a vessel used to melt substances) are clay and iron.\n(Rasaratnasamuchchaya–10.3)",
+          "6.1 Observing Objects Around Us\nGhulan and Sheeta are thrilled to go to their new class\nafter the summer break. They enter their classroom and\nstart talking. “What have you brought to school today?”\nasks Sheeta.\n\nLook, I\nhave a new\nnotebook.\nI also have a\nnew notebook\nand a pen.",
+          "After some time, Madam Vidya, their science teacher,\nenters the class and starts interacting with the students to\ndraw their attention to many things they use in their daily\nlife. She asks, “How are they similar to or different from\neach other? What are their shapes and colours? How does it\nfeel whe"
+        ],
+        "concepts": [
+          "materials",
+          "crucibles",
+          "classroom",
+          "science teacher",
+          "daily life"
+        ],
+        "context_relation": "The page discusses the materials used in making crucibles and transitions to a scene in a classroom where students are interacting with their new school supplies.",
+        "limitations": [
+          "The page does not provide specific details about the materials used in crucibles or the exact scene in the classroom."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

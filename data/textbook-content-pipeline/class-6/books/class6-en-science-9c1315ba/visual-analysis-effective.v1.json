@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "88237a0b33a063702c10953a34857fd856bdb37dc5d479dbb97eaaedbf83b526",
+  "raw_analysis_sha256": "1cb479cc61bcaeee93a53f9a1452b46df9dee6de0c5dc4d698293993d8d1104d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:22:08Z",
+      "checkpointed_at": "2026-10-20T10:26:14Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:23:07Z",
+      "checkpointed_at": "2026-10-20T10:27:14Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:23:58Z",
+      "checkpointed_at": "2026-10-20T10:28:06Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:24:46Z",
+      "checkpointed_at": "2026-10-20T10:28:54Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62319,6 +62319,68 @@
         "concepts": [],
         "context_relation": "unclear",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8688d4a5c68eed1b65a7b4f",
+      "asset_sha256": "15b3674f1441beb52b2718a6d8de8af3b8eb6bef00c90c65753a4c0a88c4b4ce",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 119,
+      "asset_path": "page-0119.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ba824eb919a0214ac7e039b493594f10eceb9afc3804568ea0652486f4010b1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing materials around us, including a quote about crucibles and a scene with students in a classroom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6\nMaterials Around Us",
+          "उपादानं भवेत्तस्ा (मूषाया:) मृत्ति‍का लोहमेव च।\n(रसरतनसमुच्चय–१०.३)\n\nThe materials used to make the crucible\n(a vessel used to melt substances) are clay and iron.\n(Rasaratnasamuchchaya–10.3)",
+          "6.1 Observing Objects Around Us\nGhulan and Sheeta are thrilled to go to their new class\nafter the summer break. They enter their classroom and\nstart talking. “What have you brought to school today?”\nasks Sheeta.\n\nLook, I\nhave a new\nnotebook.\nI also have a\nnew notebook\nand a pen.",
+          "After some time, Madam Vidya, their science teacher,\nenters the class and starts interacting with the students to\ndraw their attention to many things they use in their daily\nlife. She asks, “How are they similar to or different from\neach other? What are their shapes and colours? How does it\nfeel whe"
+        ],
+        "concepts": [
+          "materials",
+          "crucibles",
+          "classroom",
+          "science teacher",
+          "daily life"
+        ],
+        "context_relation": "The page discusses the materials used in making crucibles and transitions to a scene in a classroom where students are interacting with their new school supplies.",
+        "limitations": [
+          "The page does not provide specific details about the materials used in crucibles or the exact scene in the classroom."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:33:16Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing materials around us, including a quote about crucibles and a scene with students in a classroom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6\nMaterials Around Us",
+          "उपादानं भवेत्तस्ा (मूषाया:) मृत्ति‍का लोहमेव च।\n(रसरतनसमुच्चय–१०.३)\n\nThe materials used to make the crucible\n(a vessel used to melt substances) are clay and iron.\n(Rasaratnasamuchchaya–10.3)",
+          "6.1 Observing Objects Around Us\nGhulan and Sheeta are thrilled to go to their new class\nafter the summer break. They enter their classroom and\nstart talking. “What have you brought to school today?”\nasks Sheeta.\n\nLook, I\nhave a new\nnotebook.\nI also have a\nnew notebook\nand a pen.",
+          "After some time, Madam Vidya, their science teacher,\nenters the class and starts interacting with the students to\ndraw their attention to many things they use in their daily\nlife. She asks, “How are they similar to or different from\neach other? What are their shapes and colours? How does it\nfeel whe"
+        ],
+        "concepts": [
+          "materials",
+          "crucibles",
+          "classroom",
+          "science teacher",
+          "daily life"
+        ],
+        "context_relation": "The page discusses the materials used in making crucibles and transitions to a scene in a classroom where students are interacting with their new school supplies.",
+        "limitations": [
+          "The page does not provide specific details about the materials used in crucibles or the exact scene in the classroom."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
