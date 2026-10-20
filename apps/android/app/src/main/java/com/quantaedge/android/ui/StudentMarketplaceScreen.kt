@@ -35,7 +35,9 @@ fun StudentMarketplaceScreen(
     onJoinFree: (Long) -> Unit,
     onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
-    onAllCourses: () -> Unit
+    onAllCourses: () -> Unit,
+    pendingVerification: Boolean = false,
+    onRetryVerification: () -> Unit = {}
 ) {
     val hi = language == "hi"
     val inr = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
@@ -54,6 +56,24 @@ fun StudentMarketplaceScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = onAllCourses, enabled = !busy) { Text(if (hi) "आपके courses" else "Your courses") }
             OutlinedButton(onClick = onRefresh, enabled = !busy) { Text("↻") }
+        }
+        if (pendingVerification) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        if (hi) "भुगतान की पुष्टि बाकी है" else "Payment verification is pending",
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        if (hi) "इस order को सत्यापित करें। अभी दोबारा भुगतान न करें।"
+                        else "Reconcile the saved order before trying to pay again.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Button(onClick = onRetryVerification, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                        Text(if (hi) "भुगतान फिर से सत्यापित करें" else "Retry payment verification")
+                    }
+                }
+            }
         }
         if (loading) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         if (loadFailed) {
@@ -125,7 +145,7 @@ fun StudentMarketplaceScreen(
                                 else if (hi) "अभिभावक से खरीदने को कहें" else "Ask parent to buy")
                         }
                         pricePaise > 0L && currency == "INR" -> Button(
-                            onClick = { onBuy(id) }, enabled = !busy && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
+                            onClick = { onBuy(id) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "Checkout खुल रहा है…" else "Opening checkout…" }
                                 else if (hi) "Razorpay से खरीदें" else "Buy with Razorpay")
