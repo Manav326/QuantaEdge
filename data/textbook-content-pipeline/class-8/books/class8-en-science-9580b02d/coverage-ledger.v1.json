@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1086,
-    "successful_visual_analyses": 1069,
-    "missing_visual_analyses": 1205,
+    "raw_analysis_result_rows": 1087,
+    "successful_visual_analyses": 1070,
+    "missing_visual_analyses": 1204,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1222,
+    "unresolved_count": 1221,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40988,9 +40988,23 @@
       "asset_path": "assets/2920aac10ab51ccb9c02e727ff070b870eb67840b3547641f6059b42de9ba259.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of an electric heating element, likely used in a household appliance.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric heating element",
+          "household appliance",
+          "electricity",
+          "heating effect"
+        ],
+        "context_relation": "The image is a visual representation of an electric heating element, which is used in various household appliances.",
+        "limitations": [
+          "The image does not provide specific details about the appliance or its function."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
