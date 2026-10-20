@@ -219,8 +219,6 @@ try {
         Remove-Item -LiteralPath $stagedApk -Force -ErrorAction SilentlyContinue
         throw "The downloaded APK reported an invalid SHA-1 fingerprint: $apkSha1Display. The previously saved APK was not changed."
     }
-    Write-Status ("Android signing certificate SHA-1 (fixed OAuth fingerprint): {0}" -f $apkSha1Display) "Green"
-
     $metadata = [ordered]@{
         repository = $Repository
         branch = [string]$sourceRun.headBranch
