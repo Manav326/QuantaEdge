@@ -52,9 +52,9 @@ public class AdminAnalyticsController {
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_program course on course.id=spe.program_id and course.status='ACTIVE' and course.code<>'GENERAL'
       join curriculum_program_subject cps on cps.program_id=course.id and cps.subject_id=s.id and cps.class_id=s.class_id
-      where ts.institution_id=?
+      where ts.institution_id=? and ts.course_id=?
         and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
-      """,courseId,institutionId));
+      """,courseId,institutionId,courseId));
     result.put("learning",jdbc.queryForMap("""
       select count(*) as attempts_30d,
              count(*) filter(where qa.correct=true) as correct_30d,
@@ -71,9 +71,9 @@ public class AdminAnalyticsController {
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_program course on course.id=spe.program_id and course.status='ACTIVE' and course.code<>'GENERAL'
       join curriculum_program_subject cps on cps.program_id=course.id and cps.subject_id=s.id and cps.class_id=s.class_id
-      where qa.institution_id=? and qa.answered_at>=now()-interval '30 days'
+      where qa.institution_id=? and qa.course_id=? and qa.answered_at>=now()-interval '30 days'
         and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
-      """,courseId,institutionId));
+      """,courseId,institutionId,courseId));
     result.put("daily",jdbc.queryForList("""
       select d::date as day,
              coalesce(s.sessions,0) as sessions,
@@ -92,7 +92,7 @@ public class AdminAnalyticsController {
         join curriculum_subject s on s.id=ch.subject_id and s.active=true
         join curriculum_program course on course.id=spe.program_id and course.status='ACTIVE' and course.code<>'GENERAL'
         join curriculum_program_subject cps on cps.program_id=course.id and cps.subject_id=s.id and cps.class_id=s.class_id
-        where ts.institution_id=? and ts.created_at>=current_date-interval '13 days'
+        where ts.institution_id=? and ts.course_id=? and ts.created_at>=current_date-interval '13 days'
           and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
         group by ts.created_at::date
       ) s on s.day=d::date
@@ -111,12 +111,12 @@ public class AdminAnalyticsController {
         join curriculum_subject s on s.id=ch.subject_id and s.active=true
         join curriculum_program course on course.id=spe.program_id and course.status='ACTIVE' and course.code<>'GENERAL'
         join curriculum_program_subject cps on cps.program_id=course.id and cps.subject_id=s.id and cps.class_id=s.class_id
-        where qa.institution_id=? and qa.answered_at>=current_date-interval '13 days'
+        where qa.institution_id=? and qa.course_id=? and qa.answered_at>=current_date-interval '13 days'
           and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
         group by qa.answered_at::date
       ) a on a.day=d::date
       order by day
-      """,courseId,institutionId,courseId,institutionId));
+      """,courseId,institutionId,courseId,courseId,institutionId,courseId));
     result.put("mastery",jdbc.queryForList("""
       select course.id as course_id,course.display_name as course_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -132,11 +132,11 @@ public class AdminAnalyticsController {
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_program course on course.id=spe.program_id and course.status='ACTIVE' and course.code<>'GENERAL'
       join curriculum_program_subject cps on cps.program_id=course.id and cps.subject_id=s.id and cps.class_id=s.class_id
-      where m.institution_id=?
+      where m.institution_id=? and m.course_id=?
         and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
       group by course.id,course.display_name,s.code,s.display_name
       order by course.display_name,s.display_name
-      """,courseId,institutionId));
+      """,courseId,institutionId,courseId));
     return result;
   }
 
