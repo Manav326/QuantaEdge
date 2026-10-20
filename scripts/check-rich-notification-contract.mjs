@@ -116,6 +116,7 @@ assert.ok(validator.includes('MAX_DOCUMENT_NODES') &&
 const pushService = read('services/api/src/main/java/com/quantaedge/api/AndroidPushService.java');
 assert.ok(pushService.includes('FirebaseMessaging') && pushService.includes('UNREGISTERED') &&
   pushService.includes('if (!isConfigured()) return 0;') && pushService.includes('isRecipientCurrentlyEligible') &&
+  pushService.includes('eligibilityInstitutionIds') && pushService.includes('audience_snapshot_json') &&
   pushService.includes("next_attempt_at=now()+interval '10 minutes'") && pushService.includes('if(claimed!=1) continue;'),
   'Android push must be provider-backed, retryable/configuration-safe without discarding queued attempts, and recheck current recipient eligibility.');
 const deviceController = read('services/api/src/main/java/com/quantaedge/api/NotificationDeviceController.java');

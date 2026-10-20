@@ -175,7 +175,7 @@ Do not send real notifications to production users from fixtures or QA automatio
 - a CI contract script for shared surfaces, routes, tenant boundaries and rich-content safety.
 
 **Not yet delivered/configured:**
-- Live provider delivery is not yet verified against a configured Firebase project. Android FCM token registration, installation/account/tenant binding, notification permission/channels, push-tap inbox detail, invalid-token revocation and bounded retries are now implemented. The provider remains disabled when server credentials are absent; no provider secret is committed.
+- Live provider delivery is not yet verified against a configured Firebase project. Android FCM token registration, installation/account binding with per-recipient tenant eligibility checks, notification permission/channels, push-tap inbox detail, invalid-token revocation and bounded retries are now implemented. The provider remains disabled when server credentials are absent; no provider secret is committed.
 - prompt-to-image generation: the logo tool creates editable local vector concepts and is not labelled AI-generated. An image-generation provider must be selected/configured before that capability can be truthfully enabled.
 - institution employee/staff recipients: the existing schema intentionally separates tenant membership from `hr_employee`/`staff_account`; do not infer membership until HRMS defines and enforces the tenant-to-organization mapping.
 - live database/Flyway tests, application builds and a green GitHub Actions result have not been confirmed from this session. CI now contains a contract check that will run on the main push, but source commits alone do not count as runtime verification.

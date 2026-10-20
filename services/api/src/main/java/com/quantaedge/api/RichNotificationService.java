@@ -641,9 +641,6 @@ public class RichNotificationService {
         and d.identity_kind=r.recipient_kind
         and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
           or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
-        and (d.institution_id=r.institution_id or
-          (r.institution_id is null and c.scope='HRMS_PLATFORM'
-            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
       where r.campaign_id=? and r.recipient_kind in ('STUDENT','USER_ACCOUNT')
       on conflict do nothing
       """,campaignId);
@@ -659,9 +656,6 @@ public class RichNotificationService {
           where d.status='ACTIVE' and d.identity_kind=r.recipient_kind
             and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
               or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
-            and (d.institution_id=r.institution_id or
-              (r.institution_id is null and c.scope='HRMS_PLATFORM'
-                and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
         )
       on conflict do nothing
       """,campaignId);

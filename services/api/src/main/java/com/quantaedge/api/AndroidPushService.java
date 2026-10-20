@@ -10,6 +10,8 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MessagingErrorCode;
 import com.google.firebase.messaging.Notification;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -17,6 +19,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.HexFormat;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -39,13 +42,16 @@ public class AndroidPushService {
   private static final int MAX_ATTEMPTS = 4;
 
   private final JdbcTemplate jdbc;
+  private final ObjectMapper mapper;
   private final FirebaseMessaging messaging;
 
   public AndroidPushService(
       JdbcTemplate jdbc,
+      ObjectMapper mapper,
       @Value("${app.notifications.fcm.project-id:}") String projectId,
       @Value("${app.notifications.fcm.service-account-json-base64:}") String credentialsBase64) {
     this.jdbc = jdbc;
+    this.mapper = mapper;
     this.messaging = initializeMessaging(projectId, credentialsBase64);
   }
 
@@ -99,18 +105,16 @@ public class AndroidPushService {
               and d.identity_kind=r.recipient_kind
               and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
                 or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
-              and (d.institution_id=r.institution_id or
-                (r.institution_id is null and c.scope='HRMS_PLATFORM'
-                  and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
           )
         )
       """);
 
     List<Map<String,Object>> attempts = jdbc.queryForList("""
       select a.id as attempt_id,a.recipient_id,a.attempt_number,a.device_registration_id,
-        d.device_token,d.institution_id as device_institution_id,
+        d.device_token,r.institution_id as recipient_institution_id,
         r.recipient_kind,r.student_id,r.user_account_id,
         c.public_id as campaign_public_id,c.scope,c.course_id,c.title,
+        c.audience_snapshot::text as audience_snapshot_json,
         coalesce(nullif(c.summary,''),nullif(c.content_document #>> '{blocks,0,subtitle}',''),
           nullif(c.content_document #>> '{blocks,0,body}',''),'Open QuantaEdge to view details') as push_body
       from notification_delivery_attempt a
@@ -122,9 +126,6 @@ public class AndroidPushService {
         and d.status='ACTIVE' and d.identity_kind=r.recipient_kind
         and ((r.recipient_kind='STUDENT' and d.student_id=r.student_id)
           or (r.recipient_kind='USER_ACCOUNT' and d.user_account_id=r.user_account_id))
-        and (d.institution_id=r.institution_id or
-          (r.institution_id is null and c.scope='HRMS_PLATFORM'
-            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(d.institution_id)))
         and c.status='SENT' and (c.expires_at is null or c.expires_at>now())
       order by a.next_attempt_at,a.id limit 100
       """);
@@ -143,7 +144,8 @@ public class AndroidPushService {
       if(claimed!=1) continue;
       long recipientId = number(row.get("recipient_id"));
       long deviceId = number(row.get("device_registration_id"));
-      long institutionId = number(row.get("device_institution_id"));
+      Long recipientInstitutionId = row.get("recipient_institution_id") instanceof Number value
+          ? value.longValue() : null;
       String kind = String.valueOf(row.get("recipient_kind"));
       long identityId = "STUDENT".equals(kind)
           ? number(row.get("student_id")) : number(row.get("user_account_id"));
@@ -151,7 +153,10 @@ public class AndroidPushService {
       Long courseId = row.get("course_id") instanceof Number value ? value.longValue() : null;
       int attemptNumber = Math.toIntExact(number(row.get("attempt_number")));
 
-      if (!isRecipientCurrentlyEligible(kind, identityId, institutionId, scope, courseId)) {
+      boolean eligible = eligibilityInstitutionIds(row, recipientInstitutionId).stream()
+          .anyMatch(institutionId -> isRecipientCurrentlyEligible(
+              kind, identityId, institutionId, scope, courseId));
+      if (!eligible) {
         failAttempt(attemptId, "RECIPIENT_INELIGIBLE");
         processed++;
         continue;
@@ -202,6 +207,33 @@ public class AndroidPushService {
       processed++;
     }
     return processed;
+  }
+
+
+  /**
+   * A device's currently selected institution is not a recipient boundary: parents may have
+   * eligible children in several institutions. For HRMS fan-out rows, check the frozen campaign
+   * target list and send once per account/device only if the account remains eligible somewhere
+   * in that list.
+   */
+  List<Long> eligibilityInstitutionIds(Map<String,Object> row, Long recipientInstitutionId) {
+    if (recipientInstitutionId != null && recipientInstitutionId > 0L) {
+      return List.of(recipientInstitutionId);
+    }
+    Object raw = row.get("audience_snapshot_json");
+    if (raw == null || String.valueOf(raw).isBlank()) return List.of();
+    try {
+      JsonNode ids = mapper.readTree(String.valueOf(raw)).path("institutionIds");
+      if (!ids.isArray()) return List.of();
+      LinkedHashSet<Long> result = new LinkedHashSet<>();
+      for (JsonNode id : ids) {
+        if (id.canConvertToLong() && id.asLong() > 0L) result.add(id.asLong());
+      }
+      return List.copyOf(result);
+    } catch (Exception failure) {
+      LOGGER.warn("Android push attempt has an invalid campaign institution snapshot");
+      return List.of();
+    }
   }
 
   private boolean isRecipientCurrentlyEligible(
