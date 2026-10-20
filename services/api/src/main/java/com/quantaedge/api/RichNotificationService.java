@@ -477,7 +477,9 @@ public class RichNotificationService {
         returning id
         """,Long.class,normalizedScope,institutionId,courseId,templateId,templateVersion,checkedTitle,checkedSummary,
         writeJson(document),writeJson(scheduledFilter),writeJson(scheduledSnapshot),actor.workspace(),
-        actor.staffId(),actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
+        actor.staffId(),actor.institutionAdminId(),key,
+        scheduledAt==null?null:java.sql.Timestamp.from(scheduledAt),
+        expiresAt==null?null:java.sql.Timestamp.from(expiresAt),recipients.size());
       audit(actor,institutionId,id,templateId,"CAMPAIGN_SCHEDULED",
           Map.of("scope",normalizedScope,"recipientCount",recipients.size(),"scheduledAt",scheduledAt.toString(),
               "institutionIds",scheduledSnapshot.get("institutionIds")));
@@ -593,7 +595,9 @@ public class RichNotificationService {
       returning id
       """,Long.class,scope,institutionId,courseId,templateId,templateVersion,title,summary,
       writeJson(document),writeJson(filter),writeJson(snapshot),actor.workspace(),actor.staffId(),
-      actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
+      actor.institutionAdminId(),key,
+      scheduledAt==null?null:java.sql.Timestamp.from(scheduledAt),
+      expiresAt==null?null:java.sql.Timestamp.from(expiresAt),recipients.size());
     dispatchExistingCampaign(actor,id,recipients,document,scope,filter);
     audit(actor,institutionId,id,templateId,"CAMPAIGN_SENT",Map.of(
       "scope",scope,"recipientCount",recipients.size(),"recipientCounts",counts));
