@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8ea644dcc146ea426577cc9980a1b02687eea19ad97c29b71b4403ff89c8b440",
+  "raw_analysis_sha256": "880bf2ca8b49e2249c6f1144b5ada214643354a1ab732c8cc6a9c04e2e11dd5b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:09:51Z",
+      "checkpointed_at": "2026-10-20T21:13:56Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:10:45Z",
+      "checkpointed_at": "2026-10-20T21:14:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:11:54Z",
+      "checkpointed_at": "2026-10-20T21:15:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:12:36Z",
+      "checkpointed_at": "2026-10-20T21:16:41Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65054,6 +65054,92 @@
         "context_relation": "The image is a visual representation of the text provided in the source text.",
         "limitations": [
           "The image does not provide any additional information beyond what is stated in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c2bca3be6bc69539a4ac9e98",
+      "asset_sha256": "8d45e6d089f72d94d2aa105f4b081bde32e558208572f7f28c3308a7a230a970",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "page-0127.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different materials used by different people.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "There are many materials through which you are not",
+          "able to see at all. These materials are called opaque. Wood,",
+          "cardboard and metals are examples of opaque materials.",
+          "The materials through which objects can be seen, but not",
+          "clearly, are known as translucent. Butter paper and frosted",
+          "glass are examples of translucent materials.",
+          "Look at Fig. 6.5. Identify and label the nature of materials",
+          "used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s",
+          "brother (D).",
+          "D        C",
+          "B",
+          "A",
+          "Fig. 6.5: Identify the nature of different materials",
+          "(A) --------------- (B) --------------- (C) --------------- (D) ---------------",
+          "Activity 6.6: Let us classify",
+          "Classify the following objects as transparent, translucent or",
+          "opaque in Table 6.4."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials",
+          "classification of materials"
+        ],
+        "context_relation": "The image is a visual representation of the classification of materials based on their transparency.",
+        "limitations": [
+          "The image does not provide specific examples of materials for each person."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:19:39Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing different materials used by different people.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "There are many materials through which you are not",
+          "able to see at all. These materials are called opaque. Wood,",
+          "cardboard and metals are examples of opaque materials.",
+          "The materials through which objects can be seen, but not",
+          "clearly, are known as translucent. Butter paper and frosted",
+          "glass are examples of translucent materials.",
+          "Look at Fig. 6.5. Identify and label the nature of materials",
+          "used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s",
+          "brother (D).",
+          "D        C",
+          "B",
+          "A",
+          "Fig. 6.5: Identify the nature of different materials",
+          "(A) --------------- (B) --------------- (C) --------------- (D) ---------------",
+          "Activity 6.6: Let us classify",
+          "Classify the following objects as transparent, translucent or",
+          "opaque in Table 6.4."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials",
+          "classification of materials"
+        ],
+        "context_relation": "The image is a visual representation of the classification of materials based on their transparency.",
+        "limitations": [
+          "The image does not provide specific examples of materials for each person."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

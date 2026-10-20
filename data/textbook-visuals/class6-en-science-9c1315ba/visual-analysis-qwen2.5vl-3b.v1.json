@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1290,
+    "assets_selected": 1291,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1286,
-    "assets_remaining": 792,
+    "assets_analyzed": 1287,
+    "assets_remaining": 791,
     "assets_completion_percent": 61.9,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1285,
+    "assets_skipped_from_checkpoint": 1286,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:09:51Z"
+      "checkpointed_at": "2026-10-20T21:13:56Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:10:45Z"
+      "checkpointed_at": "2026-10-20T21:14:49Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:11:54Z"
+      "checkpointed_at": "2026-10-20T21:15:58Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:12:36Z"
+      "checkpointed_at": "2026-10-20T21:16:41Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43025,6 +43025,57 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:12:53Z"
+    },
+    {
+      "asset_id": "c2bca3be6bc69539a4ac9e98",
+      "asset_sha256": "8d45e6d089f72d94d2aa105f4b081bde32e558208572f7f28c3308a7a230a970",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "page-0127.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different materials used by different people.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "There are many materials through which you are not",
+          "able to see at all. These materials are called opaque. Wood,",
+          "cardboard and metals are examples of opaque materials.",
+          "The materials through which objects can be seen, but not",
+          "clearly, are known as translucent. Butter paper and frosted",
+          "glass are examples of translucent materials.",
+          "Look at Fig. 6.5. Identify and label the nature of materials",
+          "used by Ghulan (A), Sheeta (B), Sara (C) and Sheeta’s",
+          "brother (D).",
+          "D        C",
+          "B",
+          "A",
+          "Fig. 6.5: Identify the nature of different materials",
+          "(A) --------------- (B) --------------- (C) --------------- (D) ---------------",
+          "Activity 6.6: Let us classify",
+          "Classify the following objects as transparent, translucent or",
+          "opaque in Table 6.4."
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "transparent materials",
+          "classification of materials"
+        ],
+        "context_relation": "The image is a visual representation of the classification of materials based on their transparency.",
+        "limitations": [
+          "The image does not provide specific examples of materials for each person."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:19:39Z"
     }
   ]
 }
