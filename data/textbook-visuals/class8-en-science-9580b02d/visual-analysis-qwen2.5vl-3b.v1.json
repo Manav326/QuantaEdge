@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1138,
+    "assets_selected": 1139,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1134,
-    "assets_remaining": 1157,
+    "assets_analyzed": 1135,
+    "assets_remaining": 1156,
     "assets_completion_percent": 49.5,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1133,
+    "assets_skipped_from_checkpoint": 1134,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:28:12Z"
+      "checkpointed_at": "2026-10-20T16:32:23Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:28:57Z"
+      "checkpointed_at": "2026-10-20T16:33:08Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:29:27Z"
+      "checkpointed_at": "2026-10-20T16:33:38Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:30:16Z"
+      "checkpointed_at": "2026-10-20T16:34:27Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37117,6 +37117,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:31:24Z"
+    },
+    {
+      "asset_id": "c7f1e14620c5ccc87d3255ed",
+      "asset_sha256": "fccce2348b34330990ef3f0412d023f11031d2bb226fb23bd84c8d69de9ccfda",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/fccce2348b34330990ef3f0412d023f11031d2bb226fb23bd84c8d69de9ccfda.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is lifting a large cardboard box.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "lifting",
+          "cardboard box",
+          "person"
+        ],
+        "context_relation": "The image shows a person lifting a box, which could be related to the theme of physical exertion or lifting heavy objects.",
+        "limitations": [
+          "The image does not provide specific details about the person or the box."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:35:35Z"
     }
   ]
 }

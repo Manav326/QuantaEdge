@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "feafc6518ae0467f300ef47c3ebdc1bdec177849626e4c4ef60cafb13f407feb",
+  "raw_analysis_sha256": "0e742edd60495e6ed472a04d85d596d025d64d8108ca90b8af93feaadec1855f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:28:12Z",
+      "checkpointed_at": "2026-10-20T16:32:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:28:57Z",
+      "checkpointed_at": "2026-10-20T16:33:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:29:27Z",
+      "checkpointed_at": "2026-10-20T16:33:38Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:30:16Z",
+      "checkpointed_at": "2026-10-20T16:34:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55684,6 +55684,54 @@
         "context_relation": "The image shows a girl using a rope to pull a box, which is a common illustration in physics to demonstrate the concept of force and motion.",
         "limitations": [
           "The image does not provide specific details about the forces involved or the physics principles being demonstrated."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c7f1e14620c5ccc87d3255ed",
+      "asset_sha256": "fccce2348b34330990ef3f0412d023f11031d2bb226fb23bd84c8d69de9ccfda",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/fccce2348b34330990ef3f0412d023f11031d2bb226fb23bd84c8d69de9ccfda.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is lifting a large cardboard box.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "lifting",
+          "cardboard box",
+          "person"
+        ],
+        "context_relation": "The image shows a person lifting a box, which could be related to the theme of physical exertion or lifting heavy objects.",
+        "limitations": [
+          "The image does not provide specific details about the person or the box."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:35:35Z",
+      "effective_analysis": {
+        "visual_summary": "A person is lifting a large cardboard box.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "lifting",
+          "cardboard box",
+          "person"
+        ],
+        "context_relation": "The image shows a person lifting a box, which could be related to the theme of physical exertion or lifting heavy objects.",
+        "limitations": [
+          "The image does not provide specific details about the person or the box."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

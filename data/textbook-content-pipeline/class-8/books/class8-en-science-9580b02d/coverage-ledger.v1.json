@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1160,
-    "successful_visual_analyses": 1138,
-    "missing_visual_analyses": 1131,
+    "raw_analysis_result_rows": 1161,
+    "successful_visual_analyses": 1139,
+    "missing_visual_analyses": 1130,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1153,
+    "unresolved_count": 1152,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43533,9 +43533,22 @@
       "asset_path": "assets/fccce2348b34330990ef3f0412d023f11031d2bb226fb23bd84c8d69de9ccfda.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person is lifting a large cardboard box.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "lifting",
+          "cardboard box",
+          "person"
+        ],
+        "context_relation": "The image shows a person lifting a box, which could be related to the theme of physical exertion or lifting heavy objects.",
+        "limitations": [
+          "The image does not provide specific details about the person or the box."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
