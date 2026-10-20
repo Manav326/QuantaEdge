@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "58bea7831ef0ca1ae110d946882e21e0e076fdf695ffa4dadef3bb1bf26d81d6",
+  "raw_analysis_sha256": "cc45e0fd66e7ddd951630399e46dd98a4007f2fdfb8c8147514955b3a0c7ca85",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:59:17Z",
+      "checkpointed_at": "2026-10-20T01:08:02Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:00:15Z",
+      "checkpointed_at": "2026-10-20T01:09:00Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56402,18 +56402,18 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide the actual length of the table."
+          "The table does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:04:40Z",
+      "checkpointed_at": "2026-10-20T01:09:49Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56437,11 +56437,11 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide the actual length of the table."
+          "The table does not provide the actual length of the table."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -56850,7 +56850,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57004,21 +57004,73 @@
     {
       "asset_id": "dd2bf22c245deaad1b708c89",
       "asset_sha256": "f36c2b6e694bb9d787e8aa871e2fd3d319810c93e9a9852fe18ef54601b89f4a",
-      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 101,
       "asset_path": "page-0101.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A ruler showing the measurement of 1 cm divided into 10 equal parts, with a question asking if it would be convenient to use the unit metre to measure larger lengths.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.3: A 15-cm scale",
+          "of 1 cm length are further divided into 10 equal parts. The length of one of these smaller parts is called a millimetre (mm). 1 mm is the smallest value of length that you can measure using this scale. 1 mm is equal to one-tenth of a centimeter (1 mm = 0.1 cm).",
+          "For measuring larger lengths, we use a larger unit called a kilometre (km) which is equal to 1000 metres. And for measuring smaller lengths, we use units such as centimetre or millimetre.",
+          "1 km = 1000 m  1 m = 100 cm  1 cm = 10 mm",
+          "In some scales, you might have noticed another scale marking. This scale marking is in inches, where 1 inch = 2.54 cm. In earlier days, units, such as inch and foot, were used to measure length. These units are still used by some people.",
+          "Measurement of Length and Motion",
+          "Do you know?"
+        ],
+        "concepts": [
+          "measurement",
+          "length",
+          "millimetre",
+          "centimetre",
+          "kilometre",
+          "inches",
+          "measurement units"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the measurement of length using different units.",
+        "limitations": [
+          "The image does not provide specific measurements or conversions."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:16:49Z",
+      "effective_analysis": {
+        "visual_summary": "A ruler showing the measurement of 1 cm divided into 10 equal parts, with a question asking if it would be convenient to use the unit metre to measure larger lengths.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.3: A 15-cm scale",
+          "of 1 cm length are further divided into 10 equal parts. The length of one of these smaller parts is called a millimetre (mm). 1 mm is the smallest value of length that you can measure using this scale. 1 mm is equal to one-tenth of a centimeter (1 mm = 0.1 cm).",
+          "For measuring larger lengths, we use a larger unit called a kilometre (km) which is equal to 1000 metres. And for measuring smaller lengths, we use units such as centimetre or millimetre.",
+          "1 km = 1000 m  1 m = 100 cm  1 cm = 10 mm",
+          "In some scales, you might have noticed another scale marking. This scale marking is in inches, where 1 inch = 2.54 cm. In earlier days, units, such as inch and foot, were used to measure length. These units are still used by some people.",
+          "Measurement of Length and Motion",
+          "Do you know?"
+        ],
+        "concepts": [
+          "measurement",
+          "length",
+          "millimetre",
+          "centimetre",
+          "kilometre",
+          "inches",
+          "measurement units"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the measurement of length using different units.",
+        "limitations": [
+          "The image does not provide specific measurements or conversions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
