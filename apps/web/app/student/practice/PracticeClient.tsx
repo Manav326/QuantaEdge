@@ -94,7 +94,8 @@ export default function PracticeClient() {
     return String(subject?.subject_name || subject?.display_name || code);
   };
 
-  const noEnrolledCourses = !loadingCourses && !courseError && courses.length === 0;
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
   if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><h1>{tx('Practice', 'अभ्यास')}</h1></header>
     <p className="auth-card" role="status"><UiText message="student.empty.practice.message" /></p>
