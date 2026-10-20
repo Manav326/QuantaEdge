@@ -66,6 +66,7 @@ private val uiPhrases = listOf(
     UiPhrase("empty_marketplace_title", "No courses are available right now", "अभी कोई course उपलब्ध नहीं है"),
     UiPhrase("empty_marketplace_message", "The Marketplace has no published course offers at the moment. Refresh to check again, or open My Courses to review your current enrolments.", "Marketplace में अभी कोई published course offer नहीं है। दोबारा check करने के लिए refresh करें या अपने मौजूदा enrolments देखने के लिए My Courses खोलें।"),
     UiPhrase("empty_marketplace_refresh", "Refresh Marketplace", "Marketplace refresh करें"),
+    UiPhrase("empty_loading_courses", "Loading your courses…", "आपके courses लोड हो रहे हैं…"),
     UiPhrase("empty_my_courses_title", "No courses in your account yet", "आपके account में अभी कोई course नहीं है"),
     UiPhrase("empty_my_courses_message", "Explore the Marketplace to find a course. Once enrolment is confirmed, your lessons, practice, tests and progress will appear here.", "Course खोजने के लिए Marketplace देखें। Enrolment confirm होने के बाद आपके lessons, practice, tests और progress यहाँ दिखाई देंगे।"),
     UiPhrase("empty_courses_action", "My Courses", "मेरे courses"),

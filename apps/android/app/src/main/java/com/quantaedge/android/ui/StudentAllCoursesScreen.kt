@@ -61,7 +61,7 @@ fun StudentAllCoursesScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     androidx.compose.material3.CircularProgressIndicator()
-                    Text(if (hi) "Courses लोड हो रही हैं…" else "Loading your courses…",
+                    Text(localizedUiText("Loading your courses…"),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }

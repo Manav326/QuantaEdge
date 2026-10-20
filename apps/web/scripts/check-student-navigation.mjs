@@ -190,7 +190,9 @@ const androidSignInFlow = androidApp.slice(
 assert.ok(androidSignInFlow.includes('route = AppRoute.STUDENT_HOME') &&
   !androidSignInFlow.includes('route = AppRoute.MARKETPLACE') &&
   androidApp.includes('Button(onClick = onMarketplace') &&
-  androidApp.includes('fun studentHasNoCourses(): Boolean'),
+  androidApp.includes('fun studentHasNoCourses(): Boolean') &&
+  androidApp.includes('studentProgramsLoaded') &&
+  androidApp.includes('hasConfirmedNoEnrolledCourses'),
   'Android must keep first-time learners on the dashboard and open Marketplace only from its explicit action.');
 assert.ok(androidLocalization.includes('empty_dashboard_title') &&
   androidApp.includes('Your lessons will appear here once you enroll in a course.') &&
