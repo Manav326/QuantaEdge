@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1176,
-    "successful_visual_analyses": 1151,
+    "successful_visual_analyses": 1153,
     "missing_visual_analyses": 902,
-    "failed_visual_analyses": 25,
+    "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 927,
+    "unresolved_count": 925,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43648,9 +43648,25 @@
       "asset_path": "assets/a65e862ea8ab807acaa9eeede5430ca5d30979882c5bf7769846a147bc3b496d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green flexible measuring tape with measurements in centimeters.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "8",
+          "14",
+          "15"
+        ],
+        "concepts": [
+          "flexible measuring tape",
+          "centimeters"
+        ],
+        "context_relation": "Measurement",
+        "limitations": [
+          "The image does not show the actual measurements taken by the tailor."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43768,9 +43784,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl named Deepa is getting a new uniform made. She needs a two-metre cloth piece. Her mother takes her to a cloth shop where the shopkeeper measures the cloth using a metal measuring rod. Then, the tailor takes her measurements using a flexible measuring tape. Her mother instructs the tailor to increase the measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth shop. She asks for a two-metre cloth piece. The shopkeeper measures the cloth using a metal measuring",
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth shop. She asks for a two-metre cloth piece. The shopkeeper measures the cloth using a metal measuring"
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth s"
+        ],
+        "context_relation": "The image shows a sequence of events related to Deepa getting a new uniform made, including the measurement of the cloth using a metal measuring rod and a flexible measuring tape.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the tailor's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

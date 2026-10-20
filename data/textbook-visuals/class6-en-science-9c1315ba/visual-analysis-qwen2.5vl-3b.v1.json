@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1152,
+    "assets_selected": 1153,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1148,
-    "assets_remaining": 930,
-    "assets_completion_percent": 55.2,
-    "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1147,
+    "assets_analyzed": 1150,
+    "assets_remaining": 928,
+    "assets_completion_percent": 55.3,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 1148,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:40:48Z"
+      "checkpointed_at": "2026-10-20T00:49:29Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:41:48Z"
+      "checkpointed_at": "2026-10-20T00:50:28Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -36835,9 +36835,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -36938,19 +36938,37 @@
     {
       "asset_id": "c0dfde5e80bfd4c601fe47f2",
       "asset_sha256": "a65e862ea8ab807acaa9eeede5430ca5d30979882c5bf7769846a147bc3b496d",
-      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 97,
       "asset_path": "assets/a65e862ea8ab807acaa9eeede5430ca5d30979882c5bf7769846a147bc3b496d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green flexible measuring tape with measurements in centimeters.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "8",
+          "14",
+          "15"
+        ],
+        "concepts": [
+          "flexible measuring tape",
+          "centimeters"
+        ],
+        "context_relation": "Measurement",
+        "limitations": [
+          "The image does not show the actual measurements taken by the tailor."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T00:57:03Z"
     },
     {
       "asset_id": "b2a06839178c0ad5860e0b3d",
@@ -37060,19 +37078,41 @@
     {
       "asset_id": "ad3aab649f5f0ad3b7d6552a",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 97,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl named Deepa is getting a new uniform made. She needs a two-metre cloth piece. Her mother takes her to a cloth shop where the shopkeeper measures the cloth using a metal measuring rod. Then, the tailor takes her measurements using a flexible measuring tape. Her mother instructs the tailor to increase the measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth shop. She asks for a two-metre cloth piece. The shopkeeper measures the cloth using a metal measuring",
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth shop. She asks for a two-metre cloth piece. The shopkeeper measures the cloth using a metal measuring"
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Chapter       and Motion 5",
+          "Deepa, a curious eleven-year old girl, lives in a town in the state of Haryana. The new school year has started. Deepa needs a new uniform since she has grown taller. Her mother takes her to a cloth s"
+        ],
+        "context_relation": "The image shows a sequence of events related to Deepa getting a new uniform made, including the measurement of the cloth using a metal measuring rod and a flexible measuring tape.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the tailor's actions."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T00:58:07Z"
     },
     {
       "asset_id": "c37bbec8ae4c8586abc6bbb3",
