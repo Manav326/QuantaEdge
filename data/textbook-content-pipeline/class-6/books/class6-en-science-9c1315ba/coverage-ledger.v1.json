@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1202,
-    "successful_visual_analyses": 1179,
-    "missing_visual_analyses": 876,
+    "raw_analysis_result_rows": 1204,
+    "successful_visual_analyses": 1181,
+    "missing_visual_analyses": 874,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 899,
+    "unresolved_count": 897,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45611,9 +45611,28 @@
       "asset_path": "page-0106.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a measuring tape and a measuring point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.10:",
+          "A measuring tape",
+          "Reference",
+          "Point",
+          "Fig. 5.11: Drawing lines for Kabaddi court"
+        ],
+        "concepts": [
+          "measuring tape",
+          "reference point",
+          "Kabaddi court"
+        ],
+        "context_relation": "The image is a visual representation of the discussion about measuring distances and the reference point in the text.",
+        "limitations": [
+          "The image does not show the students or the sports teacher drawing the lines."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45629,9 +45648,31 @@
       "asset_path": "assets/a91c67c0a4431ce2a80a3b0d4d435083a403969ac43832011fa2f178ecbbdd90.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the distance to Delhi from a starting point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "DELHI 0 km",
+          "DELHI 10 km",
+          "DELHI 20 km",
+          "DELHI 30 km",
+          "DELHI 40 km",
+          "DELHI 50 km",
+          "DELHI 60 km",
+          "DELHI 70 km"
+        ],
+        "concepts": [
+          "Distance to Delhi",
+          "Kilometre stones",
+          "Traveling to Delhi"
+        ],
+        "context_relation": "The image shows the distance to Delhi from a starting point, which is related to the story of Padma traveling to visit her grandparents in Delhi.",
+        "limitations": [
+          "The image does not show the actual distance to Delhi, only the distance from the starting point."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

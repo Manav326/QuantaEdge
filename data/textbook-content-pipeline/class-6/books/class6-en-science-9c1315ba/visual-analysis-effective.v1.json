@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "252df65f30f476490e548eb06ea90b0992f9b46b6fca577e7e4af3670d48599e",
+  "raw_analysis_sha256": "19353b16f68b793838c9fa0dc48682addd29b81df9462edaab1574374dda2f9b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:35:05Z",
+      "checkpointed_at": "2026-10-20T02:38:28Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:36:02Z",
+      "checkpointed_at": "2026-10-20T02:39:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T02:36:51Z",
+      "checkpointed_at": "2026-10-20T02:40:21Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -58669,6 +58669,132 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7feec144cfa661814094dfd",
+      "asset_sha256": "92e22032b32775928b93a057ed983195b9c84ac068ab9d9203eef255d413970f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 106,
+      "asset_path": "page-0106.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "734b116b1c4368447ac310dbdeb581a6ef78406574ecec11e957e5984d700b44",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a measuring tape and a measuring point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.10:",
+          "A measuring tape",
+          "Reference",
+          "Point",
+          "Fig. 5.11: Drawing lines for Kabaddi court"
+        ],
+        "concepts": [
+          "measuring tape",
+          "reference point",
+          "Kabaddi court"
+        ],
+        "context_relation": "The image is a visual representation of the discussion about measuring distances and the reference point in the text.",
+        "limitations": [
+          "The image does not show the students or the sports teacher drawing the lines."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:44:30Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a measuring tape and a measuring point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.10:",
+          "A measuring tape",
+          "Reference",
+          "Point",
+          "Fig. 5.11: Drawing lines for Kabaddi court"
+        ],
+        "concepts": [
+          "measuring tape",
+          "reference point",
+          "Kabaddi court"
+        ],
+        "context_relation": "The image is a visual representation of the discussion about measuring distances and the reference point in the text.",
+        "limitations": [
+          "The image does not show the students or the sports teacher drawing the lines."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae8353836fdebf36e19598d7",
+      "asset_sha256": "a91c67c0a4431ce2a80a3b0d4d435083a403969ac43832011fa2f178ecbbdd90",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/a91c67c0a4431ce2a80a3b0d4d435083a403969ac43832011fa2f178ecbbdd90.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad1c06783cb79a28550afd83982c1a5b3e08449d1858c951fc7a8d2c40a30e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the distance to Delhi from a starting point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "DELHI 0 km",
+          "DELHI 10 km",
+          "DELHI 20 km",
+          "DELHI 30 km",
+          "DELHI 40 km",
+          "DELHI 50 km",
+          "DELHI 60 km",
+          "DELHI 70 km"
+        ],
+        "concepts": [
+          "Distance to Delhi",
+          "Kilometre stones",
+          "Traveling to Delhi"
+        ],
+        "context_relation": "The image shows the distance to Delhi from a starting point, which is related to the story of Padma traveling to visit her grandparents in Delhi.",
+        "limitations": [
+          "The image does not show the actual distance to Delhi, only the distance from the starting point."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T02:46:16Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the distance to Delhi from a starting point.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "DELHI 0 km",
+          "DELHI 10 km",
+          "DELHI 20 km",
+          "DELHI 30 km",
+          "DELHI 40 km",
+          "DELHI 50 km",
+          "DELHI 60 km",
+          "DELHI 70 km"
+        ],
+        "concepts": [
+          "Distance to Delhi",
+          "Kilometre stones",
+          "Traveling to Delhi"
+        ],
+        "context_relation": "The image shows the distance to Delhi from a starting point, which is related to the story of Padma traveling to visit her grandparents in Delhi.",
+        "limitations": [
+          "The image does not show the actual distance to Delhi, only the distance from the starting point."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
