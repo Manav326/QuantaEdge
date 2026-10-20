@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1277,
+    "assets_selected": 1278,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1273,
-    "assets_remaining": 805,
+    "assets_analyzed": 1274,
+    "assets_remaining": 804,
     "assets_completion_percent": 61.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1272,
+    "assets_skipped_from_checkpoint": 1273,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:04:21Z"
+      "checkpointed_at": "2026-10-20T20:08:21Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:05:14Z"
+      "checkpointed_at": "2026-10-20T20:09:14Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:06:24Z"
+      "checkpointed_at": "2026-10-20T20:10:24Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:07:06Z"
+      "checkpointed_at": "2026-10-20T20:11:06Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42498,6 +42498,52 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T20:07:17Z"
+    },
+    {
+      "asset_id": "e195deb36179265ad1edba40",
+      "asset_sha256": "4c02b9022b97e0b28fa566430f00bdc30f7eafd662d0ce535f895ab86943b348",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 125,
+      "asset_path": "page-0125.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f9d0c986bf7f5ad16fb16f65c87492efc8f608a8e89a11e1ccbdad5d1218efb1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials, specifically focusing on lustrous and non-lustrous surfaces.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "rough or smooth), colour and other noticeable features,\nand record your observations in the notebook. Group the\ncollected pieces based on their appearance.\n\nMaterials that typically have shiny surfaces are said to\nhave a lustrous appearance. Such materials with lustre are\nusually metals. Examples of",
+          "to the effect of air and moisture on them. As\na result, we often notice the lustre only on\ntheir freshly cut surfaces. Non-lustrous\nmaterials are those that do not have a shiny\nsurface. Some examples of non-lustrous\nmaterials are paper, wood, rubber, jute, etc.",
+          "All that glitters is not gold” goes an old\nsaying! Not all the materials that shine are metals.\nSurfaces of some materials are made shiny by\npolishing or coating them with thin layers of plastic,\nwax or any other material which makes them look\nshiny. These materials may not be metals.",
+          "6.3.2 Which materials are hard?\n\nWhen you press different objects or materials with your\nhands, some of them like stones, may be hard to compress,\nwhile others, like an eraser, can be easily compressed. Take\na metal key and use it to scratch the surface of a piece of\nwood, aluminium, stone, iron, ca",
+          "Activity 6.5: Let us observe\n\nHold the objects given in Table 6.3 with your hands.\nFeel whether the objects are hard or soft. Find out the\nmaterials they are made up of. Enter your observations\nin Table 6.3."
+        ],
+        "concepts": [
+          "Materials",
+          "Lustrous",
+          "Non-lustrous",
+          "Hardness",
+          "Softness",
+          "Scratchability",
+          "Compression",
+          "Surface Properties",
+          "Observations",
+          "Materials in Nature"
+        ],
+        "context_relation": "The page discusses the properties of materials, focusing on lustrous and non-lustrous surfaces, hardness, and scratchability.",
+        "limitations": [
+          "The page does not provide specific examples or measurements for the properties discussed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:14:29Z"
     }
   ]
 }
