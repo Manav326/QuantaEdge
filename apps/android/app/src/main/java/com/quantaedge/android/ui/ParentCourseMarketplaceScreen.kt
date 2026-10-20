@@ -73,7 +73,9 @@ fun ParentCourseMarketplaceScreen(
     onDismissRequest: (Long) -> Unit,
     onTransfer: (Long, Long) -> Unit,
     onMyLearning: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    pendingVerification: Boolean = false,
+    onRetryVerification: () -> Unit = {}
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingTransfer by remember { mutableStateOf<Pair<Long, Long>?>(null) }
@@ -105,6 +107,20 @@ fun ParentCourseMarketplaceScreen(
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+        if (pendingVerification) {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(t("Payment verification is pending", "भुगतान की पुष्टि बाकी है"),
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text(t("Reconcile the saved order before trying to pay again.",
+                        "दोबारा भुगतान करने से पहले इसी order की पुष्टि करें।"),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Button(onClick = onRetryVerification, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                        Text(t("Retry payment verification", "भुगतान फिर से सत्यापित करें"))
+                    }
+                }
+            }
+        }
         if (loading) {
             Box(Modifier.fillMaxWidth().padding(vertical = 22.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         } else if (loadFailed) {
@@ -142,7 +158,7 @@ fun ParentCourseMarketplaceScreen(
                                 Button(onClick = {
                                     if (price == 0L) onAddFree(courseId, "CHILD", studentId)
                                     else onBuy(courseId, "CHILD", studentId)
-                                }, enabled = !busy && courseId > 0L && studentId > 0L, modifier = Modifier.weight(1f)) {
+                                }, enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && studentId > 0L, modifier = Modifier.weight(1f)) {
                                     Text(t("Buy for this child", "इस बच्चे के लिए"))
                                 }
                                 TextButton(onClick = { onDismissRequest(requestId) }, enabled = !busy && requestId > 0L) {
@@ -192,7 +208,7 @@ fun ParentCourseMarketplaceScreen(
                                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             } else {
                                 Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else onBuy(courseId, "SELF", 0L) },
-                                    enabled = !busy && courseId > 0L, modifier = Modifier.fillMaxWidth()) {
+                                    enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L, modifier = Modifier.fillMaxWidth()) {
                                     Text(if (price == 0L) t("Add free course for me", "अपने लिए निःशुल्क कोर्स") else t("Buy for me", "अपने लिए खरीदें"))
                                 }
                                 if (children.isNotEmpty()) {
@@ -210,7 +226,7 @@ fun ParentCourseMarketplaceScreen(
                                             }
                                             TextButton(
                                                 onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else onBuy(courseId, "CHILD", childId) },
-                                                enabled = !busy && courseId > 0L && childId > 0L && !alreadyOwned && price >= 0L
+                                                enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && childId > 0L && !alreadyOwned && price >= 0L
                                             ) { Text(t(if (price == 0L) "Add" else "Buy", if (price == 0L) "जोड़ें" else "खरीदें")) }
                                         }
                                     }
