@@ -3621,5 +3621,12 @@
   "web.workspace.parentFallbackName": "Parent account",
   "web.workspace.progressSavesAutomatically": "Progress saves automatically",
   "web.workspace.safeLearningSpace": "Safe learning space",
-  "web.workspace.studentFallbackName": "Student"
+  "web.workspace.studentFallbackName": "Student",
+  "student.empty.dashboard.title": "Your learning starts here",
+  "student.empty.dashboard.message": "You haven’t enrolled in any courses yet. Visit the Marketplace to explore and enroll in a course.",
+  "student.empty.dashboard.action": "Explore Marketplace",
+  "student.empty.learn.message": "Your lessons will appear here once you enroll in a course.",
+  "student.empty.practice.message": "Your practice activities will appear here once you enroll in a course.",
+  "student.empty.progress.message": "Your learning progress will appear here once you enroll in a course.",
+  "student.empty.books.message": "Your course books will appear here once you enroll in a course."
 }
