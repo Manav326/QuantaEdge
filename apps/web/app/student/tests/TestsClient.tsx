@@ -28,7 +28,7 @@ type AttemptQuestion = {
   correctAnswer?:{kind?:string;value?:any}|null;
 };
 type Attempt = {
-  attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;started_at:string;deadline_at:string;
+  attempt_id:number;assessment_id:number;test_id?:string|null;course_id?:number|null;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
   questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
@@ -342,7 +342,9 @@ export default function TestsClient(){
     if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS'||entries.length===0)return;
     setSaving(true);
     const run=saveQueueRef.current.then(async()=>{
-      await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/answers',{
+      const attemptCourseId=Number(currentAttempt.course_id);
+      if(!Number.isSafeInteger(attemptCourseId)||attemptCourseId<=0)throw new Error('This test attempt has no verified course mapping. Answers remain saved locally until the course can be verified.');
+      await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/answers?courseId='+encodeURIComponent(String(attemptCourseId)),{
         method:'PUT',
         body:JSON.stringify({answers:entries.map(([attemptQuestionId,answer])=>({attemptQuestionId:Number(attemptQuestionId),answer}))})
       });
@@ -403,7 +405,8 @@ export default function TestsClient(){
   async function openResult(attemptId:number){
     setBusy(true);setError('');setNotice('');
     try{
-      const data=await api('/api/v1/learning/assessment-attempts/'+attemptId);
+      if(courseId===null)throw new Error('Select the course that contains this test result.');
+      const data=await api('/api/v1/learning/assessment-attempts/'+attemptId+'?courseId='+encodeURIComponent(String(courseId)));
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
@@ -475,7 +478,9 @@ export default function TestsClient(){
         if(!automatic)throw e;
         setNotice('Time expired. The test is being finalized with the answers already saved.');
       }
-      const data=await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/submit',{method:'POST'});
+      const attemptCourseId=Number(currentAttempt.course_id);
+      if(!Number.isSafeInteger(attemptCourseId)||attemptCourseId<=0)throw new Error('This test attempt has no verified course mapping. It was not submitted to another course.');
+      const data=await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/submit?courseId='+encodeURIComponent(String(attemptCourseId)),{method:'POST'});
       setAttempt(data);attemptRef.current=data;setShowSubmit(false);
       setTab(data.status==='RELEASED'?'results':'tests');
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Fill-in, short-answer and long-answer responses are waiting for an assigned staff reviewer. Your final score and feedback will appear after all required answers are checked.');
