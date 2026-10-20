@@ -61,6 +61,7 @@ private val uiPhrases = listOf(
     UiPhrase("otp_reset_help", "Request an OTP on your registered mobile and set a new password.", "अपने पंजीकृत मोबाइल पर OTP प्राप्त करके नया पासवर्ड सेट करें।"),
     UiPhrase("development_otp", "Development OTP: ", "स्थानीय विकास OTP: "),
     UiPhrase("empty_dashboard_title", "Your learning starts here", "आपकी learning यहीं से शुरू होती है"),
+    UiPhrase("Loading your courses…", "Loading your courses…", "आपके कोर्स लोड हो रहे हैं…"),
     UiPhrase("empty_dashboard_message", "You haven’t enrolled in any courses yet. Visit the Marketplace to explore and enroll in a course.", "अभी आपने कोई course enroll नहीं किया है। अपना पहला course खोजने और enroll करने के लिए Marketplace देखें।"),
     UiPhrase("empty_dashboard_marketplace", "Explore Marketplace", "Explore Marketplace"),
     UiPhrase("empty_marketplace_title", "No courses are available right now", "अभी कोई course उपलब्ध नहीं है"),
