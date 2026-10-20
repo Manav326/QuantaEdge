@@ -131,7 +131,7 @@ public class LearningController {
                count(*) filter(where q.question_type='MCQ' and exists(
                  select 1 from student_question_attempt a
                  where a.student_id=learner.id and a.institution_id=(select institution_id from tenant_scope)
-                   and a.question_id=q.id and a.activity_kind='LESSON_INLINE'
+                   and a.course_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE'
                )) as mcq_answered_count
         from question q
         where q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
@@ -140,7 +140,7 @@ public class LearningController {
         select count(*) as completed_attempt_count
         from student_practice_session ps
         where ps.student_id=learner.id and ps.institution_id=(select institution_id from tenant_scope)
-          and ps.status='COMPLETED'
+          and ps.course_id=? and ps.status='COMPLETED'
           and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
       ) practice_count on true
       left join lateral (
@@ -156,12 +156,13 @@ public class LearningController {
           left join lateral (
             select a.correct
             from student_question_attempt a
-            where a.practice_session_id=ps.id and a.question_id=psq.question_id
+            where a.practice_session_id=ps.id and a.course_id=ps.course_id and a.question_id=psq.question_id
             order by a.answered_at desc,a.id desc limit 1
           ) latest on true
           where psq.practice_session_id=ps.id
         ) score
-        where ps.student_id=learner.id and ps.status='COMPLETED'
+        where ps.student_id=learner.id and ps.institution_id=(select institution_id from tenant_scope)
+          and ps.course_id=? and ps.status='COMPLETED'
           and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
         order by case when score.graded_count>0
                       then score.correct_count::numeric/score.graded_count end desc nulls last,
@@ -178,7 +179,7 @@ public class LearningController {
           where psq.practice_session_id=ps.id
         ) session_progress
         where ps.student_id=learner.id and ps.institution_id=(select institution_id from tenant_scope)
-          and ps.status='IN_PROGRESS'
+          and ps.course_id=? and ps.status='IN_PROGRESS'
           and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
         order by ps.created_at desc,ps.id desc
         limit 1
@@ -188,8 +189,8 @@ public class LearningController {
         and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """.replace("__PROGRAM_SCOPE__",programScope);
-    return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,language,language,language,language,
-        subjectCode,courseId);
+    return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,courseId,courseId,courseId,courseId,
+        language,language,language,language,subjectCode,courseId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
@@ -239,7 +240,7 @@ public class LearningController {
       join curriculum_program_subject course_subject on course_subject.program_id=?
         and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
       left join learning_objective o on o.id=l.objective_id
-      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? and p.institution_id=?
+      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? and p.institution_id=? and p.course_id=?
       left join lateral (
         select t.id,t.title,t.summary from lesson_translation t
         where t.lesson_id=l.id and t.language=? and t.translation_status='PUBLISHED'
@@ -279,7 +280,7 @@ public class LearningController {
             and (s.program_id=cps.program_id or
                  (s.program_id is null and selected_course.class_id=s.class_id))
         )
-      """,courseId,context.studentId(),institutionId,
+      """,courseId,context.studentId(),institutionId,courseId,
         language,language,language,language,language,lessonId,courseId);
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
@@ -298,7 +299,7 @@ public class LearningController {
       ) bt on true
       where b.lesson_id=? and b.active=true order by b.sequence_no,b.id
       """,language,lessonId);
-    List<Map<String,Object>> questions=publicQuestions(lessonId,context.studentId(),language,institutionId);
+    List<Map<String,Object>> questions=publicQuestions(lessonId,context.studentId(),courseId,language,institutionId);
     result.put("blocks",blocks);
     result.put("questions",questions);
     long translatedBlocks=blocks.stream().filter(block -> Boolean.TRUE.equals(block.get("translated"))).count();
@@ -338,7 +339,7 @@ public class LearningController {
     long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
     ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
-    return publicQuestions(lessonId,context.studentId(),language,institutionId);
+    return publicQuestions(lessonId,context.studentId(),courseId,language,institutionId);
   }
 
   @PostMapping("/questions/{questionId}/answer")
@@ -418,7 +419,7 @@ public class LearningController {
     return result;
   }
 
-  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId,String language,long institutionId){
+  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId,long courseId,String language,long institutionId){
     return jdbc.queryForList("""
       with tenant_scope as (select ?::bigint as institution_id) 
       select q.id,q.question_type,coalesce(qt.prompt,q.prompt) as prompt,q.difficulty,q.sort_order,q.concept_id,
@@ -428,7 +429,7 @@ public class LearningController {
              (qt.id is not null) as translated,
              exists(select 1 from student_question_attempt a
                     where a.student_id=? and a.institution_id=(select institution_id from tenant_scope)
-                       and a.question_id=q.id and a.activity_kind='LESSON_INLINE') as attempted,
+                       and a.course_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE') as attempted,
              case when qt.id is not null then coalesce(qt.options,'[]'::jsonb)
                   when q.question_type in ('MCQ','TRUE_FALSE') then
                     coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
@@ -451,7 +452,7 @@ public class LearningController {
         order by t.version_no desc,t.id desc limit 1
       ) qt on true
       where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
-      """,institutionId,studentId,language,lessonId);
+      """,institutionId,studentId,courseId,language,lessonId);
   }
 
   // Legacy Java-only wrappers are retained for binary/source compatibility but fail closed:
