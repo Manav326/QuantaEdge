@@ -539,7 +539,7 @@ public class RelationalStructuredLessonService {
         asset.set("alt_by_locale", bilingual(alt, alt));
         asset.set("caption_by_locale", bilingual(
             nonBlank(text(en.path("caption").asText("")), text(en.path("description").asText(""))),
-            nonBlank(text(hi.path("caption").asText("")), text(hi.path("description").asText(""))));
+            nonBlank(text(hi.path("caption").asText("")), text(hi.path("description").asText("")))));
         continue;
       }
       if ("DIAGRAM".equals(type)) {
@@ -584,7 +584,7 @@ public class RelationalStructuredLessonService {
             nonBlank(text(en.path("prompt").asText("")), text(en.path("instructions").asText("")),
                 text(en.path("title").asText("")), text(en.path("body").asText(""))),
             nonBlank(text(hi.path("prompt").asText("")), text(hi.path("instructions").asText("")),
-                text(hi.path("title").asText("")), text(hi.path("body").asText(""))));
+                text(hi.path("title").asText("")), text(hi.path("body").asText("")))));
         block.set("configuration", stripPrivateFields(en).deepCopy());
         continue;
       }
