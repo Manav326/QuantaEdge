@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1212,
-    "successful_visual_analyses": 1189,
-    "missing_visual_analyses": 866,
+    "raw_analysis_result_rows": 1214,
+    "successful_visual_analyses": 1191,
+    "missing_visual_analyses": 864,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 889,
+    "unresolved_count": 887,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45973,9 +45973,16 @@
       "asset_path": "assets/dcf40d1787b83094748721881f73f24b989104a9cde5f1cc5bc612fe7ab580b5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with jagged edges.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a yellow rectangular shape with jagged edges.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45991,9 +45998,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of rest and motion using the example of passengers in a bus.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all the passengers were seated. She looked around again after a minute and found them still occupying their seats. She wondered, 'Are they moving?' She concluded that the position of the passengers was not changing with time. Therefore, they were c",
+          "The reference point is important in deciding whether an object is at rest or in motion. If Deepa considered herself (or the bus) as the refer",
+          "The concept of rest and motion is explained using the example of passengers in a bus."
+        ],
+        "concepts": [
+          "rest",
+          "motion",
+          "reference point",
+          "object",
+          "bus",
+          "passengers"
+        ],
+        "context_relation": "The text explains the concept of rest and motion using the example of passengers in a bus.",
+        "limitations": [
+          "The text does not provide a diagram or illustration to visually represent the concept."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
