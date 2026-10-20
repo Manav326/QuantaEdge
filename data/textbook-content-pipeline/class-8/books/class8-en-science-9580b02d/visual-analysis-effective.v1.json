@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d387a7f3ff9955807c9812aeec7c8c3a2e8be2e0942a3ae2224127bf9656260b",
+  "raw_analysis_sha256": "782f626d09667cfda661be99c90c7b76c2d5b63ce32f4168e52e15f466230711",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:50:19Z",
+      "checkpointed_at": "2026-10-20T16:54:29Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:51:04Z",
+      "checkpointed_at": "2026-10-20T16:55:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:51:34Z",
+      "checkpointed_at": "2026-10-20T16:55:43Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:52:23Z",
+      "checkpointed_at": "2026-10-20T16:56:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56022,6 +56022,60 @@
         "context_relation": "The image represents a physical interaction between two forces, one pulling the other.",
         "limitations": [
           "The image does not provide specific details about the forces or their effects."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "29302d0406e7f51b0a68bb34",
+      "asset_sha256": "ab63e5b126e799a7323b24c80d447a7402699c8d1babe1e96517ab52728bbca5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/ab63e5b126e799a7323b24c80d447a7402699c8d1babe1e96517ab52728bbca5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "686f3a6ba10c803f918bf7a5d43ac6572c12ff6705bcdb5f5a36cf8a902f4ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand opening a drawer, illustrating the concept of force applied to objects.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect of force",
+          "drawer",
+          "object"
+        ],
+        "context_relation": "The image is related to the educational content about forces and their effects on objects.",
+        "limitations": [
+          "The image does not provide specific examples or scenarios for analysis."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:57:41Z",
+      "effective_analysis": {
+        "visual_summary": "A hand opening a drawer, illustrating the concept of force applied to objects.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect of force",
+          "drawer",
+          "object"
+        ],
+        "context_relation": "The image is related to the educational content about forces and their effects on objects.",
+        "limitations": [
+          "The image does not provide specific examples or scenarios for analysis."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

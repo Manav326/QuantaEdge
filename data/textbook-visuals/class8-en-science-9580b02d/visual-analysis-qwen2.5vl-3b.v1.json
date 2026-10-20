@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1143,
+    "assets_selected": 1144,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1139,
-    "assets_remaining": 1152,
-    "assets_completion_percent": 49.7,
+    "assets_analyzed": 1140,
+    "assets_remaining": 1151,
+    "assets_completion_percent": 49.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1138,
+    "assets_skipped_from_checkpoint": 1139,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:50:19Z"
+      "checkpointed_at": "2026-10-20T16:54:29Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:51:04Z"
+      "checkpointed_at": "2026-10-20T16:55:14Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:51:34Z"
+      "checkpointed_at": "2026-10-20T16:55:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:52:23Z"
+      "checkpointed_at": "2026-10-20T16:56:33Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37326,6 +37326,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:53:29Z"
+    },
+    {
+      "asset_id": "29302d0406e7f51b0a68bb34",
+      "asset_sha256": "ab63e5b126e799a7323b24c80d447a7402699c8d1babe1e96517ab52728bbca5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/ab63e5b126e799a7323b24c80d447a7402699c8d1babe1e96517ab52728bbca5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "686f3a6ba10c803f918bf7a5d43ac6572c12ff6705bcdb5f5a36cf8a902f4ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand opening a drawer, illustrating the concept of force applied to objects.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect of force",
+          "drawer",
+          "object"
+        ],
+        "context_relation": "The image is related to the educational content about forces and their effects on objects.",
+        "limitations": [
+          "The image does not provide specific examples or scenarios for analysis."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:57:41Z"
     }
   ]
 }
