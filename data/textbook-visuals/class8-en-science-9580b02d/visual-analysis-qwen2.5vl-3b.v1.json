@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1140,
+    "assets_selected": 1141,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1136,
-    "assets_remaining": 1155,
+    "assets_analyzed": 1137,
+    "assets_remaining": 1154,
     "assets_completion_percent": 49.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1135,
+    "assets_skipped_from_checkpoint": 1136,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:36:35Z"
+      "checkpointed_at": "2026-10-20T16:40:14Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:37:20Z"
+      "checkpointed_at": "2026-10-20T16:40:59Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:37:50Z"
+      "checkpointed_at": "2026-10-20T16:41:29Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:38:39Z"
+      "checkpointed_at": "2026-10-20T16:42:18Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37189,6 +37189,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:39:14Z"
+    },
+    {
+      "asset_id": "98b5cbc7855921af4fb8b876",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing against the wind, while Ragini is moving with the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "forces",
+          "exploring landscapes"
+        ],
+        "context_relation": "The image shows a scenario where the wind affects the motion of the cyclists, illustrating the concept of forces in motion.",
+        "limitations": [
+          "The image does not show the actual motion of the cyclists or the wind's effect on their speed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:42:51Z"
     }
   ]
 }

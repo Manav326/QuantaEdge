@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1162,
-    "successful_visual_analyses": 1140,
-    "missing_visual_analyses": 1129,
+    "raw_analysis_result_rows": 1163,
+    "successful_visual_analyses": 1141,
+    "missing_visual_analyses": 1128,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1151,
+    "unresolved_count": 1150,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43603,9 +43603,28 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing against the wind, while Ragini is moving with the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "forces",
+          "exploring landscapes"
+        ],
+        "context_relation": "The image shows a scenario where the wind affects the motion of the cyclists, illustrating the concept of forces in motion.",
+        "limitations": [
+          "The image does not show the actual motion of the cyclists or the wind's effect on their speed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
