@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1280,
+    "assets_selected": 1281,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1276,
-    "assets_remaining": 802,
-    "assets_completion_percent": 61.4,
+    "assets_analyzed": 1277,
+    "assets_remaining": 801,
+    "assets_completion_percent": 61.5,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1275,
+    "assets_skipped_from_checkpoint": 1276,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:19:53Z"
+      "checkpointed_at": "2026-10-20T20:24:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:20:47Z"
+      "checkpointed_at": "2026-10-20T20:25:01Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:21:56Z"
+      "checkpointed_at": "2026-10-20T20:26:10Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:22:38Z"
+      "checkpointed_at": "2026-10-20T20:26:52Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42638,6 +42638,69 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T20:23:05Z"
+    },
+    {
+      "asset_id": "6ec14905267df07093a92aa4",
+      "asset_sha256": "da41235dfdeaf9bb7cd96e445553700ef6b0c37c80bdfbd8304034b512e2f166",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 126,
+      "asset_path": "page-0126.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0e6560a69b60e64613f0cfebd11a7d39a81619c19c912291707db01dd038403b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing objects, their hardness, and materials they are made of.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials",
+          "they are made up of",
+          "Object",
+          "Hard/Soft",
+          "Material(s)",
+          "Brick",
+          "Hard",
+          "Baked clay",
+          "Water bottle",
+          "",
+          "",
+          "",
+          "Pillow",
+          "",
+          "",
+          "",
+          "Tumbler",
+          "",
+          "",
+          "",
+          "Table",
+          "",
+          "",
+          "",
+          "Sweater",
+          "",
+          "",
+          "",
+          "Any other",
+          ""
+        ],
+        "concepts": [
+          "Hardness",
+          "Materials",
+          "Observations"
+        ],
+        "context_relation": "Observing and comparing properties of materials",
+        "limitations": [
+          "No specific questions or tasks are provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:29:38Z"
     }
   ]
 }
