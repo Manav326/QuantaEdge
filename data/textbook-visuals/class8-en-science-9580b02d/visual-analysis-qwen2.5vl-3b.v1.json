@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1050,
+    "assets_selected": 1052,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1047,
-    "assets_remaining": 1244,
-    "assets_completion_percent": 45.7,
+    "assets_analyzed": 1049,
+    "assets_remaining": 1242,
+    "assets_completion_percent": 45.8,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1045,
+    "assets_skipped_from_checkpoint": 1047,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:50:35Z"
+      "checkpointed_at": "2026-10-20T04:53:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:51:08Z"
+      "checkpointed_at": "2026-10-20T04:54:11Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:51:30Z"
+      "checkpointed_at": "2026-10-20T04:54:33Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33813,6 +33813,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:52:51Z"
+    },
+    {
+      "asset_id": "f05bd2a10a1812806ce0ae8a",
+      "asset_sha256": "639fa0645e8419c4155b726c653f1a126e7ab56e4f7df241a2068c94bf78ac9b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/639fa0645e8419c4155b726c653f1a126e7ab56e4f7df241a2068c94bf78ac9b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Compass needle",
+          "Magnetic poles",
+          "Attraction between unlike poles"
+        ],
+        "context_relation": "The image illustrates the interaction between a compass needle and the magnetic poles of an electromagnet.",
+        "limitations": [
+          "The compass needle is not shown moving or indicating a direction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:55:14Z"
+    },
+    {
+      "asset_id": "e9992e1e078f7ad8b01d0d31",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "Explanation of magnetic poles and attraction",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:55:30Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "54af1049f54ac827f6c525dc9b0940a8ac155f043dc28fb68d0c4a9dcac87345",
+  "raw_analysis_sha256": "48596ae90cca210803370a05b5232f6c1fa531c53bac079fbba4cc6b9a274632",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:50:35Z",
+      "checkpointed_at": "2026-10-20T04:53:37Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:51:08Z",
+      "checkpointed_at": "2026-10-20T04:54:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:51:30Z",
+      "checkpointed_at": "2026-10-20T04:54:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -50568,6 +50568,122 @@
         "context_relation": "The image illustrates the interaction between a compass needle and an electromagnet, explaining the concept of magnetic poles and attraction.",
         "limitations": [
           "The image does not provide specific details about the electromagnet's construction or the compass needle's position."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f05bd2a10a1812806ce0ae8a",
+      "asset_sha256": "639fa0645e8419c4155b726c653f1a126e7ab56e4f7df241a2068c94bf78ac9b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/639fa0645e8419c4155b726c653f1a126e7ab56e4f7df241a2068c94bf78ac9b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Compass needle",
+          "Magnetic poles",
+          "Attraction between unlike poles"
+        ],
+        "context_relation": "The image illustrates the interaction between a compass needle and the magnetic poles of an electromagnet.",
+        "limitations": [
+          "The compass needle is not shown moving or indicating a direction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:55:14Z",
+      "effective_analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Compass needle",
+          "Magnetic poles",
+          "Attraction between unlike poles"
+        ],
+        "context_relation": "The image illustrates the interaction between a compass needle and the magnetic poles of an electromagnet.",
+        "limitations": [
+          "The compass needle is not shown moving or indicating a direction."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e9992e1e078f7ad8b01d0d31",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "Explanation of magnetic poles and attraction",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:55:30Z",
+      "effective_analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "Explanation of magnetic poles and attraction",
+        "limitations": [
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1066,
-    "successful_visual_analyses": 1050,
-    "missing_visual_analyses": 1225,
+    "raw_analysis_result_rows": 1068,
+    "successful_visual_analyses": 1052,
+    "missing_visual_analyses": 1223,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1241,
+    "unresolved_count": 1239,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40311,9 +40311,27 @@
       "asset_path": "assets/639fa0645e8419c4155b726c653f1a126e7ab56e4f7df241a2068c94bf78ac9b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Compass needle",
+          "Magnetic poles",
+          "Attraction between unlike poles"
+        ],
+        "context_relation": "The image illustrates the interaction between a compass needle and the magnetic poles of an electromagnet.",
+        "limitations": [
+          "The compass needle is not shown moving or indicating a direction."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40329,9 +40347,27 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A compass needle near the ends of an electromagnet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards end A of the electromagnet, then end A is south pole."
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Attraction between unlike poles",
+          "Compass needle",
+          "Electromagnet"
+        ],
+        "context_relation": "Explanation of magnetic poles and attraction",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
