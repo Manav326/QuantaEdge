@@ -414,7 +414,7 @@ export default function TextbooksClient() {
       </section>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.loading.your.textbook.library.e562b86c')}</div>
-        : !error && !courseError && visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>{translateUi(locale, 'legacy.web.no.published.pdfs.available.yet.6a520470')}</h3><p>{translateUi(locale, 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')}</p><Link href={'/student/structured-lessons' + (activeCourseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourseId)) : '')}>{translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}</Link></div>
+        : !error && !courseError && visibleDocuments.length === 0 ? <StudentEmptyState icon="book" title={translateUi(locale, 'legacy.web.no.published.pdfs.available.yet.6a520470')} message={translateUi(locale, 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')} primaryActionHref={'/student/structured-lessons' + (activeCourseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourseId)) : '')} primaryActionLabel={translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}/>
         : <div className="qe-textbook-resource-groups">
           {subjectGroups.map(({ code, name: rawName, rows }) => {
             const name = displaySubjectName(code, rawName);
