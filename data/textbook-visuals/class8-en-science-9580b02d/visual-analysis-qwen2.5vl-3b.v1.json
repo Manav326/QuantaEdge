@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 971,
+    "assets_selected": 973,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 968,
-    "assets_remaining": 1323,
+    "assets_analyzed": 970,
+    "assets_remaining": 1321,
     "assets_completion_percent": 42.3,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 966,
+    "assets_skipped_from_checkpoint": 968,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:38:22Z"
+      "checkpointed_at": "2026-10-20T02:40:12Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:38:56Z"
+      "checkpointed_at": "2026-10-20T02:40:46Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:39:18Z"
+      "checkpointed_at": "2026-10-20T02:41:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30879,6 +30879,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:39:27Z"
+    },
+    {
+      "asset_id": "a7c4ab7f2b74ed1cffc14fae",
+      "asset_sha256": "ee2baa2937eb5404cebf251b829457004b05e876d64f1d183ce514c606dde50a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/ee2baa2937eb5404cebf251b829457004b05e876d64f1d183ce514c606dde50a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a cow, a pig, and a rooster.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct relation to the text about the discovery of penicillin.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information about the discovery of penicillin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:41:45Z"
+    },
+    {
+      "asset_id": "837eca90fde94084c6319a8a",
+      "asset_sha256": "61dc15f3165c544e7d186f1e6a2e602994511c43861315610f7c580ea77af9fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/61dc15f3165c544e7d186f1e6a2e602994511c43861315610f7c580ea77af9fd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a box of butter, a bottle of milk, and a carton of eggs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "butter",
+          "milk",
+          "eggs"
+        ],
+        "context_relation": "The image is not directly related to the text about Penicillin discovery.",
+        "limitations": [
+          "The image does not provide any information about Penicillin or its discovery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:42:23Z"
     }
   ]
 }
