@@ -719,10 +719,23 @@ public class CourseMarketplaceController {
     if (!isReusablePendingOrder(order)) {
       throw new IllegalStateException("The previous course checkout is not ready. Please retry shortly.");
     }
+
+    // A local PENDING row can outlive a successful provider payment when the browser
+    // callback was interrupted or verification failed. Never hand a paid Razorpay order
+    // back to checkout; the original payment must be reconciled instead of charged again.
+    String providerOrderId = String.valueOf(order.get("provider_order_id"));
+    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
+    long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
+    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
+      throw new IllegalStateException(
+          "A payment has already completed for this course order. Retry verification for the saved payment; do not start another checkout.");
+    }
+
     return checkoutResponse(
         ((Number) order.get("id")).longValue(),
-        String.valueOf(order.get("provider_order_id")),
-        ((Number) order.get("offer_price_paise")).longValue(),
+        providerOrderId,
+        expectedAmount,
         String.valueOf(order.get("currency")),
         courseId,
         title,
