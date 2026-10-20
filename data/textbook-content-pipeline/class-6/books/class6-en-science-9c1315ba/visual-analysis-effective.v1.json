@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "739cc9c3d25cd918ae7ec5c58d30c55a49db8ff21dd7fba7e787777bc359e98f",
+  "raw_analysis_sha256": "b251ffe1ca7f63b57b41f3d6d1452f90066fe2de3f868ad1651064932ad7ad72",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:45:26Z",
+      "checkpointed_at": "2026-10-20T21:50:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:46:19Z",
+      "checkpointed_at": "2026-10-20T21:51:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:47:28Z",
+      "checkpointed_at": "2026-10-20T21:52:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:48:10Z",
+      "checkpointed_at": "2026-10-20T21:53:06Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65464,6 +65464,80 @@
         "context_relation": "The image is related to the concept of dissolution and solubility, as it shows a clear glass of a brown liquid, which could be a result of dissolving a substance in water.",
         "limitations": [
           "The image does not provide specific details about the substance dissolved in water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "576bec39a5f46ed3e1808628",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 129,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "639e0eeefb7ad11a739f4b551820b316d64b89d7df947c37078501bcc668fadc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the behavior of different materials when mixed with water.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.5: Mixing different materials in water",
+          "Prediction",
+          "Observation",
+          "Will disappear in water/will not disappear in water",
+          "Disappears in water/does not disappear in water",
+          "Material",
+          "Sugar",
+          "Salt",
+          "Chalk powder",
+          "Sand",
+          "Sawdust",
+          "Any other"
+        ],
+        "concepts": [
+          "dissolving",
+          "soluble",
+          "water"
+        ],
+        "context_relation": "The table compares the behavior of different materials when mixed with water.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each material's behavior."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:53:30Z",
+      "effective_analysis": {
+        "visual_summary": "A table comparing the behavior of different materials when mixed with water.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.5: Mixing different materials in water",
+          "Prediction",
+          "Observation",
+          "Will disappear in water/will not disappear in water",
+          "Disappears in water/does not disappear in water",
+          "Material",
+          "Sugar",
+          "Salt",
+          "Chalk powder",
+          "Sand",
+          "Sawdust",
+          "Any other"
+        ],
+        "concepts": [
+          "dissolving",
+          "soluble",
+          "water"
+        ],
+        "context_relation": "The table compares the behavior of different materials when mixed with water.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each material's behavior."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
