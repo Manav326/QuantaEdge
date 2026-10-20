@@ -11,9 +11,9 @@
     "assets_selected": 1165,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1160,
-    "assets_remaining": 1131,
-    "assets_completion_percent": 50.6,
+    "assets_analyzed": 1161,
+    "assets_remaining": 1130,
+    "assets_completion_percent": 50.7,
     "assets_failed": 18,
     "assets_skipped_from_checkpoint": 1160,
     "batch_limit": 5,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:53:01Z"
+      "checkpointed_at": "2026-10-20T23:01:04Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:53:49Z"
+      "checkpointed_at": "2026-10-20T23:01:53Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:54:28Z"
+      "checkpointed_at": "2026-10-20T23:02:32Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:55:26Z"
+      "checkpointed_at": "2026-10-20T23:03:31Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37954,6 +37954,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T18:05:34Z"
+    },
+    {
+      "asset_id": "552001401da1dfdeed32e404",
+      "asset_sha256": "72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with one hand outstretched as if pushing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "contact forces",
+          "interaction between objects",
+          "force disappearing when interaction ceases"
+        ],
+        "context_relation": "The image illustrates the concept of contact forces as described in the text.",
+        "limitations": [
+          "The image does not show the table being pushed, which is a key element in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T23:05:07Z"
     }
   ]
 }

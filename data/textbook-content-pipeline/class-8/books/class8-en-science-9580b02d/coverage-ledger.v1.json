@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1182,
-    "successful_visual_analyses": 1164,
-    "missing_visual_analyses": 1109,
+    "raw_analysis_result_rows": 1183,
+    "successful_visual_analyses": 1165,
+    "missing_visual_analyses": 1108,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1127,
+    "unresolved_count": 1126,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44340,9 +44340,22 @@
       "asset_path": "assets/72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with one hand outstretched as if pushing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "contact forces",
+          "interaction between objects",
+          "force disappearing when interaction ceases"
+        ],
+        "context_relation": "The image illustrates the concept of contact forces as described in the text.",
+        "limitations": [
+          "The image does not show the table being pushed, which is a key element in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

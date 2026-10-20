@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2042e195ad1f08b6535e6738689086b0b5497cda1c3c89d53125a514fe77e411",
+  "raw_analysis_sha256": "99ae3e40647a0e11520d6088c7f84e3dbeadf29cec61716081a2b518ade6f4be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:53:01Z",
+      "checkpointed_at": "2026-10-20T23:01:04Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:53:49Z",
+      "checkpointed_at": "2026-10-20T23:01:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:54:28Z",
+      "checkpointed_at": "2026-10-20T23:02:32Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -51509,7 +51509,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:55:26Z",
+      "checkpointed_at": "2026-10-20T23:03:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56998,6 +56998,54 @@
         "context_relation": "The image is related to the educational content about forces and interactions.",
         "limitations": [
           "The image does not provide specific details about the forces involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "552001401da1dfdeed32e404",
+      "asset_sha256": "72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with one hand outstretched as if pushing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "contact forces",
+          "interaction between objects",
+          "force disappearing when interaction ceases"
+        ],
+        "context_relation": "The image illustrates the concept of contact forces as described in the text.",
+        "limitations": [
+          "The image does not show the table being pushed, which is a key element in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T23:05:07Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with one hand outstretched as if pushing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "contact forces",
+          "interaction between objects",
+          "force disappearing when interaction ceases"
+        ],
+        "context_relation": "The image illustrates the concept of contact forces as described in the text.",
+        "limitations": [
+          "The image does not show the table being pushed, which is a key element in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
