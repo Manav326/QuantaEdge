@@ -38,6 +38,7 @@ public class CourseMarketplaceController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final ObjectMapper objectMapper;
+  private final CourseOrderFinancialService courseOrderFinancialService;
   private final String keyId;
   private final String keySecret;
   private final String baseUrl;
@@ -48,12 +49,14 @@ public class CourseMarketplaceController {
       JdbcTemplate jdbc,
       AuthorizationService authorization,
       ObjectMapper objectMapper,
+      CourseOrderFinancialService courseOrderFinancialService,
       @Value("${app.razorpay.key-id:}") String keyId,
       @Value("${app.razorpay.key-secret:}") String keySecret,
       @Value("${app.razorpay.base-url:https://api.razorpay.com/v1}") String baseUrl) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.objectMapper = objectMapper;
+    this.courseOrderFinancialService = courseOrderFinancialService;
     this.keyId = keyId == null ? "" : keyId.trim();
     this.keySecret = keySecret == null ? "" : keySecret.trim();
     this.baseUrl = (baseUrl == null ? "https://api.razorpay.com/v1" : baseUrl.trim()).replaceAll("/+$", "");
@@ -591,7 +594,8 @@ public class CourseMarketplaceController {
       }
     }
     Map<String, Object> offer = rows.getFirst();
-    long amountPaise = ((Number) offer.get("price_paise")).longValue();
+    long listedPricePaise = ((Number) offer.get("price_paise")).longValue();
+    long amountPaise = listedPricePaise;
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
     String title = String.valueOf(offer.getOrDefault("title", "Course access"));
     long purchaserAccountId;
@@ -652,12 +656,23 @@ public class CourseMarketplaceController {
       }
     }
 
+    CourseOrderFinancialService.CheckoutSnapshot financialSnapshot =
+        courseOrderFinancialService.prepareCheckout(
+            ((Number)offer.get("institution_offer_id")).longValue(),
+            institutionId,listedPricePaise,currency,title,buyerSnapshot);
+    amountPaise=financialSnapshot.payablePaise();
     String receipt = "qe_" + UUID.randomUUID().toString().replace("-", "");
     String buyerSnapshotJson;
+    String taxCalculationSnapshotJson;
+    String revenueShareSnapshotJson;
+    String discountSnapshotJson;
     try {
       buyerSnapshotJson = objectMapper.writeValueAsString(buyerSnapshot);
+      taxCalculationSnapshotJson = objectMapper.writeValueAsString(financialSnapshot.taxCalculationSnapshot());
+      revenueShareSnapshotJson = objectMapper.writeValueAsString(financialSnapshot.revenueSharePolicySnapshot());
+      discountSnapshotJson = objectMapper.writeValueAsString(financialSnapshot.discountSnapshot());
     } catch (JsonProcessingException serializationError) {
-      throw new IllegalStateException("Unable to serialize the purchaser snapshot.", serializationError);
+      throw new IllegalStateException("Unable to serialize the purchaser and approved financial snapshots.", serializationError);
     }
     long localOrderId;
     try {
@@ -665,15 +680,19 @@ public class CourseMarketplaceController {
           insert into course_payment_order(
             student_id,purchaser_user_id,target_student_id,recipient_type,
             course_id,institution_id,institution_offer_id,offer_price_paise,currency,
-            listed_price_paise,discount_amount_paise,buyer_snapshot,
+            listed_price_paise,discount_amount_paise,discount_reference,discount_snapshot,
+            tax_profile_id,taxable_value_paise,output_tax_paise,tax_calculation_snapshot,
+            revenue_share_policy_id,revenue_share_policy_snapshot,buyer_snapshot,
             receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,?,?,?,?,0,?::jsonb,?,?, 'CREATING')
+          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?,?,?,?::jsonb,?,?::jsonb,?::jsonb,?,?, 'CREATING')
           returning id
           """, Long.class, targetStudentId, purchaserUserId,
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
           courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
-          amountPaise, currency, ((Number)offer.get("price_paise")).longValue(),
-          buyerSnapshotJson, receipt, idempotencyKey);
+          amountPaise, currency, financialSnapshot.listedPricePaise(),financialSnapshot.discountPaise(),
+          null,discountSnapshotJson,financialSnapshot.taxProfileId(),financialSnapshot.taxableValuePaise(),
+          financialSnapshot.outputTaxPaise(),taxCalculationSnapshotJson,financialSnapshot.revenueSharePolicyId(),
+          revenueShareSnapshotJson,buyerSnapshotJson,receipt,idempotencyKey);
     } catch (DuplicateKeyException conflict) {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
@@ -1169,15 +1188,22 @@ public class CourseMarketplaceController {
         where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
         """, purchaserUserId, purchaserUserId, targetStudentId, institutionId, courseId);
     }
-    jdbc.update("""
+    CourseOrderFinancialService.FinalizedSale finalizedSale =
+        courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,expectedAmount);
+    int finalizedRows=jdbc.update("""
         update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
-          verified_at=now(),updated_at=now()
+          verified_at=now(),captured_amount_paise=?,captured_at=now(),fiscal_document_id=?,updated_at=now()
         where id=? and institution_id=? and status in ('PENDING','EXPIRED')
-        """, paymentId, signature, localOrderId, institutionId);
+        """, paymentId, signature, expectedAmount, finalizedSale.fiscalDocumentId(),localOrderId,institutionId);
+    if(finalizedRows!=1) throw new IllegalStateException("The course order changed while finalizing its fiscal document.");
     Map<String,Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
     result.put("purchasedFor", "CHILD".equals(recipientType) ? "CHILD"
         : purchaserUserId == null ? "LEARNER" : "PARENT");
     result.put("studentId", targetStudentId);
+    result.put("invoiceDocumentId", finalizedSale.fiscalDocumentId());
+    result.put("invoiceNumber", finalizedSale.documentNumber());
+    result.put("institutionSharePaise", finalizedSale.allocatedToInstitutionsPaise());
+    result.put("platformRemainderPaise", finalizedSale.platformRemainderPaise());
     result.put("transferable", purchaserUserId != null && "STUDENT".equals(recipientType));
     return result;
   }
@@ -1356,6 +1382,18 @@ public class CourseMarketplaceController {
     result.put("entitled", true);
     result.put("orderId", localOrderId);
     result.put("courseId", courseId);
+    List<Map<String,Object>> invoiceRows=jdbc.queryForList("""
+      select d.id as invoice_document_id,d.document_number,d.total_value_paise,d.tax_value_paise
+      from course_payment_order o left join fiscal_document d on d.id=o.fiscal_document_id
+      where o.id=? and o.status='VERIFIED'
+      """,localOrderId);
+    if(!invoiceRows.isEmpty()&&invoiceRows.getFirst().get("invoice_document_id")!=null) {
+      Map<String,Object> invoice=invoiceRows.getFirst();
+      result.put("invoiceDocumentId",invoice.get("invoice_document_id"));
+      result.put("invoiceNumber",invoice.get("document_number"));
+      result.put("invoiceTotalPaise",invoice.get("total_value_paise"));
+      result.put("invoiceTaxPaise",invoice.get("tax_value_paise"));
+    }
     return result;
   }
 

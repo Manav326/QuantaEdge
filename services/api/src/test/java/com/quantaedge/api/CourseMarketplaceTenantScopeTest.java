@@ -26,6 +26,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 class CourseMarketplaceTenantScopeTest {
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
+  @Mock private CourseOrderFinancialService courseOrderFinancialService;
 
   private final AuthContext student = new AuthContext(70L, 7L, "STUDENT", "Tenant Student");
   private final InstitutionTenantContext tenant = new InstitutionTenantContext(17L, "SCHOOL-A", "School A");
@@ -34,7 +35,7 @@ class CourseMarketplaceTenantScopeTest {
   @BeforeEach
   void setUp() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    controller = new CourseMarketplaceController(jdbc, authorization, new ObjectMapper(),
+    controller = new CourseMarketplaceController(jdbc, authorization, new ObjectMapper(),courseOrderFinancialService,
         "", "", "https://api.razorpay.com/v1");
   }
 
