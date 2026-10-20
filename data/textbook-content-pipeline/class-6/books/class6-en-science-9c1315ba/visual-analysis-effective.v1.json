@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c756fa0c84f987efe99f1178ee459716ea82585b6c2421f4ace73b17ca5dec61",
+  "raw_analysis_sha256": "a3ed04f6d3cf235cbddaca4ad55670163e532ff174c558d000002b0917e0aaa9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:50:50Z",
+      "checkpointed_at": "2026-10-20T20:55:48Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:51:44Z",
+      "checkpointed_at": "2026-10-20T20:56:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:52:54Z",
+      "checkpointed_at": "2026-10-20T20:57:51Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:53:37Z",
+      "checkpointed_at": "2026-10-20T20:58:33Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64822,6 +64822,76 @@
         "context_relation": "The diagram is related to the identification of materials based on their transparency properties.",
         "limitations": [
           "The image does not provide specific details about the nature of the materials used by each person or their transparency properties."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c43d76d115c07d0db79206e",
+      "asset_sha256": "4d6db55b305d6435deaf8046a634fe813f96f8cb5401204fbf920627c71a2c2f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/4d6db55b305d6435deaf8046a634fe813f96f8cb5401204fbf920627c71a2c2f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a rough texture.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "wood",
+          "cardboard",
+          "metals",
+          "butter paper",
+          "frosted glass",
+          "opaque materials",
+          "translucent materials",
+          "wood",
+          "cardboard",
+          "metals",
+          "butter paper",
+          "frosted glass"
+        ],
+        "context_relation": "The image is a visual representation of a wooden plank, which is an example of an opaque material.",
+        "limitations": [
+          "The image does not provide specific details about the texture or color of the wooden plank."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:59:47Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a rough texture.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "wood",
+          "cardboard",
+          "metals",
+          "butter paper",
+          "frosted glass",
+          "opaque materials",
+          "translucent materials",
+          "wood",
+          "cardboard",
+          "metals",
+          "butter paper",
+          "frosted glass"
+        ],
+        "context_relation": "The image is a visual representation of a wooden plank, which is an example of an opaque material.",
+        "limitations": [
+          "The image does not provide specific details about the texture or color of the wooden plank."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
