@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6a9d54cb54f6d2dae5eba884b156ea4242ab1d0a7aab3938150b56bf66e0ae51",
+  "raw_analysis_sha256": "e6944fb6725a42834a3ae405471d516f78bf41fb8f3026c37e5b5a87752b6c1a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:51:23Z",
+      "checkpointed_at": "2026-10-20T06:54:15Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:51:57Z",
+      "checkpointed_at": "2026-10-20T06:54:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:52:19Z",
+      "checkpointed_at": "2026-10-20T06:55:11Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:52:56Z",
+      "checkpointed_at": "2026-10-20T06:55:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53219,6 +53219,64 @@
         "concepts": [],
         "context_relation": "The image is not related to the text content.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4f545dce1e05af0892022494",
+      "asset_sha256": "b0818ba59d3a48e5a1614d593404731748f58ab5ad71fa795b0e1b926ac9f376",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/b0818ba59d3a48e5a1614d593404731748f58ab5ad71fa795b0e1b926ac9f376.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a dry cell showing its components.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Thick moist paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte",
+          "Carbon rod",
+          "Metal cap"
+        ],
+        "context_relation": "The image explains the structure and components of a dry cell.",
+        "limitations": [
+          "The image does not provide specific details about the electrolyte's composition or the exact shape of the carbon rod."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:56:26Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a dry cell showing its components.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Thick moist paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte",
+          "Carbon rod",
+          "Metal cap"
+        ],
+        "context_relation": "The image explains the structure and components of a dry cell.",
+        "limitations": [
+          "The image does not provide specific details about the electrolyte's composition or the exact shape of the carbon rod."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1115,
-    "successful_visual_analyses": 1097,
-    "missing_visual_analyses": 1176,
+    "raw_analysis_result_rows": 1116,
+    "successful_visual_analyses": 1098,
+    "missing_visual_analyses": 1175,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1194,
+    "unresolved_count": 1193,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41981,9 +41981,27 @@
       "asset_path": "assets/b0818ba59d3a48e5a1614d593404731748f58ab5ad71fa795b0e1b926ac9f376.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a dry cell showing its components.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Thick moist paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte",
+          "Carbon rod",
+          "Metal cap"
+        ],
+        "context_relation": "The image explains the structure and components of a dry cell.",
+        "limitations": [
+          "The image does not provide specific details about the electrolyte's composition or the exact shape of the carbon rod."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
