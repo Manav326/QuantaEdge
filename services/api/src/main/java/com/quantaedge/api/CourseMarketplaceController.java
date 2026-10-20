@@ -497,12 +497,18 @@ public class CourseMarketplaceController {
         targetStudentId, orderRecipientType, institutionId,request.discountCode());
   }
 
-  private String normalizeDiscountCodeForRequest(String supplied) {
+  static String normalizeDiscountCodeForRequest(String supplied) {
     if(supplied==null||supplied.isBlank()) return null;
     String code=supplied.trim().toUpperCase(Locale.ROOT);
     if(!code.matches("[A-Z0-9][A-Z0-9_-]{2,39}"))
       throw new IllegalArgumentException("Offer codes must be 3–40 letters, digits, hyphens or underscores.");
     return code;
+  }
+
+  static boolean discountCodeMatchesForRetry(String lockedCode,String requestedCode) {
+    return java.util.Objects.equals(
+        normalizeDiscountCodeForRequest(lockedCode),
+        normalizeDiscountCodeForRequest(requestedCode));
   }
 
   private String normalizeIdempotencyKey(String supplied) {
@@ -680,8 +686,7 @@ public class CourseMarketplaceController {
         // another payment attempt against that provider order. Expiring locally here would
         // release a limited coupon slot even though an old checkout could still be paid.
         String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
-        String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
-        if(!java.util.Objects.equals(previousCode,requestedCode)) {
+        if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
           throw new IllegalStateException(
               "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
         }
