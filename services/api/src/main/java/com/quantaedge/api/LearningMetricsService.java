@@ -28,6 +28,11 @@ public class LearningMetricsService {
         where cps.program_id=? and cps.subject_id=s.id
           and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))
       """;
+    String courseProgressScope = programId == null ? "p.course_id is null" : "p.course_id=?";
+    String courseAttemptScope = programId == null ? "qa.course_id is null" : "qa.course_id=?";
+    String courseMasteryScope = programId == null ? "m.course_id is null" : "m.course_id=?";
+    String courseAssessmentScope = programId == null ? "a.course_id is null" : "a.course_id=?";
+    String coursePracticeScope = programId == null ? "ps.course_id is null" : "ps.course_id=?";
     Map<String,Object> result=new LinkedHashMap<>(jdbc.queryForMap("""
       select id,public_id,public_user_id,display_name,class_code,board,language,
              case when profile_image_data_url is not null
@@ -47,7 +52,7 @@ public class LearningMetricsService {
         : "join curriculum_subject s on s.id=ste.subject_id and s.class_id=ste.class_id and s.active=true";
     Object[] lessonArgs = programId == null
         ? new Object[]{studentId}
-        : new Object[]{programId,studentId,programId};
+        : new Object[]{programId,programId,studentId,programId};
     String lessonSql = """
       select count(distinct l.id) as total_lessons,
              count(distinct l.id) filter(where p.status='COMPLETED') as completed_lessons,
@@ -59,10 +64,15 @@ public class LearningMetricsService {
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=st.id __TENANT_P__
+        and __COURSE_PROGRESS_SCOPE__
       where st.id=? and st.active=true and __SUBJECT_SCOPE__
-      """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_JOIN__",lessonSubjectJoin).replace("__SUBJECT_SCOPE__",subjectScope);
+      """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_JOIN__",lessonSubjectJoin)
+         .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope).replace("__SUBJECT_SCOPE__",subjectScope);
     result.put("lessonStats",jdbc.queryForMap(tenantSql(lessonSql,institutionId),tenantArgs(institutionId,lessonArgs)));
 
+    Object[] questionStatsArgs = programId == null
+        ? new Object[]{studentId}
+        : new Object[]{studentId,programId,programId};
     result.put("questionStats",jdbc.queryForMap(tenantSql("""
       select count(*) as attempts,count(*) filter(where qa.correct=true) as correct,
              count(*) filter(where qa.correct is not null) as graded_attempts,
@@ -74,8 +84,9 @@ public class LearningMetricsService {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       where qa.student_id=? __TENANT_QA__ and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
-        and __SUBJECT_SCOPE__
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+        and __COURSE_ATTEMPT_SCOPE__ and __SUBJECT_SCOPE__
+      """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,questionStatsArgs))));
 
     String curriculumClassScope = programId == null
         ? "c.code=(select class_code from student where id=? and active=true)"
@@ -85,7 +96,7 @@ public class LearningMetricsService {
         : "join curriculum_program_subject ste on ste.program_id=? and ste.subject_id=s.id and ste.class_id=s.class_id";
     Object[] curriculumArgs = programId == null
         ? new Object[]{studentId,studentId,studentId}
-        : new Object[]{programId,studentId,programId};
+        : new Object[]{programId,studentId,programId,programId};
     String curriculumSql = """
       select c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              count(distinct ch.id) as chapters,count(distinct l.id) as lessons,
@@ -99,14 +110,19 @@ public class LearningMetricsService {
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? __TENANT_P__
+        and __COURSE_PROGRESS_SCOPE__
       where c.active=true and __CURRICULUM_CLASS_SCOPE__
         and __SUBJECT_SCOPE__
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
       """.replace("__TRACK_JOIN__",curriculumTrackJoin)
+         .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope)
          .replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
          .replace("__SUBJECT_SCOPE__",subjectScope);
     result.put("curriculum",jdbc.queryForList(tenantSql(curriculumSql,institutionId),tenantArgs(institutionId,curriculumArgs)));
 
+    Object[] masteryArgs = programId == null
+        ? new Object[]{studentId}
+        : new Object[]{studentId,programId,programId};
     result.put("mastery",jdbc.queryForMap(tenantSql("""
       select count(*) as concepts,coalesce(round(avg(m.mastery_percent),1),0) as average_mastery,
              count(*) filter(where m.mastery_percent>=80) as mastered,
@@ -115,8 +131,9 @@ public class LearningMetricsService {
       join chapter_concept cc on cc.id=m.concept_id
       join curriculum_chapter ch on ch.id=cc.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
-      where m.student_id=? __TENANT_M__ and __SUBJECT_SCOPE__
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      where m.student_id=? __TENANT_M__ and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
+      """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,masteryArgs))));
 
     result.put("masteryDetails",jdbc.queryForList(tenantSql("""
       select cc.id as concept_id,cc.title as concept_title,ch.display_name as chapter_name,
@@ -125,9 +142,12 @@ public class LearningMetricsService {
       join chapter_concept cc on cc.id=m.concept_id
       join curriculum_chapter ch on ch.id=cc.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
-      where m.student_id=? __TENANT_M__ and m.mastery_percent<80 and __SUBJECT_SCOPE__
+      where m.student_id=? __TENANT_M__ and m.mastery_percent<80
+        and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
       order by m.mastery_percent asc,ch.teaching_order,ch.sort_order,cc.concept_order,cc.id limit 30
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,
+          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
 
     result.put("assessmentStats",jdbc.queryForMap(tenantSql("""
       select count(*) filter(where att.status<>'ABANDONED') as attempts,
