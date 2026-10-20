@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 975,
+    "assets_selected": 977,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 972,
-    "assets_remaining": 1319,
-    "assets_completion_percent": 42.4,
+    "assets_analyzed": 974,
+    "assets_remaining": 1317,
+    "assets_completion_percent": 42.5,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 970,
+    "assets_skipped_from_checkpoint": 972,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:43:08Z"
+      "checkpointed_at": "2026-10-20T02:46:06Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:43:42Z"
+      "checkpointed_at": "2026-10-20T02:46:39Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:44:04Z"
+      "checkpointed_at": "2026-10-20T02:47:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31003,6 +31003,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:45:21Z"
+    },
+    {
+      "asset_id": "f4314215ba119063361b66f7",
+      "asset_sha256": "6f2e943d1d11f01c4e9721edc2c05807e06c625f689b57219e421439bcfce0c5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/6f2e943d1d11f01c4e9721edc2c05807e06c625f689b57219e421439bcfce0c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a hospital building with an ambulance parked in front.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "HOSPITAL",
+          "ambulance",
+          "hospital building"
+        ],
+        "concepts": [
+          "hospital",
+          "ambulance",
+          "building"
+        ],
+        "context_relation": "The image represents a hospital and an ambulance, which are related to medical services.",
+        "limitations": [
+          "The image does not provide specific details about the discovery of Penicillin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:47:40Z"
+    },
+    {
+      "asset_id": "f2f5c8da74f7e51d8c2798cd",
+      "asset_sha256": "26e92c071daa9cd3e06ca77284b08f83c2dd5217faac7c439b90b37212da7bea",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/26e92c071daa9cd3e06ca77284b08f83c2dd5217faac7c439b90b37212da7bea.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of various types of pills and capsules.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "medication",
+          "pill",
+          "capsule",
+          "antibiotic",
+          "Penicillin"
+        ],
+        "context_relation": "The image is related to the discovery of Penicillin, a first antibiotic.",
+        "limitations": [
+          "The image does not provide specific details about the types of pills and capsules."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:48:17Z"
     }
   ]
 }
