@@ -529,3 +529,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - The helper waits for inspection of a response clone, then returns the original `Response`; existing `json()`, `text()`, and status handling are preserved. All non-2xx API responses, network failures (except intentional aborts), explicit `warning` payloads, and warning-level notices are forwarded to the root notification host.
 - The host now only displays notifications; it no longer overrides browser `fetch`. Toasts render in a fixed viewport portal attached to `document.body`, support info/success/warning/error tones, and retain Copy, Dismiss, queue and auto-dismiss controls.
 - CI contract now checks that the three app hosts/clients stay identical, the global fetch override stays absent, and every migrated client file imports `apiFetch` without direct fetch calls. The next Actions run is the acceptance gate.
+
+## Student no-enrolment empty states — 2026-10-20
+
+- Added centralized English and Hinglish UI catalog messages for the student Dashboard, Learn, Practice, Progress and Books no-enrolment states, including the Marketplace action label.
+- The Dashboard uses a deliberate action rather than automatically navigating away on first login. Course-dependent pages render no-enrolment guidance only after loading completes without a course API error.
+- Android uses the same message intent through its selected-language phrase registry; surfaces and text use Material theme roles.
+- The student-navigation source contract now checks both catalogs, all four content pages, and the Android no-course routing/screen states.
+- Implementation is on `main`; CI and live-account QA remain verification gates.
