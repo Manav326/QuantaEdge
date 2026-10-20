@@ -666,7 +666,16 @@ public class CourseMarketplaceController {
       notes.put("quantaedge_institution_offer_id", String.valueOf(offer.get("institution_offer_id")));
       if (purchaserUserId != null) notes.put("quantaedge_purchaser_user_id", Long.toString(purchaserUserId));
       String requestJson = objectMapper.writeValueAsString(Map.of(
-          "amount", amountPaise, "currency", currency, "receipt", receipt, "notes", notes));
+          "amount", amountPaise,
+          "currency", currency,
+          "receipt", receipt,
+          "notes", notes,
+          "payment", Map.of(
+              "capture", "automatic",
+              "capture_options", Map.of(
+                  "automatic_expiry_period", 12,
+                  "manual_expiry_period", 7200,
+                  "refund_speed", "normal"))));
       JsonNode providerOrder = razorpayRequest("POST", "/orders", requestJson);
       String providerOrderId = providerOrder.path("id").asText("");
       long providerAmount = providerOrder.path("amount").asLong(-1);
@@ -829,11 +838,43 @@ public class CourseMarketplaceController {
     JsonNode payment = razorpayRequest("GET", "/payments/" + paymentId, null);
     long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
     String expectedCurrency = String.valueOf(order.get("currency"));
-    if (!orderId.equals(payment.path("order_id").asText(""))
-        || payment.path("amount").asLong(-1) != expectedAmount
-        || !expectedCurrency.equalsIgnoreCase(payment.path("currency").asText(""))
-        || !"captured".equalsIgnoreCase(payment.path("status").asText(""))) {
-      throw new IllegalArgumentException("The payment is not captured for this exact course order. Course access remains locked.");
+    if (!isPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+      throw new IllegalArgumentException("The payment ID, order, amount or currency does not match this course order. Course access remains locked.");
+    }
+
+    // Razorpay can return a successful checkout in the authorised state when automatic
+    // capture is delayed or unavailable. Capture only after the signed callback and exact
+    // persisted order, amount and currency have been checked; never capture an arbitrary
+    // payment supplied by the browser.
+    if ("authorized".equalsIgnoreCase(payment.path("status").asText(""))) {
+      String captureRequest;
+      try {
+        captureRequest = objectMapper.writeValueAsString(
+            Map.of("amount", expectedAmount, "currency", expectedCurrency));
+      } catch (Exception exception) {
+        throw new IllegalStateException("Payment capture could not be prepared. Retry verification; do not start another checkout.", exception);
+      }
+      try {
+        razorpayRequest("POST", "/payments/" + paymentId + "/capture", captureRequest);
+      } catch (IllegalStateException captureFailure) {
+        // The capture may have succeeded even if the HTTP response was lost, or another
+        // capture worker may have won the race. Re-read provider state before reporting
+        // failure so an already-captured payment is still allowed to finish verification.
+        JsonNode refreshed = razorpayRequest("GET", "/payments/" + paymentId, null);
+        if (!isCapturedPaymentForExactOrder(refreshed, paymentId, orderId, expectedAmount, expectedCurrency)) {
+          throw new IllegalStateException(
+              "Razorpay has authorised this payment but capture is still pending. Retry verification; do not start another checkout.",
+              captureFailure);
+        }
+        payment = refreshed;
+      }
+      if (!isCapturedPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+        payment = razorpayRequest("GET", "/payments/" + paymentId, null);
+      }
+    }
+    if (!isCapturedPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+      throw new IllegalArgumentException(
+          "The payment is not captured for this exact course order. Retry verification; do not start another checkout.");
     }
 
     long targetStudentId = ((Number) order.get("student_id")).longValue();
@@ -1072,6 +1113,21 @@ public class CourseMarketplaceController {
         )
         """, Boolean.class, studentId, courseId, studentId, courseId, studentId, courseId);
     return Boolean.TRUE.equals(value);
+  }
+
+  static boolean isPaymentForExactOrder(
+      JsonNode payment, String paymentId, String orderId, long amount, String currency) {
+    return payment != null
+        && paymentId != null && paymentId.equals(payment.path("id").asText(""))
+        && orderId != null && orderId.equals(payment.path("order_id").asText(""))
+        && payment.path("amount").asLong(-1) == amount
+        && currency != null && currency.equalsIgnoreCase(payment.path("currency").asText(""));
+  }
+
+  static boolean isCapturedPaymentForExactOrder(
+      JsonNode payment, String paymentId, String orderId, long amount, String currency) {
+    return isPaymentForExactOrder(payment, paymentId, orderId, amount, currency)
+        && "captured".equalsIgnoreCase(payment.path("status").asText(""));
   }
 
   private Map<String, Object> verifiedResult(long localOrderId, long courseId) {
