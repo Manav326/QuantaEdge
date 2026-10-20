@@ -14,7 +14,7 @@
     "assets_analyzed": 1219,
     "assets_remaining": 859,
     "assets_completion_percent": 58.7,
-    "assets_failed": 23,
+    "assets_failed": 24,
     "assets_skipped_from_checkpoint": 1219,
     "batch_limit": 5,
     "publication_allowed": false
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T07:09:52Z"
+      "checkpointed_at": "2026-10-20T07:31:47Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23234,64 +23234,19 @@
     {
       "asset_id": "b774a52d7cb0d92087bcb1db",
       "asset_sha256": "6b30e918053e216338afcc644368301befcaa75dc2c0e0f2877cafc0a732f66a",
+      "page_text_context_sha256": "cf1a0e01d86fefc810281a9c7f843839cdd7f282a4a0fcab1bf6214a3169caa4",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 30,
       "asset_path": "page-0030.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "cf1a0e01d86fefc810281a9c7f843839cdd7f282a4a0fcab1bf6214a3169caa4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing observations of plants and animals.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "What similarities and differences did you find among the\nplants that you observed?\nYou must have observed that plants have a variety of\nfeatures such as—",
-          "tall/short, hard/soft stem",
-          "different shapes of leaves and their arrangement on\nthe stem or branches",
-          "flowers varying in colour, shape, and scent",
-          "Now, create a list of animals you observed during this\nwalk or from your previous experiences. Record the places\nwhere they live, the food they eat and the way they move\naround in Table 2.2. Some examples have been provided\nfor you.",
-          "Table 2.2: Observations of different animals around us",
-          "Name of\nthe animal\n(local name)",
-          "Place where\nthey live",
-          "Food they\neat",
-          "The way\nthey move\naround",
-          "Any other\nobservations\nand features",
-          "Crow",
-          "Tree",
-          "Insects",
-          "Fly and walk",
-          "Carrying a\ntwig in its\nbeak",
-          "Ant",
-          "Nest in soil\nand burrow",
-          "Leaves, seeds\nand insects",
-          "Have six legs",
-          "Cow",
-          "Grasses,\nleaves",
-          "Any other",
-          "What are the similarities and differences among the\nanimals that you have observed and recorded in Table 2.2?\nYou would have observed that some animals live on land\nwhile some others live on trees. Birds live on trees. Fish live\nin water and some animals like frogs live on land as well\nas in water. ",
-          "Sketch the plants and animals observed by you in your\nnotebook or prepare a scrapbook with leaves, flowers from\ndifferent plants and feathers from animals. Write all the\ndetails you have gathered about them."
-        ],
-        "concepts": [
-          "Observations of plants and animals",
-          "Similarities and differences",
-          "Animals living on land and trees",
-          "Animals living in water",
-          "Animals consuming diverse foods",
-          "Animals exhibiting variety of movements"
-        ],
-        "context_relation": "Observations and descriptions of plants and animals",
-        "limitations": [
-          "No specific visual elements provided",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T07:19:08Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "50c147c57e8e2e87ca99b4df",
@@ -23609,21 +23564,24 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram showing different criteria for grouping plants and animals.",
-        "visual_type": "diagram",
+        "visual_summary": "A table showing different criteria for grouping plants and animals.",
+        "visual_type": "table",
         "visible_text": [
-          "Presence/                     Hard/soft          Eating         Place they\nabse\nence of                    stem            habits              live\nflowers\nFig. 2.2: Some possible criteria of groupings of plants and animals",
-          "You may have grouped animals based on varied features,\nsuch as what they eat, where they live, what colour they are\nand how they move.",
-          "What is the importance of grouping? Grouping makes it\neasier to understand and study plants and animals on the\nbasis of their similarities and differences.",
-          "You will learn more about the importance of grouping in\nour daily lives in the chapter, 'Materials Around Us'.",
+          "Presence/",
+          "absence of",
+          "flowers",
+          "Fig. 2.2: Some possible criteria of groupings of plants and animals",
+          "You may have grouped animals based on varied features, such as what they eat, where they live, what colour they are and how they move.",
+          "What is the importance of grouping? Grouping makes it easier to understand and study plants and animals on the basis of their similarities and differences.",
+          "You will learn more about the importance of grouping in our daily lives in the chapter, 'Materials Around Us'.",
           "2.2.1 How to group plants?",
-          "You must have noticed that plants show variation in the\nfeatures related to stems, leaves, flowers, and more. The\nstems of different plants vary in thickness, height, and\nhardness, while the leaves vary in shape, colour, size and\narrangement. You might have tried grouping the plants in\nActivity 2.3 ",
-          "You might have also learnt in earlier classes that plants\ncan be grouped into herbs, shrubs, and trees based on their\nheight and types of stem. Let us study the features of plants\nin more detail and group them on that basis.",
+          "You must have noticed that plants show variation in the features related to stems, leaves, flowers, and more. The stems of different plants vary in thickness, height, and hardness, while the leaves vary in shape, colour, size and arrangement. You might have tried grouping the plants in Activity 2.3 ",
+          "You might have also learnt in earlier classes that plants can be grouped into herbs, shrubs, and trees based on their height and types of stem. Let us study the features of plants in more detail and group them on that basis.",
           "Activity 2.4: Let us group",
-          "Let us go on a nature walk again for some more\ninteresting observations.",
-          "Look closely at the height of different plants. Are\nthese plants shorter than you, as tall as you, or taller\nthan you?",
-          "Is the stem brown or green? Touch and feel the stems\nand try to bend them gently. Can you bend the stem\neasily, or is it stiff? Take care that the stems do not break.",
-          "Also, observe from where the branches of the plants\nrise—whether they arise close to the ground or higher\nup on the stem. Fill in your observations in Table 2.3.\nA few examples are already given."
+          "Let us go on a nature walk again for some more interesting observations.",
+          "Look closely at the height of different plants. Are these plants shorter than you, as tall as you, or taller than you?",
+          "Is the stem brown or green? Touch and feel the stems and try to bend them gently. Can you bend the stem easily, or is it stiff? Take care that the stems do not break.",
+          "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
           "grouping",
@@ -23639,24 +23597,24 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "nature walk",
+          "observations"
         ],
-        "context_relation": "exploring the criteria for grouping plants and animals",
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
-          "The text does not provide specific examples or criteria for grouping plants and animals."
+          "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T07:23:48Z"
+      "checkpointed_at": "2026-10-20T07:34:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -24236,7 +24194,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -25469,7 +25427,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39338687789",
+      "run_id": "39381360674",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
