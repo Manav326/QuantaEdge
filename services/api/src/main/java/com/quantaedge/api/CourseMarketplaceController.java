@@ -676,7 +676,16 @@ public class CourseMarketplaceController {
       notes.put("quantaedge_institution_offer_id", String.valueOf(offer.get("institution_offer_id")));
       if (purchaserUserId != null) notes.put("quantaedge_purchaser_user_id", Long.toString(purchaserUserId));
       String requestJson = objectMapper.writeValueAsString(Map.of(
-          "amount", amountPaise, "currency", currency, "receipt", receipt, "notes", notes));
+          "amount", amountPaise,
+          "currency", currency,
+          "receipt", receipt,
+          "notes", notes,
+          "payment", Map.of(
+              "capture", "automatic",
+              "capture_options", Map.of(
+                  "automatic_expiry_period", 12,
+                  "manual_expiry_period", 7200,
+                  "refund_speed", "optimum"))));
       JsonNode providerOrder = razorpayRequest("POST", "/orders", requestJson);
       String providerOrderId = providerOrder.path("id").asText("");
       long providerAmount = providerOrder.path("amount").asLong(-1);
