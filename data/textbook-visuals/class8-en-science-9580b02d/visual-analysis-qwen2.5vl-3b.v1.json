@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1161,
+    "assets_selected": 1162,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 1157,
     "assets_remaining": 1134,
     "assets_completion_percent": 50.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1156,
+    "assets_skipped_from_checkpoint": 1157,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:58:01Z"
+      "checkpointed_at": "2026-10-20T22:05:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:58:49Z"
+      "checkpointed_at": "2026-10-20T22:06:12Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:59:27Z"
+      "checkpointed_at": "2026-10-20T22:06:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33957,9 +33957,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -34405,8 +34405,8 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "(Do not hold the nichrome wire).",
-          "What difference do you feel?",
           "Safety first",
+          "What difference do you feel?",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
           "You may have observed that nichrome wire feels warm when current is passed through it.",
@@ -34424,17 +34424,16 @@
           "Incandescent lamp",
           "Electric current in household appliances"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, emphasizing the importance of safety precautions and the scientific reasoning behind it.",
         "limitations": [
-          "The page does not provide specific instructions for the experiment described, only general guidelines.",
-          "The page does not include any visual aids or diagrams to support the explanation."
+          "The page does not provide specific instructions for the activity described, only general guidelines."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:04:25Z"
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T22:16:25Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
