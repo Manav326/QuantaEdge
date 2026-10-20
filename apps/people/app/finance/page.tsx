@@ -11,6 +11,7 @@ type Registration = { id:number; legal_entity_id:number; legal_entity_name:strin
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
 type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
 type PolicyRecipient = { institution_id:number; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; institution_name?:string };
+type DiscountOffer = { id:number; institution_offer_id:number; code:string; version:number; currency:string; discount_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; max_discount_paise?:number|null; min_listed_price_paise:number; max_redemptions?:number|null; max_redemptions_per_purchaser?:number|null; effective_from:string; effective_until?:string|null; status:string; institution_name:string; course_name:string; redemption_count:number; offer_price_paise:number };
 type PolicyDetail = Policy & { recipients:PolicyRecipient[] };
 type Template = { id:number; scope:string; legal_entity_id?:number|null; internal_name:string; template_version_id?:number|null; version_no?:number|null; version_status?:string; design_definition_json?:string|null; published_at?:string|null };
 type FinancialDocument = { id:number; document_type:string; document_number:string; issued_at:string; currency:string; total_value_paise:number; tax_value_paise:number; source_type:string; source_record_key:string; pdf_available:boolean };
@@ -38,10 +39,11 @@ function parseDesign(value?:string|null):Design{
 }
 
 export default function FinancePage(){
-  const [tab,setTab]=useState<'overview'|'entities'|'tax'|'distribution'|'studio'|'documents'>('overview');
+  const [tab,setTab]=useState<'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'>('overview');
   const [catalog,setCatalog]=useState<Catalog|null>(null);
   const [overview,setOverview]=useState<Overview|null>(null);
   const [policies,setPolicies]=useState<Policy[]>([]);
+  const [discounts,setDiscounts]=useState<DiscountOffer[]>([]);
   const [templates,setTemplates]=useState<Template[]>([]);
   const [documents,setDocuments]=useState<FinancialDocument[]>([]);
   const [seriesDrafts,setSeriesDrafts]=useState<Record<string,string>>({});
@@ -69,16 +71,22 @@ export default function FinancePage(){
   const [templateEntityId,setTemplateEntityId]=useState('');
   const [design,setDesign]=useState<Design>({...DEFAULT_DESIGN});
   const [templateName,setTemplateName]=useState('QuantaEdge Course Invoice');
+  const [discountForm,setDiscountForm]=useState({
+    offerId:'',code:'',discountType:'PERCENTAGE',percentage:'10',flatAmountRupees:'100',
+    maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',
+    effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''
+  });
 
   const loadAll=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const [c,o,p,t,d]=await Promise.all([
+      const [c,o,p,disc,t,d]=await Promise.all([
         api<Catalog>(BASE+'/catalog'),api<Overview>(BASE+'/overview'),api<Policy[]>(BASE+'/revenue-share/policies'),
-        api<Template[]>(BASE+'/invoice-templates'),api<FinancialDocument[]>(BASE+'/documents')
+        api<DiscountOffer[]>(BASE+'/discounts'),api<Template[]>(BASE+'/invoice-templates'),api<FinancialDocument[]>(BASE+'/documents')
       ]);
-      setCatalog(c);setOverview(o);setPolicies(p);setTemplates(t);setDocuments(d);
+      setCatalog(c);setOverview(o);setPolicies(p);setDiscounts(disc);setTemplates(t);setDocuments(d);
       if(!selectedOfferId&&c.offers.length) setSelectedOfferId(String(c.offers[0].offer_id));
+      if(!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
       if(!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
       if(!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
       if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
@@ -89,7 +97,7 @@ export default function FinancePage(){
       }
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
-  },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId]);
+  },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId,discountForm.offerId]);
   useEffect(()=>{void loadAll();},[loadAll]);
   useEffect(()=>()=>{if(previewPdfUrl)URL.revokeObjectURL(previewPdfUrl);},[previewPdfUrl]);
 
@@ -201,6 +209,36 @@ export default function FinancePage(){
   };
   useEffect(()=>{if(taxForm.offerId)void loadTaxProfiles(taxForm.offerId);},[taxForm.offerId]);
 
+  const createDiscount=()=>{
+    if(!discountForm.offerId){setError('Select a course offer for this discount code.');return;}
+    if(!/^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$/.test(discountForm.code.trim())){setError('Offer codes must be 3–40 letters, digits, hyphens or underscores.');return;}
+    if(discountForm.discountType==='PERCENTAGE'&&(!(Number(discountForm.percentage)>0)||Number(discountForm.percentage)>100)){setError('Discount percentage must be greater than 0 and no more than 100.');return;}
+    if(discountForm.discountType==='FLAT'&&!(Number(discountForm.flatAmountRupees)>0)){setError('Enter a positive flat discount amount.');return;}
+    if(discountForm.maxDiscountRupees!==''&&!(Number(discountForm.maxDiscountRupees)>0)){setError('Maximum discount cap must be positive when configured.');return;}
+    if(discountForm.minListedPriceRupees!==''&&Number(discountForm.minListedPriceRupees)<0){setError('Minimum listed price cannot be negative.');return;}
+    if(discountForm.maxRedemptions!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptions))||Number(discountForm.maxRedemptions)<=0)){setError('Maximum redemptions must be a positive whole number.');return;}
+    if(discountForm.maxRedemptionsPerPurchaser!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptionsPerPurchaser))||Number(discountForm.maxRedemptionsPerPurchaser)<=0)){setError('Per-purchaser limit must be a positive whole number.');return;}
+    if(discountForm.effectiveUntil&&new Date(discountForm.effectiveUntil)<=new Date(discountForm.effectiveFrom)){setError('Offer end must be after its start.');return;}
+    void action(async()=>{
+      const created=await api<{id:number;code:string;version:number}>(BASE+'/discounts',{method:'POST',body:JSON.stringify({
+        institutionOfferId:Number(discountForm.offerId),code:discountForm.code.trim().toUpperCase(),
+        currency:'INR',discountType:discountForm.discountType,
+        percentage:discountForm.discountType==='PERCENTAGE'?discountForm.percentage:null,
+        flatAmountRupees:discountForm.discountType==='FLAT'?discountForm.flatAmountRupees:null,
+        maxDiscountRupees:discountForm.maxDiscountRupees||null,
+        minListedPriceRupees:discountForm.minListedPriceRupees||'0',
+        maxRedemptions:discountForm.maxRedemptions||null,
+        maxRedemptionsPerPurchaser:discountForm.maxRedemptionsPerPurchaser||null,
+        effectiveFrom:asIso(discountForm.effectiveFrom),
+        effectiveUntil:discountForm.effectiveUntil?asIso(discountForm.effectiveUntil):null
+      })});
+      await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});
+    },'Discount created and submitted for independent HRMS approval. It cannot be used until approved.');
+  };
+  const submitDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/submit',{method:'POST'}),'Discount submitted for HRMS approval.');
+  const approveDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/approve',{method:'POST'}),'Discount approved. The server will validate eligibility and enforce usage limits.');
+  const retireDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/retire',{method:'POST'}),'Discount retired. Existing order snapshots remain unchanged.');
+
   const createPolicy=()=>{
     if(!selectedOfferId){setError('Select a course offer first.');return;}
     void action(async()=>{
@@ -285,7 +323,7 @@ export default function FinancePage(){
   const activeDraft=selectedTemplate?.version_status==='DRAFT' || !selectedTemplate;
   const tabs:[typeof tab,string,string][]=[
     ['overview','Overview','▦'],['entities','Legal entities & GST','⌂'],['tax','Tax profiles','%'],
-    ['distribution','Revenue distribution','↗'],['studio','Invoice Design Studio','▤'],['documents','Issued documents','▣']
+    ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],['documents','Issued documents','▣']
   ];
   return <main className={styles.page}>
     <header className={styles.header}>
@@ -406,6 +444,33 @@ export default function FinancePage(){
             <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
           </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.institution_name}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of net pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
+      </section>}
+      {tab==='discounts'&&<section className={styles.stack}>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Course offer discount codes</h2><p>HRMS approves a versioned percentage or flat discount for one exact institution offer. Uses are reserved before checkout and become redeemed only after verified payment.</p></div></div>
+          <form className={styles.form} onSubmit={event=>{event.preventDefault();createDiscount();}}>
+            <label>Institution course offer<select required value={discountForm.offerId} onChange={event=>setDiscountForm(v=>({...v,offerId:event.target.value}))}><option value="">Select course offer</option>{catalog.offers.filter(o=>o.currency==='INR'&&o.offer_status!=='ARCHIVED').map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {rupees(o.price_paise,o.currency)}</option>)}</select></label>
+            <div className={styles.inputGrid}><label>Offer code<input required minLength={3} maxLength={40} pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" value={discountForm.code} onChange={event=>setDiscountForm(v=>({...v,code:event.target.value.toUpperCase()}))} placeholder="WELCOME10"/></label><label>Discount type<select value={discountForm.discountType} onChange={event=>setDiscountForm(v=>({...v,discountType:event.target.value}))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat amount</option></select></label>{discountForm.discountType==='PERCENTAGE'?<label>Percentage (%)<input type="number" required min="0.01" max="100" step="0.01" value={discountForm.percentage} onChange={event=>setDiscountForm(v=>({...v,percentage:event.target.value}))}/></label>:<label>Flat discount (₹)<input type="number" required min="0.01" step="0.01" value={discountForm.flatAmountRupees} onChange={event=>setDiscountForm(v=>({...v,flatAmountRupees:event.target.value}))}/></label>}</div>
+            <div className={styles.inputGrid}><label>Maximum discount cap (₹, optional)<input type="number" min="0.01" step="0.01" value={discountForm.maxDiscountRupees} onChange={event=>setDiscountForm(v=>({...v,maxDiscountRupees:event.target.value}))} placeholder="No extra cap"/></label><label>Minimum listed price (₹)<input type="number" min="0" step="0.01" value={discountForm.minListedPriceRupees} onChange={event=>setDiscountForm(v=>({...v,minListedPriceRupees:event.target.value}))}/></label><label>Total redemption limit (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptions} onChange={event=>setDiscountForm(v=>({...v,maxRedemptions:event.target.value}))} placeholder="Unlimited"/></label></div>
+            <div className={styles.inputGrid}><label>Uses per purchaser (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptionsPerPurchaser} onChange={event=>setDiscountForm(v=>({...v,maxRedemptionsPerPurchaser:event.target.value}))} placeholder="Unlimited"/></label><label>Starts at<input required type="datetime-local" value={discountForm.effectiveFrom} onChange={event=>setDiscountForm(v=>({...v,effectiveFrom:event.target.value}))}/></label><label>Ends at (optional)<input type="datetime-local" value={discountForm.effectiveUntil} onChange={event=>setDiscountForm(v=>({...v,effectiveUntil:event.target.value}))}/></label></div>
+            <p className={styles.note}>Saving creates a new immutable draft version and submits it for approval. Approval rejects overlapping active versions of the same code for the same course. No code is usable before approval.</p>
+            <button className={styles.primary} disabled={busy||!catalog.offers.length}>Create & submit discount for approval</button>
+          </form>
+        </section>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Discount policy ledger</h2><p>Version history, approval status and redemption counts are visible to the platform finance owner.</p></div><button className={styles.secondary} type="button" disabled={busy} onClick={()=>void loadAll()}>Refresh</button></div>
+          {discounts.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Code / course</th><th>Rule</th><th>Validity</th><th>Use limits</th><th>Status / action</th></tr></thead><tbody>{discounts.map(d=><tr key={d.id}>
+            <td><b>{d.code} · v{d.version}</b><small>{d.institution_name} · {d.course_name}</small></td>
+            <td>{d.discount_type==='PERCENTAGE'?Number(d.percentage_basis_points||0)/100+'%':rupees(d.flat_amount_paise||0,d.currency)}{d.max_discount_paise ? ' · cap '+rupees(d.max_discount_paise,d.currency) : ''}<small>Minimum {rupees(d.min_listed_price_paise,d.currency)}</small></td>
+            <td>{new Date(d.effective_from).toLocaleString()}<small>{d.effective_until?'Until '+new Date(d.effective_until).toLocaleString():'No end date'}</small></td>
+            <td>{d.redemption_count}/{d.max_redemptions??'∞'}<small>Per purchaser: {d.max_redemptions_per_purchaser??'∞'}</small></td>
+            <td><span className={styles.status}>{d.status}</span><div className={styles.discountActions}>
+              {d.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>submitDiscount(d.id)}>Submit</button>}
+              {d.status==='PENDING_APPROVAL'&&<button className={styles.primarySmall} disabled={busy} onClick={()=>approveDiscount(d.id)}>Approve</button>}
+              {['DRAFT','PENDING_APPROVAL','APPROVED'].includes(d.status)&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>retireDiscount(d.id)}>Retire</button>}
+            </div></td>
+          </tr>)}</tbody></table></div>:<div className={styles.emptyLarge}><span>%</span><b>No discount codes configured</b><p>Create a draft and approve it in HRMS. No demo coupons are seeded.</p></div>}
+        </section>
       </section>}
       {tab==='studio'&&<section className={styles.studio}>
         <section className={styles.panel}><h2>Invoice Design Studio</h2><p>Make a new draft or create a version from a published design. The preview is a watermarked sample; it never issues an invoice or consumes a legal number.</p>
