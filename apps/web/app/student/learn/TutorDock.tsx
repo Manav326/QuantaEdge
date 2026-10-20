@@ -64,7 +64,7 @@ async function readBody(response: Response): Promise<ApiBody> {
 const TUTOR_RECOVERY_ATTEMPTS = 46;
 const TUTOR_RECOVERY_INTERVAL_MS = 2000;
 
-async function recoverPersistedTutorTurn(sessionId: number, userMessage: string): Promise<TutorMessage[] | null> {
+async function recoverPersistedTutorTurn(sessionId: number, courseId: number, userMessage: string): Promise<TutorMessage[] | null> {
   // The local CPU model can take 65–90 seconds. Gateway errors can arrive before
   // inference finishes, so keep reconciling persisted history long enough for the
   // in-flight API request to finish instead of prematurely discarding the turn.
@@ -357,7 +357,7 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
       }
     })();
     return () => { cancelled = true; };
-  }, [open, lessonId, languageReady, retryAttempt]);
+  }, [open, lessonId, courseId, languageReady, retryAttempt]);
 
   useEffect(() => {
     if (!open || !languageReady) return;
@@ -589,7 +589,7 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
         const definitiveTutorFailure = body.error === 'TUTOR_PROVIDER_ERROR'
           || body.error === 'TUTOR_UNAVAILABLE';
         if (!definitiveTutorFailure && (response.status >= 500 || typeof body.rawText === 'string')) {
-          const recovered = await recoverPersistedTutorTurn(sessionId, message);
+          const recovered = await recoverPersistedTutorTurn(sessionId, courseId, message);
           if (recovered) {
             setMessages(recovered);
             setError('');
@@ -609,7 +609,7 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
       }
       setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string, created_at: new Date().toISOString() }]);
     } catch {
-      const recovered = await recoverPersistedTutorTurn(sessionId, message);
+      const recovered = await recoverPersistedTutorTurn(sessionId, courseId, message);
       if (recovered) {
         setMessages(recovered);
         setError('');
