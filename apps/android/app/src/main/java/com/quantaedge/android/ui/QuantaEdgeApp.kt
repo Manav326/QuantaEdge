@@ -4187,7 +4187,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onJoinFree = ::joinFreeMarketplaceCourse,
                         onAskParent = ::requestParentCoursePurchase,
                         onRefresh = ::refreshMarketplace,
-                        onAllCourses = ::openAllCourses
+                        onAllCourses = ::openAllCourses,
+                        pendingVerification = pendingStudentPaymentVerification != null,
+                        onRetryVerification = { retryPendingCoursePayment("STUDENT") }
                     )
                     AppRoute.PARENT_HOME -> ParentHomeScreen(
                         parent = parentAccount,
@@ -4250,7 +4252,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                 refreshUser()
                             }
                         },
-                        onBack = ::goBack
+                        onBack = ::goBack,
+                        pendingVerification = pendingParentPaymentVerification != null,
+                        onRetryVerification = { retryPendingCoursePayment("PARENT") }
                     )
                     AppRoute.PARENT_REPORT -> ParentReportScreen(
                         report = parentReport,
