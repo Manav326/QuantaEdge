@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1072,
-    "successful_visual_analyses": 1055,
-    "missing_visual_analyses": 1219,
+    "raw_analysis_result_rows": 1074,
+    "successful_visual_analyses": 1057,
+    "missing_visual_analyses": 1217,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1236,
+    "unresolved_count": 1234,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40491,9 +40491,18 @@
       "asset_path": "assets/d0f471a18d4be621e1d8df9865a28a9f92defde19df47d5b6740af741272dcec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person in a light blue shirt pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electromagnets and their use in lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnets or their applications."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40509,9 +40518,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electromagnet is shown lifting an iron/steel object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Are electromagnets also used in real life, for lifting electromagnets?",
+          "Lifting electromagnets are strong electromagnets, that may be hung to the cranes.",
+          "The crane operator can control the magnet by switching the current ON and OFF.",
+          "When the current is turned ON, the electromagnet lifts the iron/steel objects;",
+          "When the current is switched OFF, magnetic field disappears, and the",
+          "magnet is no longer effective."
+        ],
+        "concepts": [
+          "Electromagnets",
+          "Lifting electromagnets",
+          "Iron/Steel objects",
+          "Crane operator",
+          "Current ON and OFF",
+          "Magnetic field",
+          "Magnet"
+        ],
+        "context_relation": "The image is a visual representation of the concept of electromagnets used in real life for lifting objects.",
+        "limitations": [
+          "The image does not show the actual lifting process.",
+          "The image does not show the crane operator's control mechanism."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

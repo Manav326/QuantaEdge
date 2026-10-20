@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cb5d8ce7791bf9354aa663b1306c7d83162858397db4efd3cf30d3eabd361ab5",
+  "raw_analysis_sha256": "811a4acb8b7a4e8ee7a7d91f7f66a1cf8d30067d0e02d32d33802090b93be9c2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:00:38Z",
+      "checkpointed_at": "2026-10-20T05:03:27Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:01:11Z",
+      "checkpointed_at": "2026-10-20T05:04:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:01:33Z",
+      "checkpointed_at": "2026-10-20T05:04:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -50842,6 +50842,118 @@
         "context_relation": "The image does not provide any specific context or relation to the text.",
         "limitations": [
           "The image does not show any electromagnets or cranes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "75bbece36785ac08efb5e4d2",
+      "asset_sha256": "d0f471a18d4be621e1d8df9865a28a9f92defde19df47d5b6740af741272dcec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/d0f471a18d4be621e1d8df9865a28a9f92defde19df47d5b6740af741272dcec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fccf27fa60a31f8e8242c03e69b236dbd10db5012130c0a061078d0bc89ded37",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a light blue shirt pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electromagnets and their use in lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnets or their applications."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:04:57Z",
+      "effective_analysis": {
+        "visual_summary": "A person in a light blue shirt pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electromagnets and their use in lifting objects.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnets or their applications."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d2d40d7c7e0280971c53ec17",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fccf27fa60a31f8e8242c03e69b236dbd10db5012130c0a061078d0bc89ded37",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electromagnet is shown lifting an iron/steel object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Are electromagnets also used in real life, for lifting electromagnets?",
+          "Lifting electromagnets are strong electromagnets, that may be hung to the cranes.",
+          "The crane operator can control the magnet by switching the current ON and OFF.",
+          "When the current is turned ON, the electromagnet lifts the iron/steel objects;",
+          "When the current is switched OFF, magnetic field disappears, and the",
+          "magnet is no longer effective."
+        ],
+        "concepts": [
+          "Electromagnets",
+          "Lifting electromagnets",
+          "Iron/Steel objects",
+          "Crane operator",
+          "Current ON and OFF",
+          "Magnetic field",
+          "Magnet"
+        ],
+        "context_relation": "The image is a visual representation of the concept of electromagnets used in real life for lifting objects.",
+        "limitations": [
+          "The image does not show the actual lifting process.",
+          "The image does not show the crane operator's control mechanism."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:05:17Z",
+      "effective_analysis": {
+        "visual_summary": "An electromagnet is shown lifting an iron/steel object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Are electromagnets also used in real life, for lifting electromagnets?",
+          "Lifting electromagnets are strong electromagnets, that may be hung to the cranes.",
+          "The crane operator can control the magnet by switching the current ON and OFF.",
+          "When the current is turned ON, the electromagnet lifts the iron/steel objects;",
+          "When the current is switched OFF, magnetic field disappears, and the",
+          "magnet is no longer effective."
+        ],
+        "concepts": [
+          "Electromagnets",
+          "Lifting electromagnets",
+          "Iron/Steel objects",
+          "Crane operator",
+          "Current ON and OFF",
+          "Magnetic field",
+          "Magnet"
+        ],
+        "context_relation": "The image is a visual representation of the concept of electromagnets used in real life for lifting objects.",
+        "limitations": [
+          "The image does not show the actual lifting process.",
+          "The image does not show the crane operator's control mechanism."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
