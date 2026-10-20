@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a3970003550a747cddee9ddb578e8a914b13e7d2440d5dab1166b379aca51b39",
+  "raw_analysis_sha256": "db560bd06ea42bac603f234745bc58cbbf2652a2bb7fc8496ed0c5ff9c0b112b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:06:01Z",
+      "checkpointed_at": "2026-10-20T05:09:46Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:06:34Z",
+      "checkpointed_at": "2026-10-20T05:10:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:06:57Z",
+      "checkpointed_at": "2026-10-20T05:10:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51094,6 +51094,126 @@
         "limitations": [
           "The page does not provide specific examples or experiments for the concepts discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "990a9d11958396daa5225e75",
+      "asset_sha256": "26251bf7ac72308dbcc46e821501f57c9b52dcbbb6f9d81b7e53be8794523c37",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/26251bf7ac72308dbcc46e821501f57c9b52dcbbb6f9d81b7e53be8794523c37.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a telescope to observe the sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Observing the sky",
+          "Using a telescope"
+        ],
+        "context_relation": "The image shows a person using a telescope, which is related to the topic of observing the sky.",
+        "limitations": [
+          "The image does not provide specific details about the telescope or the person's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:11:17Z",
+      "effective_analysis": {
+        "visual_summary": "A person using a telescope to observe the sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Observing the sky",
+          "Using a telescope"
+        ],
+        "context_relation": "The image shows a person using a telescope, which is related to the topic of observing the sky.",
+        "limitations": [
+          "The image does not provide specific details about the telescope or the person's actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9adf283a57600a6cc1149b71",
+      "asset_sha256": "1b5731e86381d385c60615ee12ec118685b4686d9bc5e2fc046879806d7caaa4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/1b5731e86381d385c60615ee12ec118685b4686d9bc5e2fc046879806d7caaa4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electrical circuit setup with a battery, nichrome wire, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "53",
+          "Do not hold the nichrome wire.",
+          "Safety First",
+          "What difference do you feel?",
+          "Do not touch the wire for an extended period to avoid any injuries.",
+          "Repeat the last two steps to confirm the observation.",
+          "You may have observed that nichrome wire feels warm when current is passed through it.",
+          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance."
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic and Heating Effects",
+          "Nichrome Wire",
+          "Battery",
+          "Light Bulb",
+          "Opposition or Resistance"
+        ],
+        "context_relation": "The image illustrates an experiment to demonstrate the heating effect of electric current on nichrome wire.",
+        "limitations": [
+          "The image does not show the actual heating effect of the nichrome wire."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:12:02Z",
+      "effective_analysis": {
+        "visual_summary": "An electrical circuit setup with a battery, nichrome wire, and a light bulb.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "53",
+          "Do not hold the nichrome wire.",
+          "Safety First",
+          "What difference do you feel?",
+          "Do not touch the wire for an extended period to avoid any injuries.",
+          "Repeat the last two steps to confirm the observation.",
+          "You may have observed that nichrome wire feels warm when current is passed through it.",
+          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance."
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic and Heating Effects",
+          "Nichrome Wire",
+          "Battery",
+          "Light Bulb",
+          "Opposition or Resistance"
+        ],
+        "context_relation": "The image illustrates an experiment to demonstrate the heating effect of electric current on nichrome wire.",
+        "limitations": [
+          "The image does not show the actual heating effect of the nichrome wire."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
