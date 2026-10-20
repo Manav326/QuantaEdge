@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.text.Normalizer;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +54,9 @@ public class AdminContentController {
   private final QuestionHistoryService questionHistory;
   private final AssessmentCatalogService assessmentCatalog;
 
+  @Value("${app.institution.default-code:}")
+  private String defaultInstitutionCode = "";
+
   public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization,
       StaffAuditService staffAudit, QuestionHistoryService questionHistory,
       AssessmentCatalogService assessmentCatalog) {
@@ -62,6 +66,31 @@ public class AdminContentController {
     this.staffAudit = staffAudit;
     this.questionHistory = questionHistory;
     this.assessmentCatalog = assessmentCatalog;
+  }
+
+  /** Lists active institutions that have at least one active course assignment. */
+  @GetMapping("/institutions")
+  public List<Map<String,Object>> institutions(
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context, "CONTENT_VIEW");
+    String preferredCode = defaultInstitutionCode == null
+        ? "" : defaultInstitutionCode.trim().toUpperCase(Locale.ROOT);
+    return jdbc.queryForList("""
+      select t.id as institution_id,t.tenant_code,t.display_name,
+             case when ?<>'' and t.tenant_code=? then true else false end as is_default
+      from institution_tenant t
+      where t.status='ACTIVE'
+        and exists (
+          select 1
+          from institution_course_assignment assignment
+          join institution_course_release release on release.id=assignment.course_release_id
+          join curriculum_program p on p.id=release.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          where assignment.institution_id=t.id and assignment.status='ASSIGNED'
+        )
+      order by case when ?<>'' and t.tenant_code=? then 0 else 1 end,
+               lower(t.display_name),t.id
+      """, preferredCode, preferredCode, preferredCode, preferredCode);
   }
 
   @GetMapping("/programs")

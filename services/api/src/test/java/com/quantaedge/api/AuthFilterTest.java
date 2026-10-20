@@ -174,7 +174,7 @@ class AuthFilterTest {
     StaffAuditService audit = mock(StaffAuditService.class);
     JdbcTemplate jdbc = mock(JdbcTemplate.class);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
-        Map.<String,Object>of("id", 91L, "tenant_code", "QUANTA-EDGE", "display_name", "QuantaEdge")));
+        Map.<String,Object>of("id", 92L, "tenant_code", "SCHOOL-B", "display_name", "School B")));
     InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
     AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
     MockHttpServletRequest request = new MockHttpServletRequest(
@@ -194,7 +194,7 @@ class AuthFilterTest {
 
     assertEquals(200, response.getStatus());
     assertEquals(request, chain.getRequest());
-    assertEquals(new InstitutionTenantContext(91L, "QUANTA-EDGE", "QuantaEdge"),
+    assertEquals(new InstitutionTenantContext(92L, "SCHOOL-B", "School B"),
         request.getAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE));
   }
 

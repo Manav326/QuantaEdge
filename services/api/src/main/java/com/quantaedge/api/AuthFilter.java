@@ -286,16 +286,27 @@ public class AuthFilter extends OncePerRequestFilter {
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
           token != null, workspace, context != null);
       if (context != null) {
-        // Education Admin is scoped to its configured QuantaEdge institution. Resolve this
-        // server-side rather than trusting a browser selector; the controller still enforces
-        // CONTENT_VIEW and queries only courses assigned to this institution.
+        // Education Admin is a centrally permissioned content workspace. Resolve the active
+        // institution selected by the UI, or a deployment default when one is configured.
+        // Content routes require a tenant; unrelated staff routes remain usable without one.
+        // The catalogue route itself populates the institution selector before a choice.
         if (institutionTenantContextService != null
             && "EDUCATION_ADMIN".equals(workspace)
-            && (uri.equals("/api/v1/admin") || uri.startsWith("/api/v1/admin/"))) {
+            && (uri.equals("/api/v1/admin") || uri.startsWith("/api/v1/admin/"))
+            && !uri.equals("/api/v1/admin/content/institutions")) {
           try {
+            String selectedCode = institutionTenantContextService.selectTenantCode(
+                request.getHeader(InstitutionTenantContextService.HEADER_NAME));
             InstitutionTenantContext adminTenant =
-                institutionTenantContextService.requireEducationAdminInstitution();
-            request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, adminTenant);
+                selectedCode == null ? null : institutionTenantContextService.resolve(selectedCode);
+            boolean contentPath = uri.equals("/api/v1/admin/content")
+                || uri.startsWith("/api/v1/admin/content/");
+            if (adminTenant == null && contentPath) {
+              adminTenant = institutionTenantContextService.requireSelector(selectedCode);
+            }
+            if (adminTenant != null) {
+              request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, adminTenant);
+            }
           } catch (InstitutionTenantContextService.InvalidInstitutionContextException ex) {
             writeJsonError(response, ex.statusCode(), ex.errorCode(), ex.getMessage());
             return;

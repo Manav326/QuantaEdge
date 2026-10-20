@@ -24,6 +24,7 @@ import {
 } from './admin-navigation';
 
 type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[] };
+type AdminInstitution = { institution_id: number; tenant_code: string; display_name: string; is_default?: boolean };
 
 function activeSection(pathname: string): AdminSection {
   if (pathname === '/') return 'overview';
@@ -61,6 +62,10 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const publicRoute = pathname === '/login' || pathname === '/session';
   const [locale, setLocale] = useState<AdminLocale>('hinglish');
   const [session, setSession] = useState<StaffSession | null>(null);
+  const [institutions, setInstitutions] = useState<AdminInstitution[]>([]);
+  const [institutionCode, setInstitutionCode] = useState('');
+  const [institutionLoading, setInstitutionLoading] = useState(true);
+  const [institutionError, setInstitutionError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMoreButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -100,6 +105,75 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       .catch(() => { if (alive) setSession(null); });
     return () => { alive = false; };
   }, [publicRoute]);
+
+  // Institution choice is a UI selector only; the API resolves it to an active tenant and
+  // independently applies the authenticated staff permissions and course-assignment checks.
+  useEffect(() => {
+    let alive = true;
+    if (publicRoute) {
+      setInstitutions([]);
+      setInstitutionCode('');
+      setInstitutionError('');
+      setInstitutionLoading(false);
+      return () => { alive = false; };
+    }
+    if (!session) {
+      setInstitutionLoading(true);
+      return () => { alive = false; };
+    }
+    const canViewContent = session.role === 'ADMIN'
+      || (Array.isArray(session.permissions) && session.permissions.includes('CONTENT_VIEW'));
+    if (!session.staffId || !canViewContent) {
+      setInstitutions([]);
+      setInstitutionCode('');
+      setInstitutionError('');
+      setInstitutionLoading(false);
+      return () => { alive = false; };
+    }
+
+    setInstitutionLoading(true);
+    setInstitutionError('');
+    apiFetch('/api/v1/admin/content/institutions', { cache: 'no-store' })
+      .then(async response => {
+        const body = await response.json().catch(() => []);
+        if (!response.ok) {
+          const detail = body && typeof body === 'object'
+            ? String((body as { message?: unknown; detail?: unknown }).message
+              || (body as { detail?: unknown }).detail || '')
+            : '';
+          throw new Error(detail || 'Available institutions could not be loaded.');
+        }
+        return Array.isArray(body) ? body.flatMap((row: any) => {
+          const tenantCode = String(row?.tenant_code || '').trim().toUpperCase();
+          const name = String(row?.display_name || '').trim();
+          const id = Number(row?.institution_id || row?.id);
+          if (!tenantCode || !name || !Number.isSafeInteger(id) || id <= 0) return [];
+          return [{ institution_id: id, tenant_code: tenantCode, display_name: name, is_default: row?.is_default === true }];
+        }) as AdminInstitution[] : [];
+      })
+      .then(rows => {
+        if (!alive) return;
+        setInstitutions(rows);
+        let remembered = '';
+        try { remembered = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
+        const selected = rows.find(row => row.tenant_code === remembered)?.tenant_code
+          || rows.find(row => row.is_default)?.tenant_code
+          || (rows.length === 1 ? rows[0].tenant_code : '');
+        setInstitutionCode(selected);
+        try {
+          if (selected) window.localStorage.setItem('qe:admin:activeInstitutionCode', selected);
+          else window.localStorage.removeItem('qe:admin:activeInstitutionCode');
+        } catch {}
+      })
+      .catch(error => {
+        if (!alive) return;
+        setInstitutions([]);
+        setInstitutionCode('');
+        setInstitutionError(error instanceof Error ? error.message : 'Available institutions could not be loaded.');
+      })
+      .finally(() => { if (alive) setInstitutionLoading(false); });
+    return () => { alive = false; };
+  }, [publicRoute, session]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -175,6 +249,12 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
+  const canSelectInstitution = Boolean(session?.staffId) && (session?.role === 'ADMIN'
+    || (Array.isArray(session?.permissions) && session.permissions.includes('CONTENT_VIEW')));
+  const tenantScopedPage = ['overview', 'content', 'translations', 'questions', 'resources', 'sources',
+    'assessments', 'classes', 'students', 'parents', 'certificates', 'marketplace', 'notifications'].includes(active);
+  const institutionSelectionRequired = canSelectInstitution && tenantScopedPage && !institutionLoading && !institutionCode;
+  const activeInstitution = institutions.find(item => item.tenant_code === institutionCode) || null;
   const visibleOverviewItems = [ADMIN_OVERVIEW_ITEM].filter(item => canSeeAdminItem(item, value.role, value.permissions));
   const visibleGroups = ADMIN_NAV_GROUPS
     .map(group => ({ ...group, items: group.items.filter(item => canSeeAdminItem(item, value.role, value.permissions)) }))
@@ -198,11 +278,30 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span className="qe-admin-global-context-label">QUANTAEDGE</span>
+            <span className="qe-admin-global-context-label">{activeInstitution?.display_name || 'Education Admin'}</span>
             <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
             <strong>{t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
+            {canSelectInstitution ? <label style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
+              <span>Institution</span>
+              <select
+                value={institutionCode}
+                disabled={institutionLoading || institutions.length === 0}
+                onChange={event => {
+                  const next = event.target.value;
+                  if (!institutions.some(item => item.tenant_code === next)) return;
+                  try { window.localStorage.setItem('qe:admin:activeInstitutionCode', next); } catch {}
+                  setInstitutionCode(next);
+                  window.location.reload();
+                }}
+                aria-label="Select institution"
+                style={{ minWidth: 180, maxWidth: 280, padding: '7px 9px', border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 9, background: 'var(--admin-surface,#fff)', color: 'var(--admin-text,#1b2430)' }}
+              >
+                <option value="">{institutionLoading ? 'Loading institutions…' : 'Select institution'}</option>
+                {institutions.map(item => <option key={item.tenant_code} value={item.tenant_code}>{item.display_name}</option>)}
+              </select>
+            </label> : null}
             <label className="qe-admin-language-switcher">
               <span aria-hidden="true">文</span>
               <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
@@ -212,7 +311,18 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           </div>
         </header>
 
-        <div className="qe-admin-workspace-page-slot">{children}</div>
+        <div className="qe-admin-workspace-page-slot">
+          {!publicRoute && !session ? <div role="status" style={{ padding: 28 }}>Preparing staff workspace…</div>
+            : institutionLoading && canSelectInstitution ? <div role="status" style={{ padding: 28 }}>Loading institution access…</div>
+            : institutionError && canSelectInstitution ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
+                <h2>Institution access unavailable</h2><p>{institutionError}</p><button type="button" onClick={() => window.location.reload()}>Retry</button>
+              </div>
+            : institutionSelectionRequired ? <div role="status" style={{ margin: 24, padding: 22, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
+                <h2>Select an institution</h2><p>Choose the institution whose assigned courses and curriculum you need to manage.</p>
+                {institutions.length === 0 ? <p>No active institution with assigned courses is available to this account.</p> : null}
+              </div>
+            : children}
+        </div>
       </div>
 
       {mobileMenuOpen ? (
