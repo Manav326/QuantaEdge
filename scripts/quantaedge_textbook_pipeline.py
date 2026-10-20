@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """QuantaEdge resumable visual pipeline orchestration and Layer 5 evidence ledger."""
 from __future__ import annotations
-import argparse, copy, hashlib, json, re, shutil, subprocess, sys, tarfile
+import argparse, copy, hashlib, json, re, shutil, subprocess, sys, tarfile, time
 from pathlib import Path
 
 KINDS={"embedded_image","page_preview"}
@@ -14,6 +14,48 @@ def read_json(path):
 def write_json(path,data):
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix(path.suffix+".tmp")
     tmp.write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n",encoding="utf-8");tmp.replace(path)
+
+_TRANSIENT_REGISTRY_ERRORS = (
+    "i/o timeout", "tls handshake timeout", "context deadline exceeded",
+    "connection reset", "connection refused", "temporary failure in name resolution",
+    "network is unreachable", "dial tcp", "unexpected eof", "unexpected status code 429",
+    "unexpected status code 500", "unexpected status code 502", "unexpected status code 503",
+    "unexpected status code 504", "too many requests", "server misbehaving",
+)
+
+def push_oci_artifact_with_retry(command, *, cwd, description, attempts=4, initial_delay_seconds=10):
+    """Retry transient OCI-registry errors; return False after network retries are exhausted.
+
+    Caller must already have a durable Git checkpoint before publishing a Layer 4/5
+    analysis artifact. Git is the recovery source when GHCR is temporarily unavailable.
+    Permanent/authentication errors fail immediately rather than being hidden.
+    """
+    if attempts < 1:
+        raise ValueError("attempts must be at least 1")
+    for attempt in range(1, attempts + 1):
+        result = subprocess.run(command, cwd=cwd, text=True, capture_output=True)
+        if result.stdout:
+            print(result.stdout, end="" if result.stdout.endswith("\n") else "\n", flush=True)
+        if result.returncode == 0:
+            return True
+        details = (result.stderr or result.stdout or f"exit code {result.returncode}").strip()
+        print(f"[registry] {description}: push attempt {attempt}/{attempts} failed: {details}", file=sys.stderr, flush=True)
+        transient = any(token in details.lower() for token in _TRANSIENT_REGISTRY_ERRORS)
+        if not transient:
+            raise subprocess.CalledProcessError(result.returncode, command, output=result.stdout, stderr=result.stderr)
+        if attempt < attempts:
+            delay = initial_delay_seconds * (2 ** (attempt - 1))
+            print(f"[registry] transient failure; retrying {description} in {delay}s.", flush=True)
+            time.sleep(delay)
+    print(
+        f"[registry] WARNING: {description} remains unavailable after {attempts} attempts. "
+        "The matching Git checkpoint is durable; continuing from Git and disabling further "
+        "GHCR pushes for this run.",
+        file=sys.stderr,
+        flush=True,
+    )
+    return False
+
 def rel(path,root):
     try:return Path(path).resolve().relative_to(Path(root).resolve()).as_posix()
     except ValueError:raise ValueError(f"Path {path} is outside repo root {root}.")
@@ -297,7 +339,7 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
 
 
 def run_layers(args):
-    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[]
+    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
     if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
     for s in selection["sources"]:
@@ -344,9 +386,20 @@ def run_layers(args):
                 tar.add(work/name,arcname=name)
             digest=hashlib.sha256(bundle.read_bytes()).hexdigest()
             tag=f"inventory-layer1-class{selection['class']}-{slug}-sha{s['sha256'][:12]}-run-{args.run_id}"
-            subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
-            inventory_bundle={"package":args.package,"tag":tag,"tar_sha256":digest}
-            print(f"[pipeline] INVENTORY_BUNDLE_PUBLISHED book={slug} tag={tag} tar_sha256={digest}",flush=True)
+            if registry_writes_enabled:
+                published=push_oci_artifact_with_retry(
+                    ["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],
+                    cwd=sroot,description=f"{slug} inventory bundle",
+                )
+                if published:
+                    inventory_bundle={"package":args.package,"tag":tag,"tar_sha256":digest}
+                    print(f"[pipeline] INVENTORY_BUNDLE_PUBLISHED book={slug} tag={tag} tar_sha256={digest}",flush=True)
+                else:
+                    registry_writes_enabled=False
+                    inventory_bundle=None
+            else:
+                inventory_bundle=None
+                print(f"[registry] GHCR writes disabled for this run; inventory bundle will be recovered from the Git checkpoint for {slug}.",flush=True)
         previous_layers=prior_index.get("layers",{}) if prior_matches and isinstance(prior_index.get("layers"),dict) else {}
         layers={"1":"COMPLETE","2":previous_layers.get("2","COMPLETE"),"3":previous_layers.get("3","COMPLETE"),
                 "4":"RUNNING","5":"RUNNING","6":previous_layers.get("6","NOT_STARTED"),
@@ -370,9 +423,17 @@ def run_layers(args):
                 backfill_legacy_context_hashes(previous_inventory,raw,book_id=s["book_id"],source_sha=s["sha256"],model=args.model)
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
-            subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],cwd=raw.parent,check=True)
             data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
+            # Git is committed first: even if GHCR times out after analysis, this batch
+            # survives runner teardown and the next resume can continue from the repo.
             git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)],f"checkpoint(content): Layer 4-5 {slug}")
+            if registry_writes_enabled:
+                published=push_oci_artifact_with_retry(
+                    ["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],
+                    cwd=raw.parent,description=f"{slug} Layer 4/5 analysis checkpoint",
+                )
+                if not published:
+                    registry_writes_enabled=False
             print(f"[pipeline] BATCH_CHECKPOINTED class={selection['class']} book={slug} batch={batch_number} processed_this_batch={processed} analyzed_total={summary.get('assets_analyzed',0)} failed_total={summary.get('assets_failed',0)} results_saved={len(data.get('results',[]))} next_batch={'yes' if processed>0 else 'no'}",flush=True)
             if processed==0:break
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
