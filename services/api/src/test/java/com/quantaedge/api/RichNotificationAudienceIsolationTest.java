@@ -58,7 +58,7 @@ class RichNotificationAudienceIsolationTest {
         "institutionIds", List.of(101L, 202L, 303L),
         "recipientTypes", List.of("STUDENT"));
 
-    assertThrows(SecurityException.class,
+    assertThrows(IllegalArgumentException.class,
         () -> service.resolveAudience("HRMS_PLATFORM", null, null, audience));
   }
 

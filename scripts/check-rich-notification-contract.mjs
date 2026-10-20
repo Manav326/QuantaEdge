@@ -119,7 +119,7 @@ for (const required of [
 const audienceIntegration = read('services/api/src/test/java/com/quantaedge/api/RichNotificationAudienceIsolationIntegrationTest.java');
 for (const required of [
   'qe.qa.lifecycle.integration', 'Flyway.configure()', 'TENANT_LEARNER_BOUNDARY_V1',
-  'institutionA', 'institutionB', 'institutionC', 'HRMS_PLATFORM', 'consent_status=\\'CONSENTED\\'',
+  'institutionA', 'institutionB', 'institutionC', 'HRMS_PLATFORM', "consent_status='CONSENTED'",
   'assertThrows(SecurityException.class',
 ]) {
   assert.ok(audienceIntegration.includes(required), `P1 notification database acceptance coverage is missing ${required}`);
