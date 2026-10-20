@@ -12,9 +12,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +36,7 @@ fun StudentMarketplaceScreen(
     language: String,
     busyCourseId: Long?,
     busy: Boolean,
-    onBuy: (Long) -> Unit,
+    onBuy: (Long, String) -> Unit,
     onJoinFree: (Long) -> Unit,
     onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
@@ -40,6 +45,7 @@ fun StudentMarketplaceScreen(
     onRetryVerification: () -> Unit = {}
 ) {
     val hi = language == "hi"
+    var discountCode by remember { mutableStateOf("") }
     val inr = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -57,6 +63,21 @@ fun StudentMarketplaceScreen(
             OutlinedButton(onClick = onAllCourses, enabled = !busy) { Text(if (hi) "आपके courses" else "Your courses") }
             OutlinedButton(onClick = onRefresh, enabled = !busy) { Text("↻") }
         }
+        OutlinedTextField(
+            value = discountCode,
+            onValueChange = { discountCode = it.uppercase(Locale.ROOT) },
+            label = { Text(if (hi) "Offer code (वैकल्पिक)" else "Offer code (optional)") },
+            placeholder = { Text(if (hi) "संस्था द्वारा दिया गया code" else "Code supplied by your institution") },
+            singleLine = true,
+            enabled = !busy && !pendingVerification,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            if (hi) "Code केवल उसी course पर लागू होगा जिसके लिए HRMS ने approval दिया है। कीमत और tax server पर तय होते हैं।"
+            else "Codes only work for the course approved by HRMS. The server calculates your discount and tax.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         if (pendingVerification) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -145,7 +166,7 @@ fun StudentMarketplaceScreen(
                                 else if (hi) "अभिभावक से खरीदने को कहें" else "Ask parent to buy")
                         }
                         pricePaise > 0L && currency == "INR" -> Button(
-                            onClick = { onBuy(id) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
+                            onClick = { onBuy(id, discountCode.trim()) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "Checkout खुल रहा है…" else "Opening checkout…" }
                                 else if (hi) "Razorpay से खरीदें" else "Buy with Razorpay")
