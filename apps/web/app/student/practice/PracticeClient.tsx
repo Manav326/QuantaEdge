@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
+import { UiText } from '../../i18n/useUiTranslation';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type PracticeTopic = {
@@ -92,6 +93,12 @@ export default function PracticeClient() {
     const subject = (activeCourse?.subjects || []).find(item => String(item.subject_code || item.code || '') === code);
     return String(subject?.subject_name || subject?.display_name || code);
   };
+
+  const noEnrolledCourses = !loadingCourses && !courseError && courses.length === 0;
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading"><h1>{tx('Practice', 'अभ्यास')}</h1></header>
+    <p className="auth-card" role="status"><UiText message="student.empty.practice.message" /></p>
+  </section></div></main>;
 
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading qe-lesson-list-header">
