@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 993,
+    "assets_selected": 995,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 990,
-    "assets_remaining": 1301,
-    "assets_completion_percent": 43.2,
+    "assets_analyzed": 992,
+    "assets_remaining": 1299,
+    "assets_completion_percent": 43.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 988,
+    "assets_skipped_from_checkpoint": 990,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:14:47Z"
+      "checkpointed_at": "2026-10-20T03:17:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:15:21Z"
+      "checkpointed_at": "2026-10-20T03:18:18Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:15:43Z"
+      "checkpointed_at": "2026-10-20T03:18:40Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31670,6 +31670,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:16:59Z"
+    },
+    {
+      "asset_id": "2050fb52a859022f97bcda91",
+      "asset_sha256": "62271c80ab4a1b393aec88ccd59685713826e37d481961d8f0396c081114f30f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/62271c80ab4a1b393aec88ccd59685713826e37d481961d8f0396c081114f30f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is vomiting, with vomit spilling out from their mouth.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "vomiting",
+          "illness",
+          "health",
+          "diet",
+          "medication",
+          "lifestyle changes",
+          "rehabilitation",
+          "non-communicable diseases",
+          "early diagnosis"
+        ],
+        "context_relation": "The image is related to the topic of managing illnesses and promoting recovery through lifestyle changes and medication.",
+        "limitations": [
+          "The image does not provide specific details about the type of illness or the medication being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:19:20Z"
+    },
+    {
+      "asset_id": "4db759dbcd425e6b4eaf7022",
+      "asset_sha256": "ae2af80bf3aacd635f0e7ff068fb93005af94bf15e60262c2be6d9d5c7eef0f9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/ae2af80bf3aacd635f0e7ff068fb93005af94bf15e60262c2be6d9d5c7eef0f9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using an inhaler, likely for asthma or allergies.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "asthma",
+          "allergies",
+          "inhaler",
+          "asthma inhaler",
+          "allergy inhaler"
+        ],
+        "context_relation": "The image is related to the topic of managing illnesses and promoting recovery, specifically for non-communicable diseases.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:19:57Z"
     }
   ]
 }
