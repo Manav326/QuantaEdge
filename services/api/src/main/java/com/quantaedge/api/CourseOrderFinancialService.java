@@ -82,6 +82,7 @@ public class CourseOrderFinancialService {
         tp.price_includes_tax,tp.place_of_supply_rule,tp.tax_components::text as tax_components_json,
         le.entity_kind,le.institution_id as seller_institution_id,le.legal_name,le.trade_name,
         le.registered_address::text as registered_address_json,le.country_code,le.invoice_series_code,
+        le.einvoice_applicability,le.einvoice_applicability_reviewed_by_staff_id,le.einvoice_applicability_reviewed_at,
         gr.id as gst_registration_id,gr.gstin as supplier_gstin,gr.state_code as supplier_state_code,
         gr.registration_type as gst_registration_type,gr.registered_address::text as gst_address_json
       from course_tax_profile tp
@@ -105,6 +106,18 @@ public class CourseOrderFinancialService {
     if(profiles.size()>1) throw new IllegalStateException(
         "Checkout is paused because more than one approved tax profile is effective for this course. HRMS must resolve the overlap.");
     Map<String,Object> profile=profiles.getFirst();
+
+    String eInvoiceApplicability=nullableString(profile.get("einvoice_applicability"));
+    if ((!"NOT_REQUIRED".equals(eInvoiceApplicability) && !"REQUIRED".equals(eInvoiceApplicability))
+        || nullableLong(profile.get("einvoice_applicability_reviewed_by_staff_id"))==null
+        || profile.get("einvoice_applicability_reviewed_at")==null) {
+      throw new IllegalStateException(
+          "Checkout is paused: HRMS must record an e-invoice applicability review for this legal seller before any course sale.");
+    }
+    if ("REQUIRED".equals(eInvoiceApplicability)) {
+      throw new IllegalStateException(
+          "Checkout is paused: this legal seller requires e-invoicing. Sales remain blocked until IRP/IRN submission and signed-QR verification are integrated and enabled.");
+    }
 
     String treatmentText=string(profile.get("tax_treatment"));
     CourseTaxCalculator.Treatment treatment;
