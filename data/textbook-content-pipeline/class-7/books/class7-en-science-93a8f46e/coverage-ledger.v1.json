@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2036,
-    "successful_visual_analyses": 1928,
-    "missing_visual_analyses": 5452,
+    "raw_analysis_result_rows": 2039,
+    "successful_visual_analyses": 1931,
+    "missing_visual_analyses": 5449,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5560,
+    "unresolved_count": 5557,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -83915,9 +83915,26 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table comparing the appearance, hardness, and effect of hammering on different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Appearance, hardness, and effect of hammering on different objects or materials",
+          "S.No. Object/Material Appearance Effect of hammering",
+          "1. Object/Material Hard/Soft (flattens/breaks into)"
+        ],
+        "concepts": [
+          "Appearance",
+          "Hardness",
+          "Effect of hammering"
+        ],
+        "context_relation": "The table provides a comparative analysis of different objects or materials based on their appearance, hardness, and the effect of hammering.",
+        "limitations": [
+          "The table does not specify the exact objects or materials being compared."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83933,9 +83950,34 @@
       "asset_path": "page-0063.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table listing properties of different materials under hammering.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Appearance, hardness, and effect of hammering on different objects or materials",
+          "S.No. Object/Material Appearance (lustrous/ non-lustrous) Hard/Soft Effect of hammering (flattens/breaks into pieces)",
+          "1. Piece of copper",
+          "2. Piece of aluminium",
+          "3. Iron nail",
+          "4. Piece of coal",
+          "5. Lump of sulfur (pea-sized)",
+          "6. Block of wood"
+        ],
+        "concepts": [
+          "Appearance",
+          "Hardness",
+          "Effect of hammering",
+          "Lustrous",
+          "Non-lustrous",
+          "Malleability"
+        ],
+        "context_relation": "The table provides information on the appearance, hardness, and effect of hammering on different materials.",
+        "limitations": [
+          "The table does not include specific details about the materials or their properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83951,9 +83993,18 @@
       "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized figure with a curved line and a circular shape with two small lines extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the properties of materials, specifically the difference between malleability and brittleness.",
+        "limitations": [
+          "The image does not provide any specific information or data that can be quantified or analyzed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
