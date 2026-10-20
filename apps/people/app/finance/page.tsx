@@ -212,6 +212,16 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'PDF preview could not be generated.');}
     finally{setPreviewPdfLoading(false);}
   };
+  const submitTemplate=()=>{
+    if(!selectedTemplateId||!selectedVersionNo){setError('Select a template draft first.');return;}
+    void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo+'/submit',{method:'POST'}),
+      'Invoice template submitted for approval.');
+  };
+  const approveTemplate=()=>{
+    if(!selectedTemplateId||!selectedVersionNo){setError('Select a pending template version first.');return;}
+    void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo+'/approve',{method:'POST'}),
+      'Invoice template approved. Publishing is a separate step.');
+  };
   const publishTemplate=()=>{
     if(!selectedTemplateId||!selectedVersionNo){setError('Select a template draft first.');return;}
     void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo+'/publish',{method:'POST'}),
@@ -332,13 +342,19 @@ export default function FinancePage(){
         <section className={styles.panel}><h2>Invoice Design Studio</h2><p>Make a new draft or create a version from a published design. The preview is a watermarked sample; it never issues an invoice or consumes a legal number.</p>
           <label>Existing template<select value={selectedTemplateId} onChange={e=>selectTemplate(e.target.value)}><option value="">Create a new template…</option>{templates.map(t=><option key={t.id} value={t.id}>{t.internal_name} · {t.scope} · v{t.version_no} ({t.version_status})</option>)}</select></label>
           {!selectedTemplateId&&<><label>Template name<input value={templateName} onChange={e=>setTemplateName(e.target.value)}/></label><label>Template scope<select value={templateScope} onChange={e=>setTemplateScope(e.target.value)}><option value="PLATFORM">Platform invoice design</option><option value="SELLER">Seller-specific invoice design</option></select></label>{templateScope==='SELLER'&&<label>Legal seller<select value={templateEntityId} onChange={e=>setTemplateEntityId(e.target.value)}><option value="">Select seller</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name}</option>)}</select></label>}</>}
-          {selectedTemplate&&<div className={styles.versionBanner}><span>Editing v{selectedVersionNo||selectedTemplate.version_no} · {selectedTemplate.version_status}</span>{selectedTemplate.version_status!=='DRAFT'&&<button className={styles.secondarySmall} onClick={startTemplateVersion} disabled={busy}>＋ New draft version</button>}</div>}
-          <div className={styles.designControls}><label>Primary colour<input type="color" value={design.primaryColor} onChange={e=>setDesign(v=>({...v,primaryColor:e.target.value.toUpperCase()}))}/></label><label>Accent colour<input type="color" value={design.accentColor} onChange={e=>setDesign(v=>({...v,accentColor:e.target.value.toUpperCase()}))}/></label></div>
-          <label>Paper surface<select value={design.surfaceStyle} onChange={e=>setDesign(v=>({...v,surfaceStyle:e.target.value}))}><option value="WARM_PAPER">Warm premium paper</option><option value="CLEAN_WHITE">Clean white</option><option value="SOFT_SLATE">Soft slate</option></select></label>
-          <label>Layout<select value={design.layout} onChange={e=>setDesign(v=>({...v,layout:e.target.value}))}><option value="EDITORIAL">Editorial / premium</option><option value="CLASSIC">Classic / formal</option></select></label>
-          <label className={styles.checkLabel}><input type="checkbox" checked={design.showLogo} onChange={e=>setDesign(v=>({...v,showLogo:e.target.checked}))}/> Show approved supplier logo where configured</label>
-          <label>Footer copy<textarea rows={3} maxLength={500} value={design.footerText} onChange={e=>setDesign(v=>({...v,footerText:e.target.value}))}/></label>
-          <div className={styles.buttonStack}>{!selectedTemplate?<button className={styles.primary} disabled={busy} onClick={createTemplate}>Create draft template</button>:<><button className={styles.secondary} disabled={busy||selectedTemplate.version_status!=='DRAFT'} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy||selectedTemplate.version_status!=='DRAFT'} onClick={publishTemplate}>Approve & publish version</button></>}</div>
+          {selectedTemplate&&<div className={styles.versionBanner}><span>Editing v{selectedVersionNo||selectedTemplate.version_no} · {selectedTemplate.version_status}</span>{['PUBLISHED','RETIRED'].includes(selectedTemplate.version_status||'')&&<button className={styles.secondarySmall} onClick={startTemplateVersion} disabled={busy}>＋ New draft version</button>}</div>}
+          <div className={styles.designControls}><label>Primary colour<input type="color" disabled={!activeDraft} value={design.primaryColor} onChange={e=>setDesign(v=>({...v,primaryColor:e.target.value.toUpperCase()}))}/></label><label>Accent colour<input type="color" disabled={!activeDraft} value={design.accentColor} onChange={e=>setDesign(v=>({...v,accentColor:e.target.value.toUpperCase()}))}/></label></div>
+          <label>Paper surface<select disabled={!activeDraft} value={design.surfaceStyle} onChange={e=>setDesign(v=>({...v,surfaceStyle:e.target.value}))}><option value="WARM_PAPER">Warm premium paper</option><option value="CLEAN_WHITE">Clean white</option><option value="SOFT_SLATE">Soft slate</option></select></label>
+          <label>Layout<select disabled={!activeDraft} value={design.layout} onChange={e=>setDesign(v=>({...v,layout:e.target.value}))}><option value="EDITORIAL">Editorial / premium</option><option value="CLASSIC">Classic / formal</option></select></label>
+          <label className={styles.checkLabel}><input type="checkbox" disabled={!activeDraft} checked={design.showLogo} onChange={e=>setDesign(v=>({...v,showLogo:e.target.checked}))}/> Show approved supplier logo where configured</label>
+          <label>Footer copy<textarea disabled={!activeDraft} rows={3} maxLength={500} value={design.footerText} onChange={e=>setDesign(v=>({...v,footerText:e.target.value}))}/></label>
+          <div className={styles.buttonStack}>
+            {!selectedTemplate?<button className={styles.primary} disabled={busy} onClick={createTemplate}>Create draft template</button>:<>
+              {selectedTemplate.version_status==='DRAFT'&&<><button className={styles.secondary} disabled={busy} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy} onClick={submitTemplate}>Submit for approval</button></>}
+              {selectedTemplate.version_status==='PENDING_APPROVAL'&&<button className={styles.primary} disabled={busy} onClick={approveTemplate}>Approve version</button>}
+              {selectedTemplate.version_status==='APPROVED'&&<button className={styles.primary} disabled={busy} onClick={publishTemplate}>Publish approved version</button>}
+            </>}
+          </div>
           <p className={styles.note}>Published template versions are immutable for the purpose of historical invoices. Actual statutory documents also snapshot seller, recipient, tax, line items and totals separately.</p>
         </section>
         <section className={styles.previewPanel}><div className={styles.previewHeader}><div><span className={styles.eyebrow}>LIVE PREVIEW</span><h2>Invoice document</h2></div><div className={styles.previewActions}><span className={styles.samplePill}>SAMPLE · NOT ISSUED</span><button type="button" className={styles.secondarySmall} disabled={previewPdfLoading} onClick={()=>void generatePdfPreview()}>{previewPdfLoading?'Rendering PDF…':'Open PDF preview'}</button></div></div>
