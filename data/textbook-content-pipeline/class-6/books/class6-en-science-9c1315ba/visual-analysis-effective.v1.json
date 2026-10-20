@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "92a0d319026c54e4000cb6596c17e72f5ce2f3d95738676d412d44bb5f2d3489",
+  "raw_analysis_sha256": "f5a9737adb36052f08541f636ef99a3e27d9208b9e7cb5a98b2af172d562d342",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:06:46Z",
+      "checkpointed_at": "2026-10-20T10:12:17Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:07:46Z",
+      "checkpointed_at": "2026-10-20T10:13:17Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:08:37Z",
+      "checkpointed_at": "2026-10-20T10:14:07Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:09:25Z",
+      "checkpointed_at": "2026-10-20T10:14:55Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62154,6 +62154,94 @@
         "context_relation": "The QR code likely leads to additional educational content or resources related to the chapter 'Materials Around Us' in the textbook.",
         "limitations": [
           "The QR code does not provide specific content or information about the chapter."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e84b9fac5f26bed880320a0e",
+      "asset_sha256": "e47a9b5fe0c64a7ce0da9cda5843fe6fedbb8ce914c6ed90a03942cc400fd9e5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/e47a9b5fe0c64a7ce0da9cda5843fe6fedbb8ce914c6ed90a03942cc400fd9e5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ba824eb919a0214ac7e039b493594f10eceb9afc3804568ea0652486f4010b1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of aged, torn paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Materials Around Us",
+          "Chapter 6",
+          "उपादानं भवेत्तस्ा (मूषाया:) मृत्ति‍का लोहमेव च ।",
+          "(रसरतनसमुच्चय–१०.३)",
+          "The materials used to make the crucible",
+          "(a vessel used to melt substances) are clay and iron.",
+          "(Rasaratnasamuchchaya–10.3)",
+          "6.1 Observing Objects Around Us",
+          "Ghulan and Sheeta are thrilled to go to their new class",
+          "after the summer break. They enter their classroom and",
+          "start talking. “What have you brought to school today?”",
+          "asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Materials",
+          "Crucible",
+          "Clay",
+          "Iron",
+          "Observing Objects",
+          "Classroom",
+          "Summer break"
+        ],
+        "context_relation": "The image is a visual representation of the text from the textbook.",
+        "limitations": [
+          "The image does not show any objects or scenes from the textbook.",
+          "The image is a static representation of text, not a dynamic or interactive element."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:16:49Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of aged, torn paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Materials Around Us",
+          "Chapter 6",
+          "उपादानं भवेत्तस्ा (मूषाया:) मृत्ति‍का लोहमेव च ।",
+          "(रसरतनसमुच्चय–१०.३)",
+          "The materials used to make the crucible",
+          "(a vessel used to melt substances) are clay and iron.",
+          "(Rasaratnasamuchchaya–10.3)",
+          "6.1 Observing Objects Around Us",
+          "Ghulan and Sheeta are thrilled to go to their new class",
+          "after the summer break. They enter their classroom and",
+          "start talking. “What have you brought to school today?”",
+          "asks Sheeta.",
+          "Look, I",
+          "I also"
+        ],
+        "concepts": [
+          "Materials",
+          "Crucible",
+          "Clay",
+          "Iron",
+          "Observing Objects",
+          "Classroom",
+          "Summer break"
+        ],
+        "context_relation": "The image is a visual representation of the text from the textbook.",
+        "limitations": [
+          "The image does not show any objects or scenes from the textbook.",
+          "The image is a static representation of text, not a dynamic or interactive element."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
