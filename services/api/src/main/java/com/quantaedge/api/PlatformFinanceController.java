@@ -128,6 +128,16 @@ public class PlatformFinanceController {
     Map<String,Object> e=one("select id,entity_kind,institution_id,status,legal_name from billing_legal_entity where id=?",legalEntityId);
     if(e.isEmpty()) throw notFound("Legal entity not found.");
     Long institutionId=optionalLong(e.get("institution_id"));
+    if(!exists("""
+      select exists(select 1 from billing_legal_entity
+        where id=?
+          and nullif(btrim(registered_address->>'line1'),'') is not null
+          and nullif(btrim(registered_address->>'city'),'') is not null
+          and nullif(btrim(registered_address->>'state'),'') is not null
+          and nullif(btrim(registered_address->>'postalCode'),'') is not null)
+      """,legalEntityId)) {
+      throw bad("Complete the registered address (line, city, state and postal code) before activating the legal seller.");
+    }
     if("INSTITUTION".equals(String.valueOf(e.get("entity_kind"))) &&
         !exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",institutionId)) {
       throw bad("The institution must be active before its legal entity can be activated.");
@@ -209,7 +219,13 @@ public class PlatformFinanceController {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
     long entityId=requiredLong(body,"legalEntityId");
-    if(!exists("select exists(select 1 from billing_legal_entity where id=?)",entityId)) throw bad("Select an existing legal seller.");
+    if(!exists("""
+      select exists(select 1 from billing_legal_entity e
+        where e.id=? and (e.entity_kind='PLATFORM'
+          or (e.entity_kind='INSTITUTION' and e.institution_id=?)))
+      """,entityId,institutionId)) {
+      throw bad("Select the platform legal seller or the legal entity belonging to this course offer's institution.");
+    }
     String treatment=requiredText(body,"taxTreatment").toUpperCase(Locale.ROOT);
     if(!List.of("TAXABLE","EXEMPT","NIL_RATED","NON_GST","COMPOSITION").contains(treatment)) throw bad("Unsupported tax treatment.");
     int gst=integer(body,"gstRateBasisPoints",0),cess=integer(body,"cessRateBasisPoints",0);
@@ -497,8 +513,17 @@ public class PlatformFinanceController {
         v.version_no,v.status as version_status,v.design_definition::text as design_definition_json,
         v.preview_asset_key,v.published_at
       from invoice_template t left join lateral (
-        select iv.id,iv.version_no,iv.status,iv.design_definition,iv.preview_asset_key,iv.published_at
-        from invoice_template_version iv where iv.template_id=t.id order by iv.version_no desc limit 1
+        select iv.id,iv.version_no,
+          case
+            when iv.status in ('PUBLISHED','RETIRED') then iv.status
+            when review.review_status='PENDING_APPROVAL' then 'PENDING_APPROVAL'
+            when review.review_status='APPROVED' then 'APPROVED'
+            else iv.status
+          end as status,
+          iv.design_definition,iv.preview_asset_key,iv.published_at
+        from invoice_template_version iv
+        left join invoice_template_version_review review on review.template_version_id=iv.id
+        where iv.template_id=t.id order by iv.version_no desc limit 1
       ) v on true order by t.created_at desc,t.id desc
       """);
   }
@@ -540,10 +565,16 @@ public class PlatformFinanceController {
     Map<String,Object> template=one("select scope,legal_entity_id,internal_name from invoice_template where id=?",templateId);
     if(template.isEmpty()) throw notFound("Invoice template not found.");
     Map<String,Object> latest=one("""
-      select design_definition::text as definition from invoice_template_version
-      where template_id=? order by version_no desc limit 1
+      select iv.design_definition::text as definition,iv.status,
+        review.review_status
+      from invoice_template_version iv
+      left join invoice_template_version_review review on review.template_version_id=iv.id
+      where iv.template_id=? order by iv.version_no desc limit 1
       """,templateId);
     if(latest.isEmpty()) throw bad("Template has no saved design version to copy.");
+    if(!List.of("PUBLISHED","RETIRED").contains(String.valueOf(latest.get("status")))) {
+      throw bad("Finish publishing the current template version before creating another draft.");
+    }
     String definition=String.valueOf(latest.get("definition"));
     Integer version=jdbc.queryForObject("select coalesce(max(version_no),0)+1 from invoice_template_version where template_id=?",Integer.class,templateId);
     long versionId=jdbc.queryForObject("""
@@ -561,11 +592,14 @@ public class PlatformFinanceController {
       @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     Map<String,Object> row=one("""
-      select v.id,v.status,t.legal_entity_id from invoice_template_version v
-      join invoice_template t on t.id=v.template_id where t.id=? and v.version_no=?
+      select v.id,v.status,t.legal_entity_id,review.review_status from invoice_template_version v
+      join invoice_template t on t.id=v.template_id
+      left join invoice_template_version_review review on review.template_version_id=v.id
+      where t.id=? and v.version_no=?
       """,templateId,versionNo);
     if(row.isEmpty()) throw notFound("Invoice-template version not found.");
-    if(!"DRAFT".equals(String.valueOf(row.get("status")))) throw bad("Only a draft template version can be edited.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status"))) || row.get("review_status")!=null)
+      throw bad("A submitted or approved template version is locked. Create a new draft after publication.");
     Map<String,Object> design=normalizeDesign(body.get("designDefinition"));
     jdbc.update("update invoice_template_version set design_definition=?::jsonb,preview_asset_key=null,preview_sha256=null where id=?",
         json(design),row.get("id"));
@@ -574,30 +608,103 @@ public class PlatformFinanceController {
     return Map.of("id",templateId,"versionNo",versionNo,"status","DRAFT","designDefinition",design);
   }
 
+  @PostMapping("/invoice-templates/{templateId}/versions/{versionNo}/submit")
+  @Transactional
+  public Map<String,Object> submitTemplate(@PathVariable long templateId,@PathVariable int versionNo,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select v.id,v.status,t.legal_entity_id,v.design_definition::text as definition
+      from invoice_template_version v join invoice_template t on t.id=v.template_id
+      where t.id=? and v.version_no=?
+      """,templateId,versionNo);
+    if(row.isEmpty()) throw notFound("Invoice-template version not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))) throw bad("Only a draft template version can be submitted.");
+    if(exists("select exists(select 1 from invoice_template_version_review where template_version_id=?)",row.get("id")))
+      throw bad("This template version already has a review record and cannot be submitted again.");
+    long reviewId=jdbc.queryForObject("""
+      insert into invoice_template_version_review(
+        template_version_id,review_status,submitted_by_staff_id,design_definition_snapshot
+      ) values(?,'PENDING_APPROVAL',?,?::jsonb) returning id
+      """,Long.class,row.get("id"),context.staffId(),row.get("definition"));
+    jdbc.update("""
+      insert into invoice_template_version_review_event(review_id,event_type,actor_staff_id,details)
+      values(?,'SUBMITTED',?,?::jsonb)
+      """,reviewId,context.staffId(),json(Map.of("templateId",templateId,"versionNo",versionNo)));
+    audit(optionalLong(row.get("legal_entity_id")),null,context,"INVOICE_TEMPLATE_SUBMITTED",
+        "INVOICE_TEMPLATE",Long.toString(templateId),Map.of("version",versionNo,"reviewId",reviewId));
+    return Map.of("id",templateId,"versionNo",versionNo,"status","PENDING_APPROVAL");
+  }
+
+  @PostMapping("/invoice-templates/{templateId}/versions/{versionNo}/approve")
+  @Transactional
+  public Map<String,Object> approveTemplate(@PathVariable long templateId,@PathVariable int versionNo,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select v.id,v.status,t.scope,t.legal_entity_id,
+        r.id as review_id,r.review_status,r.design_definition_snapshot=v.design_definition as design_matches
+      from invoice_template_version v join invoice_template t on t.id=v.template_id
+      join invoice_template_version_review r on r.template_version_id=v.id
+      where t.id=? and v.version_no=?
+      """,templateId,versionNo);
+    if(row.isEmpty()) throw notFound("Invoice template review not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))
+        || !"PENDING_APPROVAL".equals(String.valueOf(row.get("review_status"))))
+      throw bad("Only a pending template review can be approved.");
+    if(!Boolean.TRUE.equals(row.get("design_matches")))
+      throw bad("The saved template changed after submission. It cannot be approved.");
+    Long entityId=optionalLong(row.get("legal_entity_id"));
+    if("SELLER".equals(String.valueOf(row.get("scope"))) && !exists(
+        "select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",entityId)) {
+      throw bad("Activate the legal seller before approving its invoice template.");
+    }
+    int changed=jdbc.update("""
+      update invoice_template_version_review
+      set review_status='APPROVED',approved_by_staff_id=?,approved_at=now()
+      where id=? and review_status='PENDING_APPROVAL'
+      """,context.staffId(),row.get("review_id"));
+    if(changed!=1) throw bad("Template review changed during approval. Reload and retry.");
+    jdbc.update("""
+      insert into invoice_template_version_review_event(review_id,event_type,actor_staff_id,details)
+      values(?,'APPROVED',?,?::jsonb)
+      """,row.get("review_id"),context.staffId(),json(Map.of("templateId",templateId,"versionNo",versionNo)));
+    audit(entityId,null,context,"INVOICE_TEMPLATE_APPROVED","INVOICE_TEMPLATE",Long.toString(templateId),
+        Map.of("version",versionNo,"reviewId",row.get("review_id")));
+    return Map.of("id",templateId,"versionNo",versionNo,"status","APPROVED");
+  }
+
   @PostMapping("/invoice-templates/{templateId}/versions/{versionNo}/publish")
   @Transactional
   public Map<String,Object> publishTemplate(@PathVariable long templateId,@PathVariable int versionNo,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     Map<String,Object> row=one("""
-      select v.id,v.status,t.scope,t.legal_entity_id from invoice_template_version v
-      join invoice_template t on t.id=v.template_id where t.id=? and v.version_no=?
+      select v.id,v.status,t.scope,t.legal_entity_id,r.id as review_id,r.review_status,
+        r.design_definition_snapshot=v.design_definition as design_matches
+      from invoice_template_version v join invoice_template t on t.id=v.template_id
+      join invoice_template_version_review r on r.template_version_id=v.id
+      where t.id=? and v.version_no=?
       """,templateId,versionNo);
-    if(row.isEmpty()) throw notFound("Invoice-template version not found.");
-    if(!"DRAFT".equals(String.valueOf(row.get("status")))) throw bad("Only a draft template version can be published.");
+    if(row.isEmpty()) throw notFound("Approved invoice-template version not found.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))
+        || !"APPROVED".equals(String.valueOf(row.get("review_status"))))
+      throw bad("Approve the template version before publishing.");
+    if(!Boolean.TRUE.equals(row.get("design_matches")))
+      throw bad("The saved template no longer matches the approved design snapshot.");
     Long entityId=optionalLong(row.get("legal_entity_id"));
     if("SELLER".equals(String.valueOf(row.get("scope"))) && !exists(
         "select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",entityId)) {
       throw bad("Activate the legal seller before publishing its invoice template.");
     }
     jdbc.update("update invoice_template_version set status='RETIRED' where template_id=? and status='PUBLISHED'",templateId);
-    int n=jdbc.update("""
-      update invoice_template_version set status='PUBLISHED',approved_by_staff_id=?,approved_at=now(),
-        published_by_staff_id=?,published_at=now()
-      where template_id=? and version_no=? and status='DRAFT'
-      """,context.staffId(),context.staffId(),templateId,versionNo);
-    if(n!=1) throw bad("Template changed during publish. Reload and retry.");
-    audit(entityId,null,context,"INVOICE_TEMPLATE_PUBLISHED","INVOICE_TEMPLATE",Long.toString(templateId),Map.of("version",versionNo));
+    int changed=jdbc.update("""
+      update invoice_template_version set status='PUBLISHED',published_by_staff_id=?,published_at=now()
+      where id=? and status='DRAFT'
+      """,context.staffId(),row.get("id"));
+    if(changed!=1) throw bad("Template changed during publication. Reload and retry.");
+    audit(entityId,null,context,"INVOICE_TEMPLATE_PUBLISHED","INVOICE_TEMPLATE",Long.toString(templateId),
+        Map.of("version",versionNo,"reviewId",row.get("review_id")));
     return Map.of("id",templateId,"versionNo",versionNo,"status","PUBLISHED");
   }
 
