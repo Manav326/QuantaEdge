@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "96a03a2db35228e1f4fae5a0aa0112cfe88194698eda495e4f3b8561710d30d6",
+  "raw_analysis_sha256": "8af69b6031ab45aac5a5870a31278cecc512d2a54f26249cd2dc952e311e58d3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:50:05Z",
+      "checkpointed_at": "2026-10-20T03:54:34Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:50:38Z",
+      "checkpointed_at": "2026-10-20T03:55:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:51:01Z",
+      "checkpointed_at": "2026-10-20T03:55:30Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -48536,6 +48536,142 @@
         "context_relation": "The image does not directly relate to the visible text.",
         "limitations": [
           "The image does not provide specific information about the visible text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b8ed8f3edbec5789ce7dd618",
+      "asset_sha256": "c00dc2949845ad5f563d833a41502ecf2270ff22d1a3349c9452bbed031798d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/c00dc2949845ad5f563d833a41502ecf2270ff22d1a3349c9452bbed031798d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three students are presenting an exhibit on a table, with a focus on an electromagnet lifting an object.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Science Exhibition",
+          "Lifting Electromagnet"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Science Exhibition",
+          "Lifting Object"
+        ],
+        "context_relation": "The image is related to the topic of electricity and magnets, specifically focusing on an electromagnet lifting an object.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:56:10Z",
+      "effective_analysis": {
+        "visual_summary": "Three students are presenting an exhibit on a table, with a focus on an electromagnet lifting an object.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Science Exhibition",
+          "Lifting Electromagnet"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Science Exhibition",
+          "Lifting Object"
+        ],
+        "context_relation": "The image is related to the topic of electricity and magnets, specifically focusing on an electromagnet lifting an object.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0167b6d76b4d48427f9eced8",
+      "asset_sha256": "4f068a937332d5dbbc5cf8933d06be4e0381b547bf8198ef0cf7334ee2945db1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/4f068a937332d5dbbc5cf8933d06be4e0381b547bf8198ef0cf7334ee2945db1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Temporary Magnets",
+          "Heat Generation",
+          "Cell/Battery",
+          "Rechargeability"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a cartoon and does not represent a real scenario."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:56:58Z",
+      "effective_analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Temporary Magnets",
+          "Heat Generation",
+          "Cell/Battery",
+          "Rechargeability"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a cartoon and does not represent a real scenario."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
