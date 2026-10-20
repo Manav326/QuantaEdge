@@ -216,7 +216,7 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
+          QUANTAEDGE_API_BASE_URL: ${{ vars.QUANTAEDGE_LOCAL_API_BASE_URL || 'http://192.168.31.47:8080/' }}
           QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
           QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
           QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
@@ -235,7 +235,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-android-apk-stable
-          path: apps/android/app/build/outputs/apk/release/app-release.apk
+          path: apps/android/app/build/outputs/apk/local/app-local.apk
           if-no-files-found: error
           retention-days: 14
       - name: Explain unavailable installable APK
