@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cd6af86716488c45e88bbf4b0b2a25f0cab7245d3ca6c45ebb668218237c806a",
+  "raw_analysis_sha256": "aa7d0eda314b05d7d5e3d33bb242c4ba73c616458af1c4c47514b6aad0f4ce66",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T13:36:21Z",
+      "checkpointed_at": "2026-10-20T13:45:56Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T13:37:06Z",
+      "checkpointed_at": "2026-10-20T13:46:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T13:37:35Z",
+      "checkpointed_at": "2026-10-20T13:47:11Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51442,8 +51442,8 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "(Do not hold the nichrome wire).",
-          "Safety first",
           "What difference do you feel?",
+          "Safety first",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
           "You may have observed that nichrome wire feels warm when current is passed through it.",
@@ -51463,21 +51463,22 @@
         ],
         "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
         "limitations": [
-          "The page does not provide specific instructions for the activity, only a general description of what to observe."
+          "The page does not provide specific instructions for the experiment described, only general guidelines.",
+          "The page does not include any visual aids or diagrams to support the explanation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T13:44:56Z",
+      "checkpointed_at": "2026-10-20T13:47:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "(Do not hold the nichrome wire).",
-          "Safety first",
           "What difference do you feel?",
+          "Safety first",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
           "You may have observed that nichrome wire feels warm when current is passed through it.",
@@ -51497,7 +51498,8 @@
         ],
         "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
         "limitations": [
-          "The page does not provide specific instructions for the activity, only a general description of what to observe."
+          "The page does not provide specific instructions for the experiment described, only general guidelines.",
+          "The page does not include any visual aids or diagrams to support the explanation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -52032,7 +52034,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39353199646",
+      "run_id": "39419720549",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
