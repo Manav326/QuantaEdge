@@ -69,7 +69,7 @@ public class NotificationDeviceController {
     }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("registered",true); result.put("deviceId",deviceId);
-    result.put("institutionCode",selected.institutionCode()); result.put("providerConfigured",push.isConfigured());
+    result.put("institutionCode",selected.tenantCode()); result.put("providerConfigured",push.isConfigured());
     return result;
   }
 

@@ -68,7 +68,11 @@ object NotificationPushRegistration {
     suspend fun sync(context: Context) {
         val app = configuredFirebaseApp(context) ?: return
         if (!canPostNotifications(context)) return
-        val token = runCatching { FirebaseMessaging.getInstance(app).token.await() }.getOrNull()?.trim().orEmpty()
+        val token = runCatching {
+            // configuredFirebaseApp initialized the default app; FirebaseMessaging's app overload
+            // is package-private in the Android SDK, so use the public default-instance accessor.
+            FirebaseMessaging.getInstance().token.await()
+        }.getOrNull()?.trim().orEmpty()
         if (token.isBlank()) return
         registerAuthenticatedDevice(context.applicationContext, token)
     }
