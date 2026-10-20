@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "55a2a4bb48acb76adedaeed89525061df35a7e3e190563532a43ccb64451b6de",
+  "raw_analysis_sha256": "ac1af1828fba55b6867c3cc76adc7835392b1fe25ecbfb0cde2641b0735c72df",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:06:07Z",
+      "checkpointed_at": "2026-10-20T22:09:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:06:28Z",
+      "checkpointed_at": "2026-10-20T22:09:28Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -116456,6 +116456,182 @@
         "context_relation": "The image is a visual representation of the text discussing the properties of coal, sulfur, and wood.",
         "limitations": [
           "The image does not provide any additional context or information beyond the text it is based on."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "18248516adb43ddc697c0f19",
+      "asset_sha256": "670ca579a541cef2c246c33755775e2a2e668c3014915204a96b9e44443387a2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/670ca579a541cef2c246c33755775e2a2e668c3014915204a96b9e44443387a2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a wheelbarrow with a wheel and a handle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the properties of materials, specifically the difference between malleability and brittleness.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials.",
+          "The image does not show any text or labels that could provide additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:10:03Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a wheelbarrow with a wheel and a handle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the properties of materials, specifically the difference between malleability and brittleness.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials.",
+          "The image does not show any text or labels that could provide additional context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "19623d540497e47686b9e40e",
+      "asset_sha256": "846d5cc052a202e6821bad5c8eb56c74bee55de62a6f8cc1b5b56e423dbc4c8f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/846d5cc052a202e6821bad5c8eb56c74bee55de62a6f8cc1b5b56e423dbc4c8f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a piece of coal or a lump of sulfur breaking into pieces, indicating its brittleness.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brittleness",
+          "coal",
+          "sulfur",
+          "malleability",
+          "wood",
+          "brittleness",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image illustrates the brittleness of coal and sulfur, contrasting it with the malleability of wood, which is a concept discussed in the context of the Harappans and their impact on the civilisation of India.",
+        "limitations": [
+          "The image does not provide specific details about the Harappans or their impact on civilisation.",
+          "The image focuses on the physical properties of coal, sulfur, and wood, without showing the broader historical context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:10:46Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a piece of coal or a lump of sulfur breaking into pieces, indicating its brittleness.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brittleness",
+          "coal",
+          "sulfur",
+          "malleability",
+          "wood",
+          "brittleness",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image illustrates the brittleness of coal and sulfur, contrasting it with the malleability of wood, which is a concept discussed in the context of the Harappans and their impact on the civilisation of India.",
+        "limitations": [
+          "The image does not provide specific details about the Harappans or their impact on civilisation.",
+          "The image focuses on the physical properties of coal, sulfur, and wood, without showing the broader historical context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ffb0986047455c5c4faf9fb0",
+      "asset_sha256": "55d6a68d327352353270702a39b01401d9d5223abbf6a4245fe2339f4e85044d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/55d6a68d327352353270702a39b01401d9d5223abbf6a4245fe2339f4e85044d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "coal",
+          "sulfur",
+          "wood"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood.",
+        "limitations": [
+          "The text does not provide specific examples or measurements.",
+          "The text does not include any diagrams or images.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:11:29Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "coal",
+          "sulfur",
+          "wood"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood.",
+        "limitations": [
+          "The text does not provide specific examples or measurements.",
+          "The text does not include any diagrams or images.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

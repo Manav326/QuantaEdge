@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2057,
-    "successful_visual_analyses": 1949,
-    "missing_visual_analyses": 5431,
+    "raw_analysis_result_rows": 2060,
+    "successful_visual_analyses": 1952,
+    "missing_visual_analyses": 5428,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5539,
+    "unresolved_count": 5536,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -84641,9 +84641,19 @@
       "asset_path": "assets/670ca579a541cef2c246c33755775e2a2e668c3014915204a96b9e44443387a2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a wheelbarrow with a wheel and a handle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the properties of materials, specifically the difference between malleability and brittleness.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials.",
+          "The image does not show any text or labels that could provide additional context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84659,9 +84669,32 @@
       "asset_path": "assets/846d5cc052a202e6821bad5c8eb56c74bee55de62a6f8cc1b5b56e423dbc4c8f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a piece of coal or a lump of sulfur breaking into pieces, indicating its brittleness.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brittleness",
+          "coal",
+          "sulfur",
+          "malleability",
+          "wood",
+          "brittleness",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image illustrates the brittleness of coal and sulfur, contrasting it with the malleability of wood, which is a concept discussed in the context of the Harappans and their impact on the civilisation of India.",
+        "limitations": [
+          "The image does not provide specific details about the Harappans or their impact on civilisation.",
+          "The image focuses on the physical properties of coal, sulfur, and wood, without showing the broader historical context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84677,9 +84710,31 @@
       "asset_path": "assets/55d6a68d327352353270702a39b01401d9d5223abbf6a4245fe2339f4e85044d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "coal",
+          "sulfur",
+          "wood"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood.",
+        "limitations": [
+          "The text does not provide specific examples or measurements.",
+          "The text does not include any diagrams or images.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
