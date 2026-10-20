@@ -38,6 +38,7 @@ type PurchaseRequestStatus = {
   currency: string;
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:student';
 type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string };
 
 declare global {
@@ -117,10 +118,43 @@ export default function StudentMarketplacePage() {
 
   useEffect(() => { void loadOffers(); void loadPurchaseRequests(); }, [loadOffers, loadPurchaseRequests]);
 
+  // Keep the signed checkout response for this tab so a refresh/deployment cannot
+  // erase the only data that can safely verify a payment already made by the learner.
+  useEffect(() => {
+    try {
+      const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      if (!saved) return;
+      const value = JSON.parse(saved) as Partial<VerifyDraft>;
+      const draft: VerifyDraft = {
+        courseId: Number(value.courseId),
+        localOrderId: Number(value.localOrderId),
+        paymentId: String(value.paymentId || ''),
+        orderId: String(value.orderId || ''),
+        signature: String(value.signature || ''),
+      };
+      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
+          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
+          && /^pay_[A-Za-z0-9]+$/.test(draft.paymentId)
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId)
+          && /^[A-Fa-f0-9]{64}$/.test(draft.signature)) {
+        setPendingVerify(draft);
+      } else {
+        window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+      }
+    } catch {
+      // Storage may be disabled by the browser; in-page retry still works.
+    }
+  }, []);
+
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
     setStatus('');
     setPendingVerify(draft);
+    try {
+      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // Keep the in-memory retry state even when session storage is unavailable.
+    }
     try {
       await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
         method: 'POST',
@@ -133,6 +167,7 @@ export default function StudentMarketplacePage() {
         }),
       }));
       setPendingVerify(null);
+      try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       setStatus('Payment verified. Your course is now in All Courses.');
       await loadOffers();
       await loadPurchaseRequests();
