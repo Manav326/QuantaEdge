@@ -576,9 +576,8 @@ public class CourseOrderFinancialService {
 
   private String institutionName(long institutionId) {
     String name=jdbc.queryForObject("""
-      select coalesce(nullif(b.display_name,''),t.display_name)
-      from institution_tenant t left join institution_branding b on b.institution_id=t.id
-      where t.id=? and t.status='ACTIVE'
+      select display_name from institution_tenant
+      where id=? and status='ACTIVE'
       """,String.class,institutionId);
     if(name==null||name.isBlank())throw new IllegalStateException("The course institution branding could not be resolved.");
     return name;
