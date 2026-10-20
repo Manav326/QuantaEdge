@@ -420,7 +420,7 @@ public class PlatformFinanceController {
     } else if("FLAT".equals(type)) {
       flatPaise=moneyPaise(body.get("flatAmountRupees"),"flatAmountRupees",false);
     } else throw bad("Discount type must be PERCENTAGE or FLAT.");
-    Long cap=moneyPaise(body.get("maxDiscountRupees"),"maxDiscountRupees",true);
+    Long cap=moneyPaise(body.get("maxDiscountRupees"),"maxDiscountRupees",false);
     Long minimum=moneyPaise(body.get("minListedPriceRupees"),"minListedPriceRupees",true);
     if(minimum==null) minimum=0L;
     Long maxRedemptions=optionalLong(body.get("maxRedemptions"));
@@ -1113,6 +1113,23 @@ public class PlatformFinanceController {
       if(value>0) return value;
     } catch(Exception ignored) { }
     throw bad(key+" must be a positive whole number when configured.");
+  }
+  private static long number(Object raw) {
+    if(raw instanceof Number n) {
+      try { return new java.math.BigDecimal(n.toString()).longValueExact(); }
+      catch(Exception ex) { throw bad("Expected an integer numeric value."); }
+    }
+    try { return new java.math.BigDecimal(String.valueOf(raw).trim()).longValueExact(); }
+    catch(Exception ex) { throw bad("Expected an integer numeric value."); }
+  }
+  private static Long nullableLong(Object raw) {
+    if(raw==null || String.valueOf(raw).trim().isEmpty()) return null;
+    return number(raw);
+  }
+  private static Integer nullableInteger(Object raw) {
+    if(raw==null || String.valueOf(raw).trim().isEmpty()) return null;
+    try { return new java.math.BigDecimal(String.valueOf(raw).trim()).intValueExact(); }
+    catch(Exception ex) { throw bad("Expected a whole-number integer."); }
   }
   private static Long optionalLong(Object raw) {
     if(raw==null)return null;
