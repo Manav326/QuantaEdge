@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
+import InvoiceDownloads from '../../components/InvoiceDownloads';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
@@ -376,6 +377,7 @@ export default function ParentCoursesPage() {
         {error && <div className="parent-courses-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="parent-courses-page__alert" role="status">{notice}</div>}
         <BillingProfileEditor workspace="PARENT" english={english} />
+        <InvoiceDownloads workspace="PARENT" english={english} />
         {pendingVerify && <section className="parent-courses-page__verify">
           <div><strong><LocaleText hinglish="भुगतान पुष्टि बाकी है" english="Payment verification is pending" /></strong>
             <p><LocaleText hinglish="दोबारा भुगतान न करें। इसी order की पुष्टि फिर से करें।" english="Do not pay again. Retry verification for this same order." /></p></div>

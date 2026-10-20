@@ -299,3 +299,14 @@ Verification at this checkpoint:
 - HRMS template actions are separate: submit, approve, then publish. The backend checks that the template design still matches the submitted snapshot before approval and publication.
 - Seller setup now requires a complete registered address. Tax-profile seller selection is limited to the platform or the institution that owns the course offer.
 - Remaining major work: attach approved tax snapshots to course orders, reconcile captured payment amount, issue and render invoices, persist revenue-share allocation snapshots, add secure customer/parent invoice downloads, audit discounts, and implement refund/credit-note adjustments.
+
+
+### 2026-10-20 — Captured-sale finalization and customer invoice downloads
+
+- Added V153 to persist the approved revenue-share policy and invoice series on each pending course order, and to extend the verified-order immutability guard to the new financial facts.
+- Course checkout now requires an effective approved tax profile, legal seller, published invoice template and a single effective approved revenue-share policy. It computes the payable amount before creating the Razorpay order, and persists the tax/buyer/template/share snapshots against that order.
+- Course payment verification now calls the financial finalizer only after verifying Razorpay signature, exact order, amount, currency and captured status. In the same database transaction it posts immutable invoice and revenue-share allocation rows and then marks the order verified with captured amount, timestamp and fiscal-document link.
+- Added an actual A4 PDF renderer and private artifact storage for issued tax invoices/bills of supply. Issuance records document numbering, line/tax snapshots, PDF hash/size and issue/render events. Invoice sequence is legal-entity and financial-year scoped.
+- Added purchaser-scoped student/parent invoice list and download endpoints. Downloads verify order ownership and tenant scope, hash-check the private PDF, and append a download-audit event. Student Marketplace and Parent Courses now include an “Invoices & payments” section with a PDF download action.
+- Discount amount is currently zero because a coupon/offer-code pricing engine has not been found or integrated into this purchase path. The schema and invoice math are prepared to snapshot discounts, but offers must not be represented as working until the coupon source is audited and wired into the quote flow.
+- Next: check the exact latest Actions results and fix compilation/migration issues; add tests for the complete financial snapshot/finalization contract; then surface a download link in HRMS Finance & Billing, implement adjustment/credit-note reversals and exercise the full flow against a test Razorpay order and three institution tenants.

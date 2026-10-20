@@ -11,6 +11,7 @@ import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { UiText } from '../../i18n/useUiTranslation';
 import StudentEmptyState from '../components/StudentEmptyState';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
+import InvoiceDownloads from '../../components/InvoiceDownloads';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
@@ -353,6 +354,7 @@ export default function StudentMarketplacePage() {
 
       {status && <p className={styles.status} role="status">{status}</p>}
       <BillingProfileEditor workspace="STUDENT" english />
+      <InvoiceDownloads workspace="STUDENT" english />
       {purchaseRequests.length > 0 && (
         <section className={styles.requestHistory} aria-labelledby="qe-purchase-request-history">
           <div className={styles.requestHistoryHeading}>
