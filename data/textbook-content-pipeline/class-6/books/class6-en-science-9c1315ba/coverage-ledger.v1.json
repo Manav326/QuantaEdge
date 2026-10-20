@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1252,
-    "successful_visual_analyses": 1228,
-    "missing_visual_analyses": 826,
+    "raw_analysis_result_rows": 1253,
+    "successful_visual_analyses": 1229,
+    "missing_visual_analyses": 825,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 850,
+    "unresolved_count": 849,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47310,24 +47310,23 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Measurement exercises involving a tumbler, bottle, friend's height, and a coin.",
+        "visual_summary": "Measurement exercises involving tumbler, bottle, friend's height, coin, and rollercoaster track.",
         "visual_type": "uncertain",
         "visible_text": [
-          "6. Take a tumbler or a bottle. Measure the length of the curved part of the base of glass or bottle and record it.",
-          "7. Measure the height of your friend and express it in (i) metres (ii) centimetres and (iii) millimetres.",
-          "8. You are given a coin. Estimate how many coins are required to be placed one after the other lengthwise, without leaving any gap between them, to cover the whole length of the chosen side of a notebook. Verify your estimate by measuring the same side of the notebook and the size of the coin using ",
-          "9. Give two examples each for linear, circular and oscillatory motion.",
-          "10. Observe different objects around you. It is easier to express the lengths of some objects in mm, some in cm and some in m. Make a list of three objects in each category and enter them in the Table 5.6.",
+          "6.  Take a tumbler or a bottle. Measure the length of the curved\npart of the base of glass or bottle and record it.",
+          "7.  Measure the height of your friend and express it in (i) metres\n(ii) centimetres and (iii) millimetres.",
+          "8.  You are given a coin. Estimate how many coins are required\n to be placed one after the other lengthwise, without\nleaving any gap between them, to cover the whole length\nof the chosen side of a notebook. Verify your estimate by\nmeasuring the same side of the notebook and the size of the\ncoin usin",
+          "9.  Give two examples each for linear, circular and oscillatory\nmotion.",
+          "10.  Observe different objects around you. It is easier to express\nthe lengths of some objects in mm, some in cm and some in\nm. Make a list of three objects in each category and enter\nthem in the Table 5.6.",
           "Table 5.6: Sizes of objects around us",
-          "11. A rollercoaster track is made in the shape shown in Fig. 5.19. A ball starts from point A and escapes through point F. Identify the types of motion of the ball on the rollercoaster and corresponding portions of the track."
+          "11.  A rollercoaster track\nis made in the shape\nshown in Fig. 5.19.\nA ball starts from\npoint A and escapes\nthrough point F.\nIdentify the types of\nmotion of the ball\non the rollercoaster\nand corresponding\nportions of the track."
         ],
         "concepts": [
           "Measurement",
           "Linear motion",
           "Circular motion",
           "Oscillatory motion",
-          "Rollercoaster track",
-          "Motion types"
+          "Rollercoaster track"
         ],
         "context_relation": "Measurement exercises",
         "limitations": [
@@ -47350,9 +47349,34 @@
       "asset_path": "assets/a54ba942c85da69418d51c5ebd13e9887a30fe9ece7a65225ee24d029543a00d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green leaf with a ruler next to it, showing the leaf's length.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "12. Tasneem wants to make a metre scale by herself. She",
+          "considers the following materials for it—plywood, paper,",
+          "cloth, stretchable rubber and steel. Which of these should",
+          "she not use and why?",
+          "13. Think, design and develop a card game on conversion of",
+          "units of length to play with your friends.",
+          "Can you find the thickness of a single page of your notebook",
+          "or textbook using a scale? Think of a way and write it. Carry",
+          "out the activity and report your result.",
+          "Collect fallen leaves from the same tree. Identify the name of",
+          "the tree"
+        ],
+        "concepts": [
+          "length measurement",
+          "card game",
+          "thickness measurement"
+        ],
+        "context_relation": "The image is related to the activity of measuring the length of a leaf and the thickness of a page using a ruler.",
+        "limitations": [
+          "The image does not provide specific measurements or names of the materials"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

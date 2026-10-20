@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1228,
+    "assets_selected": 1229,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1224,
-    "assets_remaining": 854,
-    "assets_completion_percent": 58.9,
+    "assets_analyzed": 1226,
+    "assets_remaining": 852,
+    "assets_completion_percent": 59.0,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1223,
+    "assets_skipped_from_checkpoint": 1224,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:09:27Z"
+      "checkpointed_at": "2026-10-20T09:16:58Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:10:28Z"
+      "checkpointed_at": "2026-10-20T09:17:59Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:11:20Z"
+      "checkpointed_at": "2026-10-20T09:18:50Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40701,24 +40701,23 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Measurement exercises involving a tumbler, bottle, friend's height, and a coin.",
+        "visual_summary": "Measurement exercises involving tumbler, bottle, friend's height, coin, and rollercoaster track.",
         "visual_type": "uncertain",
         "visible_text": [
-          "6. Take a tumbler or a bottle. Measure the length of the curved part of the base of glass or bottle and record it.",
-          "7. Measure the height of your friend and express it in (i) metres (ii) centimetres and (iii) millimetres.",
-          "8. You are given a coin. Estimate how many coins are required to be placed one after the other lengthwise, without leaving any gap between them, to cover the whole length of the chosen side of a notebook. Verify your estimate by measuring the same side of the notebook and the size of the coin using ",
-          "9. Give two examples each for linear, circular and oscillatory motion.",
-          "10. Observe different objects around you. It is easier to express the lengths of some objects in mm, some in cm and some in m. Make a list of three objects in each category and enter them in the Table 5.6.",
+          "6.  Take a tumbler or a bottle. Measure the length of the curved\npart of the base of glass or bottle and record it.",
+          "7.  Measure the height of your friend and express it in (i) metres\n(ii) centimetres and (iii) millimetres.",
+          "8.  You are given a coin. Estimate how many coins are required\n to be placed one after the other lengthwise, without\nleaving any gap between them, to cover the whole length\nof the chosen side of a notebook. Verify your estimate by\nmeasuring the same side of the notebook and the size of the\ncoin usin",
+          "9.  Give two examples each for linear, circular and oscillatory\nmotion.",
+          "10.  Observe different objects around you. It is easier to express\nthe lengths of some objects in mm, some in cm and some in\nm. Make a list of three objects in each category and enter\nthem in the Table 5.6.",
           "Table 5.6: Sizes of objects around us",
-          "11. A rollercoaster track is made in the shape shown in Fig. 5.19. A ball starts from point A and escapes through point F. Identify the types of motion of the ball on the rollercoaster and corresponding portions of the track."
+          "11.  A rollercoaster track\nis made in the shape\nshown in Fig. 5.19.\nA ball starts from\npoint A and escapes\nthrough point F.\nIdentify the types of\nmotion of the ball\non the rollercoaster\nand corresponding\nportions of the track."
         ],
         "concepts": [
           "Measurement",
           "Linear motion",
           "Circular motion",
           "Oscillatory motion",
-          "Rollercoaster track",
-          "Motion types"
+          "Rollercoaster track"
         ],
         "context_relation": "Measurement exercises",
         "limitations": [
@@ -40730,7 +40729,51 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:15:46Z"
+      "checkpointed_at": "2026-10-20T09:19:31Z"
+    },
+    {
+      "asset_id": "3fa4f9bd86efefd2b5c90dc8",
+      "asset_sha256": "a54ba942c85da69418d51c5ebd13e9887a30fe9ece7a65225ee24d029543a00d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 117,
+      "asset_path": "assets/a54ba942c85da69418d51c5ebd13e9887a30fe9ece7a65225ee24d029543a00d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green leaf with a ruler next to it, showing the leaf's length.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "12. Tasneem wants to make a metre scale by herself. She",
+          "considers the following materials for it—plywood, paper,",
+          "cloth, stretchable rubber and steel. Which of these should",
+          "she not use and why?",
+          "13. Think, design and develop a card game on conversion of",
+          "units of length to play with your friends.",
+          "Can you find the thickness of a single page of your notebook",
+          "or textbook using a scale? Think of a way and write it. Carry",
+          "out the activity and report your result.",
+          "Collect fallen leaves from the same tree. Identify the name of",
+          "the tree"
+        ],
+        "concepts": [
+          "length measurement",
+          "card game",
+          "thickness measurement"
+        ],
+        "context_relation": "The image is related to the activity of measuring the length of a leaf and the thickness of a page using a ruler.",
+        "limitations": [
+          "The image does not provide specific measurements or names of the materials"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:21:20Z"
     }
   ]
 }
