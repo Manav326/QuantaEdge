@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1224,
+    "assets_selected": 1226,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1221,
-    "assets_remaining": 857,
-    "assets_completion_percent": 58.8,
+    "assets_analyzed": 1223,
+    "assets_remaining": 855,
+    "assets_completion_percent": 58.9,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1219,
+    "assets_skipped_from_checkpoint": 1221,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:57:03Z"
+      "checkpointed_at": "2026-10-20T09:04:30Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:58:04Z"
+      "checkpointed_at": "2026-10-20T09:05:31Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:58:55Z"
+      "checkpointed_at": "2026-10-20T09:06:23Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40596,6 +40596,69 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T09:03:17Z"
+    },
+    {
+      "asset_id": "bb2c2be32a4d42336516a181",
+      "asset_sha256": "d3f122f58f464b0cf9a9b4c7b59dbdea16dcbe79b788d45314eae6fe78db1878",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/d3f122f58f464b0cf9a9b4c7b59dbdea16dcbe79b788d45314eae6fe78db1878.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a curved metal rod with a loop and a small red ball attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A curved metal rod with a loop and a small red ball attached to it."
+        ],
+        "concepts": [
+          "Curved metal rod",
+          "Loop",
+          "Red ball"
+        ],
+        "context_relation": "The image is related to the measurement of curved parts of objects.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical values."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:07:59Z"
+    },
+    {
+      "asset_id": "4a92f9ffab9334e505b664c7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or instructions",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:08:14Z"
     }
   ]
 }

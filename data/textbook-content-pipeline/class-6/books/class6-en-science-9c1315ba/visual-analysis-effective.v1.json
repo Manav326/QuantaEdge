@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "eaa09253ef61e959ac611768b0f96e2f26b9f260eab299ffb8eac3a6d08f2487",
+  "raw_analysis_sha256": "7c61e6c0fa548e5cd2b1a662a972092446c82ff5be60fb1bdc56aacef3ba862b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:57:03Z",
+      "checkpointed_at": "2026-10-20T09:04:30Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:58:04Z",
+      "checkpointed_at": "2026-10-20T09:05:31Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T08:58:55Z",
+      "checkpointed_at": "2026-10-20T09:06:23Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61238,6 +61238,100 @@
         "context_relation": "The table and statements are related to the concept of measurement of length and motion.",
         "limitations": [
           "The table does not provide specific measurements or units for the lengths."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bb2c2be32a4d42336516a181",
+      "asset_sha256": "d3f122f58f464b0cf9a9b4c7b59dbdea16dcbe79b788d45314eae6fe78db1878",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/d3f122f58f464b0cf9a9b4c7b59dbdea16dcbe79b788d45314eae6fe78db1878.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a curved metal rod with a loop and a small red ball attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A curved metal rod with a loop and a small red ball attached to it."
+        ],
+        "concepts": [
+          "Curved metal rod",
+          "Loop",
+          "Red ball"
+        ],
+        "context_relation": "The image is related to the measurement of curved parts of objects.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical values."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:07:59Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a curved metal rod with a loop and a small red ball attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A curved metal rod with a loop and a small red ball attached to it."
+        ],
+        "concepts": [
+          "Curved metal rod",
+          "Loop",
+          "Red ball"
+        ],
+        "context_relation": "The image is related to the measurement of curved parts of objects.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical values."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4a92f9ffab9334e505b664c7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or instructions",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:08:14Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or instructions",
+          "no visible text or images"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
