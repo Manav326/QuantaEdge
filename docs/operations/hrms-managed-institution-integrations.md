@@ -47,3 +47,12 @@ These values are managed by the HRMS/platform operator in deployment secrets and
 ## Failure behavior
 
 Missing central credentials return a clear platform-configuration error. An unknown, suspended or conflicting institution context fails closed. The UI should explain that the platform operator needs to complete setup; it must not redirect a learner to QuantaEdge, create global access, fall back to another tenant's credentials/data, or mark checkout/signup successful prematurely.
+
+## Android Google sign-in: `[16] Account reauth failed`
+
+- The Android client must use the same **Web OAuth client ID** returned by `GET /api/v1/auth/google/config` as the ID-token audience. Do not pass an Android OAuth client ID to `setServerClientId`.
+- The Credential Manager bottom sheet first requests previously authorized accounts. If no such credential exists, or Google reports the specific `Account reauth failed` cancellation, the client must fall back to `GetSignInWithGoogleOption` instead of treating the provider's cancellation status as an ordinary user dismiss.
+- On app logout, call `CredentialManager.clearCredentialState(ClearCredentialStateRequest())` best-effort to clear provider-side app session state. This does not sign the user out of Android or remove the Google account from the device.
+- If the explicit flow still fails, inspect the Android OAuth client in the same Google Cloud project: the **application/package ID must exactly match the installed APK**, and the registered SHA-1 must match the certificate that signed that APK. Debug builds, locally signed release builds, tenant-branded packages with a different `applicationId`, and Play-distributed builds can have different package/SHA-1 combinations. For Play installs, verify the Play App Signing certificate SHA-1 as well as any local development certificate needed for dev builds. Do not change the API's Web client ID audience to the Android client ID.
+- Test at minimum: account already authorized, first-time Google account, repeat sign-in after QuantaEdge logout, a Google account that requires re-authentication, and a deliberately mismatched package/SHA-1. Record Android version, installed package name, APK source/signing fingerprint and the exception class/message (never record ID tokens).
+
