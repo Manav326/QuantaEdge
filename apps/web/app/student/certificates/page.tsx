@@ -549,7 +549,13 @@ function StudentCertificatesContent() {
             <span className={styles.meta}>{certificates.length} {translateUi(locale, 'legacy.web.records.415b5a7c')}</span>
           </div>
           {error && certificates.length === 0 ? null : !certificates.length ? (
-            <div className={styles.empty}><strong>{translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}</strong><p>{translateUi(locale, 'legacy.web.complete.all.published.lessons.or.pass.6578ce33')}</p></div>
+            <StudentEmptyState
+              icon="certificates"
+              title={translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}
+              message={translateUi(locale, 'legacy.web.complete.all.published.lessons.or.pass.6578ce33')}
+              primaryActionHref={'/student/tests' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')}
+              primaryActionLabel={<UiText message="web.navigation.student.testsResults" />}
+            />
           ) : (
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
