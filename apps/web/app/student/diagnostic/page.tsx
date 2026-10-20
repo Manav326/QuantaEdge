@@ -11,6 +11,7 @@ import {useRouter,useSearchParams} from 'next/navigation';
 import {useStudentCourseScope} from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import AnswerFeedback from '../../components/AnswerFeedback';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type Q={id:number;question_type:string;prompt:string;explanation?:string;options:string;answered?:boolean;lastCorrect?:boolean|null;selectedAnswer?:any};
 type DiagnosticPayload={completed?:boolean;available?:boolean;attemptId?:number;status?:string;questionCount?:number;questions?:Q[];message?:string;detail?:string};
@@ -110,6 +111,13 @@ export default function DiagnosticPage(){
     finally{setSubmitting(false);}
   }
 
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if(noEnrolledCourses)return <main className="practice-page"><section className="practice-wrap">
+    <StudentEmptyState icon="diagnostic" title={<UiText message="student.empty.diagnostic.title" />}
+      message={<UiText message="student.empty.diagnostic.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />} />
+  </section></main>;
   if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.loading.your.saved.diagnostic.b2912d85" /></div></section></main>;
   if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.diagnostic.f6a469cb" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><UiText message="legacy.web.try.again.c3572b4c" /></button><Link href={courseId!==null?"/student?courseId="+encodeURIComponent(String(courseId)):"/student/courses"} className="text-link"><UiText message="legacy.web.back.97062f29" /></Link></div></section></main>;
   if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.initial.diagnostic.6c007aef" /></div><h1><UiText message="legacy.web.diagnostic.is.not.available.yet.33d8f4ec" /></h1><p><UiText message="legacy.web.the.diagnostic.will.appear.when.enough.04469512" /></p><Link href={courseId!==null?"/student?courseId="+encodeURIComponent(String(courseId)):"/student/courses"} className="button button-dark"><UiText message="legacy.web.student.home.15fbe96d" /></Link></section></main>;

@@ -17,6 +17,13 @@ const structuredLessonsApi = read('../../../services/api/src/main/java/com/quant
 const certificatesPage = read('../app/student/certificates/page.tsx');
 const studentProgressPage = read('../app/student/progress/page.tsx');
 const studentBooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
+const studentMarketplacePage = read('../app/student/marketplace/page.tsx');
+const studentCoursesPage = read('../app/student/courses/page.tsx');
+const studentClassesClient = read('../app/student/classes/ClassesClient.tsx');
+const studentDiagnosticPage = read('../app/student/diagnostic/page.tsx');
+const studentCertificatesPage = read('../app/student/certificates/page.tsx');
+const studentLessonDetailClient = read('../app/student/structured-lessons/StructuredLessonDetailClient.tsx');
+const studentEmptyState = read('../app/student/components/StudentEmptyState.tsx');
 const englishUiCatalog = read('../app/i18n/catalogs/english.json');
 const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
@@ -510,4 +517,44 @@ assert.ok(androidApp.includes('ZoneId.of("Asia/Kolkata")') &&
   'Android dashboard timestamps and local datetime fallback must use the same agreed India timezone as web.');
 
 
-console.log('Navigation, localization, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
+assert.ok(studentEmptyState.includes('aria-live="polite"') && studentEmptyState.includes('primaryActionHref') &&
+  studentEmptyState.includes('secondaryActionHref') && studentEmptyState.includes('onRetry'),
+  'Student empty states must be accessible, visually reusable and offer relevant navigation/retry actions.');
+assert.ok(studentMarketplacePage.includes('!loading && !loadError && offers.length === 0') &&
+  studentMarketplacePage.includes('student.empty.marketplace.title') &&
+  studentMarketplacePage.includes('onRetry={() => void loadOffers()}') &&
+  studentMarketplacePage.includes('secondaryActionHref="/student/courses"'),
+  'A genuinely empty marketplace must show a deliberate fallback with retry and a route to My Courses; load errors must remain a separate state.');
+assert.ok(studentCoursesPage.includes('!loading && !error && owned.length === 0') &&
+  studentCoursesPage.includes('student.empty.courses.title') &&
+  studentCoursesPage.includes('primaryActionHref="/student/marketplace"'),
+  'The course list must have a localized empty state only after a successful empty response.');
+for (const [source, label] of [
+  [structuredLessonsClient, 'Structured lessons'],
+  [practiceClient, 'Practice'],
+  [studentProgressPage, 'Progress'],
+  [studentBooksClient, 'Books and chapters'],
+  [studentClassesClient, 'Live and recorded classes'],
+  [studentDiagnosticPage, 'Diagnostic'],
+  [studentCertificatesPage, 'Certificates'],
+  [testsClient, 'Tests and results'],
+  [studentLessonDetailClient, 'Nested lesson detail'],
+]) {
+  assert.ok(source.includes('StudentEmptyState') && source.includes('noEnrolledCourses'),
+    label + ' must use the shared no-enrolment fallback rather than an API-error or content-empty message.');
+}
+assert.ok(studentCertificatesPage.includes('!requestedCertificateId') &&
+  studentCertificatesPage.includes('requestedCertificateId'),
+  'The no-course certificate fallback must not intercept direct certificate lookup/verification links.');
+for (const relative of ['english.json', 'hinglish.json']) {
+  const catalog = JSON.parse(read('../app/i18n/catalogs/' + relative));
+  for (const key of [
+    'student.empty.marketplace.title','student.empty.marketplace.message','student.empty.marketplace.refresh',
+    'student.empty.courses.title','student.empty.courses.message','student.empty.learn.title',
+    'student.empty.practice.title','student.empty.progress.title','student.empty.books.title',
+    'student.empty.classes.title','student.empty.classes.message','student.empty.tests.title',
+    'student.empty.certificates.title','student.empty.diagnostic.title','student.empty.lesson.title',
+  ]) assert.ok(typeof catalog[key] === 'string' && catalog[key].trim().length > 0,
+    'Missing localized student empty-state copy: ' + key + ' in ' + relative);
+}
+console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');

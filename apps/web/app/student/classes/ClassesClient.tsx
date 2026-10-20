@@ -14,6 +14,7 @@ import styles from './Classes.module.css';
 import LearningChatPanel from './LearningChatPanel';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type LiveClass = {
   session_id:number;title:string;description?:string;provider:string;youtube_video_id?:string|null;starts_at:string;ends_at:string;status:string;join_window_minutes?:number|null;
@@ -243,6 +244,14 @@ export default function StudentClassesClient(){
   const filteredRecordings=recordings.filter(r=>subjectFilter==='ALL'||r.subject_code===subjectFilter);
   const activeJoined=sessions.find(s=>s.session_id===joinedSessionId);
   const now=clockNow;
+
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className={styles.shell}><section className={styles.wrap}>
+    <StudentEmptyState icon="classes" title={translateUi(locale, 'student.empty.classes.title')}
+      message={translateUi(locale, 'student.empty.classes.message')}
+      primaryActionHref="/student/marketplace" primaryActionLabel={translateUi(locale, 'student.empty.dashboard.action')} />
+  </section></main>;
 
   return <main className={styles.shell}>
     <section className={styles.wrap}>

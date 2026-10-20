@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 import StructuredLessonExperience from './StructuredLessonExperience';
 import AssignedLearningResources from './AssignedLearningResources';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
@@ -86,6 +87,15 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     results[id] = { status: value.status, score: value.score, maxScore: value.maxScore, feedback: value.feedback, feedbackByLocale: value.feedbackByLocale };
     submitted[id] = value.status === 'correct' || value.status === 'pending_review';
   });
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <StudentEmptyState icon="learn" title={<UiText message="student.empty.lesson.title" />}
+      message={<UiText message="student.empty.lesson.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student/structured-lessons" secondaryActionLabel={<UiText message="web.navigation.student.structuredLessons" />} />
+  </section></div></main>;
+
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading">
       <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}

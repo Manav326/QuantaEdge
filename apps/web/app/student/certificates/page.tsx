@@ -12,6 +12,7 @@ import { useLocale } from '../../components/LanguageProvider';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 import styles from './Certificates.module.css';
 
 function localizedTrackName(code: string | undefined, name: string | undefined, language: string) {
@@ -368,6 +369,19 @@ function StudentCertificatesContent() {
       setBusy(false);
     }
   }
+
+  const noEnrolledCourses = !requestedCertificateId && !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return (
+    <main className="app-shell">
+      <section className={styles.page}>
+        <StudentEmptyState icon="certificates" title={<UiText message="student.empty.certificates.title" />}
+          message={<UiText message="student.empty.certificates.message" />}
+          primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+          secondaryActionHref="/student/tests" secondaryActionLabel={<UiText message="web.navigation.student.testsResults" />} />
+      </section>
+    </main>
+  );
 
   return (
     <main className="app-shell">

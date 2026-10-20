@@ -14,6 +14,7 @@ import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import styles from './Tests.module.css';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type AssessmentCard = {
   assessment_id:number;test_id?:string|null;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -502,6 +503,15 @@ export default function TestsClient(){
     setAttempt(null);setResponses({});dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
     void loadOverview();
   }
+
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 && !attempt &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className={styles.shell}>
+    <StudentEmptyState icon="tests" title={<UiText message="student.empty.tests.title" />}
+      message={<UiText message="student.empty.tests.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student" secondaryActionLabel={<UiText message="web.navigation.student.today" />} />
+  </main>;
 
   return <main className={styles.shell}>
     <section className={styles.wrap}>

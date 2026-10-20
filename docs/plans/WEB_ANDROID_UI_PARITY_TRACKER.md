@@ -53,3 +53,8 @@ The agreed pattern is a shared responsive, accessible student empty-state compon
 Marketplace has a distinct no-published-offers fallback with retry and a link to My Courses. Loading and genuine request failures remain separate; empty catalogue copy must not imply an API failure is an empty result. Direct certificate lookup links remain usable when the student has no current enrolment. Empty content *within an enrolled course* (no published tests, released results, scheduled class, recording, PDF or issued certificate) stays contextual to that content.
 
 Implementation on main does not mean browser/device E2E is passed. Verify mobile layout, keyboard focus, action destinations, truly empty responses, API errors, and both interface languages before marking parity QA green.
+
+
+### Route coverage added on 2026-10-20
+
+The shared web fallback now covers Live/Recorded Classes, Diagnostic, Tests & Results, Certificates and nested Structured Lesson detail in addition to Dashboard, My Courses, Marketplace, Learn, Practice, Progress and Books. Route-level gates require the course scope to finish loading and only accept an empty/explicit no-enrolment result; unrelated course-scope failures retain their error UI. Certificate deep links bypass the no-enrolment guard. The navigation contract asserts all of these coverage points and the Marketplace's distinct no-offers retry state.
