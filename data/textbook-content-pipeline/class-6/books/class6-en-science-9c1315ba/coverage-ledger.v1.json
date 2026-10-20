@@ -47714,27 +47714,23 @@
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
         "visible_text": [
-          "Discuss with elders in your community what units were\nused for measurement of length in the olden days. Also,\nusing the internet, try to find out about the length scales\nfound in excavations of archaeological sites in India.",
-          "Create a maze using lines of 1 cm, 2 cm and their combination.\nPart of it has been made for you in Fig. 5.21. Now use your\nimagination and expand it to a size as big as you want.",
-          "How tall am I? Stand along\na wall and with the help of\nan adult, mark your height\n(Fig. 5.22). Repeat it every\nthree months to maintain a\nheight record for yourself\nand your siblings.",
-          "Let us design a fun method\nfor measuring the distance\nbetween two places by using\na bicycle. Attach a flexible\nmetal strip to the spoke of\nthe front wheel in such a\nmanner that it hits the frame\nof the bicycle holding the\nwheel, every time it crosses it\nand produces a sound (Fig. 5.23).",
-          "Now ride the bicycle slowly and count the number of times\nin which sound occurred. The number will give you the\nnumber of turns of your wheel made. Now measure the\nlength of the outer boundary of\nthe wheel using a string as done in\nFig. 5.8. Multiply this length by the\nnumber of turns of the wheel. ",
-          "Such methods are actually used\nto measure the distance for road-\nrunning races. Try to find out about\na 'Jones Counter' which is attached\nto a bicycle wheel and is used for\nmeasuring distances."
+          "Fig. 5.21: A maze",
+          "Fig. 5.22: Measuring height",
+          "Fig. 5.23: Measuring distance"
         ],
         "concepts": [
-          "measurement of length",
-          "archaeological sites",
-          "maze",
-          "height",
-          "distance",
+          "measuring height",
+          "measuring distance",
           "bicycle",
+          "spoke",
+          "wheel",
           "string",
           "road-running races",
           "Jones Counter"
         ],
         "context_relation": "instructions for measuring height and distance using a bicycle",
         "limitations": [
-          "instructions are for educational purposes only"
+          "instructions are for Grade 6 students"
         ]
       },
       "chapter_id": null,
