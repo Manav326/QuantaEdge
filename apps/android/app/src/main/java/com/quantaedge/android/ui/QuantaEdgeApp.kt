@@ -5050,17 +5050,16 @@ private fun StudentHomeScreen(
     if (activeCourseIdResolved <= 0L && !programsLoadFailed &&
         programs.none { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused") }) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 28.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(localizedUiText("Your learning starts here"),
-                style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
-            Text(localizedUiText("You haven’t enrolled in any courses yet. Visit the Marketplace to explore and enroll in a course."),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Button(onClick = onMarketplace, enabled = !busy) {
-                Text(localizedUiText("Explore Marketplace"))
-            }
+            StudentEnrollmentEmptyState(
+                icon = "▦",
+                title = localizedUiText("Your learning starts here"),
+                message = localizedUiText("You haven’t enrolled in any courses yet. Visit the Marketplace to explore and enroll in a course."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
         }
         return
     }
