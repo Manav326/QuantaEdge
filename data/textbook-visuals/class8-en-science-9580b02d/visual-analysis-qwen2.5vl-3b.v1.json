@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T12:48:15Z"
+      "checkpointed_at": "2026-10-20T12:55:00Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T12:48:59Z"
+      "checkpointed_at": "2026-10-20T12:55:45Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T12:49:29Z"
+      "checkpointed_at": "2026-10-20T12:56:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25816,7 +25816,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39353199646",
+      "run_id": "39419720549",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -25865,9 +25865,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39353199646",
+      "run_id": "39419720549",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
