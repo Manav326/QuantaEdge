@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "062cd73336984e953e4b0d18c11361e31fcad07fbe99961215b69b0bc80a8b66",
+  "raw_analysis_sha256": "aca79dcc8257a5dc78d9d9b1c53bb45baba5df6da24d20eb964f06d0b50404f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:50:52Z",
+      "checkpointed_at": "2026-10-20T21:58:01Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:51:39Z",
+      "checkpointed_at": "2026-10-20T21:58:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T21:52:17Z",
+      "checkpointed_at": "2026-10-20T21:59:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -49088,7 +49088,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -49706,21 +49706,55 @@
     {
       "asset_id": "e2b1867d601a9ad83b7f7e99",
       "asset_sha256": "da73b8d06d118c3232a119a97895c4ed29c02d75b17bfc6b1b100ed38371e35b",
-      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 69,
       "asset_path": "assets/da73b8d06d118c3232a119a97895c4ed29c02d75b17bfc6b1b100ed38371e35b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coil of wire wrapped around an iron nail, with two wires extending from the ends.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Electromagnet",
+          "Wire coil",
+          "Iron nail",
+          "Electric current",
+          "Magnetic field"
+        ],
+        "context_relation": "The image represents a simple electromagnet, which is a practical application of the magnetic effect of electric current.",
+        "limitations": [
+          "The image does not show the current flowing through the wire or the magnetic field produced.",
+          "The image does not show the interaction between the electromagnet and an iron paper clip."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T22:04:11Z",
+      "effective_analysis": {
+        "visual_summary": "A coil of wire wrapped around an iron nail, with two wires extending from the ends.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Electromagnet",
+          "Wire coil",
+          "Iron nail",
+          "Electric current",
+          "Magnetic field"
+        ],
+        "context_relation": "The image represents a simple electromagnet, which is a practical application of the magnetic effect of electric current.",
+        "limitations": [
+          "The image does not show the current flowing through the wire or the magnetic field produced.",
+          "The image does not show the interaction between the electromagnet and an iron paper clip."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
