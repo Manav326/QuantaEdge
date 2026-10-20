@@ -44,7 +44,8 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
   const matchesRequestedCourse = useCallback((course: EnrolledCourse) => {
     if (!hasRequestedCourse) return false;
     if (/^\d+$/.test(requestedText)) return Number(course.id || course.course_id) === Number(requestedText);
-    return String(course.public_id || '').toUpperCase() === requestedText.toUpperCase();
+    return String(course.public_id || '').toUpperCase() === requestedText.toUpperCase()
+      || String(course.code || '').toUpperCase() === requestedText.toUpperCase();
   }, [hasRequestedCourse, requestedText]);
 
   // Reuse the current catalogue when the URL changes only to preserve course/subject selection.
