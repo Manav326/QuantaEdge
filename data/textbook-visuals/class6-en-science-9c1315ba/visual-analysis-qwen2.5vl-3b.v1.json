@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1274,
+    "assets_selected": 1275,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1270,
-    "assets_remaining": 808,
-    "assets_completion_percent": 61.1,
+    "assets_analyzed": 1271,
+    "assets_remaining": 807,
+    "assets_completion_percent": 61.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1269,
+    "assets_skipped_from_checkpoint": 1270,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:48:20Z"
+      "checkpointed_at": "2026-10-20T19:55:21Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:49:14Z"
+      "checkpointed_at": "2026-10-20T19:56:14Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:50:25Z"
+      "checkpointed_at": "2026-10-20T19:57:24Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:51:08Z"
+      "checkpointed_at": "2026-10-20T19:58:06Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42411,6 +42411,37 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T19:54:18Z"
+    },
+    {
+      "asset_id": "03673fa07d82da6a1cf0995e",
+      "asset_sha256": "f08ca368d0e408ed57ebe11f6b4aea00c3be2783e484d3058c18bea151aa858b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 125,
+      "asset_path": "assets/f08ca368d0e408ed57ebe11f6b4aea00c3be2783e484d3058c18bea151aa858b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f9d0c986bf7f5ad16fb16f65c87492efc8f608a8e89a11e1ccbdad5d1218efb1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with a concerned expression, holding their head with one hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content.",
+          "The image is a single frame and does not depict a sequence or progression of events.",
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any specific objects or elements that are relevant to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T19:59:17Z"
     }
   ]
 }
