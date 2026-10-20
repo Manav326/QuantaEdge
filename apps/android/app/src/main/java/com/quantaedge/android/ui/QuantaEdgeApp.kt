@@ -1788,8 +1788,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun startPractice() {
         runTask {
             val lessonId = lesson.longAny("id", "lesson_id")
+            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course before starting practice.")
             practice = ApiClient.postObject("/api/v1/learning/practice/sessions/from-lesson",
-                JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
+                JSONObject().put("lessonId", lessonId).put("courseId", currentCourseId)
+                    .put("language", learningContentLanguage))
             answers.clear()
             feedbacks.clear()
             route = AppRoute.PRACTICE
@@ -2884,7 +2886,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            val refreshedPractice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + learningContentLanguage)
+            val refreshedPractice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId +
+                "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
             practice = refreshedPractice
             val refreshedQuestion = refreshedPractice.optJSONArray("questions")?.objectItems()
                 ?.firstOrNull { it.longAny("id", "questionId", "question_id") == questionId }
