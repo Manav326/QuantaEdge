@@ -318,3 +318,10 @@ Verification at this checkpoint:
 - Student Marketplace and Parent Courses display verified invoice history and download PDFs through the same-origin API client, preserving tenant/workspace context. The API enforces purchaser ownership and records every download.
 - The invoice renderer now uses the course title and institution branding stored at checkout rather than looking those values up again at issue time. A sale's descriptive text therefore stays anchored to the checkout snapshot.
 - Recent Actions identified a missing Spring HttpHeaders constant on the new download endpoint; this was corrected to the literal standard header name. Run the latest CI before treating the finance flow as build-verified.
+
+
+### 2026-10-20 — GST serial-length compliance
+
+- Updated the printed invoice serial to use a compact financial year (for example `QE/26-27/000001`) while keeping the full financial year internally for sequence partitioning.
+- HRMS restricts invoice series prefixes to 1–3 characters, the API guards the final serial length, and migration V154 adds a database check limiting new invoice numbers to 16 characters. A sequence stops safely at 999,999 for each series/year rather than emitting an overlength serial.
+- This aligns the serial length with the current CBIC GST Rule 46 text. Tax rates, supply classification, place-of-supply decisions and applicability still require approval by the institution/platform's tax adviser before live issuance.

@@ -125,7 +125,7 @@ export default function FinancePage(){
   };
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
-    if(!/^[A-Z0-9_-]{1,16}$/.test(series)){setError('Invoice series must be 1–16 uppercase letters, digits, underscores or hyphens.');return;}
+    if(!/^[A-Z0-9_-]{1,16}$/.test(series)){setError('Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.');return;}
     void action(()=>api(BASE+'/legal-entities/'+entity.id+'/invoice-series',{method:'PUT',body:JSON.stringify({invoiceSeriesCode:series})}),
       'Invoice series saved. Existing invoices keep their original numbers; future documents use this series.');
   };
@@ -306,7 +306,7 @@ export default function FinancePage(){
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
             <label>Finance contact email<input type="email" value={entityForm.contactEmail} onChange={e=>setEntityForm(v=>({...v,contactEmail:e.target.value}))}/></label>
-            <label>Invoice series prefix<input required minLength={1} maxLength={16} pattern="[A-Za-z0-9_-]{1,16}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/2026-27/000001.</small></label>
+            <label>Invoice series prefix<input required minLength={1} maxLength={16} pattern="[A-Za-z0-9_-]{1,3}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/26-27/000001 (max 16 characters).</small></label>
             <label>Registered address line<input required value={entityForm.addressLine} onChange={e=>setEntityForm(v=>({...v,addressLine:e.target.value}))}/></label>
             <div className={styles.inputGrid}><label>City<input required value={entityForm.city} onChange={e=>setEntityForm(v=>({...v,city:e.target.value}))}/></label><label>State<input required value={entityForm.state} onChange={e=>setEntityForm(v=>({...v,state:e.target.value}))}/></label><label>PIN code<input required value={entityForm.postalCode} onChange={e=>setEntityForm(v=>({...v,postalCode:e.target.value}))}/></label></div>
             <button className={styles.primary} disabled={busy}>Save legal entity draft</button>

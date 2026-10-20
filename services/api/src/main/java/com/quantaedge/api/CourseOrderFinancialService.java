@@ -433,7 +433,7 @@ public class CourseOrderFinancialService {
     LocalDate issueDate=LocalDate.now(INDIA);
     String fy=financialYear(issueDate);
     String series=value(supplier,"invoiceSeriesCode","QE").toUpperCase(Locale.ROOT);
-    if(!series.matches("[A-Z0-9_-]{1,16}")) throw new IllegalStateException("The seller invoice series code is invalid.");
+    if(!series.matches("[A-Z0-9_-]{1,3}")) throw new IllegalStateException("The seller invoice series code must be 1 to 3 characters.");
 
     jdbc.update("""
       insert into fiscal_document_sequence(
@@ -447,11 +447,16 @@ public class CourseOrderFinancialService {
       for update
       """,Long.class,legalEntityId,documentType,fy,series);
     if(next==null||next<=0) throw new IllegalStateException("The invoice numbering sequence is unavailable.");
+    if(next>999_999L) throw new IllegalStateException("This invoice series reached its 999,999-document limit for the financial year. Approve a new series prefix before issuing another document.");
     jdbc.update("""
       update fiscal_document_sequence set next_sequence_no=?,updated_at=now()
       where legal_entity_id=? and document_type=? and financial_year=? and series_code=?
       """,Math.addExact(next,1),legalEntityId,documentType,fy,series);
-    String docNumber=series+"/"+fy+"/"+String.format(Locale.ROOT,"%06d",next);
+    String printedFinancialYear=String.format(Locale.ROOT,"%02d-%02d",
+        issueDate.getMonthValue()>=4?issueDate.getYear()%100:(issueDate.getYear()-1)%100,
+        issueDate.getMonthValue()>=4?(issueDate.getYear()+1)%100:issueDate.getYear()%100);
+    String docNumber=series+"/"+printedFinancialYear+"/"+String.format(Locale.ROOT,"%06d",next);
+    if(docNumber.length()>16) throw new IllegalStateException("The configured invoice serial would exceed the 16-character statutory limit.");
     String idempotency="course-order:"+orderId+":fiscal-document:v1";
 
     Long templateId=nullableLong(taxSnapshot.get("invoiceTemplateVersionId"));

@@ -114,7 +114,7 @@ public class PlatformFinanceController {
     String invoiceSeries=optionalText(body.get("invoiceSeriesCode"));
     if(invoiceSeries==null) invoiceSeries="QE";
     invoiceSeries=invoiceSeries.toUpperCase(Locale.ROOT);
-    if(!invoiceSeries.matches("[A-Z0-9_-]{1,16}")) throw bad("Invoice series code must be 1–16 uppercase letters, digits, underscores or hyphens.");
+    if(!invoiceSeries.matches("[A-Z0-9_-]{1,3}")) throw bad("Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens so the complete invoice serial stays within 16 characters.");
     long id=jdbc.queryForObject("""
       insert into billing_legal_entity(entity_kind,institution_id,legal_name,trade_name,contact_email,contact_phone,
         registered_address,invoice_series_code,status,created_by_staff_id)
@@ -163,7 +163,7 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     String series=requiredText(body,"invoiceSeriesCode").toUpperCase(Locale.ROOT);
-    if(!series.matches("[A-Z0-9_-]{1,16}")) throw bad("Invoice series code must be 1–16 uppercase letters, digits, underscores or hyphens.");
+    if(!series.matches("[A-Z0-9_-]{1,3}")) throw bad("Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens so the complete invoice serial stays within 16 characters.");
     Map<String,Object> entity=one("select id,institution_id,legal_name,invoice_series_code from billing_legal_entity where id=?",legalEntityId);
     if(entity.isEmpty()) throw notFound("Legal entity not found.");
     jdbc.update("update billing_legal_entity set invoice_series_code=?,updated_by_staff_id=?,updated_at=now() where id=?",
