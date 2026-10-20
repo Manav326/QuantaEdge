@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1259,
+    "assets_selected": 1260,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1255,
-    "assets_remaining": 823,
+    "assets_analyzed": 1256,
+    "assets_remaining": 822,
     "assets_completion_percent": 60.4,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1254,
+    "assets_skipped_from_checkpoint": 1255,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:47:09Z"
+      "checkpointed_at": "2026-10-20T11:51:18Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:48:09Z"
+      "checkpointed_at": "2026-10-20T11:52:21Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:49:01Z"
+      "checkpointed_at": "2026-10-20T11:53:14Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:49:51Z"
+      "checkpointed_at": "2026-10-20T11:54:04Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41855,6 +41855,57 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T11:50:02Z"
+    },
+    {
+      "asset_id": "3e5bf29c39c7c99475fee949",
+      "asset_sha256": "583fb1de0e7be1f5b134bd6bdbd571d699ea1addec3d9492bc455afc212652a6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 122,
+      "asset_path": "page-0122.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4e42123f8a89f1c55aecf06e59a1799e12c2f631543f5fdb1df10ff8f7c3d36d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a diagram of a tumbler and questions about materials used to make it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.3: Let us think",
+          "Let us think what materials we can use to make a tumbler.",
+          "Fill in the names of the materials in the spaces provided in",
+          "Fig. 6.2.",
+          "Tumbler",
+          "Fig. 6.2: Materials used to make a tumbler",
+          "Would it be a",
+          "good idea to",
+          "use paper-like",
+          "materials for",
+          "making cooking",
+          "utensils?",
+          "Why cannot a",
+          "tumbler made of",
+          "cloth be used for",
+          "storing water?"
+        ],
+        "concepts": [
+          "materials",
+          "tumbler",
+          "paper-like materials",
+          "cloth",
+          "storing water"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the materials used to make a tumbler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:58:04Z"
     }
   ]
 }
