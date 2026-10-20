@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7c61e6c0fa548e5cd2b1a662a972092446c82ff5be60fb1bdc56aacef3ba862b",
+  "raw_analysis_sha256": "915e6bdbf7a76da6f1c92dd9bcdadfcdc0f50cbee1f72c6384e95daf335c9d66",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:04:30Z",
+      "checkpointed_at": "2026-10-20T09:09:27Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:05:31Z",
+      "checkpointed_at": "2026-10-20T09:10:28Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:06:23Z",
+      "checkpointed_at": "2026-10-20T09:11:20Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61332,6 +61332,118 @@
         "limitations": [
           "unclear content or instructions",
           "no visible text or images"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "25e29e2df00a7c10dc37dcb7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:11:33Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae8bf28ed5606307f8b93cd4",
+      "asset_sha256": "9b7fedeecbc9c05c9055522ad49368362220e4145e4b6fa3464ae3286f59a18e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "asset_path": "page-0116.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "43ceb02d5fff54a1f9ed71507e05038a2141ead9428ca54c1988024044017e2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Measurement exercises involving a tumbler, bottle, friend's height, and a coin.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "6. Take a tumbler or a bottle. Measure the length of the curved part of the base of glass or bottle and record it.",
+          "7. Measure the height of your friend and express it in (i) metres (ii) centimetres and (iii) millimetres.",
+          "8. You are given a coin. Estimate how many coins are required to be placed one after the other lengthwise, without leaving any gap between them, to cover the whole length of the chosen side of a notebook. Verify your estimate by measuring the same side of the notebook and the size of the coin using ",
+          "9. Give two examples each for linear, circular and oscillatory motion.",
+          "10. Observe different objects around you. It is easier to express the lengths of some objects in mm, some in cm and some in m. Make a list of three objects in each category and enter them in the Table 5.6.",
+          "Table 5.6: Sizes of objects around us",
+          "11. A rollercoaster track is made in the shape shown in Fig. 5.19. A ball starts from point A and escapes through point F. Identify the types of motion of the ball on the rollercoaster and corresponding portions of the track."
+        ],
+        "concepts": [
+          "Measurement",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Rollercoaster track",
+          "Motion types"
+        ],
+        "context_relation": "Measurement exercises",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:15:46Z",
+      "effective_analysis": {
+        "visual_summary": "Measurement exercises involving a tumbler, bottle, friend's height, and a coin.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "6. Take a tumbler or a bottle. Measure the length of the curved part of the base of glass or bottle and record it.",
+          "7. Measure the height of your friend and express it in (i) metres (ii) centimetres and (iii) millimetres.",
+          "8. You are given a coin. Estimate how many coins are required to be placed one after the other lengthwise, without leaving any gap between them, to cover the whole length of the chosen side of a notebook. Verify your estimate by measuring the same side of the notebook and the size of the coin using ",
+          "9. Give two examples each for linear, circular and oscillatory motion.",
+          "10. Observe different objects around you. It is easier to express the lengths of some objects in mm, some in cm and some in m. Make a list of three objects in each category and enter them in the Table 5.6.",
+          "Table 5.6: Sizes of objects around us",
+          "11. A rollercoaster track is made in the shape shown in Fig. 5.19. A ball starts from point A and escapes through point F. Identify the types of motion of the ball on the rollercoaster and corresponding portions of the track."
+        ],
+        "concepts": [
+          "Measurement",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion",
+          "Rollercoaster track",
+          "Motion types"
+        ],
+        "context_relation": "Measurement exercises",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
