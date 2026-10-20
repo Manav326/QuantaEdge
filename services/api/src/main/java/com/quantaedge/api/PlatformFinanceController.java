@@ -30,13 +30,15 @@ public class PlatformFinanceController {
   private final AuthorizationService authorization;
   private final ObjectMapper objectMapper;
   private final InvoicePreviewPdfRenderer invoicePreviewPdfRenderer;
+  private final FiscalDocumentStorage fiscalDocumentStorage;
 
   public PlatformFinanceController(JdbcTemplate jdbc, AuthorizationService authorization, ObjectMapper objectMapper,
-      InvoicePreviewPdfRenderer invoicePreviewPdfRenderer) {
+      InvoicePreviewPdfRenderer invoicePreviewPdfRenderer,FiscalDocumentStorage fiscalDocumentStorage) {
     this.jdbc=jdbc;
     this.authorization=authorization;
     this.objectMapper=objectMapper;
     this.invoicePreviewPdfRenderer=invoicePreviewPdfRenderer;
+    this.fiscalDocumentStorage=fiscalDocumentStorage;
   }
 
   @GetMapping("/overview")
@@ -108,13 +110,17 @@ public class PlatformFinanceController {
       throw bad("Choose an existing institution for this legal entity.");
     }
     String name=requiredText(body,"legalName");
+    String invoiceSeries=optionalText(body.get("invoiceSeriesCode"));
+    if(invoiceSeries==null) invoiceSeries="QE";
+    invoiceSeries=invoiceSeries.toUpperCase(Locale.ROOT);
+    if(!invoiceSeries.matches("[A-Z0-9_-]{1,16}")) throw bad("Invoice series code must be 1–16 uppercase letters, digits, underscores or hyphens.");
     long id=jdbc.queryForObject("""
       insert into billing_legal_entity(entity_kind,institution_id,legal_name,trade_name,contact_email,contact_phone,
-        registered_address,status,created_by_staff_id)
-      values(?,?,?,?,?,?,?::jsonb,'DRAFT',?) returning id
+        registered_address,invoice_series_code,status,created_by_staff_id)
+      values(?,?,?,?,?,?,?::jsonb,?,'DRAFT',?) returning id
       """,Long.class,kind,institutionId,name,optionalText(body.get("tradeName")),
         optionalText(body.get("contactEmail")),optionalText(body.get("contactPhone")),
-        jsonObject(body.get("registeredAddress")),context.staffId());
+        jsonObject(body.get("registeredAddress")),invoiceSeries,context.staffId());
     audit(id,institutionId,context,"LEGAL_ENTITY_CREATED","BILLING_LEGAL_ENTITY",Long.toString(id),
         Map.of("entityKind",kind,"legalName",name));
     return Map.of("id",id,"status","DRAFT","message","Draft saved. Activate only after the legal identity and tax details are reviewed.");
@@ -147,6 +153,24 @@ public class PlatformFinanceController {
     audit(legalEntityId,institutionId,context,"LEGAL_ENTITY_ACTIVATED","BILLING_LEGAL_ENTITY",
         Long.toString(legalEntityId),Map.of("legalName",String.valueOf(e.get("legal_name"))));
     return Map.of("id",legalEntityId,"status","ACTIVE");
+  }
+
+  @PutMapping("/legal-entities/{legalEntityId}/invoice-series")
+  @Transactional
+  public Map<String,Object> updateInvoiceSeries(
+      @PathVariable long legalEntityId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    String series=requiredText(body,"invoiceSeriesCode").toUpperCase(Locale.ROOT);
+    if(!series.matches("[A-Z0-9_-]{1,16}")) throw bad("Invoice series code must be 1–16 uppercase letters, digits, underscores or hyphens.");
+    Map<String,Object> entity=one("select id,institution_id,legal_name,invoice_series_code from billing_legal_entity where id=?",legalEntityId);
+    if(entity.isEmpty()) throw notFound("Legal entity not found.");
+    jdbc.update("update billing_legal_entity set invoice_series_code=?,updated_by_staff_id=?,updated_at=now() where id=?",
+        series,context.staffId(),legalEntityId);
+    Long institutionId=optionalLong(entity.get("institution_id"));
+    audit(legalEntityId,institutionId,context,"INVOICE_SERIES_UPDATED","BILLING_LEGAL_ENTITY",
+        Long.toString(legalEntityId),Map.of("oldSeries",String.valueOf(entity.get("invoice_series_code")),"newSeries",series));
+    return Map.of("id",legalEntityId,"invoiceSeriesCode",series);
   }
 
   @PostMapping("/legal-entities/{legalEntityId}/gst-registrations")
@@ -721,6 +745,39 @@ public class PlatformFinanceController {
       """);
   }
 
+  @GetMapping(value="/documents/{documentId}/download",produces=MediaType.APPLICATION_PDF_VALUE)
+  @Transactional
+  public ResponseEntity<byte[]> downloadFiscalDocument(
+      @PathVariable long documentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireOwner(context);
+    Map<String,Object> row=one("""
+      select d.document_number,a.storage_key,a.sha256,a.byte_length
+      from fiscal_document d join fiscal_document_asset a
+        on a.fiscal_document_id=d.id and a.asset_type='PDF'
+      where d.id=? order by a.created_at desc,a.id desc limit 1
+      """,documentId);
+    if(row.isEmpty()) throw notFound("The issued PDF for this fiscal document is not available.");
+    String key=String.valueOf(row.get("storage_key"));
+    byte[] bytes=fiscalDocumentStorage.readPdf(key);
+    if(bytes.length!=((Number)row.get("byte_length")).longValue()
+        || !FiscalDocumentStorage.sha256(bytes).equals(String.valueOf(row.get("sha256")))) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"The stored invoice did not pass its integrity check.");
+    }
+    jdbc.update("""
+      insert into fiscal_document_event(fiscal_document_id,event_type,idempotency_key,actor_staff_id,details)
+      values(?,'DOWNLOAD_AUDITED',?,?,?::jsonb)
+      """,documentId,"hrms-invoice-download:"+UUID.randomUUID(),context.staffId(),
+        json(Map.of("actorType","QE_PLATFORM_OWNER","actorStaffId",context.staffId())));
+    String safeName=String.valueOf(row.get("document_number")).replaceAll("[^A-Za-z0-9_-]","-");
+    return ResponseEntity.ok()
+      .contentType(MediaType.APPLICATION_PDF)
+      .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")
+      .header(HttpHeaders.CACHE_CONTROL,"private, no-store, max-age=0")
+      .header(HttpHeaders.X_CONTENT_TYPE_OPTIONS,"nosniff")
+      .body(bytes);
+  }
+
   @GetMapping("/documents/{documentId}")
   public Map<String,Object> documentDetail(@PathVariable long documentId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
@@ -746,7 +803,7 @@ public class PlatformFinanceController {
   private List<Map<String,Object>> legalEntityRows() {
     return jdbc.queryForList("""
       select e.id,e.entity_kind,e.institution_id,t.display_name as institution_name,e.legal_name,e.trade_name,
-        e.contact_email,e.contact_phone,e.registered_address::text as registered_address_json,e.status,e.created_at,
+        e.contact_email,e.contact_phone,e.invoice_series_code,e.registered_address::text as registered_address_json,e.status,e.created_at,
         (select count(*) from billing_gst_registration g where g.legal_entity_id=e.id and g.status='ACTIVE') as active_gst_registrations
       from billing_legal_entity e left join institution_tenant t on t.id=e.institution_id
       order by e.created_at desc,e.id desc
