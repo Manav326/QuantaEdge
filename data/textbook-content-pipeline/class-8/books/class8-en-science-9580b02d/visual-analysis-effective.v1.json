@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "db560bd06ea42bac603f234745bc58cbbf2652a2bb7fc8496ed0c5ff9c0b112b",
+  "raw_analysis_sha256": "19450835d667926948a2fb1a4e14dc6567208d83388718c674de435a640398b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:09:46Z",
+      "checkpointed_at": "2026-10-20T05:12:46Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:10:19Z",
+      "checkpointed_at": "2026-10-20T05:13:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:10:41Z",
+      "checkpointed_at": "2026-10-20T05:13:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51214,6 +51214,136 @@
         "context_relation": "The image illustrates an experiment to demonstrate the heating effect of electric current on nichrome wire.",
         "limitations": [
           "The image does not show the actual heating effect of the nichrome wire."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ff6e8b0aef09afca7266ef7",
+      "asset_sha256": "c1e3724ab7a0113a5778277c8a2442bb54873fc8e9473879b91cc4139b31c7e6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/c1e3724ab7a0113a5778277c8a2442bb54873fc8e9473879b91cc4139b31c7e6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with hands open, possibly explaining or demonstrating something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Electric current",
+          "Resistance",
+          "Opposition",
+          "Nichrome wire",
+          "Safety first"
+        ],
+        "context_relation": "The image is related to the educational content about electricity and its effects, specifically focusing on the heating effect of electric current through a nichrome wire.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or demonstration.",
+          "The text in the image is incomplete and does not provide a full explanation of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:14:20Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with hands open, possibly explaining or demonstrating something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Electric current",
+          "Resistance",
+          "Opposition",
+          "Nichrome wire",
+          "Safety first"
+        ],
+        "context_relation": "The image is related to the educational content about electricity and its effects, specifically focusing on the heating effect of electric current through a nichrome wire.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or demonstration.",
+          "The text in the image is incomplete and does not provide a full explanation of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "369a0c32842149fffc3ac415",
+      "asset_sha256": "8e3c4d980dccdf3681e5df444552d052ceb3d8f433f7a72081ab2088bd5dd1ac",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/8e3c4d980dccdf3681e5df444552d052ceb3d8f433f7a72081ab2088bd5dd1ac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a39188148654c34be0c9beb364cb234a6fe25b1301d9cc986fe744de2b273f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist wearing a lab coat, gloves, and safety goggles, giving a thumbs-up gesture.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "53",
+          "Safety First",
+          "Do not hold the nichrome wire.",
+          "Do not touch the wire for an extended period to avoid any injuries.",
+          "Repeat the last two steps to confirm the observation.",
+          "You may have observed that nichrome wire feels warm when current is passed through it.",
+          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Nichrome Wire",
+          "Safety",
+          "Electric Current",
+          "Opposition",
+          "Resistance"
+        ],
+        "context_relation": "The image is related to the educational content of Chapter 4 on Electricity, specifically discussing the heating effects of electric current through a nichrome wire.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the observations made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:15:05Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist wearing a lab coat, gloves, and safety goggles, giving a thumbs-up gesture.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
+          "53",
+          "Safety First",
+          "Do not hold the nichrome wire.",
+          "Do not touch the wire for an extended period to avoid any injuries.",
+          "Repeat the last two steps to confirm the observation.",
+          "You may have observed that nichrome wire feels warm when current is passed through it.",
+          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Nichrome Wire",
+          "Safety",
+          "Electric Current",
+          "Opposition",
+          "Resistance"
+        ],
+        "context_relation": "The image is related to the educational content of Chapter 4 on Electricity, specifically discussing the heating effects of electric current through a nichrome wire.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the observations made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
