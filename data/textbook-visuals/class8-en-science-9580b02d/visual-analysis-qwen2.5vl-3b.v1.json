@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1123,
+    "assets_selected": 1124,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1119,
-    "assets_remaining": 1172,
-    "assets_completion_percent": 48.8,
+    "assets_analyzed": 1120,
+    "assets_remaining": 1171,
+    "assets_completion_percent": 48.9,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1118,
+    "assets_skipped_from_checkpoint": 1119,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:19:01Z"
+      "checkpointed_at": "2026-10-20T15:23:15Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:19:47Z"
+      "checkpointed_at": "2026-10-20T15:24:00Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:20:16Z"
+      "checkpointed_at": "2026-10-20T15:24:30Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:21:06Z"
+      "checkpointed_at": "2026-10-20T15:25:19Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36522,6 +36522,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T15:22:15Z"
+    },
+    {
+      "asset_id": "68f45cd9cf3f3bb37f4cfeeb",
+      "asset_sha256": "2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large green octagonal object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not represent any complex concept or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:26:28Z"
     }
   ]
 }
