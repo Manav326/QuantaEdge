@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 973,
+    "assets_selected": 975,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 970,
-    "assets_remaining": 1321,
-    "assets_completion_percent": 42.3,
+    "assets_analyzed": 972,
+    "assets_remaining": 1319,
+    "assets_completion_percent": 42.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 968,
+    "assets_skipped_from_checkpoint": 970,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:40:12Z"
+      "checkpointed_at": "2026-10-20T02:43:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:40:46Z"
+      "checkpointed_at": "2026-10-20T02:43:42Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:41:08Z"
+      "checkpointed_at": "2026-10-20T02:44:04Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30939,6 +30939,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T02:42:23Z"
+    },
+    {
+      "asset_id": "68379a34d0e65ac914d9bd16",
+      "asset_sha256": "4aafd7e915d68debbcb183d0fb4d46eb67d3503ac52ec737e03aa13e0daeec4b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/4aafd7e915d68debbcb183d0fb4d46eb67d3503ac52ec737e03aa13e0daeec4b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a headband and a blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text.",
+          "The image is a cartoon illustration and may not accurately represent the person mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:44:41Z"
+    },
+    {
+      "asset_id": "cec578016eb04731cf7b9b4c",
+      "asset_sha256": "dfd70fe1bd202e2f6d9039a1187a779d7681f15282071b9f895d5580df3c4a20",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/dfd70fe1bd202e2f6d9039a1187a779d7681f15282071b9f895d5580df3c4a20.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a patient in a hospital bed with an IV stand next to it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "hospital bed",
+          "IV stand",
+          "patient",
+          "hospital",
+          "cartoon"
+        ],
+        "context_relation": "The image is related to the discovery of Penicillin, as it shows a patient in a hospital bed, which is a common setting for medical research and discoveries.",
+        "limitations": [
+          "The image does not provide specific details about the patient or the hospital setting.",
+          "The image does not show any medical equipment or tools related to the discovery of Penicillin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:45:21Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "07eaa6caf4396bb8b5115a9d313a80233726ef537fe5dee39128b98a6737a0b1",
+  "raw_analysis_sha256": "2abc9c4aaa07b5f9d3011c7a0db250e04b184f713aa268f2a863746b2d1b5f26",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:40:12Z",
+      "checkpointed_at": "2026-10-20T02:43:08Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:40:46Z",
+      "checkpointed_at": "2026-10-20T02:43:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:41:08Z",
+      "checkpointed_at": "2026-10-20T02:44:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -46122,6 +46122,102 @@
         "context_relation": "The image is not directly related to the text about Penicillin discovery.",
         "limitations": [
           "The image does not provide any information about Penicillin or its discovery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68379a34d0e65ac914d9bd16",
+      "asset_sha256": "4aafd7e915d68debbcb183d0fb4d46eb67d3503ac52ec737e03aa13e0daeec4b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/4aafd7e915d68debbcb183d0fb4d46eb67d3503ac52ec737e03aa13e0daeec4b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a headband and a blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text.",
+          "The image is a cartoon illustration and may not accurately represent the person mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:44:41Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a headband and a blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text.",
+          "The image is a cartoon illustration and may not accurately represent the person mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cec578016eb04731cf7b9b4c",
+      "asset_sha256": "dfd70fe1bd202e2f6d9039a1187a779d7681f15282071b9f895d5580df3c4a20",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/dfd70fe1bd202e2f6d9039a1187a779d7681f15282071b9f895d5580df3c4a20.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "48680b54d6d9186c0f7f15cd8a0422c12dd9b535e586a872f51867d204b93fb6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a patient in a hospital bed with an IV stand next to it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "hospital bed",
+          "IV stand",
+          "patient",
+          "hospital",
+          "cartoon"
+        ],
+        "context_relation": "The image is related to the discovery of Penicillin, as it shows a patient in a hospital bed, which is a common setting for medical research and discoveries.",
+        "limitations": [
+          "The image does not provide specific details about the patient or the hospital setting.",
+          "The image does not show any medical equipment or tools related to the discovery of Penicillin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:45:21Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a patient in a hospital bed with an IV stand next to it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "hospital bed",
+          "IV stand",
+          "patient",
+          "hospital",
+          "cartoon"
+        ],
+        "context_relation": "The image is related to the discovery of Penicillin, as it shows a patient in a hospital bed, which is a common setting for medical research and discoveries.",
+        "limitations": [
+          "The image does not provide specific details about the patient or the hospital setting.",
+          "The image does not show any medical equipment or tools related to the discovery of Penicillin."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
