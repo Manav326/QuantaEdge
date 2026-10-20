@@ -463,6 +463,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
+    // The list begins empty in memory; that alone is not proof of no enrolments.
+    var studentProgramsLoaded by remember { mutableStateOf(false) }
     var studentProgramsLoadFailed by remember { mutableStateOf(false) }
     var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var marketplaceOffers by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -826,6 +828,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
 
         studentPrograms = programs
+        studentProgramsLoaded = true
         if (currentCourseId > 0L && ownedPrograms.any { it.longAny("id", "course_id") == currentCourseId }) {
             preferences.edit().putLong("activeCourseId", currentCourseId).apply()
         } else {
@@ -915,7 +918,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
     }
 
-    fun studentHasNoCourses(): Boolean = !studentProgramsLoadFailed && !studentHasCourseAccess()
+    fun studentHasNoCourses(): Boolean = StudentNavigationContract.hasConfirmedNoEnrolledCourses(
+        courseListLoaded = studentProgramsLoaded,
+        courseListLoadFailed = studentProgramsLoadFailed,
+        hasCourseAccess = studentHasCourseAccess()
+    )
 
     suspend fun enterSignedInHome(user: JSONObject) {
         auth = user
@@ -3950,6 +3957,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         profile = studentProfile,
                         recommendation = recommendation,
                         programs = studentPrograms,
+                        programsLoaded = studentProgramsLoaded,
                         dashboardClasses = dashboardClasses,
                         dashboardClassesLoaded = dashboardClassesLoaded,
                         dashboardClassesFailed = dashboardClassesFailed,
@@ -3984,6 +3992,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.ALL_COURSES -> StudentAllCoursesScreen(
                         programs = studentPrograms,
+                        programsLoaded = studentProgramsLoaded,
                         programsLoadFailed = studentProgramsLoadFailed,
                         courseProgress = courseProgress,
                         activeCourseId = currentCourseId,
@@ -5015,6 +5024,7 @@ private fun StudentHomeScreen(
     userName: String,
     profile: JSONObject,
     recommendation: JSONObject,
+    programsLoaded: Boolean,
     language: String,
     busy: Boolean,
     onSubject: (String) -> Unit,
@@ -5057,7 +5067,22 @@ private fun StudentHomeScreen(
             (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
     } ?: programs.firstOrNull { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }
     val activeCourseIdResolved = activeCourse?.longAny("id", "course_id") ?: 0L
-    if (activeCourseIdResolved <= 0L && !programsLoadFailed &&
+    if (activeCourseIdResolved <= 0L && !programsLoaded && !programsLoadFailed) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Text(
+                localizedUiText("Loading your courses…"),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        return
+    }
+    if (programsLoaded && activeCourseIdResolved <= 0L && !programsLoadFailed &&
         programs.none { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused") }) {
         Column(
             modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),

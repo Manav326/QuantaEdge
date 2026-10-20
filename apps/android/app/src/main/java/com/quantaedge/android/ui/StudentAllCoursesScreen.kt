@@ -27,6 +27,7 @@ import org.json.JSONObject
 @Composable
 fun StudentAllCoursesScreen(
     programs: List<JSONObject>,
+    programsLoaded: Boolean,
     programsLoadFailed: Boolean,
     courseProgress: Map<Long, JSONObject>,
     activeCourseId: Long,
@@ -53,7 +54,18 @@ fun StudentAllCoursesScreen(
             )
         }
         if (owned.isEmpty()) {
-            if (programsLoadFailed) {
+            if (!programsLoaded && !programsLoadFailed) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    androidx.compose.material3.CircularProgressIndicator()
+                    Text(if (hi) "Courses लोड हो रही हैं…" else "Loading your courses…",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            } else if (programsLoadFailed) {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text(if (hi) "Courses लोड नहीं हो पाए" else "Courses couldn't be loaded",

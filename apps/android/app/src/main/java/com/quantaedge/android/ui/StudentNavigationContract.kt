@@ -5,6 +5,12 @@ package com.quantaedge.android.ui
  * Keep route grouping independent of rendering so new routes can be covered
  * without requiring a UI/Compose test harness.
  */
+internal fun hasConfirmedNoEnrolledCourses(
+    courseListLoaded: Boolean,
+    courseListLoadFailed: Boolean,
+    hasCourseAccess: Boolean
+): Boolean = courseListLoaded && !courseListLoadFailed && !hasCourseAccess
+
 internal enum class AppRoute {
     WELCOME, LOGIN, PARENT_SIGNUP, PARENT_RESET, ACCOUNT_SIGNUP, STUDENT_HOME, ALL_COURSES, MARKETPLACE, PARENT_HOME, PARENT_COURSES, PARENT_REPORT, PARENT_PROFILE, ACCOUNT_IDENTITY,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, PARENT_CHILD_ARCHIVED, ACCOUNT_LIFECYCLE, SUBJECT_LESSONS, LESSON, PRACTICE,

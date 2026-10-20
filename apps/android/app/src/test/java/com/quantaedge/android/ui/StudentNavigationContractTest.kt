@@ -34,6 +34,22 @@ class StudentNavigationContractTest {
     }
 
     @Test
+    fun noCourseEmptyStateWaitsForAConfirmedSuccessfulCourseLoad() {
+        assertFalse(hasConfirmedNoEnrolledCourses(
+            courseListLoaded = false, courseListLoadFailed = false, hasCourseAccess = false
+        ))
+        assertFalse(hasConfirmedNoEnrolledCourses(
+            courseListLoaded = true, courseListLoadFailed = true, hasCourseAccess = false
+        ))
+        assertFalse(hasConfirmedNoEnrolledCourses(
+            courseListLoaded = true, courseListLoadFailed = false, hasCourseAccess = true
+        ))
+        assertTrue(hasConfirmedNoEnrolledCourses(
+            courseListLoaded = true, courseListLoadFailed = false, hasCourseAccess = false
+        ))
+    }
+
+    @Test
     fun progressCertificatesAndLibraryRoutesKeepTheirOwnGroups() {
         listOf(AppRoute.PROGRESS, AppRoute.CERTIFICATES).forEach { route ->
             assertEquals("progress", StudentNavigationContract.studentGroupForRoute(route, "today"))

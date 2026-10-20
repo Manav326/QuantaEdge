@@ -68,3 +68,10 @@ Nested lesson/detail guards follow course scope; an in-progress assessment route
 Android's no-enrolment Certificates state also retains a **Scan certificate** action; the empty-state guard yields to scanner mode and scanned verification results, including invalid-code feedback, instead of hiding them behind the course prompt.
 
 The source contract now checks these web and Android states and the central English/Hinglish copy. In-course empty catalogues now also use the shared premium card with contextual copy: no published structured lessons, no scheduled live classes, no recordings, no published tests/results, no PDFs, and no issued certificates. The available action is contextual (refresh, review lessons, or open Tests & Results), not a generic enrolment prompt. The checks do not replace Android build/device tests or web browser E2E; keep QA status pending until the current main workflow is green and the main empty, error and enrolled-but-no-content cases are exercised.
+
+
+## Android no-course loading guard — 2026-10-20
+
+Reviewed Android student route fallbacks in Dashboard, My Courses, Marketplace, Structured Lessons and nested lessons, Practice, Diagnostic, Tests and Results, live/recorded classes, Progress, Certificates and Books/Chapters. The existing Android code uses the shared Compose `StudentEnrollmentEmptyState` component for the confirmed no-enrolment case. Marketplace already has a separate empty-offers fallback with Refresh and My Courses actions; load failures remain their own state. Certificate scanning/verification remains available without course enrolment.
+
+Tightened initial-load handling: an empty in-memory course list no longer qualifies as a confirmed no-enrolment state. The predicate now requires a successful catalogue fetch, no catalogue-load failure and no enrolled/paused course. Dashboard and My Courses show a loading state until the catalogue resolves. Added a JVM unit test for loaded, failed and entitled cases. Source/unit-test evidence is not device E2E certification.
