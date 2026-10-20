@@ -23,4 +23,10 @@
 .seriesInline{display:flex!important;align-items:center;gap:8px;font-size:10px!important;color:#667085!important;margin-top:5px}
 .seriesInline input{width:110px!important;max-width:42vw;min-height:31px!important;padding:6px 8px!important;border:1px solid #d9dfe8!important;border-radius:8px!important;background:#fff!important;color:#17233c!important;font-size:11px!important}
 .seriesInline input:focus{outline:none;border-color:#fb923c!important;box-shadow:0 0 0 3px #f9731617}
+.entityRow{display:grid;grid-template-columns:minmax(220px,1fr) auto;align-items:center}
+.einvoiceReview{grid-column:1/-1;display:grid;grid-template-columns:minmax(170px,.7fr) minmax(230px,1.4fr) auto;align-items:end;gap:9px;padding-top:10px;border-top:1px solid #edf0f4}
+.einvoiceReview label{display:grid;gap:5px;min-width:0;font-size:10px;font-weight:800;color:#475467}
+.einvoiceReview input,.einvoiceReview select{width:100%;min-width:0;min-height:34px;border:1px solid #d9dfe8;border-radius:8px;padding:7px 9px;background:#fff;color:#17233c;font-size:11px}
+.einvoiceReview .einvoiceHelp{grid-column:1/-1!important;font-size:10px;color:#85521b;line-height:1.6}
+@media(max-width:900px){.entityRow{grid-template-columns:1fr}.einvoiceReview{grid-template-columns:1fr}}
 @media(max-width:660px){.entityActions{justify-content:flex-start}.seriesInline{align-items:flex-start;flex-direction:column}}
