@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1257,
+    "assets_selected": 1258,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1253,
-    "assets_remaining": 825,
+    "assets_analyzed": 1254,
+    "assets_remaining": 824,
     "assets_completion_percent": 60.3,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1252,
+    "assets_skipped_from_checkpoint": 1253,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:36:56Z"
+      "checkpointed_at": "2026-10-20T11:42:48Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:38:00Z"
+      "checkpointed_at": "2026-10-20T11:43:50Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:38:55Z"
+      "checkpointed_at": "2026-10-20T11:44:43Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:39:51Z"
+      "checkpointed_at": "2026-10-20T11:45:32Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41795,6 +41795,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T11:41:33Z"
+    },
+    {
+      "asset_id": "df12a68d982caa6418fc6dcd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4e42123f8a89f1c55aecf06e59a1799e12c2f631543f5fdb1df10ff8f7c3d36d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a white text that reads 'Tumbler' and 'Fig. 6.2: Materials used to make a tumbler'.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Tumbler",
+          "Fig. 6.2: Materials used to make a tumbler"
+        ],
+        "concepts": [
+          "Materials used to make a tumbler",
+          "Fig. 6.2"
+        ],
+        "context_relation": "The text is related to the materials used to make a tumbler.",
+        "limitations": [
+          "The image does not show any materials or objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:45:56Z"
     }
   ]
 }

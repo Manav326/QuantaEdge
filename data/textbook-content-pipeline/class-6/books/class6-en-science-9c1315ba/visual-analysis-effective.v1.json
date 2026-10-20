@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ef65bd1d217881336233f1bf9f09597a1ac8763cfee326c3f6bd978c8f468490",
+  "raw_analysis_sha256": "63991e68a39f9082de7c80ffd9a26e13531820ff4ae5ce4b2c4341ce4af193a2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:36:56Z",
+      "checkpointed_at": "2026-10-20T11:42:48Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:38:00Z",
+      "checkpointed_at": "2026-10-20T11:43:50Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:38:55Z",
+      "checkpointed_at": "2026-10-20T11:44:43Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T11:39:51Z",
+      "checkpointed_at": "2026-10-20T11:45:32Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -63094,6 +63094,58 @@
           "The image does not provide specific details about the materials used to make a tumbler.",
           "The image does not show the process of making a tumbler.",
           "The image does not include any text or labels to identify the materials used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "df12a68d982caa6418fc6dcd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4e42123f8a89f1c55aecf06e59a1799e12c2f631543f5fdb1df10ff8f7c3d36d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a white text that reads 'Tumbler' and 'Fig. 6.2: Materials used to make a tumbler'.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Tumbler",
+          "Fig. 6.2: Materials used to make a tumbler"
+        ],
+        "concepts": [
+          "Materials used to make a tumbler",
+          "Fig. 6.2"
+        ],
+        "context_relation": "The text is related to the materials used to make a tumbler.",
+        "limitations": [
+          "The image does not show any materials or objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T11:45:56Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with a white text that reads 'Tumbler' and 'Fig. 6.2: Materials used to make a tumbler'.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Tumbler",
+          "Fig. 6.2: Materials used to make a tumbler"
+        ],
+        "concepts": [
+          "Materials used to make a tumbler",
+          "Fig. 6.2"
+        ],
+        "context_relation": "The text is related to the materials used to make a tumbler.",
+        "limitations": [
+          "The image does not show any materials or objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
