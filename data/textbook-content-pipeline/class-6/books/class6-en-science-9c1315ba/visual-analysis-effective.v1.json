@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a7f2d6954e35e1fc14225b8dcb6422d1f7b9834e97fcfe26443ea6769ded5d6a",
+  "raw_analysis_sha256": "fc814b6056211414ff7b3beb52ce88ba229bb497aba6782c2eb07d1ffc83122b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:22:00Z",
+      "checkpointed_at": "2026-10-20T04:30:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:22:59Z",
+      "checkpointed_at": "2026-10-20T04:31:52Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:23:52Z",
+      "checkpointed_at": "2026-10-20T04:32:43Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60578,6 +60578,110 @@
         "context_relation": "The image illustrates the different types of motion observed in a children's park, as listed in Table 5.4.",
         "limitations": [
           "The image does not provide specific examples or descriptions of each type of motion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "87d46cc14adba5054b777774",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dd50592391f4dded6552901d509d10248cd9876f76c35fd734ad1e3ee7719995",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Types of motion observed in a children's park, including linear, circular, and oscillatory motion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children's park",
+          "Table 5.4: Types of Motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "context_relation": "The image is a visual representation of the types of motion observed in a children's park, as described in the text.",
+        "limitations": [
+          "The image does not provide specific examples or descriptions of each type of motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:33:09Z",
+      "effective_analysis": {
+        "visual_summary": "Types of motion observed in a children's park, including linear, circular, and oscillatory motion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children's park",
+          "Table 5.4: Types of Motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "context_relation": "The image is a visual representation of the types of motion observed in a children's park, as described in the text.",
+        "limitations": [
+          "The image does not provide specific examples or descriptions of each type of motion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cfc3e786d2e65bf9ed1f684b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dd50592391f4dded6552901d509d10248cd9876f76c35fd734ad1e3ee7719995",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:33:23Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

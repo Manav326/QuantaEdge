@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1236,
-    "successful_visual_analyses": 1212,
-    "missing_visual_analyses": 842,
+    "raw_analysis_result_rows": 1238,
+    "successful_visual_analyses": 1214,
+    "missing_visual_analyses": 840,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 866,
+    "unresolved_count": 864,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46805,9 +46805,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Types of motion observed in a children's park, including linear, circular, and oscillatory motion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.18: Types of motion observed in a children's park",
+          "Table 5.4: Types of Motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "concepts": [
+          "Types of motion",
+          "Linear motion",
+          "Circular motion",
+          "Oscillatory motion"
+        ],
+        "context_relation": "The image is a visual representation of the types of motion observed in a children's park, as described in the text.",
+        "limitations": [
+          "The image does not provide specific examples or descriptions of each type of motion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46823,9 +46843,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
