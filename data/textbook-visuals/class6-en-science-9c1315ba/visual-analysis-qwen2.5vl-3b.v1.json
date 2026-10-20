@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1161,
+    "assets_selected": 1162,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1157,
-    "assets_remaining": 921,
-    "assets_completion_percent": 55.7,
+    "assets_analyzed": 1159,
+    "assets_remaining": 919,
+    "assets_completion_percent": 55.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1156,
+    "assets_skipped_from_checkpoint": 1157,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:29:30Z"
+      "checkpointed_at": "2026-10-20T01:36:47Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:30:27Z"
+      "checkpointed_at": "2026-10-20T01:37:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:31:15Z"
+      "checkpointed_at": "2026-10-20T01:38:33Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38214,6 +38214,112 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T01:35:38Z"
+    },
+    {
+      "asset_id": "feb9594a4d60e725488758f2",
+      "asset_sha256": "a1f7857a32cc32836c7f6f8f95b82ec373015785b3f14bcbb20c31bbbcf8ac48",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/a1f7857a32cc32836c7f6f8f95b82ec373015785b3f14bcbb20c31bbbcf8ac48.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A stainless steel ruler with measurements in both millimeters and inches.",
+        "visual_type": "photo",
+        "visible_text": [
+          "1/2",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "32",
+          "64",
+          "16",
+          "5",
+          "6",
+          "STAINLESS STEEL"
+        ],
+        "concepts": [
+          "Measurement",
+          "Stainless Steel",
+          "Ruler",
+          "Inches",
+          "Millimeters"
+        ],
+        "context_relation": "The image is a visual aid for the text explaining how to measure length when the ends of the scale are broken.",
+        "limitations": [
+          "The ruler is only shown in one position, not in use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:40:15Z"
+    },
+    {
+      "asset_id": "a13dd496d8033a4a38b81486",
+      "asset_sha256": "04adafe36c5bf48ff485ade0b676e39cd9f68adda85f94dd9be624268bcaf786",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/04adafe36c5bf48ff485ade0b676e39cd9f68adda85f94dd9be624268bcaf786.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red pencil is placed on a green ruler, showing the length of the pencil.",
+        "visual_type": "photo",
+        "visible_text": [
+          "0",
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15"
+        ],
+        "concepts": [
+          "measurement",
+          "ruler",
+          "pencil"
+        ],
+        "context_relation": "The image shows how to measure the length of an object using a ruler.",
+        "limitations": [
+          "The image does not provide a clear zero mark on the ruler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:41:57Z"
     }
   ]
 }
