@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1120,
-    "successful_visual_analyses": 1102,
-    "missing_visual_analyses": 1171,
+    "raw_analysis_result_rows": 1121,
+    "successful_visual_analyses": 1103,
+    "missing_visual_analyses": 1170,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1189,
+    "unresolved_count": 1188,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42164,9 +42164,23 @@
       "asset_path": "assets/72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, possibly symbolizing progress or achievement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "progress",
+          "achievement",
+          "climbing",
+          "stairs"
+        ],
+        "context_relation": "The image likely represents the idea of progressing or achieving something, possibly related to the text about lithium-ion batteries and their importance in modern devices.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

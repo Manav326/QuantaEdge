@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c7cfd7c4e797ff07224fee5729bae1ee03f7b9f1209cc33f17773616e96922bd",
+  "raw_analysis_sha256": "a3b981be8dbdcfcfce0de70acfac70fac5f7eac13083fcb366afaf779b03127b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:05:03Z",
+      "checkpointed_at": "2026-10-20T07:09:09Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:05:37Z",
+      "checkpointed_at": "2026-10-20T07:09:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:06:00Z",
+      "checkpointed_at": "2026-10-20T07:10:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T07:06:37Z",
+      "checkpointed_at": "2026-10-20T07:10:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53514,6 +53514,56 @@
         "context_relation": "The text describes the structure and usage of dry cells and rechargeable batteries, providing examples of their applications.",
         "limitations": [
           "The text does not provide specific details about the chemical composition or working principle of the dry cells or rechargeable batteries."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "836435ade0a93ceaba268b72",
+      "asset_sha256": "72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/72a71756f5d37d9ef469eb16fab6cdba8b8ca04f2e6802bf9a93070a8441e48b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "30a9718af722b445ea06280501b62ed4c094302ae837e7af82151b11532c1f06",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, possibly symbolizing progress or achievement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "progress",
+          "achievement",
+          "climbing",
+          "stairs"
+        ],
+        "context_relation": "The image likely represents the idea of progressing or achieving something, possibly related to the text about lithium-ion batteries and their importance in modern devices.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T07:10:48Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, possibly symbolizing progress or achievement.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "progress",
+          "achievement",
+          "climbing",
+          "stairs"
+        ],
+        "context_relation": "The image likely represents the idea of progressing or achieving something, possibly related to the text about lithium-ion batteries and their importance in modern devices.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
