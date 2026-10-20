@@ -60,12 +60,12 @@ Missing central credentials return a clear platform-configuration error. An unkn
 
 ## Stable Android CI APK signing and Google OAuth registration
 
-The main-branch workflow publishes the **quantaedge-android-apk** installable artifact only when the permanent production signing keystore is configured in GitHub Actions secrets. Every release APK is signed automatically by Gradle with that same keystore. Do not generate a new keystore per commit or run; the certificate SHA-1 stays the same as long as the signing key remains unchanged.
+The main-branch workflow publishes the **quantaedge-android-apk-stable** installable artifact only when the permanent production signing keystore is configured in GitHub Actions secrets. Every release APK is signed automatically by Gradle with that same keystore. Do not generate a new keystore per commit or run; the certificate SHA-1 stays the same as long as the signing key remains unchanged.
 
 For the directly installed CI APK:
 
 1. Configure one permanent Android signing keystore in GitHub Actions secrets. The APK workflow and Play Store bundle workflow already use the same four secrets: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD`. Do not generate a new key per build.
-2. Run `scripts/android-fetch-latest-apk.ps1` once with an available APK signed by that key, copy the printed SHA-1 into an **Android OAuth client** in the HRMS-managed Google Cloud project for package **com.quantaedge.android**. Register it once; ordinary code commits/builds must not require re-registration.
+2. After CI first publishes the stable-signed `quantaedge-android-apk-stable` artifact, run `scripts/android-fetch-latest-apk.ps1` once, copy the printed SHA-1 into an **Android OAuth client** in the HRMS-managed Google Cloud project for package **com.quantaedge.android**. Register it once; ordinary code commits/builds must not require re-registration.
 3. Keep `GOOGLE_WEB_CLIENT_ID` mapped to the **Web application OAuth client** used by `/api/v1/auth/google/config`. Do not replace the server audience with the Android client ID.
 
 Each APK still has to be signed as part of building it, but every build must reuse the same saved keystore. The SHA-1 belongs to that key and therefore stays constant; the routine CI workflow does not calculate or print it each run. Google Play may use a separate Play App Signing certificate if the app is distributed through Play.
