@@ -194,6 +194,9 @@ public class CourseRefundLedgerService {
           "The original captured order changed while the provider refund was being processed.");
       return refundView(refundId);
     }
+    // Record the provider-confirmed event before the compensating fiscal document and allocation events.
+    event(refundId,"PROVIDER_PROCESSED","course-refund:"+refundId+":provider:processed:"+providerRefundId,
+        actorStaffId,Map.of("providerRefundId",providerRefundId,"amountPaise",expectedAmount,"currency","INR"));
     long creditNoteId=issueCreditNote(refund,order,providerRefundId,actorStaffId);
     reverseInstitutionAllocations(refund,order,providerRefundId,creditNoteId,actorStaffId);
     jdbc.update("""
@@ -201,8 +204,6 @@ public class CourseRefundLedgerService {
         provider_response_snapshot=?::jsonb,credit_note_document_id=?,settled_at=now(),updated_at=now()
       where id=? and status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED')
       """,providerRefundId,snapshotJson,creditNoteId,refundId);
-    event(refundId,"PROVIDER_PROCESSED","course-refund:"+refundId+":provider:processed:"+providerRefundId,
-        actorStaffId,Map.of("providerRefundId",providerRefundId,"creditNoteDocumentId",creditNoteId));
     return refundView(refundId);
   }
 
@@ -294,8 +295,10 @@ public class CourseRefundLedgerService {
         d.recipient_snapshot::text as recipient_json,d.transaction_snapshot::text as transaction_json,
         d.tax_summary_snapshot::text as tax_summary_json,d.taxable_value_paise,d.tax_value_paise,
         d.total_value_paise,d.amount_paid_paise,d.template_version_id,
-        coalesce(tv.design_definition::text,'{}') as design_json
-      from fiscal_document d left join invoice_template_version tv on tv.id=d.template_version_id
+        coalesce(o.tax_calculation_snapshot->'invoiceTemplateDesignSnapshot',tv.design_definition,'{}'::jsonb)::text as design_json
+      from fiscal_document d
+      left join invoice_template_version tv on tv.id=d.template_version_id
+      left join course_payment_order o on o.fiscal_document_id=d.id
       where d.id=? for update of d
       """,originalDocId);
     if(original.isEmpty()||!("TAX_INVOICE".equals(string(original.get("document_type")))
