@@ -1,5 +1,6 @@
 package com.quantaedge.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -652,6 +653,12 @@ public class CourseMarketplaceController {
     }
 
     String receipt = "qe_" + UUID.randomUUID().toString().replace("-", "");
+    String buyerSnapshotJson;
+    try {
+      buyerSnapshotJson = objectMapper.writeValueAsString(buyerSnapshot);
+    } catch (JsonProcessingException serializationError) {
+      throw new IllegalStateException("Unable to serialize the purchaser snapshot.", serializationError);
+    }
     long localOrderId;
     try {
       localOrderId = jdbc.queryForObject("""
@@ -666,7 +673,7 @@ public class CourseMarketplaceController {
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
           courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
           amountPaise, currency, ((Number)offer.get("price_paise")).longValue(),
-          objectMapper.writeValueAsString(buyerSnapshot), receipt, idempotencyKey);
+          buyerSnapshotJson, receipt, idempotencyKey);
     } catch (DuplicateKeyException conflict) {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
