@@ -96,6 +96,10 @@ public class StructuredLessonController {
     if (RelationalStructuredLessonService.isDatabaseLessonId(artifactId)) {
       RelationalStructuredLessonService.LoadedLesson lesson = relationalLessons.requirePublishedLesson(
           artifactId, context.studentId(), institutionId, resolvedCourseId);
+      // Opening a relational structured lesson is a real lesson start. Reuse the canonical
+      // lesson-progress path and stamp it with the exact institution/course already validated
+      // by the adapter; do not create a second structured-only progress ledger.
+      learningController.start(lesson.lessonId(), resolvedCourseId, context, tenant);
       ObjectNode payload = lesson.payload().deepCopy();
       payload.put("requested_language", locale);
       return payload;
