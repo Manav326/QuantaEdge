@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "57bcfebcabf94698c2a7be3cd777643a8cfd0185f0f8677931f0bb48974f25c9",
+  "raw_analysis_sha256": "9cc0a9c14456d966320d9e2c444db8434507ad5fe8e1091a4af5d435114fadc8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:41:03Z",
+      "checkpointed_at": "2026-10-20T14:45:19Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:41:48Z",
+      "checkpointed_at": "2026-10-20T14:46:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:42:18Z",
+      "checkpointed_at": "2026-10-20T14:46:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:43:07Z",
+      "checkpointed_at": "2026-10-20T14:47:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -54292,6 +54292,60 @@
         "context_relation": "The image is related to the textbook content about electromagnets and circuits.",
         "limitations": [
           "The image does not provide specific details about the experiment or the reasons for the observed phenomena."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4d6c5161474932e9361f6479",
+      "asset_sha256": "8a728f4ae0682c29020579bfab35d27c70af072f21a39f0fd0fb10364c31c6c0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/8a728f4ae0682c29020579bfab35d27c70af072f21a39f0fd0fb10364c31c6c0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of an electromagnet with a switch and wires.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Switch",
+          "Wires"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Switch",
+          "Wires"
+        ],
+        "context_relation": "The image is related to the textbook's content about electromagnets and switches.",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:48:30Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of an electromagnet with a switch and wires.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Switch",
+          "Wires"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Switch",
+          "Wires"
+        ],
+        "context_relation": "The image is related to the textbook's content about electromagnets and switches.",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
