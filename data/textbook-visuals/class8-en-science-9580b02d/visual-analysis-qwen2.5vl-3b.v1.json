@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1099,
+    "assets_selected": 1100,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1095,
-    "assets_remaining": 1196,
+    "assets_analyzed": 1096,
+    "assets_remaining": 1195,
     "assets_completion_percent": 47.8,
     "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 1094,
+    "assets_skipped_from_checkpoint": 1095,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:57:10Z"
+      "checkpointed_at": "2026-10-20T07:00:06Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:57:45Z"
+      "checkpointed_at": "2026-10-20T07:00:41Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:58:07Z"
+      "checkpointed_at": "2026-10-20T07:01:03Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:58:44Z"
+      "checkpointed_at": "2026-10-20T07:01:40Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35601,6 +35601,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T06:59:20Z"
+    },
+    {
+      "asset_id": "ca8c70faf666689ad5fb751b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a dry cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Electrolyte paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte paste",
+          "Carbon rod",
+          "Metal cap"
+        ],
+        "context_relation": "The image is a visual representation of the components of a dry cell.",
+        "limitations": [
+          "The image does not provide information about the function or operation of the dry cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T07:01:51Z"
     }
   ]
 }

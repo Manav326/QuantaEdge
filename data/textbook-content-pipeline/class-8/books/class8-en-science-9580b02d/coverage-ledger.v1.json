@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1117,
-    "successful_visual_analyses": 1099,
-    "missing_visual_analyses": 1174,
+    "raw_analysis_result_rows": 1118,
+    "successful_visual_analyses": 1100,
+    "missing_visual_analyses": 1173,
     "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1192,
+    "unresolved_count": 1191,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42052,9 +42052,27 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a dry cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Metal cap",
+          "Carbon rod",
+          "Electrolyte paste"
+        ],
+        "concepts": [
+          "Dry cell",
+          "Electrolyte paste",
+          "Carbon rod",
+          "Metal cap"
+        ],
+        "context_relation": "The image is a visual representation of the components of a dry cell.",
+        "limitations": [
+          "The image does not provide information about the function or operation of the dry cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
