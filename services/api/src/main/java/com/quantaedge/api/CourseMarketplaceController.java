@@ -739,14 +739,11 @@ public class CourseMarketplaceController {
 
     if(financialSnapshot.discountOfferId()!=null) {
       try {
-        jdbc.update("""
-          insert into course_discount_redemption(
-            discount_offer_id,course_payment_order_id,purchaser_user_account_id,institution_offer_id,
-            code_snapshot,discount_amount_paise,status
-          ) values(?,?,?,?,?,?,'RESERVED')
-          """,financialSnapshot.discountOfferId(),localOrderId,purchaserAccountId,
-          ((Number)offer.get("institution_offer_id")).longValue(),financialSnapshot.discountCode(),
-          financialSnapshot.discountPaise());
+        courseOrderFinancialService.reserveDiscountRedemption(
+            financialSnapshot.discountOfferId(),localOrderId,purchaserAccountId,
+            ((Number)offer.get("institution_offer_id")).longValue(),
+            financialSnapshot.discountCode(),financialSnapshot.listedPricePaise(),
+            financialSnapshot.discountPaise());
       } catch(Exception reservationFailure) {
         jdbc.update("""
           update course_payment_order set status='FAILED',failure_code='DISCOUNT_SNAPSHOT_FAILED',updated_at=now()
