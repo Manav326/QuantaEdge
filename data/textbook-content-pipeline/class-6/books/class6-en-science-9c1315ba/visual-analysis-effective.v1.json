@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8d08260bc1cd12e088ea8e30275556034f15a2e704768312e61df027cf57741d",
+  "raw_analysis_sha256": "bf5819329e156071b4ab4e0ba318247f7be566eb06369b6c72bef7e197440805",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:15:34Z",
+      "checkpointed_at": "2026-10-20T20:19:53Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:16:28Z",
+      "checkpointed_at": "2026-10-20T20:20:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:17:40Z",
+      "checkpointed_at": "2026-10-20T20:21:56Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:18:23Z",
+      "checkpointed_at": "2026-10-20T20:22:38Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64362,6 +64362,84 @@
         "limitations": [
           "The table does not include specific examples or descriptions of the materials used for each object.",
           "The text suggests that the table is meant to be discussed with friends, but does not provide specific questions or prompts for discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "46e736ebb7b2a3de19ec5dc3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 126,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e6560a69b60e64613f0cfebd11a7d39a81619c19c912291707db01dd038403b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing various objects and their corresponding hardness or softness, along with the materials they are made of.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials they are made up of",
+          "Object           Hard/Soft          Material(s)",
+          "Brick                 Hard           Baked clay",
+          "Water bottle",
+          "Pillow",
+          "Tumbler",
+          "Table",
+          "Sweater",
+          "Any other",
+          "Compare your observations with the observations of your friends and discuss.",
+          "You have learnt that materials can have different hardness or softness."
+        ],
+        "concepts": [
+          "Hardness",
+          "Softness",
+          "Materials",
+          "Observations",
+          "Discussion"
+        ],
+        "context_relation": "The table is a part of an educational content about materials and their properties.",
+        "limitations": [
+          "The table does not provide specific examples or measurements for hardness or softness.",
+          "The table does not include a comparison of the objects with other materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T20:23:05Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing various objects and their corresponding hardness or softness, along with the materials they are made of.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.3: Hard or soft objects and the materials they are made up of",
+          "Object           Hard/Soft          Material(s)",
+          "Brick                 Hard           Baked clay",
+          "Water bottle",
+          "Pillow",
+          "Tumbler",
+          "Table",
+          "Sweater",
+          "Any other",
+          "Compare your observations with the observations of your friends and discuss.",
+          "You have learnt that materials can have different hardness or softness."
+        ],
+        "concepts": [
+          "Hardness",
+          "Softness",
+          "Materials",
+          "Observations",
+          "Discussion"
+        ],
+        "context_relation": "The table is a part of an educational content about materials and their properties.",
+        "limitations": [
+          "The table does not provide specific examples or measurements for hardness or softness.",
+          "The table does not include a comparison of the objects with other materials."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
