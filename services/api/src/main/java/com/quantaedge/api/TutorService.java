@@ -69,22 +69,26 @@ public class TutorService {
   }
 
   public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId,long institutionId){
+    throw missingCourseContext();
+  }
+
+  public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId,long institutionId,long courseId){
     context=authorization.requireStudent(context);
-    ensureSessionOwner(context.studentId(),sessionId,institutionId);
+    ensureSessionOwner(context.studentId(),sessionId,institutionId,courseId);
     Long sessionLessonId=jdbc.queryForObject(
-        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=?",
-        Long.class,sessionId,context.studentId(),institutionId);
-    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId);
+        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=? and course_id=?",
+        Long.class,sessionId,context.studentId(),institutionId,courseId);
+    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId,courseId);
     int rowLimit=Math.max(1,Math.min(limit==null?30:limit,100));
     String beforeFilter=beforeId==null?"":" and tm.id < ?";
     List<Object> args=new ArrayList<>();
-    args.add(sessionId);args.add(context.studentId());args.add(institutionId);
+    args.add(sessionId);args.add(context.studentId());args.add(institutionId);args.add(courseId);
     if(beforeId!=null)args.add(beforeId);
     args.add(rowLimit+1);
     List<Map<String,Object>> rows=jdbc.queryForList(
       "select tm.id,tm.role,tm.mode,tm.message,tm.created_at from tutor_message tm " +
       "join tutor_session ts on ts.id=tm.session_id " +
-      "where tm.session_id=? and ts.student_id=? and ts.institution_id=?"+beforeFilter+
+      "where tm.session_id=? and ts.student_id=? and ts.institution_id=? and ts.course_id=?"+beforeFilter+
       " order by tm.id desc limit ?",args.toArray());
     boolean hasMore=rows.size()>rowLimit;
     if(hasMore)rows.remove(rows.size()-1);
@@ -104,13 +108,17 @@ public class TutorService {
   }
 
   public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId,String language,long institutionId){
+    throw missingCourseContext();
+  }
+
+  public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId,String language,long institutionId,long courseId){
     long requestStartedNanos=System.nanoTime();
     context=authorization.requireStudent(context);
-    ensureSessionOwner(context.studentId(),sessionId,institutionId);
+    ensureSessionOwner(context.studentId(),sessionId,institutionId,courseId);
     Long sessionLessonId=jdbc.queryForObject(
-        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=?",
-        Long.class,sessionId,context.studentId(),institutionId);
-    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId);
+        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=? and course_id=?",
+        Long.class,sessionId,context.studentId(),institutionId,courseId);
+    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId,courseId);
     String tutorLanguage=normalizeTutorLanguage(language);
     String normalized=message==null?"":message.trim();
     if(normalized.isBlank())throw new IllegalArgumentException("Tutor message cannot be empty");
