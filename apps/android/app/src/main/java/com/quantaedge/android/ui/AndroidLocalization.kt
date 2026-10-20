@@ -85,6 +85,7 @@ private val uiPhrases = listOf(
     UiPhrase("empty_progress_title", "Your learning progress", "आपकी learning progress"),
     UiPhrase("empty_books_title", "Books and chapters", "Books और chapters"),
     UiPhrase("empty_explore_marketplace", "Explore Marketplace", "Marketplace खोलें"),
+    UiPhrase("empty_scan_certificate", "Scan certificate", "प्रमाणपत्र स्कैन करें"),
     UiPhrase("empty_leaderboard_title", "Leaderboard needs an enrolled course", "Leaderboard देखने के लिए enrolled course चाहिए"),
     UiPhrase("empty_leaderboard_message", "Enrol in a course to see rankings for published assessments.", "Published assessments की rankings देखने के लिए course में enrol करें।"),
     UiPhrase("empty_course_access_load_error", "Course information could not be confirmed. Open My Courses to refresh it.", "Course की जानकारी confirm नहीं हो सकी। इसे refresh करने के लिए My Courses खोलें।"),
