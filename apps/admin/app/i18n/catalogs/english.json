@@ -3647,5 +3647,6 @@
   "student.empty.diagnostic.title": "Start with an enrolled course",
   "student.empty.diagnostic.message": "Your diagnostic will appear here when an enrolled course is available.",
   "student.empty.lesson.title": "Choose a course to open this lesson",
-  "student.empty.lesson.message": "Enrol in a course first, then return to the lesson from your Learning catalogue."
+  "student.empty.lesson.message": "Enrol in a course first, then return to the lesson from your Learning catalogue.",
+  "people.navigation.financeBilling": "Finance & Billing"
 }

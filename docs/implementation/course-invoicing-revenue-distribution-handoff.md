@@ -243,3 +243,12 @@ Verification at this checkpoint:
 - Added follow-up migration V150 for the tax-profile version uniqueness and to make platform-level audit actions representable while requiring an actor on every financial audit record.
 - Still not complete: real Razorpay-to-invoice/allocation orchestration, invoice PDF renderer/private download service, student/parent Orders & Payments screens, coupon integration audit, actual payout integration, provider/e-invoice integration, and runtime/integration verification.
 - CI status for the exact commit must be checked after this update; earlier commits triggered independent runs and some were cancelled as newer main commits were pushed. Do not treat cancellation as a product test failure or as successful verification.
+
+
+### 2026-10-20 — CI-driven corrections
+
+- Run #4865 for commit `5a2176238e1061e68c8ce48fcd2e00ddfd8709e2` failed its central localization parity check because the canonical catalogs under `localization/catalogs` had not been updated before editing the People app copies. The canonical English/Hinglish catalogs and corresponding web/Admin/People generated copies are synchronized in this checkpoint.
+- Fixed the revenue-share policy submission race: recipients are now saved and awaited before the policy is submitted. The save-only button retains its own async flow.
+- Tightened GST registration consistency (the GSTIN prefix must match the supplied state code) and added explicit duplicate-recipient validation before insert, so duplicates return a controlled validation error rather than a database conflict.
+- Imported `CSSProperties` as a type. Re-check People Operations build, API verification and localization parity on the new exact commit.
+- Tax calculation and HRMS financial configuration remain foundations: actual Razorpay settlement-to-invoice/allocation, PDF issuance/download and payouts are not complete.

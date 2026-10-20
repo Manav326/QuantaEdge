@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -142,6 +144,7 @@ public class PlatformFinanceController {
     if(!gstin.matches("[0-9A-Z]{15}")) throw bad("Enter a GSTIN in the expected 15-character format.");
     String stateCode=requiredText(body,"stateCode");
     if(!stateCode.matches("[0-9]{2}")) throw bad("GST state code must contain two digits.");
+    if(!gstin.startsWith(stateCode)) throw bad("GSTIN prefix must match the registration state code.");
     java.time.LocalDate start=localDate(body,"effectiveFrom");
     java.time.LocalDate end=optionalLocalDate(body.get("effectiveUntil"));
     if(end!=null && end.isBefore(start)) throw bad("GST registration end date cannot precede its start date.");
@@ -349,9 +352,11 @@ public class PlatformFinanceController {
     if(!(body.get("recipients") instanceof List<?> raw)) throw bad("Recipients must be a list.");
     List<Map<String,Object>> normalized=new ArrayList<>();
     List<RevenueDistributionCalculator.Share> validation=new ArrayList<>();
+    Set<Long> recipientInstitutionIds=new HashSet<>();
     for(Object item:raw) {
       if(!(item instanceof Map<?,?> map)) throw bad("Each recipient must be an object.");
       long institutionId=requiredLong(map.get("institutionId"),"institutionId");
+      if(!recipientInstitutionIds.add(institutionId)) throw bad("An institution can appear only once in a revenue-share policy.");
       if(!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",institutionId)) {
         throw bad("Every revenue recipient must be an active institution.");
       }

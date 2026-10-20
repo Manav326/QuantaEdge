@@ -1,7 +1,7 @@
 'use client';
 
 import { apiFetch } from '../components/apiClient';
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
@@ -84,7 +84,7 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
   },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId]);
-  useEffect(()=>{void loadAll();},[]);
+  useEffect(()=>{void loadAll();},[loadAll]);
 
   const action=async(work:()=>Promise<unknown>,success:string)=>{
     setBusy(true);setError('');setNotice('');
@@ -158,15 +158,16 @@ export default function FinancePage(){
       setPolicyDetail(detail);setRecipients([]);
     },'Draft revenue-share policy created.');
   };
-  const saveRecipients=()=>{
-    if(!selectedPolicyId){setError('Create or select a draft policy first.');return;}
+  const recipientPayload=()=>{
+    if(!selectedPolicyId) throw new Error('Create or select a draft policy first.');
     const invalid=recipients.some(r=>!r.institutionId||(r.calculationType==='PERCENTAGE'?!(Number(r.percentage)>0&&Number(r.percentage)<=100):!(Number(r.flatRupees)>0)));
-    if(invalid){setError('Every recipient must have an institution and a valid positive percentage or flat amount.');return;}
-    void action(async()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({
-      recipients:recipients.map(r=>r.calculationType==='PERCENTAGE'
-        ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
-        :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)})
-    })}), 'Revenue-share recipients saved.');
+    if(invalid) throw new Error('Every recipient must have an institution and a valid positive percentage or flat amount.');
+    return recipients.map(r=>r.calculationType==='PERCENTAGE'
+      ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
+      :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
+  };
+  const saveRecipients=()=>{
+    void action(async()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
   };
   const createTemplate=()=>{
     void action(async()=>{
@@ -301,7 +302,7 @@ export default function FinancePage(){
               <button className={styles.removeRow} type="button" aria-label="Remove institution" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
             </div>)}</div>
             <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{institutionId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add institution</button>
-            <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await saveRecipients();await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
+            <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
           </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.institution_name}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of net pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
       </section>}
@@ -319,7 +320,7 @@ export default function FinancePage(){
           <p className={styles.note}>Published template versions are immutable for the purpose of historical invoices. Actual statutory documents also snapshot seller, recipient, tax, line items and totals separately.</p>
         </section>
         <section className={styles.previewPanel}><div className={styles.previewHeader}><div><span className={styles.eyebrow}>LIVE PREVIEW</span><h2>Invoice document</h2></div><span className={styles.samplePill}>SAMPLE · NOT ISSUED</span></div>
-          <div className={styles.paperWrap}><article className={[styles.paper,design.surfaceStyle==='CLEAN_WHITE'?styles.paperWhite:design.surfaceStyle==='SOFT_SLATE'?styles.paperSlate:styles.paperWarm].join(' ')} style={{'--invoice-primary':design.primaryColor,'--invoice-accent':design.accentColor} as React.CSSProperties}>
+          <div className={styles.paperWrap}><article className={[styles.paper,design.surfaceStyle==='CLEAN_WHITE'?styles.paperWhite:design.surfaceStyle==='SOFT_SLATE'?styles.paperSlate:styles.paperWarm].join(' ')} style={{'--invoice-primary':design.primaryColor,'--invoice-accent':design.accentColor} as CSSProperties}>
             <div className={styles.paperTopRule}/>
             <header className={styles.paperBrand}><div className={styles.mark} style={{background:design.primaryColor}}>{design.showLogo?'QE':'IN'}</div><div><strong>LEGAL SUPPLIER NAME</strong><span>Registered address · State and PIN</span><span>GSTIN: configured approved registration</span></div><div className={styles.documentTitle}><span>TAX INVOICE</span><b>QE-PREVIEW-0001</b><small>Preview date · sample only</small></div></header>
             <div className={styles.paperRule}/>
