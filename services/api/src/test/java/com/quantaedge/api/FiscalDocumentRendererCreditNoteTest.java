@@ -21,12 +21,19 @@ class FiscalDocumentRendererCreditNoteTest {
         "legalName","Test Purchaser",
         "billingAddress",Map.of("line1","2 Demo Road","city","Patna","state","Bihar","postalCode","800001"),
         "beneficiaryName","Test Learner");
-    Map<String,Object> transaction=Map.of(
-        "currency","INR","courseTitle","Class 6 Mathematics","orderReference","QE-ORDER-12",
-        "institutionName","QuantaEdge","paymentReference","rfnd_TEST123",
-        "originalDocumentNumber","QE/26-27/000001","listedPricePaise",11800L,
-        "discountValuePaise",0L,"taxableValuePaise",10000L,"taxValuePaise",1800L,
-        "amountPaidPaise",11800L,"paymentStatus","REFUND PROCESSED");
+    Map<String,Object> transaction=Map.ofEntries(
+        Map.entry("currency","INR"),
+        Map.entry("courseTitle","Class 6 Mathematics"),
+        Map.entry("orderReference","QE-ORDER-12"),
+        Map.entry("institutionName","QuantaEdge"),
+        Map.entry("paymentReference","rfnd_TEST123"),
+        Map.entry("originalDocumentNumber","QE/26-27/000001"),
+        Map.entry("listedPricePaise",11800L),
+        Map.entry("discountValuePaise",0L),
+        Map.entry("taxableValuePaise",10000L),
+        Map.entry("taxValuePaise",1800L),
+        Map.entry("amountPaidPaise",11800L),
+        Map.entry("paymentStatus","REFUND PROCESSED"));
     Map<String,Object> taxSummary=Map.of(
         "serviceClassificationCode","9983",
         "taxTreatment","TAXABLE",
