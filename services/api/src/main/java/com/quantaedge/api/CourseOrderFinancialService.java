@@ -1,0 +1,740 @@
+package com.quantaedge.api;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Server-side course-sale financial orchestration.
+ *
+ * It snapshots the approved seller/tax/share/template policies at checkout and, only after
+ * exact Razorpay capture has been verified, issues the fiscal document and posts share facts.
+ * This service intentionally does not decide statutory tax treatment or fetch a rate from
+ * client input. Those values must already be approved in HRMS.
+ */
+@Service
+public class CourseOrderFinancialService {
+  private static final ZoneId INDIA=ZoneId.of("Asia/Kolkata");
+  private static final TypeReference<Map<String,Object>> MAP_TYPE=new TypeReference<>() {};
+  private static final TypeReference<List<Map<String,Object>>> LIST_MAP_TYPE=new TypeReference<>() {};
+
+  private final JdbcTemplate jdbc;
+  private final ObjectMapper mapper;
+  private final FiscalDocumentRenderer renderer;
+  private final FiscalDocumentStorage storage;
+
+  public record CheckoutSnapshot(
+      long listedPricePaise,
+      long discountPaise,
+      long payablePaise,
+      long taxableValuePaise,
+      long outputTaxPaise,
+      long taxProfileId,
+      long legalEntityId,
+      Long gstRegistrationId,
+      long revenueSharePolicyId,
+      long templateVersionId,
+      Map<String,Object> taxCalculationSnapshot,
+      Map<String,Object> revenueSharePolicySnapshot,
+      Map<String,Object> discountSnapshot) {}
+
+  public record FinalizedSale(long fiscalDocumentId,String documentNumber,long allocatedToInstitutionsPaise,
+      long platformRemainderPaise) {}
+
+  public CourseOrderFinancialService(
+      JdbcTemplate jdbc,ObjectMapper mapper,FiscalDocumentRenderer renderer,FiscalDocumentStorage storage) {
+    this.jdbc=jdbc;
+    this.mapper=mapper;
+    this.renderer=renderer;
+    this.storage=storage;
+  }
+
+  /** Prepare an immutable order quote before calling Razorpay. Currently no coupon is applied. */
+  public CheckoutSnapshot prepareCheckout(
+      long offerId,long institutionId,long listedPricePaise,String currency,
+      String courseTitle,Map<String,Object> buyerSnapshot) {
+    if(listedPricePaise<=0) throw new IllegalArgumentException("A paid course needs a positive listed price.");
+    if(!"INR".equalsIgnoreCase(currency)) throw new IllegalArgumentException("Financial checkout currently supports INR only.");
+
+    LocalDate today=LocalDate.now(INDIA);
+    List<Map<String,Object>> profiles=jdbc.queryForList("""
+      select tp.id as tax_profile_id,tp.version as tax_profile_version,tp.legal_entity_id,
+        tp.service_classification_code,tp.tax_treatment,tp.gst_rate_basis_points,tp.cess_rate_basis_points,
+        tp.price_includes_tax,tp.place_of_supply_rule,tp.tax_components::text as tax_components_json,
+        le.entity_kind,le.institution_id as seller_institution_id,le.legal_name,le.trade_name,
+        le.registered_address::text as registered_address_json,le.country_code,le.invoice_series_code,
+        gr.id as gst_registration_id,gr.gstin as supplier_gstin,gr.state_code as supplier_state_code,
+        gr.registration_type as gst_registration_type,gr.registered_address::text as gst_address_json
+      from course_tax_profile tp
+      join institution_marketplace_offer o on o.id=tp.institution_offer_id and o.institution_id=?
+      join billing_legal_entity le on le.id=tp.legal_entity_id and le.status='ACTIVE'
+        and (le.entity_kind='PLATFORM' or le.institution_id=o.institution_id)
+      left join lateral (
+        select g.id,g.gstin,g.state_code,g.registration_type,g.registered_address
+        from billing_gst_registration g
+        where g.legal_entity_id=le.id and g.status='ACTIVE'
+          and g.effective_from<=? and (g.effective_until is null or g.effective_until>=?)
+        order by g.effective_from desc,g.id desc limit 1
+      ) gr on true
+      where tp.institution_offer_id=? and tp.status='APPROVED'
+        and tp.effective_from<=now() and (tp.effective_until is null or tp.effective_until>now())
+      order by tp.version desc,tp.id desc
+      limit 2
+      """,institutionId,today,today,offerId);
+    if(profiles.isEmpty()) throw new IllegalStateException(
+        "Checkout is not configured: HRMS must activate the legal seller and approve an effective tax profile for this course.");
+    if(profiles.size()>1) throw new IllegalStateException(
+        "Checkout is paused because more than one approved tax profile is effective for this course. HRMS must resolve the overlap.");
+    Map<String,Object> profile=profiles.getFirst();
+
+    String treatmentText=string(profile.get("tax_treatment"));
+    CourseTaxCalculator.Treatment treatment;
+    try { treatment=CourseTaxCalculator.Treatment.valueOf(treatmentText); }
+    catch(Exception ex) { throw new IllegalStateException("The approved tax profile uses an unsupported tax treatment."); }
+    int gstRate=integer(profile.get("gst_rate_basis_points"));
+    int cessRate=integer(profile.get("cess_rate_basis_points"));
+    boolean priceIncludesTax=Boolean.TRUE.equals(profile.get("price_includes_tax"));
+    Long gstRegistrationId=nullableLong(profile.get("gst_registration_id"));
+    String supplierStateCode=nullableString(profile.get("supplier_state_code"));
+    String supplierGstin=nullableString(profile.get("supplier_gstin"));
+    if(treatment==CourseTaxCalculator.Treatment.TAXABLE) {
+      if(gstRegistrationId==null||supplierGstin==null||supplierStateCode==null)
+        throw new IllegalStateException("Taxable checkout requires an active HRMS-verified GST registration for the legal seller.");
+      if(!supplierGstin.startsWith(supplierStateCode))
+        throw new IllegalStateException("The active seller GSTIN does not match the registration state. HRMS must correct it before sales.");
+    }
+
+    Map<String,Object> profileTaxComponents=parseObject(profile.get("tax_components_json"));
+    String placeRule=string(profile.get("place_of_supply_rule"));
+    String buyerStateCode=resolveStateCode(buyerSnapshot,profileTaxComponents,placeRule,supplierStateCode,treatment);
+    if(treatment==CourseTaxCalculator.Treatment.TAXABLE && buyerStateCode==null)
+      throw new IllegalStateException("A billing state is required to determine the GST place of supply. Update the purchaser's billing details before checkout.");
+    if("CA_APPROVED_CUSTOM".equals(placeRule)
+        && !validStateCode(profileTaxComponents.get("caApprovedPlaceOfSupplyStateCode"))) {
+      throw new IllegalStateException("This tax profile uses a custom place-of-supply rule that has not been configured for automated checkout.");
+    }
+
+    CourseTaxCalculator.Result quote=CourseTaxCalculator.quote(
+        listedPricePaise,0L,treatment,gstRate,cessRate,priceIncludesTax);
+    List<Map<String,Object>> taxComponents=taxComponents(
+        quote,profileTaxComponents,placeRule,supplierStateCode,buyerStateCode);
+    Map<String,Object> supplierSnapshot=new LinkedHashMap<>();
+    supplierSnapshot.put("legalEntityId",number(profile.get("legal_entity_id")));
+    supplierSnapshot.put("entityKind",string(profile.get("entity_kind")));
+    supplierSnapshot.put("legalName",string(profile.get("legal_name")));
+    supplierSnapshot.put("tradeName",nullableString(profile.get("trade_name")));
+    supplierSnapshot.put("registeredAddress",parseObject(profile.get("registered_address_json")));
+    supplierSnapshot.put("countryCode",string(profile.get("country_code")));
+    supplierSnapshot.put("invoiceSeriesCode",string(profile.get("invoice_series_code")));
+    supplierSnapshot.put("gstRegistrationId",gstRegistrationId);
+    supplierSnapshot.put("gstin",supplierGstin);
+    supplierSnapshot.put("stateCode",supplierStateCode);
+    supplierSnapshot.put("registrationType",nullableString(profile.get("gst_registration_type")));
+    if(profile.get("gst_address_json")!=null)
+      supplierSnapshot.put("gstRegisteredAddress",parseObject(profile.get("gst_address_json")));
+
+    List<Map<String,Object>> templateRows=jdbc.queryForList("""
+      select v.id as template_version_id,v.design_definition::text as design_definition_json,
+        t.scope,t.internal_name
+      from invoice_template t
+      join invoice_template_version v on v.template_id=t.id and v.status='PUBLISHED'
+      where (t.scope='SELLER' and t.legal_entity_id=?)
+         or (t.scope='PLATFORM' and t.legal_entity_id is null)
+      order by case when t.scope='SELLER' then 0 else 1 end,v.published_at desc,v.id desc
+      limit 1
+      """,number(profile.get("legal_entity_id")));
+    if(templateRows.isEmpty()) throw new IllegalStateException(
+        "Checkout is not ready: HRMS must publish an invoice template before this course can be sold.");
+    Map<String,Object> selectedTemplate=templateRows.getFirst();
+    long templateVersionId=number(selectedTemplate.get("template_version_id"));
+    Map<String,Object> designSnapshot=parseObject(selectedTemplate.get("design_definition_json"));
+
+    List<Map<String,Object>> policies=jdbc.queryForList("""
+      select id,policy_version,currency,effective_from,effective_until
+      from revenue_share_policy
+      where institution_offer_id=? and status='APPROVED'
+        and currency=? and effective_from<=now() and (effective_until is null or effective_until>now())
+      order by policy_version desc,id desc limit 2
+      """,offerId,currency.toUpperCase(Locale.ROOT));
+    if(policies.isEmpty()) throw new IllegalStateException(
+        "Checkout is not ready: HRMS must approve an effective revenue-share policy for this course.");
+    if(policies.size()>1) throw new IllegalStateException(
+        "Checkout is paused because multiple approved revenue-share policies are effective. HRMS must resolve the overlap.");
+    Map<String,Object> policy=policies.getFirst();
+    long policyId=number(policy.get("id"));
+    List<Map<String,Object>> recipientRows=jdbc.queryForList("""
+      select r.id as policy_recipient_id,r.institution_id,t.display_name as institution_name,t.status as institution_status,
+        r.calculation_type,r.percentage_basis_points,r.flat_amount_paise
+      from revenue_share_policy_recipient r
+      join institution_tenant t on t.id=r.institution_id
+      where r.policy_id=? order by t.display_name,r.id
+      """,policyId);
+    if(recipientRows.isEmpty()) throw new IllegalStateException("The approved revenue-share policy has no institution recipients.");
+    List<Map<String,Object>> recipientSnapshots=new ArrayList<>();
+    List<RevenueDistributionCalculator.Share> validationShares=new ArrayList<>();
+    long percentageBasisPoints=0;
+    for(Map<String,Object> recipient:recipientRows) {
+      if(!"ACTIVE".equals(string(recipient.get("institution_status"))))
+        throw new IllegalStateException("An approved share recipient is not an active institution. HRMS must update the policy.");
+      long institutionRecipientId=number(recipient.get("institution_id"));
+      String calculationType=string(recipient.get("calculation_type"));
+      Integer bps=nullableInteger(recipient.get("percentage_basis_points"));
+      Long flat=nullableLong(recipient.get("flat_amount_paise"));
+      Map<String,Object> snapshot=new LinkedHashMap<>();
+      snapshot.put("policyRecipientId",number(recipient.get("policy_recipient_id")));
+      snapshot.put("institutionId",institutionRecipientId);
+      snapshot.put("institutionName",string(recipient.get("institution_name")));
+      snapshot.put("calculationType",calculationType);
+      snapshot.put("percentageBasisPoints",bps);
+      snapshot.put("flatAmountPaise",flat);
+      recipientSnapshots.add(snapshot);
+      if("PERCENTAGE".equals(calculationType)) {
+        if(bps==null||bps<1||bps>10_000) throw new IllegalStateException("Approved revenue-share percentage is invalid.");
+        percentageBasisPoints=Math.addExact(percentageBasisPoints,bps);
+        validationShares.add(RevenueDistributionCalculator.Share.percentage(institutionRecipientId,bps));
+      } else if("FLAT".equals(calculationType)) {
+        if(flat==null||flat<=0) throw new IllegalStateException("Approved flat revenue share is invalid.");
+        validationShares.add(RevenueDistributionCalculator.Share.flat(institutionRecipientId,flat));
+      } else throw new IllegalStateException("Approved revenue-share calculation type is unsupported.");
+    }
+    if(percentageBasisPoints>10_000)
+      throw new IllegalStateException("The approved percentage shares exceed 100% of the distributable pool.");
+
+    long pool=quote.customerPayablePaise()-quote.outputTaxPaise();
+    long estimatedAllocated=0;
+    for(RevenueDistributionCalculator.Share share:validationShares) {
+      long amount=share.calculationType()==RevenueDistributionCalculator.CalculationType.PERCENTAGE
+          ?percentageOf(pool,share.percentageBasisPoints())
+          :share.flatAmountPaise();
+      estimatedAllocated=Math.addExact(estimatedAllocated,amount);
+    }
+    if(estimatedAllocated>pool)
+      throw new IllegalStateException("The approved flat and percentage shares exceed the after-tax pool for this course price. HRMS must adjust the policy.");
+
+    Map<String,Object> taxSnapshot=new LinkedHashMap<>();
+    taxSnapshot.put("snapshotVersion",1);
+    taxSnapshot.put("taxProfileId",number(profile.get("tax_profile_id")));
+    taxSnapshot.put("taxProfileVersion",number(profile.get("tax_profile_version")));
+    taxSnapshot.put("taxTreatment",treatment.name());
+    taxSnapshot.put("serviceClassificationCode",nullableString(profile.get("service_classification_code")));
+    taxSnapshot.put("gstRateBasisPoints",gstRate);
+    taxSnapshot.put("cessRateBasisPoints",cessRate);
+    taxSnapshot.put("priceIncludesTax",priceIncludesTax);
+    taxSnapshot.put("placeOfSupplyRule",placeRule);
+    taxSnapshot.put("supplierStateCode",supplierStateCode);
+    taxSnapshot.put("buyerStateCode",buyerStateCode);
+    taxSnapshot.put("listedPricePaise",quote.listedPricePaise());
+    taxSnapshot.put("discountPaise",quote.discountPaise());
+    taxSnapshot.put("discountedPricePaise",quote.discountedPricePaise());
+    taxSnapshot.put("taxableValuePaise",quote.taxableValuePaise());
+    taxSnapshot.put("outputTaxPaise",quote.outputTaxPaise());
+    taxSnapshot.put("customerPayablePaise",quote.customerPayablePaise());
+    taxSnapshot.put("components",taxComponents);
+    taxSnapshot.put("supplierSnapshot",supplierSnapshot);
+    taxSnapshot.put("invoiceTemplateVersionId",templateVersionId);
+    taxSnapshot.put("invoiceTemplateDesignSnapshot",designSnapshot);
+    taxSnapshot.put("invoiceTemplateScope",string(selectedTemplate.get("scope")));
+    taxSnapshot.put("invoiceTemplateName",string(selectedTemplate.get("internal_name")));
+
+    Map<String,Object> shareSnapshot=new LinkedHashMap<>();
+    shareSnapshot.put("snapshotVersion",1);
+    shareSnapshot.put("policyId",policyId);
+    shareSnapshot.put("policyVersion",number(policy.get("policy_version")));
+    shareSnapshot.put("currency",string(policy.get("currency")));
+    shareSnapshot.put("effectiveFrom",String.valueOf(policy.get("effective_from")));
+    shareSnapshot.put("effectiveUntil",policy.get("effective_until")==null?null:String.valueOf(policy.get("effective_until")));
+    shareSnapshot.put("recipients",recipientSnapshots);
+
+    return new CheckoutSnapshot(
+        listedPricePaise,0L,quote.customerPayablePaise(),quote.taxableValuePaise(),quote.outputTaxPaise(),
+        number(profile.get("tax_profile_id")),number(profile.get("legal_entity_id")),gstRegistrationId,
+        policyId,templateVersionId,taxSnapshot,shareSnapshot,Map.of("discountPaise",0,"discountType","NONE"));
+  }
+
+  /**
+   * Call inside the payment-verification database transaction only after the provider confirms
+   * the exact order/payment/amount/currency is captured.
+   */
+  @Transactional
+  public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,long capturedAmountPaise) {
+    List<Map<String,Object>> orders=jdbc.queryForList("""
+      select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,institution_id,
+        institution_offer_id,offer_price_paise,currency,listed_price_paise,discount_amount_paise,
+        tax_profile_id,taxable_value_paise,output_tax_paise,tax_calculation_snapshot::text as tax_snapshot_json,
+        buyer_snapshot::text as buyer_snapshot_json,revenue_share_policy_id,
+        revenue_share_policy_snapshot::text as share_snapshot_json,fiscal_document_id
+      from course_payment_order where id=? for update
+      """,localOrderId);
+    if(orders.isEmpty()) throw new IllegalStateException("The captured course order could not be found.");
+    Map<String,Object> order=orders.getFirst();
+    long payable=number(order.get("offer_price_paise"));
+    if(capturedAmountPaise!=payable)
+      throw new IllegalArgumentException("The captured payment does not equal this course order's server-calculated payable amount.");
+    Map<String,Object> taxSnapshot=parseObject(order.get("tax_snapshot_json"));
+    Map<String,Object> shareSnapshot=parseObject(order.get("share_snapshot_json"));
+    Map<String,Object> buyerSnapshot=parseObject(order.get("buyer_snapshot_json"));
+    if(taxSnapshot.isEmpty()||shareSnapshot.isEmpty())
+      throw new IllegalStateException("This order has no locked tax/share policy snapshot. Do not issue a document against incomplete financial facts.");
+    if(number(taxSnapshot.get("customerPayablePaise"))!=capturedAmountPaise
+        ||number(taxSnapshot.get("taxProfileId"))!=number(order.get("tax_profile_id"))
+        ||number(shareSnapshot.get("policyId"))!=number(order.get("revenue_share_policy_id"))) {
+      throw new IllegalStateException("Course order financial snapshots do not match the captured order.");
+    }
+
+    long listed=number(order.get("listed_price_paise"));
+    long discount=number(order.get("discount_amount_paise"));
+    CourseTaxCalculator.Treatment treatment=CourseTaxCalculator.Treatment.valueOf(string(taxSnapshot.get("taxTreatment")));
+    int gstRate=integer(taxSnapshot.get("gstRateBasisPoints"));
+    int cessRate=integer(taxSnapshot.get("cessRateBasisPoints"));
+    boolean includesTax=Boolean.TRUE.equals(taxSnapshot.get("priceIncludesTax"));
+    CourseTaxCalculator.Result verified=CourseTaxCalculator.calculate(
+        listed,discount,treatment,gstRate,cessRate,includesTax,capturedAmountPaise);
+    long storedTax=number(order.get("output_tax_paise"));
+    long storedTaxable=number(order.get("taxable_value_paise"));
+    if(verified.outputTaxPaise()!=storedTax||verified.taxableValuePaise()!=storedTaxable
+        ||number(taxSnapshot.get("outputTaxPaise"))!=storedTax
+        ||number(taxSnapshot.get("taxableValuePaise"))!=storedTaxable)
+      throw new IllegalStateException("Captured payment does not reconcile to the stored, approved tax calculation.");
+
+    List<Map<String,Object>> recipientSnapshots=asMapList(shareSnapshot.get("recipients"));
+    List<RevenueDistributionCalculator.Share> shares=new ArrayList<>();
+    Map<Long,Map<String,Object>> recipientByInstitution=new LinkedHashMap<>();
+    for(Map<String,Object> recipient:recipientSnapshots) {
+      long institutionId=number(recipient.get("institutionId"));
+      String type=string(recipient.get("calculationType"));
+      RevenueDistributionCalculator.Share share;
+      if("PERCENTAGE".equals(type))
+        share=RevenueDistributionCalculator.Share.percentage(institutionId,integer(recipient.get("percentageBasisPoints")));
+      else if("FLAT".equals(type))
+        share=RevenueDistributionCalculator.Share.flat(institutionId,number(recipient.get("flatAmountPaise")));
+      else throw new IllegalStateException("Stored revenue-share snapshot contains an unsupported share type.");
+      shares.add(share);
+      if(recipientByInstitution.put(institutionId,recipient)!=null)
+        throw new IllegalStateException("Stored revenue-share snapshot contains a duplicate institution.");
+    }
+    RevenueDistributionCalculator.Result distribution=RevenueDistributionCalculator.calculate(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+        capturedAmountPaise,storedTax,shares);
+
+    String currency=string(order.get("currency")).toUpperCase(Locale.ROOT);
+    long orderId=number(order.get("id"));
+    long policyId=number(shareSnapshot.get("policyId"));
+    for(RevenueDistributionCalculator.Allocation allocation:distribution.allocations()) {
+      Map<String,Object> recipient=recipientByInstitution.get(allocation.institutionId());
+      if(recipient==null) throw new IllegalStateException("The revenue allocation recipient snapshot is incomplete.");
+      long recipientRowId=number(recipient.get("policyRecipientId"));
+      String idem="course-order:"+orderId+":revenue-share:"+allocation.institutionId()+":v1";
+      List<Map<String,Object>> existing=jdbc.queryForList("""
+        select id,policy_id,policy_recipient_id,allocated_amount_paise,actual_paid_paise,output_tax_paise
+        from revenue_share_allocation where course_payment_order_id=? and institution_id=?
+        """,orderId,allocation.institutionId());
+      long allocationId;
+      if(!existing.isEmpty()) {
+        Map<String,Object> row=existing.getFirst();
+        if(number(row.get("policy_id"))!=policyId
+            ||number(row.get("policy_recipient_id"))!=recipientRowId
+            ||number(row.get("allocated_amount_paise"))!=allocation.amountPaise()
+            ||number(row.get("actual_paid_paise"))!=capturedAmountPaise
+            ||number(row.get("output_tax_paise"))!=storedTax)
+          throw new IllegalStateException("An existing institutional allocation conflicts with this captured sale.");
+        allocationId=number(row.get("id"));
+      } else {
+        Map<String,Object> calc=new LinkedHashMap<>();
+        calc.put("policyId",policyId);
+        calc.put("policyVersion",shareSnapshot.get("policyVersion"));
+        calc.put("institutionId",allocation.institutionId());
+        calc.put("calculationType",allocation.calculationType().name());
+        calc.put("percentageBasisPoints",recipient.get("percentageBasisPoints"));
+        calc.put("flatAmountPaise",recipient.get("flatAmountPaise"));
+        calc.put("actualPaidPaise",capturedAmountPaise);
+        calc.put("outputTaxPaise",storedTax);
+        calc.put("distributablePoolPaise",distribution.distributablePoolPaise());
+        calc.put("allocatedAmountPaise",allocation.amountPaise());
+        calc.put("platformRemainderPaise",distribution.platformRemainderPaise());
+        allocationId=jdbc.queryForObject("""
+          insert into revenue_share_allocation(
+            course_payment_order_id,policy_id,policy_recipient_id,institution_id,currency,
+            actual_paid_paise,output_tax_paise,distributable_pool_paise,total_institution_allocated_paise,
+            allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key
+          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?) returning id
+          """,Long.class,orderId,policyId,recipientRowId,allocation.institutionId(),currency,
+            capturedAmountPaise,storedTax,distribution.distributablePoolPaise(),
+            distribution.totalInstitutionAllocatedPaise(),allocation.amountPaise(),
+            distribution.platformRemainderPaise(),json(calc),idem);
+      }
+      jdbc.update("""
+        insert into revenue_share_allocation_event(
+          allocation_id,event_type,amount_paise,currency,idempotency_key,details
+        ) values(?,'EARNED',?,?,?,?::jsonb)
+        on conflict(idempotency_key) do nothing
+        """,allocationId,allocation.amountPaise(),currency,idem+":earned",
+          json(Map.of("coursePaymentOrderId",orderId,"paymentId",paymentId,"policyId",policyId)));
+    }
+
+    long fiscalDocumentId=number(order.get("fiscal_document_id"));
+    String documentNumber="";
+    if(fiscalDocumentId>0) {
+      Map<String,Object> existing=one("select id,document_number from fiscal_document where id=?",fiscalDocumentId);
+      if(existing.isEmpty()) throw new IllegalStateException("The order points to a missing fiscal document.");
+      fiscalDocumentId=number(existing.get("id"));documentNumber=string(existing.get("document_number"));
+    } else {
+      FinalizedSale invoice=createFiscalDocument(order,paymentId,capturedAmountPaise,
+          verified,distribution,taxSnapshot,buyerSnapshot,currency,orderId);
+      fiscalDocumentId=invoice.fiscalDocumentId();documentNumber=invoice.documentNumber();
+    }
+    return new FinalizedSale(fiscalDocumentId,documentNumber,
+        distribution.totalInstitutionAllocatedPaise(),distribution.platformRemainderPaise());
+  }
+
+  private FinalizedSale createFiscalDocument(
+      Map<String,Object> order,String paymentId,long captured,
+      CourseTaxCalculator.Result taxResult,RevenueDistributionCalculator.Result distribution,
+      Map<String,Object> taxSnapshot,Map<String,Object> buyerSnapshot,String currency,long orderId) {
+    Map<String,Object> supplier=asMap(taxSnapshot.get("supplierSnapshot"));
+    Map<String,Object> taxSummary=new LinkedHashMap<>();
+    taxSummary.put("taxTreatment",taxSnapshot.get("taxTreatment"));
+    taxSummary.put("serviceClassificationCode",taxSnapshot.get("serviceClassificationCode"));
+    taxSummary.put("gstRateBasisPoints",taxSnapshot.get("gstRateBasisPoints"));
+    taxSummary.put("cessRateBasisPoints",taxSnapshot.get("cessRateBasisPoints"));
+    taxSummary.put("components",asMapList(taxSnapshot.get("components")));
+    taxSummary.put("placeOfSupplyRule",taxSnapshot.get("placeOfSupplyRule"));
+    taxSummary.put("buyerStateCode",taxSnapshot.get("buyerStateCode"));
+    taxSummary.put("supplierStateCode",taxSnapshot.get("supplierStateCode"));
+
+    long legalEntityId=number(supplier.get("legalEntityId"));
+    Long gstRegistrationId=nullableLong(supplier.get("gstRegistrationId"));
+    if(legalEntityId<=0) throw new IllegalStateException("The locked supplier snapshot has no legal entity.");
+    String treatment=string(taxSnapshot.get("taxTreatment"));
+    String documentType="TAXABLE".equals(treatment)?"TAX_INVOICE":"BILL_OF_SUPPLY";
+    OffsetDateTime now=OffsetDateTime.now(ZoneOffset.UTC);
+    LocalDate issueDate=LocalDate.now(INDIA);
+    String fy=financialYear(issueDate);
+    String series=value(supplier,"invoiceSeriesCode","QE").toUpperCase(Locale.ROOT);
+    if(!series.matches("[A-Z0-9_-]{1,16}")) throw new IllegalStateException("The seller invoice series code is invalid.");
+
+    jdbc.update("""
+      insert into fiscal_document_sequence(
+        legal_entity_id,document_type,financial_year,series_code,next_sequence_no
+      ) values(?,?,?,?,1)
+      on conflict(legal_entity_id,document_type,financial_year,series_code) do nothing
+      """,legalEntityId,documentType,fy,series);
+    Long next=jdbc.queryForObject("""
+      select next_sequence_no from fiscal_document_sequence
+      where legal_entity_id=? and document_type=? and financial_year=? and series_code=?
+      for update
+      """,Long.class,legalEntityId,documentType,fy,series);
+    if(next==null||next<=0) throw new IllegalStateException("The invoice numbering sequence is unavailable.");
+    jdbc.update("""
+      update fiscal_document_sequence set next_sequence_no=?,updated_at=now()
+      where legal_entity_id=? and document_type=? and financial_year=? and series_code=?
+      """,Math.addExact(next,1),legalEntityId,documentType,fy,series);
+    String docNumber=series+"/"+fy+"/"+String.format(Locale.ROOT,"%06d",next);
+    String idempotency="course-order:"+orderId+":fiscal-document:v1";
+
+    Long templateId=nullableLong(taxSnapshot.get("invoiceTemplateVersionId"));
+    Map<String,Object> transaction=new LinkedHashMap<>();
+    transaction.put("coursePaymentOrderId",orderId);
+    transaction.put("orderReference","QE-ORDER-"+orderId);
+    transaction.put("courseId",number(order.get("course_id")));
+    transaction.put("courseTitle",courseTitle(number(order.get("course_id"))));
+    transaction.put("institutionId",number(order.get("institution_id")));
+    transaction.put("institutionName",institutionName(number(order.get("institution_id"))));
+    transaction.put("purchaserUserId",order.get("purchaser_user_id"));
+    transaction.put("beneficiaryStudentId",number(order.get("student_id")));
+    transaction.put("paymentReference",paymentId);
+    transaction.put("listedPricePaise",taxResult.listedPricePaise());
+    transaction.put("discountValuePaise",taxResult.discountPaise());
+    transaction.put("taxableValuePaise",taxResult.taxableValuePaise());
+    transaction.put("taxValuePaise",taxResult.outputTaxPaise());
+    transaction.put("amountPaidPaise",captured);
+    transaction.put("currency",currency);
+
+    List<Map<String,Object>> lineRows=new ArrayList<>();
+    Map<String,Object> line=new LinkedHashMap<>();
+    line.put("description",courseTitle(number(order.get("course_id"))));
+    line.put("serviceClassificationCode",taxSnapshot.get("serviceClassificationCode"));
+    line.put("quantity",BigDecimal.ONE);
+    line.put("unitPricePaise",taxResult.listedPricePaise());
+    line.put("discountValuePaise",taxResult.discountPaise());
+    line.put("taxableValuePaise",taxResult.taxableValuePaise());
+    line.put("taxComponentsSnapshot",taxSummary);
+    line.put("taxValuePaise",taxResult.outputTaxPaise());
+    line.put("lineTotalPaise",captured);
+    lineRows.add(line);
+
+    Map<String,Object> transactionJson= new LinkedHashMap<>(transaction);
+    transactionJson.put("taxProfileId",taxSnapshot.get("taxProfileId"));
+    transactionJson.put("taxProfileVersion",taxSnapshot.get("taxProfileVersion"));
+    transactionJson.put("revenueSharePolicyId",number(order.get("revenue_share_policy_id")));
+    transactionJson.put("revenueSharePolicyVersion",taxSnapshot.get("revenueSharePolicyVersion"));
+
+    Long docId=jdbc.queryForObject("""
+      insert into fiscal_document(
+        legal_entity_id,gst_registration_id,document_type,financial_year,series_code,sequence_no,document_number,
+        source_type,source_record_key,idempotency_key,currency,supplier_snapshot,recipient_snapshot,
+        transaction_snapshot,tax_summary_snapshot,taxable_value_paise,discount_value_paise,tax_value_paise,
+        total_value_paise,amount_paid_paise,template_version_id
+      ) values(?,?,?,?,?,?,?,'COURSE_ORDER',?,?,?,?,?,?,?,?,?,?,?,?,?) returning id
+      """,Long.class,legalEntityId,gstRegistrationId,documentType,fy,series,next,docNumber,
+        Long.toString(orderId),idempotency,currency,json(supplier),json(buyerSnapshot),json(transactionJson),
+        json(taxSummary),taxResult.taxableValuePaise(),taxResult.discountPaise(),taxResult.outputTaxPaise(),
+        captured,captured,templateId);
+
+    jdbc.update("""
+      insert into fiscal_document_line(
+        fiscal_document_id,line_no,product_reference,description_snapshot,service_classification_code,
+        quantity,unit_price_paise,discount_value_paise,taxable_value_paise,tax_components_snapshot,
+        tax_value_paise,line_total_paise
+      ) values(?,1,?,?,?,?,?,?,?,?::jsonb,?,?)
+      """,docId,"COURSE-"+number(order.get("course_id")),line.get("description"),
+        line.get("serviceClassificationCode"),line.get("quantity"),taxResult.listedPricePaise(),
+        taxResult.discountPaise(),taxResult.taxableValuePaise(),json(taxSummary),
+        taxResult.outputTaxPaise(),captured);
+
+    Map<String,Object> templateDesign=asMap(taxSnapshot.get("invoiceTemplateDesignSnapshot"));
+    FiscalDocumentRenderer.RenderedFiscalDocument rendered=renderer.render(
+        documentType,docNumber,issueDate,supplier,buyerSnapshot,transaction,taxSummary,lineRows,templateDesign);
+    FiscalDocumentStorage.StoredDocument asset=storage.storePdf(rendered.pdf());
+    jdbc.update("""
+      insert into fiscal_document_asset(
+        fiscal_document_id,asset_type,storage_key,mime_type,sha256,byte_length
+      ) values(?,'PDF',?,'application/pdf',?,?)
+      """,docId,asset.storageKey(),asset.sha256(),asset.sizeBytes());
+    jdbc.update("""
+      insert into fiscal_document_event(fiscal_document_id,event_type,idempotency_key,details)
+      values(?,'ISSUED',?,?::jsonb)
+      on conflict(idempotency_key) do nothing
+      """,docId,idempotency+":issued",json(Map.of("coursePaymentOrderId",orderId,"paymentReference",paymentId)));
+    jdbc.update("""
+      insert into fiscal_document_event(fiscal_document_id,event_type,idempotency_key,details)
+      values(?,'PDF_RENDERED',?,?::jsonb)
+      on conflict(idempotency_key) do nothing
+      """,docId,idempotency+":pdf",json(Map.of("sha256",asset.sha256(),"byteLength",asset.sizeBytes())));
+    return new FinalizedSale(docId,docNumber,distribution.totalInstitutionAllocatedPaise(),distribution.platformRemainderPaise());
+  }
+
+  public record DownloadableInvoice(long documentId,String documentNumber,String storageKey,String sha256,long sizeBytes) {}
+
+  public DownloadableInvoice invoiceDownload(long courseOrderId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select d.id,d.document_number,a.storage_key,a.sha256,a.byte_length
+      from course_payment_order o join fiscal_document d on d.id=o.fiscal_document_id
+      join fiscal_document_asset a on a.fiscal_document_id=d.id and a.asset_type='PDF'
+      where o.id=? and o.status='VERIFIED'
+      order by a.created_at desc,a.id desc limit 1
+      """,courseOrderId);
+    if(rows.isEmpty()) throw new IllegalArgumentException("An issued invoice PDF is not available for this verified course order.");
+    Map<String,Object> row=rows.getFirst();
+    return new DownloadableInvoice(number(row.get("id")),string(row.get("document_number")),
+        string(row.get("storage_key")),string(row.get("sha256")),number(row.get("byte_length")));
+  }
+
+  public byte[] readInvoice(DownloadableInvoice document) {
+    byte[] bytes=storage.readPdf(document.storageKey());
+    if(!FiscalDocumentStorage.sha256(bytes).equals(document.sha256())||bytes.length!=document.sizeBytes())
+      throw new IllegalStateException("The stored invoice did not pass its integrity check.");
+    return bytes;
+  }
+
+  private long offerIdForOrder(long orderId) {
+    Long id=jdbc.queryForObject("select institution_offer_id from course_payment_order where id=?",Long.class,orderId);
+    if(id==null)throw new IllegalStateException("Course order is missing its offer link.");
+    return id;
+  }
+
+  private String courseTitle(long courseId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select coalesce(nullif(o.title_override,''),p.display_name) as title
+      from curriculum_program p join institution_marketplace_offer o on o.course_id=p.id
+      join course_payment_order order_row on order_row.institution_offer_id=o.id
+      where order_row.course_id=? order by o.id limit 1
+      """,courseId);
+    if(rows.isEmpty()) return "Course access";
+    return string(rows.getFirst().get("title"));
+  }
+
+  private String institutionName(long institutionId) {
+    String name=jdbc.queryForObject("select display_name from institution_tenant where id=?",String.class,institutionId);
+    return name==null?"":name;
+  }
+
+  private static List<Map<String,Object>> taxComponents(
+      CourseTaxCalculator.Result result,Map<String,Object> profileComponents,String placeRule,
+      String supplierStateCode,String buyerStateCode) {
+    List<Map<String,Object>> components=new ArrayList<>();
+    if(result.treatment()!=CourseTaxCalculator.Treatment.TAXABLE) return components;
+    long cess=percentageOf(result.taxableValuePaise(),result.cessRateBasisPoints());
+    long gst=result.outputTaxPaise()-cess;
+    if(gst<0) throw new IllegalStateException("Tax breakdown is inconsistent with the approved inclusive tax rate.");
+    String supplyState="RECIPIENT_LOCATION".equals(placeRule)?buyerStateCode:
+        "SUPPLIER_LOCATION".equals(placeRule)?supplierStateCode:
+        validStateCode(profileComponents.get("caApprovedPlaceOfSupplyStateCode"))
+            ?string(profileComponents.get("caApprovedPlaceOfSupplyStateCode")):null;
+    if(supplyState==null) throw new IllegalStateException("The approved place-of-supply rule could not be resolved.");
+    if(supplyState.equals(supplierStateCode)) {
+      int cgstRate=result.gstRateBasisPoints()/2;
+      int sgstRate=result.gstRateBasisPoints()-cgstRate;
+      long cgst=gst/2;
+      long sgst=gst-cgst;
+      if(cgst>0||cgstRate>0) components.add(component("CGST",cgstRate,cgst));
+      if(sgst>0||sgstRate>0) components.add(component("SGST",sgstRate,sgst));
+    } else {
+      components.add(component("IGST",result.gstRateBasisPoints(),gst));
+    }
+    if(cess>0||result.cessRateBasisPoints()>0)
+      components.add(component("CESS",result.cessRateBasisPoints(),cess));
+    return components;
+  }
+
+  private static Map<String,Object> component(String name,int rateBasisPoints,long amountPaise) {
+    return Map.of("name",name,"rateBasisPoints",rateBasisPoints,"amountPaise",amountPaise);
+  }
+
+  private static String resolveStateCode(
+      Map<String,Object> buyer,Map<String,Object> taxComponents,String placeRule,
+      String supplierStateCode,CourseTaxCalculator.Treatment treatment) {
+    if(treatment!=CourseTaxCalculator.Treatment.TAXABLE) {
+      Object explicit=buyer==null?null:buyer.get("gstStateCode");
+      if(validStateCode(explicit))return string(explicit);
+      return stateCodeFromAddress(buyer==null?null:asMap(buyer.get("billingAddress")).get("state"));
+    }
+    return switch(placeRule) {
+      case "SUPPLIER_LOCATION" -> supplierStateCode;
+      case "RECIPIENT_LOCATION" -> {
+        Object explicit=buyer==null?null:buyer.get("gstStateCode");
+        if(validStateCode(explicit))yield string(explicit);
+        yield stateCodeFromAddress(buyer==null?null:asMap(buyer.get("billingAddress")).get("state"));
+      }
+      case "CA_APPROVED_CUSTOM" -> {
+        Object configured=taxComponents.get("caApprovedPlaceOfSupplyStateCode");
+        yield validStateCode(configured)?string(configured):null;
+      }
+      default -> null;
+    };
+  }
+
+  private static String stateCodeFromAddress(Object raw) {
+    String state=raw==null?"":String.valueOf(raw).trim().toUpperCase(Locale.ROOT)
+        .replaceAll("[.,]","").replaceAll("\\s+"," ");
+    return switch(state) {
+      case "JAMMU AND KASHMIR","JAMMU & KASHMIR","J&K" -> "01";
+      case "HIMACHAL PRADESH" -> "02";
+      case "PUNJAB" -> "03";
+      case "CHANDIGARH" -> "04";
+      case "UTTARAKHAND","UTTARANCHAL" -> "05";
+      case "HARYANA" -> "06";
+      case "DELHI","NCT OF DELHI" -> "07";
+      case "RAJASTHAN" -> "08";
+      case "UTTAR PRADESH","UP" -> "09";
+      case "BIHAR" -> "10";
+      case "SIKKIM" -> "11";
+      case "ARUNACHAL PRADESH" -> "12";
+      case "NAGALAND" -> "13";
+      case "MANIPUR" -> "14";
+      case "MIZORAM" -> "15";
+      case "TRIPURA" -> "16";
+      case "MEGHALAYA" -> "17";
+      case "ASSAM" -> "18";
+      case "WEST BENGAL" -> "19";
+      case "JHARKHAND" -> "20";
+      case "ODISHA","ORISSA" -> "21";
+      case "CHHATTISGARH" -> "22";
+      case "MADHYA PRADESH" -> "23";
+      case "GUJARAT" -> "24";
+      case "DAMAN AND DIU","DAMAN & DIU" -> "25";
+      case "DADRA AND NAGAR HAVELI AND DAMAN AND DIU","DADRA AND NAGAR HAVELI" -> "26";
+      case "MAHARASHTRA" -> "27";
+      case "ANDHRA PRADESH OLD" -> "28";
+      case "KARNATAKA" -> "29";
+      case "GOA" -> "30";
+      case "LAKSHADWEEP" -> "31";
+      case "KERALA" -> "32";
+      case "TAMIL NADU" -> "33";
+      case "PUDUCHERRY","PONDICHERRY" -> "34";
+      case "ANDAMAN AND NICOBAR ISLANDS","ANDAMAN & NICOBAR ISLANDS" -> "35";
+      case "TELANGANA" -> "36";
+      case "ANDHRA PRADESH" -> "37";
+      case "LADAKH" -> "38";
+      case "OTHER TERRITORY" -> "97";
+      default -> null;
+    };
+  }
+
+  private static boolean validStateCode(Object value) {
+    return value!=null&&String.valueOf(value).trim().matches("[0-9]{2}");
+  }
+  private static long percentageOf(long amountPaise,int rateBasisPoints) {
+    return BigDecimal.valueOf(amountPaise).multiply(BigDecimal.valueOf(rateBasisPoints))
+        .divide(BigDecimal.valueOf(10_000),0,RoundingMode.HALF_UP).longValueExact();
+  }
+  private static String financialYear(LocalDate date) {
+    int start=date.getMonthValue()>=4?date.getYear():date.getYear()-1;
+    return start+"-"+String.format(Locale.ROOT,"%02d",(start+1)%100);
+  }
+  private static int integer(Object raw) {
+    try { return raw instanceof Number n?Math.toIntExact(n.longValue()):Integer.parseInt(String.valueOf(raw)); }
+    catch(Exception ex) { throw new IllegalStateException("An approved financial snapshot contains a malformed integer."); }
+  }
+  private static long number(Object raw) {
+    try { return raw instanceof Number n?new BigDecimal(n.toString()).longValueExact():Long.parseLong(String.valueOf(raw)); }
+    catch(Exception ex) { return 0; }
+  }
+  private static Long nullableLong(Object raw) {
+    return raw==null?null:number(raw);
+  }
+  private static Integer nullableInteger(Object raw) {
+    return raw==null?null:integer(raw);
+  }
+  private static String nullableString(Object raw) {
+    if(raw==null)return null;String s=String.valueOf(raw).trim();return s.isEmpty()?null:s;
+  }
+  private static String string(Object raw) {
+    return raw==null?"":String.valueOf(raw).trim();
+  }
+  private static String value(Map<String,Object> m,String k,String fallback) {
+    String v=nullableString(m==null?null:m.get(k));return v==null?fallback:v;
+  }
+  private Map<String,Object> parseObject(Object raw) {
+    if(raw==null)return new LinkedHashMap<>();
+    if(raw instanceof Map<?,?> map)return asMap(map);
+    String json=String.valueOf(raw);
+    try { return mapper.readValue(json,MAP_TYPE); }
+    catch(Exception ex) { throw new IllegalStateException("A financial JSON snapshot is malformed.",ex); }
+  }
+  private static Map<String,Object> asMap(Object raw) {
+    Map<String,Object> out=new LinkedHashMap<>();
+    if(raw instanceof Map<?,?> m)m.forEach((k,v)->out.put(String.valueOf(k),v));
+    return out;
+  }
+  private static List<Map<String,Object>> asMapList(Object raw) {
+    if(!(raw instanceof List<?> list))return List.of();
+    List<Map<String,Object>> out=new ArrayList<>();
+    for(Object item:list)if(item instanceof Map<?,?> m)out.add(asMap(m));
+    return out;
+  }
+  private String json(Object value) {
+    try { return mapper.writeValueAsString(value==null?Map.of():value); }
+    catch(Exception ex) { throw new IllegalStateException("A financial snapshot could not be serialized.",ex); }
+  }
+  private Map<String,Object> one(String sql,Object... args) {
+    List<Map<String,Object>> rows=jdbc.queryForList(sql,args);
+    return rows.isEmpty()?Map.of():rows.getFirst();
+  }
+}
