@@ -511,11 +511,6 @@ public class CourseRefundLedgerService {
     long originalTotal=originalTotalValue==null?0L:originalTotalValue;
     long targetCumulativeTax=proportional(originalTax,cumulativeRefund,originalTotal);
     long cumulativeNetRefund=cumulativeRefund-targetCumulativeTax;
-    Long priorNetTaxable=jdbc.queryForObject("""
-      select coalesce(sum(d.taxable_value_paise),0)
-      from course_payment_refund r join fiscal_document d on d.id=r.credit_note_document_id
-      where r.course_payment_order_id=? and r.status='PROCESSED' and r.id<>?
-      """,Long.class,orderId,refundId);
     long currentTax=targetCumulativeTax-(priorTaxValue==null?0L:priorTaxValue);
     long currentNetRefund=currentAmount-currentTax;
 
@@ -595,7 +590,7 @@ public class CourseRefundLedgerService {
       """,refundId,type,idempotencyKey,actorStaffId,json(details));
   }
 
-  private static long proportional(long total,long numerator,long denominator) {
+  static long proportional(long total,long numerator,long denominator) {
     if(total<0||numerator<0||denominator<=0||numerator>denominator)
       throw new IllegalArgumentException("Refund proration inputs are outside the original transaction.");
     return BigDecimal.valueOf(total).multiply(BigDecimal.valueOf(numerator))
