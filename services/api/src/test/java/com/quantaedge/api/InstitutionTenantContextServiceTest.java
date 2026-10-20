@@ -127,26 +127,19 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
-  void educationAdminInstitutionIsResolvedFromTrustedServerConfiguration() {
+  void educationAdminResolvesTheExplicitlySelectedInstitutionWithoutAPlatformPinnedTenant() {
     JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
-        Map.<String,Object>of("id", 91L, "tenant_code", "QUANTA-EDGE", "display_name", "QuantaEdge")));
+        Map.<String,Object>of("id", 92L, "tenant_code", "SCHOOL-B", "display_name", "School B")));
     InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, "", "ROUTED");
 
-    InstitutionTenantContext resolved = service.requireEducationAdminInstitution();
+    assertNull(service.selectTenantCode(null));
+    String selectedCode = service.selectTenantCode("school-b");
+    assertEquals("SCHOOL-B", selectedCode);
+    InstitutionTenantContext resolved = service.resolve(selectedCode);
 
-    assertEquals(new InstitutionTenantContext(91L, "QUANTA-EDGE", "QuantaEdge"), resolved);
+    assertEquals(new InstitutionTenantContext(92L, "SCHOOL-B", "School B"), resolved);
     verify(jdbc).queryForList(anyString(), any(Object[].class));
-  }
-
-  @Test
-  void educationAdminInstitutionCodeMustBeConfiguredAndValid() {
-    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
-    assertThrows(IllegalArgumentException.class,
-        () -> new InstitutionTenantContextService(jdbc, "", "ROUTED", "not a code"));
-    assertThrows(IllegalArgumentException.class,
-        () -> new InstitutionTenantContextService(jdbc, "", "ROUTED", ""));
-    verifyNoInteractions(jdbc);
   }
 
   @Test
