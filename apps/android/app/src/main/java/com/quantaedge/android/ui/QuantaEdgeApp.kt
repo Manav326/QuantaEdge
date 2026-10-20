@@ -974,7 +974,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
     }
 
-    fun studentHasNoCourses(): Boolean = StudentNavigationContract.hasConfirmedNoEnrolledCourses(
+    fun studentHasNoCourses(): Boolean = hasConfirmedNoEnrolledCourses(
         courseListLoaded = studentProgramsLoaded,
         courseListLoadFailed = studentProgramsLoadFailed,
         hasCourseAccess = studentHasCourseAccess()
