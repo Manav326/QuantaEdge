@@ -64,8 +64,8 @@ The main-branch workflow publishes the **quantaedge-android-apk** installable ar
 
 For the directly installed CI APK:
 
-1. In the HRMS-managed Google Cloud project, create or verify an **Android OAuth client** using package name **com.quantaedge.android** and the single SHA-1 printed by the successful Build Android APK job.
-2. Keep **GOOGLE_WEB_CLIENT_ID** mapped to the **Web application OAuth client** used by the API route /api/v1/auth/google/config. The Android OAuth client and Web OAuth client serve different purposes; do not replace the server audience with the Android client ID.
-3. If the app is installed from Google Play, register the Play App Signing certificate's SHA-1 for the same package in Google Cloud. Google Play re-signs distributed APKs with the Play App Signing key; that is a separate distribution certificate from the CI APK's signer.
+1. Configure one permanent Android signing keystore in GitHub Actions secrets. The APK workflow and Play Store bundle workflow already use the same four secrets: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD`. Do not generate a new key per build.
+2. Run `scripts/android-fetch-latest-apk.ps1` once with an available APK signed by that key, copy the printed SHA-1 into an **Android OAuth client** in the HRMS-managed Google Cloud project for package **com.quantaedge.android**. Register it once; ordinary code commits/builds must not require re-registration.
+3. Keep `GOOGLE_WEB_CLIENT_ID` mapped to the **Web application OAuth client** used by `/api/v1/auth/google/config`. Do not replace the server audience with the Android client ID.
 
-Signing keystore material and passwords remain in GitHub Actions secrets only; never commit them to the repository. If the permanent signing secrets are missing, CI still validates the debug build but deliberately does not publish an installable APK. The download/install script searches recent runs for an available APK and prints the actual signing certificate SHA-1 from the APK it downloads.
+Each APK still has to be signed as part of building it, but every build must reuse the same saved keystore. The SHA-1 belongs to that key and therefore stays constant; the routine CI workflow does not calculate or print it each run. Google Play may use a separate Play App Signing certificate if the app is distributed through Play.
