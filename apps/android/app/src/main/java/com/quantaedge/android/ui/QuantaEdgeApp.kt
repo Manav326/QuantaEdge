@@ -969,7 +969,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }
         } else {
             runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
-            ApiClient.postObject("/api/v1/auth/logout")
+            runCatching { ApiClient.postObject("/api/v1/auth/logout") }
+            runCatching { GoogleCredentialFlow.clearCredentialState(context.applicationContext) }
             ApiClient.clearSession()
             throw IOException("यह Android ऐप छात्र और अभिभावक खातों के लिए है।")
         }
