@@ -29,6 +29,11 @@ const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidLocalization = read('../../android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
 const androidProgressScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
+const androidEnrollmentEmptyState = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentEnrollmentEmptyState.kt');
+const androidMarketplaceScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentMarketplaceScreen.kt');
+const androidAllCoursesScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
+const androidClassesScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
+const androidCertificatesScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
 const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
 const androidGoogleCredentialFlow = read('../../android/app/src/main/java/com/quantaedge/android/data/GoogleCredentialFlow.kt');
@@ -546,14 +551,51 @@ for (const [source, label] of [
 assert.ok(studentCertificatesPage.includes('!requestedCertificateId') &&
   studentCertificatesPage.includes('requestedCertificateId'),
   'The no-course certificate fallback must not intercept direct certificate lookup/verification links.');
+assert.ok(studentClassesClient.includes(':(error||courseError)?null:filteredSessions.length===0') &&
+  studentClassesClient.includes(':(error||courseError)?null:filteredRecordings.length===0'),
+  'Live and recorded class empty messages must not appear alongside failed requests.');
+assert.ok(testsClient.includes(':error?null:filteredTests.length===0') &&
+  testsClient.includes(':error?null:results.length===0'),
+  'Test and result empty messages must not misreport API failures as zero data.');
+assert.ok(certificatesPage.includes('error && certificates.length === 0 ? null : !certificates.length ?'),
+  'Certificate inventory must not say there are no certificates when its data could not be loaded.');
+assert.ok(studentBooksClient.includes('!error && !courseError && visibleDocuments.length === 0'),
+  'The textbook library must distinguish failed requests from a successfully empty published-resource list.');
+assert.ok(androidEnrollmentEmptyState.includes('CardDefaults.cardElevation') &&
+  androidEnrollmentEmptyState.includes('primaryLabel') && androidEnrollmentEmptyState.includes('onPrimary'),
+  'Android must provide the same reusable, themed student empty-state card and actionable controls.');
+assert.ok(androidApp.includes('AppRoute.LESSON -> if (studentHasNoCourses())') &&
+  androidApp.includes('AppRoute.DIAGNOSTIC -> if (studentHasNoCourses())') &&
+  androidApp.includes('AppRoute.ASSESSMENT_RESULTS -> if (studentHasNoCourses())') &&
+  androidApp.includes('AppRoute.LEADERBOARD -> if (studentHasNoCourses())') &&
+  androidApp.includes('noEnrolledCourses = studentHasNoCourses()') &&
+  androidApp.includes('onMarketplace = ::openMarketplace'),
+  'Android nested lesson, diagnostic, test results, leaderboard and course-dependent screens must route confirmed no-enrolment states to Marketplace.');
+assert.ok(androidMarketplaceScreen.includes('} else if (!loading && offers.isEmpty())') &&
+  androidMarketplaceScreen.includes('onAllCourses') && androidMarketplaceScreen.includes('onRefresh'),
+  'Android Marketplace must differentiate empty offers from failed loads and provide refresh and My Courses actions.');
+assert.ok(androidAllCoursesScreen.includes('if (programsLoadFailed)') &&
+  androidAllCoursesScreen.includes('StudentEnrollmentEmptyState'),
+  'Android My Courses must keep course-fetch failures separate from a successfully empty enrolment list.');
+assert.ok(androidClassesScreen.includes('noEnrolledCourses: Boolean = false') &&
+  androidClassesScreen.includes('StudentEnrollmentEmptyState') &&
+  androidCertificatesScreen.includes('if (noEnrolledCourses)') &&
+  androidCertificatesScreen.includes('courseAccessLoadError'),
+  'Android live/recorded classes and certificates must offer a deliberate no-enrolment state and preserve course lookup errors.');
+assert.ok(androidLocalization.includes('empty_leaderboard_title') &&
+  androidLocalization.includes('empty_course_access_load_error') &&
+  androidLocalization.includes('empty_marketplace_title'),
+  'Android empty-state copy must be available through the central localization phrase catalogue.');
+
 for (const relative of ['english.json', 'hinglish.json']) {
   const catalog = JSON.parse(read('../app/i18n/catalogs/' + relative));
   for (const key of [
     'student.empty.marketplace.title','student.empty.marketplace.message','student.empty.marketplace.refresh',
-    'student.empty.courses.title','student.empty.courses.message','student.empty.learn.title',
-    'student.empty.practice.title','student.empty.progress.title','student.empty.books.title',
-    'student.empty.classes.title','student.empty.classes.message','student.empty.tests.title',
-    'student.empty.certificates.title','student.empty.diagnostic.title','student.empty.lesson.title',
+    'student.empty.courses.title','student.empty.courses.message','student.empty.learn.title','student.empty.learn.message',
+    'student.empty.practice.title','student.empty.practice.message','student.empty.progress.title','student.empty.progress.message',
+    'student.empty.books.title','student.empty.books.message','student.empty.classes.title','student.empty.classes.message',
+    'student.empty.tests.title','student.empty.tests.message','student.empty.certificates.title','student.empty.certificates.message',
+    'student.empty.diagnostic.title','student.empty.diagnostic.message','student.empty.lesson.title','student.empty.lesson.message',
   ]) assert.ok(typeof catalog[key] === 'string' && catalog[key].trim().length > 0,
     'Missing localized student empty-state copy: ' + key + ' in ' + relative);
 }
