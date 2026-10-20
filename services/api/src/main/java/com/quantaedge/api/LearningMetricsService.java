@@ -192,7 +192,7 @@ public class LearningMetricsService {
         and __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
       order by coalesce(att.released_at,att.submitted_at,att.started_at) desc,att.id desc limit 10
       """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,assessmentArgs)));
 
     result.put("recentAttempts",jdbc.queryForList(tenantSql("""
       select qa.answered_at,qa.correct,q.question_type,ch.display_name as chapter_name,
