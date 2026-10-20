@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1262,
+    "assets_selected": 1263,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1258,
-    "assets_remaining": 820,
-    "assets_completion_percent": 60.5,
+    "assets_analyzed": 1259,
+    "assets_remaining": 819,
+    "assets_completion_percent": 60.6,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1257,
+    "assets_skipped_from_checkpoint": 1258,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:05:11Z"
+      "checkpointed_at": "2026-10-20T12:11:01Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:06:14Z"
+      "checkpointed_at": "2026-10-20T12:12:05Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:07:08Z"
+      "checkpointed_at": "2026-10-20T12:13:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:07:59Z"
+      "checkpointed_at": "2026-10-20T12:13:51Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -41977,6 +41977,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T12:09:43Z"
+    },
+    {
+      "asset_id": "c7bf365b2d556147aa505b11",
+      "asset_sha256": "81dd42e39d4b548d9e0ad1668a6634004d684a3f582541ddd567bab50a2f0d2e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/81dd42e39d4b548d9e0ad1668a6634004d684a3f582541ddd567bab50a2f0d2e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow ball.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cricket ball",
+          "tennis ball",
+          "different materials",
+          "bouncing height"
+        ],
+        "context_relation": "The image is related to the activity and discussion about the bouncing height of balls made from different materials.",
+        "limitations": [
+          "The image does not provide specific details about the bouncing height of the balls.",
+          "The image does not show the balls being dropped from a fixed height."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T12:15:32Z"
     }
   ]
 }
