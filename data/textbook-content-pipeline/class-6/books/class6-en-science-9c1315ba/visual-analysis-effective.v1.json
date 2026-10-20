@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "94e7d7b3c15a7577fd3b50a7d55b4654245d9ad0bb61de7c0d2ad641f42e9bef",
+  "raw_analysis_sha256": "b78c89fd74255ec34eee007a418e36d53f4d1ec2d6eb29aff80df5739f5186fb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:51:34Z",
+      "checkpointed_at": "2026-10-20T03:57:51Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:52:36Z",
+      "checkpointed_at": "2026-10-20T03:58:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:53:27Z",
+      "checkpointed_at": "2026-10-20T03:59:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59947,6 +59947,122 @@
         ],
         "context_relation": "The image illustrates the concept of circular motion and oscillatory motion as described in the textbook.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d697cd5e2bd905eeb5af75ee",
+      "asset_sha256": "914ee906aa3757563be3ce95c94edfa75a963955f10c293a4042ec6a7dda284c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/914ee906aa3757563be3ce95c94edfa75a963955f10c293a4042ec6a7dda284c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful carousel with children riding horses.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "carousel",
+          "children",
+          "horses",
+          "colorful",
+          "ride"
+        ],
+        "context_relation": "The image is related to the concept of a carousel.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:01:19Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful carousel with children riding horses.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "carousel",
+          "children",
+          "horses",
+          "colorful",
+          "ride"
+        ],
+        "context_relation": "The image is related to the concept of a carousel.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e5bf38851d6cc403e626518",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Circular motion of an eraser on a thread.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.15: Circular motion",
+          "Activity 5.5: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hang the eraser by holding the other end of the thread",
+          "(Fig. 5.16). Keep your hand steady.",
+          "Using the other hand, take the eraser slightly to one side and then release (Fig. 5.16).",
+          "Does it start moving to and fro? Is its motion similar to the motion of a swing?",
+          "When an object moves to and fro about some fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "Circular motion",
+          "Oscillatory motion",
+          "Circular motion of an eraser on a thread"
+        ],
+        "context_relation": "The image is a visual representation of an activity to understand circular motion and oscillatory motion.",
+        "limitations": [
+          "The image does not show the actual motion of the eraser.",
+          "The image does not show the thread or the eraser."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:01:59Z",
+      "effective_analysis": {
+        "visual_summary": "Circular motion of an eraser on a thread.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.15: Circular motion",
+          "Activity 5.5: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hang the eraser by holding the other end of the thread",
+          "(Fig. 5.16). Keep your hand steady.",
+          "Using the other hand, take the eraser slightly to one side and then release (Fig. 5.16).",
+          "Does it start moving to and fro? Is its motion similar to the motion of a swing?",
+          "When an object moves to and fro about some fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "Circular motion",
+          "Oscillatory motion",
+          "Circular motion of an eraser on a thread"
+        ],
+        "context_relation": "The image is a visual representation of an activity to understand circular motion and oscillatory motion.",
+        "limitations": [
+          "The image does not show the actual motion of the eraser.",
+          "The image does not show the thread or the eraser."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

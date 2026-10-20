@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1202,
+    "assets_selected": 1204,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1199,
-    "assets_remaining": 879,
-    "assets_completion_percent": 57.7,
+    "assets_analyzed": 1201,
+    "assets_remaining": 877,
+    "assets_completion_percent": 57.8,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1197,
+    "assets_skipped_from_checkpoint": 1199,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:51:34Z"
+      "checkpointed_at": "2026-10-20T03:57:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:52:36Z"
+      "checkpointed_at": "2026-10-20T03:58:53Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:53:27Z"
+      "checkpointed_at": "2026-10-20T03:59:45Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39774,6 +39774,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T03:56:40Z"
+    },
+    {
+      "asset_id": "d697cd5e2bd905eeb5af75ee",
+      "asset_sha256": "914ee906aa3757563be3ce95c94edfa75a963955f10c293a4042ec6a7dda284c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/914ee906aa3757563be3ce95c94edfa75a963955f10c293a4042ec6a7dda284c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful carousel with children riding horses.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "carousel",
+          "children",
+          "horses",
+          "colorful",
+          "ride"
+        ],
+        "context_relation": "The image is related to the concept of a carousel.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:01:19Z"
+    },
+    {
+      "asset_id": "8e5bf38851d6cc403e626518",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b2b48b07ed89aee3859727a26ef8eb21210f93d328ba01cc817fa26db9e93ce9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Circular motion of an eraser on a thread.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.15: Circular motion",
+          "Activity 5.5: Let us investigate",
+          "Tie an eraser (or a potato) to one end of a thread.",
+          "Hang the eraser by holding the other end of the thread",
+          "(Fig. 5.16). Keep your hand steady.",
+          "Using the other hand, take the eraser slightly to one side and then release (Fig. 5.16).",
+          "Does it start moving to and fro? Is its motion similar to the motion of a swing?",
+          "When an object moves to and fro about some fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "Circular motion",
+          "Oscillatory motion",
+          "Circular motion of an eraser on a thread"
+        ],
+        "context_relation": "The image is a visual representation of an activity to understand circular motion and oscillatory motion.",
+        "limitations": [
+          "The image does not show the actual motion of the eraser.",
+          "The image does not show the thread or the eraser."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:01:59Z"
     }
   ]
 }
