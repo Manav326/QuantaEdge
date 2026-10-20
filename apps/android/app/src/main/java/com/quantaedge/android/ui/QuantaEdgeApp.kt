@@ -4426,6 +4426,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         },
                         onMarketplace = ::openMarketplace,
+                        onAllCourses = ::openAllCourses,
                         onBack = ::openProgress
                     )
                     AppRoute.LEADERBOARD -> if (studentHasNoCourses()) {
