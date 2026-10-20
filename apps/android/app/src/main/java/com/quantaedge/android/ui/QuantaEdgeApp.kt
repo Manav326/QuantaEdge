@@ -4121,9 +4121,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         busy = busy,
                         onRefresh = { openStructuredLessons(structuredSubjectFilter) },
                         onSelectSubject = { code -> openStructuredLessons(code) },
-                        onOpenLesson = ::openStructuredLesson
+                        onOpenLesson = ::openStructuredLesson,
+                        onMarketplace = ::openMarketplace
                     )
-                    AppRoute.LESSON -> if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
+                    AppRoute.LESSON -> if (studentHasNoCourses()) {
+                        StudentEnrollmentEmptyState(
+                            icon = "▤",
+                            title = localizedUiText("Choose a course to open this lesson"),
+                            message = localizedUiText("Enrol in a course first, then return to the lesson from your Learning catalogue."),
+                            primaryLabel = localizedUiText("Explore Marketplace"),
+                            onPrimary = ::openMarketplace
+                        )
+                    } else if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
                         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                             StructuredLessonRenderer(
                         lesson = lesson,
@@ -4228,7 +4237,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onComplete = { route = AppRoute.LESSON },
                         onProgress = ::openProgress
                     )
-                    AppRoute.DIAGNOSTIC -> DiagnosticScreen(
+                    AppRoute.DIAGNOSTIC -> if (studentHasNoCourses()) {
+                        StudentEnrollmentEmptyState(
+                            icon = "◎",
+                            title = localizedUiText("Start with an enrolled course"),
+                            message = localizedUiText("Your diagnostic will appear here when an enrolled course is available."),
+                            primaryLabel = localizedUiText("Explore Marketplace"),
+                            onPrimary = ::openMarketplace
+                        )
+                    } else DiagnosticScreen(
                         diagnostic = diagnostic,
                         answers = answers,
                         feedbacks = feedbacks,
@@ -4255,7 +4272,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpen = ::openAssessment,
                         onPrepareOffline = ::prepareOfflineAssessment,
                         onResults = ::loadAssessmentResults,
-                        onRefresh = { openAssessments(assessmentSubjectFilter) }
+                        onRefresh = { openAssessments(assessmentSubjectFilter) },
+                        onMarketplace = ::openMarketplace
                     )
                     AppRoute.ASSESSMENT_ATTEMPT -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
@@ -4276,7 +4294,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         }
                     )
-                    AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
+                    AppRoute.ASSESSMENT_RESULTS -> if (studentHasNoCourses()) {
+                        StudentEnrollmentEmptyState(
+                            icon = "▤",
+                            title = localizedUiText("Your results will appear here"),
+                            message = localizedUiText("Enrol in a course to see released test results and certificate eligibility."),
+                            primaryLabel = localizedUiText("Explore Marketplace"),
+                            onPrimary = ::openMarketplace
+                        )
+                    } else ResultsScreen(
                         resultItems = assessmentResults,
                         resultTotal = resultsTotal,
                         pageSize = resultsPageSize,
@@ -4324,7 +4350,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpen = ::openDocument,
                         onDownload = ::downloadDocument,
                         onRemoveOffline = ::removeOfflineDownload,
-                        onRefresh = { openResources(resourceSubjectFilter) }
+                        onRefresh = { openResources(resourceSubjectFilter) },
+                        onMarketplace = ::openMarketplace
                     )
                     AppRoute.DOCUMENT_READER -> DocumentReaderScreen(
                         document = selectedDocument,
@@ -4380,11 +4407,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         certificateEligibility = assessmentCertificateEligibility,
                         onRefresh = ::openProgress,
                         onIssueCertificate = ::issueCertificateForAttempt,
-                        onViewCertificate = ::viewResultCertificate
+                        onViewCertificate = ::viewResultCertificate,
+                        onMarketplace = ::openMarketplace
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
                         courseId = currentCourseId,
+                        noEnrolledCourses = studentHasNoCourses(),
                         certificateLanguage = certificateLanguage,
                         onCertificateLanguageChange = { next ->
                             if (next == "hi" || next == "en") {
@@ -4392,6 +4421,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                 preferences.edit().putString("certificateLanguage", next).apply()
                             }
                         },
+                        onMarketplace = ::openMarketplace,
                         onBack = ::openProgress
                     )
                     AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
@@ -5495,17 +5525,19 @@ private fun StructuredLessonCatalogueScreen(
     busy: Boolean,
     onRefresh: () -> Unit,
     onSelectSubject: (String) -> Unit,
-    onOpenLesson: (JSONObject) -> Unit
+    onOpenLesson: (JSONObject) -> Unit,
+    onMarketplace: () -> Unit = {}
  ) {
     if (noEnrolledCourses) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(if (language == "hi") "संरचित पाठ" else "Structured lessons",
-                style = MaterialTheme.typography.headlineSmall)
-            Text(localizedUiText("Your lessons will appear here once you enroll in a course."),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            StudentEnrollmentEmptyState(
+                icon = "▤",
+                title = localizedUiText("Your learning space starts with a course"),
+                message = localizedUiText("Your lessons will appear here once you enroll in a course."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
         }
         return
     }
@@ -6010,7 +6042,8 @@ private fun AssessmentListScreen(
     onOpen: (JSONObject) -> Unit,
     onPrepareOffline: (JSONObject) -> Unit,
     onResults: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onMarketplace: () -> Unit = {}
 ) {
     val compact = LocalConfiguration.current.screenWidthDp < 390
     val pageCount = ((total + pageSize - 1) / pageSize).coerceAtLeast(1)
@@ -6018,10 +6051,14 @@ private fun AssessmentListScreen(
     var pageSizeMenuExpanded by remember { mutableStateOf(false) }
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     if (noEnrolledCourses) {
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(t("Practice", "अभ्यास"), style = MaterialTheme.typography.headlineSmall)
-            Text(localizedUiText("Your practice activities will appear here once you enroll in a course."),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            StudentEnrollmentEmptyState(
+                icon = "✓",
+                title = localizedUiText("Tests and results need a course"),
+                message = localizedUiText("Enrol in a course to access published tests, saved results and certificate eligibility."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
         }
         return
     }
@@ -6793,7 +6830,8 @@ private fun ResourcesScreen(
     onOpen: (JSONObject) -> Unit,
     onDownload: (JSONObject) -> Unit,
     onRemoveOffline: (JSONObject) -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onMarketplace: () -> Unit = {}
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
@@ -6833,13 +6871,15 @@ private fun ResourcesScreen(
     }
 
     if (noEnrolledCourses) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(t("Textbook library", "पाठ्यपुस्तक लाइब्रेरी"), style = MaterialTheme.typography.headlineSmall)
-            Text(localizedUiText("Your course books will appear here once you enroll in a course."),
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            StudentEnrollmentEmptyState(
+                icon = "▣",
+                title = localizedUiText("Books and chapters"),
+                message = localizedUiText("Your course books will appear here once you enroll in a course."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
         }
         return
     }
