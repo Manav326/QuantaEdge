@@ -911,6 +911,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         dashboardClassesLoaded = true
     }
 
+    fun studentHasCourseAccess(): Boolean = studentPrograms.any {
+        it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
+    }
+
+    fun studentHasNoCourses(): Boolean = !studentProgramsLoadFailed && !studentHasCourseAccess()
+
     suspend fun enterSignedInHome(user: JSONObject) {
         auth = user
         val role = user.textAny("role").uppercase()
@@ -937,28 +943,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 route = AppRoute.STUDENT_HOME
                 return
             }
-            val hasCourseAccess = studentPrograms.any {
-                it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
-            }
+            val hasCourseAccess = studentHasCourseAccess()
             if (!studentProgramsLoadFailed && !hasCourseAccess) {
-                // A genuinely empty course catalogue is a marketplace onboarding state,
-                // not a dashboard state. Do not redirect on API/network failures.
+                // Empty enrolment is a dashboard state. Marketplace opens only after the
+                // learner explicitly taps its dashboard action.
                 currentCourseId = 0L
                 courseProgress = emptyMap()
                 studentTextbookDocuments = emptyList()
                 recommendation = JSONObject()
-                route = AppRoute.MARKETPLACE
-                marketplaceLoading = true
-                marketplaceLoadFailed = false
-                try {
-                    marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
-                    marketplaceLoadFailed = false
-                } catch (_: Exception) {
-                    marketplaceOffers = emptyList()
-                    marketplaceLoadFailed = true
-                } finally {
-                    marketplaceLoading = false
-                }
+                route = AppRoute.STUDENT_HOME
             } else {
                 if (currentCourseId > 0L) {
                     studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
@@ -1459,6 +1452,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
         val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
+        if (targetCourseId <= 0L && studentHasNoCourses()) {
+            error = ""
+            structuredLessonMode = true
+            structuredSubjectFilter = subjectCode
+            structuredLessons = emptyList()
+            route = AppRoute.SUBJECT_LESSONS
+            return
+        }
         if (targetCourseId <= 0L) {
             error = if (language == "hi") "पहले एक उपलब्ध course चुनें।" else "Choose an available course first."
             route = AppRoute.ALL_COURSES
@@ -1509,10 +1510,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (currentCourseId <= 0L) {
                 refreshStudentPrograms()
             }
-            if (currentCourseId <= 0L) throw IOException(
-                if (language == "hi") "पाठ देखने के लिए पहले एक enrolled course चुनें।"
-                else "Choose an enrolled course before opening lessons."
-            )
+            if (currentCourseId <= 0L) {
+                if (studentHasNoCourses()) {
+                    structuredLessons = emptyList()
+                    error = ""
+                    return@runTask
+                }
+                throw IOException(
+                    if (language == "hi") "पाठ देखने के लिए पहले एक enrolled course चुनें।"
+                    else "Choose an enrolled course before opening lessons."
+                )
+            }
             val course = studentPrograms.firstOrNull {
                 it.longAny("id", "course_id") == currentCourseId &&
                     (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
@@ -1632,6 +1640,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (normalizedFilter in setOf("maths", "science")) currentSubject = normalizedFilter
         val subjectCode = if (normalizedFilter == "ALL") "" else normalizedFilter
         route = AppRoute.ASSESSMENTS
+        if (studentHasNoCourses()) {
+            assessments = emptyList()
+            offlineAssessments = emptyList()
+            assessmentsTotal = 0
+            return
+        }
         runTask {
             val local = withContext(Dispatchers.IO) { offlineAssessmentStore.catalogueItems() }
                 .filter {
@@ -2938,7 +2952,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         route = AppRoute.PROGRESS
         runTask {
             if (currentCourseId <= 0L) refreshStudentPrograms()
-            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course to view its report.")
+            if (currentCourseId <= 0L) {
+                if (studentHasNoCourses()) {
+                    progressData = JSONObject()
+                    route = AppRoute.PROGRESS
+                    return@runTask
+                }
+                throw IOException("Choose an enrolled course to view its report.")
+            }
             progressData = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
             loadProgressCertificateData(progressData)
             route = AppRoute.PROGRESS
@@ -4089,6 +4110,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRestore = ::restoreArchivedChild
                     )
                     AppRoute.SUBJECT_LESSONS -> StructuredLessonCatalogueScreen(
+                        noEnrolledCourses = studentHasNoCourses(),
                         items = structuredLessons,
                         courseName = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optString("display_name").orEmpty(),
                         subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { arr ->
@@ -4219,6 +4241,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = ::openDiagnostic
                     )
                     AppRoute.ASSESSMENTS -> AssessmentListScreen(
+                        noEnrolledCourses = studentHasNoCourses(),
                         subject = assessmentSubjectFilter,
                         assessmentItems = assessments,
                         offlineItems = offlineAssessments,
@@ -4288,6 +4311,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         }
                     )
                     AppRoute.RESOURCES -> ResourcesScreen(
+                        noEnrolledCourses = studentHasNoCourses(),
                         documents = documents,
                         subject = resourceSubjectFilter,
                         language = language,
@@ -4348,6 +4372,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onTransitionToParent = ::transitionToParentAccount
                     )
                     AppRoute.PROGRESS -> StudentProgressScreen(
+                        noEnrolledCourses = studentHasNoCourses(),
                         data = progressData,
                         language = language,
                         busy = busy,
@@ -4987,6 +5012,23 @@ private fun StudentHomeScreen(
             (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
     } ?: programs.firstOrNull { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }
     val activeCourseIdResolved = activeCourse?.longAny("id", "course_id") ?: 0L
+    if (activeCourseIdResolved <= 0L && !programsLoadFailed &&
+        programs.none { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused") }) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(localizedUiText("Your learning starts here"),
+                style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
+            Text(localizedUiText("You haven’t enrolled in any courses yet. Visit the Marketplace to explore and enroll in a course."),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Button(onClick = onMarketplace, enabled = !busy) {
+                Text(localizedUiText("Explore Marketplace"))
+            }
+        }
+        return
+    }
     val activeCourseSubjects = activeCourse?.optJSONArray("subjects")?.let { array ->
         (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
     }.orEmpty()
@@ -5444,6 +5486,7 @@ private fun LessonListScreen(
 
 @Composable
 private fun StructuredLessonCatalogueScreen(
+    noEnrolledCourses: Boolean,
     items: List<JSONObject>,
     courseName: String,
     subjects: List<JSONObject>,
@@ -5453,7 +5496,19 @@ private fun StructuredLessonCatalogueScreen(
     onRefresh: () -> Unit,
     onSelectSubject: (String) -> Unit,
     onOpenLesson: (JSONObject) -> Unit
-) {
+ ) {
+    if (noEnrolledCourses) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(if (language == "hi") "संरचित पाठ" else "Structured lessons",
+                style = MaterialTheme.typography.headlineSmall)
+            Text(localizedUiText("Your lessons will appear here once you enroll in a course."),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        return
+    }
     fun completed(item: JSONObject): Boolean =
         item.optBoolean("completed") || item.optBoolean("isCompleted") ||
             item.optInt("progressPercent", item.optInt("progress_percent", 0)) >= 100
@@ -5941,6 +5996,7 @@ private fun DiagnosticScreen(
 
 @Composable
 private fun AssessmentListScreen(
+    noEnrolledCourses: Boolean,
     subject: String,
     assessmentItems: List<JSONObject>,
     offlineItems: List<JSONObject>,
@@ -5961,6 +6017,14 @@ private fun AssessmentListScreen(
     val pageIndex = (pageOffset / pageSize).coerceIn(0, pageCount - 1)
     var pageSizeMenuExpanded by remember { mutableStateOf(false) }
     fun t(en: String, hi: String) = if (language == "hi") hi else en
+    if (noEnrolledCourses) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(t("Practice", "अभ्यास"), style = MaterialTheme.typography.headlineSmall)
+            Text(localizedUiText("Your practice activities will appear here once you enroll in a course."),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        return
+    }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("टेस्ट और मूल्यांकन"), style = MaterialTheme.typography.headlineSmall)
@@ -6716,6 +6780,7 @@ private fun ResultsScreen(
 
 @Composable
 private fun ResourcesScreen(
+    noEnrolledCourses: Boolean,
     documents: List<JSONObject>,
     subject: String,
     language: String,
@@ -6765,6 +6830,18 @@ private fun ResourcesScreen(
 
     val visibleDocumentCount = documents.count {
         subjectFilter == "ALL" || it.textAny("subject_code", "subjectCode").equals(subjectFilter, true)
+    }
+
+    if (noEnrolledCourses) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(t("Textbook library", "पाठ्यपुस्तक लाइब्रेरी"), style = MaterialTheme.typography.headlineSmall)
+            Text(localizedUiText("Your course books will appear here once you enroll in a course."),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        return
     }
 
     if (pendingRemoval != null) {
