@@ -115,7 +115,7 @@ public class CourseInvoiceController {
     context=authorization.requireStudent(context);
     long institutionId=requireTenant(tenant);
     requireStudentDocument(orderId,documentId,context.studentId(),institutionId);
-    return buildDocumentDownload(orderId,documentId,"STUDENT",context.userId());
+    return buildDownloadDocument(orderId,documentId,"STUDENT",context.userId());
   }
 
   @GetMapping(value="/family/orders/{orderId}/documents/{documentId}.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
@@ -127,7 +127,7 @@ public class CourseInvoiceController {
     context=authorization.requireParent(context);
     long institutionId=requireTenant(tenant);
     requireParentDocument(orderId,documentId,context.userId(),institutionId);
-    return buildDocumentDownload(orderId,documentId,"PARENT",context.userId());
+    return buildDownloadDocument(orderId,documentId,"PARENT",context.userId());
   }
 
   private void requireStudentDocument(long orderId,long documentId,long studentId,long institutionId) {
