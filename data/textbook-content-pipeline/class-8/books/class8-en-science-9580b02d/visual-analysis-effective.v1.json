@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e31c7e4ab01ab6484db7eabcc618f100751ee27d4ce77cee6d2c5584c4f6e312",
+  "raw_analysis_sha256": "6d64584515b79e64049a4c377c61e31937b3c035de605f410b10db123cd6e265",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:09:53Z",
+      "checkpointed_at": "2026-10-20T02:14:31Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:10:29Z",
+      "checkpointed_at": "2026-10-20T02:15:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:10:52Z",
+      "checkpointed_at": "2026-10-20T02:15:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -42678,21 +42678,67 @@
     {
       "asset_id": "59a9255ba0ced0e697dda0ef",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 51,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46336a4d66faddcb234c836aec8d3d5458efcdf65cc983a602e69e59f8248df4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39260167363",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Comparison of two playgrounds, one clean and well-maintained, the other polluted and unhygienic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.2.2 Keep the environment clean",
+          "Activity 3.3: Let us compare",
+          "z Look at Fig. 3.3a and Fig. 3.3b. Which playground would you",
+          "z Most of us would like to play in the playground shown in Fig. 3.3a as it is clean, well-maintained, and looks beautiful. The playground in Fig. 3.3b is polluted, dirty, unhygienic, and full of flies and mosquitos.",
+          "z In addition to inculcating good habits and",
+          "31"
+        ],
+        "concepts": [
+          "clean playground",
+          "polluted playground",
+          "hygiene",
+          "health risks"
+        ],
+        "context_relation": "Comparison of playground environments",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:15:48Z",
+      "effective_analysis": {
+        "visual_summary": "Comparison of two playgrounds, one clean and well-maintained, the other polluted and unhygienic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "3.2.2 Keep the environment clean",
+          "Activity 3.3: Let us compare",
+          "z Look at Fig. 3.3a and Fig. 3.3b. Which playground would you",
+          "z Most of us would like to play in the playground shown in Fig. 3.3a as it is clean, well-maintained, and looks beautiful. The playground in Fig. 3.3b is polluted, dirty, unhygienic, and full of flies and mosquitos.",
+          "z In addition to inculcating good habits and",
+          "31"
+        ],
+        "concepts": [
+          "clean playground",
+          "polluted playground",
+          "hygiene",
+          "health risks"
+        ],
+        "context_relation": "Comparison of playground environments",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -43912,21 +43958,69 @@
     {
       "asset_id": "f33c51ce68aeb7c0b7061fbd",
       "asset_sha256": "6e139284c6445954e003a50e000aa69bc3621fd95e5625962aebc5c302251544",
-      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 54,
       "asset_path": "assets/6e139284c6445954e003a50e000aa69bc3621fd95e5625962aebc5c302251544.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39260167363",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person coughing, with a stream of mucus or phlegm being expelled.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "coughing",
+          "phlegm",
+          "cough",
+          "fever",
+          "fatigue",
+          "loss of appetite",
+          "night sweats",
+          "TB (Tuberculosis)",
+          "close contact",
+          "TB-infected people",
+          "mouth and nose covering",
+          "good hygiene",
+          "vaccination"
+        ],
+        "context_relation": "The image illustrates a person coughing, which is a symptom of TB, and provides advice on how to avoid spreading the disease.",
+        "limitations": [
+          "The image does not provide specific details about the type of TB or the exact symptoms."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:16:28Z",
+      "effective_analysis": {
+        "visual_summary": "A person coughing, with a stream of mucus or phlegm being expelled.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "coughing",
+          "phlegm",
+          "cough",
+          "fever",
+          "fatigue",
+          "loss of appetite",
+          "night sweats",
+          "TB (Tuberculosis)",
+          "close contact",
+          "TB-infected people",
+          "mouth and nose covering",
+          "good hygiene",
+          "vaccination"
+        ],
+        "context_relation": "The image illustrates a person coughing, which is a symptom of TB, and provides advice on how to avoid spreading the disease.",
+        "limitations": [
+          "The image does not provide specific details about the type of TB or the exact symptoms."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
