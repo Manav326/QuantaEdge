@@ -1,8 +1,29 @@
-import hashlib,json,tempfile,unittest
+import hashlib,json,tempfile,unittest,subprocess
 from pathlib import Path
-from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker,previous_inventory_for_resume
+from unittest.mock import patch
+from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker,previous_inventory_for_resume,push_oci_artifact_with_retry
 def w(p,v):p.write_text(json.dumps(v)+"\n",encoding="utf-8")
 class PipelineTests(unittest.TestCase):
+ def test_registry_push_retries_transient_network_errors(self):
+  failed=subprocess.CompletedProcess(["oras","push"],1,"","Error: Head https://ghcr.io/v2/example/manifests/tag: dial tcp 140.82.112.33:443: i/o timeout")
+  succeeded=subprocess.CompletedProcess(["oras","push"],0,"pushed","")
+  with patch("scripts.quantaedge_textbook_pipeline.subprocess.run",side_effect=[failed,succeeded]) as run, patch("scripts.quantaedge_textbook_pipeline.time.sleep") as sleep:
+   self.assertTrue(push_oci_artifact_with_retry(["oras","push"],cwd=self.root,description="test checkpoint",attempts=3,initial_delay_seconds=1))
+  self.assertEqual(2,run.call_count)
+  sleep.assert_called_once_with(1)
+ def test_registry_push_exhaustion_falls_back_to_git_checkpoint(self):
+  failed=subprocess.CompletedProcess(["oras","push"],1,"","Head https://ghcr.io/v2/example/manifests/tag: i/o timeout")
+  with patch("scripts.quantaedge_textbook_pipeline.subprocess.run",return_value=failed) as run, patch("scripts.quantaedge_textbook_pipeline.time.sleep") as sleep:
+   self.assertFalse(push_oci_artifact_with_retry(["oras","push"],cwd=self.root,description="test checkpoint",attempts=3,initial_delay_seconds=1))
+  self.assertEqual(3,run.call_count)
+  self.assertEqual([unittest.mock.call(1),unittest.mock.call(2)],sleep.call_args_list)
+ def test_registry_push_does_not_retry_permanent_errors(self):
+  failed=subprocess.CompletedProcess(["oras","push"],1,"","unauthorized: authentication required")
+  with patch("scripts.quantaedge_textbook_pipeline.subprocess.run",return_value=failed) as run, patch("scripts.quantaedge_textbook_pipeline.time.sleep") as sleep:
+   with self.assertRaises(subprocess.CalledProcessError):
+    push_oci_artifact_with_retry(["oras","push"],cwd=self.root,description="test checkpoint",attempts=4,initial_delay_seconds=1)
+  run.assert_called_once()
+  sleep.assert_not_called()
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.sha="a"*64;self.ash=hashlib.sha256(b"x").hexdigest()
   self.inv=self.root/"i.json";self.raw=self.root/"r.json";self.man=self.root/"m.json";self.txt=self.root/"p.jsonl";self.eff=self.root/"eff.json";self.ledger=self.root/"ledger.json"
