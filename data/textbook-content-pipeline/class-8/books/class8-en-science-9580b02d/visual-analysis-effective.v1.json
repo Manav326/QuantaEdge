@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a46ddcb4873211ddedeca3441d00e0337b56fc37b02f24b43daeb4a863f2297e",
+  "raw_analysis_sha256": "75f538c12582e532233e1992dfb3bf0018851a4ac946a55c36e9167afc81d840",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:25:55Z",
+      "checkpointed_at": "2026-10-20T02:28:26Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:26:30Z",
+      "checkpointed_at": "2026-10-20T02:29:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:26:54Z",
+      "checkpointed_at": "2026-10-20T02:29:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -45626,6 +45626,124 @@
         "context_relation": "The page is a blank page with no visible text or images.",
         "limitations": [
           "The page is a blank page with no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "855d0fa5360479d777621f0d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:29:32Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b97ebc179d884cc618d70459",
+      "asset_sha256": "ff430a11e8551d831a839369a598d97fad9b6c8ebcf517bebd57ef402ce6500a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "page-0059.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook discussing vaccines and their role in protecting people against serious diseases. It mentions that vaccines are preventive and can help prevent illnesses, reduce the spread of infections, and save millions of lives every year. It also highlights India's role in vaccine production and the contributions of scientists like Maharaj Kishan Bhan.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Vaccines are one of the most effective ways to protect people\nof all ages—from infants to the elderly—against many serious\n\ndiseases. They help prevent illnesses, reduce the spread of\ninfections, and save millions of lives every year. It is important\n\nto remember that vaccines are preventive, not cu",
+          "India’s Role in Vaccine Production\nIndia is one of the world’s largest vaccine\nproducers. It manufactures vaccines on a\nmassive scale and supplies them to many\ncountries. Indian vaccine companies\nplayed a key role during the COVID-19\npandemic and continue to support global\nhealth efforts.",
+          "Maharaj Kishan Bhan was a well-known Indian\ndoctor and scientist. As Secretary of the Department\nof Biotechnology, he helped promote science and\ninnovation in India. He played a key role in developing\nthe Rotavirus vaccine, which protects children from\ndiarrhoea. He believed in using research to cre"
+        ],
+        "concepts": [
+          "vaccines",
+          "prevention",
+          "curative",
+          "serious diseases",
+          "infections",
+          "lives saved",
+          "vaccine production",
+          "COVID-19 pandemic",
+          "health efforts",
+          "Rotavirus vaccine",
+          "diarrhoea",
+          "biotechnology",
+          "innovation",
+          "healthcare"
+        ],
+        "context_relation": "The image is a page from a textbook discussing vaccines and their role in protecting people against serious diseases. It mentions that vaccines are preventive and can help prevent illnesses, reduce the spread of infections, and save millions of lives every year. It also highlights India's role in vaccine production and the contributions of scientists like Maharaj Kishan Bhan.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook beyond the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:31:30Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a page from a textbook discussing vaccines and their role in protecting people against serious diseases. It mentions that vaccines are preventive and can help prevent illnesses, reduce the spread of infections, and save millions of lives every year. It also highlights India's role in vaccine production and the contributions of scientists like Maharaj Kishan Bhan.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Vaccines are one of the most effective ways to protect people\nof all ages—from infants to the elderly—against many serious\n\ndiseases. They help prevent illnesses, reduce the spread of\ninfections, and save millions of lives every year. It is important\n\nto remember that vaccines are preventive, not cu",
+          "India’s Role in Vaccine Production\nIndia is one of the world’s largest vaccine\nproducers. It manufactures vaccines on a\nmassive scale and supplies them to many\ncountries. Indian vaccine companies\nplayed a key role during the COVID-19\npandemic and continue to support global\nhealth efforts.",
+          "Maharaj Kishan Bhan was a well-known Indian\ndoctor and scientist. As Secretary of the Department\nof Biotechnology, he helped promote science and\ninnovation in India. He played a key role in developing\nthe Rotavirus vaccine, which protects children from\ndiarrhoea. He believed in using research to cre"
+        ],
+        "concepts": [
+          "vaccines",
+          "prevention",
+          "curative",
+          "serious diseases",
+          "infections",
+          "lives saved",
+          "vaccine production",
+          "COVID-19 pandemic",
+          "health efforts",
+          "Rotavirus vaccine",
+          "diarrhoea",
+          "biotechnology",
+          "innovation",
+          "healthcare"
+        ],
+        "context_relation": "The image is a page from a textbook discussing vaccines and their role in protecting people against serious diseases. It mentions that vaccines are preventive and can help prevent illnesses, reduce the spread of infections, and save millions of lives every year. It also highlights India's role in vaccine production and the contributions of scientists like Maharaj Kishan Bhan.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook beyond the visible text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
