@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b98d03571f260a291e864803b32436da154ac62558a79ed2af29561c220afdb1",
+  "raw_analysis_sha256": "1169ef3310bcde4024f9a64b7b9c2f57a52ead275b05a2d01f3bf3ced3ddbbdc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:45:23Z",
+      "checkpointed_at": "2026-10-20T06:48:28Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:45:57Z",
+      "checkpointed_at": "2026-10-20T06:49:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:46:20Z",
+      "checkpointed_at": "2026-10-20T06:49:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:46:57Z",
+      "checkpointed_at": "2026-10-20T06:50:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -53142,6 +53142,46 @@
         "context_relation": "The image is a close-up of a rechargeable Li-ion battery pack, providing safety and operational instructions.",
         "limitations": [
           "The image does not provide information about the battery's capacity or usage."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "05d6c85c248894d4788179f0",
+      "asset_sha256": "71429cef424a45c8e0db16364fe41b8cd628104d808f19210804235546908b55",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/71429cef424a45c8e0db16364fe41b8cd628104d808f19210804235546908b55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f3433ec90979a9b7ae3111ebf8d27a4fabbdf08cedf159a9356860e3e0f1536",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A smartphone is charging from a USB cable plugged into a wall socket.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a common scenario of charging a mobile phone using a USB cable.",
+        "limitations": [
+          "The image does not provide any specific information about the type of dry cell or the voltage of the cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:50:38Z",
+      "effective_analysis": {
+        "visual_summary": "A smartphone is charging from a USB cable plugged into a wall socket.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a common scenario of charging a mobile phone using a USB cable.",
+        "limitations": [
+          "The image does not provide any specific information about the type of dry cell or the voltage of the cell."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
