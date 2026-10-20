@@ -120,6 +120,7 @@ export default function StudentMarketplacePage() {
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
     setStatus('');
+    setPendingVerify(draft);
     try {
       await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
         method: 'POST',
@@ -146,6 +147,10 @@ export default function StudentMarketplacePage() {
   }, [loadOffers, loadPurchaseRequests, router]);
 
   async function buyCourse(courseId: number) {
+    if (pendingVerify) {
+      setStatus('A previous payment still needs verification. Retry verification before starting another checkout.');
+      return;
+    }
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
     if (institutionContextRequested && (!brand || isResolving)) {
       setStatus('We could not verify your school identity. Reopen the official link shared by your school before starting checkout.');
@@ -186,7 +191,6 @@ export default function StudentMarketplacePage() {
             orderId: String(response.razorpay_order_id || ''),
             signature: String(response.razorpay_signature || ''),
           };
-          setPendingVerify(draft);
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== order.orderId) {
             setStatus('The payment confirmation did not match this order. Retry verification or contact support if money was deducted.');
             setBusyCourseId(null);
@@ -357,8 +361,8 @@ export default function StudentMarketplacePage() {
                       {busyCourseId === offer.course_id ? 'Adding…' : 'Add free course'}
                     </button>
                   ) : (
-                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null} onClick={() => void buyCourse(offer.course_id)}>
-                      {busyCourseId === offer.course_id ? 'Opening checkout…' : 'Buy with Razorpay'}
+                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => void buyCourse(offer.course_id)}>
+                      {pendingVerify ? 'Verify previous payment first' : busyCourseId === offer.course_id ? 'Opening checkout…' : 'Buy with Razorpay'}
                     </button>
                   )}
                 </div>
