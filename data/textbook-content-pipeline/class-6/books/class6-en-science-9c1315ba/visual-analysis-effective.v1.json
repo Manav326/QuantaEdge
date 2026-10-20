@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "292daa90470fc585f020d588d8e06a4b14f8829b9f60fc4d46d0543d3465809f",
+  "raw_analysis_sha256": "edb361d01f48ca3505696e9383e334a731625ca16be1cdca6d0f4c4947d233ca",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:12:59Z",
+      "checkpointed_at": "2026-10-20T03:18:18Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:13:58Z",
+      "checkpointed_at": "2026-10-20T03:19:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:14:50Z",
+      "checkpointed_at": "2026-10-20T03:20:11Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -59353,6 +59353,84 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7889c3f91b8b390c6062012c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all the passengers were seated. She looked around again after a minute and found them still occupying their seats. She wondered, 'Are they moving?' She concluded that the position of the passengers was not changing with time. Therefore, they were c",
+          "The reference point is important in deciding whether an object is at rest or in motion. If Deepa considered herself (or the bus) as the refer",
+          "The concept of rest and motion is crucial in physics, as it helps in understanding the behavior of objects under different conditions."
+        ],
+        "concepts": [
+          "Rest",
+          "Motion",
+          "Reference point",
+          "Physics"
+        ],
+        "context_relation": "The text is discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "limitations": [
+          "The text does not provide specific examples or equations related to the concept of rest and motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:20:50Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all the passengers were seated. She looked around again after a minute and found them still occupying their seats. She wondered, 'Are they moving?' She concluded that the position of the passengers was not changing with time. Therefore, they were c",
+          "The reference point is important in deciding whether an object is at rest or in motion. If Deepa considered herself (or the bus) as the refer",
+          "The concept of rest and motion is crucial in physics, as it helps in understanding the behavior of objects under different conditions."
+        ],
+        "concepts": [
+          "Rest",
+          "Motion",
+          "Reference point",
+          "Physics"
+        ],
+        "context_relation": "The text is discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "limitations": [
+          "The text does not provide specific examples or equations related to the concept of rest and motion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2185c15c0a88a108ea516878",
+      "asset_sha256": "9ec157be1b2f439e1a301a92f008de212dec7042241058b5a3a0fbfa16e9d23c",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "asset_path": "page-0109.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

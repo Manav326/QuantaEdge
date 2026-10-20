@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1191,
+    "assets_selected": 1193,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1188,
-    "assets_remaining": 890,
+    "assets_analyzed": 1189,
+    "assets_remaining": 889,
     "assets_completion_percent": 57.2,
-    "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1186,
+    "assets_failed": 24,
+    "assets_skipped_from_checkpoint": 1188,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:12:59Z"
+      "checkpointed_at": "2026-10-20T03:18:18Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:13:58Z"
+      "checkpointed_at": "2026-10-20T03:19:18Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T03:14:50Z"
+      "checkpointed_at": "2026-10-20T03:20:11Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39381,6 +39381,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T03:17:08Z"
+    },
+    {
+      "asset_id": "7889c3f91b8b390c6062012c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all the passengers were seated. She looked around again after a minute and found them still occupying their seats. She wondered, 'Are they moving?' She concluded that the position of the passengers was not changing with time. Therefore, they were c",
+          "The reference point is important in deciding whether an object is at rest or in motion. If Deepa considered herself (or the bus) as the refer",
+          "The concept of rest and motion is crucial in physics, as it helps in understanding the behavior of objects under different conditions."
+        ],
+        "concepts": [
+          "Rest",
+          "Motion",
+          "Reference point",
+          "Physics"
+        ],
+        "context_relation": "The text is discussing the concept of rest and motion in physics, using the example of passengers in a bus.",
+        "limitations": [
+          "The text does not provide specific examples or equations related to the concept of rest and motion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T03:20:50Z"
+    },
+    {
+      "asset_id": "2185c15c0a88a108ea516878",
+      "asset_sha256": "9ec157be1b2f439e1a301a92f008de212dec7042241058b5a3a0fbfa16e9d23c",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "asset_path": "page-0109.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
