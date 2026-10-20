@@ -375,7 +375,7 @@ export default function TextbooksClient() {
     setPageError('');
   }, [selected?.document_id, currentPage]);
 
-  const noEnrolledCourses = !documentId && !loadingCourses && courses.length === 0 &&
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
     (!courseError || courseError === 'This course is not enrolled in your current institution account.');
   if (noEnrolledCourses) return <main className="app-shell qe-textbook-shell"><section className="qe-textbook-library">
     <StudentEmptyState icon="book" title={translateUi(locale, 'student.empty.books.title')}
