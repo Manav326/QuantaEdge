@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1958,
-    "successful_visual_analyses": 1883,
-    "missing_visual_analyses": 5530,
-    "failed_visual_analyses": 75,
+    "raw_analysis_result_rows": 1961,
+    "successful_visual_analyses": 1885,
+    "missing_visual_analyses": 5527,
+    "failed_visual_analyses": 76,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5605,
+    "unresolved_count": 5603,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -81704,9 +81704,31 @@
       "asset_path": "assets/0c7d9d201bd7630d939017027155fd91ffb0a056c611c4e6a0ea9c9b1f673211.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "Craftspersons",
+          "Metals",
+          "Daily use items",
+          "Ironsmiths",
+          "Items of daily use",
+          "Flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -81722,9 +81744,31 @@
       "asset_path": "assets/efd4eb0beec374ecc184fe345b0a81eddd1e873fcdf65eea9334fe5f1e88dc51.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of an elderly craftsperson, Sudarshan, making items of daily use using a hammer and an anvil.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "items of daily use",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image shows an elderly craftsperson making items of daily use, specifically flat pans (tawas), as part of a project to learn about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not provide specific details about the process of making flat pans (tawas).",
+          "The image does not show the materials used or the tools used by the craftsperson."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -81740,7 +81784,7 @@
       "asset_path": "assets/22cb2508fae6032103bced4fe361147e80021dc774ea67af6d495cccbb64bc19.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
