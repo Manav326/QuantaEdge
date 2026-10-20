@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "76a96bf9ba524e0df0666866c986c55d9bf223c5161e5b9956c99e551ae4ab01",
+  "raw_analysis_sha256": "1c5ed1237823230e7ed3ccf7ca916671de17ca962466524eadc70909e05f32ec",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:58:26Z",
+      "checkpointed_at": "2026-10-20T16:02:45Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:59:11Z",
+      "checkpointed_at": "2026-10-20T16:03:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:59:41Z",
+      "checkpointed_at": "2026-10-20T16:04:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:00:30Z",
+      "checkpointed_at": "2026-10-20T16:04:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55282,6 +55282,46 @@
         "context_relation": "The image is related to the textbook content on 'Exploring Forces' in Grade 8.",
         "limitations": [
           "The image does not provide specific answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c0269f6f9c58a701e10bf3e5",
+      "asset_sha256": "006e4a34051675f3322dbaa86e8fb2b64ea802029a7190bd2f6cf7ea32b76c37",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/006e4a34051675f3322dbaa86e8fb2b64ea802029a7190bd2f6cf7ea32b76c37.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a notebook and a pen, possibly engaged in writing or drawing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the textbook content about exploring forces and questions related to it.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or questions related to forces."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:05:55Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a notebook and a pen, possibly engaged in writing or drawing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the textbook content about exploring forces and questions related to it.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or questions related to forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
