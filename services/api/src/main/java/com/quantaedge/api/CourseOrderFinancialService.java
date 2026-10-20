@@ -311,7 +311,7 @@ public class CourseOrderFinancialService {
     taxSnapshot.put("supplierStateCode",supplierStateCode);
     taxSnapshot.put("buyerStateCode",buyerStateCode);
     taxSnapshot.put("listedPricePaise",quote.listedPricePaise());
-    taxSnapshot.put("discountOfferId",discountOfferId);
+    taxSnapshot.put("discountOfferId",discountOfferId==null?0L:discountOfferId);
     taxSnapshot.put("discountCode",normalizedCode);
     taxSnapshot.put("discountPaise",quote.discountPaise());
     taxSnapshot.put("discountedPricePaise",quote.discountedPricePaise());
