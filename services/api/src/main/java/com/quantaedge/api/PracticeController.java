@@ -364,34 +364,38 @@ public class PracticeController {
 
   @GetMapping("/sessions/{sessionId}")
   public Map<String,Object> getSession(@PathVariable long sessionId,
+      @RequestParam Long courseId,
       @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    ensureActiveEnrolledCourse(context.studentId(),institutionId,courseId);
     language=normalizeLanguage(language);
-    return getSessionForTenant(sessionId,language,context,institutionId);
+    return getSessionForTenant(sessionId,language,context,institutionId,courseId);
   }
 
-  private Map<String,Object> getSessionForTenant(long sessionId,String language,AuthContext context,long institutionId) {
+  private Map<String,Object> getSessionForTenant(long sessionId,String language,AuthContext context,long institutionId,long courseId) {
     List<Map<String,Object>> sessions=jdbc.queryForList("""
-      select id,status,requested_question_count,selected_question_count,created_at,completed_at
-      from student_practice_session where id=? and student_id=? and institution_id=?
-      """,sessionId,context.studentId(),institutionId);
+      select id,status,requested_question_count,selected_question_count,created_at,completed_at,course_id
+      from student_practice_session where id=? and student_id=? and institution_id=? and course_id=?
+      """,sessionId,context.studentId(),institutionId,courseId);
     if(sessions.isEmpty())throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Practice session not found.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select psq.question_id,psq.sequence_no,psq.answered_at,psq.question_snapshot::text as question_snapshot,
              (select count(*) from student_question_attempt a
-              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id and a.question_id=psq.question_id) as attempt_count,
+              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id
+                and a.course_id=ps.course_id and a.question_id=psq.question_id) as attempt_count,
              (select a.correct from student_question_attempt a
-              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id and a.question_id=psq.question_id
+              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id
+                and a.course_id=ps.course_id and a.question_id=psq.question_id
               order by a.answered_at desc,a.id desc limit 1) as last_correct
       from student_practice_session_question psq
       join student_practice_session ps on ps.id=psq.practice_session_id
-      where ps.id=? and ps.student_id=? and ps.institution_id=?
+      where ps.id=? and ps.student_id=? and ps.institution_id=? and ps.course_id=?
       order by psq.sequence_no
-      """,sessionId,context.studentId(),institutionId);
+      """,sessionId,context.studentId(),institutionId,courseId);
     List<Map<String,Object>> questions=new ArrayList<>();
     for(Map<String,Object> row:rows) {
       try {
@@ -508,6 +512,25 @@ public class PracticeController {
   private String json(Object value) {
     try{return mapper.writeValueAsString(value);}
     catch(JacksonException ex){throw new IllegalStateException("Could not save practice session data.",ex);}
+  }
+
+  private void ensureActiveEnrolledCourse(long studentId,long institutionId,long courseId) {
+    if(courseId<1L) throw badRequest("Select an active course before opening practice.");
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from student st
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+          and spe.program_id=p.id and spe.status='ACTIVE'
+        join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+        where st.id=? and st.active=true
+      )
+      """,Boolean.class,institutionId,courseId,studentId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,"The selected course is not actively enrolled in this institution.");
   }
 
   private long requireInstitution(InstitutionTenantContext tenant) {
