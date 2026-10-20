@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1042,
+    "assets_selected": 1044,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1039,
-    "assets_remaining": 1252,
+    "assets_analyzed": 1041,
+    "assets_remaining": 1250,
     "assets_completion_percent": 45.4,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1037,
+    "assets_skipped_from_checkpoint": 1039,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:38:33Z"
+      "checkpointed_at": "2026-10-20T04:41:38Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:39:07Z"
+      "checkpointed_at": "2026-10-20T04:42:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:39:31Z"
+      "checkpointed_at": "2026-10-20T04:42:35Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33553,6 +33553,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:40:52Z"
+    },
+    {
+      "asset_id": "49bbd21962f7c986a019b9d6",
+      "asset_sha256": "60ff92009564cf54bb47c8b1b080a7b3699d6b10921c1f5f81dcc7fa52746603",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/60ff92009564cf54bb47c8b1b080a7b3699d6b10921c1f5f81dcc7fa52746603.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two compasses are placed near the ends of a cylindrical coil, and the compasses are observed to deflect when the coil is connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Place the compasses near the two ends of the cylindrical coil (Fig. 4.3b).",
+          "Connect the two ends of the coil with the terminals of the cell as shown in Fig. 4.3c and observe the magnetic compasses. Do you find any deflection in the needles of the compasses?",
+          "Disconnect the wire from the cell. Do the needles of the compasses deflect?",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "magnetic compass",
+          "cylindrical coil",
+          "battery",
+          "deflection"
+        ],
+        "context_relation": "The image is a visual representation of an experiment involving a cylindrical coil and compasses, where the compasses deflect when the coil is connected to a battery.",
+        "limitations": [
+          "The image does not provide specific details about the experiment setup or the results observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:43:21Z"
+    },
+    {
+      "asset_id": "60e402f7303c88067c8bb8a0",
+      "asset_sha256": "13ea219c7d9827afee8bb89e347954dc7ca639ab80548b71e947960ad8dd51a4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/13ea219c7d9827afee8bb89e347954dc7ca639ab80548b71e947960ad8dd51a4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl with braided hair wearing a blue shirt and light blue pants, standing with her arms crossed and one hand on her chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the textbook text.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content.",
+          "The image is a cartoon illustration and does not depict any specific educational concept or formula from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:43:58Z"
     }
   ]
 }

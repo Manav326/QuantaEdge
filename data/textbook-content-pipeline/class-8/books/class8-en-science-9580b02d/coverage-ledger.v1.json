@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1058,
-    "successful_visual_analyses": 1042,
-    "missing_visual_analyses": 1233,
+    "raw_analysis_result_rows": 1060,
+    "successful_visual_analyses": 1044,
+    "missing_visual_analyses": 1231,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1249,
+    "unresolved_count": 1247,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40059,9 +40059,28 @@
       "asset_path": "assets/60ff92009564cf54bb47c8b1b080a7b3699d6b10921c1f5f81dcc7fa52746603.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two compasses are placed near the ends of a cylindrical coil, and the compasses are observed to deflect when the coil is connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Place the compasses near the two ends of the cylindrical coil (Fig. 4.3b).",
+          "Connect the two ends of the coil with the terminals of the cell as shown in Fig. 4.3c and observe the magnetic compasses. Do you find any deflection in the needles of the compasses?",
+          "Disconnect the wire from the cell. Do the needles of the compasses deflect?",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "magnetic compass",
+          "cylindrical coil",
+          "battery",
+          "deflection"
+        ],
+        "context_relation": "The image is a visual representation of an experiment involving a cylindrical coil and compasses, where the compasses deflect when the coil is connected to a battery.",
+        "limitations": [
+          "The image does not provide specific details about the experiment setup or the results observed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40077,9 +40096,19 @@
       "asset_path": "assets/13ea219c7d9827afee8bb89e347954dc7ca639ab80548b71e947960ad8dd51a4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl with braided hair wearing a blue shirt and light blue pants, standing with her arms crossed and one hand on her chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the textbook text.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content.",
+          "The image is a cartoon illustration and does not depict any specific educational concept or formula from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
