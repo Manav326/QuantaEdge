@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 /**
  * HRMS-owned financial configuration. This controller deliberately does not issue invoices,
@@ -26,11 +29,14 @@ public class PlatformFinanceController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final ObjectMapper objectMapper;
+  private final InvoicePreviewPdfRenderer invoicePreviewPdfRenderer;
 
-  public PlatformFinanceController(JdbcTemplate jdbc, AuthorizationService authorization, ObjectMapper objectMapper) {
+  public PlatformFinanceController(JdbcTemplate jdbc, AuthorizationService authorization, ObjectMapper objectMapper,
+      InvoicePreviewPdfRenderer invoicePreviewPdfRenderer) {
     this.jdbc=jdbc;
     this.authorization=authorization;
     this.objectMapper=objectMapper;
+    this.invoicePreviewPdfRenderer=invoicePreviewPdfRenderer;
   }
 
   @GetMapping("/overview")
@@ -263,7 +269,7 @@ public class PlatformFinanceController {
       select exists(select 1 from course_tax_profile where institution_offer_id=? and status='APPROVED' and id<>?
         and (?::timestamptz is null or effective_from < ?::timestamptz)
         and (effective_until is null or effective_until > ?::timestamptz))
-      """,Boolean.class,offerId,profileId,end,end,start));
+      """,Boolean.class,offerId,profileId,dbInstant(end),dbInstant(end),dbInstant(start)));
     if(overlap) throw bad("Another approved tax profile overlaps this effective period.");
     if("TAXABLE".equals(String.valueOf(row.get("tax_treatment")))) {
       java.time.LocalDate date=java.time.LocalDate.ofInstant(start,java.time.ZoneId.of("Asia/Kolkata"));
@@ -334,7 +340,7 @@ public class PlatformFinanceController {
       insert into revenue_share_policy(institution_offer_id,policy_version,currency,status,effective_from,
         effective_until,contractual_reference,notes,created_by_staff_id)
       values(?,?,?,'DRAFT',?,?,?,?,?) returning id
-      """,Long.class,offerId,version,currency,start,end,optionalText(body.get("contractualReference")),
+      """,Long.class,offerId,version,currency,dbInstant(start),dbInstant(end),optionalText(body.get("contractualReference")),
         optionalText(body.get("notes")),context.staffId());
     audit(null,institutionId,context,"REVENUE_SHARE_POLICY_CREATED","REVENUE_SHARE_POLICY",Long.toString(id),
         Map.of("offerId",offerId,"version",version));
@@ -415,6 +421,15 @@ public class PlatformFinanceController {
       """,policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
     if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status")))) throw bad("Submit the policy before approval.");
+    List<Map<String,Object>> policyRecipients=jdbc.queryForList("""
+      select calculation_type,percentage_basis_points,flat_amount_paise
+      from revenue_share_policy_recipient where policy_id=?
+      """,policyId);
+    if(policyRecipients.isEmpty()) throw bad("A policy needs at least one institution recipient.");
+    long percentageBasisPoints=policyRecipients.stream()
+      .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
+      .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();
+    if(percentageBasisPoints>10_000) throw bad("The combined percentage allocation cannot exceed 100% of the distributable pool.");
     long offerId=((Number)row.get("institution_offer_id")).longValue();
     long sourceInstitution=offerInstitution(offerId);
     Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
@@ -424,14 +439,14 @@ public class PlatformFinanceController {
           and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
         join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
         where o.id=? and o.status in ('APPROVED','PUBLISHED'))
-      """,start,start,offerId);
+      """,dbInstant(start),dbInstant(start),offerId);
     if(!sellerReady) throw bad("Approval needs an active legal seller and an approved tax profile effective for this sale.");
     Map<String,Object> tax=one("""
       select tax.legal_entity_id,tax.tax_treatment from course_tax_profile tax
       where tax.institution_offer_id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       order by tax.version desc limit 1
-      """,offerId,start,start);
+      """,offerId,dbInstant(start),dbInstant(start));
     if("TAXABLE".equals(String.valueOf(tax.get("tax_treatment")))) {
       java.time.LocalDate date=java.time.LocalDate.ofInstant(start,java.time.ZoneId.of("Asia/Kolkata"));
       if(!exists("""
@@ -445,7 +460,7 @@ public class PlatformFinanceController {
       select exists(select 1 from revenue_share_policy where institution_offer_id=? and status='APPROVED' and id<>?
         and (?::timestamptz is null or effective_from < ?::timestamptz)
         and (effective_until is null or effective_until > ?::timestamptz))
-      """,Boolean.class,offerId,policyId,end,end,start));
+      """,Boolean.class,offerId,policyId,dbInstant(end),dbInstant(end),dbInstant(start)));
     if(overlap) throw bad("Another approved revenue-share policy overlaps this effective period.");
     int n=jdbc.update("""
       update revenue_share_policy set status='APPROVED',approved_by_staff_id=?,approved_at=now()
@@ -455,6 +470,20 @@ public class PlatformFinanceController {
     audit(null,sourceInstitution,context,"REVENUE_SHARE_POLICY_APPROVED","REVENUE_SHARE_POLICY",
         Long.toString(policyId),Map.of("offerId",offerId,"policyVersion",row.get("policy_version")));
     return Map.of("id",policyId,"status","APPROVED");
+  }
+
+  @PostMapping(value="/invoice-template-preview.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
+  public ResponseEntity<byte[]> previewInvoiceTemplate(
+      @RequestBody(required=false) Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireOwner(context);
+    Map<String,Object> design=normalizeDesign(body==null?null:body.get("designDefinition"));
+    byte[] pdf=invoicePreviewPdfRenderer.renderPreview(design).pdf();
+    return ResponseEntity.ok()
+      .contentType(MediaType.APPLICATION_PDF)
+      .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=quantaedge-invoice-preview.pdf")
+      .header(HttpHeaders.CACHE_CONTROL,"no-store, max-age=0")
+      .body(pdf);
   }
 
   @GetMapping("/invoice-templates")
@@ -699,6 +728,9 @@ public class PlatformFinanceController {
   private static Instant optionalInstant(Object raw) {
     if(optionalText(raw)==null)return null;
     try{return Instant.parse(String.valueOf(raw));}catch(Exception ex){throw bad("Effective end must be an ISO-8601 UTC timestamp.");}
+  }
+  private static java.time.OffsetDateTime dbInstant(Instant value) {
+    return value == null ? null : java.time.OffsetDateTime.ofInstant(value, java.time.ZoneOffset.UTC);
   }
   private static Instant asInstant(Object raw) {
     if(raw instanceof java.sql.Timestamp t)return t.toInstant();

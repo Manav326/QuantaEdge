@@ -58,6 +58,8 @@ export default function FinancePage(){
   const [taxForm,setTaxForm]=useState<TaxForm>({offerId:'',legalEntityId:'',serviceClassificationCode:'',taxTreatment:'TAXABLE',gstPercent:'',cessPercent:'',priceIncludesTax:true,placeOfSupplyRule:'RECIPIENT_LOCATION',effectiveFrom:new Date(Date.now()-60000).toISOString().slice(0,16)});
   const [taxProfiles,setTaxProfiles]=useState<Record<string,any[]>>({});
   const [selectedTemplateId,setSelectedTemplateId]=useState('');
+  const [previewPdfUrl,setPreviewPdfUrl]=useState<string|null>(null);
+  const [previewPdfLoading,setPreviewPdfLoading]=useState(false);
   const [selectedVersionNo,setSelectedVersionNo]=useState<number|null>(null);
   const [templateScope,setTemplateScope]=useState('PLATFORM');
   const [templateEntityId,setTemplateEntityId]=useState('');
@@ -85,6 +87,7 @@ export default function FinancePage(){
     finally{setLoading(false);}
   },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId]);
   useEffect(()=>{void loadAll();},[loadAll]);
+  useEffect(()=>()=>{if(previewPdfUrl)URL.revokeObjectURL(previewPdfUrl);},[previewPdfUrl]);
 
   const action=async(work:()=>Promise<unknown>,success:string)=>{
     setBusy(true);setError('');setNotice('');
@@ -189,6 +192,25 @@ export default function FinancePage(){
     if(!selectedTemplateId||!selectedVersionNo){setError('Create a template or start a draft version first.');return;}
     void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo,{method:'PUT',body:JSON.stringify({designDefinition:design})}),
       'Invoice template draft saved. The preview reflects the saved design.');
+  };
+  const generatePdfPreview=async()=>{
+    setPreviewPdfLoading(true);setError('');
+    try{
+      const response=await apiFetch(BASE+'/invoice-template-preview.pdf',{
+        method:'POST',
+        headers:{'X-QE-Workspace':'HRMS','Accept':'application/pdf','Content-Type':'application/json'},
+        credentials:'same-origin',cache:'no-store',body:JSON.stringify({designDefinition:design})
+      });
+      if(!response.ok){
+        const raw=await response.text();let detail:any={};
+        try{detail=raw?JSON.parse(raw):{};}catch{detail={message:raw};}
+        throw new Error(String(detail.message||detail.detail||detail.error||'PDF preview could not be generated.'));
+      }
+      const blob=await response.blob();
+      if(blob.size===0||(!blob.type.includes('pdf')&&blob.type!=='application/octet-stream')) throw new Error('The server did not return a valid PDF preview.');
+      setPreviewPdfUrl(URL.createObjectURL(blob));
+    }catch(e){setError(e instanceof Error?e.message:'PDF preview could not be generated.');}
+    finally{setPreviewPdfLoading(false);}
   };
   const publishTemplate=()=>{
     if(!selectedTemplateId||!selectedVersionNo){setError('Select a template draft first.');return;}
@@ -319,7 +341,7 @@ export default function FinancePage(){
           <div className={styles.buttonStack}>{!selectedTemplate?<button className={styles.primary} disabled={busy} onClick={createTemplate}>Create draft template</button>:<><button className={styles.secondary} disabled={busy||selectedTemplate.version_status!=='DRAFT'} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy||selectedTemplate.version_status!=='DRAFT'} onClick={publishTemplate}>Approve & publish version</button></>}</div>
           <p className={styles.note}>Published template versions are immutable for the purpose of historical invoices. Actual statutory documents also snapshot seller, recipient, tax, line items and totals separately.</p>
         </section>
-        <section className={styles.previewPanel}><div className={styles.previewHeader}><div><span className={styles.eyebrow}>LIVE PREVIEW</span><h2>Invoice document</h2></div><span className={styles.samplePill}>SAMPLE · NOT ISSUED</span></div>
+        <section className={styles.previewPanel}><div className={styles.previewHeader}><div><span className={styles.eyebrow}>LIVE PREVIEW</span><h2>Invoice document</h2></div><div className={styles.previewActions}><span className={styles.samplePill}>SAMPLE · NOT ISSUED</span><button type="button" className={styles.secondarySmall} disabled={previewPdfLoading} onClick={()=>void generatePdfPreview()}>{previewPdfLoading?'Rendering PDF…':'Open PDF preview'}</button></div></div>
           <div className={styles.paperWrap}><article className={[styles.paper,design.surfaceStyle==='CLEAN_WHITE'?styles.paperWhite:design.surfaceStyle==='SOFT_SLATE'?styles.paperSlate:styles.paperWarm].join(' ')} style={{'--invoice-primary':design.primaryColor,'--invoice-accent':design.accentColor} as CSSProperties}>
             <div className={styles.paperTopRule}/>
             <header className={styles.paperBrand}><div className={styles.mark} style={{background:design.primaryColor}}>{design.showLogo?'QE':'IN'}</div><div><strong>LEGAL SUPPLIER NAME</strong><span>Registered address · State and PIN</span><span>GSTIN: configured approved registration</span></div><div className={styles.documentTitle}><span>TAX INVOICE</span><b>QE-PREVIEW-0001</b><small>Preview date · sample only</small></div></header>
@@ -330,6 +352,7 @@ export default function FinancePage(){
             <footer className={styles.paperFooter}><div><b>{design.footerText}</b><span>Supplier particulars, required declarations and authentication are rendered from the approved invoice snapshot.</span></div><div className={styles.previewSeal}>PREVIEW<br/>NOT A TAX INVOICE</div></footer>
           </article></div>
           <div className={styles.previewNote}><span>◎</span><p>This live design preview uses sample placeholders. It deliberately does not fabricate a GSTIN, legal invoice number, tax rate or real customer data.</p></div>
+          {previewPdfUrl&&<section className={styles.pdfPreviewPanel}><div className={styles.pdfPreviewToolbar}><b>PDF output preview · sample only</b><div><a href={previewPdfUrl} download="quantaedge-invoice-preview.pdf">Download preview PDF</a><button type="button" className={styles.secondarySmall} onClick={()=>setPreviewPdfUrl(null)}>Close</button></div></div><iframe title="Invoice design PDF preview" src={previewPdfUrl}/></section>}
         </section>
       </section>}
       {tab==='documents'&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Issued fiscal documents</h2><p>HRMS financial audit view. Customer-facing secure PDF delivery is a separate issuance/rendering integration gate.</p></div><button className={styles.secondary} onClick={()=>void loadAll()} disabled={busy}>Refresh records</button></div>

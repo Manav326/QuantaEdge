@@ -252,3 +252,13 @@ Verification at this checkpoint:
 - Tightened GST registration consistency (the GSTIN prefix must match the supplied state code) and added explicit duplicate-recipient validation before insert, so duplicates return a controlled validation error rather than a database conflict.
 - Imported `CSSProperties` as a type. Re-check People Operations build, API verification and localization parity on the new exact commit.
 - Tax calculation and HRMS financial configuration remain foundations: actual Razorpay settlement-to-invoice/allocation, PDF issuance/download and payouts are not complete.
+
+
+### 2026-10-20 — Server-rendered PDF preview and policy validation
+
+- Added an HRMS-only `POST /api/v1/hrms/platform/finance/invoice-template-preview.pdf` route. It returns an inline PDF sample from the current unsaved design definition; preview rendering never creates a fiscal document, allocates a legal invoice number or writes a financial record.
+- Added `InvoicePreviewPdfRenderer` and unit tests checking PDF structure/page geometry and safe design fallbacks. The preview is prominently marked PREVIEW / NOT A TAX INVOICE and uses sample placeholders.
+- Added an “Open PDF preview” action to HRMS Invoice Design Studio and an embedded PDF viewer with a download-preview action. The HTML preview remains live for unsaved changes; the PDF is rendered from the same current design payload.
+- Converted effective policy/tax-profile timestamps into JDBC-supported UTC `OffsetDateTime` values before PostgreSQL queries.
+- Policy approval now rejects combined percentage recipients exceeding 100% before activation. Flat amounts remain subject to the actual captured sale's distributable-pool validation.
+- This remains preview/design functionality, not a production-issued invoice. Next: verify the current exact-commit CI; then connect captured payment + approved tax snapshot + allocation + immutable fiscal-document issuance and secure downloads.
