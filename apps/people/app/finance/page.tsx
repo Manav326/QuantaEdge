@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProp
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
-type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; status:string; active_gst_registrations?:number };
+type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
 type Offer = { offer_id:number; institution_id:number; institution_name:string; course_code:string; course_name:string; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
@@ -45,6 +45,8 @@ export default function FinancePage(){
   const [templates,setTemplates]=useState<Template[]>([]);
   const [documents,setDocuments]=useState<FinancialDocument[]>([]);
   const [seriesDrafts,setSeriesDrafts]=useState<Record<string,string>>({});
+  const [einvoiceDrafts,setEinvoiceDrafts]=useState<Record<string,string>>({});
+  const [einvoiceNotes,setEinvoiceNotes]=useState<Record<string,string>>({});
   const [downloadingDocumentId,setDownloadingDocumentId]=useState<number|null>(null);
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
@@ -125,9 +127,25 @@ export default function FinancePage(){
   };
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
-    if(!/^[A-Z0-9_-]{1,16}$/.test(series)){setError('Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.');return;}
+    if(!/^[A-Z0-9_-]{1,3}$/.test(series)){setError('Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.');return;}
     void action(()=>api(BASE+'/legal-entities/'+entity.id+'/invoice-series',{method:'PUT',body:JSON.stringify({invoiceSeriesCode:series})}),
       'Invoice series saved. Existing invoices keep their original numbers; future documents use this series.');
+  };
+  const saveEinvoiceApplicability=(entity:LegalEntity)=>{
+    const applicability=einvoiceDrafts[String(entity.id)]??entity.einvoice_applicability??'UNREVIEWED';
+    const reviewNote=(einvoiceNotes[String(entity.id)]??entity.einvoice_applicability_review_note??'').trim();
+    if(applicability!=='NOT_REQUIRED'&&applicability!=='REQUIRED'){
+      setError('Choose NOT_REQUIRED or REQUIRED only after reviewing the seller with the responsible tax adviser.');return;
+    }
+    if(reviewNote.length<20||reviewNote.length>1000){
+      setError('Add a review rationale or tax-adviser reference between 20 and 1,000 characters.');return;
+    }
+    const message=applicability==='REQUIRED'
+      ?'Review recorded. Checkout remains blocked until e-invoice integration is enabled.'
+      :'Review recorded. Other checkout gates still apply; this record is not legal certification.';
+    void action(()=>api(BASE+'/legal-entities/'+entity.id+'/einvoice-applicability',{
+      method:'PUT',body:JSON.stringify({applicability,reviewNote})
+    }),message);
   };
   const downloadDocument=async(fiscalDoc:FinancialDocument)=>{
     setDownloadingDocumentId(fiscalDoc.id);setError('');setNotice('');
@@ -313,10 +331,25 @@ export default function FinancePage(){
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
             <div className={styles.entitySummary}><b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span><small>{e.active_gst_registrations||0} verified registration(s)</small>
-              <label className={styles.seriesInline}>Invoice series prefix<input maxLength={16} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
+              <label className={styles.seriesInline}>Invoice series prefix<input maxLength={3} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
+              <small>e-Invoice applicability: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
             </div>
             <div className={styles.entityActions}><button className={styles.secondarySmall} disabled={busy} onClick={()=>saveInvoiceSeries(e)}>Save series</button>
               {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+            </div>
+            <div className={styles.einvoiceReview}>
+              <label>Reviewed applicability
+                <select value={einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED'} onChange={event=>setEinvoiceDrafts(old=>({...old,[String(e.id)]:event.target.value}))}>
+                  <option value="UNREVIEWED" disabled>Not reviewed</option>
+                  <option value="NOT_REQUIRED">Not required — reviewed</option>
+                  <option value="REQUIRED">Required — block checkout</option>
+                </select>
+              </label>
+              <label>Review rationale / tax-adviser reference
+                <input maxLength={1000} value={einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??''} placeholder="Reference and reason for the seller's applicability decision" onChange={event=>setEinvoiceNotes(old=>({...old,[String(e.id)]:event.target.value}))}/>
+              </label>
+              <button className={styles.secondarySmall} disabled={busy} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
+              <small className={styles.einvoiceHelp}>Human review only; this does not validate against the GST portal. REQUIRED keeps checkout blocked until IRP/IRN and signed-QR verification are integrated.</small>
             </div>
           </article>)}</div>
         </div>
