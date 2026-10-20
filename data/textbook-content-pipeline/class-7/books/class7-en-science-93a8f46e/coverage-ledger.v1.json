@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2027,
-    "successful_visual_analyses": 1919,
-    "missing_visual_analyses": 5461,
+    "raw_analysis_result_rows": 2030,
+    "successful_visual_analyses": 1922,
+    "missing_visual_analyses": 5458,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5569,
+    "unresolved_count": 5566,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -83608,9 +83608,30 @@
       "asset_path": "assets/a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red-hot iron block being beaten with a hammer.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "iron",
+          "hammer",
+          "furnace",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The image shows a close-up of an iron block being heated and beaten, which is part of the context of the text discussing the process of making iron items.",
+        "limitations": [
+          "The image is blurry and lacks clarity, making it difficult to see the details of the iron block and the hammer."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83626,9 +83647,30 @@
       "asset_path": "assets/39d7a5d15c06fcf1fde30345c4354a5896bfdc66f5b4f5b33fea18138854053b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scene depicting Sudarshan heating an iron block in a furnace and beating it with a hammer.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "furnace",
+          "iron",
+          "hammer",
+          "shape",
+          "axe"
+        ],
+        "context_relation": "The scene is part of a larger narrative about the process of making an axe from iron.",
+        "limitations": [
+          "The image does not show the final product of the axe being made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83644,9 +83686,32 @@
       "asset_path": "assets/f59a088eea9e6a708d325b3f7cbef3802769792db6583a48376aa9c7c8567021.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly a scroll of paper or parchment, with a wooden handle at the top.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "iron metal",
+          "wood",
+          "coal",
+          "furnace",
+          "hammer",
+          "axe",
+          "shape"
+        ],
+        "context_relation": "The image is a part of a larger educational content, specifically a textbook page about the process of making and shaping iron items.",
+        "limitations": [
+          "The image does not provide specific details about the process or materials used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
