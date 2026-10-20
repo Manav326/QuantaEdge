@@ -68,6 +68,8 @@ fun StudentCertificatesScreen(
     certificateLanguage: String,
     onCertificateLanguageChange: (String) -> Unit,
     initialAssessmentAttemptId: Long = 0L,
+    noEnrolledCourses: Boolean = courseId <= 0L,
+    onMarketplace: () -> Unit = {},
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -413,6 +415,24 @@ fun StudentCertificatesScreen(
         }
     }
 
+
+    if (noEnrolledCourses) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            StudentEnrollmentEmptyState(
+                icon = "🏅",
+                title = localizedUiText("Your certificates are linked to courses"),
+                message = localizedUiText("Enrol in a course to see eligible achievements and issued certificates."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace,
+                secondaryLabel = localizedUiText("My Courses"),
+                onSecondary = onBack
+            )
+        }
+        return
+    }
 
     if (showScanner) {
         PremiumCodeScannerScreen(
