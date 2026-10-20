@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1129,
+    "assets_selected": 1130,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1125,
-    "assets_remaining": 1166,
+    "assets_analyzed": 1126,
+    "assets_remaining": 1165,
     "assets_completion_percent": 49.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1124,
+    "assets_skipped_from_checkpoint": 1125,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:49:14Z"
+      "checkpointed_at": "2026-10-20T15:54:00Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:49:59Z"
+      "checkpointed_at": "2026-10-20T15:54:45Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:50:29Z"
+      "checkpointed_at": "2026-10-20T15:55:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:51:18Z"
+      "checkpointed_at": "2026-10-20T15:56:04Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36769,6 +36769,59 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T15:53:00Z"
+    },
+    {
+      "asset_id": "8c027d8d3d058acebc851c96",
+      "asset_sha256": "5b010304e5856d8131059f1f0e8f8ebc440016820d86206862bc77be77d6c8eb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/5b010304e5856d8131059f1f0e8f8ebc440016820d86206862bc77be77d6c8eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Book ID: ncert-c8-english-hecu1",
+          "Source PDF page: 82",
+          "Asset kind: embedded_image",
+          "Nearby extracted page text (possibly incomplete):",
+          "Exploring Forces",
+          "5",
+          "Probe and ponder",
+          "z Why does it feel harder to pedal a bicycle when going uphill",
+          "than on flat ground?",
+          "z Why is it easier to slip on a wet surface?",
+          "z Why do we feel ‘light’ or like we are ‘floating’ just after our",
+          "swing reaches its highest point and begins to come down?",
+          "z Share your questions",
+          "?",
+          "62",
+          "Curiosity— Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Exploring Forces",
+          "Curiosity",
+          "Science",
+          "Grade 8",
+          "Reprint 2026-27"
+        ],
+        "context_relation": "The image is related to the textbook content about exploring forces and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content.",
+          "The image does not show any specific questions or answers related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:57:26Z"
     }
   ]
 }
