@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1040,
-    "successful_visual_analyses": 1025,
-    "missing_visual_analyses": 1251,
+    "raw_analysis_result_rows": 1042,
+    "successful_visual_analyses": 1027,
+    "missing_visual_analyses": 1249,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1266,
+    "unresolved_count": 1264,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39388,9 +39388,41 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Model",
+          "Exhibit",
+          "Energy",
+          "Exploring",
+          "Questions",
+          "Notes",
+          "Lifting electromagnet",
+          "Typical crane",
+          "Senior",
+          "Sumana"
+        ],
+        "context_relation": "The image is a visual representation of a model of a lifting electromagnet used in the science exhibition.",
+        "limitations": [
+          "The image does not show the actual working of the electromagnet.",
+          "The image does not show the students' reactions or interactions with the model."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39406,9 +39438,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Lifting electromagnet"
+        ],
+        "context_relation": "The image is a visual representation of the model described in the text.",
+        "limitations": [
+          "The image does not show the actual model, only a description.",
+          "The image does not show the actual model in operation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

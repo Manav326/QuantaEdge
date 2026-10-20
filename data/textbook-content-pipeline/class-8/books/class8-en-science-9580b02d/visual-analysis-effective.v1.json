@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2fb4f9cfd5aafb08487463d200b00908b8ab1e0e379296f1b0cff4daba791c4c",
+  "raw_analysis_sha256": "e4785baf19c1d9b5913f3e16bdf37c7e1de37d1ad703627fa23075efdb55cd47",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:07:13Z",
+      "checkpointed_at": "2026-10-20T04:11:54Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:07:47Z",
+      "checkpointed_at": "2026-10-20T04:12:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:08:10Z",
+      "checkpointed_at": "2026-10-20T04:12:49Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -49091,6 +49091,160 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5c66c012b4a116cca5008fb4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Model",
+          "Exhibit",
+          "Energy",
+          "Exploring",
+          "Questions",
+          "Notes",
+          "Lifting electromagnet",
+          "Typical crane",
+          "Senior",
+          "Sumana"
+        ],
+        "context_relation": "The image is a visual representation of a model of a lifting electromagnet used in the science exhibition.",
+        "limitations": [
+          "The image does not show the actual working of the electromagnet.",
+          "The image does not show the students' reactions or interactions with the model."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:13:13Z",
+      "effective_analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Model",
+          "Exhibit",
+          "Energy",
+          "Exploring",
+          "Questions",
+          "Notes",
+          "Lifting electromagnet",
+          "Typical crane",
+          "Senior",
+          "Sumana"
+        ],
+        "context_relation": "The image is a visual representation of a model of a lifting electromagnet used in the science exhibition.",
+        "limitations": [
+          "The image does not show the actual working of the electromagnet.",
+          "The image does not show the students' reactions or interactions with the model."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "93e54c2b2f70aa1d9ffcb344",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Lifting electromagnet"
+        ],
+        "context_relation": "The image is a visual representation of the model described in the text.",
+        "limitations": [
+          "The image does not show the actual model, only a description.",
+          "The image does not show the actual model in operation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:13:34Z",
+      "effective_analysis": {
+        "visual_summary": "A model of a lifting electromagnet with an iron nail wrapped in wire connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "It was the day of the science exhibition, and the school was buzzing with energy.",
+          "Mohini and Aakarsh, along with their friends, went from one exhibit to another, eagerly exploring different models, asking questions and taking notes.",
+          "One simple model really fascinated them.",
+          "It was a working model of a lifting electromagnet which was displayed by their senior, Sumana.",
+          "In it, instead of a hook like a typical crane, there was an iron nail wrapped in wire, which was connected to a battery."
+        ],
+        "concepts": [
+          "Science exhibition",
+          "Electromagnet",
+          "Iron nail",
+          "Wire",
+          "Battery",
+          "Lifting electromagnet"
+        ],
+        "context_relation": "The image is a visual representation of the model described in the text.",
+        "limitations": [
+          "The image does not show the actual model, only a description.",
+          "The image does not show the actual model in operation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
