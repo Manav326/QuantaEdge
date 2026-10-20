@@ -18,6 +18,7 @@ const certificatesPage = read('../app/student/certificates/page.tsx');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
 const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
+const androidGoogleCredentialFlow = read('../../android/app/src/main/java/com/quantaedge/android/data/GoogleCredentialFlow.kt');
 
 // Parent and Student sessions are separate identities. The proxy may only use
 // the matching workspace cookie as a routing hint; the API/client guard validates identity.
@@ -147,6 +148,14 @@ assert.ok(!androidApp.includes('Text(if (language == "hi") "ट्यूटर" 
   'The Learn submenu must not expose the unusable Tutor text link.');
 assert.ok(androidApp.includes('StudentAllCoursesScreen(') && androidApp.includes('StudentMarketplaceScreen('),
   'Android must have dedicated All Courses and Marketplace routes.');
+assert.ok(androidGoogleCredentialFlow.includes('.setFilterByAuthorizedAccounts(true)') &&
+  androidGoogleCredentialFlow.includes('GetSignInWithGoogleOption.Builder(clientId)') &&
+  androidGoogleCredentialFlow.includes('catch (error: GetCredentialCancellationException)') &&
+  androidGoogleCredentialFlow.includes('isAccountReauthFailure(error)'),
+  'Android Google sign-in must use the authorized-account bottom sheet first and explicitly recover the [16] re-authentication failure.');
+assert.ok(androidGoogleCredentialFlow.includes('clearCredentialState(ClearCredentialStateRequest())') &&
+  androidApp.includes('GoogleCredentialFlow.clearCredentialState(context.applicationContext)'),
+  'Android logout must clear Credential Manager provider state so the next Google sign-in starts cleanly.');
 
 assert.ok(layout.includes('visibleStudentNavGroups.map(group => group.href ?'), 'Desktop student navigation must use the grouped configuration.');
 assert.ok(layout.includes('qe-student-mobile-nav'), 'Mobile student navigation must use the grouped configuration.');
