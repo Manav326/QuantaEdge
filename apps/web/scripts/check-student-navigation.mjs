@@ -561,6 +561,23 @@ assert.ok(certificatesPage.includes('error && certificates.length === 0 ? null :
   'Certificate inventory must not say there are no certificates when its data could not be loaded.');
 assert.ok(studentBooksClient.includes('!error && !courseError && visibleDocuments.length === 0'),
   'The textbook library must distinguish failed requests from a successfully empty published-resource list.');
+assert.ok(structuredLessonsClient.includes('onRetry={() => void loadCatalogue()}') &&
+  structuredLessonsClient.includes('(error || courseError) ? null :') &&
+  structuredLessonsClient.includes('StudentEmptyState'),
+  'An enrolled course with no published lessons needs a premium, retryable empty state, but not alongside an API error.');
+assert.ok(studentClassesClient.includes('StudentEmptyState icon="classes"') &&
+  studentClassesClient.includes("retryLabel={translateUi(locale, 'legacy.web.refresh.e9337860')}"),
+  'Empty live and recorded classes must use the shared card and offer a retry.');
+assert.ok(testsClient.includes('StudentEmptyState icon="tests"') &&
+  testsClient.includes('primaryActionHref="/student/structured-lessons"'),
+  'Empty tests must offer a route into lessons, and test results must offer a refresh action.');
+assert.ok(studentBooksClient.includes('StudentEmptyState icon="book"') &&
+  studentBooksClient.includes("primaryActionLabel={translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}"),
+  'An enrolled course with no published PDFs needs a shared library empty state linking back to lessons.');
+assert.ok(certificatesPage.includes("title={translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}") &&
+  certificatesPage.includes('primaryActionLabel={<UiText message="web.navigation.student.testsResults" />}'),
+  'An enrolled course with no issued certificates needs a shared empty state leading to Tests & Results.');
+
 assert.ok(androidEnrollmentEmptyState.includes('CardDefaults.cardElevation') &&
   androidEnrollmentEmptyState.includes('primaryLabel') && androidEnrollmentEmptyState.includes('onPrimary'),
   'Android must provide the same reusable, themed student empty-state card and actionable controls.');
