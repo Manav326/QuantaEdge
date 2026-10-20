@@ -15,7 +15,13 @@ const structuredLessonsClient = read('../app/student/structured-lessons/Structur
 const structuredLessonDetailClient = read('../app/student/structured-lessons/StructuredLessonDetailClient.tsx');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
+const studentProgressPage = read('../app/student/progress/page.tsx');
+const studentBooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
+const englishUiCatalog = read('../app/i18n/catalogs/english.json');
+const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidLocalization = read('../../android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
+const androidProgressScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
 const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
 const androidGoogleCredentialFlow = read('../../android/app/src/main/java/com/quantaedge/android/data/GoogleCredentialFlow.kt');
@@ -140,6 +146,48 @@ assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketpl
 assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.includes('/student/courses') && dashboardPage.includes('/student/marketplace'),
   'Dashboard must show the active course and link to dedicated Courses and Marketplace screens.');
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
+
+const emptyStatePages = [
+  ['Learn', structuredLessonsClient, 'student.empty.learn.message'],
+  ['Practice', practiceClient, 'student.empty.practice.message'],
+  ['Progress', studentProgressPage, 'student.empty.progress.message'],
+  ['Books', studentBooksClient, 'student.empty.books.message'],
+];
+assert.ok(dashboardPage.includes('student.empty.dashboard.title') &&
+  dashboardPage.includes('student.empty.dashboard.message') &&
+  dashboardPage.includes('student.empty.dashboard.action') &&
+  !dashboardPage.includes('Opening the course marketplace'),
+  'A learner without enrolments must stay on the dashboard and see a localized, explicit Marketplace action.');
+for (const [pageName, source, messageKey] of emptyStatePages) {
+  assert.ok(source.includes(messageKey) && source.includes('noEnrolledCourses') &&
+    source.includes('!loadingCourses') && source.includes('!courseError'),
+    `${pageName} must show its localized empty state only after course loading succeeds with no enrolments.`);
+}
+for (const key of [
+  'student.empty.dashboard.title', 'student.empty.dashboard.message', 'student.empty.dashboard.action',
+  'student.empty.learn.message', 'student.empty.practice.message', 'student.empty.progress.message', 'student.empty.books.message'
+]) {
+  assert.ok(Object.hasOwn(JSON.parse(englishUiCatalog), key) && Object.hasOwn(JSON.parse(hinglishUiCatalog), key),
+    `Both UI language catalogs must define ${key}.`);
+}
+const androidSignInFlow = androidApp.slice(
+  androidApp.indexOf('suspend fun enterSignedInHome('),
+  androidApp.indexOf('suspend fun refreshUser()')
+);
+assert.ok(androidSignInFlow.includes('route = AppRoute.STUDENT_HOME') &&
+  !androidSignInFlow.includes('route = AppRoute.MARKETPLACE') &&
+  androidApp.includes('Button(onClick = onMarketplace') &&
+  androidApp.includes('fun studentHasNoCourses(): Boolean'),
+  'Android must keep first-time learners on the dashboard and open Marketplace only from its explicit action.');
+assert.ok(androidLocalization.includes('empty_dashboard_title') &&
+  androidApp.includes('Your lessons will appear here once you enroll in a course.') &&
+  androidApp.includes('Your practice activities will appear here once you enroll in a course.') &&
+  androidProgressScreen.includes('Your learning progress will appear here once you enroll in a course.') &&
+  androidApp.includes('Your course books will appear here once you enroll in a course.'),
+  'Android Learn, Practice, Progress and Books must have language-aware empty-state messages.');
+assert.ok(androidApp.includes('if (noEnrolledCourses)') &&
+  androidProgressScreen.includes('if (noEnrolledCourses)'),
+  'Android must suppress course/subject filtering UI when no courses are enrolled.');
 assert.ok(androidApp.includes('FloatingTutorDock(') &&
   androidApp.includes('route == AppRoute.LESSON && lesson.longAny("id", "lesson_id") > 0L') &&
   !androidApp.includes('if (tutorMinimized)'),
