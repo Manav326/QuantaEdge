@@ -9,6 +9,7 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
 import { UiText } from '../../i18n/useUiTranslation';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type PracticeTopic = {
   artifactId: string;
