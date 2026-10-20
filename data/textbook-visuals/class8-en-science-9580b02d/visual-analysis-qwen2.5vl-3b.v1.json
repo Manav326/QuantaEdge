@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1137,
+    "assets_selected": 1138,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1133,
-    "assets_remaining": 1158,
+    "assets_analyzed": 1134,
+    "assets_remaining": 1157,
     "assets_completion_percent": 49.5,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1132,
+    "assets_skipped_from_checkpoint": 1133,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:24:01Z"
+      "checkpointed_at": "2026-10-20T16:28:12Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:24:46Z"
+      "checkpointed_at": "2026-10-20T16:28:57Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:25:15Z"
+      "checkpointed_at": "2026-10-20T16:29:27Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:26:04Z"
+      "checkpointed_at": "2026-10-20T16:30:16Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37084,6 +37084,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:27:13Z"
+    },
+    {
+      "asset_id": "bb314ed3740e3461281a7c0a",
+      "asset_sha256": "7d9c20a94ff4ecf3ba9a47a04fcefaa2425812ed15c081b118232ec7226396ee",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/7d9c20a94ff4ecf3ba9a47a04fcefaa2425812ed15c081b118232ec7226396ee.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl pulling a box with a rope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pulling",
+          "box",
+          "rope",
+          "girl"
+        ],
+        "context_relation": "The image shows a girl using a rope to pull a box, which is a common illustration in physics to demonstrate the concept of force and motion.",
+        "limitations": [
+          "The image does not provide specific details about the forces involved or the physics principles being demonstrated."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:31:24Z"
     }
   ]
 }

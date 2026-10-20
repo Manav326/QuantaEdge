@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1159,
-    "successful_visual_analyses": 1137,
-    "missing_visual_analyses": 1132,
+    "raw_analysis_result_rows": 1160,
+    "successful_visual_analyses": 1138,
+    "missing_visual_analyses": 1131,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1154,
+    "unresolved_count": 1153,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43501,9 +43501,23 @@
       "asset_path": "assets/7d9c20a94ff4ecf3ba9a47a04fcefaa2425812ed15c081b118232ec7226396ee.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl pulling a box with a rope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pulling",
+          "box",
+          "rope",
+          "girl"
+        ],
+        "context_relation": "The image shows a girl using a rope to pull a box, which is a common illustration in physics to demonstrate the concept of force and motion.",
+        "limitations": [
+          "The image does not provide specific details about the forces involved or the physics principles being demonstrated."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
