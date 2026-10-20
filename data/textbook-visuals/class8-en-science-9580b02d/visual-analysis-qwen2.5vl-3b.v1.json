@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1150,
+    "assets_selected": 1151,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1146,
-    "assets_remaining": 1145,
-    "assets_completion_percent": 50.0,
+    "assets_analyzed": 1147,
+    "assets_remaining": 1144,
+    "assets_completion_percent": 50.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1145,
+    "assets_skipped_from_checkpoint": 1146,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:19:22Z"
+      "checkpointed_at": "2026-10-20T17:23:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:20:07Z"
+      "checkpointed_at": "2026-10-20T17:24:22Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:20:37Z"
+      "checkpointed_at": "2026-10-20T17:24:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:21:25Z"
+      "checkpointed_at": "2026-10-20T17:25:40Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37564,6 +37564,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T17:22:37Z"
+    },
+    {
+      "asset_id": "1675ea956c63b75069e5c15a",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5ef6be77826ded0e4c0fb51889bbddecdd1cfb40c0b3d5099b6975b4cf5a4ffe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a set of stairs.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "struggling"
+        ],
+        "context_relation": "The image illustrates a situation where a person is facing a challenge, possibly metaphorically representing the concept of 'overcoming obstacles' in the context of the chapter.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or the force being applied.",
+          "The image is a single frame and does not show the progression or outcome of the situation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:26:50Z"
     }
   ]
 }
