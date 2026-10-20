@@ -210,3 +210,25 @@ Visual direction: premium, calm, smooth high-quality layered surfaces, careful w
 - Next migration identified at initial audit: V149, **recheck before creating**.
 - First implementation slice planned: schema foundation plus deterministic revenue-distribution calculator and unit tests. This is not production invoicing/payout authorization.
 - The Actions run visible during this checkpoint was run #4858 for commit `13a568745bec09d9e979d37b98be4b938f7462d5` (push; in progress when queried). Do not treat it as the status for later commits; check Actions on the exact latest main SHA.
+
+
+### 2026-10-20 — First backend calculation checkpoint
+
+Commits on `main`:
+- `e5e9055e53d25b76b3721833b3e70e98ed9adcae` — initial durable spec/source audit.
+- `a6a625614dc96c8d727812b96de3d4fbde8cfd02` — V149 financial-document and revenue-share foundation.
+- `d8154c4e62e1be328c61e47cbd0b8210f3bcfc8e` — schema integrity correction: store total institutional allocation per pool and ensure allocation recipient/policy/institution IDs match.
+- `24f9cf65d1fa867c04d12c33b5dcc8ac7deb63ff` — deterministic distribution calculator.
+- `989eaa3801df8e269148555a72777db7bb1b5db3` — unit tests for mixed allocation rules.
+
+Changes present in this slice:
+- Added initial tables for legal entities/GST registrations, versioned course tax profiles, invoice template versions, fiscal document numbering/documents/line snapshots/assets/events, revenue-share policy recipients/allocation ledger/events and financial audit log.
+- Added database triggers rejecting update/delete for issued fiscal documents, document lines/assets/events, allocation facts/events and financial audit entries.
+- Added pure integer-minor-unit distribution math: requires explicit verified-captured confirmation, uses actual paid amount minus tax, supports percentage and flat shares, applies HALF_UP basis-point rounding, and rejects duplicate institutions or shares exceeding the pool.
+- No fiscal document issuance endpoint, tax-policy API, invoice renderer/download endpoint, coupon integration, payout integration or HRMS screen is claimed complete yet.
+
+Verification at this checkpoint:
+- Source writes succeeded on `main`.
+- GitHub Actions run #4863 for `989eaa3801df8e269148555a72777db7bb1b5db3` was pending when checked; check Actions again after this checkpoint.
+- Unit tests have been committed but not independently executed in this chat environment.
+- Still required next: tax calculation with discount-inclusive/exclusive prices; HRMS-authorized APIs and UI for legal entity/tax/policy/template configuration; live invoice preview; then payment-to-invoice/allocation integration and secure user/parent downloads.
