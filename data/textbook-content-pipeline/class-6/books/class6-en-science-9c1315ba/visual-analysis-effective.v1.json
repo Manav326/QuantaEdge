@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cd57e0b9a7fc7555e407c52dd6d8f6ed267554c8dbe187016be6b3f19283eeef",
+  "raw_analysis_sha256": "305616214ac2a596d2ea3e09daa63050b7a2bc00ce6e7538ebf498274246f2b8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:43:06Z",
+      "checkpointed_at": "2026-10-20T01:47:04Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:44:05Z",
+      "checkpointed_at": "2026-10-20T01:48:04Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:44:57Z",
+      "checkpointed_at": "2026-10-20T01:48:54Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57818,6 +57818,108 @@
         "context_relation": "The image is a visual aid for understanding the correct position of the eye for measuring length when the ends of the scale are broken or the zero marking is not clear.",
         "limitations": [
           "The image does not provide specific measurements or calculations, but rather a general explanation and diagram for the concept."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f99fc10a4e105963d0712021",
+      "asset_sha256": "701e223b8de624ca681484189b5fe55ca28e5ebae430631adff6895bf72238d8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 103,
+      "asset_path": "page-0103.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a ruler with a broken end and instructions on how to measure length when the ends are broken.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "B",
+          "C",
+          "A",
+          "Fig. 5.5: Correct position of the eye is 'B'",
+          "How to measure the length if the ends of the scale are broken?",
+          "If the ends of the scale are broken or the zero marking is not clear, it can still be used for measurement. With such a scale, use any other full mark of the scale, say, 1.0 cm (Fig. 5.6). Then you must subtract the reading of this mark from the reading at the other end. For example, in Fig. 5.6, th",
+          "Fig. 5.6: Correct method of placing the scale with broken end",
+          "How do visually challenged students measure lengths? They use scales with raised markings that can be felt by touching them."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:53:01Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a ruler with a broken end and instructions on how to measure length when the ends are broken.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "B",
+          "C",
+          "A",
+          "Fig. 5.5: Correct position of the eye is 'B'",
+          "How to measure the length if the ends of the scale are broken?",
+          "If the ends of the scale are broken or the zero marking is not clear, it can still be used for measurement. With such a scale, use any other full mark of the scale, say, 1.0 cm (Fig. 5.6). Then you must subtract the reading of this mark from the reading at the other end. For example, in Fig. 5.6, th",
+          "Fig. 5.6: Correct method of placing the scale with broken end",
+          "How do visually challenged students measure lengths? They use scales with raised markings that can be felt by touching them."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f98275ba9b854b9e4275312",
+      "asset_sha256": "ccb8fe31ef548caa96de5c04bd685a3eab453547231495291ed195620fe4aa11",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/ccb8fe31ef548caa96de5c04bd685a3eab453547231495291ed195620fe4aa11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "062c72d949c8302ac605d4d89484b106e744ba27502d471a9507bc90d363669c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing glasses and a red checkered shirt, with one hand on their chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the educational content about measuring lengths.",
+        "limitations": [
+          "The image does not provide any specific information about measuring lengths or the objects being measured."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:54:34Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing glasses and a red checkered shirt, with one hand on their chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the educational content about measuring lengths.",
+        "limitations": [
+          "The image does not provide any specific information about measuring lengths or the objects being measured."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

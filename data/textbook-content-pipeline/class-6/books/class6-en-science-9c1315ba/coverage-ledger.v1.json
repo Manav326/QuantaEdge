@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1186,
-    "successful_visual_analyses": 1164,
-    "missing_visual_analyses": 892,
+    "raw_analysis_result_rows": 1188,
+    "successful_visual_analyses": 1166,
+    "missing_visual_analyses": 890,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 914,
+    "unresolved_count": 912,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45073,9 +45073,29 @@
       "asset_path": "page-0103.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a ruler with a broken end and instructions on how to measure length when the ends are broken.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "B",
+          "C",
+          "A",
+          "Fig. 5.5: Correct position of the eye is 'B'",
+          "How to measure the length if the ends of the scale are broken?",
+          "If the ends of the scale are broken or the zero marking is not clear, it can still be used for measurement. With such a scale, use any other full mark of the scale, say, 1.0 cm (Fig. 5.6). Then you must subtract the reading of this mark from the reading at the other end. For example, in Fig. 5.6, th",
+          "Fig. 5.6: Correct method of placing the scale with broken end",
+          "How do visually challenged students measure lengths? They use scales with raised markings that can be felt by touching them."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45091,9 +45111,18 @@
       "asset_path": "assets/ccb8fe31ef548caa96de5c04bd685a3eab453547231495291ed195620fe4aa11.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing glasses and a red checkered shirt, with one hand on their chin, appearing thoughtful.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the educational content about measuring lengths.",
+        "limitations": [
+          "The image does not provide any specific information about measuring lengths or the objects being measured."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
