@@ -32,13 +32,20 @@ class OfflineAssessmentSyncWorker(appContext: Context, parameters: WorkerParamet
                 if (isStopped) return Result.retry()
                 val attempt = record.optJSONObject("attempt") ?: continue
                 val attemptId = attempt.optLongAny("attempt_id", "attemptId", "id")
+                val courseId = attempt.optLongAny("course_id", "courseId", "program_id")
                 val token = attempt.optString("offlinePackageToken")
-                if (attemptId <= 0L || token.isBlank()) {
-                    store.markState(attemptId, "SYNC_ERROR", "Offline package metadata is incomplete.")
+                if (attemptId <= 0L || courseId <= 0L || token.isBlank()) {
+                    // An offline attempt without a canonical course link is retained locally rather
+                    // than being guessed into whichever course happens to be selected at sync time.
+                    store.markState(attemptId, "SYNC_ERROR", "Offline package metadata is missing its verified course mapping.")
                     continue
                 }
                 try {
-                    val serverAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/$attemptId")
+                    val serverAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/$attemptId?courseId=$courseId")
+                    if (serverAttempt.optLongAny("course_id", "courseId", "program_id") != courseId) {
+                        store.markState(attemptId, "SYNC_ERROR", "The saved offline test belongs to a different course. Its answers were not uploaded.")
+                        continue
+                    }
                     if (serverAttempt.optString("status") != "IN_PROGRESS") {
                         // Handles worker interruption after server accepted submission; preserve its real result state locally.
                         store.markSynced(attemptId, serverAttempt)
@@ -65,12 +72,12 @@ class OfflineAssessmentSyncWorker(appContext: Context, parameters: WorkerParamet
                             ""
                         }
                         ApiClient.putObject(
-                            "/api/v1/learning/assessment-attempts/$attemptId/answers/$questionId",
+                            "/api/v1/learning/assessment-attempts/$attemptId/answers/$questionId?courseId=$courseId",
                             JSONObject().put("answer", answer).put("offlinePackageToken", token)
                         )
                     }
                     val submitted = ApiClient.postObject(
-                        "/api/v1/learning/assessment-attempts/$attemptId/submit",
+                        "/api/v1/learning/assessment-attempts/$attemptId/submit?courseId=$courseId",
                         JSONObject().put("offlinePackageToken", token)
                     )
                     store.markSynced(attemptId, submitted)
