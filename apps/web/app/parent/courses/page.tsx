@@ -25,6 +25,7 @@ type Entitlement = {
   holder_student_id: number; transfer_count: number;
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:parent';
 
 declare global {
   interface Window {
@@ -114,6 +115,33 @@ export default function ParentCoursesPage() {
 
   useEffect(() => { void load(); }, [load]);
 
+  // Retain the exact provider callback for same-order recovery after a refresh.
+  useEffect(() => {
+    try {
+      const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      if (!saved) return;
+      const value = JSON.parse(saved) as Partial<VerifyDraft>;
+      const draft: VerifyDraft = {
+        courseId: Number(value.courseId),
+        localOrderId: Number(value.localOrderId),
+        paymentId: String(value.paymentId || ''),
+        orderId: String(value.orderId || ''),
+        signature: String(value.signature || ''),
+      };
+      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
+          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
+          && /^pay_[A-Za-z0-9]+$/.test(draft.paymentId)
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId)
+          && /^[A-Fa-f0-9]{64}$/.test(draft.signature)) {
+        setPendingVerify(draft);
+      } else {
+        window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+      }
+    } catch {
+      // Keep the checkout usable if browser session storage is unavailable.
+    }
+  }, []);
+
   const money = (paise: number) => new Intl.NumberFormat('en-IN', {
     style: 'currency', currency: 'INR', maximumFractionDigits: 2,
   }).format(paise / 100);
@@ -124,12 +152,18 @@ export default function ParentCoursesPage() {
     setNotice('');
     setPendingVerify(draft);
     try {
+      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // The in-page retry remains available if browser storage is blocked.
+    }
+    try {
       await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: draft.paymentId, orderId: draft.orderId, signature: draft.signature }),
       }));
       setPendingVerify(null);
+      try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
       await load();
     } catch (e) {
