@@ -1996,7 +1996,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openClasses(subjectCode: String = currentSubject) {
         if (currentCourseId <= 0L) {
-            error = if (language == "hi") "पहले अपना कोर्स चुनें।" else "Select a primary course first."
+            // A confirmed no-enrolment state is handled by the classes empty-state UI.
+            // Keep genuine course-catalogue failures visible as errors.
+            error = if (studentHasNoCourses()) "" else if (language == "hi")
+                "पहले अपना कोर्स चुनें।" else "Select a primary course first."
             route = AppRoute.CLASSES
             liveClasses = emptyList()
             recordedClasses = emptyList()
@@ -4480,7 +4483,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         offlineDownloadedIds = offlineRecordingIds,
                         videoDownloadStates = videoDownloadStates,
                         onDownloadRecording = ::downloadRecordingOffline,
-                        onRemoveOfflineRecording = ::removeOfflineRecording
+                        onRemoveOfflineRecording = ::removeOfflineRecording,
+                        noEnrolledCourses = studentHasNoCourses(),
+                        onMarketplace = ::openMarketplace
                     )
                     AppRoute.RECORDING_PLAYER -> RecordedPlayerScreen(
                         recording = selectedRecording,
