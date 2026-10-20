@@ -396,41 +396,56 @@ public class LearningStateService {
     }
   }
 
-  private void updateMastery(long studentId,long conceptId,Long institutionId){
+  private void updateMastery(long studentId,long conceptId,Long institutionId,Long courseId){
     Map<String,Object> outcome;
     if(institutionId==null){
       outcome=jdbc.queryForMap("""
         with latest_by_question as (
           select distinct on (q.id) q.id as question_id,qa.correct
           from student_question_attempt qa join question q on q.id=qa.question_id
-          where qa.student_id=? and q.concept_id=?
+          where qa.student_id=? and qa.course_id is null and q.concept_id=?
             and qa.activity_kind in ('LESSON_INLINE','PRACTICE') and qa.correct is not null
           order by q.id,qa.answered_at desc,qa.id desc
         )
         select
           (select count(*) from student_question_attempt qa join question q on q.id=qa.question_id
-           where qa.student_id=? and q.concept_id=? and qa.activity_kind in ('LESSON_INLINE','PRACTICE')) as attempts,
-          count(*) as graded_attempts,
-          count(*) filter(where correct=true) as correct_attempts
+           where qa.student_id=? and qa.course_id is null and q.concept_id=?
+             and qa.activity_kind in ('LESSON_INLINE','PRACTICE')) as attempts,
+          count(*) as graded_attempts,count(*) filter(where correct=true) as correct_attempts
         from latest_by_question
       """,studentId,conceptId,studentId,conceptId);
+    } else if(courseId==null){
+      outcome=jdbc.queryForMap("""
+        with latest_by_question as (
+          select distinct on (q.id) q.id as question_id,qa.correct
+          from student_question_attempt qa join question q on q.id=qa.question_id
+          where qa.student_id=? and qa.institution_id=? and qa.course_id is null and q.concept_id=?
+            and qa.activity_kind in ('LESSON_INLINE','PRACTICE') and qa.correct is not null
+          order by q.id,qa.answered_at desc,qa.id desc
+        )
+        select
+          (select count(*) from student_question_attempt qa join question q on q.id=qa.question_id
+           where qa.student_id=? and qa.institution_id=? and qa.course_id is null and q.concept_id=?
+             and qa.activity_kind in ('LESSON_INLINE','PRACTICE')) as attempts,
+          count(*) as graded_attempts,count(*) filter(where correct=true) as correct_attempts
+        from latest_by_question
+      """,studentId,institutionId,conceptId,studentId,institutionId,conceptId);
     } else {
       outcome=jdbc.queryForMap("""
         with latest_by_question as (
           select distinct on (q.id) q.id as question_id,qa.correct
           from student_question_attempt qa join question q on q.id=qa.question_id
-          where qa.student_id=? and qa.institution_id=? and q.concept_id=?
+          where qa.student_id=? and qa.institution_id=? and qa.course_id=? and q.concept_id=?
             and qa.activity_kind in ('LESSON_INLINE','PRACTICE') and qa.correct is not null
           order by q.id,qa.answered_at desc,qa.id desc
         )
         select
           (select count(*) from student_question_attempt qa join question q on q.id=qa.question_id
-           where qa.student_id=? and qa.institution_id=? and q.concept_id=?
+           where qa.student_id=? and qa.institution_id=? and qa.course_id=? and q.concept_id=?
              and qa.activity_kind in ('LESSON_INLINE','PRACTICE')) as attempts,
-          count(*) as graded_attempts,
-          count(*) filter(where correct=true) as correct_attempts
+          count(*) as graded_attempts,count(*) filter(where correct=true) as correct_attempts
         from latest_by_question
-      """,studentId,institutionId,conceptId,studentId,institutionId,conceptId);
+      """,studentId,institutionId,courseId,conceptId,studentId,institutionId,courseId,conceptId);
     }
     int attempts=((Number)outcome.get("attempts")).intValue();
     int graded=((Number)outcome.get("graded_attempts")).intValue();
@@ -441,21 +456,34 @@ public class LearningStateService {
         insert into student_concept_mastery(
           student_id,concept_id,mastery_percent,attempts,graded_attempts,correct_attempts,last_attempt_at,updated_at
         ) values(?,?,?,?,?,?,now(),now())
-        on conflict(student_id,concept_id) do update set
-          attempts=excluded.attempts,graded_attempts=excluded.graded_attempts,
+        on conflict(student_id,concept_id)
+          where institution_id is null and course_id is null
+        do update set attempts=excluded.attempts,graded_attempts=excluded.graded_attempts,
           correct_attempts=excluded.correct_attempts,mastery_percent=excluded.mastery_percent,
           last_attempt_at=now(),updated_at=now()
       """,studentId,conceptId,percent,attempts,graded,correct);
-    } else {
+    } else if(courseId==null){
       jdbc.update("""
         insert into student_concept_mastery(
           student_id,institution_id,concept_id,mastery_percent,attempts,graded_attempts,correct_attempts,last_attempt_at,updated_at
         ) values(?,?,?,?,?,?,?,now(),now())
-        on conflict(institution_id,student_id,concept_id) do update set
-          attempts=excluded.attempts,graded_attempts=excluded.graded_attempts,
+        on conflict(institution_id,student_id,concept_id)
+          where institution_id is not null and course_id is null
+        do update set attempts=excluded.attempts,graded_attempts=excluded.graded_attempts,
           correct_attempts=excluded.correct_attempts,mastery_percent=excluded.mastery_percent,
           last_attempt_at=now(),updated_at=now()
       """,studentId,institutionId,conceptId,percent,attempts,graded,correct);
+    } else {
+      jdbc.update("""
+        insert into student_concept_mastery(
+          student_id,institution_id,course_id,concept_id,mastery_percent,attempts,graded_attempts,correct_attempts,last_attempt_at,updated_at
+        ) values(?,?,?,?,?,?,?,?,now(),now())
+        on conflict(institution_id,student_id,course_id,concept_id)
+          where institution_id is not null and course_id is not null
+        do update set attempts=excluded.attempts,graded_attempts=excluded.graded_attempts,
+          correct_attempts=excluded.correct_attempts,mastery_percent=excluded.mastery_percent,
+          last_attempt_at=now(),updated_at=now()
+      """,studentId,institutionId,courseId,conceptId,percent,attempts,graded,correct);
     }
   }
 
