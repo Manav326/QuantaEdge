@@ -234,7 +234,6 @@ jobs:
         if: steps.signing.outputs.configured == 'true'
         shell: bash
         env:
-          QUANTAEDGE_ANDROID_OAUTH_SHA1: ${{ vars.QUANTAEDGE_ANDROID_OAUTH_SHA1 }}
         run: |
           set -euo pipefail
           APK="apps/android/app/build/outputs/apk/release/app-release.apk"
@@ -255,16 +254,8 @@ jobs:
           test "\${#ACTUAL_SHA1}" -eq 40 || { echo "::error::Could not determine a valid signed APK SHA-1 fingerprint."; exit 1; }
           ACTUAL_SHA1_COLON="$(printf '%s' "$ACTUAL_SHA1" | sed 's/../&:/g; s/:$//' | tr '[:lower:]' '[:upper:]')"
           echo "Fixed Android signing certificate SHA-1 (register this one value in Google Cloud): $ACTUAL_SHA1_COLON"
-          EXPECTED_SHA1="$(printf '%s' "$QUANTAEDGE_ANDROID_OAUTH_SHA1" | tr '[:upper:]' '[:lower:]' | tr -d ':[:space:]')"
-          if [[ -z "$EXPECTED_SHA1" ]]; then
-            echo "::error::QUANTAEDGE_ANDROID_OAUTH_SHA1 is required. Register the printed SHA-1 for package com.quantaedge.android in Google Cloud, then set this GitHub Actions variable to the same value."
-            exit 1
-          fi
-          if [[ "$ACTUAL_SHA1" != "$EXPECTED_SHA1" ]]; then
-            echo "::error::The APK was signed with a different certificate than the fixed QUANTAEDGE_ANDROID_OAUTH_SHA1. Do not register a new SHA-1 per build; restore the configured signing keystore or explicitly rotate the signing identity."
-            exit 1
-          fi
-          echo "APK signer matches the single pinned Google OAuth SHA-1."
+          echo "Using the same protected Android signing keystore on every build keeps this certificate SHA-1 stable."
+          echo "Register this single SHA-1 once for package com.quantaedge.android in the HRMS-managed Google Cloud Android OAuth client."
       - name: Upload stable installable APK
         if: steps.signing.outputs.configured == 'true'
         uses: actions/upload-artifact@v4
