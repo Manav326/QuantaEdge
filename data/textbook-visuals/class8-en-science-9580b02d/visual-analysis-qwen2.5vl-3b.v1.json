@@ -11,10 +11,10 @@
     "assets_selected": 1164,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1159,
-    "assets_remaining": 1132,
+    "assets_analyzed": 1160,
+    "assets_remaining": 1131,
     "assets_completion_percent": 50.6,
-    "assets_failed": 19,
+    "assets_failed": 18,
     "assets_skipped_from_checkpoint": 1159,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:37:21Z"
+      "checkpointed_at": "2026-10-20T22:47:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:38:13Z"
+      "checkpointed_at": "2026-10-20T22:48:37Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:38:51Z"
+      "checkpointed_at": "2026-10-20T22:49:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34434,7 +34434,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39490257224",
-      "checkpointed_at": "2026-10-20T22:39:52Z"
+      "checkpointed_at": "2026-10-20T22:50:13Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36628,19 +36628,32 @@
     {
       "asset_id": "25b498e95a785841dca7c1f4",
       "asset_sha256": "0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756",
-      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 81,
       "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about electricity and magnets.",
+        "limitations": [
+          "The image does not provide specific details about the educational content.",
+          "The image does not show any specific educational content.",
+          "The image does not include any text or labels that provide information about the educational content."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T22:51:50Z"
     },
     {
       "asset_id": "75d096e943e0aa1cc4b83d52",
