@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2018,
-    "successful_visual_analyses": 1910,
-    "missing_visual_analyses": 5470,
+    "raw_analysis_result_rows": 2021,
+    "successful_visual_analyses": 1913,
+    "missing_visual_analyses": 5467,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5578,
+    "unresolved_count": 5575,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -83330,9 +83330,30 @@
       "asset_path": "assets/7ffa28898ce6c99bf64a4073aa838e043ce721d4c8b4900f5230fba4ccb45e0f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scene showing Sudarshan heating an iron block in a furnace and then beating it with a hammer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "metalworking",
+          "furnace",
+          "iron",
+          "hammer",
+          "axe"
+        ],
+        "context_relation": "The scene is part of a larger narrative about metalworking and the transformation of iron into an axe.",
+        "limitations": [
+          "The image does not show the final product of the metalworking process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83348,9 +83369,22 @@
       "asset_path": "assets/463bd019425f9c4a36596c8e19a6e8d0212e2cf138dc02b28e7bef6c7ed47204.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a hammer and striking a nail on a checkered surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hammer",
+          "nail",
+          "checkered surface"
+        ],
+        "context_relation": "The image shows a hand using a hammer to strike a nail, which is a common tool used in construction and carpentry.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the hand, hammer, and nail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83366,9 +83400,19 @@
       "asset_path": "assets/cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visible in the text.",
+          "The image is a close-up and does not show the full context of the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

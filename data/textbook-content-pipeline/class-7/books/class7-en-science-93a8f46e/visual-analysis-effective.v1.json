@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8a6c48cfa787d27fcb4fe0733b44e3e6cf2fac7417a0be7c72b564e511fb88f7",
+  "raw_analysis_sha256": "dc0c88d7033e60f36383c976462b8f01b06823c7b3625cd3d5dc46baea7ea93c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:29:09Z",
+      "checkpointed_at": "2026-10-20T21:32:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:29:30Z",
+      "checkpointed_at": "2026-10-20T21:32:30Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -114380,6 +114380,160 @@
         "context_relation": "The scene is part of a larger narrative about metalworking and the transformation of iron into an axe.",
         "limitations": [
           "The image does not show the final product of the metalworking process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c9ffe0a5f5174e374e91e71",
+      "asset_sha256": "7ffa28898ce6c99bf64a4073aa838e043ce721d4c8b4900f5230fba4ccb45e0f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/7ffa28898ce6c99bf64a4073aa838e043ce721d4c8b4900f5230fba4ccb45e0f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene showing Sudarshan heating an iron block in a furnace and then beating it with a hammer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "metalworking",
+          "furnace",
+          "iron",
+          "hammer",
+          "axe"
+        ],
+        "context_relation": "The scene is part of a larger narrative about metalworking and the transformation of iron into an axe.",
+        "limitations": [
+          "The image does not show the final product of the metalworking process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:33:15Z",
+      "effective_analysis": {
+        "visual_summary": "A scene showing Sudarshan heating an iron block in a furnace and then beating it with a hammer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Sudarshan: We use iron metal to make these items. We also use wood to prepare handles wherever required. Additionally, we use coal in our furnaces to heat the iron.",
+          "Sudarshan is heating an iron block in the furnace. It has become red hot. He starts beating it hard with a hammer.",
+          "Anandi is amazed and asks, \"Why are you beating it?\"",
+          "Sudarshan: I am beating it to shape it into an axe.",
+          "Anandi: Wow, a piece of iron can be beaten into"
+        ],
+        "concepts": [
+          "metalworking",
+          "furnace",
+          "iron",
+          "hammer",
+          "axe"
+        ],
+        "context_relation": "The scene is part of a larger narrative about metalworking and the transformation of iron into an axe.",
+        "limitations": [
+          "The image does not show the final product of the metalworking process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a530fad3f69ea9583fa5a974",
+      "asset_sha256": "463bd019425f9c4a36596c8e19a6e8d0212e2cf138dc02b28e7bef6c7ed47204",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/463bd019425f9c4a36596c8e19a6e8d0212e2cf138dc02b28e7bef6c7ed47204.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a hammer and striking a nail on a checkered surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hammer",
+          "nail",
+          "checkered surface"
+        ],
+        "context_relation": "The image shows a hand using a hammer to strike a nail, which is a common tool used in construction and carpentry.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the hand, hammer, and nail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:33:54Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a hammer and striking a nail on a checkered surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hammer",
+          "nail",
+          "checkered surface"
+        ],
+        "context_relation": "The image shows a hand using a hammer to strike a nail, which is a common tool used in construction and carpentry.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the hand, hammer, and nail."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "560f1d6600aee92a99c3ffad",
+      "asset_sha256": "cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visible in the text.",
+          "The image is a close-up and does not show the full context of the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:34:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visible in the text.",
+          "The image is a close-up and does not show the full context of the text content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
