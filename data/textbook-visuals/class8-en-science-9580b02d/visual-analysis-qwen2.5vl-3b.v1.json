@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1113,
+    "assets_selected": 1114,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1109,
-    "assets_remaining": 1182,
-    "assets_completion_percent": 48.4,
+    "assets_analyzed": 1110,
+    "assets_remaining": 1181,
+    "assets_completion_percent": 48.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1108,
+    "assets_skipped_from_checkpoint": 1109,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:36:49Z"
+      "checkpointed_at": "2026-10-20T14:41:03Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:37:34Z"
+      "checkpointed_at": "2026-10-20T14:41:48Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:38:04Z"
+      "checkpointed_at": "2026-10-20T14:42:18Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:38:53Z"
+      "checkpointed_at": "2026-10-20T14:43:07Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36186,6 +36186,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T14:40:04Z"
+    },
+    {
+      "asset_id": "259f1a8a51882cd17997803c",
+      "asset_sha256": "abd239e55f7ca8e0caf34416b6a7e7864d5859df5cb38c4e843ec1827b9feef8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/abd239e55f7ca8e0caf34416b6a7e7864d5859df5cb38c4e843ec1827b9feef8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a circuit with a light bulb and a switch, connected to a wire wrapped around an iron nail in a beaker of water.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "circuit",
+          "light bulb",
+          "switch",
+          "iron nail",
+          "wire",
+          "beaker",
+          "water"
+        ],
+        "context_relation": "The image is related to the textbook content about electromagnets and circuits.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the reasons for the observed phenomena."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:44:18Z"
     }
   ]
 }
