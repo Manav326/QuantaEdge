@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProp
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
-type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; status:string; active_gst_registrations?:number };
+type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; status:string; active_gst_registrations?:number };
 type Offer = { offer_id:number; institution_id:number; institution_name:string; course_code:string; course_name:string; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
@@ -44,6 +44,8 @@ export default function FinancePage(){
   const [policies,setPolicies]=useState<Policy[]>([]);
   const [templates,setTemplates]=useState<Template[]>([]);
   const [documents,setDocuments]=useState<FinancialDocument[]>([]);
+  const [seriesDrafts,setSeriesDrafts]=useState<Record<string,string>>({});
+  const [downloadingDocumentId,setDownloadingDocumentId]=useState<number|null>(null);
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -52,7 +54,7 @@ export default function FinancePage(){
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
-  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:''});
+  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [gstEntityId,setGstEntityId]=useState('');
   const [gstForm,setGstForm]=useState({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
   const [taxForm,setTaxForm]=useState<TaxForm>({offerId:'',legalEntityId:'',serviceClassificationCode:'',taxTreatment:'TAXABLE',gstPercent:'',cessPercent:'',priceIncludesTax:true,placeOfSupplyRule:'RECIPIENT_LOCATION',effectiveFrom:new Date(Date.now()-60000).toISOString().slice(0,16)});
@@ -117,8 +119,37 @@ export default function FinancePage(){
     void action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
       entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null,
       legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,
+      invoiceSeriesCode:entityForm.invoiceSeriesCode,
       registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}
     })}), 'Legal entity saved as draft.');
+  };
+  const saveInvoiceSeries=(entity:LegalEntity)=>{
+    const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
+    if(!/^[A-Z0-9_-]{1,16}$/.test(series)){setError('Invoice series must be 1–16 uppercase letters, digits, underscores or hyphens.');return;}
+    void action(()=>api(BASE+'/legal-entities/'+entity.id+'/invoice-series',{method:'PUT',body:JSON.stringify({invoiceSeriesCode:series})}),
+      'Invoice series saved. Existing invoices keep their original numbers; future documents use this series.');
+  };
+  const downloadDocument=async(document:FinancialDocument)=>{
+    setDownloadingDocumentId(document.id);setError('');setNotice('');
+    try{
+      const response=await apiFetch(BASE+'/documents/'+document.id+'/download',{
+        method:'GET',credentials:'same-origin',cache:'no-store',
+        headers:{'X-QE-Workspace':'HRMS','Accept':'application/pdf'}
+      });
+      if(!response.ok){
+        const raw=await response.text();let detail:any={};
+        try{detail=raw?JSON.parse(raw):{};}catch{detail={message:raw};}
+        throw new Error(String(detail.message||detail.detail||detail.error||'Invoice PDF could not be downloaded.'));
+      }
+      const blob=await response.blob();
+      if(blob.size===0||!blob.type.toLowerCase().includes('pdf'))throw new Error('The server did not return a valid PDF.');
+      const url=URL.createObjectURL(blob),anchor=document.createElement('a');
+      anchor.href=url;anchor.download=document.document_number.replace(/[^A-Za-z0-9_-]/g,'-')+'.pdf';
+      document.body.appendChild(anchor);anchor.click();anchor.remove();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+      setNotice('Invoice PDF downloaded.');
+    }catch(e){setError(e instanceof Error?e.message:'Invoice PDF could not be downloaded.');}
+    finally{setDownloadingDocumentId(null);}
   };
   const createRegistration=(event:FormEvent)=>{
     event.preventDefault();
@@ -275,13 +306,18 @@ export default function FinancePage(){
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
             <label>Finance contact email<input type="email" value={entityForm.contactEmail} onChange={e=>setEntityForm(v=>({...v,contactEmail:e.target.value}))}/></label>
+            <label>Invoice series prefix<input required minLength={1} maxLength={16} pattern="[A-Za-z0-9_-]{1,16}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/2026-27/000001.</small></label>
             <label>Registered address line<input required value={entityForm.addressLine} onChange={e=>setEntityForm(v=>({...v,addressLine:e.target.value}))}/></label>
             <div className={styles.inputGrid}><label>City<input required value={entityForm.city} onChange={e=>setEntityForm(v=>({...v,city:e.target.value}))}/></label><label>State<input required value={entityForm.state} onChange={e=>setEntityForm(v=>({...v,state:e.target.value}))}/></label><label>PIN code<input required value={entityForm.postalCode} onChange={e=>setEntityForm(v=>({...v,postalCode:e.target.value}))}/></label></div>
             <button className={styles.primary} disabled={busy}>Save legal entity draft</button>
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
-            <div><b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span><small>{e.active_gst_registrations||0} verified registration(s)</small></div>
-            {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+            <div className={styles.entitySummary}><b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span><small>{e.active_gst_registrations||0} verified registration(s)</small>
+              <label className={styles.seriesInline}>Invoice series prefix<input maxLength={16} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
+            </div>
+            <div className={styles.entityActions}><button className={styles.secondarySmall} disabled={busy} onClick={()=>saveInvoiceSeries(e)}>Save series</button>
+              {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+            </div>
           </article>)}</div>
         </div>
         <div className={styles.panel}><h2>GST registrations</h2><p>Enter registration details, then independently review and mark them verified. This action records an HRMS review; it does not claim an automated GST-portal validation.</p>
@@ -371,8 +407,8 @@ export default function FinancePage(){
           {previewPdfUrl&&<section className={styles.pdfPreviewPanel}><div className={styles.pdfPreviewToolbar}><b>PDF output preview · sample only</b><div><a href={previewPdfUrl} download="quantaedge-invoice-preview.pdf">Download preview PDF</a><button type="button" className={styles.secondarySmall} onClick={()=>setPreviewPdfUrl(null)}>Close</button></div></div><iframe title="Invoice design PDF preview" src={previewPdfUrl}/></section>}
         </section>
       </section>}
-      {tab==='documents'&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Issued fiscal documents</h2><p>HRMS financial audit view. Customer-facing secure PDF delivery is a separate issuance/rendering integration gate.</p></div><button className={styles.secondary} onClick={()=>void loadAll()} disabled={busy}>Refresh records</button></div>
-        {documents.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Document</th><th>Issued</th><th>Tax</th><th>Total</th><th>PDF</th></tr></thead><tbody>{documents.map(d=><tr key={d.id}><td><b>{d.document_number}</b><small>{d.document_type} · {d.source_type}</small></td><td>{new Date(d.issued_at).toLocaleDateString('en-IN')}</td><td>{rupees(d.tax_value_paise,d.currency)}</td><td>{rupees(d.total_value_paise,d.currency)}</td><td>{d.pdf_available?'Stored PDF':'Not rendered'}</td></tr>)}</tbody></table></div>:<div className={styles.emptyLarge}><span>▤</span><b>No fiscal documents issued yet</b><p>Configuration records and the live preview do not create invoices. A verified payment-to-issuance workflow must create a legal document before it appears here.</p></div>}
+      {tab==='documents'&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Issued fiscal documents</h2><p>HRMS audit view for issued documents. Download the stored, hash-verified PDF or open its transaction snapshot.</p></div><button className={styles.secondary} onClick={()=>void loadAll()} disabled={busy}>Refresh records</button></div>
+        {documents.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Document</th><th>Issued</th><th>Tax</th><th>Total</th><th>PDF</th></tr></thead><tbody>{documents.map(d=><tr key={d.id}><td><b>{d.document_number}</b><small>{d.document_type} · {d.source_type}</small></td><td>{new Date(d.issued_at).toLocaleDateString('en-IN')}</td><td>{rupees(d.tax_value_paise,d.currency)}</td><td>{rupees(d.total_value_paise,d.currency)}</td><td>{d.pdf_available?<button type="button" className={styles.secondarySmall} disabled={downloadingDocumentId!==null} onClick={()=>void downloadDocument(d)}>{downloadingDocumentId===d.id?'Preparing…':'Download PDF'}</button>:'Not rendered'}</td></tr>)}</tbody></table></div>:<div className={styles.emptyLarge}><span>▤</span><b>No fiscal documents issued yet</b><p>Only invoices created by the captured-payment finalizer appear here. The live Studio preview never consumes a legal number or creates an issued invoice.</p></div>}
       </section>}
     </>}
   </main>;
