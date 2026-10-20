@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1306,
-    "successful_visual_analyses": 1283,
-    "missing_visual_analyses": 772,
+    "raw_analysis_result_rows": 1307,
+    "successful_visual_analyses": 1284,
+    "missing_visual_analyses": 771,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 795,
+    "unresolved_count": 794,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49333,9 +49333,27 @@
       "asset_path": "assets/a75750e93f625c8137e3fef377276dab218590f6da03f73c0002671159b644be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing four labeled materials, with A, B, C, and D representing different types of materials.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "D",
+          "C",
+          "B",
+          "A"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "materials used by different individuals"
+        ],
+        "context_relation": "The image is related to the educational content about opaque and translucent materials.",
+        "limitations": [
+          "The image does not provide specific details about the nature of the materials used by each individual."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
