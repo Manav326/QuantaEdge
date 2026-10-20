@@ -3621,5 +3621,12 @@
   "web.workspace.parentFallbackName": "Parent account",
   "web.workspace.progressSavesAutomatically": "Progress अपने-आप save होती है",
   "web.workspace.safeLearningSpace": "सुरक्षित learning space",
-  "web.workspace.studentFallbackName": "Student"
+  "web.workspace.studentFallbackName": "Student",
+  "student.empty.dashboard.title": "आपकी learning यहीं से शुरू होती है",
+  "student.empty.dashboard.message": "अभी आपने कोई course enroll नहीं किया है। अपना पहला course खोजने और enroll करने के लिए Marketplace देखें।",
+  "student.empty.dashboard.action": "Explore Marketplace",
+  "student.empty.learn.message": "Course enroll करने के बाद आपके lessons यहाँ दिखेंगे।",
+  "student.empty.practice.message": "Course enroll करने के बाद आपकी practice activities यहाँ दिखेंगी।",
+  "student.empty.progress.message": "Course enroll करने के बाद आपकी learning progress यहाँ दिखेगी।",
+  "student.empty.books.message": "Course enroll करने के बाद आपकी books यहाँ दिखेंगी।"
 }
