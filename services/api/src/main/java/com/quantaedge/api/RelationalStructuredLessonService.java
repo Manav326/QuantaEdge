@@ -537,9 +537,11 @@ public class RelationalStructuredLessonService {
         asset.put("student_renderable", true);
         asset.put("review_status", "APPROVED");
         asset.set("alt_by_locale", bilingual(alt, alt));
-        asset.set("caption_by_locale", bilingual(
-            nonBlank(text(en.path("caption").asText("")), text(en.path("description").asText(""))),
-            nonBlank(text(hi.path("caption").asText("")), text(hi.path("description").asText("")))));
+        String captionEnglish = nonBlank(text(en.path("caption").asText("")),
+            text(en.path("description").asText("")));
+        String captionHindi = nonBlank(text(hi.path("caption").asText("")),
+            text(hi.path("description").asText("")));
+        asset.set("caption_by_locale", bilingual(captionEnglish, captionHindi));
         continue;
       }
       if ("DIAGRAM".equals(type)) {
@@ -580,11 +582,13 @@ public class RelationalStructuredLessonService {
         block.put("id", id);
         block.put("type", "activity");
         block.put("order", number(row.get("sequence_no")));
-        block.set("instructions_by_locale", bilingual(
-            nonBlank(text(en.path("prompt").asText("")), text(en.path("instructions").asText("")),
-                text(en.path("title").asText("")), text(en.path("body").asText(""))),
-            nonBlank(text(hi.path("prompt").asText("")), text(hi.path("instructions").asText("")),
-                text(hi.path("title").asText("")), text(hi.path("body").asText("")))));
+        String instructionsEnglish = nonBlank(
+            text(en.path("prompt").asText("")), text(en.path("instructions").asText("")),
+            text(en.path("title").asText("")), text(en.path("body").asText("")));
+        String instructionsHindi = nonBlank(
+            text(hi.path("prompt").asText("")), text(hi.path("instructions").asText("")),
+            text(hi.path("title").asText("")), text(hi.path("body").asText("")));
+        block.set("instructions_by_locale", bilingual(instructionsEnglish, instructionsHindi));
         block.set("configuration", stripPrivateFields(en).deepCopy());
         continue;
       }
