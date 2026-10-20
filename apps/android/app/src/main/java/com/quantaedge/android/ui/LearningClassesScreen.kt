@@ -106,10 +106,27 @@ fun LearningClassesScreen(
     offlineDownloadedIds: Set<Long> = emptySet(),
     videoDownloadStates: Map<Long, String> = emptyMap(),
     onDownloadRecording: (JSONObject) -> Unit = {},
-    onRemoveOfflineRecording: (JSONObject) -> Unit = {}
+    onRemoveOfflineRecording: (JSONObject) -> Unit = {},
+    noEnrolledCourses: Boolean = false,
+    onMarketplace: () -> Unit = {}
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
+    if (noEnrolledCourses) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            StudentEnrollmentEmptyState(
+                icon = "◷",
+                title = localizedUiText("Your classes will appear here"),
+                message = localizedUiText("Enrol in a course to see scheduled live classes and recordings for your subjects."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace
+            )
+        }
+        return
+    }
     var clockNowMillis by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (true) {
