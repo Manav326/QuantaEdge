@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1997,
+    "assets_selected": 1999,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
     "assets_analyzed": 1994,
     "assets_remaining": 5494,
     "assets_completion_percent": 26.6,
-    "assets_failed": 108,
-    "assets_skipped_from_checkpoint": 1992,
+    "assets_failed": 109,
+    "assets_skipped_from_checkpoint": 1994,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -295,9 +295,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
+      "run_id": "39513499631",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -2352,7 +2352,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
+      "run_id": "39513499631",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -4670,9 +4670,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
+      "run_id": "39513499631",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -4687,9 +4687,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
+      "run_id": "39513499631",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -9807,47 +9807,19 @@
     {
       "asset_id": "89b40b364042ef1985b11a00",
       "asset_sha256": "6b97a9691a4ae69ec6fb289ae3cce00bbf6a91ed6c7ec437b7b8d455acaee82a",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 22,
       "asset_path": "page-0022.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
-        ],
-        "concepts": [
-          "science",
-          "curiosity",
-          "open-mindedness",
-          "process",
-          "environment",
-          "society",
-          "human activities",
-          "environmental challenges",
-          "sustainability",
-          "properties of materials",
-          "discovery",
-          "interconnectedness"
-        ],
-        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
-        "limitations": [
-          "The page does not provide specific examples or activities for the reader to engage with."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:52:45Z"
+      "run_id": "39513499631",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
