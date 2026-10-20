@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1153,
+    "assets_selected": 1155,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1150,
-    "assets_remaining": 928,
-    "assets_completion_percent": 55.3,
-    "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1148,
+    "assets_analyzed": 1151,
+    "assets_remaining": 927,
+    "assets_completion_percent": 55.4,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 1150,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:49:29Z"
+      "checkpointed_at": "2026-10-20T00:59:17Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:50:28Z"
+      "checkpointed_at": "2026-10-20T01:00:15Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37502,18 +37502,19 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Length of the table"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The text does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:33:14Z"
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:04:40Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37566,7 +37567,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -37575,19 +37576,31 @@
     {
       "asset_id": "4f9b956834eea8d2c3c21a9e",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 100,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:06:51Z"
     },
     {
       "asset_id": "d3edd052fc4e4927c604d19b",

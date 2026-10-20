@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "80997ea3bbe5108d0aedf60f63fa21b734a39bf5dcbe9332ad7e54d244a73bc3",
+  "raw_analysis_sha256": "58bea7831ef0ca1ae110d946882e21e0e076fdf695ffa4dadef3bb1bf26d81d6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:49:29Z",
+      "checkpointed_at": "2026-10-20T00:59:17Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T00:50:28Z",
+      "checkpointed_at": "2026-10-20T01:00:15Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56401,18 +56401,19 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Length of the table"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The text does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:33:14Z",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:04:40Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56435,11 +56436,12 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Length of the table"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The text does not provide the actual length of the table."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -56520,7 +56522,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
+      "run_id": "39338687789",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -56532,21 +56534,43 @@
     {
       "asset_id": "4f9b956834eea8d2c3c21a9e",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 100,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39270469423",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:06:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
