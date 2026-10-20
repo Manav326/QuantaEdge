@@ -1186,10 +1186,12 @@ public class AssessmentController {
   @GetMapping("/learning/assessment-attempts/{attemptId}")
   public Map<String, Object> studentAttempt(
       @PathVariable long attemptId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     return attemptDetails(attemptId, context, false,requireInstitution(tenant));
   }
 
@@ -1198,12 +1200,14 @@ public class AssessmentController {
   public Map<String, Object> saveAnswer(
       @PathVariable long attemptId,
       @PathVariable long attemptQuestionId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select att.id,att.status,att.deadline_at,att.student_id,att.offline_mode,
              att.offline_sync_expires_at,att.offline_package_token_hash
@@ -1240,12 +1244,14 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> saveAnswers(
       @PathVariable long attemptId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select id,status,deadline_at,student_id,offline_mode,offline_sync_expires_at,offline_package_token_hash
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -1294,11 +1300,13 @@ public class AssessmentController {
   @Transactional
   public Map<String,Object> refreshOfflinePackageToken(
       @PathVariable long attemptId,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,assessment_id,student_id,status,offline_mode,offline_sync_expires_at
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -1332,10 +1340,12 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> submitAttempt(
       @PathVariable long attemptId,
+      @RequestParam Long courseId,
       @RequestBody(required=false) Map<String,Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
+    requireAttemptInCourse(attemptId,courseId,tenant);
     return submitAttemptInternal(attemptId,body,context,requireInstitution(tenant));
   }
 
@@ -1623,7 +1633,8 @@ public class AssessmentController {
     Object[] queryArgs = institutionId == null
         ? new Object[]{attemptId} : new Object[]{attemptId,institutionId};
     List<Map<String, Object>> attempts = jdbc.queryForList("""
-      select att.id as attempt_id,att.assessment_id,a.public_id as test_id,att.student_id,att.attempt_number,att.status,
+      select att.id as attempt_id,att.assessment_id,a.public_id as test_id,a.course_id as course_id,
+             att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
              att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
              att.assessment_snapshot::text as assessment_snapshot,
