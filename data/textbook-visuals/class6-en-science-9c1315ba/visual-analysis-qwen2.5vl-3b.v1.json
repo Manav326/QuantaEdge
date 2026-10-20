@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1236,
+    "assets_selected": 1238,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1233,
-    "assets_remaining": 845,
-    "assets_completion_percent": 59.3,
+    "assets_analyzed": 1234,
+    "assets_remaining": 844,
+    "assets_completion_percent": 59.4,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1231,
+    "assets_skipped_from_checkpoint": 1233,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:42:25Z"
+      "checkpointed_at": "2026-10-20T09:47:42Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:43:28Z"
+      "checkpointed_at": "2026-10-20T09:48:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:44:21Z"
+      "checkpointed_at": "2026-10-20T09:49:37Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41018,6 +41018,85 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T09:46:28Z"
+    },
+    {
+      "asset_id": "cd917f757dd6a474b058e0cc",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 118,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b069fea0daabb9fda1f255bdd9e00b5080124641cc48187fde1ae520bf72ceda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A maze created using lines of 1 cm, 2 cm, and their combinations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Create a maze using lines of 1 cm, 2 cm and their combination.",
+          "Part of it has been made for you in Fig. 5.21. Now use your imagination and expand it to a size as big as you want."
+        ],
+        "concepts": [
+          "Maze creation",
+          "Measurement of length",
+          "Combination of lines"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The maze is not fully visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:50:02Z"
+    },
+    {
+      "asset_id": "38753714830e2c291a62d837",
+      "asset_sha256": "d786c1fe22356f45c684715d868b67ad6fbf5b73a22d280c5be40ff303fbc8d1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 118,
+      "asset_path": "page-0118.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b069fea0daabb9fda1f255bdd9e00b5080124641cc48187fde1ae520bf72ceda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "instructions for measuring height and distance using a bicycle",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Discuss with elders in your community what units were\nused for measurement of length in the olden days. Also,\nusing the internet, try to find out about the length scales\nfound in excavations of archaeological sites in India.",
+          "Create a maze using lines of 1 cm, 2 cm and their combination.\nPart of it has been made for you in Fig. 5.21. Now use your\nimagination and expand it to a size as big as you want.",
+          "How tall am I? Stand along\na wall and with the help of\nan adult, mark your height\n(Fig. 5.22). Repeat it every\nthree months to maintain a\nheight record for yourself\nand your siblings.",
+          "Let us design a fun method\nfor measuring the distance\nbetween two places by using\na bicycle. Attach a flexible\nmetal strip to the spoke of\nthe front wheel in such a\nmanner that it hits the frame\nof the bicycle holding the\nwheel, every time it crosses it\nand produces a sound (Fig. 5.23).",
+          "Now ride the bicycle slowly and count the number of times\nin which sound occurred. The number will give you the\nnumber of turns of your wheel made. Now measure the\nlength of the outer boundary of\nthe wheel using a string as done in\nFig. 5.8. Multiply this length by the\nnumber of turns of the wheel. ",
+          "Such methods are actually used\nto measure the distance for road-\nrunning races. Try to find out about\na 'Jones Counter' which is attached\nto a bicycle wheel and is used for\nmeasuring distances."
+        ],
+        "concepts": [
+          "measurement of length",
+          "archaeological sites",
+          "maze",
+          "height",
+          "bicycle",
+          "distance",
+          "road-running races",
+          "Jones Counter"
+        ],
+        "context_relation": "instructions for measuring height and distance using a bicycle",
+        "limitations": [
+          "instructions are for educational purposes only"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:54:24Z"
     }
   ]
 }

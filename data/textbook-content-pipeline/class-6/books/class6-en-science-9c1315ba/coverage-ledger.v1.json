@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1261,
-    "successful_visual_analyses": 1236,
-    "missing_visual_analyses": 817,
+    "raw_analysis_result_rows": 1263,
+    "successful_visual_analyses": 1238,
+    "missing_visual_analyses": 815,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 842,
+    "unresolved_count": 840,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47630,9 +47630,25 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A maze created using lines of 1 cm, 2 cm, and their combinations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Create a maze using lines of 1 cm, 2 cm and their combination.",
+          "Part of it has been made for you in Fig. 5.21. Now use your imagination and expand it to a size as big as you want."
+        ],
+        "concepts": [
+          "Maze creation",
+          "Measurement of length",
+          "Combination of lines"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The maze is not fully visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47648,9 +47664,34 @@
       "asset_path": "page-0118.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "instructions for measuring height and distance using a bicycle",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Discuss with elders in your community what units were\nused for measurement of length in the olden days. Also,\nusing the internet, try to find out about the length scales\nfound in excavations of archaeological sites in India.",
+          "Create a maze using lines of 1 cm, 2 cm and their combination.\nPart of it has been made for you in Fig. 5.21. Now use your\nimagination and expand it to a size as big as you want.",
+          "How tall am I? Stand along\na wall and with the help of\nan adult, mark your height\n(Fig. 5.22). Repeat it every\nthree months to maintain a\nheight record for yourself\nand your siblings.",
+          "Let us design a fun method\nfor measuring the distance\nbetween two places by using\na bicycle. Attach a flexible\nmetal strip to the spoke of\nthe front wheel in such a\nmanner that it hits the frame\nof the bicycle holding the\nwheel, every time it crosses it\nand produces a sound (Fig. 5.23).",
+          "Now ride the bicycle slowly and count the number of times\nin which sound occurred. The number will give you the\nnumber of turns of your wheel made. Now measure the\nlength of the outer boundary of\nthe wheel using a string as done in\nFig. 5.8. Multiply this length by the\nnumber of turns of the wheel. ",
+          "Such methods are actually used\nto measure the distance for road-\nrunning races. Try to find out about\na 'Jones Counter' which is attached\nto a bicycle wheel and is used for\nmeasuring distances."
+        ],
+        "concepts": [
+          "measurement of length",
+          "archaeological sites",
+          "maze",
+          "height",
+          "bicycle",
+          "distance",
+          "road-running races",
+          "Jones Counter"
+        ],
+        "context_relation": "instructions for measuring height and distance using a bicycle",
+        "limitations": [
+          "instructions are for educational purposes only"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
