@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1180,
-    "successful_visual_analyses": 1157,
-    "missing_visual_analyses": 1111,
+    "raw_analysis_result_rows": 1181,
+    "successful_visual_analyses": 1158,
+    "missing_visual_analyses": 1110,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1134,
+    "unresolved_count": 1133,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44201,9 +44201,23 @@
       "asset_path": "assets/93a0414e2fea77c8e88bc066b5914caa21652f932a0c8184f24d59a8380a5a41.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two dolphins swimming in the water, creating ripples.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "dolphins",
+          "swimming",
+          "water",
+          "ripples"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions between objects.",
+        "limitations": [
+          "The image does not provide specific information about the types of forces or their interactions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

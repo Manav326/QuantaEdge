@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3cdd6b83c90e4a9bb57933308aff60790cce3519082e264218b57edacf1fc6c0",
+  "raw_analysis_sha256": "65e79d7aa4771518b5a20eaf656fd471608edbd3cb851cc0d331d4a7ce2eec67",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:53:55Z",
+      "checkpointed_at": "2026-10-20T17:58:07Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:54:40Z",
+      "checkpointed_at": "2026-10-20T17:58:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:55:10Z",
+      "checkpointed_at": "2026-10-20T17:59:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:55:59Z",
+      "checkpointed_at": "2026-10-20T18:00:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56738,6 +56738,56 @@
         "context_relation": "The image is related to the educational content about contact forces in physics.",
         "limitations": [
           "The image does not provide specific details about the physics concepts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1f5ffa4424f56371efa1485c",
+      "asset_sha256": "93a0414e2fea77c8e88bc066b5914caa21652f932a0c8184f24d59a8380a5a41",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/93a0414e2fea77c8e88bc066b5914caa21652f932a0c8184f24d59a8380a5a41.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two dolphins swimming in the water, creating ripples.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "dolphins",
+          "swimming",
+          "water",
+          "ripples"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions between objects.",
+        "limitations": [
+          "The image does not provide specific information about the types of forces or their interactions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T18:01:21Z",
+      "effective_analysis": {
+        "visual_summary": "Two dolphins swimming in the water, creating ripples.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "dolphins",
+          "swimming",
+          "water",
+          "ripples"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions between objects.",
+        "limitations": [
+          "The image does not provide specific information about the types of forces or their interactions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
