@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8af69b6031ab45aac5a5870a31278cecc512d2a54f26249cd2dc952e311e58d3",
+  "raw_analysis_sha256": "d1a5b75239a059f195c2a438dcd46d66e1e6300d351c940be6f56603eae638dc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:54:34Z",
+      "checkpointed_at": "2026-10-20T03:57:43Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:55:08Z",
+      "checkpointed_at": "2026-10-20T03:58:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:55:30Z",
+      "checkpointed_at": "2026-10-20T03:58:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -48672,6 +48672,176 @@
         "limitations": [
           "The image does not provide specific information about the text.",
           "The image is a cartoon and does not represent a real scenario."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "156a7ff387ed55bf54a7c4a8",
+      "asset_sha256": "95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Electric Lamp",
+          "Electric Cell",
+          "Temporary Magnets",
+          "Heat Generation",
+          "Electrical Appliances",
+          "Cell",
+          "Battery",
+          "Dead Battery",
+          "Rechargeable Battery"
+        ],
+        "context_relation": "The image is a visual representation of the text content related to electricity, magnetic effects, and heating effects.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:59:31Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Electric Lamp",
+          "Electric Cell",
+          "Temporary Magnets",
+          "Heat Generation",
+          "Electrical Appliances",
+          "Cell",
+          "Battery",
+          "Dead Battery",
+          "Rechargeable Battery"
+        ],
+        "context_relation": "The image is a visual representation of the text content related to electricity, magnetic effects, and heating effects.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6dab112e60b05f5340f1be9e",
+      "asset_sha256": "e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a pencil and a notebook, possibly indicating a student or an educator.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Magnets",
+          "Heat Generation",
+          "Cell/Battery",
+          "Rechargeability"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about electricity, magnetic effects, and heating effects.",
+        "limitations": [
+          "The image does not provide specific details about the textbook page content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:00:19Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a pencil and a notebook, possibly indicating a student or an educator.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity: Magneticand Heating Effects  4",
+          "z  If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Electric Circuit",
+          "Magnets",
+          "Heat Generation",
+          "Cell/Battery",
+          "Rechargeability"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about electricity, magnetic effects, and heating effects.",
+        "limitations": [
+          "The image does not provide specific details about the textbook page content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
