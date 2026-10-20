@@ -86,7 +86,7 @@ public class LearningMetricsService {
       where qa.student_id=? __TENANT_QA__ and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
         and __COURSE_ATTEMPT_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,questionStatsArgs))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,questionStatsArgs)));
 
     String curriculumClassScope = programId == null
         ? "c.code=(select class_code from student where id=? and active=true)"
@@ -133,7 +133,7 @@ public class LearningMetricsService {
       join curriculum_subject s on s.id=ch.subject_id
       where m.student_id=? __TENANT_M__ and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,masteryArgs))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,masteryArgs)));
 
     result.put("masteryDetails",jdbc.queryForList(tenantSql("""
       select cc.id as concept_id,cc.title as concept_title,ch.display_name as chapter_name,
@@ -146,8 +146,8 @@ public class LearningMetricsService {
         and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
       order by m.mastery_percent asc,ch.teaching_order,ch.sort_order,cc.concept_order,cc.id limit 30
       """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,
-          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,
+          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId})));
 
     Object[] assessmentArgs = programId == null
         ? new Object[]{studentId}
@@ -173,11 +173,11 @@ public class LearningMetricsService {
                filter(where att.status='RELEASED' and att.final_score is not null),1),0) as average_released_percent
       from assessment a join student_assessment_attempt att on att.assessment_id=a.id and att.student_id=? __TENANT_ATT__
       join curriculum_subject s on s.id=a.subject_id
-      where __SUBJECT_SCOPE__
+      where __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
       group by a.assessment_type
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end
       """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,assessmentArgs))));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,assessmentArgs)));
 
     result.put("recentAssessments",jdbc.queryForList(tenantSql("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.final_score,
