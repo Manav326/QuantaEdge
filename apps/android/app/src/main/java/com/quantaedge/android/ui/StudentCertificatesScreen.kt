@@ -418,7 +418,7 @@ fun StudentCertificatesScreen(
     }
 
 
-    if (noEnrolledCourses) {
+    if (noEnrolledCourses && !showScanner && verificationCode.isBlank() && error.isBlank() && notice.isBlank()) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -428,7 +428,9 @@ fun StudentCertificatesScreen(
                 title = localizedUiText("Your certificates are linked to courses"),
                 message = localizedUiText("Enrol in a course to see eligible achievements and issued certificates."),
                 primaryLabel = localizedUiText("Explore Marketplace"),
-                onPrimary = onMarketplace
+                onPrimary = onMarketplace,
+                secondaryLabel = localizedUiText("Scan certificate"),
+                onSecondary = { showScanner = true }
             )
         }
         return
