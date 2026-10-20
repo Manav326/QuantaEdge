@@ -548,7 +548,7 @@ function StudentCertificatesContent() {
             <div><span className={styles.eyebrow}>03 · {translateUi(locale, 'legacy.web.your.records.c4304201')}</span><h2>{translateUi(locale, 'legacy.web.issued.certificates.3cbbcab6')}</h2></div>
             <span className={styles.meta}>{certificates.length} {translateUi(locale, 'legacy.web.records.415b5a7c')}</span>
           </div>
-          {!certificates.length ? (
+          {error && certificates.length === 0 ? null : !certificates.length ? (
             <div className={styles.empty}><strong>{translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}</strong><p>{translateUi(locale, 'legacy.web.complete.all.published.lessons.or.pass.6578ce33')}</p></div>
           ) : (
             <div className={styles.certificateList}>
