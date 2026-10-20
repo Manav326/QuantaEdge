@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1982,
+    "assets_selected": 1985,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1980,
-    "assets_remaining": 5508,
-    "assets_completion_percent": 26.4,
+    "assets_analyzed": 1983,
+    "assets_remaining": 5505,
+    "assets_completion_percent": 26.5,
     "assets_failed": 108,
-    "assets_skipped_from_checkpoint": 1977,
+    "assets_skipped_from_checkpoint": 1980,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:37:10Z"
+      "checkpointed_at": "2026-10-20T22:40:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:37:31Z"
+      "checkpointed_at": "2026-10-20T22:40:29Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -75860,6 +75860,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
       "checkpointed_at": "2026-10-20T22:39:26Z"
+    },
+    {
+      "asset_id": "e9ec6dbc98fd02da6f6e34d2",
+      "asset_sha256": "3845a8937e1b8dffd0d591d934772ecfeb86d317711a84f81427aff21c02f67b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/3845a8937e1b8dffd0d591d934772ecfeb86d317711a84f81427aff21c02f67b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "coal",
+          "sulfur",
+          "wood"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically coal, sulfur, and wood, in relation to their brittleness and malleability.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the brittleness or malleability of these materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:41:11Z"
+    },
+    {
+      "asset_id": "630e38251d19dea487353294",
+      "asset_sha256": "4a62c04f9972e185b05668608d82f1162529f7365a95e0263221893695e64378",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/4a62c04f9972e185b05668608d82f1162529f7365a95e0263221893695e64378.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "Brittleness",
+          "Malleability",
+          "Coal",
+          "Sulfur",
+          "Wood"
+        ],
+        "context_relation": "The image is a visual representation of the properties of different materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal, sulfur, and wood.",
+          "The image does not include any scientific explanations or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:41:53Z"
+    },
+    {
+      "asset_id": "1f0ba27f1066585777f39636",
+      "asset_sha256": "518b014c761f6cc50d4d579be65b6bd812bd29220941f373b34e97de9a1e1907",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/518b014c761f6cc50d4d579be65b6bd812bd29220941f373b34e97de9a1e1907.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "properties of materials"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically coal, sulfur, and wood.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the properties being discussed.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:42:34Z"
     }
   ]
 }
