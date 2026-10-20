@@ -209,7 +209,7 @@ public class LearningStateService {
 
     if(autoGraded&&correct!=null&&!"DIAGNOSTIC".equals(source)){
       Object concept=jdbc.queryForMap("select concept_id from question where id=?",questionId).get("concept_id");
-      if(concept instanceof Number) updateMastery(studentId,((Number)concept).longValue(),institutionId);
+      if(concept instanceof Number) updateMastery(studentId,((Number)concept).longValue(),institutionId,courseId);
     }
   }
 
@@ -297,33 +297,50 @@ public class LearningStateService {
     """,Long.class,lessonId);
     Long answered;
     Long completedPractice;
-    if(institutionId==null){
+    if(courseId!=null){
       answered=jdbc.queryForObject("""
         select count(distinct qa.question_id)
         from student_question_attempt qa
         join question q on q.id=qa.question_id
-        where qa.student_id=? and qa.activity_kind='LESSON_INLINE'
+        where qa.student_id=? and qa.institution_id=? and qa.course_id=?
+          and qa.activity_kind='LESSON_INLINE' and q.lesson_id=? and q.active=true
+          and q.review_status in ('APPROVED','PUBLISHED') and q.question_type='MCQ'
+      """,Long.class,studentId,institutionId,courseId,lessonId);
+      String marker = "[{\"sourceLessonId\":" + lessonId + "}]";
+      completedPractice=jdbc.queryForObject("""
+        select count(*) from student_practice_session
+        where student_id=? and institution_id=? and course_id=? and status='COMPLETED'
+          and topic_selections @> ?::jsonb
+      """,Long.class,studentId,institutionId,courseId,marker);
+    } else if(institutionId==null){
+      answered=jdbc.queryForObject("""
+        select count(distinct qa.question_id)
+        from student_question_attempt qa
+        join question q on q.id=qa.question_id
+        where qa.student_id=? and qa.course_id is null and qa.activity_kind='LESSON_INLINE'
           and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
           and q.question_type='MCQ'
       """,Long.class,studentId,lessonId);
       String marker = "[{\"sourceLessonId\":" + lessonId + "}]";
       completedPractice=jdbc.queryForObject("""
         select count(*) from student_practice_session
-        where student_id=? and status='COMPLETED' and topic_selections @> ?::jsonb
+        where student_id=? and course_id is null and status='COMPLETED'
+          and topic_selections @> ?::jsonb
       """,Long.class,studentId,marker);
     } else {
       answered=jdbc.queryForObject("""
         select count(distinct qa.question_id)
         from student_question_attempt qa
         join question q on q.id=qa.question_id
-        where qa.student_id=? and qa.institution_id=? and qa.activity_kind='LESSON_INLINE'
-          and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
-          and q.question_type='MCQ'
+        where qa.student_id=? and qa.institution_id=? and qa.course_id is null
+          and qa.activity_kind='LESSON_INLINE' and q.lesson_id=? and q.active=true
+          and q.review_status in ('APPROVED','PUBLISHED') and q.question_type='MCQ'
       """,Long.class,studentId,institutionId,lessonId);
       String marker = "[{\"sourceLessonId\":" + lessonId + "}]";
       completedPractice=jdbc.queryForObject("""
         select count(*) from student_practice_session
-        where student_id=? and institution_id=? and status='COMPLETED' and topic_selections @> ?::jsonb
+        where student_id=? and institution_id=? and course_id is null
+          and status='COMPLETED' and topic_selections @> ?::jsonb
       """,Long.class,studentId,institutionId,marker);
     }
 
@@ -338,7 +355,7 @@ public class LearningStateService {
         insert into student_lesson_progress(
           student_id,lesson_id,status,progress_percent,started_at,last_opened_at,completed_at
         ) values(?,?,?,?,now(),now(),case when ?='COMPLETED' then now() else null end)
-        on conflict(student_id,lesson_id) do update set
+        on conflict(student_id,lesson_id) where institution_id is null and course_id is null do update set
           status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else excluded.status end,
           progress_percent=case when student_lesson_progress.status='COMPLETED'
             then 100 else excluded.progress_percent end,
@@ -346,12 +363,14 @@ public class LearningStateService {
           completed_at=case when student_lesson_progress.status='COMPLETED'
             then student_lesson_progress.completed_at else excluded.completed_at end
       """,studentId,lessonId,status,progress,status);
-    } else {
+    } else if(courseId==null){
       jdbc.update("""
         insert into student_lesson_progress(
           student_id,institution_id,lesson_id,status,progress_percent,started_at,last_opened_at,completed_at
         ) values(?,?,?,?,?,now(),now(),case when ?='COMPLETED' then now() else null end)
-        on conflict(institution_id,student_id,lesson_id) do update set
+        on conflict(institution_id,student_id,lesson_id)
+          where institution_id is not null and course_id is null
+        do update set
           status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else excluded.status end,
           progress_percent=case when student_lesson_progress.status='COMPLETED'
             then 100 else excluded.progress_percent end,
@@ -359,6 +378,21 @@ public class LearningStateService {
           completed_at=case when student_lesson_progress.status='COMPLETED'
             then student_lesson_progress.completed_at else excluded.completed_at end
       """,studentId,institutionId,lessonId,status,progress,status);
+    } else {
+      jdbc.update("""
+        insert into student_lesson_progress(
+          student_id,institution_id,course_id,lesson_id,status,progress_percent,started_at,last_opened_at,completed_at
+        ) values(?,?,?,?,?,?,now(),now(),case when ?='COMPLETED' then now() else null end)
+        on conflict(institution_id,student_id,course_id,lesson_id)
+          where institution_id is not null and course_id is not null
+        do update set
+          status=case when student_lesson_progress.status='COMPLETED' then 'COMPLETED' else excluded.status end,
+          progress_percent=case when student_lesson_progress.status='COMPLETED'
+            then 100 else excluded.progress_percent end,
+          last_opened_at=now(),
+          completed_at=case when student_lesson_progress.status='COMPLETED'
+            then student_lesson_progress.completed_at else excluded.completed_at end
+      """,studentId,institutionId,courseId,lessonId,status,progress,status);
     }
   }
 
