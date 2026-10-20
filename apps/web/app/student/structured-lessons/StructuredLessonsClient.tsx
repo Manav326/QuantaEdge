@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type LessonItem = {
   artifactId: string; subjectCode: string; chapterNumber: number;
