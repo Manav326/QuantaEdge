@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1826,
+    "assets_selected": 1827,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1822,
-    "assets_remaining": 5666,
-    "assets_completion_percent": 24.3,
-    "assets_failed": 92,
-    "assets_skipped_from_checkpoint": 1821,
+    "assets_analyzed": 1824,
+    "assets_remaining": 5664,
+    "assets_completion_percent": 24.4,
+    "assets_failed": 95,
+    "assets_skipped_from_checkpoint": 1822,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -69417,6 +69417,140 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338690203",
       "checkpointed_at": "2026-10-20T04:24:58Z"
+    },
+    {
+      "asset_id": "061ec3f0baf7a4a6d2460dd5",
+      "asset_sha256": "636b2c4a6ec86cfdd7bb99b9f60a4b9d368aa86787deb8418e756acf5463c377",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/636b2c4a6ec86cfdd7bb99b9f60a4b9d368aa86787deb8418e756acf5463c377.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "a5cd9d53774841407b91c0e4",
+      "asset_sha256": "1406d2cb638b7b7387ef650042a19c4fb8b56cbd904c2a4acd5c5b2cc40019e1",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/1406d2cb638b7b7387ef650042a19c4fb8b56cbd904c2a4acd5c5b2cc40019e1.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "c33ef263be5eee37cc226627",
+      "asset_sha256": "146bc433cb290b24f76f28de4d59434300188386bd6c51ff0561c64fba831e4a",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/146bc433cb290b24f76f28de4d59434300188386bd6c51ff0561c64fba831e4a.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "1f1587201484aaa26ca3e68c",
+      "asset_sha256": "18fcce647c0013c5a61e278f914210613d14c87fcd89215c5f04b9814972099b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/18fcce647c0013c5a61e278f914210613d14c87fcd89215c5f04b9814972099b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the craft of ironsmiths in Rajasthan, focusing on the making of daily-use items like flat pans.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily-use items",
+          "Rajasthan",
+          "ironsmiths",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The text describes a scenario where Yashwant and Anandi are learning about the craft of ironsmiths in Rajasthan, specifically focusing on the making of daily-use items like flat pans.",
+        "limitations": [
+          "The image does not provide any visual representation of the ironsmiths or the items they make."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:36:10Z"
+    },
+    {
+      "asset_id": "cb5b5b941e4dfea8e2cf2264",
+      "asset_sha256": "18fcce647c0013c5a61e278f914210613d14c87fcd89215c5f04b9814972099b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/18fcce647c0013c5a61e278f914210613d14c87fcd89215c5f04b9814972099b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the craft of ironsmiths in Rajasthan, focusing on the making of daily-use items.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily-use items",
+          "Rajasthan",
+          "ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "The text describes a conversation between Yashwant, Anandi, and Sudarshan uncle about the making of daily-use items by ironsmiths in Rajasthan.",
+        "limitations": [
+          "The image does not show any visual representation of the items made by ironsmiths.",
+          "The text does not provide specific details about the items made by ironsmiths."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338690203",
+      "checkpointed_at": "2026-10-20T04:36:40Z"
     }
   ]
 }
