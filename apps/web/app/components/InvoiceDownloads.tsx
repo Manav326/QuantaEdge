@@ -26,6 +26,7 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
   const [invoices,setInvoices]=useState<Invoice[]>([]);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
+  const [downloading,setDownloading]=useState<number|null>(null);
   const t=(en:string,hi:string)=>english?en:hi;
   const load=useCallback(async()=>{
     setLoading(true);setError('');
@@ -47,9 +48,32 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
   const money=(paise:number,currency:string)=>new Intl.NumberFormat(english?'en-IN':'hi-IN',{
     style:'currency',currency:currency||'INR',maximumFractionDigits:2
   }).format((Number(paise)||0)/100);
-  const download=(id:number)=>workspace==='PARENT'
-    ?'/api/v1/marketplace/family/orders/'+id+'/invoice.pdf'
-    :'/api/v1/marketplace/orders/'+id+'/invoice.pdf';
+  const download=async(id:number,documentNumber:string)=>{
+    setDownloading(id);setError('');
+    try{
+      const path=workspace==='PARENT'
+        ?'/api/v1/marketplace/family/orders/'+id+'/invoice.pdf'
+        :'/api/v1/marketplace/orders/'+id+'/invoice.pdf';
+      const response=await apiFetch(path,{
+        method:'GET',credentials:'same-origin',cache:'no-store',
+        headers:{'X-QE-Workspace':workspace,'Accept':'application/pdf'}
+      });
+      if(!response.ok){
+        const raw=await response.text();let data:any={};
+        try{data=raw?JSON.parse(raw):{};}catch{data={message:raw};}
+        throw new Error(String(data.message||data.detail||data.error||'The invoice PDF could not be downloaded.'));
+      }
+      const blob=await response.blob();
+      if(blob.size===0||!blob.type.toLowerCase().includes('pdf'))throw new Error('The server did not return a valid invoice PDF.');
+      const objectUrl=URL.createObjectURL(blob);
+      const anchor=document.createElement('a');
+      anchor.href=objectUrl;
+      anchor.download=documentNumber.replace(/[^A-Za-z0-9_-]/g,'-')+'.pdf';
+      document.body.appendChild(anchor);anchor.click();anchor.remove();
+      window.setTimeout(()=>URL.revokeObjectURL(objectUrl),1000);
+    }catch(e){setError(e instanceof Error?e.message:t('The invoice PDF could not be downloaded.','इनवॉइस PDF डाउनलोड नहीं हो सका।'));}
+    finally{setDownloading(null);}
+  };
 
   return <section className={styles.shell} aria-labelledby={workspace==='PARENT'?'qe-parent-invoices':'qe-student-invoices'}>
     <div className={styles.heading}>
@@ -80,7 +104,7 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
             <strong>{money(invoice.total_value_paise,invoice.currency)}</strong>
             <span>{t('Paid','भुगतान हुआ')}</span>
           </div>
-          <a className={styles.download} href={download(invoice.course_order_id)} download>{t('Download PDF','PDF डाउनलोड करें')} <span aria-hidden="true">↓</span></a>
+          <button className={styles.download} type="button" disabled={downloading!==null} onClick={()=>void download(invoice.course_order_id,invoice.document_number)}>{downloading===invoice.course_order_id?t('Preparing…','तैयार हो रहा है…'):t('Download PDF','PDF डाउनलोड करें')} <span aria-hidden="true">↓</span></button>
         </article>)}
       </div>}
   </section>;
