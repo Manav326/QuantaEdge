@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 import org.flywaydb.core.Flyway;
@@ -212,6 +213,25 @@ class RichNotificationAudienceIsolationIntegrationTest {
           select count(*) from notification_recipient
           where id=? and campaign_id=? and state='READ' and read_at is not null
           """, recipientId, campaignId));
+
+      Map<String, Object> scheduled = service.send(sender, "USER", institutionA, null,
+          directStudent(studentA), "Scheduled QA notice", "A cancellation lifecycle test",
+          document, null, null, "notification-schedule-" + UUID.randomUUID(),
+          Instant.now().plusSeconds(3600), null);
+      long scheduledCampaignId = ((Number) scheduled.get("id")).longValue();
+      notificationCampaignIds.add(scheduledCampaignId);
+      assertEquals("SCHEDULED", scheduled.get("status"));
+      Map<String, Object> cancelled = service.cancelCampaign(sender, scheduledCampaignId);
+      assertEquals("CANCELLED", cancelled.get("status"));
+      assertEquals(0L, count(jdbc,
+          "select count(*) from notification_recipient where campaign_id=?", scheduledCampaignId),
+          "A cancelled scheduled campaign must not be delivered to the inbox.");
+
+      assertThrows(IllegalArgumentException.class, () -> service.send(
+          sender, "USER", institutionA, null, directStudent(studentA),
+          "Invalid scheduled notice", "This should be rejected",
+          document, null, null, "notification-schedule-past-" + UUID.randomUUID(),
+          Instant.now().minusSeconds(60), null));
     } finally {
       // Notification rows reference QA users and intentionally restrict their deletion. Remove
       // only the campaign IDs created by this test before uninstalling its exact QA fixture.
