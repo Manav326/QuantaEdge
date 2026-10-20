@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cb016017dcee1a6fd6c21acf5a30ea0c6443c9deff1b59bc06e3612bf70753f8",
+  "raw_analysis_sha256": "7b2cd3f87bfdbb83aa15b7e42798eac8fd6f84caec0f53a8a7e8af59630af6c7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:04:44Z",
+      "checkpointed_at": "2026-10-20T03:07:43Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:05:19Z",
+      "checkpointed_at": "2026-10-20T03:08:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:05:42Z",
+      "checkpointed_at": "2026-10-20T03:08:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -46912,6 +46912,122 @@
         "limitations": [
           "The image does not provide specific details about the bacteria or their resistance.",
           "The image does not show the precautions mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ce601b9d3eab6a76d6ca6aaf",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think the antibiotic resistance has been developed in bacterial pathogens? What precautions may be taken to reduce antibiotic resistance?",
+          "z To tackle the problem of antibiotic resistance, we must use antibiotics wisely — only when prescribed by a doctor, in the correct dose, and for the right duration."
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "tackle antibiotic resistance"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:08:52Z",
+      "effective_analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think the antibiotic resistance has been developed in bacterial pathogens? What precautions may be taken to reduce antibiotic resistance?",
+          "z To tackle the problem of antibiotic resistance, we must use antibiotics wisely — only when prescribed by a doctor, in the correct dose, and for the right duration."
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "tackle antibiotic resistance"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fc210515d060d28fc756c9ef",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think\n    the antibiotic resistance has been developed in bacterial\n    pathogens? What precautions may be taken to reduce\n    antibiotic resistance?\n    z To tackle the problem of antibiotic resistance, we must\n    use antibiotics wisely — only",
+          "Chapter 3 — Health: The Ultimate Treasure     41"
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "right duration"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:09:11Z",
+      "effective_analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think\n    the antibiotic resistance has been developed in bacterial\n    pathogens? What precautions may be taken to reduce\n    antibiotic resistance?\n    z To tackle the problem of antibiotic resistance, we must\n    use antibiotics wisely — only",
+          "Chapter 3 — Health: The Ultimate Treasure     41"
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "right duration"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

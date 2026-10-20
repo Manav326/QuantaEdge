@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1000,
-    "successful_visual_analyses": 988,
-    "missing_visual_analyses": 1291,
+    "raw_analysis_result_rows": 1002,
+    "successful_visual_analyses": 990,
+    "missing_visual_analyses": 1289,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1303,
+    "unresolved_count": 1301,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38017,9 +38017,26 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think the antibiotic resistance has been developed in bacterial pathogens? What precautions may be taken to reduce antibiotic resistance?",
+          "z To tackle the problem of antibiotic resistance, we must use antibiotics wisely — only when prescribed by a doctor, in the correct dose, and for the right duration."
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "tackle antibiotic resistance"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38035,9 +38052,28 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An infographic discussing antibiotic resistance in bacterial pathogens and precautions to reduce it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "z Study the infographic given in Fig. 3.5b. How do you think\n    the antibiotic resistance has been developed in bacterial\n    pathogens? What precautions may be taken to reduce\n    antibiotic resistance?\n    z To tackle the problem of antibiotic resistance, we must\n    use antibiotics wisely — only",
+          "Chapter 3 — Health: The Ultimate Treasure     41"
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "correct dose",
+          "right duration"
+        ],
+        "context_relation": "The infographic is a visual representation of the discussion about antibiotic resistance in bacterial pathogens and the precautions that can be taken to reduce it.",
+        "limitations": [
+          "The infographic is not visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
