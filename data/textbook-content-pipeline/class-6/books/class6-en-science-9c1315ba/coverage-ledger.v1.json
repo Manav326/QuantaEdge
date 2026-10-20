@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1289,
-    "successful_visual_analyses": 1264,
-    "missing_visual_analyses": 789,
+    "raw_analysis_result_rows": 1290,
+    "successful_visual_analyses": 1265,
+    "missing_visual_analyses": 788,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 814,
+    "unresolved_count": 813,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48629,9 +48629,28 @@
       "asset_path": "assets/f852dd0bbaf8eb99a3a3e89d4a19a89e4e963b930f31fc2dde6569ae1d0d5c3e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding two balls, possibly to demonstrate the bounce of different materials.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 6.4: Let us explore",
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce."
+        ],
+        "concepts": [
+          "different materials for balls",
+          "bounce of balls",
+          "comparison of balls"
+        ],
+        "context_relation": "The image is related to the activity and figure mentioned in the text.",
+        "limitations": [
+          "The image does not show the balls being dropped or the results of the bounce comparison."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

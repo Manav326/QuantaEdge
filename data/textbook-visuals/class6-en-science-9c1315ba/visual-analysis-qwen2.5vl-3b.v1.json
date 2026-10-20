@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1264,
+    "assets_selected": 1265,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1260,
-    "assets_remaining": 818,
-    "assets_completion_percent": 60.6,
+    "assets_analyzed": 1261,
+    "assets_remaining": 817,
+    "assets_completion_percent": 60.7,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1259,
+    "assets_skipped_from_checkpoint": 1260,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:16:48Z"
+      "checkpointed_at": "2026-10-20T12:22:30Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:17:52Z"
+      "checkpointed_at": "2026-10-20T12:23:33Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:18:45Z"
+      "checkpointed_at": "2026-10-20T12:24:26Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41097,7 +41097,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T12:19:35Z"
+      "checkpointed_at": "2026-10-20T12:25:17Z"
     },
     {
       "asset_id": "f8915891e892c87de378bee1",
@@ -42045,6 +42045,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
       "checkpointed_at": "2026-10-20T12:21:14Z"
+    },
+    {
+      "asset_id": "5e72b708841be5bd8356253b",
+      "asset_sha256": "f852dd0bbaf8eb99a3a3e89d4a19a89e4e963b930f31fc2dde6569ae1d0d5c3e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/f852dd0bbaf8eb99a3a3e89d4a19a89e4e963b930f31fc2dde6569ae1d0d5c3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "887dfd86328046a5ed762d048bf0bd5760a8a7e70c8d70e31d15a70e104efd93",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding two balls, possibly to demonstrate the bounce of different materials.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 6.4: Let us explore",
+          "Fig. 6.3 illustrates a variety of balls that are of the same size but made up of different materials.",
+          "Take each ball and drop it from a fixed height.",
+          "Note the height to which the ball bounces and record it in Table 6.2.",
+          "Identify the ball that achieves the highest bounce."
+        ],
+        "concepts": [
+          "different materials for balls",
+          "bounce of balls",
+          "comparison of balls"
+        ],
+        "context_relation": "The image is related to the activity and figure mentioned in the text.",
+        "limitations": [
+          "The image does not show the balls being dropped or the results of the bounce comparison."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T12:26:59Z"
     }
   ]
 }
