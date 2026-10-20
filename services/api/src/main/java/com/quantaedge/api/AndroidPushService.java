@@ -132,6 +132,15 @@ public class AndroidPushService {
     int processed = 0;
     for (Map<String,Object> row : attempts) {
       long attemptId = number(row.get("attempt_id"));
+      // Conditional lease claim prevents separate API replicas from sending the same row.
+      // A worker crash leaves the attempt pending but releases it automatically after ten minutes.
+      int claimed=jdbc.update("""
+        update notification_delivery_attempt
+        set next_attempt_at=now()+interval '10 minutes'
+        where id=? and channel='ANDROID_PUSH' and status in ('PENDING','RETRYING')
+          and next_attempt_at<=now()
+        """,attemptId);
+      if(claimed!=1) continue;
       long recipientId = number(row.get("recipient_id"));
       long deviceId = number(row.get("device_registration_id"));
       long institutionId = number(row.get("device_institution_id"));
