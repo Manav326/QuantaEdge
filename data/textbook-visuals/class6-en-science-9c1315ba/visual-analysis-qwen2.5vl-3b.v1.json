@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1268,
+    "assets_selected": 1269,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 1264,
     "assets_remaining": 814,
     "assets_completion_percent": 60.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1263,
+    "assets_skipped_from_checkpoint": 1264,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:02:02Z"
+      "checkpointed_at": "2026-10-20T19:07:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:02:56Z"
+      "checkpointed_at": "2026-10-20T19:07:59Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:04:06Z"
+      "checkpointed_at": "2026-10-20T19:09:10Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:04:49Z"
+      "checkpointed_at": "2026-10-20T19:09:52Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39478,7 +39478,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381360674",
+      "run_id": "39461591466",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
