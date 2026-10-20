@@ -240,6 +240,11 @@ class RichNotificationAudienceIsolationIntegrationTest {
     }
   }
 
+  private static long count(JdbcTemplate jdbc, String sql, Object... args) {
+    Long value = jdbc.queryForObject(sql, Long.class, args);
+    return value == null ? 0L : value;
+  }
+
   private static long required(Map<String, Long> values, String key) {
     Long value = values.get(key);
     if (value == null || value <= 0L) throw new AssertionError("Missing QA fixture value for " + key);
