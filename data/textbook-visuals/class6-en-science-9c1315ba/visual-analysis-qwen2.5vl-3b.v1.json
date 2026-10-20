@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T17:31:12Z"
+      "checkpointed_at": "2026-10-20T17:40:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T17:32:06Z"
+      "checkpointed_at": "2026-10-20T17:40:57Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T17:33:16Z"
+      "checkpointed_at": "2026-10-20T17:42:08Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23757,7 +23757,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381360674",
+      "run_id": "39461591466",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -24223,9 +24223,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39381360674",
+      "run_id": "39461591466",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
       "publication_allowed": false
     },
