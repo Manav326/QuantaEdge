@@ -559,14 +559,14 @@ public class CourseOrderFinancialService {
     return id;
   }
 
-  private String courseTitle(long courseId) {
+  private String courseTitle(long institutionOfferId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select coalesce(nullif(o.title_override,''),p.display_name) as title
-      from curriculum_program p join institution_marketplace_offer o on o.course_id=p.id
-      join course_payment_order order_row on order_row.institution_offer_id=o.id
-      where order_row.course_id=? order by o.id limit 1
-      """,courseId);
-    if(rows.isEmpty()) return "Course access";
+      from institution_marketplace_offer o
+      join curriculum_program p on p.id=o.course_id
+      where o.id=?
+      """,institutionOfferId);
+    if(rows.isEmpty()) throw new IllegalStateException("The sold course offer was not found in its institution scope.");
     return string(rows.getFirst().get("title"));
   }
 
