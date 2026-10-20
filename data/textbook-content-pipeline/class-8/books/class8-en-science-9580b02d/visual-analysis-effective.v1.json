@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "85ec7d801de0964b0d45a27d3dd8ec6150bd5c9f65a43a5ade816460bf712662",
+  "raw_analysis_sha256": "be8e0a40448f00fa3804df5ccf566aaf20be814d089bf39557fc7481cde2fe34",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:06:10Z",
+      "checkpointed_at": "2026-10-20T06:08:31Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:06:43Z",
+      "checkpointed_at": "2026-10-20T06:09:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:07:04Z",
+      "checkpointed_at": "2026-10-20T06:09:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T06:07:40Z",
+      "checkpointed_at": "2026-10-20T06:10:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -52298,6 +52298,80 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9e932525f7420a7ec10730d1",
+      "asset_sha256": "077e0ec9da32438d56002347a0634ddb5ec4945459ce2618ba846bbbe5f8445e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 75,
+      "asset_path": "page-0075.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "aea6c47d87dc8df6f932d601b41adf4e16f8caed0f597f02df9e63a986e4a3ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of a voltaic cell and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.3 How Does a Battery Generate Electricity?",
+          "Let us start with one of the earliest types of electric cells ever made.",
+          "4.3.1 Voltaic cell",
+          "A Voltaic cell, also known as Galvanic cell, is shown in Fig. 4.7. It contains two metal rods made of different materials and a liquid called an electrolyte, placed in a glass or plastic container. The rods, called electrodes, are partly dipped in the electrolyte, which is usually a weak acid or sal",
+          "The Voltaic or Galvanic cells get their names from two Italian scientists, Alessandro Volta and Luigi Galvani. In the late 1700s, Galvani noticed that a dead frog's leg kicked when touched with two different metals—copper and iron. It was already known by then that electricity could stimulate muscul"
+        ],
+        "concepts": [
+          "voltaic cell",
+          "electrolyte",
+          "electrode",
+          "electric current",
+          "chemical reaction",
+          "electricity",
+          "battery",
+          "galvanic cell",
+          "electricity generation",
+          "electrolysis"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of a voltaic cell and its components.",
+        "limitations": [
+          "The image does not show the actual components of a voltaic cell."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T06:12:01Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of a voltaic cell and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.3 How Does a Battery Generate Electricity?",
+          "Let us start with one of the earliest types of electric cells ever made.",
+          "4.3.1 Voltaic cell",
+          "A Voltaic cell, also known as Galvanic cell, is shown in Fig. 4.7. It contains two metal rods made of different materials and a liquid called an electrolyte, placed in a glass or plastic container. The rods, called electrodes, are partly dipped in the electrolyte, which is usually a weak acid or sal",
+          "The Voltaic or Galvanic cells get their names from two Italian scientists, Alessandro Volta and Luigi Galvani. In the late 1700s, Galvani noticed that a dead frog's leg kicked when touched with two different metals—copper and iron. It was already known by then that electricity could stimulate muscul"
+        ],
+        "concepts": [
+          "voltaic cell",
+          "electrolyte",
+          "electrode",
+          "electric current",
+          "chemical reaction",
+          "electricity",
+          "battery",
+          "galvanic cell",
+          "electricity generation",
+          "electrolysis"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of a voltaic cell and its components.",
+        "limitations": [
+          "The image does not show the actual components of a voltaic cell."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
