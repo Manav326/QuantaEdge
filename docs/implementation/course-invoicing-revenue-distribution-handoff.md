@@ -275,3 +275,11 @@ Verification at this checkpoint:
 - Corrected the remaining tax-profile INSERT to bind UTC `OffsetDateTime` values rather than `Instant`, matching PostgreSQL JDBC's supported timestamp-with-time-zone type.
 - Percentage recipients are now validated at draft-save time as well as approval time: total percentage must be at most 100%. Mixed flat amounts can still exceed a small actual pool, so the deterministic sale allocation must validate the real pool before any allocation is posted.
 - Customer billing profiles and per-order locked billing/tax/discount snapshots are the next model slice; production sale issuance is not yet wired to these foundations.
+
+
+### 2026-10-20 — Purchaser billing identity snapshot
+
+- Added `BillingCustomerProfileController`: authenticated student and parent routes retrieve/update only the caller's billing profile. It validates business billing address completeness, email/phone format, GSTIN length and GST state-prefix consistency; event history stores changed field names, not the submitted PII.
+- Added validation tests for individual and business profiles, GSTIN/state mismatch, incomplete business address, invalid GSTIN and invalid email.
+- Course-order creation now persists the purchaser's billing profile snapshot and beneficiary name together with list-price and zero-discount values. Later profile edits cannot rewrite an already-verified order snapshot (database guard from V151).
+- No customer-facing invoice issuance is enabled yet: the course order still needs an approved tax-profile snapshot, legal document selection/numbering, immutable fiscal document + line creation and private PDF storage. Coupons/offers integration remains to be audited/implemented before claiming discounted checkouts work.

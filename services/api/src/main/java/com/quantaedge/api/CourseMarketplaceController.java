@@ -593,6 +593,15 @@ public class CourseMarketplaceController {
     long amountPaise = ((Number) offer.get("price_paise")).longValue();
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
     String title = String.valueOf(offer.getOrDefault("title", "Course access"));
+    long purchaserAccountId;
+    if(purchaserUserId!=null) {
+      purchaserAccountId=purchaserUserId;
+    } else {
+      Long linkedUserId=jdbc.queryForObject("select user_account_id from student where id=? and active=true",Long.class,targetStudentId);
+      if(linkedUserId==null) throw new IllegalStateException("The purchaser account is not linked to the learner profile.");
+      purchaserAccountId=linkedUserId;
+    }
+    Map<String,Object> buyerSnapshot=billingProfileSnapshot(purchaserAccountId,targetStudentId);
     String institutionDisplayName=jdbc.queryForObject("""
       select coalesce(nullif(b.display_name,''),t.display_name)
       from institution_tenant t left join institution_branding b on b.institution_id=t.id
@@ -649,13 +658,15 @@ public class CourseMarketplaceController {
           insert into course_payment_order(
             student_id,purchaser_user_id,target_student_id,recipient_type,
             course_id,institution_id,institution_offer_id,offer_price_paise,currency,
+            listed_price_paise,discount_amount_paise,buyer_snapshot,
             receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,?,?,?,?,?,'CREATING')
+          ) values(?,?,?,?,?,?,?,?,?,?,0,?::jsonb,?,?, 'CREATING')
           returning id
           """, Long.class, targetStudentId, purchaserUserId,
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
           courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
-          amountPaise, currency, receipt, idempotencyKey);
+          amountPaise, currency, ((Number)offer.get("price_paise")).longValue(),
+          objectMapper.writeValueAsString(buyerSnapshot), receipt, idempotencyKey);
     } catch (DuplicateKeyException conflict) {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
@@ -710,6 +721,39 @@ public class CourseMarketplaceController {
       if (exception instanceof IllegalStateException state) throw state;
       throw new IllegalStateException("Payment could not be started. Please retry.", exception);
     }
+  }
+
+  private Map<String,Object> billingProfileSnapshot(long userAccountId,long beneficiaryStudentId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select u.id,coalesce(nullif(p.legal_name,''),u.display_name) as legal_name,
+        coalesce(p.billing_type,'INDIVIDUAL') as billing_type,p.gstin,p.gst_state_code,
+        coalesce(p.billing_address,'{}'::jsonb)::text as billing_address_json,
+        coalesce(p.contact_email,u.contact_email,u.email) as contact_email,
+        coalesce(p.contact_phone,u.mobile_e164) as contact_phone,
+        coalesce(p.version,0) as profile_version,u.display_name
+      from user_account u left join billing_customer_profile p on p.user_account_id=u.id
+      where u.id=? and u.active=true
+      """,userAccountId);
+    if(rows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
+    Map<String,Object> row=rows.getFirst();
+    Map<String,Object> snapshot=new LinkedHashMap<>();
+    snapshot.put("billingType",row.get("billing_type"));
+    snapshot.put("legalName",row.get("legal_name"));
+    snapshot.put("gstin",row.get("gstin"));
+    snapshot.put("gstStateCode",row.get("gst_state_code"));
+    try {
+      snapshot.put("billingAddress",objectMapper.readValue(
+          String.valueOf(row.get("billing_address_json")),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){}));
+    } catch(Exception ex) {
+      throw new IllegalStateException("The purchaser billing address snapshot could not be read.",ex);
+    }
+    snapshot.put("contactEmail",row.get("contact_email"));
+    snapshot.put("contactPhone",row.get("contact_phone"));
+    snapshot.put("billingProfileVersion",row.get("profile_version"));
+    String beneficiaryName=jdbc.queryForObject("select display_name from student where id=?",String.class,beneficiaryStudentId);
+    snapshot.put("beneficiaryName",beneficiaryName);
+    return snapshot;
   }
 
   private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
