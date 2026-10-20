@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1157,
-    "successful_visual_analyses": 1135,
-    "missing_visual_analyses": 1134,
+    "raw_analysis_result_rows": 1158,
+    "successful_visual_analyses": 1136,
+    "missing_visual_analyses": 1133,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1156,
+    "unresolved_count": 1155,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43427,9 +43427,32 @@
       "asset_path": "page-0082.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a science textbook titled 'Exploring Forces' with a question prompt and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring Forces         5",
+          "Probe and ponder",
+          "Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "Why is it easier to slip on a wet surface?",
+          "Why do we feel ‘light’ or like we are ‘floating’ just after our swing reaches its highest point and begins to come down?",
+          "Share your questions",
+          "?"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycle pedaling",
+          "Slipping on wet surfaces",
+          "Floating sensation",
+          "Swing dynamics"
+        ],
+        "context_relation": "The page is part of a science textbook focusing on forces and their effects on different surfaces and situations.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
