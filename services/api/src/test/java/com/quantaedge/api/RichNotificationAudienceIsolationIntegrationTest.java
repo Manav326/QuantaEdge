@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -54,6 +55,7 @@ class RichNotificationAudienceIsolationIntegrationTest {
 
     String key = "notification-audience-" + UUID.randomUUID();
     UUID runId = null;
+    List<Long> notificationCampaignIds = new ArrayList<>();
     try {
       Map<String, Object> installed = qa.install("TENANT_LEARNER_BOUNDARY_V1", key, null);
       assertEquals("INSTALLED", installed.get("state"), () -> "QA fixture install failed: " + installed);
@@ -157,7 +159,72 @@ class RichNotificationAudienceIsolationIntegrationTest {
           Map.of("recipients", List.of(Map.of("kind", "USER_ACCOUNT", "id", parentA)))));
 
       assertTrue(childA > 0L, "The consented parent edge must refer to a real QA child.");
+
+      // Exercise the real in-app dispatch contract, idempotent replay, tenant-scoped inbox,
+      // read-state transition and channel attempt record against PostgreSQL.
+      Long senderStaffId = jdbc.queryForObject("""
+          select id from staff_account where qa_test_run_id=? and role='CONTENT_REVIEWER'
+          order by id limit 1
+          """, Long.class, runId);
+      RichNotificationService.Actor sender = new RichNotificationService.Actor(
+          "EDUCATION_ADMIN", senderStaffId, null, institutionA);
+      Map<String, Object> document = Map.of("version", 1, "blocks", List.of(
+          Map.of("type", "hero", "title", "QA notice", "subtitle", "Institution A only")));
+      String idempotencyKey = "notification-send-" + UUID.randomUUID();
+      Map<String, Object> sent = service.send(sender, "USER", institutionA, null,
+          directStudent(studentA), "Tenant-scoped QA notice", "A durable inbox delivery test",
+          document, null, null, idempotencyKey, null, null);
+      long campaignId = ((Number) sent.get("id")).longValue();
+      notificationCampaignIds.add(campaignId);
+      assertEquals("SENT", sent.get("status"));
+      assertEquals(1, ((Number) sent.get("resolved_recipient_count")).intValue());
+
+      Map<String, Object> replay = service.send(sender, "USER", institutionA, null,
+          directStudent(studentA), "Tenant-scoped QA notice", "A durable inbox delivery test",
+          document, null, null, idempotencyKey, null, null);
+      assertEquals(campaignId, ((Number) replay.get("id")).longValue(),
+          "Replaying the same sender-scoped idempotency key must not create another campaign.");
+      assertEquals(Boolean.TRUE, replay.get("idempotentReplay"));
+
+      AuthContext studentContext = new AuthContext(null, studentA, null,
+          "STUDENT", "QA Child A", "STUDENT");
+      List<Map<String, Object>> deliveredInbox = service.inbox(
+          studentContext, institutionA, 50, null, false);
+      Map<String, Object> delivered = deliveredInbox.stream()
+          .filter(item -> "Tenant-scoped QA notice".equals(item.get("title")))
+          .findFirst().orElseThrow(() -> new AssertionError("Sent notification is missing from the targeted learner inbox."));
+      long recipientId = ((Number) delivered.get("recipient_id")).longValue();
+      assertEquals("CREATED", delivered.get("state"));
+      assertEquals(1L, count(jdbc, """
+          select count(*) from notification_delivery_attempt d
+          join notification_recipient r on r.id=d.recipient_id
+          where r.campaign_id=? and d.channel='IN_APP' and d.status='SENT'
+          """, campaignId));
+      assertTrue(service.inbox(studentContext, institutionB, 50, null, false).stream()
+          .noneMatch(item -> "Tenant-scoped QA notice".equals(item.get("title"))),
+          "Institution B must not receive Institution A's notification, even with a shared content title.");
+
+      assertTrue(service.markRead(studentContext, institutionA, recipientId, false));
+      assertTrue(service.inbox(studentContext, institutionA, 50, null, true).stream()
+          .noneMatch(item -> "Tenant-scoped QA notice".equals(item.get("title"))),
+          "A read notification must disappear from the unread-only inbox view.");
+      assertEquals(1L, count(jdbc, """
+          select count(*) from notification_recipient
+          where id=? and campaign_id=? and state='READ' and read_at is not null
+          """, recipientId, campaignId));
     } finally {
+      // Notification rows reference QA users and intentionally restrict their deletion. Remove
+      // only the campaign IDs created by this test before uninstalling its exact QA fixture.
+      for (Long campaignId : notificationCampaignIds) {
+        try {
+          jdbc.update("delete from notification_audit where campaign_id=?", campaignId);
+          jdbc.update("delete from notification_delivery_attempt where recipient_id in (select id from notification_recipient where campaign_id=?)", campaignId);
+          jdbc.update("delete from notification_recipient where campaign_id=?", campaignId);
+          jdbc.update("delete from notification_campaign where id=?", campaignId);
+        } catch (Exception ignored) {
+          // Preserve the original failure; CI discards this isolated QA database after the job.
+        }
+      }
       // Exact-run, best-effort cleanup only; never delete other test runs or production institutions.
       if (runId != null) {
         try {
