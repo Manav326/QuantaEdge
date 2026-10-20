@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 970,
-    "successful_visual_analyses": 959,
-    "missing_visual_analyses": 1321,
+    "raw_analysis_result_rows": 972,
+    "successful_visual_analyses": 961,
+    "missing_visual_analyses": 1319,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1332,
+    "unresolved_count": 1330,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37064,9 +37064,30 @@
       "asset_path": "assets/67b5a5c7c7fce082cf2fc1dd663ba408e225c70d6df5e5715618fb8dc0ad7f29.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An infographic celebrating India's global vaccine distribution, highlighting the country's role in providing vaccines to over 100 countries under the Vaccine Maitri program.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "MAKE IN INDIA VACCINES for The World",
+          "200 CRORE VACCINATIONS",
+          "24 crore doses supplied",
+          "to over 100 countries under",
+          "Vaccine Maitri"
+        ],
+        "concepts": [
+          "India's global vaccine distribution",
+          "Vaccine Maitri program",
+          "200 crore vaccinations",
+          "24 crore doses",
+          "100 countries"
+        ],
+        "context_relation": "The image promotes India's role in global health and vaccine distribution, emphasizing the success of the Vaccine Maitri program.",
+        "limitations": [
+          "The image does not provide specific details about the types of vaccines or the diseases they prevent."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37082,9 +37103,24 @@
       "asset_path": "assets/5156e3aca31ccc83e1c2c1306e1b4f93fe8a1ad47b05e7004f0c607623198c2c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person using a microscope in a laboratory setting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "laboratory",
+          "scientist",
+          "vaccines",
+          "health"
+        ],
+        "context_relation": "The image is related to the text discussing the importance of vaccines in protecting people from serious diseases.",
+        "limitations": [
+          "The image does not show the specific text about vaccines and their effectiveness."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

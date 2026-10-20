@@ -11,9 +11,9 @@
     "assets_selected": 961,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 956,
-    "assets_remaining": 1335,
-    "assets_completion_percent": 41.7,
+    "assets_analyzed": 958,
+    "assets_remaining": 1333,
+    "assets_completion_percent": 41.8,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 956,
     "batch_limit": 5,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:17:13Z"
+      "checkpointed_at": "2026-10-20T02:22:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:17:46Z"
+      "checkpointed_at": "2026-10-20T02:23:22Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T02:18:08Z"
+      "checkpointed_at": "2026-10-20T02:23:44Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30480,6 +30480,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T19:22:29Z"
+    },
+    {
+      "asset_id": "a1a2ce5beadfd257e54c4603",
+      "asset_sha256": "67b5a5c7c7fce082cf2fc1dd663ba408e225c70d6df5e5715618fb8dc0ad7f29",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/67b5a5c7c7fce082cf2fc1dd663ba408e225c70d6df5e5715618fb8dc0ad7f29.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An infographic celebrating India's global vaccine distribution, highlighting the country's role in providing vaccines to over 100 countries under the Vaccine Maitri program.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "MAKE IN INDIA VACCINES for The World",
+          "200 CRORE VACCINATIONS",
+          "24 crore doses supplied",
+          "to over 100 countries under",
+          "Vaccine Maitri"
+        ],
+        "concepts": [
+          "India's global vaccine distribution",
+          "Vaccine Maitri program",
+          "200 crore vaccinations",
+          "24 crore doses",
+          "100 countries"
+        ],
+        "context_relation": "The image promotes India's role in global health and vaccine distribution, emphasizing the success of the Vaccine Maitri program.",
+        "limitations": [
+          "The image does not provide specific details about the types of vaccines or the diseases they prevent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:24:30Z"
+    },
+    {
+      "asset_id": "f3c1c3f2bb1f2d936e04ff1f",
+      "asset_sha256": "5156e3aca31ccc83e1c2c1306e1b4f93fe8a1ad47b05e7004f0c607623198c2c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/5156e3aca31ccc83e1c2c1306e1b4f93fe8a1ad47b05e7004f0c607623198c2c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0683cf84c7bb6f98df02f0403c874ee4b36e71d7f9b88efd94d828cae9ebe169",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a microscope in a laboratory setting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "laboratory",
+          "scientist",
+          "vaccines",
+          "health"
+        ],
+        "context_relation": "The image is related to the text discussing the importance of vaccines in protecting people from serious diseases.",
+        "limitations": [
+          "The image does not show the specific text about vaccines and their effectiveness."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T02:25:10Z"
     }
   ]
 }
