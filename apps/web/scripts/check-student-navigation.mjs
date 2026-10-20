@@ -156,8 +156,9 @@ const emptyStatePages = [
 assert.ok(dashboardPage.includes('student.empty.dashboard.title') &&
   dashboardPage.includes('student.empty.dashboard.message') &&
   dashboardPage.includes('student.empty.dashboard.action') &&
-  !dashboardPage.includes('Opening the course marketplace'),
-  'A learner without enrolments must stay on the dashboard and see a localized, explicit Marketplace action.');
+  !dashboardPage.includes('Opening the course marketplace') &&
+  !dashboardPage.includes("router.replace('/student/marketplace')"),
+  'A learner without enrolments must stay on the dashboard and see a localized, explicit Marketplace action; the course-fetch effect must not redirect them.');
 for (const [pageName, source, messageKey] of emptyStatePages) {
   assert.ok(source.includes(messageKey) && source.includes('noEnrolledCourses') &&
     source.includes('!loadingCourses') && source.includes('!courseError'),
