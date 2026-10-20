@@ -123,6 +123,12 @@ export default function ProgressPage(){
     window.history.replaceState(null, '', '/student/progress'+(params.size?'?'+params.toString():''));
   }
   
+  const noEnrolledCourses = !loadingCourses && !courseError && courses.length === 0;
+  if (noEnrolledCourses) return <main className="app-shell"><section className="progress-page"><div className="auth-card" role="status">
+    <h1><UiText message="legacy.web.your.progress.c5b2f5ab" /></h1>
+    <p><UiText message="student.empty.progress.message" /></p>
+  </div></section></main>;
+
   if(error)return <main className="app-shell"><section className="progress-page"><div className="auth-card">
     <h1><UiText message="legacy.web.unable.to.load.progress.5f5e48c0" /></h1><p>{error}</p>
     <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
