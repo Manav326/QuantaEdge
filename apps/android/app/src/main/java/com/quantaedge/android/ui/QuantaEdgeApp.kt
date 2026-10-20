@@ -1468,6 +1468,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
                     throw IOException("The course order could not be identified. Retry verification before paying again.")
                 }
+                val discountPaise = order.optLong("discountPaise", 0L)
+                if (discountPaise > 0L) {
+                    val saved = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("en", "IN"))
+                        .format(discountPaise / 100.0)
+                    val appliedCode = order.optString("discountCode").ifBlank { discountCode.trim() }
+                    status = if (language == "hi") "Offer code $appliedCode लागू हुआ। आपकी बचत $saved है।"
+                        else "Offer code $appliedCode applied. You save $saved."
+                }
                 val recoverableDraft = JSONObject()
                     .put("courseId", courseId)
                     .put("localOrderId", localOrderId)
@@ -1568,6 +1576,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 val providerOrderId = order.optString("orderId").trim()
                 if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
                     throw IOException("The course order could not be identified. Retry verification before paying again.")
+                }
+                val discountPaise = order.optLong("discountPaise", 0L)
+                if (discountPaise > 0L) {
+                    val saved = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("en", "IN"))
+                        .format(discountPaise / 100.0)
+                    val appliedCode = order.optString("discountCode").ifBlank { discountCode.trim() }
+                    status = if (language == "hi") "Offer code $appliedCode लागू हुआ। आपकी बचत $saved है।"
+                        else "Offer code $appliedCode applied. You save $saved."
                 }
                 val recoverableDraft = JSONObject()
                     .put("courseId", courseId)
