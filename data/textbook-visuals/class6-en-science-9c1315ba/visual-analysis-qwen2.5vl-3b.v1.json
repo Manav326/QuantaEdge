@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1156,
+    "assets_selected": 1157,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1152,
-    "assets_remaining": 926,
-    "assets_completion_percent": 55.4,
+    "assets_analyzed": 1154,
+    "assets_remaining": 924,
+    "assets_completion_percent": 55.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1151,
+    "assets_skipped_from_checkpoint": 1152,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:08:02Z"
+      "checkpointed_at": "2026-10-20T01:17:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:09:00Z"
+      "checkpointed_at": "2026-10-20T01:18:56Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T01:09:49Z"
+      "checkpointed_at": "2026-10-20T01:19:45Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38045,6 +38045,61 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T20:33:51Z"
+    },
+    {
+      "asset_id": "076c45d57f5a5e587b1f1f01",
+      "asset_sha256": "347deed4c01d7a2e69ea75d153b62f2af08366cb07bd1ee9cf8073d7379c9a44",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/347deed4c01d7a2e69ea75d153b62f2af08366cb07bd1ee9cf8073d7379c9a44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16a46680b925b8c8c6ef849c54829957269a9b86765457ceb6a61b83223bd2c4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a red shirt and white pants, pointing with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page, not a cropped figure.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:21:12Z"
+    },
+    {
+      "asset_id": "854457874060be5c22284808",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16a46680b925b8c8c6ef849c54829957269a9b86765457ceb6a61b83223bd2c4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T01:21:23Z"
     }
   ]
 }
