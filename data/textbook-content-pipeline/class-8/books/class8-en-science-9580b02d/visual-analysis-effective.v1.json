@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "504ed47a7a3a144deff03e067b4da121adfd7f6462d042b17ceeb0505d33e171",
+  "raw_analysis_sha256": "72dfa5da2f030e4df7279068b90014bc28ba6c2ddf4451f200aedb45b48c717c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:12:50Z",
+      "checkpointed_at": "2026-10-20T15:19:01Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:13:35Z",
+      "checkpointed_at": "2026-10-20T15:19:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:14:05Z",
+      "checkpointed_at": "2026-10-20T15:20:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:14:54Z",
+      "checkpointed_at": "2026-10-20T15:21:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -54708,6 +54708,46 @@
         "context_relation": "The questions are based on the content of the textbook, specifically the topics of electromagnets, circuits, and materials.",
         "limitations": [
           "The questions are based on a specific textbook and cannot be generalized."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58ab99d9d7232e67a21794b3",
+      "asset_sha256": "f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bc1476e7b85a7ac860391876a258473064eb676631082d17e50c56fd332b079c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the content it is discussing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T15:22:15Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the content it is discussing."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
