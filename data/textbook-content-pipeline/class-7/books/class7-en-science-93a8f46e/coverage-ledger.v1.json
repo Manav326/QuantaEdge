@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2054,
-    "successful_visual_analyses": 1946,
-    "missing_visual_analyses": 5434,
+    "raw_analysis_result_rows": 2057,
+    "successful_visual_analyses": 1949,
+    "missing_visual_analyses": 5431,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5542,
+    "unresolved_count": 5539,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -84539,9 +84539,28 @@
       "asset_path": "assets/8ec461b6d4c137baea9d9b408a3a57765092f6b535b920073a89f83347d32792.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, indicating brittleness. Wood neither gets flattened nor breaks into pieces, indicating it is neither malleable nor brittle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "properties of materials"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood, in relation to their brittleness and malleability.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of brittleness or malleability.",
+          "The text does not discuss the impact of iron on the progress of civilisation of India."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84557,9 +84576,18 @@
       "asset_path": "assets/819f26ba4cb4f179130fe5275e7bcdb9bc8c75d6908ccde363d3e1176d0bea34.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a pink fabric with a yellow and green border, possibly part of a garment or textile.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a fabric, possibly part of a garment or textile.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the concept being illustrated."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -84575,9 +84603,29 @@
       "asset_path": "assets/e16e571afb05d622b33bf2e2cb14b3dfd231d632558724fc544088e7ed30cdb9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "coal",
+          "sulfur",
+          "brittleness",
+          "wood",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the properties of coal, sulfur, and wood.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text it is based on."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

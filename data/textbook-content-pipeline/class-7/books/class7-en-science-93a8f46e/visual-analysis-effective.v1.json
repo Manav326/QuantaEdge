@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4ee6ac53fc9fc7a9fab5312cf081d8d978970cf822dbb34bf9ca078cdc89692f",
+  "raw_analysis_sha256": "55a2a4bb48acb76adedaeed89525061df35a7e3e190563532a43ccb64451b6de",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:03:09Z",
+      "checkpointed_at": "2026-10-20T22:06:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:03:30Z",
+      "checkpointed_at": "2026-10-20T22:06:28Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -116295,6 +116295,168 @@
         "concepts": [],
         "context_relation": "unclear",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "678395c67bf22e279b6e75a4",
+      "asset_sha256": "8ec461b6d4c137baea9d9b408a3a57765092f6b535b920073a89f83347d32792",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/8ec461b6d4c137baea9d9b408a3a57765092f6b535b920073a89f83347d32792.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, indicating brittleness. Wood neither gets flattened nor breaks into pieces, indicating it is neither malleable nor brittle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "properties of materials"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood, in relation to their brittleness and malleability.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of brittleness or malleability.",
+          "The text does not discuss the impact of iron on the progress of civilisation of India."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:07:10Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, indicating brittleness. Wood neither gets flattened nor breaks into pieces, indicating it is neither malleable nor brittle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A piece of coal or a lump of sulfur does not show this behaviour.",
+          "They break into pieces and are said to be brittle.",
+          "On the other hand, wood neither gets flattened into a sheet nor breaks into pieces.",
+          "Therefore, wood is neither malleable nor brittle."
+        ],
+        "concepts": [
+          "brittleness",
+          "malleability",
+          "properties of materials"
+        ],
+        "context_relation": "The text describes the properties of different materials, specifically coal, sulfur, and wood, in relation to their brittleness and malleability.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of brittleness or malleability.",
+          "The text does not discuss the impact of iron on the progress of civilisation of India."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3df28f1203d87b40ed6265f7",
+      "asset_sha256": "819f26ba4cb4f179130fe5275e7bcdb9bc8c75d6908ccde363d3e1176d0bea34",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/819f26ba4cb4f179130fe5275e7bcdb9bc8c75d6908ccde363d3e1176d0bea34.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a pink fabric with a yellow and green border, possibly part of a garment or textile.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a fabric, possibly part of a garment or textile.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the concept being illustrated."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:07:46Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a pink fabric with a yellow and green border, possibly part of a garment or textile.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a fabric, possibly part of a garment or textile.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the concept being illustrated."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cf2a53a2aa1b29c3fb85accc",
+      "asset_sha256": "e16e571afb05d622b33bf2e2cb14b3dfd231d632558724fc544088e7ed30cdb9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/e16e571afb05d622b33bf2e2cb14b3dfd231d632558724fc544088e7ed30cdb9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "coal",
+          "sulfur",
+          "brittleness",
+          "wood",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the properties of coal, sulfur, and wood.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text it is based on."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T22:08:26Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of coal or a lump of sulfur breaks into pieces, while wood neither gets flattened nor breaks into pieces.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "coal",
+          "sulfur",
+          "brittleness",
+          "wood",
+          "malleability",
+          "impact of iron on civilisation",
+          "Harappans",
+          "social science",
+          "exploring society",
+          "India and Beyond"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the properties of coal, sulfur, and wood.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text it is based on."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
