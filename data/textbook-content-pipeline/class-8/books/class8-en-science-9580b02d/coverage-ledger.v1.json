@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1044,
-    "successful_visual_analyses": 1029,
-    "missing_visual_analyses": 1247,
+    "raw_analysis_result_rows": 1046,
+    "successful_visual_analyses": 1031,
+    "missing_visual_analyses": 1245,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1262,
+    "unresolved_count": 1260,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39586,9 +39586,25 @@
       "asset_path": "assets/a24fd1b40c6e965e238c8689feb360a28f747dbf556680ce1b89532edb10bde9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A boy using a telescope to observe something in the distance.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A boy using a telescope to observe something in the distance."
+        ],
+        "concepts": [
+          "Observation",
+          "Telescope",
+          "Distance",
+          "Scientific Inquiry"
+        ],
+        "context_relation": "The image is related to the educational content about observing and using a telescope.",
+        "limitations": [
+          "The image does not provide specific details about what the boy is observing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39604,9 +39620,19 @@
       "asset_path": "assets/ef2bb332b47540c19e2f1b75fddcaeb90a0c205cf0238038a03691a33e78a786.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl with braided hair wearing a blue vest and a light blue shirt, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl in a classroom setting, possibly during a lesson on electricity and magnetism.",
+        "limitations": [
+          "The image does not provide specific details about the lesson or the experiment being conducted.",
+          "The image does not include any text or labels that would provide additional context or information about the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

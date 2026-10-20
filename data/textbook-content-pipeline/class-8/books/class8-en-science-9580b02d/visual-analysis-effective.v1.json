@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "075e276b1df5d1d11a78a29d92ab923d58b90171fa43ad01e9af96afca8c4145",
+  "raw_analysis_sha256": "c8178c0539f5fd1c12f5def638e6ff1d885a549f2769a6f5911507e914d27a07",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:14:19Z",
+      "checkpointed_at": "2026-10-20T04:18:44Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:14:52Z",
+      "checkpointed_at": "2026-10-20T04:19:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:15:14Z",
+      "checkpointed_at": "2026-10-20T04:19:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -49428,6 +49428,102 @@
         "limitations": [
           "The image does not provide any specific information about the person depicted.",
           "The image is in black and white, which may limit the detail and color information available."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0980fad6d698cabfc06a1e4e",
+      "asset_sha256": "a24fd1b40c6e965e238c8689feb360a28f747dbf556680ce1b89532edb10bde9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/a24fd1b40c6e965e238c8689feb360a28f747dbf556680ce1b89532edb10bde9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9f65368010430a62158ac802ec9a84804c0f50269da6aaad2f5dc70588db4a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy using a telescope to observe something in the distance.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A boy using a telescope to observe something in the distance."
+        ],
+        "concepts": [
+          "Observation",
+          "Telescope",
+          "Distance",
+          "Scientific Inquiry"
+        ],
+        "context_relation": "The image is related to the educational content about observing and using a telescope.",
+        "limitations": [
+          "The image does not provide specific details about what the boy is observing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:20:18Z",
+      "effective_analysis": {
+        "visual_summary": "A boy using a telescope to observe something in the distance.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A boy using a telescope to observe something in the distance."
+        ],
+        "concepts": [
+          "Observation",
+          "Telescope",
+          "Distance",
+          "Scientific Inquiry"
+        ],
+        "context_relation": "The image is related to the educational content about observing and using a telescope.",
+        "limitations": [
+          "The image does not provide specific details about what the boy is observing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cbc079cd11f18b5f28210a85",
+      "asset_sha256": "ef2bb332b47540c19e2f1b75fddcaeb90a0c205cf0238038a03691a33e78a786",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/ef2bb332b47540c19e2f1b75fddcaeb90a0c205cf0238038a03691a33e78a786.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9f65368010430a62158ac802ec9a84804c0f50269da6aaad2f5dc70588db4a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl with braided hair wearing a blue vest and a light blue shirt, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl in a classroom setting, possibly during a lesson on electricity and magnetism.",
+        "limitations": [
+          "The image does not provide specific details about the lesson or the experiment being conducted.",
+          "The image does not include any text or labels that would provide additional context or information about the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:20:57Z",
+      "effective_analysis": {
+        "visual_summary": "A girl with braided hair wearing a blue vest and a light blue shirt, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a girl in a classroom setting, possibly during a lesson on electricity and magnetism.",
+        "limitations": [
+          "The image does not provide specific details about the lesson or the experiment being conducted.",
+          "The image does not include any text or labels that would provide additional context or information about the experiment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
