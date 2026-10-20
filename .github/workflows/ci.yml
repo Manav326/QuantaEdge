@@ -164,11 +164,37 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.11.1"
+      - name: Configure stable signing for the installable APK
+        id: signing
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$ANDROID_KEYSTORE_BASE64" && -z "$ANDROID_KEYSTORE_PASSWORD" && -z "$ANDROID_KEY_ALIAS" && -z "$ANDROID_KEY_PASSWORD" ]]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No stable Android signing key is configured in the production environment. Tests will run, but no installable APK will be published; an ephemeral runner debug certificate cannot provide reliable Google sign-in."
+            exit 0
+          fi
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "::error::Missing ANDROID_KEYSTORE_BASE64 production secret."; exit 1; }
+          test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "::error::Missing ANDROID_KEYSTORE_PASSWORD production secret."; exit 1; }
+          test -n "$ANDROID_KEY_ALIAS" || { echo "::error::Missing ANDROID_KEY_ALIAS production secret."; exit 1; }
+          test -n "$ANDROID_KEY_PASSWORD" || { echo "::error::Missing ANDROID_KEY_PASSWORD production secret."; exit 1; }
+          KEYSTORE_PATH="$RUNNER_TEMP/quantaedge-upload.jks"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          test -s "$KEYSTORE_PATH" || { echo "::error::Decoded Android signing keystore is empty."; exit 1; }
+          keytool -list -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
+          echo "ANDROID_KEYSTORE_PATH=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+          echo "configured=true" >> "$GITHUB_OUTPUT"
       - name: Verify structured lesson UI contract
         run: node scripts/check-structured-lesson-ui-contract.mjs
       - name: Verify Android UI localization contract
         run: node scripts/check-android-ui-localization.mjs
-      - name: Run Android unit tests and build debug APK
+      - name: Run Android unit tests and build debug APK for verification
         env:
           QUANTAEDGE_API_BASE_URL: http://192.168.31.47:8080/
           QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
@@ -182,28 +208,82 @@ jobs:
             -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
             -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
             -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
-            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID"
-      - name: Report Android package and Google OAuth signing fingerprint
-        shell: bash
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
+            --no-daemon --build-cache
+      - name: Build stable signed installable APK
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
+          QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
+          QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
+          QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
+          QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
         run: |
           set -euo pipefail
-          APK="apps/android/app/build/outputs/apk/debug/app-debug.apk"
+          gradle -p apps/android assembleRelease \
+            -PquantaedgeApiBaseUrl="$QUANTAEDGE_API_BASE_URL" \
+            -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
+            -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
+            -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
+            --no-daemon --build-cache
+      - name: Report installable APK package and Google OAuth signing fingerprint
+        if: steps.signing.outputs.configured == 'true'
+        shell: bash
+        env:
+          QUANTAEDGE_ANDROID_OAUTH_SHA1: ${{ vars.QUANTAEDGE_ANDROID_OAUTH_SHA1 }}
+        run: |
+          set -euo pipefail
+          APK="apps/android/app/build/outputs/apk/release/app-release.apk"
           AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
           APKSIGNER="$ANDROID_HOME/build-tools/36.0.0/apksigner"
-          test -s "$APK" || { echo "::error::Expected installable APK is missing."; exit 1; }
-          test -x "$AAPT" || { echo "::error::Android aapt tool is missing."; exit 1; }
-          test -x "$APKSIGNER" || { echo "::error::Android apksigner tool is missing."; exit 1; }
+          test -s "$APK" || { echo "::error::Expected signed installable APK is missing."; exit 1; }
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | grep -m1 "^package:")"
           echo "Installable APK package identity:"
-          "$AAPT" dump badging "$APK" | grep -m1 "^package:"
-          echo "Installable APK signer fingerprint (compare SHA-1 with the Android OAuth client in Google Cloud):"
-          "$APKSIGNER" verify --print-certs "$APK" | grep -E "Signer #1 certificate SHA-1 digest|Signer #1 certificate SHA-256 digest"
-      - name: Upload installable APK
+          echo "$PACKAGE_LINE"
+          PACKAGE_ID="$(printf '%s\n' "$PACKAGE_LINE" | sed -n "s/^package: name='\([^']*\)'.*/\1/p")"
+          test "$PACKAGE_ID" = "com.quantaedge.android" || {
+            echo "::error::Unexpected installable APK package '$PACKAGE_ID'; expected com.quantaedge.android."
+            exit 1
+          }
+          SIGNER_DETAILS="$("$APKSIGNER" verify --print-certs "$APK")"
+          ACTUAL_SHA1="$(printf '%s\n' "$SIGNER_DETAILS" | awk -F': ' '/Signer #1 certificate SHA-1 digest:/ { print tolower($NF); exit }' | tr -d ':[:space:]')"
+          ACTUAL_SHA256="$(printf '%s\n' "$SIGNER_DETAILS" | awk -F': ' '/Signer #1 certificate SHA-256 digest:/ { print tolower($NF); exit }' | tr -d ':[:space:]')"
+          test -n "$ACTUAL_SHA1" || { echo "::error::Could not determine the signed APK SHA-1 fingerprint."; exit 1; }
+          echo "Stable installable APK signing certificate (SHA-1, normalized): $ACTUAL_SHA1"
+          echo "Stable installable APK signing certificate (SHA-256, normalized): $ACTUAL_SHA256"
+          EXPECTED_SHA1="$(printf '%s' "$QUANTAEDGE_ANDROID_OAUTH_SHA1" | tr '[:upper:]' '[:lower:]' | tr -d ':[:space:]')"
+          if [[ -n "$EXPECTED_SHA1" ]]; then
+            if [[ "$ACTUAL_SHA1" != "$EXPECTED_SHA1" ]]; then
+              echo "::error::APK signer SHA-1 does not match Actions variable QUANTAEDGE_ANDROID_OAUTH_SHA1. Update Google Cloud and the variable intentionally if the signing key was rotated."
+              exit 1
+            fi
+            echo "APK signing fingerprint matches QUANTAEDGE_ANDROID_OAUTH_SHA1."
+          else
+            echo "::warning::Register package com.quantaedge.android with SHA-1 $ACTUAL_SHA1 in the HRMS-managed Google Cloud project, then set the Actions variable QUANTAEDGE_ANDROID_OAUTH_SHA1 to this fingerprint."
+          fi
+      - name: Upload stable installable APK
+        if: steps.signing.outputs.configured == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-android-apk
-          path: apps/android/app/build/outputs/apk/debug/app-debug.apk
+          path: apps/android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
+      - name: Explain unavailable installable APK
+        if: github.event_name != 'pull_request' && steps.signing.outputs.configured != 'true'
+        shell: bash
+        run: |
+          {
+            echo "## Installable Android APK not published"
+            echo
+            echo "The debug build passed compile/unit tests, but the stable signing keystore is not configured in the production Actions environment."
+            echo "Configure ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, and ANDROID_KEY_PASSWORD before relying on Google sign-in in a downloadable APK."
+            echo "No ephemeral debug-signed APK was published under the installable artifact name."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   validate-content-import:
     name: Content import safeguards

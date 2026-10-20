@@ -56,3 +56,17 @@ Missing central credentials return a clear platform-configuration error. An unkn
 - If the explicit flow still fails, inspect the Android OAuth client in the same Google Cloud project: the **application/package ID must exactly match the installed APK**, and the registered SHA-1 must match the certificate that signed that APK. Debug builds, locally signed release builds, tenant-branded packages with a different `applicationId`, and Play-distributed builds can have different package/SHA-1 combinations. For Play installs, verify the Play App Signing certificate SHA-1 as well as any local development certificate needed for dev builds. Do not change the API's Web client ID audience to the Android client ID.
 - Test at minimum: account already authorized, first-time Google account, repeat sign-in after QuantaEdge logout, a Google account that requires re-authentication, and a deliberately mismatched package/SHA-1. Record Android version, installed package name, APK source/signing fingerprint and the exception class/message (never record ID tokens).
 
+
+
+## Stable Android CI APK signing and Google OAuth registration
+
+The main-branch workflow runs Android unit tests on every build, but it publishes the **quantaedge-android-apk** installable artifact only when the existing production Android upload keystore secrets are available. It uses the same protected signing key as the Play Store release workflow; it must never publish a fresh-runner debug APK as the normal installable artifact because that certificate is not stable across GitHub-hosted runners.
+
+For the directly installed CI APK:
+
+1. In the HRMS-managed Google Cloud project, create or verify an **Android OAuth client** using package name **com.quantaedge.android** and the **SHA-1 printed by the successful Build Android APK job**.
+2. Add the same normalized SHA-1 to the GitHub Actions repository variable **QUANTAEDGE_ANDROID_OAUTH_SHA1**. CI will fail the fingerprint check if the signing key changes unexpectedly.
+3. Keep **GOOGLE_WEB_CLIENT_ID** mapped to the **Web application OAuth client** used by the API route /api/v1/auth/google/config. The Android OAuth client and Web OAuth client serve different purposes; do not replace the server audience with the Android client ID.
+4. If the app is installed from Google Play, also register the Play App Signing certificate's SHA-1 for the same package in Google Cloud. The directly downloaded CI APK is signed with the upload key; Google Play re-signs distributed APKs with the Play App Signing key.
+
+Signing keystores and passwords remain Actions secrets only. If stable signing secrets are missing, CI still validates the debug build but deliberately does not publish an APK under the installable artifact name. The local download/install script refuses older APKs instead of silently installing a stale build.

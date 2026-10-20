@@ -1,5 +1,5 @@
-# Download the latest available QuantaEdge Android APK built from the selected branch.
-# Prints the exact source branch and commit for the downloaded APK, then offers ADB installation.
+# Download the stable-signed QuantaEdge Android APK only from a successful CI run for the exact current branch HEAD.
+# Refuses stale artifacts, prints provenance, verifies the download, then offers ADB installation.
 [CmdletBinding()]
 param(
     [string]$Repository = "Manav326/QuantaEdge",
@@ -97,7 +97,20 @@ try {
         throw "GitHub CLI is not authenticated. Run 'gh auth login'. Details: $($auth -join ' ')"
     }
 
-    Write-Status ("Finding the newest available APK artifact from source branch '{0}'..." -f $Branch) "Cyan"
+    Write-Status ("Finding a successful Android CI build for the exact current '{0}' branch head..." -f $Branch) "Cyan"
+    $encodedBranch = [Uri]::EscapeDataString($Branch)
+    $branchApiPath = "repos/$Repository/branches/$encodedBranch"
+    $headRaw = @(& gh api $branchApiPath --jq ".commit.sha" 2>&1)
+    $headExitCode = $LASTEXITCODE
+    if ($headExitCode -ne 0) {
+        throw "Could not resolve the current '$Branch' branch head from GitHub: $($headRaw -join ' ')"
+    }
+    $currentHeadSha = (($headRaw | ForEach-Object { [string]$_ }) -join "").Trim().ToLowerInvariant()
+    if ($currentHeadSha -notmatch '^[0-9a-f]{40}$') {
+        throw "GitHub returned an invalid commit SHA for branch '$Branch': $currentHeadSha"
+    }
+    Write-Status ("Current branch head: {0}" -f $currentHeadSha) "Cyan"
+
     $runsRaw = & gh run list --repo $Repository --branch $Branch --workflow "ci.yml" --limit 100 --json databaseId,workflowName,createdAt,headSha,headBranch,status,conclusion 2>&1
     $runsExitCode = $LASTEXITCODE
     if ($runsExitCode -ne 0) {
@@ -112,17 +125,18 @@ try {
         throw "GitHub CLI returned invalid workflow-run JSON. Response: $runsJson"
     }
 
-    # A run must originate from this branch, be complete, and be from the Android CI workflow.
-    # Do not require its commit to equal today's branch head and do not inspect unrelated changed files.
+    # Never install a prior commit's APK. The CI run must be completed and successful
+    # for the exact current branch head, and must have uploaded the stable-signed artifact.
     $candidates = @($runs | Where-Object {
         $_.workflowName -eq "QuantaEdge Build and Publish" -and
         $_.headBranch -eq $Branch -and
-        ($_.status -eq "completed" -or $_.status -eq "in_progress") -and
-        $_.headSha -match '^[0-9a-f]{40}$'
+        $_.headSha -ieq $currentHeadSha -and
+        $_.status -eq "completed" -and
+        $_.conclusion -eq "success"
     } | Sort-Object createdAt -Descending)
 
     if ($candidates.Count -eq 0) {
-        throw "No recent Android CI runs were found for source branch '$Branch'. Open GitHub Actions, ensure the main-branch Android build has run, then try again."
+        throw "No completed, successful Android CI run exists for the exact current $Branch commit $currentHeadSha. Refusing to download or install an APK from an older commit. Wait until GitHub Actions succeeds for this commit, then retry."
     }
 
     $downloadedApk = $null
@@ -130,13 +144,10 @@ try {
     foreach ($run in $candidates) {
         $runDir = Join-Path $tempDir ([string]$run.databaseId)
         $null = New-Item -ItemType Directory -Path $runDir -Force
-        Write-Status ("Checking latest candidate: run {0}, branch {1}, commit {2}, result {3}..." -f $run.databaseId, $run.headBranch, $run.headSha, $run.conclusion) "Cyan"
+        Write-Status ("Checking current-head run: {0}; commit {1}; result {2}..." -f $run.databaseId, $run.headSha, $run.conclusion) "Cyan"
 
-        # Download only the installable APK artifact, not Docker build cache artifacts.
+        # Download the stable-signed installable APK only from a successful run for this exact HEAD.
         $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
-        # Missing artifacts are expected for cancelled/unfinished runs. In Windows PowerShell,
-        # native stderr can become a terminating error when ErrorActionPreference is Stop,
-        # so temporarily allow it through and use gh's exit code to continue to the next run.
         $previousErrorActionPreference = $ErrorActionPreference
         try {
             $ErrorActionPreference = "Continue"
@@ -155,14 +166,14 @@ try {
                 $sourceRun = $run
                 break
             }
-            Write-Status ("Run {0} has no plausible installable APK file." -f $run.databaseId) "Yellow"
+            Write-Status ("Current-head run {0} has no plausible stable-signed APK." -f $run.databaseId) "Yellow"
         } else {
-            Write-Status ("No '{0}' artifact in run {1}; checking the next newest run." -f $ArtifactName, $run.databaseId) "Yellow"
+            Write-Status ("Current-head run {0} has no '{1}' artifact; not falling back to an older commit." -f $run.databaseId, $ArtifactName) "Yellow"
         }
     }
 
     if (-not $downloadedApk) {
-        throw "No installable APK artifact named '$ArtifactName' was found in recent completed CI runs originating from '$Branch'. Ensure the Android build uploads this artifact."
+        throw "No stable installable APK artifact named '$ArtifactName' was found for the exact current $Branch commit $currentHeadSha. The previous local APK was not replaced; configure production signing and let CI publish the artifact for this commit."
     }
     if ($downloadedApk.Length -lt 1MB) {
         throw "Downloaded APK is unexpectedly small; the existing saved APK was not changed."
