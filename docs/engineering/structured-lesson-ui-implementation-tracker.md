@@ -303,3 +303,25 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Root cause: new profile-edit action labels were added to the canonical English/Hinglish catalogs and Web generated copies, but Admin and People generated copies were stale.
 - Fix: regenerate Admin and People catalog copies from `localization/catalogs` byte-for-byte. Do not hand-edit generated app catalogs independently.
 - Verification: compare all generated files against canonical content and rerun `python3 scripts/sync_ui_localization.py --check` in GitHub Actions. Other build jobs in #4432 were skipped after this early failure; Android APK build passed.
+
+
+## Course migration regression restoration slice — 2026-10-20
+
+**Purpose:** Restore the pre-course-migration learner route that was replaced by the structured-catalogue landing screen, while retaining institution/course authorization and the newer artifact-renderer route.
+
+- Verified legacy baseline: [LearnClient.tsx at 038e519](https://github.com/Manav326/QuantaEdge/blob/038e519d1194ebfc3c3bf88abf3e217f8087e949/apps/web/app/student/learn/LearnClient.tsx) and [PracticeClient.tsx at 038e519](https://github.com/Manav326/QuantaEdge/blob/038e519d1194ebfc3c3bf88abf3e217f8087e949/apps/web/app/student/practice/PracticeClient.tsx).
+- Restored the Web Student learning interface to `apps/web/app/student/learn/LearnClient.tsx`: course/subject selector; chapter grouping and topic rows; last-opened topic and expanded-chapter memory; textbook/chapter PDF links; lesson blocks/media/examples/recap; inline MCQs; course-gated topic practice; progress counts; and tutor launch. The new `StructuredLessonExperience` integration point is retained rather than removed.
+- Restored `apps/web/app/student/practice/PracticeClient.tsx` as the legacy question-by-question session screen: MCQ/numerical/order/matching/text responses, server feedback, retries, progress, session resume, completion summary and recap.
+- New learner-facing routes carry the eight-character `public_id`; the selected course scope resolves to the numeric DB course ID before calling legacy lesson, answer, document and practice-session APIs. Existing numeric IDs remain accepted by the course resolver for compatible old links, and pre-existing local reading-position keys are read as a fallback.
+- Updated `apps/web/app/student/CourseScope.tsx` to recognise the prior course-code deep-link parameter only as a compatibility fallback. Updated `apps/web/scripts/check-student-navigation.mjs` so it protects the restored chapter/topic UI, inline-MCQ scope, practice gating and saved progress instead of enforcing a re-export-only Learn route.
+- Kept the dedicated `/student/structured-lessons` and `/student/structured-lessons/[artifactId]` flows intact. This slice does not alter structured JSON artifact IDs/responses, curriculum primary keys, course enrollment, institution ownership or data rows.
+
+**Commits on main:**
+- Course-code deep-link compatibility: [a9640114](https://github.com/Manav326/QuantaEdge/commit/a9640114de5d7131e29f54c04bf4d010f827960d)
+- Restore chapter/topic learner screen: [b42d37ec](https://github.com/Manav326/QuantaEdge/commit/b42d37ec27fcdbb0b59fec5380a047437b87f3a5)
+- Restore resumable practice: [a7e97e8c](https://github.com/Manav326/QuantaEdge/commit/a7e97e8c2af5745d2e0b4f35d7e82f2b44a273c0)
+- Update route regression checks: [2cb92f71](https://github.com/Manav326/QuantaEdge/commit/2cb92f718309d87d091a959e7c92faee934d58cb)
+- Course-key completion/recovery/navigation fixes: [8e20f8d9](https://github.com/Manav326/QuantaEdge/commit/8e20f8d94ab147d5839fa985ca8830c8fe714c50), [f1227dd4](https://github.com/Manav326/QuantaEdge/commit/f1227dd4493e4ffa6195ece2b880d339c74657ba), [9f25eaa5](https://github.com/Manav326/QuantaEdge/commit/9f25eaa589587208ac2071a1d5536168ca235ca1)
+- Strengthen inline-MCQ/progress regression assertions: [300bafb9](https://github.com/Manav326/QuantaEdge/commit/300bafb929ecf39848e47a157daeaf425bcc963c)
+
+**Verification status:** Source-level review and pre-write invariants were checked during editing, but the repository's Node contracts, Next build, Android tests/build and real-account/browser interaction tests have not been executed in this session. GitHub's visible commit-status endpoint returned no status entries for the latest code commits, so CI is **not yet confirmed green**. Do not mark this slice acceptance-complete until the latest main workflow passes, and manually verify Class 6/7/8 subject navigation, lesson block rendering, correct/incorrect MCQ feedback, session resume, saved progress, textbook links and tenant isolation.
