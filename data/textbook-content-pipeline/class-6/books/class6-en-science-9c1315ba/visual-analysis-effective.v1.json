@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "156a71df3a04c4a8614f0bf5385304595350a0d57c54a1e7825d0da81ea397c6",
+  "raw_analysis_sha256": "a4eb830b7cd3bf9258c6c9fddd98bb412afd6747011209a8a65d5dfc24d0d319",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:44:18Z",
+      "checkpointed_at": "2026-10-20T19:48:20Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:45:11Z",
+      "checkpointed_at": "2026-10-20T19:49:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:46:21Z",
+      "checkpointed_at": "2026-10-20T19:50:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T19:47:03Z",
+      "checkpointed_at": "2026-10-20T19:51:08Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -63996,6 +63996,92 @@
           "The page is completely black and has no visible text or images.",
           "The page does not contain any educational content or visual aids.",
           "The page may be a placeholder or a draft page that has not been finalized."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "442f4b90350f25993e211d3e",
+      "asset_sha256": "cb37bb0aa5e8f4cb3be61ebde02b55ada1fbb0bbb59d41a24c089974b7ad0d83",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 124,
+      "asset_path": "page-0124.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "362541507acd1269b9f44f1df9d8475c895e7ba18aceffe848c73fab88ba6ca3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of sports balls and grouping objects based on their shapes and materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Discuss in class other properties of sports balls, such as size, colour, texture and how high they bounce and understand why balls are made up of specific materials for specific sports. Observe Fig. 6.4 and group the objects in as many different ways as possible.",
+          "You might have grouped these objects according to their shapes or by their colour or materials they are made up of.",
+          "We have learnt that materials may be classified on the basis of their properties.",
+          "For example, in the kitchen, we usually store things in such a manner where similar utensils are placed together. Similarly, a grocer usually keeps all types of spices in one corner, pulses and grains in another corner and so on. You may also visit any chemist shop and enquire about how medicines ar",
+          "6.3 What are the Different Properties of Materials?",
+          "Let us learn some more properties of materials.",
+          "6.3.1 Observe and identify appearance of materials",
+          "Materials often look different from each other. Freshly cut wood, which is unpolished, has a distinct appearance, quite different from that of iron. Similarly, iron looks different from copper or aluminium. However, there might be some similarities among iron, copper and aluminium that make them dif",
+          "Let us do a sorting challenge! Collect small pieces of paper, cardboard, wood, chalk, copper wire, aluminium foil and any article made up of brass, bronze, steel, etc. Take a look at the pieces you have collected. Do any of these materials shine when light falls on them? Observe their texture (wheth"
+        ],
+        "concepts": [
+          "properties of sports balls",
+          "grouping objects",
+          "shapes",
+          "materials",
+          "properties of materials",
+          "kitchen organization",
+          "grocery organization",
+          "chemist shop organization",
+          "properties of materials",
+          "appearance of materials",
+          "sorting challenge"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T19:54:18Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of sports balls and grouping objects based on their shapes and materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Discuss in class other properties of sports balls, such as size, colour, texture and how high they bounce and understand why balls are made up of specific materials for specific sports. Observe Fig. 6.4 and group the objects in as many different ways as possible.",
+          "You might have grouped these objects according to their shapes or by their colour or materials they are made up of.",
+          "We have learnt that materials may be classified on the basis of their properties.",
+          "For example, in the kitchen, we usually store things in such a manner where similar utensils are placed together. Similarly, a grocer usually keeps all types of spices in one corner, pulses and grains in another corner and so on. You may also visit any chemist shop and enquire about how medicines ar",
+          "6.3 What are the Different Properties of Materials?",
+          "Let us learn some more properties of materials.",
+          "6.3.1 Observe and identify appearance of materials",
+          "Materials often look different from each other. Freshly cut wood, which is unpolished, has a distinct appearance, quite different from that of iron. Similarly, iron looks different from copper or aluminium. However, there might be some similarities among iron, copper and aluminium that make them dif",
+          "Let us do a sorting challenge! Collect small pieces of paper, cardboard, wood, chalk, copper wire, aluminium foil and any article made up of brass, bronze, steel, etc. Take a look at the pieces you have collected. Do any of these materials shine when light falls on them? Observe their texture (wheth"
+        ],
+        "concepts": [
+          "properties of sports balls",
+          "grouping objects",
+          "shapes",
+          "materials",
+          "properties of materials",
+          "kitchen organization",
+          "grocery organization",
+          "chemist shop organization",
+          "properties of materials",
+          "appearance of materials",
+          "sorting challenge"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
