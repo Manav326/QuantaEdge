@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d4ca9d671234d9be65f19501a02126bd795443779ee6d4f412e4b1146c330408",
+  "raw_analysis_sha256": "4645d38d938fbc356f3841d0633398f4b00f3bd351df96ba7f610a07a9cbedae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:32:26Z",
+      "checkpointed_at": "2026-10-20T04:34:24Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:33:01Z",
+      "checkpointed_at": "2026-10-20T04:34:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:33:23Z",
+      "checkpointed_at": "2026-10-20T04:35:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -49903,6 +49903,168 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2078229f123d5d785256d0f4",
+      "asset_sha256": "fae3317f9e4a2224e4510b9e6870f4c70d8e667b39e6926773fb02ab686c803a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 69,
+      "asset_path": "page-0069.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7cb052dcd9262caf305edcf8c5f4670acca042f8153aae5f5704d454efd0ae68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for creating an electromagnet using a wire, iron nail, and an electric cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 4.2: Let us explore",
+          "z Take around 50 cm long length of a flexible",
+          "insulated wire, an iron nail, an electric cell, and",
+          "few iron paper clips.",
+          "z Tightly wrap the wire around the nail in the form",
+          "of a coil, as shown in Fig. 4.2, and secure it with",
+          "an adhesive tape.",
+          "z Connect the ends of the wire to the cell. Take care",
+          "to not connect the wires to the cell for more than",
+          "a few seconds; otherwise, the cell may weaken",
+          "quickly.",
+          "z Bring the nail close to the iron paper clips and",
+          "lift up. Do the clips hang to the ends of the nail?",
+          "z Disconnect the wire from the cell to stop the",
+          "flow of electric current in the wire. Do the clips",
+          "fall down?"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Electric current",
+          "Magnetic effect",
+          "Iron nail",
+          "Adhesive tape",
+          "Electric cell"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "The instructions are specific to the experiment described in the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:37:00Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for creating an electromagnet using a wire, iron nail, and an electric cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 4.2: Let us explore",
+          "z Take around 50 cm long length of a flexible",
+          "insulated wire, an iron nail, an electric cell, and",
+          "few iron paper clips.",
+          "z Tightly wrap the wire around the nail in the form",
+          "of a coil, as shown in Fig. 4.2, and secure it with",
+          "an adhesive tape.",
+          "z Connect the ends of the wire to the cell. Take care",
+          "to not connect the wires to the cell for more than",
+          "a few seconds; otherwise, the cell may weaken",
+          "quickly.",
+          "z Bring the nail close to the iron paper clips and",
+          "lift up. Do the clips hang to the ends of the nail?",
+          "z Disconnect the wire from the cell to stop the",
+          "flow of electric current in the wire. Do the clips",
+          "fall down?"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Electric current",
+          "Magnetic effect",
+          "Iron nail",
+          "Adhesive tape",
+          "Electric cell"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "The instructions are specific to the experiment described in the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5bd784d03b2291173c35ba30",
+      "asset_sha256": "63a236bc0f55c9e52af53bcbe8ea64ed6823faa010687982b73fb288a12faf88",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/63a236bc0f55c9e52af53bcbe8ea64ed6823faa010687982b73fb288a12faf88.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a cylindrical coil connected to a battery and two compasses placed at the ends of the coil.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):",
+          "z Place the compasses near the two ends of the",
+          "cylindrical coil (Fig. 4.3b).",
+          "z Connect the two ends of the  coil with the",
+          "terminals of the cell as shown in Fig. 4.3c and",
+          "(b)                 observe the magnetic compasses. Do you find",
+          "any deflection in the needles of the compasses?",
+          "z Disconnect the wire from the cell. Do the needles",
+          "of the c"
+        ],
+        "concepts": [
+          "Cylindrical coil",
+          "Battery",
+          "Compass",
+          "Magnetic field",
+          "Deflection",
+          "Terminal"
+        ],
+        "context_relation": "The image is a visual representation of an experiment involving a cylindrical coil connected to a battery and compasses to observe the magnetic field generated by the coil.",
+        "limitations": [
+          "The image does not provide specific details about the compasses or the coil."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:37:48Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a cylindrical coil connected to a battery and two compasses placed at the ends of the coil.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):",
+          "z Place the compasses near the two ends of the",
+          "cylindrical coil (Fig. 4.3b).",
+          "z Connect the two ends of the  coil with the",
+          "terminals of the cell as shown in Fig. 4.3c and",
+          "(b)                 observe the magnetic compasses. Do you find",
+          "any deflection in the needles of the compasses?",
+          "z Disconnect the wire from the cell. Do the needles",
+          "of the c"
+        ],
+        "concepts": [
+          "Cylindrical coil",
+          "Battery",
+          "Compass",
+          "Magnetic field",
+          "Deflection",
+          "Terminal"
+        ],
+        "context_relation": "The image is a visual representation of an experiment involving a cylindrical coil connected to a battery and compasses to observe the magnetic field generated by the coil.",
+        "limitations": [
+          "The image does not provide specific details about the compasses or the coil."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
