@@ -1998,8 +1998,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (currentCourseId <= 0L) {
             // A confirmed no-enrolment state is handled by the classes empty-state UI.
             // Keep genuine course-catalogue failures visible as errors.
-            error = if (studentHasNoCourses()) "" else if (language == "hi")
-                "पहले अपना कोर्स चुनें।" else "Select a primary course first."
+            error = if (studentHasNoCourses()) "" else error.ifBlank {
+                if (language == "hi") "पहले अपना कोर्स चुनें।" else "Select a primary course first."
+            }
             route = AppRoute.CLASSES
             liveClasses = emptyList()
             recordedClasses = emptyList()
@@ -4427,7 +4428,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onMarketplace = ::openMarketplace,
                         onBack = ::openProgress
                     )
-                    AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
+                    AppRoute.LEADERBOARD -> if (studentHasNoCourses()) {
+                        StudentEnrollmentEmptyState(
+                            icon = "♛",
+                            title = localizedUiText("Leaderboard needs an enrolled course"),
+                            message = localizedUiText("Enrol in a course to see rankings for published assessments."),
+                            primaryLabel = localizedUiText("Explore Marketplace"),
+                            onPrimary = ::openMarketplace
+                        )
+                    } else AssessmentLeaderboardScreen(
                         language = language,
                         onBack = { route = AppRoute.STUDENT_HOME }
                     )
