@@ -86,6 +86,38 @@ public class CourseRefundController {
     }
   }
 
+  @PostMapping("/orders/{orderId}/refunds/{refundId}/retry")
+  public ResponseEntity<Map<String,Object>> retryRefund(
+      @PathVariable long orderId,@PathVariable long refundId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    CourseRefundLedgerService.PreparedRefund prepared=ledger.prepareRefundForRefresh(refundId,context.staffId());
+    if(prepared.orderId()!=orderId)
+      throw new IllegalArgumentException("This refund does not belong to the selected course order.");
+    if("PROCESSED".equals(prepared.status())||"FAILED".equals(prepared.status()))
+      return ResponseEntity.ok(ledger.refundView(refundId));
+    try {
+      Map<String,Object> payload=new LinkedHashMap<>();
+      payload.put("amount",prepared.amountPaise());
+      payload.put("receipt","QE-RFND-"+prepared.id());
+      payload.put("notes",Map.of(
+          "quantaedge_refund_id",Long.toString(prepared.id()),
+          "course_payment_order_id",Long.toString(prepared.orderId()),
+          "reason",prepared.reason().length()>200?prepared.reason().substring(0,200):prepared.reason()));
+      JsonNode provider=providerRequest("POST",
+          "/payments/"+prepared.providerPaymentId()+"/refund",mapper.writeValueAsString(payload),
+          prepared.providerIdempotencyKey());
+      return handleProviderResponse(prepared,provider,context.staffId());
+    } catch(Exception providerFailure) {
+      Map<String,Object> state=ledger.markReconciliationRequired(
+          prepared.id(),context.staffId(),
+          "Razorpay response remains inconclusive. This retry reused the saved provider idempotency key.");
+      Map<String,Object> body=new LinkedHashMap<>(state);
+      body.put("message","Refund outcome is still not confirmed. The refundable balance remains reserved; retry again with this same saved request.");
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(body);
+    }
+  }
+
   @GetMapping("/orders/{orderId}/refunds")
   public java.util.List<Map<String,Object>> listOrderRefunds(
       @PathVariable long orderId,
