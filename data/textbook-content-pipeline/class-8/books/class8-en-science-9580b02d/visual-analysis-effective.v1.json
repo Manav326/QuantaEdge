@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1b4def526d1983f768eae7821fdc68ecbf7141c3c15c890b83c01c75eb660992",
+  "raw_analysis_sha256": "2dcb36827b5f63dcb9392fe05afd7f042b6654ead14664595ebccd5517a5f472",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:33:13Z",
+      "checkpointed_at": "2026-10-20T03:36:05Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:33:47Z",
+      "checkpointed_at": "2026-10-20T03:36:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:34:09Z",
+      "checkpointed_at": "2026-10-20T03:37:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47883,6 +47883,112 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6185229c5887225a30883a7b",
+      "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, with other students seated in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Classroom setting",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:37:34Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, with other students seated in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Classroom setting",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8ca63c15cd892ab22ad17db6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a period of one year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number",
+          "of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "number of cases",
+          "month",
+          "year"
+        ],
+        "context_relation": "The table provides data on the number of dengue cases reported in a hospital over a year, which can be used to analyze trends and patterns in dengue cases.",
+        "limitations": [
+          "The table only covers data for one year and does not include data for subsequent years.",
+          "The table does not provide information on the source of the data or the methodology used to collect the data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:37:59Z",
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a period of one year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number",
+          "of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "number of cases",
+          "month",
+          "year"
+        ],
+        "context_relation": "The table provides data on the number of dengue cases reported in a hospital over a year, which can be used to analyze trends and patterns in dengue cases.",
+        "limitations": [
+          "The table only covers data for one year and does not include data for subsequent years.",
+          "The table does not provide information on the source of the data or the methodology used to collect the data."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

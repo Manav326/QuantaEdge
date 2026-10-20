@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1005,
+    "assets_selected": 1007,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1002,
-    "assets_remaining": 1289,
-    "assets_completion_percent": 43.7,
+    "assets_analyzed": 1004,
+    "assets_remaining": 1287,
+    "assets_completion_percent": 43.8,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1000,
+    "assets_skipped_from_checkpoint": 1002,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:33:13Z"
+      "checkpointed_at": "2026-10-20T03:36:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:33:47Z"
+      "checkpointed_at": "2026-10-20T03:36:38Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:34:09Z"
+      "checkpointed_at": "2026-10-20T03:37:00Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32089,6 +32089,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:35:22Z"
+    },
+    {
+      "asset_id": "6185229c5887225a30883a7b",
+      "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, with other students seated in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Classroom setting",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:37:34Z"
+    },
+    {
+      "asset_id": "8ca63c15cd892ab22ad17db6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224cba2327a982ae90dbd40f9b3bae707bc7a1045fe4afe620ec2ce2de4e2345",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of dengue cases reported in a hospital over a period of one year.",
+        "visual_type": "table",
+        "visible_text": [
+          "7. The following table contains information about the number",
+          "of dengue cases reported in a hospital over a period of one year:",
+          "S. No.          1         2         3         4         5         6",
+          "Month      January  February   March     April     May      June",
+          "No. of dengue                        10        12        15        18        22        40",
+          "S. No.        7       8         9         10        11         12",
+          "Month        July    August   September  October  November  December"
+        ],
+        "concepts": [
+          "dengue cases",
+          "hospital",
+          "number of cases",
+          "month",
+          "year"
+        ],
+        "context_relation": "The table provides data on the number of dengue cases reported in a hospital over a year, which can be used to analyze trends and patterns in dengue cases.",
+        "limitations": [
+          "The table only covers data for one year and does not include data for subsequent years.",
+          "The table does not provide information on the source of the data or the methodology used to collect the data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:37:59Z"
     }
   ]
 }
