@@ -129,10 +129,10 @@ export default function FinancePage(){
     void action(()=>api(BASE+'/legal-entities/'+entity.id+'/invoice-series',{method:'PUT',body:JSON.stringify({invoiceSeriesCode:series})}),
       'Invoice series saved. Existing invoices keep their original numbers; future documents use this series.');
   };
-  const downloadDocument=async(document:FinancialDocument)=>{
-    setDownloadingDocumentId(document.id);setError('');setNotice('');
+  const downloadDocument=async(fiscalDoc:FinancialDocument)=>{
+    setDownloadingDocumentId(fiscalDoc.id);setError('');setNotice('');
     try{
-      const response=await apiFetch(BASE+'/documents/'+document.id+'/download',{
+      const response=await apiFetch(BASE+'/documents/'+fiscalDoc.id+'/download',{
         method:'GET',credentials:'same-origin',cache:'no-store',
         headers:{'X-QE-Workspace':'HRMS','Accept':'application/pdf'}
       });
@@ -144,7 +144,7 @@ export default function FinancePage(){
       const blob=await response.blob();
       if(blob.size===0||!blob.type.toLowerCase().includes('pdf'))throw new Error('The server did not return a valid PDF.');
       const url=URL.createObjectURL(blob),anchor=document.createElement('a');
-      anchor.href=url;anchor.download=document.document_number.replace(/[^A-Za-z0-9_-]/g,'-')+'.pdf';
+      anchor.href=url;anchor.download=fiscalDoc.document_number.replace(/[^A-Za-z0-9_-]/g,'-')+'.pdf';
       document.body.appendChild(anchor);anchor.click();anchor.remove();
       window.setTimeout(()=>URL.revokeObjectURL(url),1000);
       setNotice('Invoice PDF downloaded.');
