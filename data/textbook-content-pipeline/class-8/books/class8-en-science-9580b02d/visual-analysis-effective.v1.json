@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2feab3c7020ebd43bfa99e33896c9ccba8b30c99f6e47210b6f2ce164575f546",
+  "raw_analysis_sha256": "54b1895073759afb73fc88e8465912cddac6b47433dea352c2c2e18112422bd3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:36:13Z",
+      "checkpointed_at": "2026-10-20T05:39:08Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:36:46Z",
+      "checkpointed_at": "2026-10-20T05:39:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:37:09Z",
+      "checkpointed_at": "2026-10-20T05:40:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T05:37:46Z",
+      "checkpointed_at": "2026-10-20T05:40:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -51836,6 +51836,50 @@
         "context_relation": "The image is a part of a textbook discussing different types of electric heating appliances.",
         "limitations": [
           "The image does not provide specific details about the heating rod's function or components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c84aa468ef2445320705794b",
+      "asset_sha256": "90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, possibly representing a step-by-step process or progression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct context to the text or equations.",
+        "limitations": [
+          "The image does not contain any text or equations related to the content of the text provided.",
+          "The image is a cartoon and may not accurately represent the educational content.",
+          "The image does not provide a clear visual representation of the concepts or equations in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T05:41:27Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, possibly representing a step-by-step process or progression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct context to the text or equations.",
+        "limitations": [
+          "The image does not contain any text or equations related to the content of the text provided.",
+          "The image is a cartoon and may not accurately represent the educational content.",
+          "The image does not provide a clear visual representation of the concepts or equations in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
