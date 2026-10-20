@@ -70,6 +70,7 @@ export default function ParentCoursesPage() {
   const { locale } = useLocale();
   const english = locale === 'english';
   const [courses, setCourses] = useState<Course[]>([]);
+  const [discountCode, setDiscountCode] = useState('');
   const [personalLearningAvailable, setPersonalLearningAvailable] = useState(false);
   const [children, setChildren] = useState<Child[]>([]);
   const [requests, setRequests] = useState<PurchaseRequest[]>([]);
@@ -228,11 +229,17 @@ export default function ParentCoursesPage() {
       const body = await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/orders', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID() },
-        body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined }),
+        body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined, discountCode: discountCode.trim() || null }),
       }));
       if (!body.orderId || !Number.isSafeInteger(Number(body.localOrderId)) || Number(body.localOrderId) <= 0
           || !body.keyId || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0 || body.currency !== 'INR') {
         throw new Error('The course order could not be prepared. Please retry.');
+      }
+      if (Number(body.discountPaise || 0) > 0) {
+        const saved = new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(Number(body.discountPaise)/100);
+        setNotice(english
+          ? 'Offer code '+String(body.discountCode || discountCode.trim())+' applied. You save '+saved+'. The displayed payment amount includes this server-calculated discount.'
+          : 'Offer code '+String(body.discountCode || discountCode.trim())+' लागू हुआ। आपकी बचत '+saved+' है। भुगतान राशि में server-calculated discount शामिल है।');
       }
       const recoverableDraft: VerifyDraft = {
         courseId,
@@ -376,6 +383,15 @@ export default function ParentCoursesPage() {
         </div>
         {error && <div className="parent-courses-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="parent-courses-page__alert" role="status">{notice}</div>}
+        <section className="parent-courses-page__discount" aria-label="Course offer code">
+          <label htmlFor="qe-parent-discount-code"><LocaleText hinglish="Offer code (वैकल्पिक)" english="Offer code (optional)" /></label>
+          <input id="qe-parent-discount-code" autoComplete="off" maxLength={40}
+            value={discountCode} onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
+            placeholder={english?"Enter a code supplied by your institution":"आपकी संस्था द्वारा दिया गया code डालें"}
+            disabled={busy!==''||!!pendingVerify}/>
+          <p><LocaleText hinglish="कोड केवल उसी course और institution पर लागू होगा जिसके लिए HRMS ने approval दिया है। कीमत और tax की गणना server पर होती है।"
+            english="Codes apply only to the course and institution approved by HRMS. The server calculates the discount, payable amount and tax." /></p>
+        </section>
         <BillingProfileEditor workspace="PARENT" english={english} />
         <InvoiceDownloads workspace="PARENT" english={english} />
         {pendingVerify && <section className="parent-courses-page__verify">
