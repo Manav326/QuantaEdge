@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7b2cd3f87bfdbb83aa15b7e42798eac8fd6f84caec0f53a8a7e8af59630af6c7",
+  "raw_analysis_sha256": "eab101ae235e6acdbd9d157ff0472710180ce085e5eda036f6e776815b36e041",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:07:43Z",
+      "checkpointed_at": "2026-10-20T03:09:58Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:08:15Z",
+      "checkpointed_at": "2026-10-20T03:10:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:08:35Z",
+      "checkpointed_at": "2026-10-20T03:10:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47031,6 +47031,104 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "042be4b0464df9255269d576",
+      "asset_sha256": "61d931ad718e3dcee10a420df5d255c1cebf8dcb57ad9e475d755d2fbc965828",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 61,
+      "asset_path": "page-0061.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Infographic explaining how bacteria became resistant to antibiotics and preventive measures.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "HOW BACTERIA BECAME RESISTANT TO ANTIBIOTICS",
+          "Few bacteria develop resistance to antibiotics.",
+          "When antibiotics kill bacteria causing illness, they also kill good bacteria protecting the body from infection.",
+          "The antibiotic resistant bacteria grow and take over.",
+          "Some bacteria transfer antibiotic resistance to other bacteria, causing more problems.",
+          "I need antibiotic for my mother. She has a sore throat and a fever.",
+          "You must get a prescription from a doctor.",
+          "Are you giving antibiotics to your cattle?",
+          "No. I am not using any antibiotics.",
+          "No. No. do not give antibiotic injection to your cattle.",
+          "It will develop antibiotic resistance otherwise."
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "traditional medicine systems"
+        ],
+        "context_relation": "The infographic is a visual representation of the text in the activity, explaining how bacteria developed resistance to antibiotics and the preventive measures that can be taken.",
+        "limitations": [
+          "The infographic does not provide specific details about the mechanisms of antibiotic resistance or the specific bacteria that are affected.",
+          "The infographic does not provide information about the long-term effects of antibiotic resistance on human health."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:12:33Z",
+      "effective_analysis": {
+        "visual_summary": "Infographic explaining how bacteria became resistant to antibiotics and preventive measures.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "HOW BACTERIA BECAME RESISTANT TO ANTIBIOTICS",
+          "Few bacteria develop resistance to antibiotics.",
+          "When antibiotics kill bacteria causing illness, they also kill good bacteria protecting the body from infection.",
+          "The antibiotic resistant bacteria grow and take over.",
+          "Some bacteria transfer antibiotic resistance to other bacteria, causing more problems.",
+          "I need antibiotic for my mother. She has a sore throat and a fever.",
+          "You must get a prescription from a doctor.",
+          "Are you giving antibiotics to your cattle?",
+          "No. I am not using any antibiotics.",
+          "No. No. do not give antibiotic injection to your cattle.",
+          "It will develop antibiotic resistance otherwise."
+        ],
+        "concepts": [
+          "antibiotic resistance",
+          "bacterial pathogens",
+          "precautions",
+          "antibiotics",
+          "traditional medicine systems"
+        ],
+        "context_relation": "The infographic is a visual representation of the text in the activity, explaining how bacteria developed resistance to antibiotics and the preventive measures that can be taken.",
+        "limitations": [
+          "The infographic does not provide specific details about the mechanisms of antibiotic resistance or the specific bacteria that are affected.",
+          "The infographic does not provide information about the long-term effects of antibiotic resistance on human health."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "34cf1a6bd50e514925d034eb",
+      "asset_sha256": "170aeca58da9ab152ec6c4bc1e47ba5d9e4f1eb34be16542e54cd4420352d5ec",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/170aeca58da9ab152ec6c4bc1e47ba5d9e4f1eb34be16542e54cd4420352d5ec.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
