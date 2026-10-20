@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1b564d1d14250e9454407a4ab986b255eb2f192d0956d692ae328496275870b7",
+  "raw_analysis_sha256": "cdbef76851d70dbcd6035ef8078d6a6703b5c18776bf589808d099ac565380ca",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,36 +1804,25 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
-          "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:02:21Z",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T20:29:45Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1847,26 +1836,15 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
-          "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -2628,7 +2606,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2640,36 +2618,32 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:03:06Z",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T20:34:12Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2681,27 +2655,23 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -28896,9 +28866,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -29365,17 +29335,17 @@
           "Support",
           "Publication process"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:03:36Z",
+      "run_id": "39490257224",
+      "checkpointed_at": "2026-10-20T20:43:30Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -29392,9 +29362,9 @@
           "Support",
           "Publication process"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32424,9 +32394,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39419720549",
+      "run_id": "39490257224",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
