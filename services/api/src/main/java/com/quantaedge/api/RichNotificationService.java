@@ -477,7 +477,9 @@ public class RichNotificationService {
         returning id
         """,Long.class,normalizedScope,institutionId,courseId,templateId,templateVersion,checkedTitle,checkedSummary,
         writeJson(document),writeJson(scheduledFilter),writeJson(scheduledSnapshot),actor.workspace(),
-        actor.staffId(),actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
+        actor.staffId(),actor.institutionAdminId(),key,
+        scheduledAt==null?null:java.sql.Timestamp.from(scheduledAt),
+        expiresAt==null?null:java.sql.Timestamp.from(expiresAt),recipients.size());
       audit(actor,institutionId,id,templateId,"CAMPAIGN_SCHEDULED",
           Map.of("scope",normalizedScope,"recipientCount",recipients.size(),"scheduledAt",scheduledAt.toString(),
               "institutionIds",scheduledSnapshot.get("institutionIds")));
@@ -593,7 +595,9 @@ public class RichNotificationService {
       returning id
       """,Long.class,scope,institutionId,courseId,templateId,templateVersion,title,summary,
       writeJson(document),writeJson(filter),writeJson(snapshot),actor.workspace(),actor.staffId(),
-      actor.institutionAdminId(),key,scheduledAt,expiresAt,recipients.size());
+      actor.institutionAdminId(),key,
+      scheduledAt==null?null:java.sql.Timestamp.from(scheduledAt),
+      expiresAt==null?null:java.sql.Timestamp.from(expiresAt),recipients.size());
     dispatchExistingCampaign(actor,id,recipients,document,scope,filter);
     audit(actor,institutionId,id,templateId,"CAMPAIGN_SENT",Map.of(
       "scope",scope,"recipientCount",recipients.size(),"recipientCounts",counts));
@@ -751,19 +755,30 @@ public class RichNotificationService {
       jdbc.update("""
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
-          and (institution_id=? or (institution_id is null and exists(
-            select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'
-            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint))))
           and state in ('CREATED','QUEUED')
+          and exists(
+            select 1 from notification_campaign c
+            where c.id=notification_recipient.campaign_id and c.status='SENT'
+              and (c.expires_at is null or c.expires_at>now())
+              and (notification_recipient.institution_id=? or (
+                notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+                and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+          )
         """,adminId,institutionId,institutionId);
       return true;
     }
     return jdbc.update("""
       update notification_recipient set state='READ',read_at=coalesce(read_at,now())
       where id=? and recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
-        and (institution_id=? or (institution_id is null and exists(
-          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
         and state in ('CREATED','QUEUED')
+        and exists(
+          select 1 from notification_campaign c
+          where c.id=notification_recipient.campaign_id and c.status='SENT'
+            and (c.expires_at is null or c.expires_at>now())
+            and (notification_recipient.institution_id=? or (
+              notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+              and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+        )
       """,recipientId,adminId,institutionId,institutionId)==1;
   }
 
@@ -848,9 +863,15 @@ public class RichNotificationService {
         update notification_recipient set state='READ',read_at=coalesce(read_at,now())
         where recipient_kind=? and case when ?='STUDENT' then student_id=?
           when ?='USER_ACCOUNT' then user_account_id=? when ?='STAFF_ACCOUNT' then staff_account_id=?
-          else false end and (institution_id=? or (institution_id is null and exists(
-          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM'
-            and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))) and state in ('CREATED','QUEUED')
+          else false end and state in ('CREATED','QUEUED')
+          and exists(
+            select 1 from notification_campaign c
+            where c.id=notification_recipient.campaign_id and c.status='SENT'
+              and (c.expires_at is null or c.expires_at>now())
+              and (notification_recipient.institution_id=? or (
+                notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+                and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+          )
         """,kind,kind,id,kind,id,kind,id,institutionId,institutionId);
       return true;
     }
@@ -859,9 +880,15 @@ public class RichNotificationService {
       where id=? and recipient_kind=? and
         case when ?='STUDENT' then student_id=? when ?='USER_ACCOUNT' then user_account_id=?
              when ?='STAFF_ACCOUNT' then staff_account_id=? else false end
-        and (institution_id=? or (institution_id is null and exists(
-          select 1 from notification_campaign c where c.id=notification_recipient.campaign_id and c.scope='HRMS_PLATFORM')))
         and state in ('CREATED','QUEUED')
+        and exists(
+          select 1 from notification_campaign c
+          where c.id=notification_recipient.campaign_id and c.status='SENT'
+            and (c.expires_at is null or c.expires_at>now())
+            and (notification_recipient.institution_id=? or (
+              notification_recipient.institution_id is null and c.scope='HRMS_PLATFORM'
+              and c.audience_snapshot->'institutionIds' @> jsonb_build_array(?::bigint)))
+        )
       """,recipientId,kind,kind,id,kind,id,kind,id,institutionId,institutionId);
     return changed==1;
   }
