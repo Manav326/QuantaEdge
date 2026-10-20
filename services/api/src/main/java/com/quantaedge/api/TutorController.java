@@ -17,7 +17,8 @@ public class TutorController {
           InstitutionTenantContext tenant,
       @RequestBody Map<String,Object> body){
     return tutor.startSession(context,Long.parseLong(String.valueOf(body.get("lessonId"))),
-        Boolean.parseBoolean(String.valueOf(body.getOrDefault("newChat",false))),requireInstitution(tenant));
+        Boolean.parseBoolean(String.valueOf(body.getOrDefault("newChat",false))),requireInstitution(tenant),
+        Long.parseLong(String.valueOf(body.get("courseId"))));
   }
 
   @GetMapping("/sessions/{sessionId}/messages")
@@ -26,8 +27,9 @@ public class TutorController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant,
       @PathVariable long sessionId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="30") Integer limit,@RequestParam(required=false) Long beforeId){
-    return tutor.messages(context,sessionId,limit,beforeId,requireInstitution(tenant));
+    return tutor.messages(context,sessionId,limit,beforeId,requireInstitution(tenant),courseId);
   }
 
   @PostMapping("/sessions/{sessionId}/messages")
@@ -35,11 +37,11 @@ public class TutorController {
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant,
-      @PathVariable long sessionId,@RequestBody Map<String,Object> body){
+      @PathVariable long sessionId,@RequestParam Long courseId,@RequestBody Map<String,Object> body){
     return tutor.send(context,sessionId,String.valueOf(body.getOrDefault("message","")),
         String.valueOf(body.getOrDefault("mode","HINT")),
         body.get("questionId")==null?0L:Long.parseLong(String.valueOf(body.get("questionId"))),
-        body.get("language")==null?"hi":String.valueOf(body.get("language")),requireInstitution(tenant));
+        body.get("language")==null?"hi":String.valueOf(body.get("language")),requireInstitution(tenant),courseId);
   }
   private long requireInstitution(InstitutionTenantContext tenant) {
     if (tenant == null || tenant.institutionId() < 1) {
