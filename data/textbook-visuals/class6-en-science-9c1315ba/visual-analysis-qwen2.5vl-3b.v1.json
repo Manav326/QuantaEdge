@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1287,
+    "assets_selected": 1288,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1283,
-    "assets_remaining": 795,
-    "assets_completion_percent": 61.7,
+    "assets_analyzed": 1284,
+    "assets_remaining": 794,
+    "assets_completion_percent": 61.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1282,
+    "assets_skipped_from_checkpoint": 1283,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:55:48Z"
+      "checkpointed_at": "2026-10-20T21:00:52Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:56:41Z"
+      "checkpointed_at": "2026-10-20T21:01:45Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:57:51Z"
+      "checkpointed_at": "2026-10-20T21:02:54Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:58:33Z"
+      "checkpointed_at": "2026-10-20T21:03:36Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42920,6 +42920,37 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T20:59:47Z"
+    },
+    {
+      "asset_id": "5b1a067b65de426a5d4835a6",
+      "asset_sha256": "a0455f20fc4eedeb60e2c97f20d95d16e86d8c4868d939a7b3c901240a85a5f3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/a0455f20fc4eedeb60e2c97f20d95d16e86d8c4868d939a7b3c901240a85a5f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A window with two panes, one open and one closed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "window",
+          "panes",
+          "open",
+          "closed"
+        ],
+        "context_relation": "The image is related to the educational content about opaque and translucent materials.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:04:44Z"
     }
   ]
 }

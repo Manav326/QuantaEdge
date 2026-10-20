@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a3ed04f6d3cf235cbddaca4ad55670163e532ff174c558d000002b0917e0aaa9",
+  "raw_analysis_sha256": "8c558ca50c7e0d64512d90bdeb666f58f212c3039dc3101c4fe497568039b053",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:55:48Z",
+      "checkpointed_at": "2026-10-20T21:00:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:56:41Z",
+      "checkpointed_at": "2026-10-20T21:01:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:57:51Z",
+      "checkpointed_at": "2026-10-20T21:02:54Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T20:58:33Z",
+      "checkpointed_at": "2026-10-20T21:03:36Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -64893,6 +64893,52 @@
         "limitations": [
           "The image does not provide specific details about the texture or color of the wooden plank."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b1a067b65de426a5d4835a6",
+      "asset_sha256": "a0455f20fc4eedeb60e2c97f20d95d16e86d8c4868d939a7b3c901240a85a5f3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/a0455f20fc4eedeb60e2c97f20d95d16e86d8c4868d939a7b3c901240a85a5f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A window with two panes, one open and one closed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "window",
+          "panes",
+          "open",
+          "closed"
+        ],
+        "context_relation": "The image is related to the educational content about opaque and translucent materials.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:04:44Z",
+      "effective_analysis": {
+        "visual_summary": "A window with two panes, one open and one closed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "window",
+          "panes",
+          "open",
+          "closed"
+        ],
+        "context_relation": "The image is related to the educational content about opaque and translucent materials.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
