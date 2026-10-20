@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cf35f7266c92dc7df4316c84b588fade2b1b4f7556704d5707cd040d2d683a6a",
+  "raw_analysis_sha256": "3fb5845781ec813388ef6900eba535704097e5c8a058440aa333fa0bc4d78daf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:43:17Z",
+      "checkpointed_at": "2026-10-20T21:46:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:43:38Z",
+      "checkpointed_at": "2026-10-20T21:46:31Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -115166,6 +115166,138 @@
         "limitations": [
           "The image does not provide specific details about the materials being used or the exact steps of the activity.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a509254ea89cac6242cc3811",
+      "asset_sha256": "ec7083a092a2e085067c79bda01ea88fa4f7e6929c553f0fd8eb9f52049e9545",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/ec7083a092a2e085067c79bda01ea88fa4f7e6929c553f0fd8eb9f52049e9545.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d0d627dd490d8a881fddc6f300e2f14366a1dcf318788f3dfba5d56b8b96683",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen with a pointed tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the table about the appearance, hardness, and effect of hammering on different objects or materials.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:47:04Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen with a pointed tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the table about the appearance, hardness, and effect of hammering on different objects or materials.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e53db878cd6c7044d1c25c4",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d0d627dd490d8a881fddc6f300e2f14366a1dcf318788f3dfba5d56b8b96683",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue paper airplane is flying with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a simple illustration of a paper airplane flying.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:47:39Z",
+      "effective_analysis": {
+        "visual_summary": "A blue paper airplane is flying with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a simple illustration of a paper airplane flying.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6ff76e355b54c54f05bfdf94",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 63,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d0d627dd490d8a881fddc6f300e2f14366a1dcf318788f3dfba5d56b8b96683",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table comparing appearance, hardness, and effect of hammering on different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Appearance, hardness, and effect of hammering on different",
+          "objects or materials",
+          "S.No. Object/Material Appearance Effect of hammering",
+          "1. lustrous/ Hard/Soft Flattens/breaks into"
+        ],
+        "concepts": [
+          "Appearance",
+          "Hardness",
+          "Effect of hammering"
+        ],
+        "context_relation": "The table provides a comparison of different objects or materials based on their appearance, hardness, and how they respond to being hammered.",
+        "limitations": [
+          "The table does not specify the exact objects or materials being compared.",
+          "The table does not provide specific examples or descriptions of the objects or materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:47:55Z",
+      "effective_analysis": {
+        "visual_summary": "Table comparing appearance, hardness, and effect of hammering on different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Appearance, hardness, and effect of hammering on different",
+          "objects or materials",
+          "S.No. Object/Material Appearance Effect of hammering",
+          "1. lustrous/ Hard/Soft Flattens/breaks into"
+        ],
+        "concepts": [
+          "Appearance",
+          "Hardness",
+          "Effect of hammering"
+        ],
+        "context_relation": "The table provides a comparison of different objects or materials based on their appearance, hardness, and how they respond to being hammered.",
+        "limitations": [
+          "The table does not specify the exact objects or materials being compared.",
+          "The table does not provide specific examples or descriptions of the objects or materials."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
