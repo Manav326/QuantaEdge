@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1291,
+    "assets_selected": 1292,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1287,
-    "assets_remaining": 791,
-    "assets_completion_percent": 61.9,
+    "assets_analyzed": 1288,
+    "assets_remaining": 790,
+    "assets_completion_percent": 62.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1286,
+    "assets_skipped_from_checkpoint": 1287,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:13:56Z"
+      "checkpointed_at": "2026-10-20T21:20:43Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:14:49Z"
+      "checkpointed_at": "2026-10-20T21:21:36Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:15:58Z"
+      "checkpointed_at": "2026-10-20T21:22:46Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:16:41Z"
+      "checkpointed_at": "2026-10-20T21:23:28Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43076,6 +43076,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:19:39Z"
+    },
+    {
+      "asset_id": "6b6f4e180c1d43555b25f3c0",
+      "asset_sha256": "03a36ad30b97619be241eab10710323f56ef240276b5e741621100a073f47690",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 128,
+      "asset_path": "assets/03a36ad30b97619be241eab10710323f56ef240276b5e741621100a073f47690.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82279822b9b8f23dc0029dab5c76dc7a3e258c04fca8a978b64d11cfa7634d77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy holding a soccer ball, looking tired and sweating.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a boy after playing soccer, likely due to physical exertion and sweating.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:24:32Z"
     }
   ]
 }
