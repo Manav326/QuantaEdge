@@ -4,7 +4,7 @@
 param(
     [string]$Repository = "Manav326/QuantaEdge",
     [string]$Branch = "main",
-    [string]$ArtifactName = "quantaedge-android-apk"
+    [string]$ArtifactName = "quantaedge-android-apk-stable"
 )
 
 $ErrorActionPreference = "Stop"
