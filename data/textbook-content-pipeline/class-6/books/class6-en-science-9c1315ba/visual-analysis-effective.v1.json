@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d250046703d08bbbacf68708d6cb2e742e3c0a7dc42a03d16459ef13bd72bbfe",
+  "raw_analysis_sha256": "7a4ec7a5832c922a70bc4bac8c2061b8423aa0fbb68dc0e812abc294430f07de",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:05:19Z",
+      "checkpointed_at": "2026-10-20T22:10:18Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:06:13Z",
+      "checkpointed_at": "2026-10-20T22:11:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:07:23Z",
+      "checkpointed_at": "2026-10-20T22:12:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T22:08:05Z",
+      "checkpointed_at": "2026-10-20T22:13:04Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65722,6 +65722,42 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is not related to the text about ORS packets.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4d2e7c477e5afe5a6ba6fea7",
+      "asset_sha256": "0f0f28ee4a6f9a74fad0722ba38ee302ac0f4f9e2509010b6f5bb2806023de60",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 130,
+      "asset_path": "assets/0f0f28ee4a6f9a74fad0722ba38ee302ac0f4f9e2509010b6f5bb2806023de60.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "05028d1d8bb54afbeda7c134dd787bec678db6f5981cc9647868c5ab67bee3bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A fish with a yellow body and black stripes, swimming in an underwater environment.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about ORS.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T22:14:13Z",
+      "effective_analysis": {
+        "visual_summary": "A fish with a yellow body and black stripes, swimming in an underwater environment.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about ORS.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
