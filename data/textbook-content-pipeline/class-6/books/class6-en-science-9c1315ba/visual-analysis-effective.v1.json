@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3715d8c40d8c637931679935325a0be291ddd9f0cd0b09c3d2b841a9709eb612",
+  "raw_analysis_sha256": "df33f261c970c5ff0171ba805910d20530dbe6d9a03911ec8d2a4bb5f7e2ffd2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:28:56Z",
+      "checkpointed_at": "2026-10-20T09:32:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:29:58Z",
+      "checkpointed_at": "2026-10-20T09:33:37Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T09:30:50Z",
+      "checkpointed_at": "2026-10-20T09:34:30Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61698,6 +61698,76 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dcbf6beeba45ad6425f002cb",
+      "asset_sha256": "56873f7725033e09c73bff6638617b12e4747c9c58b1610c8eb7f5ffc3ec5848",
+      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 117,
+      "asset_path": "page-0117.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b1eafe2ae075efad1fc7d347",
+      "asset_sha256": "0c8b0a0a144d0a4c21bc8eb0989e6695db06a352fdd20e03a129654bce155bc7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 118,
+      "asset_path": "assets/0c8b0a0a144d0a4c21bc8eb0989e6695db06a352fdd20e03a129654bce155bc7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b069fea0daabb9fda1f255bdd9e00b5080124641cc48187fde1ae520bf72ceda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green bicycle with a pink object attached to the rear wheel.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bicycle",
+          "rear wheel",
+          "pink object",
+          "green bicycle"
+        ],
+        "context_relation": "The image is related to the topic of bicycles and their components.",
+        "limitations": [
+          "The image does not provide specific details about the pink object attached to the rear wheel."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T09:41:08Z",
+      "effective_analysis": {
+        "visual_summary": "A green bicycle with a pink object attached to the rear wheel.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bicycle",
+          "rear wheel",
+          "pink object",
+          "green bicycle"
+        ],
+        "context_relation": "The image is related to the topic of bicycles and their components.",
+        "limitations": [
+          "The image does not provide specific details about the pink object attached to the rear wheel."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
