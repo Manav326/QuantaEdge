@@ -104,6 +104,7 @@ import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.NotificationPushRegistration
 import com.quantaedge.android.data.GoogleCredentialFlow
 import com.quantaedge.android.data.GoogleSignInConfigurationException
+import com.quantaedge.android.data.GoogleSignInReauthException
 import com.quantaedge.android.data.GoogleSignInUnavailableException
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
@@ -750,6 +751,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             is GoogleSignInConfigurationException -> if (language == "hi")
                 "सर्वर पर Google साइन-इन कॉन्फ़िगर नहीं है। कृपया सहायता से संपर्क करें।"
                 else "Google sign-in isn't configured on the server. Please contact support."
+            is GoogleSignInReauthException -> if (language == "hi")
+                "Google इस Android app में account को verify नहीं कर सका। दोबारा प्रयास करें। समस्या बनी रहे तो app का package name और signing certificate का SHA-1 Google Cloud Android OAuth client से मिलाएँ।"
+                else "Google could not re-authenticate this Android app. Retry once. If it persists, verify this build's package name and signing-certificate SHA-1 in the Google Cloud Android OAuth client."
             is GoogleSignInUnavailableException -> if (language == "hi")
                 "इस डिवाइस पर Google खाता उपलब्ध नहीं है। Settings में Google खाता जोड़ें, Google Play services अपडेट करें और Google Account में Sign in with Google चालू करें।"
                 else "No Google account is available. Add a Google account in device Settings, update Google Play services, and enable Sign in with Google in Google Account settings."
@@ -1037,6 +1041,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 // Revoke the device binding before best-effort logout and local session clearing.
                 runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
                 runCatching { ApiClient.postObject("/api/v1/auth/logout", JSONObject()) }
+                runCatching { GoogleCredentialFlow.clearCredentialState(context.applicationContext) }
                 ApiClient.clearSession()
                 throw IOException("The verified Google account could not be confirmed.")
             }
@@ -1085,6 +1090,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 .put("currentPassword", currentPassword)
                 .put("newPassword", newPassword))
             runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
+            runCatching { GoogleCredentialFlow.clearCredentialState(context.applicationContext) }
             ApiClient.clearSession()
             auth = JSONObject()
             accountIdentityProfile = JSONObject()
@@ -3198,6 +3204,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             runCatching { NotificationPushRegistration.revokeCurrent(context.applicationContext) }
             runCatching { ApiClient.postObject("/api/v1/auth/logout") }
+            runCatching { GoogleCredentialFlow.clearCredentialState(context.applicationContext) }
             WorkManager.getInstance(context.applicationContext).cancelAllWorkByTag("quantaedge-resource-download")
             ApiClient.clearSession()
             AppRoute.values().forEach { savedRoute ->
