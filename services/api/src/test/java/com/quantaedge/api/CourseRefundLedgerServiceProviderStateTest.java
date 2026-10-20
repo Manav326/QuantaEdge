@@ -1,10 +1,10 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -21,7 +21,7 @@ class CourseRefundLedgerServiceProviderStateTest {
   @Test
   void pendingProviderResponseReservesStatusButDoesNotIssueCreditNote() {
     JdbcTemplate jdbc=mock(JdbcTemplate.class);
-    stubRefundReads(jdbc,"PROCESSING","provider_response");
+    stubRefundReads(jdbc,"PROCESSING");
     CourseRefundLedgerService service=service(jdbc);
 
     Map<String,Object> result=service.applyProviderResult(
@@ -30,7 +30,7 @@ class CourseRefundLedgerServiceProviderStateTest {
 
     assertEquals("PENDING",result.get("status"));
     verify(jdbc).update(contains("update course_payment_refund set status='PENDING'"),any(Object[].class));
-    verify(jdbc,never()).queryForObject(contains("insert into fiscal_document("),any(),any(Object[].class));
+    verify(jdbc,never()).queryForObject(contains("insert into fiscal_document("),eq(Long.class),any(Object[].class));
   }
 
   @Test
@@ -68,14 +68,14 @@ class CourseRefundLedgerServiceProviderStateTest {
         row.put("requested_amount_paise",5_900L);
         row.put("currency","INR");
         row.put("reason","Approved refund for course access");
-        row.put("status",status);
+        row.put("status",state.get("status"));
         row.put("provider_status",null);
         row.put("credit_note_document_id",null);
         row.put("requested_by_staff_id",5L);
         return List.of(row);
       }
       if(sql.contains("select status,provider_response_snapshot::text as response_json")) {
-        return List.of(Map.of("status",status,"response_json","{}"));
+        return List.of(Map.of("status",state.get("status"),"response_json","{}"));
       }
       if(sql.contains("select r.id,r.public_id,r.course_payment_order_id")) {
         Map<String,Object> view=new HashMap<>();
