@@ -74,7 +74,7 @@ BEFORE UPDATE OR DELETE ON course_discount_redemption_event
 FOR EACH ROW EXECUTE FUNCTION reject_billing_financial_mutation();
 
 CREATE OR REPLACE FUNCTION record_course_discount_redemption_event()
-RETURNS trigger LANGUAGE plpgsql AS $
+RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
   IF TG_OP='INSERT' THEN
     INSERT INTO course_discount_redemption_event(redemption_id,event_type,details)
@@ -88,7 +88,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$$;
 CREATE TRIGGER trg_course_discount_redemption_event
 AFTER INSERT OR UPDATE OF status ON course_discount_redemption
 FOR EACH ROW EXECUTE FUNCTION record_course_discount_redemption_event();
