@@ -232,7 +232,7 @@ export default function PracticePage(){
   </main>;
 
   if(error)return <main className="practice-page">
-    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><UiText message="legacy.web.practice.could.not.be.opened.5bc74c45" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:20}}><UiText message="legacy.web.return.to.lesson.5e757610" /></Link></section>
+    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><UiText message="legacy.web.practice.could.not.be.opened.5bc74c45" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id+'&courseId='+encodeURIComponent(courseKey):'/student/learn'+(courseKey?'?courseId='+encodeURIComponent(courseKey):'')} className="button button-dark" style={{marginTop:20}}><UiText message="legacy.web.return.to.lesson.5e757610" /></Link></section>
   </main>;
 
   if(noPractice)return <main className="practice-page">
@@ -245,7 +245,7 @@ export default function PracticePage(){
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.d07fa8cc" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:22}}><UiText message="legacy.web.choose.another.lesson.dd9afbbb" /></Link>
+      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+'&courseId='+encodeURIComponent(courseKey):'/student/learn'+(courseKey?'?courseId='+encodeURIComponent(courseKey):'')} className="button button-dark" style={{marginTop:22}}><UiText message="legacy.web.choose.another.lesson.dd9afbbb" /></Link>
     </section>
   </main>;
 
