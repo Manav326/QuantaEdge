@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e401f507c0a0454a3745d49c65d335579c8834708e4dd52dcf49bd7efb194d26",
+  "raw_analysis_sha256": "09479f50294406d64505cae98284f392186336486cf5229016a56613b8915509",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:49:34Z",
+      "checkpointed_at": "2026-10-20T14:53:45Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:50:19Z",
+      "checkpointed_at": "2026-10-20T14:54:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:50:49Z",
+      "checkpointed_at": "2026-10-20T14:55:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:51:38Z",
+      "checkpointed_at": "2026-10-20T14:55:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -54402,6 +54402,60 @@
         "context_relation": "The image is related to the textbook's content about electromagnets and their operation.",
         "limitations": [
           "The image does not provide specific details about the textbook's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2faaf09a3dc4c9ea24b7ef48",
+      "asset_sha256": "d06d17d7601dc50ffbfbb27bed73dfdce7a266f1ebd46b33f4608afef9f7b6c6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/d06d17d7601dc50ffbfbb27bed73dfdce7a266f1ebd46b33f4608afef9f7b6c6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d163fa9855f2783c20b6949d6fc5ee4e183473fbd741bf06f6ef9d268477b694",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of an electromagnet with a battery and a switch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Battery",
+          "Switch"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Battery",
+          "Switch"
+        ],
+        "context_relation": "The image is related to the textbook content about electromagnets and their operation.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's operation or the reasons for the iron nail not lifting the paper clips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:56:57Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of an electromagnet with a battery and a switch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Battery",
+          "Switch"
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Battery",
+          "Switch"
+        ],
+        "context_relation": "The image is related to the textbook content about electromagnets and their operation.",
+        "limitations": [
+          "The image does not provide specific details about the electromagnet's operation or the reasons for the iron nail not lifting the paper clips."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
