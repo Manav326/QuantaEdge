@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fbdcfc9b42de0dccb5410ad63d1ea3bf79e5d6e8a9e96ba6adcb8361872e6dd0",
+  "raw_analysis_sha256": "31b5ff686bc36ad663a4a37a66961421098038751e34ec50dd1295bb6f74b566",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:03:11Z",
+      "checkpointed_at": "2026-10-20T04:11:04Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:04:12Z",
+      "checkpointed_at": "2026-10-20T04:12:02Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:05:04Z",
+      "checkpointed_at": "2026-10-20T04:12:52Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60201,6 +60201,114 @@
         "limitations": [
           "The image does not show the actual setup or motion of the eraser."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "08c72fc03f1433ca92d0ae48",
+      "asset_sha256": "b46056383722d1356c9c2d8561c2da8db955507c9bdb8ac9dabd600f83fb9d00",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/b46056383722d1356c9c2d8561c2da8db955507c9bdb8ac9dabd600f83fb9d00.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cbad9675c0acf2a75c1e7c46b4942f58b8e43a865698fce561a758c14e3b3846",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden table with a stack of books on top, and a thin metal strip extending from the right side of the table.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take a thin metal strip of about 50 cm long.",
+          "Hold its one end pressed to a table. You may use a few",
+          "books or a brick to hold it (Fig. 5.17).",
+          "Press the free end of the strip slightly and let it go.",
+          "Observe the motion of this end of the strip.",
+          "Does it move up and down? This is also an example of",
+          "oscillatory motion.",
+          "Fig. 5.17: Oscillatory motion of a metal strip"
+        ],
+        "concepts": [
+          "Oscillatory motion",
+          "Metal strip",
+          "Table",
+          "Books",
+          "Brick"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text, showing how to set up the experiment for observing oscillatory motion of a metal strip.",
+        "limitations": [
+          "The image does not show the actual motion of the metal strip.",
+          "The image does not show the books or brick used to hold the metal strip."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:14:49Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden table with a stack of books on top, and a thin metal strip extending from the right side of the table.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take a thin metal strip of about 50 cm long.",
+          "Hold its one end pressed to a table. You may use a few",
+          "books or a brick to hold it (Fig. 5.17).",
+          "Press the free end of the strip slightly and let it go.",
+          "Observe the motion of this end of the strip.",
+          "Does it move up and down? This is also an example of",
+          "oscillatory motion.",
+          "Fig. 5.17: Oscillatory motion of a metal strip"
+        ],
+        "concepts": [
+          "Oscillatory motion",
+          "Metal strip",
+          "Table",
+          "Books",
+          "Brick"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text, showing how to set up the experiment for observing oscillatory motion of a metal strip.",
+        "limitations": [
+          "The image does not show the actual motion of the metal strip.",
+          "The image does not show the books or brick used to hold the metal strip."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "005cd68b23790299acc66893",
+      "asset_sha256": "f9db7bd07da8878cfd3d92601da5d3926b4e348973c5b2e12c0f189bf3d0cf4e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/f9db7bd07da8878cfd3d92601da5d3926b4e348973c5b2e12c0f189bf3d0cf4e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cbad9675c0acf2a75c1e7c46b4942f58b8e43a865698fce561a758c14e3b3846",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:16:21Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

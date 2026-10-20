@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1206,
+    "assets_selected": 1208,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1203,
-    "assets_remaining": 875,
-    "assets_completion_percent": 57.9,
+    "assets_analyzed": 1205,
+    "assets_remaining": 873,
+    "assets_completion_percent": 58.0,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1201,
+    "assets_skipped_from_checkpoint": 1203,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:03:11Z"
+      "checkpointed_at": "2026-10-20T04:11:04Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:04:12Z"
+      "checkpointed_at": "2026-10-20T04:12:02Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:05:04Z"
+      "checkpointed_at": "2026-10-20T04:12:52Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -39933,6 +39933,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T04:09:51Z"
+    },
+    {
+      "asset_id": "08c72fc03f1433ca92d0ae48",
+      "asset_sha256": "b46056383722d1356c9c2d8561c2da8db955507c9bdb8ac9dabd600f83fb9d00",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/b46056383722d1356c9c2d8561c2da8db955507c9bdb8ac9dabd600f83fb9d00.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cbad9675c0acf2a75c1e7c46b4942f58b8e43a865698fce561a758c14e3b3846",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden table with a stack of books on top, and a thin metal strip extending from the right side of the table.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take a thin metal strip of about 50 cm long.",
+          "Hold its one end pressed to a table. You may use a few",
+          "books or a brick to hold it (Fig. 5.17).",
+          "Press the free end of the strip slightly and let it go.",
+          "Observe the motion of this end of the strip.",
+          "Does it move up and down? This is also an example of",
+          "oscillatory motion.",
+          "Fig. 5.17: Oscillatory motion of a metal strip"
+        ],
+        "concepts": [
+          "Oscillatory motion",
+          "Metal strip",
+          "Table",
+          "Books",
+          "Brick"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text, showing how to set up the experiment for observing oscillatory motion of a metal strip.",
+        "limitations": [
+          "The image does not show the actual motion of the metal strip.",
+          "The image does not show the books or brick used to hold the metal strip."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:14:49Z"
+    },
+    {
+      "asset_id": "005cd68b23790299acc66893",
+      "asset_sha256": "f9db7bd07da8878cfd3d92601da5d3926b4e348973c5b2e12c0f189bf3d0cf4e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/f9db7bd07da8878cfd3d92601da5d3926b4e348973c5b2e12c0f189bf3d0cf4e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cbad9675c0acf2a75c1e7c46b4942f58b8e43a865698fce561a758c14e3b3846",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:16:21Z"
     }
   ]
 }
