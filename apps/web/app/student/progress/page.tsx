@@ -13,6 +13,7 @@ import {useRouter} from 'next/navigation';
 import { curriculumProgress, displayCount, displayPercent, lessonProgress, safeCount, safePercent } from '../progressMetrics';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 import { useSearchParams } from 'next/navigation';
 
 export default function ProgressPage(){
