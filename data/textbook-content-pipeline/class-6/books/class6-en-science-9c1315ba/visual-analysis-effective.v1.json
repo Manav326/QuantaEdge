@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b5b248e4df62cc6a50ce7d19fe21f7bf185d4aa37633a6236462bd8be2ca9ed4",
+  "raw_analysis_sha256": "92a0d319026c54e4000cb6596c17e72f5ce2f3d95738676d412d44bb5f2d3489",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:01:06Z",
+      "checkpointed_at": "2026-10-20T10:06:46Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34730,7 +34730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:02:07Z",
+      "checkpointed_at": "2026-10-20T10:07:46Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56413,7 +56413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:03:02Z",
+      "checkpointed_at": "2026-10-20T10:08:37Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -61978,7 +61978,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39381360674",
-      "checkpointed_at": "2026-10-20T10:03:51Z",
+      "checkpointed_at": "2026-10-20T10:09:25Z",
       "effective_analysis": {
         "visual_summary": "instructions for measuring height and distance using a bicycle",
         "visual_type": "diagram",
@@ -62110,6 +62110,50 @@
         "context_relation": "The image shows a conversation between two students in a classroom setting.",
         "limitations": [
           "The image does not provide specific details about the subjects or topics covered in the books."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86899be47b3bcf1644f1085c",
+      "asset_sha256": "06df28a8e57c857d4a8e8a693acfbe91446f7585ad4202b0b8741114c90a36b0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/06df28a8e57c857d4a8e8a693acfbe91446f7585ad4202b0b8741114c90a36b0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ba824eb919a0214ac7e039b493594f10eceb9afc3804568ea0652486f4010b1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "QR code with the text '0677CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code likely leads to additional educational content or resources related to the chapter 'Materials Around Us' in the textbook.",
+        "limitations": [
+          "The QR code does not provide specific content or information about the chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39381360674",
+      "checkpointed_at": "2026-10-20T10:11:05Z",
+      "effective_analysis": {
+        "visual_summary": "QR code with the text '0677CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code likely leads to additional educational content or resources related to the chapter 'Materials Around Us' in the textbook.",
+        "limitations": [
+          "The QR code does not provide specific content or information about the chapter."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
