@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9aa15ea26371b151886c6c5c7a4245dda70daeb305e7d8603e54c633e99904f6",
+  "raw_analysis_sha256": "76a96bf9ba524e0df0666866c986c55d9bf223c5161e5b9956c99e551ae4ab01",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:54:00Z",
+      "checkpointed_at": "2026-10-20T15:58:26Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:54:45Z",
+      "checkpointed_at": "2026-10-20T15:59:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:55:15Z",
+      "checkpointed_at": "2026-10-20T15:59:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T15:56:04Z",
+      "checkpointed_at": "2026-10-20T16:00:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55222,6 +55222,66 @@
         "limitations": [
           "The image does not provide specific details about the textbook content.",
           "The image does not show any specific questions or answers related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7dbaaccbf722e9893d2f45df",
+      "asset_sha256": "95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb56e9548b8cb740443aa0eff04685fd0752b37384c6e61a8db438dbdab64957",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "Why is it easier to slip on a wet surface?",
+          "Why do we feel 'light' or like we are 'floating' just after our swing reaches its highest point and begins to come down?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycle pedaling",
+          "Slipping on wet surfaces",
+          "Swing dynamics"
+        ],
+        "context_relation": "The image is related to the textbook content on 'Exploring Forces' in Grade 8.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:01:45Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "Why is it easier to slip on a wet surface?",
+          "Why do we feel 'light' or like we are 'floating' just after our swing reaches its highest point and begins to come down?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycle pedaling",
+          "Slipping on wet surfaces",
+          "Swing dynamics"
+        ],
+        "context_relation": "The image is related to the textbook content on 'Exploring Forces' in Grade 8.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1152,
-    "successful_visual_analyses": 1130,
-    "missing_visual_analyses": 1139,
+    "raw_analysis_result_rows": 1153,
+    "successful_visual_analyses": 1131,
+    "missing_visual_analyses": 1138,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1161,
+    "unresolved_count": 1160,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43246,9 +43246,28 @@
       "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why does it feel harder to pedal a bicycle when going uphill than on flat ground?",
+          "Why is it easier to slip on a wet surface?",
+          "Why do we feel 'light' or like we are 'floating' just after our swing reaches its highest point and begins to come down?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Forces",
+          "Bicycle pedaling",
+          "Slipping on wet surfaces",
+          "Swing dynamics"
+        ],
+        "context_relation": "The image is related to the textbook content on 'Exploring Forces' in Grade 8.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
