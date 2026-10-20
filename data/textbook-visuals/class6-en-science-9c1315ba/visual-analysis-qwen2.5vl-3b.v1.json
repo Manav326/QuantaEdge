@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1218,
+    "assets_selected": 1220,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1215,
-    "assets_remaining": 863,
-    "assets_completion_percent": 58.5,
+    "assets_analyzed": 1217,
+    "assets_remaining": 861,
+    "assets_completion_percent": 58.6,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1213,
+    "assets_skipped_from_checkpoint": 1215,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:43:10Z"
+      "checkpointed_at": "2026-10-20T04:48:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:44:09Z"
+      "checkpointed_at": "2026-10-20T04:49:03Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37514,7 +37514,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
-      "checkpointed_at": "2026-10-20T04:44:59Z"
+      "checkpointed_at": "2026-10-20T04:49:53Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40372,6 +40372,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39338687789",
       "checkpointed_at": "2026-10-20T04:46:50Z"
+    },
+    {
+      "asset_id": "510f3585365807dd6822085d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:50:04Z"
+    },
+    {
+      "asset_id": "1a513ddfd24c49be058ff0fe",
+      "asset_sha256": "fa01eca374c04d02c11aca81df26f81c53b6aa647ea2215a8144305f3e7e4da2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 114,
+      "asset_path": "page-0114.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5cbf74a7764ad311591bbf0fe41216c3d292614f13ddcb4c9b527595eb6630fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table with keywords and their classifications, followed by a summary of the International System of Units.",
+        "visual_type": "table",
+        "visible_text": [
+          "Keywords",
+          "centimetre Measurement Classify",
+          "Circular motion metre Explore",
+          "Distance millimetre Identify",
+          "kilometre Motion Investigate",
+          "Length Oscillatory motion Justification",
+          "Linear motion Reference point Observe",
+          "SI Unit of Length",
+          "Summary",
+          "The International System of Units (SI units) has been adopted by countries as standard units of measurement.",
+          "The SI unit of length is metre. Its symbol is m.",
+          "1 km = 1000 m, 1 m = 100 cm, 1 cm = 10 mm.",
+          "When distance is stated with respect to a fixed object or point, then this point is called a reference point.",
+          "An object is said to be in motion if its position changes with respect to a reference point with time.",
+          "When an object moves along a straight line, its motion is called linear motion.",
+          "When an object moves along a circular path, its motion is called circular motion.",
+          "When any object moves to and fro about any fixed position, its motion is called oscillatory motion."
+        ],
+        "concepts": [
+          "International System of Units",
+          "SI units",
+          "Length",
+          "Distance",
+          "Circular motion",
+          "Linear motion",
+          "Oscillatory motion",
+          "Reference point",
+          "Motion",
+          "Measurement",
+          "Classify",
+          "Explore",
+          "Identify",
+          "Investigate",
+          "Observe",
+          "SI Unit of Length"
+        ],
+        "context_relation": "The table and summary provide information about the International System of Units and its units, as well as the different types of motion.",
+        "limitations": [
+          "The table does not include all the units of measurement in the International System of Units.",
+          "The summary does not include all the types of motion in the International System of Units."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39338687789",
+      "checkpointed_at": "2026-10-20T04:54:24Z"
     }
   ]
 }
