@@ -58,3 +58,11 @@ Implementation on main does not mean browser/device E2E is passed. Verify mobile
 ### Route coverage added on 2026-10-20
 
 The shared web fallback now covers Live/Recorded Classes, Diagnostic, Tests & Results, Certificates and nested Structured Lesson detail in addition to Dashboard, My Courses, Marketplace, Learn, Practice, Progress and Books. Route-level gates require the course scope to finish loading and only accept an empty/explicit no-enrolment result; unrelated course-scope failures retain their error UI. Certificate deep links bypass the no-enrolment guard. The navigation contract asserts all of these coverage points and the Marketplace's distinct no-offers retry state.
+
+### Android route and empty-data safety coverage — 2026-10-20
+
+Android now uses a shared Compose empty-state card for Dashboard, My Courses, Marketplace, lessons, practice/tests, results, leaderboard, progress, library resources, live/recorded classes and certificates. Contextual next actions send a student to Marketplace; Marketplace with zero offers also offers refresh and My Courses. Course-list errors retain Retry and are not converted into “no courses” results. Class, assessment/result and certificate routes retain their own empty states for a valid enrolled course with no scheduled sessions, no published tests/results, or no issued certificates.
+
+Nested lesson/detail guards follow course scope; an in-progress assessment route is intentionally not replaced so saved work can be recovered. Direct certificate verification links remain accessible on web. Reader/deep-link access is checked against course enrolment before rendering course content. Web content lists for classes, tests/results, certificates and textbooks were also tightened so an API error cannot simultaneously claim that valid content is absent.
+
+The source contract now checks these web and Android states and the central English/Hinglish copy. The checks do not replace Android build/device tests or web browser E2E; keep QA status pending until the current main workflow is green and the main empty, error and enrolled-but-no-content cases are exercised.
