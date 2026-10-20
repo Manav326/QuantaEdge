@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1015,
+    "assets_selected": 1017,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1012,
-    "assets_remaining": 1279,
-    "assets_completion_percent": 44.2,
+    "assets_analyzed": 1014,
+    "assets_remaining": 1277,
+    "assets_completion_percent": 44.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1010,
+    "assets_skipped_from_checkpoint": 1012,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:48:11Z"
+      "checkpointed_at": "2026-10-20T03:50:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:48:44Z"
+      "checkpointed_at": "2026-10-20T03:50:38Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:49:06Z"
+      "checkpointed_at": "2026-10-20T03:51:01Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -32416,6 +32416,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:49:20Z"
+    },
+    {
+      "asset_id": "fd6ea7b3e784df3427ecabf1",
+      "asset_sha256": "8162373159229d713281111df640a3839cd7e07f79a09c1811122100f311cfb1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 65,
+      "asset_path": "page-0065.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "cf4ff399ba1e8098e044dc43875f59e9c54f5f89f2db1d245c82d04c050f3c49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Health-related educational content with questions and activities.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 3 — Health: The Ultimate Treasure",
+          "11. When our body encounters a pathogen for the first time, the immune response is generally low but on exposure to the same pathogen again, the immune response by the body is much more compared to the first exposure. Why is it so?",
+          "Discover, design, and debate",
+          "Students maintain a health diary for at least a month to track food, hygiene, exercise, sleep, screen time, and emotional state.",
+          "Read about Indian scientists like Suniti Solomon, Asima Chatterjee, Yellapragada Subbarao, Mary Poonen Lukose for their contributions in the field of health and diseases.",
+          "The deadly disease smallpox was eradicated by vaccination. Discover how this was done and why it worked. Debate whether everyone should be required to get vaccinated to protect others.",
+          "According to current guidelines, learn the correct sequence of steps for performing cardiopulmonary resuscitation (CPR) on an adult in case of sudden stoppage of breathing. School may invite a doctor or a professional to demonstrate a mock drill.",
+          "Invite a doctor to the school. Students may be encouraged to interact with the doctor on the issues of malnutrition, under-nutrition, and over-nutrition.",
+          "If you are given an opportunity to create a health card, what all would you like to include in it. Create your own health card and have discussion about it.",
+          "Have a debate on 'Are there ill-effects of fast food on companion animals?'",
+          "Reflect on the questions framed by your friends and try to answer..."
+        ],
+        "concepts": [
+          "Health diary",
+          "Indian scientists",
+          "Smallpox eradication",
+          "Cardiopulmonary resuscitation (CPR)",
+          "Nutrition",
+          "Health card",
+          "Fast food effects"
+        ],
+        "context_relation": "Health education",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:52:50Z"
+    },
+    {
+      "asset_id": "af20ec768672a130e545f0ac",
+      "asset_sha256": "961be5f0a9d55af29e18ecbfbe207dfa3af04ee9d9c3cc1f42eeb8c5b0b34c4e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/961be5f0a9d55af29e18ecbfbe207dfa3af04ee9d9c3cc1f42eeb8c5b0b34c4e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9276bc1603563b7737a393c7a4c9e962709ad9e591d9193ff1eccdb4235abc2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a train in a warehouse with overhead cranes.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Electricity: Magnetic and Heating Effects  4",
+          "z If we don’t have an electric lamp while making an electric circuit",
+          "with an electric cell, is there any other way through which we",
+          "can find out if current is flowing in the circuit?",
+          "z Is it possible to make temporary magnets? How can these",
+          "be made?",
+          "z We can generate heat by burning fossil fuels and wood; but how",
+          "is heat generated in various electrical appliances?",
+          "z How do we know if a cell or a battery is dead? Can all",
+          "cells and batteries be recharged?"
+        ],
+        "concepts": [
+          "Electricity",
+          "Magnetic Effects",
+          "Heating Effects",
+          "Circuit",
+          "Magnets",
+          "Heat Generation",
+          "Cell/Battery",
+          "Recharge"
+        ],
+        "context_relation": "The image does not directly relate to the visible text.",
+        "limitations": [
+          "The image does not provide specific information about the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:53:48Z"
     }
   ]
 }
