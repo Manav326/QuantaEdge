@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bece8b5bc994ed34be3c6ddb42c43ff339529ef10bd09febb2f3d0c9b8bbfe5f",
+  "raw_analysis_sha256": "708842fce518c48597f3bf69df69af44c9d9d66622d8ec87786590d630c7ef4a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:17:45Z",
+      "checkpointed_at": "2026-10-20T03:20:43Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:18:18Z",
+      "checkpointed_at": "2026-10-20T03:21:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:18:40Z",
+      "checkpointed_at": "2026-10-20T03:21:39Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -47345,6 +47345,92 @@
         ],
         "context_relation": "The image is related to the topic of managing illnesses and promoting recovery, specifically for non-communicable diseases.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b8cbecb32f7b624dc7983983",
+      "asset_sha256": "d5801fc9ee8b2ebb7c1caceae532690d37ce4244495c9c0d7a5c9ce527828088",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/d5801fc9ee8b2ebb7c1caceae532690d37ce4244495c9c0d7a5c9ce527828088.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a small object in their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "person holding object",
+          "small object"
+        ],
+        "context_relation": "The image likely represents a visual aid for a lesson on managing illnesses and promoting recovery, possibly related to non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific details about the object being held."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:22:15Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a small object in their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "person holding object",
+          "small object"
+        ],
+        "context_relation": "The image likely represents a visual aid for a lesson on managing illnesses and promoting recovery, possibly related to non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific details about the object being held."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "893c05a719483d878634e478",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:22:22Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

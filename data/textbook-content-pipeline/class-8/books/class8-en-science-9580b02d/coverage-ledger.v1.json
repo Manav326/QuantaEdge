@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1008,
-    "successful_visual_analyses": 995,
-    "missing_visual_analyses": 1283,
+    "raw_analysis_result_rows": 1010,
+    "successful_visual_analyses": 997,
+    "missing_visual_analyses": 1281,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1296,
+    "unresolved_count": 1294,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38290,9 +38290,21 @@
       "asset_path": "assets/d5801fc9ee8b2ebb7c1caceae532690d37ce4244495c9c0d7a5c9ce527828088.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a small object in their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "person holding object",
+          "small object"
+        ],
+        "context_relation": "The image likely represents a visual aid for a lesson on managing illnesses and promoting recovery, possibly related to non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific details about the object being held."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38308,9 +38320,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

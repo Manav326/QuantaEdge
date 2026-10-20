@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 995,
+    "assets_selected": 997,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 992,
-    "assets_remaining": 1299,
-    "assets_completion_percent": 43.3,
+    "assets_analyzed": 994,
+    "assets_remaining": 1297,
+    "assets_completion_percent": 43.4,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 990,
+    "assets_skipped_from_checkpoint": 992,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:17:45Z"
+      "checkpointed_at": "2026-10-20T03:20:43Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:18:18Z"
+      "checkpointed_at": "2026-10-20T03:21:17Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T03:18:40Z"
+      "checkpointed_at": "2026-10-20T03:21:39Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -31740,6 +31740,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T03:19:57Z"
+    },
+    {
+      "asset_id": "b8cbecb32f7b624dc7983983",
+      "asset_sha256": "d5801fc9ee8b2ebb7c1caceae532690d37ce4244495c9c0d7a5c9ce527828088",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/d5801fc9ee8b2ebb7c1caceae532690d37ce4244495c9c0d7a5c9ce527828088.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a small object in their hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "person holding object",
+          "small object"
+        ],
+        "context_relation": "The image likely represents a visual aid for a lesson on managing illnesses and promoting recovery, possibly related to non-communicable diseases and their treatments.",
+        "limitations": [
+          "The image does not provide specific details about the object being held."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:22:15Z"
+    },
+    {
+      "asset_id": "893c05a719483d878634e478",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "877e2935824f99013f003f8989219924bd0f36389c5128bf4a9e0761e18752c7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T03:22:22Z"
     }
   ]
 }
