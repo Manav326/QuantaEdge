@@ -2396,14 +2396,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             try {
                 val createdSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", activeLessonId).put("language", activeLearningLanguage))
+                    JSONObject().put("lessonId", activeLessonId).put("courseId", currentCourseId)
+                        .put("language", activeLearningLanguage))
                 if (!isCurrentTutorScope(activeLessonId)) return@runTask
                 tutorSession = createdSession
                 tutorAvailable = createdSession.optBoolean("available")
                 if (tutorAvailable) {
                     val sessionId = createdSession.longAny("sessionId", "session_id")
                     val initial = ApiClient.getObject("/api/v1/tutor/sessions/" +
-                        sessionId + "/messages?limit=30")
+                        sessionId + "/messages?courseId=" + currentCourseId + "&limit=30")
                     if (!isCurrentTutorScope(activeLessonId, sessionId)) return@runTask
                     tutorMessages = initial.optJSONArray("items").objectItems()
                     tutorHasOlderMessages = initial.optBoolean("hasMore")
@@ -2451,9 +2452,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             try {
                 val newSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", activeLessonId)
-                        .put("language", activeLearningLanguage)
-                        .put("newChat", true))
+                    JSONObject().put("lessonId", activeLessonId).put("courseId", currentCourseId)
+                        .put("language", activeLearningLanguage).put("newChat", true))
                 if (!isCurrentTutorScope(activeLessonId, activeSessionId)) return@runTask
                 tutorSession = newSession
                 expectedSessionId = newSession.longAny("sessionId", "session_id")
@@ -2487,7 +2487,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         scope.launch {
             try {
                 val olderPage = ApiClient.getObject(
-                    "/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30&beforeId=" + beforeId
+                    "/api/v1/tutor/sessions/" + sessionId + "/messages?courseId=" + currentCourseId + "&limit=30&beforeId=" + beforeId
                 )
                 if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                 val older = olderPage.optJSONArray("items").objectItems()
@@ -2512,7 +2512,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         for (attempt in 0 until 46) {
             if (attempt > 0) delay(2000)
             val page = runCatching {
-                ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?courseId=" + currentCourseId + "&limit=30")
             }.getOrNull() ?: continue
             val items = page.optJSONArray("items").objectItems()
             var userIndex = -1
@@ -2564,11 +2564,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         scope.launch {
             try {
                 try {
-                    ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
+                    ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages?courseId=" + currentCourseId,
                         JSONObject().put("message", message).put("mode", mode).put("questionId", activeQuestionId)
                             .put("language", activeLearningLanguage))
                     if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
-                    val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                    val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?courseId=" + currentCourseId + "&limit=30")
                     if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                     applyTutorMessagePage(latestPage)
                 } catch (exception: Exception) {
