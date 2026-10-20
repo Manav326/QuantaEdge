@@ -93,7 +93,8 @@ public class CourseOrderFinancialService {
     if(normalizedCode!=null) {
       List<Map<String,Object>> discounts=jdbc.queryForList("""
         select id,code,version,discount_type,percentage_basis_points,flat_amount_paise,
-          max_discount_paise,min_listed_price_paise,currency,effective_from,effective_until
+          max_discount_paise,min_listed_price_paise,max_redemptions,max_redemptions_per_purchaser,
+          currency,effective_from,effective_until
         from course_discount_offer
         where institution_offer_id=? and upper(code)=? and currency=? and status='APPROVED'
           and effective_from<=now() and (effective_until is null or effective_until>now())
@@ -122,6 +123,8 @@ public class CourseOrderFinancialService {
       discountSnapshot.put("flatAmountPaise",flat);
       discountSnapshot.put("maxDiscountPaise",cap);
       discountSnapshot.put("minListedPricePaise",minimum);
+      discountSnapshot.put("maxRedemptions",nullableLong(offer.get("max_redemptions")));
+      discountSnapshot.put("maxRedemptionsPerPurchaser",nullableInteger(offer.get("max_redemptions_per_purchaser")));
       discountSnapshot.put("discountPaise",discountPaise);
       discountSnapshot.put("effectiveFrom",String.valueOf(offer.get("effective_from")));
       discountSnapshot.put("effectiveUntil",offer.get("effective_until")==null?null:String.valueOf(offer.get("effective_until")));
@@ -340,6 +343,69 @@ public class CourseOrderFinancialService {
         quote.taxableValuePaise(),quote.outputTaxPaise(),number(profile.get("tax_profile_id")),
         number(profile.get("legal_entity_id")),gstRegistrationId,policyId,templateVersionId,
         taxSnapshot,shareSnapshot,discountSnapshot);
+  }
+
+  /**
+   * Atomically reserves an approved discount against concurrent checkouts. The policy row lock
+   * serializes redemption-cap checks for that code before a reservation is inserted.
+   */
+  @Transactional
+  public void reserveDiscountRedemption(
+      long discountOfferId,long localOrderId,long purchaserUserAccountId,long institutionOfferId,
+      String code,long listedPricePaise,long discountAmountPaise) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,institution_offer_id,code,currency,discount_type,percentage_basis_points,
+        flat_amount_paise,max_discount_paise,min_listed_price_paise,max_redemptions,
+        max_redemptions_per_purchaser
+      from course_discount_offer
+      where id=? and status='APPROVED'
+        and effective_from<=now() and (effective_until is null or effective_until>now())
+      for update
+      """,discountOfferId);
+    if(rows.size()!=1) throw new IllegalStateException(
+        "This offer code is no longer active. Refresh the marketplace and retry checkout.");
+    Map<String,Object> rule=rows.getFirst();
+    String normalized=code==null?"":code.trim().toUpperCase(Locale.ROOT);
+    if(number(rule.get("institution_offer_id"))!=institutionOfferId
+        || !normalized.equals(string(rule.get("code")))
+        || !"INR".equalsIgnoreCase(string(rule.get("currency")))) {
+      throw new IllegalStateException("The approved discount no longer matches this course order.");
+    }
+    long minimum=number(rule.get("min_listed_price_paise"));
+    if(listedPricePaise<minimum) throw new IllegalArgumentException(
+        "This offer code requires a higher course list price.");
+    long expectedDiscount=CourseDiscountCalculator.calculate(
+        listedPricePaise,string(rule.get("discount_type")),
+        nullableInteger(rule.get("percentage_basis_points")),nullableLong(rule.get("flat_amount_paise")),
+        nullableLong(rule.get("max_discount_paise")));
+    if(expectedDiscount!=discountAmountPaise||discountAmountPaise<=0||discountAmountPaise>=listedPricePaise) {
+      throw new IllegalStateException("The discount amount does not match the currently approved offer terms.");
+    }
+    Long maxRedemptions=nullableLong(rule.get("max_redemptions"));
+    Integer maxPerPurchaser=nullableInteger(rule.get("max_redemptions_per_purchaser"));
+    if(maxRedemptions!=null) {
+      Long used=jdbc.queryForObject("""
+        select count(*) from course_discount_redemption
+        where discount_offer_id=? and status in ('RESERVED','REDEEMED')
+        """,Long.class,discountOfferId);
+      if(used!=null&&used>=maxRedemptions) throw new IllegalArgumentException(
+          "This offer code has reached its redemption limit.");
+    }
+    if(maxPerPurchaser!=null) {
+      Long usedByPurchaser=jdbc.queryForObject("""
+        select count(*) from course_discount_redemption
+        where discount_offer_id=? and purchaser_user_account_id=?
+          and status in ('RESERVED','REDEEMED')
+        """,Long.class,discountOfferId,purchaserUserAccountId);
+      if(usedByPurchaser!=null&&usedByPurchaser>=maxPerPurchaser) throw new IllegalArgumentException(
+          "You have already used the maximum number of times allowed for this offer code.");
+    }
+    jdbc.update("""
+      insert into course_discount_redemption(
+        discount_offer_id,course_payment_order_id,purchaser_user_account_id,institution_offer_id,
+        code_snapshot,discount_amount_paise,status
+      ) values(?,?,?,?,?,?,'RESERVED')
+      """,discountOfferId,localOrderId,purchaserUserAccountId,institutionOfferId,normalized,discountAmountPaise);
   }
 
   /**
