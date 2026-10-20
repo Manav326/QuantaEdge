@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1158,
+    "assets_selected": 1159,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1154,
-    "assets_remaining": 1137,
+    "assets_analyzed": 1155,
+    "assets_remaining": 1136,
     "assets_completion_percent": 50.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1153,
+    "assets_skipped_from_checkpoint": 1154,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:58:07Z"
+      "checkpointed_at": "2026-10-20T18:02:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:58:52Z"
+      "checkpointed_at": "2026-10-20T18:03:06Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:59:22Z"
+      "checkpointed_at": "2026-10-20T18:03:36Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:00:11Z"
+      "checkpointed_at": "2026-10-20T18:04:25Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37836,6 +37836,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T18:01:21Z"
+    },
+    {
+      "asset_id": "fc7bf1554870246511d17f72",
+      "asset_sha256": "e616607d595ef45c7104f64ac955f70f5faf529bc3bf7debac60dd9f2d381c41",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/e616607d595ef45c7104f64ac955f70f5faf529bc3bf7debac60dd9f2d381c41.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A snake coiled in a circular pattern on a sandy surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "snake",
+          "coiled",
+          "sandy surface"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T18:05:34Z"
     }
   ]
 }

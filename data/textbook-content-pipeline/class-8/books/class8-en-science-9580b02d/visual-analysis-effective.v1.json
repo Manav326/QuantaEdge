@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "65e79d7aa4771518b5a20eaf656fd471608edbd3cb851cc0d331d4a7ce2eec67",
+  "raw_analysis_sha256": "1b564d1d14250e9454407a4ab986b255eb2f192d0956d692ae328496275870b7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:58:07Z",
+      "checkpointed_at": "2026-10-20T18:02:21Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:58:52Z",
+      "checkpointed_at": "2026-10-20T18:03:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:59:22Z",
+      "checkpointed_at": "2026-10-20T18:03:36Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T18:00:11Z",
+      "checkpointed_at": "2026-10-20T18:04:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56788,6 +56788,54 @@
         "context_relation": "The image is related to the educational content about forces and interactions between objects.",
         "limitations": [
           "The image does not provide specific information about the types of forces or their interactions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fc7bf1554870246511d17f72",
+      "asset_sha256": "e616607d595ef45c7104f64ac955f70f5faf529bc3bf7debac60dd9f2d381c41",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/e616607d595ef45c7104f64ac955f70f5faf529bc3bf7debac60dd9f2d381c41.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A snake coiled in a circular pattern on a sandy surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "snake",
+          "coiled",
+          "sandy surface"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T18:05:34Z",
+      "effective_analysis": {
+        "visual_summary": "A snake coiled in a circular pattern on a sandy surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "snake",
+          "coiled",
+          "sandy surface"
+        ],
+        "context_relation": "The image is related to the educational content about forces and interactions.",
+        "limitations": [
+          "The image does not provide specific details about the forces involved."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
