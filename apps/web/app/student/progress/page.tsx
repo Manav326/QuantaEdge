@@ -125,10 +125,11 @@ export default function ProgressPage(){
   
   const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
     (!courseError || courseError === 'This course is not enrolled in your current institution account.');
-  if (noEnrolledCourses) return <main className="app-shell"><section className="progress-page"><div className="auth-card" role="status">
-    <h1><UiText message="legacy.web.your.progress.c5b2f5ab" /></h1>
-    <p><UiText message="student.empty.progress.message" /></p>
-  </div></section></main>;
+  if (noEnrolledCourses) return <main className="app-shell"><section className="progress-page">
+    <StudentEmptyState icon="progress" title={<UiText message="student.empty.progress.title" />}
+      message={<UiText message="student.empty.progress.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />} />
+  </section></main>;
 
   if(error)return <main className="app-shell"><section className="progress-page"><div className="auth-card">
     <h1><UiText message="legacy.web.unable.to.load.progress.5f5e48c0" /></h1><p>{error}</p>

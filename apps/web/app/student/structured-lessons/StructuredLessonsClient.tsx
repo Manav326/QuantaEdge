@@ -73,7 +73,9 @@ export default function StructuredLessonsClient() {
     (!courseError || courseError === 'This course is not enrolled in your current institution account.');
   if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><h1><UiText message="web.navigation.student.structuredLessons" /></h1></header>
-    <p className="auth-card" role="status"><UiText message="student.empty.learn.message" /></p>
+    <StudentEmptyState icon="learn" title={<UiText message="student.empty.learn.title" />}
+      message={<UiText message="student.empty.learn.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />} />
   </section></div></main>;
 
   return <main className="app-shell"><div className="app-layout"><section className="app-content">

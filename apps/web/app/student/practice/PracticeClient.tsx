@@ -98,7 +98,9 @@ export default function PracticeClient() {
     (!courseError || courseError === 'This course is not enrolled in your current institution account.');
   if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><h1>{tx('Practice', 'अभ्यास')}</h1></header>
-    <p className="auth-card" role="status"><UiText message="student.empty.practice.message" /></p>
+    <StudentEmptyState icon="practice" title={<UiText message="student.empty.practice.title" />}
+      message={<UiText message="student.empty.practice.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />} />
   </section></div></main>;
 
   return <main className="app-shell"><div className="app-layout"><section className="app-content">

@@ -378,10 +378,9 @@ export default function TextbooksClient() {
   const noEnrolledCourses = !documentId && !loadingCourses && courses.length === 0 &&
     (!courseError || courseError === 'This course is not enrolled in your current institution account.');
   if (noEnrolledCourses) return <main className="app-shell qe-textbook-shell"><section className="qe-textbook-library">
-    <div className="qe-textbook-empty" role="status"><span>▤</span>
-      <h3>{translateUi(locale, 'legacy.web.books.and.chapters.7c0f264b')}</h3>
-      <p>{translateUi(locale, 'student.empty.books.message')}</p>
-    </div>
+    <StudentEmptyState icon="book" title={translateUi(locale, 'student.empty.books.title')}
+      message={translateUi(locale, 'student.empty.books.message')}
+      primaryActionHref="/student/marketplace" primaryActionLabel={translateUi(locale, 'student.empty.dashboard.action')} />
   </section></main>;
 
   return <main className={'app-shell qe-textbook-shell' + (documentId ? ' qe-textbook-shell--reader' : '')}>

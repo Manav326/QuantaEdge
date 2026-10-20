@@ -149,11 +149,15 @@ export default function StudentCoursesPage() {
       {error && <p className={styles.error} role="alert">{error}</p>}
       {loading && <div className={styles.empty} role="status">Loading your courses…</div>}
       {!loading && !error && owned.length === 0 && (
-        <div className={styles.empty}>
-          <h2>No courses in your account yet</h2>
-          <p>Explore the Marketplace to find a course. Once the purchase or enrolment is confirmed, it will appear here.</p>
-          <Link className={styles.primaryLink} href="/student/marketplace">Explore Marketplace</Link>
-        </div>
+        <StudentEmptyState
+          icon="courses"
+          title={<UiText message="student.empty.courses.title" />}
+          message={<UiText message="student.empty.courses.message" />}
+          primaryActionHref="/student/marketplace"
+          primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+          secondaryActionHref="/student"
+          secondaryActionLabel={<UiText message="web.navigation.student.today" />}
+        />
       )}
       {!loading && owned.length > 0 && (
         <section className={styles.grid} aria-label="Your enrolled courses">

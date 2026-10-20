@@ -303,10 +303,16 @@ export default function StudentMarketplacePage() {
         </div>
       )}
       {!loading && !loadError && offers.length === 0 && (
-        <div className={styles.stateCard}>
-          <h2>No published course offers yet</h2>
-          <p>Published courses will appear here when they are made available for purchase.</p>
-        </div>
+        <StudentEmptyState
+          icon="marketplace"
+          title={<UiText message="student.empty.marketplace.title" />}
+          message={<UiText message="student.empty.marketplace.message" />}
+          onRetry={() => void loadOffers()}
+          retryLabel={<UiText message="student.empty.marketplace.refresh" />}
+          retryDisabled={loading}
+          secondaryActionHref="/student/courses"
+          secondaryActionLabel={<UiText message="web.navigation.student.allCourses" />}
+        />
       )}
 
       {!loading && !loadError && offers.length > 0 && (
