@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1296,
+    "assets_selected": 1297,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1292,
-    "assets_remaining": 786,
+    "assets_analyzed": 1293,
+    "assets_remaining": 785,
     "assets_completion_percent": 62.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1291,
+    "assets_skipped_from_checkpoint": 1292,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:40:32Z"
+      "checkpointed_at": "2026-10-20T21:45:26Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:41:24Z"
+      "checkpointed_at": "2026-10-20T21:46:19Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:42:34Z"
+      "checkpointed_at": "2026-10-20T21:47:28Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:43:16Z"
+      "checkpointed_at": "2026-10-20T21:48:10Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43254,6 +43254,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:44:23Z"
+    },
+    {
+      "asset_id": "a8a35f50f47307ed543f58e1",
+      "asset_sha256": "b50980474a675f2927101bcbd39caa4bac943523984547439af7c3430d7f095f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 129,
+      "asset_path": "assets/b50980474a675f2927101bcbd39caa4bac943523984547439af7c3430d7f095f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "639e0eeefb7ad11a739f4b551820b316d64b89d7df947c37078501bcc668fadc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass of brown liquid, possibly tea or coffee, with a clear glass rim.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "dissolution",
+          "soluble substances",
+          "liquid in a glass"
+        ],
+        "context_relation": "The image is related to the concept of dissolution and solubility, as it shows a clear glass of a brown liquid, which could be a result of dissolving a substance in water.",
+        "limitations": [
+          "The image does not provide specific details about the substance dissolved in water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:49:20Z"
     }
   ]
 }

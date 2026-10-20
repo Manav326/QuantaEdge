@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1319,
-    "successful_visual_analyses": 1296,
-    "missing_visual_analyses": 759,
+    "raw_analysis_result_rows": 1320,
+    "successful_visual_analyses": 1297,
+    "missing_visual_analyses": 758,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 782,
+    "unresolved_count": 781,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49804,9 +49804,22 @@
       "asset_path": "assets/b50980474a675f2927101bcbd39caa4bac943523984547439af7c3430d7f095f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass of brown liquid, possibly tea or coffee, with a clear glass rim.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "dissolution",
+          "soluble substances",
+          "liquid in a glass"
+        ],
+        "context_relation": "The image is related to the concept of dissolution and solubility, as it shows a clear glass of a brown liquid, which could be a result of dissolving a substance in water.",
+        "limitations": [
+          "The image does not provide specific details about the substance dissolved in water."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
