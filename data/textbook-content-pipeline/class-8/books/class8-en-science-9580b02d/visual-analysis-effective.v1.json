@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ec50703e5d101af7e3b8c2735cf72b9712de2c8536aa9426eda9e154ec3cd457",
+  "raw_analysis_sha256": "9ec1553dc8842db9a9299fdf5f0e7ff1202327ae603ba575829ac8f702042cb1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:06:05Z",
+      "checkpointed_at": "2026-10-20T17:09:19Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:06:49Z",
+      "checkpointed_at": "2026-10-20T17:10:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:07:19Z",
+      "checkpointed_at": "2026-10-20T17:10:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T17:08:08Z",
+      "checkpointed_at": "2026-10-20T17:11:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -56192,6 +56192,78 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1405965931e3e9909b9db0f3",
+      "asset_sha256": "812c0144efffb541bdd8859349fd685d01670306652a45770cb8458a957d3387",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 84,
+      "asset_path": "page-0084.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "686f3a6ba10c803f918bf7a5d43ac6572c12ff6705bcdb5f5a36cf8a902f4ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing different actions and their effects of forces.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Different actions and their effects",
+          "S.No.",
+          "Action",
+          "Push/Pull",
+          "Effect",
+          "1. Your friend holding your moving bicycle from behind to stop it",
+          "2. Hitting a moving ball with a bat",
+          "3. Pressing an inflated balloon",
+          "4. Applying force on objects"
+        ],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect",
+          "action"
+        ],
+        "context_relation": "The table is a continuation of the previous text about forces and their effects.",
+        "limitations": [
+          "The table is incomplete and only lists three actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T17:14:08Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing different actions and their effects of forces.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Different actions and their effects",
+          "S.No.",
+          "Action",
+          "Push/Pull",
+          "Effect",
+          "1. Your friend holding your moving bicycle from behind to stop it",
+          "2. Hitting a moving ball with a bat",
+          "3. Pressing an inflated balloon",
+          "4. Applying force on objects"
+        ],
+        "concepts": [
+          "force",
+          "push",
+          "pull",
+          "effect",
+          "action"
+        ],
+        "context_relation": "The table is a continuation of the previous text about forces and their effects.",
+        "limitations": [
+          "The table is incomplete and only lists three actions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
