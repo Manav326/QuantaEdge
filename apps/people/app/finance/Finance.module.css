@@ -30,3 +30,15 @@
 .einvoiceReview .einvoiceHelp{grid-column:1/-1!important;font-size:10px;color:#85521b;line-height:1.6}
 @media(max-width:900px){.entityRow{grid-template-columns:1fr}.einvoiceReview{grid-template-columns:1fr}}
 @media(max-width:660px){.entityActions{justify-content:flex-start}.seriesInline{align-items:flex-start;flex-direction:column}}
+
+.documentActions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.refundPanel{display:grid;gap:14px;margin-top:18px;padding:18px;border:1px solid #f4d4bc;border-radius:16px;background:linear-gradient(145deg,#fffaf5,#fff)}
+.refundPanel h2,.refundPanel h3{margin:0;color:var(--ink)}
+.refundPanel h3{font-size:14px}
+.refundPanel p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.65}
+.refundForm{display:grid;grid-template-columns:minmax(150px,.65fr) minmax(240px,1.5fr) auto;align-items:end;gap:10px}
+.refundForm label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:800;color:#475467}
+.refundForm input{width:100%;min-width:0;min-height:39px;border:1px solid #d9dfe8;border-radius:10px;padding:9px 11px;background:#fff;color:#17233c;font-size:12px}
+.refundForm input:focus{outline:none;border-color:#fb923c;box-shadow:0 0 0 3px #f9731617}
+.refundNote{padding:10px 12px;border:1px solid #dbe7f2;border-radius:10px;background:#f7fbff!important;color:#334155!important}
+@media(max-width:850px){.refundForm{grid-template-columns:1fr}.documentActions{min-width:150px}}
