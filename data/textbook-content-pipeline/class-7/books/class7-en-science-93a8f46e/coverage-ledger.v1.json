@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2030,
-    "successful_visual_analyses": 1922,
-    "missing_visual_analyses": 5458,
+    "raw_analysis_result_rows": 2033,
+    "successful_visual_analyses": 1925,
+    "missing_visual_analyses": 5455,
     "failed_visual_analyses": 108,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5566,
+    "unresolved_count": 5563,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -83727,9 +83727,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83745,9 +83754,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -83763,9 +83781,38 @@
       "asset_path": "page-0062.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials, specifically malleability. It includes instructions for an activity involving the malleability of different materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "4.1 Properties of Materials",
+          "4.1.1 Malleability",
+          "Activity 4.1: Let us explore",
+          "Caution—Conduct this activity under the supervision of your teacher or an adult.",
+          "Collect some waste pieces of copper and aluminium, an iron nail, a piece of coal, a pea-sized lump of sulfur (gandhak), and a block of wood.",
+          "Recall the chapter 'Materials Around Us' in the Grade 6 Science textbook Curiosity and observe the appearances of the above items. Are they lustrous? Also, note whether they are hard or soft and record your observations in Table 4.1.",
+          "Now, place each of these items one by one on any hard surface and beat them with a hammer (Fig. 4.2).",
+          "What do you think will happen? Do the objects become slightly flattened or do they break into pieces?",
+          "Record your observations in Table 4.1.",
+          "Fig. 4.2: Beating an iron nail with a hammer"
+        ],
+        "concepts": [
+          "malleability",
+          "properties of materials",
+          "beating",
+          "hardness",
+          "luster",
+          "observation",
+          "materials around us"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact steps of the activity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

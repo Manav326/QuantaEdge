@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ebf18b2b58656e617ebbdfcdcfd5e9972ba6314be321d90c804bc3484ea660ab",
+  "raw_analysis_sha256": "cf35f7266c92dc7df4316c84b588fade2b1b4f7556704d5707cd040d2d683a6a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:40:03Z",
+      "checkpointed_at": "2026-10-20T21:43:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T21:40:23Z",
+      "checkpointed_at": "2026-10-20T21:43:38Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -115006,6 +115006,166 @@
         "context_relation": "The image is a part of a larger educational content, specifically a textbook page about the process of making and shaping iron items.",
         "limitations": [
           "The image does not provide specific details about the process or materials used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "065b454cc31146d413bedd3d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:43:45Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "54d55064a55516b6d6d233c7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:43:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e27731c1704a00afb5697545",
+      "asset_sha256": "0fc957705230c91e2b3ad33e7fb7da81f0c3836bb601ec661f79efe3d95dd356",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 62,
+      "asset_path": "page-0062.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5871e0d2a73a5a28da42fe7826e14b3403eb687e3ec482bbc76aea3268ef893a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials, specifically malleability. It includes instructions for an activity involving the malleability of different materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "4.1 Properties of Materials",
+          "4.1.1 Malleability",
+          "Activity 4.1: Let us explore",
+          "Caution—Conduct this activity under the supervision of your teacher or an adult.",
+          "Collect some waste pieces of copper and aluminium, an iron nail, a piece of coal, a pea-sized lump of sulfur (gandhak), and a block of wood.",
+          "Recall the chapter 'Materials Around Us' in the Grade 6 Science textbook Curiosity and observe the appearances of the above items. Are they lustrous? Also, note whether they are hard or soft and record your observations in Table 4.1.",
+          "Now, place each of these items one by one on any hard surface and beat them with a hammer (Fig. 4.2).",
+          "What do you think will happen? Do the objects become slightly flattened or do they break into pieces?",
+          "Record your observations in Table 4.1.",
+          "Fig. 4.2: Beating an iron nail with a hammer"
+        ],
+        "concepts": [
+          "malleability",
+          "properties of materials",
+          "beating",
+          "hardness",
+          "luster",
+          "observation",
+          "materials around us"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact steps of the activity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461594059",
+      "checkpointed_at": "2026-10-20T21:45:28Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials, specifically malleability. It includes instructions for an activity involving the malleability of different materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "4.1 Properties of Materials",
+          "4.1.1 Malleability",
+          "Activity 4.1: Let us explore",
+          "Caution—Conduct this activity under the supervision of your teacher or an adult.",
+          "Collect some waste pieces of copper and aluminium, an iron nail, a piece of coal, a pea-sized lump of sulfur (gandhak), and a block of wood.",
+          "Recall the chapter 'Materials Around Us' in the Grade 6 Science textbook Curiosity and observe the appearances of the above items. Are they lustrous? Also, note whether they are hard or soft and record your observations in Table 4.1.",
+          "Now, place each of these items one by one on any hard surface and beat them with a hammer (Fig. 4.2).",
+          "What do you think will happen? Do the objects become slightly flattened or do they break into pieces?",
+          "Record your observations in Table 4.1.",
+          "Fig. 4.2: Beating an iron nail with a hammer"
+        ],
+        "concepts": [
+          "malleability",
+          "properties of materials",
+          "beating",
+          "hardness",
+          "luster",
+          "observation",
+          "materials around us"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact steps of the activity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
