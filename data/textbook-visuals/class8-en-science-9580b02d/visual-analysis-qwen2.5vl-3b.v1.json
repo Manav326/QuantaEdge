@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1040,
+    "assets_selected": 1042,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1037,
-    "assets_remaining": 1254,
-    "assets_completion_percent": 45.3,
+    "assets_analyzed": 1039,
+    "assets_remaining": 1252,
+    "assets_completion_percent": 45.4,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1035,
+    "assets_skipped_from_checkpoint": 1037,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:34:24Z"
+      "checkpointed_at": "2026-10-20T04:38:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:34:59Z"
+      "checkpointed_at": "2026-10-20T04:39:07Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
-      "checkpointed_at": "2026-10-20T04:35:21Z"
+      "checkpointed_at": "2026-10-20T04:39:31Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33481,6 +33481,78 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39353199646",
       "checkpointed_at": "2026-10-20T04:37:48Z"
+    },
+    {
+      "asset_id": "aa8891a6a87e7238027916fc",
+      "asset_sha256": "045049e4ded7456ca642afe74843c62b245696181e9ff621b982096114ad3696",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/045049e4ded7456ca642afe74843c62b245696181e9ff621b982096114ad3696.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a battery connected to a spring with two paper clips attached to the ends.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A battery connected to a spring with two paper clips attached to the ends."
+        ],
+        "concepts": [
+          "battery",
+          "spring",
+          "paper clips"
+        ],
+        "context_relation": "The image is a visual representation of a simple electrical circuit setup.",
+        "limitations": [
+          "The image does not provide specific details about the battery's polarity or the spring's properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:40:10Z"
+    },
+    {
+      "asset_id": "9516a554955e5d635e766b6d",
+      "asset_sha256": "a1345d5a84d49f2ee0f9eabc878461f77cd3f76125df0326f38b69150a594a2b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/a1345d5a84d49f2ee0f9eabc878461f77cd3f76125df0326f38b69150a594a2b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ce2c8f691ad2f6141f0fe552ef194e4eeee44d415eb0eb2bc8523d167e9d7f6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two compasses are placed near the ends of a cylindrical coil, connected to a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Place the compasses near the two ends of the cylindrical coil (Fig. 4.3b).",
+          "Connect the two ends of the coil with the terminals of the cell as shown in Fig. 4.3c and observe the magnetic compasses.",
+          "Disconnect the wire from the cell."
+        ],
+        "concepts": [
+          "magnetic compass",
+          "cylindrical coil",
+          "battery",
+          "deflection"
+        ],
+        "context_relation": "The image is a diagram illustrating an experiment involving a magnetic compass and a cylindrical coil connected to a battery.",
+        "limitations": [
+          "The compasses are not shown in motion.",
+          "The battery is not shown in use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39353199646",
+      "checkpointed_at": "2026-10-20T04:40:52Z"
     }
   ]
 }
