@@ -206,6 +206,11 @@ public class CourseRefundLedgerService {
     return refundView(refundId);
   }
 
+  @Transactional(readOnly=true)
+  public PreparedRefund prepareRefundForRefresh(long refundId,long actorStaffId) {
+    return refundById(refundId);
+  }
+
   @Transactional
   public Map<String,Object> markReconciliationRequired(long refundId,long actorStaffId,String safeReason) {
     Map<String,Object> row=one("select id,status from course_payment_refund where id=? for update",refundId);
