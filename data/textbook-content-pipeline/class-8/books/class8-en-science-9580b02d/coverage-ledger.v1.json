@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1161,
-    "successful_visual_analyses": 1139,
-    "missing_visual_analyses": 1130,
+    "raw_analysis_result_rows": 1162,
+    "successful_visual_analyses": 1140,
+    "missing_visual_analyses": 1129,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1152,
+    "unresolved_count": 1151,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43564,9 +43564,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing harder against the wind, while Ragini is riding against the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "summer vacation",
+          "exploring landscapes",
+          "pushing pedals",
+          "exploring forces"
+        ],
+        "context_relation": "The image shows a scenario where two girls are cycling in a windy day, with one of them pushing against the wind and the other riding against it.",
+        "limitations": [
+          "The image does not show the actual bicycles or the landscape."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

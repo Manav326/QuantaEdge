@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1139,
+    "assets_selected": 1140,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1135,
-    "assets_remaining": 1156,
-    "assets_completion_percent": 49.5,
+    "assets_analyzed": 1136,
+    "assets_remaining": 1155,
+    "assets_completion_percent": 49.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1134,
+    "assets_skipped_from_checkpoint": 1135,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:32:23Z"
+      "checkpointed_at": "2026-10-20T16:36:35Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:33:08Z"
+      "checkpointed_at": "2026-10-20T16:37:20Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:33:38Z"
+      "checkpointed_at": "2026-10-20T16:37:50Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:34:27Z"
+      "checkpointed_at": "2026-10-20T16:38:39Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -37149,6 +37149,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
       "checkpointed_at": "2026-10-20T16:35:35Z"
+    },
+    {
+      "asset_id": "50308cd601cf1ae380c92e39",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing harder against the wind, while Ragini is riding against the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "summer vacation",
+          "exploring landscapes",
+          "pushing pedals",
+          "exploring forces"
+        ],
+        "context_relation": "The image shows a scenario where two girls are cycling in a windy day, with one of them pushing against the wind and the other riding against it.",
+        "limitations": [
+          "The image does not show the actual bicycles or the landscape."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:39:14Z"
     }
   ]
 }

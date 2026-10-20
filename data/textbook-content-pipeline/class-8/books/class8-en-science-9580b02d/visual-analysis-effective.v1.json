@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0e742edd60495e6ed472a04d85d596d025d64d8108ca90b8af93feaadec1855f",
+  "raw_analysis_sha256": "5b215ca56228bf600278f1a7ba046c0edde8ee595cac1aa71d1a3e5aa91fc952",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:32:23Z",
+      "checkpointed_at": "2026-10-20T16:36:35Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:33:08Z",
+      "checkpointed_at": "2026-10-20T16:37:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:33:38Z",
+      "checkpointed_at": "2026-10-20T16:37:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -51471,7 +51471,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T16:34:27Z",
+      "checkpointed_at": "2026-10-20T16:38:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -55732,6 +55732,70 @@
         "context_relation": "The image shows a person lifting a box, which could be related to the theme of physical exertion or lifting heavy objects.",
         "limitations": [
           "The image does not provide specific details about the person or the box."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "50308cd601cf1ae380c92e39",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2d761d64df0f438bfcff6dda66ed1c8187f37d46127a429648fa8262ba60964f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing harder against the wind, while Ragini is riding against the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "summer vacation",
+          "exploring landscapes",
+          "pushing pedals",
+          "exploring forces"
+        ],
+        "context_relation": "The image shows a scenario where two girls are cycling in a windy day, with one of them pushing against the wind and the other riding against it.",
+        "limitations": [
+          "The image does not show the actual bicycles or the landscape."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T16:39:14Z",
+      "effective_analysis": {
+        "visual_summary": "A windy day with two girls, Sonali and Ragini, riding bicycles. Sonali is pushing harder against the wind, while Ragini is riding against the wind. They are excited to explore the beautiful landscapes around their village.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "63",
+          "It was a windy day. Sonali and Ragini were excited to go cycling. Their summer vacation had just begun, and they wanted to explore the beautiful landscapes around their village. After pumping air into their bicycle tyres, they set off. As they rode through the village, the wind rushed past them. \"Oh",
+          "Their ride took them up a long path to a h"
+        ],
+        "concepts": [
+          "wind",
+          "cycling",
+          "summer vacation",
+          "exploring landscapes",
+          "pushing pedals",
+          "exploring forces"
+        ],
+        "context_relation": "The image shows a scenario where two girls are cycling in a windy day, with one of them pushing against the wind and the other riding against it.",
+        "limitations": [
+          "The image does not show the actual bicycles or the landscape."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
