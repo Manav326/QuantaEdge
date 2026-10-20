@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1288,
+    "assets_selected": 1289,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1284,
-    "assets_remaining": 794,
+    "assets_analyzed": 1285,
+    "assets_remaining": 793,
     "assets_completion_percent": 61.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1283,
+    "assets_skipped_from_checkpoint": 1284,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:00:52Z"
+      "checkpointed_at": "2026-10-20T21:05:47Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:01:45Z"
+      "checkpointed_at": "2026-10-20T21:06:40Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:02:54Z"
+      "checkpointed_at": "2026-10-20T21:07:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
-      "checkpointed_at": "2026-10-20T21:03:36Z"
+      "checkpointed_at": "2026-10-20T21:08:32Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -42951,6 +42951,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39461591466",
       "checkpointed_at": "2026-10-20T21:04:44Z"
+    },
+    {
+      "asset_id": "85cf2863316cf1d4e76acba4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 127,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a8c2620f1cc1feccc9ed83378c4ba3cb778f4d07881df44e21e38fcf6b74dc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing four different materials used by four individuals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "D",
+          "C",
+          "B",
+          "A"
+        ],
+        "concepts": [
+          "opaque materials",
+          "translucent materials",
+          "materials used by individuals"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the source text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39461591466",
+      "checkpointed_at": "2026-10-20T21:08:49Z"
     }
   ]
 }
