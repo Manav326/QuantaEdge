@@ -11,9 +11,9 @@
     "assets_selected": 1112,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 1107,
-    "assets_remaining": 1184,
-    "assets_completion_percent": 48.3,
+    "assets_analyzed": 1108,
+    "assets_remaining": 1183,
+    "assets_completion_percent": 48.4,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 1107,
     "batch_limit": 5,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:22:12Z"
+      "checkpointed_at": "2026-10-20T14:30:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:22:57Z"
+      "checkpointed_at": "2026-10-20T14:31:12Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:23:27Z"
+      "checkpointed_at": "2026-10-20T14:31:42Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,7 +34413,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39419720549",
-      "checkpointed_at": "2026-10-20T14:24:16Z"
+      "checkpointed_at": "2026-10-20T14:32:31Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -36085,6 +36085,71 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "0848f96d06218428d19c38d7",
+      "asset_sha256": "1ddbe7c94941f43fb145d96622b1169fa5fcae693dbbb7aa34438070b9f9cbab",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 79,
+      "asset_path": "page-0079.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "977e597ed500e18523cf7c790cab2db92414b1d95dbc42a7bbe907cc618e6139",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question and matching exercise related to electric current and its effects.",
+        "visual_type": "table",
+        "visible_text": [
+          "3. An electric current flows through a nichrome wire for a short time.",
+          "(i) The wire becomes warm.",
+          "(ii) A magnetic compass placed below the wire is deflected.",
+          "Choose the correct option:",
+          "(a) Only (i) is correct",
+          "(b) Only (ii) is correct",
+          "(c) Both (i) and (ii) are correct",
+          "(d) Both (i) and (ii) are not correct",
+          "4. Match the items in Column A with those in Column B.",
+          "Column A               Column B",
+          "(i)    Voltaic cell            (a) Best suited for electric heater",
+          "(ii)    Electric iron            (b) Works on magnetic effect of electric current",
+          "(iii)    Nichrome wire            (c) Works on heating effect of electric current",
+          "(iv)    Electromagnet            (d) Generates electricity by chemical reactions",
+          "5. Nichrome wire is commonly used in electrical heating devices because it",
+          "(i) is a good conductor of electricity.",
+          "(ii) generates more heat for a given current.",
+          "(iii) is cheaper than copper.",
+          "(iv) is an insulator of electricity.",
+          "6. Electric heating devices (like an electric heater or a stove) are often considered more convenient than traditional heating methods (like burning firewood or charcoal). Give reason(s) to support this statement considering societal impact.",
+          "7. Look at the Fig. 4.4a. If the compass placed near the coil deflects: (i) Draw an arrow on the diagram to show the path of the electric current. (ii) Explain why the compass needle moves when current flows. (iii) Predict what would happen to the deflection if you reverse the battery terminals."
+        ],
+        "concepts": [
+          "electric current",
+          "magnetic compass",
+          "Nichrome wire",
+          "electric heater",
+          "magnetic effect",
+          "heating effect",
+          "chemical reactions",
+          "electricity generation",
+          "societal impact",
+          "electric heating devices",
+          "traditional heating methods",
+          "electric current path",
+          "compass needle movement",
+          "battery terminals"
+        ],
+        "context_relation": "electricity and its effects",
+        "limitations": [
+          "The image does not provide specific questions or exercises related to the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39419720549",
+      "checkpointed_at": "2026-10-20T14:35:49Z"
     }
   ]
 }
