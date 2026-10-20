@@ -325,3 +325,13 @@ Verification at this checkpoint:
 - Updated the printed invoice serial to use a compact financial year (for example `QE/26-27/000001`) while keeping the full financial year internally for sequence partitioning.
 - HRMS restricts invoice series prefixes to 1–3 characters, the API guards the final serial length, and migration V154 adds a database check limiting new invoice numbers to 16 characters. A sequence stops safely at 999,999 for each series/year rather than emitting an overlength serial.
 - This aligns the serial length with the current CBIC GST Rule 46 text. Tax rates, supply classification, place-of-supply decisions and applicability still require approval by the institution/platform's tax adviser before live issuance.
+
+
+### 2026-10-20 — E-invoice applicability fail-closed gate
+
+- Added V156 to store the reviewer, review timestamp and rationale for the HRMS legal-seller e-invoice applicability decision, with a database check that prevents a reviewed status without its evidence.
+- HRMS Finance & Billing now has a per-seller applicability control (NOT_REQUIRED or REQUIRED) and requires a review rationale/reference. The API records the decision in the existing append-only financial audit log. This is an HRMS human attestation, not a GST-portal validation or a substitute for the seller's professional tax advice.
+- Course checkout now fails closed if the decision has not been reviewed. A seller marked REQUIRED cannot create new paid checkouts until IRP/IRN submission and signed-QR verification are implemented and enabled. NOT_REQUIRED only clears this single gate; active seller, tax profile, GST registration where required, published invoice template and revenue-share policy gates still apply.
+- Added targeted service tests for unreviewed sellers, sellers marked REQUIRED, and pass-through behavior for a reviewed NOT_REQUIRED seller.
+- The next implementation priorities are: (1) audit and wire coupon/offer pricing into the server quote, tax base and share calculation; (2) implement idempotent full/partial refund and credit/debit-note adjustment events tied to the original document/allocation; (3) exercise captured sale/retry/refund across at least three institution tenants, including parent purchases; and (4) verify Actions on the exact current main SHA before release.
+- Release remains **NOT READY** until end-to-end provider, refund, coupon, multi-tenant and statutory review tests pass.
