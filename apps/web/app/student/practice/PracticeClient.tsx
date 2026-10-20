@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStudentCourseScope } from '../CourseScope';
 import { apiFetch } from '../../components/apiClient';
-import StudentEmptyState from '../../components/StudentEmptyState';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
