@@ -44,14 +44,14 @@ class StudentControllerTest {
         .thenReturn(java.util.List.of(Map.of("id", 91L, "display_name", "Class 6")));
     when(jdbc.queryForObject(contains("from curriculum_program_subject cps"), eq(Long.class), eq(91L), eq("science")))
         .thenReturn(1L);
-    when(learningMetrics.statsFor(70L, 91L, 1L, "science"))
+    when(learningMetrics.statsFor(7L, 91L, 1L, "science"))
         .thenReturn(new java.util.LinkedHashMap<>(Map.of("lessonStats", Map.of("total_lessons", 20L))));
 
     Map<String,Object> result = controller.me(91L, "science", student, TEST_TENANT);
 
     assertEquals(91L, result.get("courseId"));
     assertEquals("Class 6", result.get("courseName"));
-    verify(learningMetrics).statsFor(70L, 91L, 1L, "science");
+    verify(learningMetrics).statsFor(7L, 91L, 1L, "science");
   }
 
   @Test
@@ -62,7 +62,7 @@ class StudentControllerTest {
         .thenReturn(0L);
 
     assertThrows(SecurityException.class, () -> controller.me(91L, "history", student, TEST_TENANT));
-    verify(learningMetrics, never()).statsFor(70L, 91L, 1L, "history");
+    verify(learningMetrics, never()).statsFor(7L, 91L, 1L, "history");
   }
 
   @Test
