@@ -15,11 +15,15 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.dao.DataAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/guardians")
 public class GuardianController {
+  private static final Logger LOGGER = LoggerFactory.getLogger(GuardianController.class);
   private final JdbcTemplate jdbc; private final AuthorizationService authorization; private final AuthService auth;
   private final LearningMetricsService learningMetrics;
   private final InstitutionAuthService institutionAuth;
@@ -517,6 +521,7 @@ public class GuardianController {
 
   /** Independent courses are assigned to a child separately from class/subject selection. */
   @GetMapping("/children/{studentId}/programs")
+  @Transactional(readOnly = true)
   public List<Map<String,Object>> childPrograms(@PathVariable long studentId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -525,64 +530,73 @@ public class GuardianController {
     long institutionId=requireInstitution(tenant);
     requireFullGuardianChildAccess(context.userId(),studentId);
     requireChildInstitutionMembership(studentId,institutionId);
-    List<Map<String,Object>> programs=jdbc.queryForList("""
-      select distinct p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
-        exists(select 1 from student_program_enrollment spe
-          where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
-            and spe.status='ACTIVE') as enrolled,
-        exists(select 1 from student_program_enrollment spe
-          where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
-            and spe.status='PAUSED') as paused,
-        exists(select 1
-          from institution_marketplace_offer free_offer
-          join institution_course_assignment free_assignment
-            on free_assignment.id=free_offer.assignment_id
-           and free_assignment.institution_id=free_offer.institution_id
-           and free_assignment.status='ASSIGNED'
-          where free_offer.institution_id=assignment.institution_id
-            and free_offer.course_id=p.id and free_offer.status='PUBLISHED'
-            and free_offer.price_paise=0 and free_offer.currency='INR') as free_offer
-      from curriculum_program p
-      join institution_course_assignment assignment on assignment.institution_id=?
-        and assignment.status='ASSIGNED'
-      join institution_course_release release on release.id=assignment.course_release_id
-        and release.program_id=p.id
-      join institution_tenant t on t.id=assignment.institution_id and t.status='ACTIVE'
-      where p.status='ACTIVE' and p.code<>'GENERAL'
-        and (
-          exists(select 1 from institution_marketplace_offer o
-            where o.institution_id=? and o.course_id=p.id and o.assignment_id=assignment.id
-              and o.status='PUBLISHED')
-          or exists(select 1 from student_program_enrollment e
-            where e.institution_id=? and e.student_id=? and e.program_id=p.id
-              and e.status in ('ACTIVE','PAUSED'))
-          or exists(select 1 from course_purchase cp
-            where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id)
-          or exists(select 1 from student_course_access_grant g
-            where g.institution_id=? and g.student_id=? and g.course_id=p.id)
-          or exists(select 1 from course_entitlement ce
-            where ce.institution_id=? and ce.course_id=p.id
-              and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
-        )
-      order by p.display_name,p.id
-      """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
-          institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
-    for(Map<String,Object> program:programs) {
-      long courseId=((Number)program.get("id")).longValue();
-      program.put("subjects",jdbc.queryForList("""
-        select s.id,s.code as subject_code,s.display_name as subject_name,
-          c.code as curriculum_class_code,count(distinct ch.id) as chapters,count(distinct l.id) as lessons
-        from curriculum_program_subject ps
-        join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
-        join curriculum_class c on c.id=s.class_id
-        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
-        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-        where ps.program_id=?
-        group by s.id,s.code,s.display_name,c.code,s.sort_order
-        order by ps.sort_order,s.sort_order,s.id
-        """,courseId));
+    List<Map<String,Object>> programs;
+    try {
+      programs=jdbc.queryForList("""
+            select distinct p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
+              exists(select 1 from student_program_enrollment spe
+                where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
+                  and spe.status='ACTIVE') as enrolled,
+              exists(select 1 from student_program_enrollment spe
+                where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
+                  and spe.status='PAUSED') as paused,
+              exists(select 1
+                from institution_marketplace_offer free_offer
+                join institution_course_assignment free_assignment
+                  on free_assignment.id=free_offer.assignment_id
+                 and free_assignment.institution_id=free_offer.institution_id
+                 and free_assignment.status='ASSIGNED'
+                where free_offer.institution_id=assignment.institution_id
+                  and free_offer.course_id=p.id and free_offer.status='PUBLISHED'
+                  and free_offer.price_paise=0 and free_offer.currency='INR') as free_offer
+            from curriculum_program p
+            join institution_course_assignment assignment on assignment.institution_id=?
+              and assignment.status='ASSIGNED'
+            join institution_course_release release on release.id=assignment.course_release_id
+              and release.program_id=p.id
+            join institution_tenant t on t.id=assignment.institution_id and t.status='ACTIVE'
+            where p.status='ACTIVE' and p.code<>'GENERAL'
+              and (
+                exists(select 1 from institution_marketplace_offer o
+                  where o.institution_id=? and o.course_id=p.id and o.assignment_id=assignment.id
+                    and o.status='PUBLISHED')
+                or exists(select 1 from student_program_enrollment e
+                  where e.institution_id=? and e.student_id=? and e.program_id=p.id
+                    and e.status in ('ACTIVE','PAUSED'))
+                or exists(select 1 from course_purchase cp
+                  where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id)
+                or exists(select 1 from student_course_access_grant g
+                  where g.institution_id=? and g.student_id=? and g.course_id=p.id)
+                or exists(select 1 from course_entitlement ce
+                  where ce.institution_id=? and ce.course_id=p.id
+                    and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
+              )
+            order by p.display_name,p.id
+            """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
+                institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
+            for(Map<String,Object> program:programs) {
+            long courseId=((Number)program.get("id")).longValue();
+            program.put("subjects",jdbc.queryForList("""
+              select s.id,s.code as subject_code,s.display_name as subject_name,
+                c.code as curriculum_class_code,count(distinct ch.id) as chapters,count(distinct l.id) as lessons
+              from curriculum_program_subject ps
+              join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
+              join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+                and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+              join curriculum_class c on c.id=s.class_id
+              left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+              left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+              where ps.program_id=?
+              group by s.id,s.code,s.display_name,c.code,s.sort_order
+              order by ps.sort_order,s.sort_order,s.id
+              """,courseId));
+          }
+          } catch (DataAccessException ex) {
+      // Keep the tenant and caller context in the server log so a genuine database/schema
+      // failure can be diagnosed without exposing SQL details to the browser.
+      LOGGER.error("Failed to load guardian child course catalogue (guardianUserId={}, studentId={}, institutionId={})",
+          context.userId(), studentId, institutionId, ex);
+      throw ex;
     }
     return programs;
   }
