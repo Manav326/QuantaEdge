@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2108,
+    "assets_selected": 2111,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2106,
-    "assets_remaining": 5382,
-    "assets_completion_percent": 28.1,
+    "assets_analyzed": 2109,
+    "assets_remaining": 5379,
+    "assets_completion_percent": 28.2,
     "assets_failed": 102,
-    "assets_skipped_from_checkpoint": 2103,
+    "assets_skipped_from_checkpoint": 2106,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:36:17Z"
+      "checkpointed_at": "2026-10-21T20:38:24Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:36:41Z"
+      "checkpointed_at": "2026-10-21T20:38:48Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -80490,6 +80490,116 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T20:37:34Z"
+    },
+    {
+      "asset_id": "b4ca000dad65da563547ddbd",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple illustration of a piece of metal and a butterfly, possibly representing electrical conductivity.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical conductivity",
+          "metal",
+          "butterfly"
+        ],
+        "context_relation": "The image may be related to the concept of electrical conductivity, as it shows a piece of metal and a butterfly, which could symbolize different materials or objects.",
+        "limitations": [
+          "The image does not provide specific details about the electrical properties of the materials shown."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:39:28Z"
+    },
+    {
+      "asset_id": "bea735f45852f51c49e4af0e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table summarizing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "Observation",
+          "Good conductor of electricity or poor conductor of electricity",
+          "Observation",
+          "S.No. Object/Material (bulb glows/does not glow)"
+        ],
+        "concepts": [
+          "Conduction of electricity",
+          "Good conductor",
+          "Poor conductor",
+          "Observation"
+        ],
+        "context_relation": "The table is a summary of the conduction of electricity by different materials, with a focus on whether the materials are good conductors or poor conductors.",
+        "limitations": [
+          "The table does not provide specific examples or materials for each observation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:39:45Z"
+    },
+    {
+      "asset_id": "b81e28234b91b16dcb772d35",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table summarizing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "Observation",
+          "Good conductor of electricity or poor conductor of electricity",
+          "Observation",
+          "S.No.   Object/Material   (bulb glows/does not glow)"
+        ],
+        "concepts": [
+          "Conduction of electricity",
+          "Good conductor",
+          "Poor conductor",
+          "Observation"
+        ],
+        "context_relation": "The table is a summary of observations made during an experiment to determine the conduction of electricity by different materials.",
+        "limitations": [
+          "The table does not provide specific details about the materials tested or the conditions under which the observations were made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:40:02Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2210,
-    "successful_visual_analyses": 2108,
-    "missing_visual_analyses": 5278,
+    "raw_analysis_result_rows": 2213,
+    "successful_visual_analyses": 2111,
+    "missing_visual_analyses": 5275,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5380,
+    "unresolved_count": 5377,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90373,9 +90373,22 @@
       "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple illustration of a piece of metal and a butterfly, possibly representing electrical conductivity.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical conductivity",
+          "metal",
+          "butterfly"
+        ],
+        "context_relation": "The image may be related to the concept of electrical conductivity, as it shows a piece of metal and a butterfly, which could symbolize different materials or objects.",
+        "limitations": [
+          "The image does not provide specific details about the electrical properties of the materials shown."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90391,9 +90404,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table summarizing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "Observation",
+          "Good conductor of electricity or poor conductor of electricity",
+          "Observation",
+          "S.No. Object/Material (bulb glows/does not glow)"
+        ],
+        "concepts": [
+          "Conduction of electricity",
+          "Good conductor",
+          "Poor conductor",
+          "Observation"
+        ],
+        "context_relation": "The table is a summary of the conduction of electricity by different materials, with a focus on whether the materials are good conductors or poor conductors.",
+        "limitations": [
+          "The table does not provide specific examples or materials for each observation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90409,9 +90442,29 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table summarizing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "Observation",
+          "Good conductor of electricity or poor conductor of electricity",
+          "Observation",
+          "S.No.   Object/Material   (bulb glows/does not glow)"
+        ],
+        "concepts": [
+          "Conduction of electricity",
+          "Good conductor",
+          "Poor conductor",
+          "Observation"
+        ],
+        "context_relation": "The table is a summary of observations made during an experiment to determine the conduction of electricity by different materials.",
+        "limitations": [
+          "The table does not provide specific details about the materials tested or the conditions under which the observations were made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
