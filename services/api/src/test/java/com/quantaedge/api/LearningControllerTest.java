@@ -95,11 +95,36 @@ class LearningControllerTest {
         eq(7L), eq(1L), eq(91L),
         eq("hi"), eq("hi"), eq("hi"), eq("hi"),
         eq(91L), eq(91L), eq(91L), eq(91L),
-        eq("maths"), eq(91L));
+        eq("maths"), eq("maths"), eq(91L));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));
     assertTrue(sql.getValue().contains("status='IN_PROGRESS'"));
+  }
+
+  @Test
+  void allSubjectsCatalogueReturnsEveryMappedSubjectForTheSelectedCourse() {
+    when(jdbc.queryForList(contains("select p.id"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 91L)));
+    when(jdbc.queryForList(contains("select l.id,l.code"), any(Object[].class)))
+        .thenReturn(List.of(
+            Map.of("id", 99L, "subject_code", "maths", "title", "Fractions"),
+            Map.of("id", 100L, "subject_code", "science", "title", "Materials"),
+            Map.of("id", 101L, "subject_code", "english", "title", "Reading")));
+
+    List<Map<String,Object>> rows = controller.lessons("ALL", 91L, "hi", student, TEST_TENANT);
+
+    assertEquals(3, rows.size());
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(),
+        eq(7L), eq(1L), eq(91L),
+        eq("hi"), eq("hi"), eq("hi"), eq("hi"),
+        eq(91L), eq(91L), eq(91L), eq(91L),
+        eq(""), eq(""), eq(91L));
+    assertTrue(sql.getValue().contains("course_subject.program_id=?"));
+    assertTrue(sql.getValue().contains("(? = '' or lower(s.code)=lower(?))"));
+    verify(jdbc, never()).queryForObject(contains("where cps.program_id=? and lower(s.code)=lower(?)"),
+        eq(Long.class), any(Object[].class));
   }
 
   @Test
