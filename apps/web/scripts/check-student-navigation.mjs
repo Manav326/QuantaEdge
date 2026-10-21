@@ -347,21 +347,24 @@ assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   'Legacy certificate rows must be assigned to a course only when the existing class/subject mapping is unambiguous, preserving issued artifacts.');
 
 assert.ok(workspaceLayout.includes("{ href: '/student/learn', message: 'web.navigation.student.learnTopics'") &&
-  workspaceLayout.includes("{ href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons'"),
-  'The original Learn navigation remains primary while structured lessons remain an optional separate entry.');
+  workspaceLayout.includes("{ href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons'") &&
+  workspaceLayout.includes('showWorkspaceBack') && workspaceLayout.includes('goBackWithinWorkspace') &&
+  JSON.parse(englishUiCatalog)['web.navigation.student.structuredLessons'] === 'Resume lesson' &&
+  JSON.parse(hinglishUiCatalog)['web.navigation.student.structuredLessons'] === 'पाठ फिर से शुरू करें',
+  'Learn navigation must distinguish Lessons and Topics from Resume Lesson, with a shared contextual Back action.');
 const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
 assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
   'Course-scoped learner answer writes must bind institution/course columns and keep answered_at as the database timestamp.');
 const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
-assert.ok(learnClient.includes("import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';") &&
-  learnClient.includes('inlineStructuredLesson &&') &&
-  learnClient.includes('<details className="qe-structured-optional-insert">') &&
-  learnClient.includes('initialActivityResponses={structuredActivityResponses}') &&
-  !learnClient.includes('if(lesson.structured_lesson) return') &&
+assert.ok(!learnClient.includes("import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';") &&
+  !learnClient.includes('inlineStructuredLesson') &&
+  !learnClient.includes('qe-structured-optional-insert') &&
+  !learnClient.includes('Optional structured lesson view') &&
+  learnClient.includes('learningBlocks.map(block=><Block') &&
+  learnClient.includes("['IMAGE','DIAGRAM','GIF','VIDEO','AUDIO','ANIMATION']") &&
+  learnClient.includes('const url=String(data.url||block.asset_url') &&
   structuredLessonContent.includes('showHeader = true') &&
-  learnClient.includes('onQuestionSubmit={saveStructuredQuestionResponse}') &&
-  learnClient.includes('setStructuredQuestionResponses(saved.responses)') &&
   learnClient.includes('q.saved_answer') &&
   learnClient.includes('q.saved_correct') &&
   learningController.includes('result.put("structured_lesson", structuredPayload)') &&
@@ -378,16 +381,17 @@ assert.ok(learnClient.includes("import StructuredLessonExperience from '../struc
   structuredLessonExperience.includes('{showExplanation && <StructuredLessonContent') &&
   learningStateServiceTest.includes('courseScopedAnswerInsertBindsTenantAndCourseWithMatchingPlaceholderCount') &&
   learningStateServiceTest.includes('values(?,?,?,?,?,?,?,now(),?,?)'),
-  'Structured lesson data, saved answers, question types and course-scoped writes must all have regression coverage.');
+  'Learn must render only the canonical ordered lesson blocks, while preserving the structured response contract for other clients.');
 
 assert.ok(
   structuredLessonContract.includes('export function databaseLessonIdFromArtifactId') &&
   structuredLessonContract.includes('/^db-lesson-([1-9][0-9]{0,17})$/') &&
-  structuredLessonsClient.includes('databaseLessonIdFromArtifactId(item.artifactId)') &&
-  structuredLessonsClient.includes("href = '/student/learn?' + query.toString()") &&
+  structuredLessonsClient.includes("'qe:student:last-opened-lesson:course-'") &&
+  structuredLessonsClient.includes("router.replace('/student/learn?' + target.toString())") &&
+  structuredLessonsClient.includes("subjectCode: 'ALL'") &&
   structuredLessonDetailClient.includes('databaseLessonIdFromArtifactId(artifactId)') &&
   structuredLessonDetailClient.includes("router.replace('/student/learn?' + params.toString())"),
-  'Relational lessons from the structured catalogue, including direct links, must render through the original Learn screen.'
+  'Resume Lesson must reopen the canonical Learn screen at the last course lesson and retain the Lessons and Topics return route.'
 );
 
 assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
@@ -708,10 +712,12 @@ assert.ok(certificatesPage.includes('error && certificates.length === 0 ? null :
   'Certificate inventory must not say there are no certificates when its data could not be loaded.');
 assert.ok(studentBooksClient.includes('!error && !courseError && visibleDocuments.length === 0'),
   'The textbook library must distinguish failed requests from a successfully empty published-resource list.');
-assert.ok(structuredLessonsClient.includes('onRetry={() => void loadCatalogue()}') &&
-  structuredLessonsClient.includes('(error || courseError) ? null :') &&
-  structuredLessonsClient.includes('StudentEmptyState'),
-  'An enrolled course with no published lessons needs a premium, retryable empty state, but not alongside an API error.');
+assert.ok(structuredLessonsClient.includes('qe:student:last-opened-lesson:course-') &&
+  structuredLessonsClient.includes("if (!lessonId)") &&
+  structuredLessonsClient.includes('There are no published lessons available in this course yet.') &&
+  structuredLessonsClient.includes('Open Lessons and Topics') &&
+  structuredLessonsClient.includes("router.replace('/student/learn?' + target.toString())"),
+  'Resume Lesson must handle missing history safely and offer a route to Lessons and Topics without opening a second catalogue.');
 assert.ok(studentClassesClient.includes('StudentEmptyState icon="classes"') &&
   studentClassesClient.includes("retryLabel={translateUi(locale, 'legacy.web.refresh.e9337860')}"),
   'Empty live and recorded classes must use the shared card and offer a retry.');
@@ -789,13 +795,14 @@ assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
   !structuredLessonContent.includes("if (!canDisplay && mode === 'student') return null;") &&
   structuredLessonContent.includes('qe-structured-unknown-block'),
   'Structured lesson blocks must keep backend order, show placeholders for blocked visuals and render unknown types safely.');
-assert.ok(learnClient.includes('qe-structured-optional-insert') && learnClient.includes('inlineStructuredLesson && (') &&
+assert.ok(!learnClient.includes('qe-structured-optional-insert') &&
+  !learnClient.includes('inlineStructuredLesson') &&
+  !learnClient.includes('Optional structured lesson view') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('learningBlocks.map(block=><Block') &&
   learnClient.includes('<section className="concept-card practice-launch-card">') &&
-  !learnClient.includes('if(lesson.structured_lesson) return') &&
   learnClient.includes('setTutorQuestionId(undefined);setTutorOpen(true)'),
-  'Optional structured blocks must stay inside the original lesson, MCQ and practice screen and share its tutor dock.');
+  'The original Learn screen must use the canonical ordered blocks, retain its existing MCQ/practice/tutor controls, and omit the parallel optional renderer.');
 assert.ok(structuredLessonDetailClient.includes('<TutorDock artifactId={artifactId}') &&
   structuredLessonDetailClient.includes('Ask the AI tutor about this topic'),
   'The standalone structured lesson detail must launch the shared tutor with its stable artifact ID.');
