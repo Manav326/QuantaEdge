@@ -18,6 +18,9 @@ class ApplicationStartupSmokeTest {
   private JdbcTemplate jdbc;
 
   @Autowired
+  private LearningController learningController;
+
+  @Autowired
   private LearningMetricsService learningMetrics;
 
   @Autowired
@@ -472,5 +475,26 @@ class ApplicationStartupSmokeTest {
     assertTrue(sessionStats.containsKey("sessions_30d"));
   }
 
+
+
+  @Test
+  @Transactional
+  void learningQuestionProjectionSqlExecutesAgainstMigratedTenantSchema() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant
+      where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+    Long classSixCourseId = jdbc.queryForObject("""
+      select id from curriculum_program
+      where code='CLASS_6' and status='ACTIVE' and curriculum_version='CURRENT'
+      order by id limit 1
+      """, Long.class);
+
+    // A non-existent learner/lesson returns zero rows, but PostgreSQL still parses the complete
+    // answer projection and bind list, including the tenant/course-scoped latest-attempt lateral join.
+    List<Map<String,Object>> result = learningController.publicQuestions(
+        Long.MAX_VALUE, Long.MAX_VALUE, classSixCourseId, "en", institutionId);
+    assertTrue(result != null, "The legacy learning question projection must execute on the migrated schema.");
+  }
 
 }

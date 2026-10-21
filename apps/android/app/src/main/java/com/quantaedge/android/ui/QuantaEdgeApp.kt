@@ -1776,22 +1776,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         structuredLessonPendingQuestionIds = structuredLessonPendingQuestionIds + questionId
         runTask {
             try {
-                val responseValue = JSONTokener(responseJson).nextValue()
-                val result = ApiClient.postObject(
-                    "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(artifactId) +
-                        "/questions/" + ApiClient.encodeQuery(questionId) + "/responses?courseId=" + currentCourseId + "&language=" + learningContentLanguage,
-                    JSONObject().put("response", responseValue)
+                // Keep response encoding and local state updates in one tested helper.
+                structuredLessonSavedResponses = postStructuredQuestionResponse(
+                    artifactId,
+                    questionId,
+                    currentCourseId,
+                    learningContentLanguage,
+                    responseJson,
+                    structuredLessonSavedResponses
                 )
-                val saved = JSONObject().put("response", responseValue)
-                    .put("status", result.optString("status"))
-                    .put("feedback", result.optString("feedback"))
-                result.optJSONObject("feedbackByLocale")?.let { saved.put("feedbackByLocale", it) }
-                if (result.has("score")) saved.put("score", result.optInt("score"))
-                if (result.has("maxScore")) saved.put("maxScore", result.optInt("maxScore"))
-                val all = JSONObject(structuredLessonSavedResponses.toString())
-                val questions = JSONObject(all.optJSONObject("questions")?.toString() ?: "{}")
-                questions.put(questionId, saved)
-                structuredLessonSavedResponses = all.put("questions", questions)
             } finally {
                 structuredLessonPendingQuestionIds = structuredLessonPendingQuestionIds - questionId
             }
@@ -1803,15 +1796,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         structuredLessonPendingActivityIds = structuredLessonPendingActivityIds + blockId
         runTask {
             try {
-                ApiClient.postObject(
-                    "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(artifactId) +
-                        "/activities/" + ApiClient.encodeQuery(blockId) + "/responses?courseId=" + currentCourseId,
-                    JSONObject().put("response", responseJson)
+                structuredLessonSavedResponses = postStructuredActivityResponse(
+                    artifactId,
+                    blockId,
+                    currentCourseId,
+                    responseJson,
+                    structuredLessonSavedResponses
                 )
-                val all = JSONObject(structuredLessonSavedResponses.toString())
-                val activities = JSONObject(all.optJSONObject("activities")?.toString() ?: "{}")
-                activities.put(blockId, JSONObject(responseJson))
-                structuredLessonSavedResponses = all.put("activities", activities)
             } finally {
                 structuredLessonPendingActivityIds = structuredLessonPendingActivityIds - blockId
             }
@@ -1832,31 +1823,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             answers.clear()
             feedbacks.clear()
             lessonAnswerLocks.clear()
-            val embeddedStructured = loadedLesson.optJSONObject("structured_lesson")
-            val embeddedArtifactId = embeddedStructured?.optString("artifact_id").orEmpty()
-            structuredLessonSavedResponses = if (embeddedArtifactId.isBlank()) JSONObject() else
-                runCatching {
-                    ApiClient.getObject("/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(embeddedArtifactId) +
-                        "/responses?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
-                }.getOrDefault(JSONObject())
+            structuredLessonSavedResponses = loadStructuredResponsesForLegacyLesson(
+                loadedLesson,
+                currentCourseId,
+                learningContentLanguage
+            )
             structuredLessonPendingQuestionIds = emptySet()
             structuredLessonPendingActivityIds = emptySet()
-            loadedLesson.optJSONArray("questions")?.objectItems()?.forEach { question ->
-                val questionId = question.longAny("id", "questionId", "question_id")
-                if (questionId <= 0L || !question.optBoolean("attempted")) return@forEach
-                val key = questionId.toString()
-                if (question.has("saved_answer") && !question.isNull("saved_answer")) {
-                    answers[key] = question.optString("saved_answer")
-                }
-                val hasGrade = question.has("saved_correct") && !question.isNull("saved_correct")
-                val correct = if (hasGrade) question.optBoolean("saved_correct") else null
-                lessonAnswerLocks[key] = com.quantaedge.android.domain.LessonAnswerPolicy.shouldLock(correct)
-                feedbacks[key] = when (correct) {
-                    true -> if (language == "hi") "सही उत्तर।" else "Correct answer."
-                    false -> if (language == "hi") "उत्तर सही नहीं था। दोबारा समझकर प्रयास करें।" else "The saved answer was incorrect. Review and try again."
-                    null -> if (language == "hi") "उत्तर सुरक्षित है; मूल्यांकन बाकी है।" else "Your answer is saved and may need review."
-                }
-            }
+
+            val restoredAnswers = restoreLegacyLessonAnswers(loadedLesson, language)
+            answers.putAll(restoredAnswers.answers)
+            feedbacks.putAll(restoredAnswers.feedbacks)
+            lessonAnswerLocks.putAll(restoredAnswers.answerLocks)
             route = AppRoute.LESSON
         }
     }
@@ -6202,6 +6180,7 @@ private fun LessonScreen(
                         lesson = optionalStructuredLesson,
                         language = structuredLanguage,
                         studentMode = true,
+                        showPractice = false,
                         savedResponses = structuredSavedResponses,
                         submittingQuestionIds = structuredSubmittingQuestionIds,
                         savingActivityIds = structuredSavingActivityIds,

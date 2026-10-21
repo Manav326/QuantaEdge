@@ -26,6 +26,7 @@ export type StructuredQuestion = {
   feedback_by_locale?: LocalizedText;
   legacy_question_type?: string;
   legacy_question_type_by_locale?: LocalizedText;
+  legacy_interaction_type?: 'MATCH' | 'ORDER';
   options?: StructuredOption[];
   correct_answer_ids?: string[];
   correct_answer?: boolean;

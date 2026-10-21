@@ -99,5 +99,8 @@ class LearningStateServiceTest {
     assertEquals(42L, bound[3]);
     assertEquals("A", bound[4]);
     assertEquals("A", bound[5]);
+    assertTrue(bound[6] == null, "Unknown grading must remain null, not be converted to false.");
+    assertTrue(bound[7] == null, "Inline lesson answers do not belong to a practice session.");
+    assertEquals("LESSON_INLINE", bound[8]);
   }
 }
