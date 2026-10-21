@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3d69d6960f585ce0b81e5f74f1470e0f5dfd7cd1deebf9d4e4c98ee1977ef9f7",
+  "raw_analysis_sha256": "e931044971f47aa18933fb131db68a6f73a393a2f400050ecd7d05dbf29fdbdb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:50:18Z",
+      "checkpointed_at": "2026-10-21T11:58:38Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:51:11Z",
+      "checkpointed_at": "2026-10-21T11:59:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:51:53Z",
+      "checkpointed_at": "2026-10-21T12:00:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -51509,7 +51509,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:52:58Z",
+      "checkpointed_at": "2026-10-21T12:01:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -57146,7 +57146,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -57163,18 +57163,18 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of their application in living beings.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:57:21Z",
+      "checkpointed_at": "2026-10-21T12:02:06Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -57191,9 +57191,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of their application in living beings.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
