@@ -205,7 +205,15 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     </div>;
   }
   if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><UiText message="legacy.web.ai.tutor.30676145" /></strong><p><UiText message="legacy.web.if.you.get.stuck.ask.for.a.hint.explan.cc1a4459" /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><UiText message="legacy.web.open.tutor.3a75221b" /></button></div></div>;
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') {
+    const recapPoints = Array.isArray(data.points) ? data.points : Array.isArray(data.keyPoints) ? data.keyPoints : [];
+    const recapFallback = recapPoints.length ? [] : collectLegacyBlockText(data);
+    return <div className="concept-card" aria-label={locale==='english'?'Lesson recap':'पाठ का दोहराव'}>
+      {recapPoints.map((point:string,index:number)=><div className="feedback" key={index}><span>✓ <MathText text={String(point)}/></span></div>)}
+      {!recapPoints.length && recapFallback.map((point,index)=><div className="feedback" key={index}><span>✓ <MathText text={point}/></span></div>)}
+      {!recapPoints.length && !recapFallback.length && <span className="concept-kicker">{locale==='english'?'Recap content is not available yet.':'दोहराने की सामग्री अभी उपलब्ध नहीं है।'}</span>}
+    </div>;
+  }
 
   // Unknown backend block types use the existing lesson card style rather than disappearing.
   const fallbackTitle=String(data.heading || data.title || data.name || block.block_type.replaceAll('_',' ').toLowerCase());
