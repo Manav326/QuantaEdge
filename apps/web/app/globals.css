@@ -1472,6 +1472,11 @@ html[data-qe-appearance="dark"] .parent-account__icon {
 .qe-practice-catalogue .qe-practice-course-subject-scope select:hover:not(:disabled){
   border-color:var(--qe-color-focus);
 }
+.qe-practice-catalogue .qe-practice-course-subject-scope select[data-selected="true"]{
+  border-color:var(--qe-color-focus);
+  background:var(--qe-color-primary-container);
+  color:var(--qe-color-primary-text);
+}
 .qe-practice-catalogue .qe-practice-course-subject-scope select:focus-visible{
   outline:3px solid color-mix(in srgb,var(--qe-color-focus) 22%,transparent);
   outline-offset:2px;
