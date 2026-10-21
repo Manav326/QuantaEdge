@@ -35,7 +35,7 @@ public class LearningController {
 
   @GetMapping("/lessons")
   public List<Map<String,Object>> lessons(
-      @RequestParam String subjectCode,
+      @RequestParam(required=false) String subjectCode,
       @RequestParam Long courseId,
       @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
@@ -44,8 +44,9 @@ public class LearningController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
-    String normalizedSubject=subjectCode==null?"":subjectCode.trim().toLowerCase(Locale.ROOT);
-    if(!normalizedSubject.matches("[a-z0-9][a-z0-9_-]{0,39}")) {
+    String normalizedSubject=subjectCode==null || subjectCode.isBlank() || subjectCode.trim().equalsIgnoreCase("ALL")
+        ? "" : subjectCode.trim().toLowerCase(Locale.ROOT);
+    if(!normalizedSubject.isEmpty() && !normalizedSubject.matches("[a-z0-9][a-z0-9_-]{0,39}")) {
       throw new IllegalArgumentException("Choose a subject from the selected course.");
     }
     if(courseId==null || courseId<=0L) {
@@ -69,17 +70,19 @@ public class LearningController {
     long selectedCourseId=((Number)scopedPrograms.getFirst().get("id")).longValue();
     assertInstitutionCourseEntitlement(context.studentId(),selectedCourseId,institutionId);
 
-    Long mappedSubjectCount=jdbc.queryForObject("""
-      select count(*)
-      from curriculum_program_subject cps
-      join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
-      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
-        and (s.program_id=cps.program_id or
-             (s.program_id is null and selected_course.class_id=s.class_id and cps.class_id=s.class_id))
-      where cps.program_id=? and lower(s.code)=lower(?)
-      """,Long.class,selectedCourseId,normalizedSubject);
-    if(mappedSubjectCount==null || mappedSubjectCount==0L) {
-      throw new SecurityException("This subject does not belong to the selected course.");
+    if(!normalizedSubject.isEmpty()) {
+      Long mappedSubjectCount=jdbc.queryForObject("""
+        select count(*)
+        from curriculum_program_subject cps
+        join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+        join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+          and (s.program_id=cps.program_id or
+               (s.program_id is null and selected_course.class_id=s.class_id and cps.class_id=s.class_id))
+        where cps.program_id=? and lower(s.code)=lower(?)
+        """,Long.class,selectedCourseId,normalizedSubject);
+      if(mappedSubjectCount==null || mappedSubjectCount==0L) {
+        throw new SecurityException("This subject does not belong to the selected course.");
+      }
     }
     return lessonsForScope(normalizedSubject,language,selectedCourseId,context,institutionId);
   }
@@ -197,16 +200,16 @@ public class LearningController {
         order by ps.created_at desc,ps.id desc
         limit 1
       ) active_practice on true
-      where true and s.code=? and c.active=true and s.active=true
+      where true and (? = '' or lower(s.code)=lower(?)) and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
         and __PROGRAM_SCOPE__
-      order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
+      order by s.code,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """.replace("__PROGRAM_SCOPE__",programScope);
-    // Bind values in SQL placeholder order: learner, tenant, course, translations,
-    // course-scoped history, subject code, and final course-scope predicate.
+    // Blank subject means all subjects mapped to the selected course; course and tenant
+    // access checks above still apply before the catalogue query runs.
     return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,
         language,language,language,language,
-        courseId,courseId,courseId,courseId,subjectCode,courseId);
+        courseId,courseId,courseId,courseId,subjectCode,subjectCode,courseId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
