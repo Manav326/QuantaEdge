@@ -157,6 +157,8 @@ export default function ParentPage(){
   const assessmentStats=selected.assessmentStats||{};
   const recentAssessments=Array.isArray(selected.recentAssessments)?selected.recentAssessments:[];
   const assessmentByType=Array.isArray(selected.assessmentByType)?selected.assessmentByType:[];
+  const diagnosticStats=selected.diagnosticStats||{};
+  const diagnosticSubjects=Array.isArray(selected.diagnosticSubjects)?selected.diagnosticSubjects:[];
   const assessmentTypeLabel=(kind:string)=>kind==='TOPIC_END'?'Topic-end test':kind==='CHAPTER_END'?'Chapter-end test':'Admin-created test';
   const assessmentStatusLabel=(status:string)=>status==='RELEASED'?'Result released':status==='AWAITING_REVIEW'?'Awaiting teacher review':status==='GRADED'?'Graded · awaiting release':status==='IN_PROGRESS'?'In progress':String(status||'—').replaceAll('_',' ').toLowerCase();
 
@@ -185,6 +187,29 @@ export default function ParentPage(){
         <article><span><UiText message="legacy.web.practice.accuracy.68741915" /></span><strong>{q.accuracy_percent??0}%</strong><small>{q.attempts??0} <UiText message="legacy.web.saved.attempts.7e9ba519" /></small></article>
         <article><span><UiText message="legacy.web.curriculum.6b69620f" /></span><strong>{stats.completion_percent??0}%</strong><small><UiText message="legacy.web.completion.ddfe45c9" /></small></article>
         <article><span><UiText message="legacy.web.tests.released.cdea55dd" /></span><strong>{assessmentStats.released??0}</strong><small>{assessmentStats.awaiting_review??0} awaiting review · {assessmentStats.average_released_percent??0}% avg</small></article>
+        <article><span><LocaleText hinglish="प्रारंभिक डायग्नोस्टिक" english="Initial diagnostic" /></span>
+          <strong>{Number(diagnosticStats.completed_attempts||0)>0 ? String(diagnosticStats.accuracy_percent??0)+'%' : '—'}</strong>
+          <small>{Number(diagnosticStats.completed_attempts||0)>0
+            ? <LocaleText hinglish="शुरुआती सटीकता" english="Baseline accuracy" />
+            : Number(diagnosticStats.in_progress_attempts||0)>0
+              ? <LocaleText hinglish="जारी है" english="In progress" />
+              : <LocaleText hinglish="अभी नहीं दिया गया" english="Not attempted" />}</small>
+        </article>
+      </div>
+      <div className="parent-grid">
+        <article className="report-panel">
+          <div className="panel-title"><strong><LocaleText hinglish="प्रारंभिक डायग्नोस्टिक baseline" english="Initial diagnostic baseline" /></strong><span>↗</span></div>
+          <div className="topic-line"><b><LocaleText hinglish="सटीकता" english="Accuracy" /></b>
+            <span>{Number(diagnosticStats.completed_attempts||0)>0 ? String(diagnosticStats.accuracy_percent??0)+'%' : '—'}</span></div>
+          <div className="topic-line"><b><LocaleText hinglish="सही उत्तर" english="Correct answers" /></b>
+            <span>{diagnosticStats.correct_answers??0} / {diagnosticStats.graded_answers??0}</span></div>
+          {diagnosticSubjects.length ? diagnosticSubjects.map((item:any)=><div className="topic-line" key={item.subject_code}>
+            <b>{item.subject_name||item.subject_code}</b><span>{item.accuracy_percent??0}%</span>
+          </div>) : <p><LocaleText hinglish="डायग्नोस्टिक पूरा होने पर विषयवार परिणाम यहाँ दिखेंगे।"
+              english="Subject-level results appear here after the diagnostic is completed." /></p>}
+          <small><LocaleText hinglish="यह baseline नियमित practice accuracy और concept mastery से अलग है।"
+            english="This baseline is separate from routine practice accuracy and concept mastery." /></small>
+        </article>
       </div>
       <div className="parent-grid">
         <article className="report-panel"><div className="panel-title"><strong><UiText message="legacy.web.curriculum.covered.a8cbc92c" /></strong><span>✓</span></div>{curriculum.length?curriculum.map((item:any)=><div className="topic-line" key={item.subject_code}><b>{item.subject_name||item.subject_code}</b><span className="good">{item.completed??0}/{item.lessons??0} <UiText message="legacy.web.lessons.19bb9b3d" /></span></div>):<p><UiText message="legacy.web.there.is.no.summary.available.for.subs.c6842db3" /></p>}</article>
