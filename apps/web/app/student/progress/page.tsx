@@ -20,7 +20,7 @@ export default function ProgressPage(){
   const router=useRouter();
   const searchParams=useSearchParams();
   const requestedCourseText=searchParams.get('courseId')||'';
-  const requestedCourseId=/^\d+$/.test(requestedCourseText)&&Number(requestedCourseText)>0?Number(requestedCourseText):null;
+  const requestedCourseId=requestedCourseText||null;
   const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale}=useLocale();
   const {brand}=useTenantBranding();
@@ -32,14 +32,15 @@ export default function ProgressPage(){
   const [issuingAttemptId,setIssuingAttemptId]=useState<number|null>(null);
   const [certificateError,setCertificateError]=useState('');
   const [certificateNotice,setCertificateNotice]=useState('');
+  const publicCourseRef=String(activeCourse?.public_id||(courseId!==null?courseId:''));
 
   const refreshCertificateRecords=useCallback(async(source:any)=>{
     try{
-      const certPromise=apiFetch('/api/v1/students/me/certificates?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+      const certPromise=apiFetch('/api/v1/students/me/certificates?courseId='+encodeURIComponent(publicCourseRef),{cache:'no-store',credentials:'same-origin'});
       const recent=Array.isArray(source?.recentAssessments)?source.recentAssessments:[];
       const ids=[...new Set(recent.map((item:any)=>Number(item.attempt_id)).filter((id:number)=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
       const eligibilityPromise=ids.length
-        ?apiFetch('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
+        ?apiFetch('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(publicCourseRef)+'&attemptIds='+ids.join(','),{cache:'no-store',credentials:'same-origin'})
         :Promise.resolve(null);
       const [certResponse,eligibilityResponse]=await Promise.all([certPromise,eligibilityPromise]);
       const certBody=await certResponse.json().catch(()=>({}));
@@ -56,14 +57,14 @@ export default function ProgressPage(){
       setCertificates([]);
       setCertificateEligibility({});
     }
-  },[courseId]);
+  },[courseId,publicCourseRef]);
 
   async function issueResultCertificate(attemptId:number){
     setIssuingAttemptId(attemptId);setCertificateError('');setCertificateNotice('');
     try{
       const response=await apiFetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId}:{}),...(brand?.institutionCode?{institutionCode:brand.institutionCode}:{})})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId:publicCourseRef}:{}),...(brand?.institutionCode?{institutionCode:brand.institutionCode}:{})})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
@@ -104,9 +105,12 @@ export default function ProgressPage(){
   },[router,refreshCertificateRecords,courseId,subjectCode,loadingCourses,courseError]);
 
   useEffect(()=>{
-    if(courseId===null || searchParams.get('courseId')===String(courseId))return;
-    window.history.replaceState(null, '', '/student/progress?courseId='+encodeURIComponent(String(courseId)));
-  },[courseId,router,searchParams]);
+    if(courseId===null || searchParams.get('courseId')===publicCourseRef)return;
+    const params=new URLSearchParams();
+    params.set('courseId',publicCourseRef);
+    if(subjectCode!=='ALL')params.set('subjectCode',subjectCode);
+    window.history.replaceState(null, '', '/student/progress?'+params.toString());
+  },[courseId,publicCourseRef,subjectCode,router,searchParams]);
 
   useEffect(()=>{
     if(subjectCode==='ALL')return;
@@ -116,12 +120,13 @@ export default function ProgressPage(){
   async function changeCourse(value:string){
     await selectCourse(value);
     setSubjectCode('ALL');
-    window.history.replaceState(null, '', '/student/progress?courseId='+encodeURIComponent(value));
+    const selected=courses.find(course=>String(course.id)===String(value));
+    window.history.replaceState(null, '', '/student/progress?courseId='+encodeURIComponent(String(selected?.public_id||value)));
   }
   function changeSubject(value:string){
     setSubjectCode(value);
     const params=new URLSearchParams();
-    if(courseId!==null)params.set('courseId',String(courseId));
+    if(courseId!==null)params.set('courseId',publicCourseRef);
     if(value!=='ALL')params.set('subjectCode',value);
     window.history.replaceState(null, '', '/student/progress'+(params.size?'?'+params.toString():''));
   }
@@ -190,7 +195,7 @@ export default function ProgressPage(){
           <div><b>{item.assessment_title || assessmentTypeLabel(item.assessment_type)}</b><small>{assessmentTypeLabel(item.assessment_type)} · {item.subject_name || '—'}{item.chapter_name?' · '+item.chapter_name:''}</small></div>
           <div className="student-test-result">
             <span className={item.status==='RELEASED'?'good':''}>{item.status==='RELEASED'?String(item.final_score??'—')+' / '+String(item.max_score??'—'):assessmentStatusLabel(item.status)}</span>
-            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificate.id}><UiText message="legacy.web.view.certificate.07663aac" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked"><UiText message="legacy.web.certificate.revoked.29f7fafd" /></small>:eligibility?.eligible?(
+            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?courseId='+encodeURIComponent(publicCourseRef)+'&certificateId='+certificate.id}><UiText message="legacy.web.view.certificate.07663aac" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked"><UiText message="legacy.web.certificate.revoked.29f7fafd" /></small>:eligibility?.eligible?(
               <button type="button" className="student-cert-issue" disabled={issuingAttemptId!==null} onClick={()=>void issueResultCertificate(Number(item.attempt_id))}>
                 {issuingAttemptId===Number(item.attempt_id)?translateUi(locale, 'legacy.web.issuing.1efee91b'):translateUi(locale, 'legacy.web.issue.certificate.2e69c02c')}
               </button>
@@ -203,8 +208,8 @@ export default function ProgressPage(){
           </div>
         </div>;
       }):<div className="topic-line"><span><UiText message="legacy.web.your.test.status.and.result.will.appea.0798ef2f" /></span></div>}</div>
-      <Link href={courseId!==null?'/student/certificates?courseId='+encodeURIComponent(String(courseId)):'/student/courses'} className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
-      <Link href={'/student/tests'+(courseId!==null?'?courseId='+courseId:'')} className="button button-dark"><UiText message="legacy.web.view.all.tests.and.results.f924b495" /></Link>
-      <Link href={courseId!==null ? '/student/structured-lessons?courseId='+encodeURIComponent(String(activeCourse?.public_id || courseId))+(activeCourse?.subjects?.[0] ? '&subjectCode='+encodeURIComponent(String(activeCourse.subjects[0].subject_code||activeCourse.subjects[0].code||'')) : '') : '/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
+      <Link href={courseId!==null?'/student/certificates?courseId='+encodeURIComponent(publicCourseRef):'/student/courses'} className="button button-light"><UiText message="legacy.web.view.certificates.fec657d5" /></Link>
+      <Link href={'/student/tests'+(courseId!==null?'?courseId='+encodeURIComponent(publicCourseRef):'')} className="button button-dark"><UiText message="legacy.web.view.all.tests.and.results.f924b495" /></Link>
+      <Link href={courseId!==null ? '/student/structured-lessons?courseId='+encodeURIComponent(publicCourseRef) : '/student/courses'} className="button button-light"><UiText message="legacy.web.open.recommended.lesson.e9600941" /></Link>
     </section></main>;
 }
