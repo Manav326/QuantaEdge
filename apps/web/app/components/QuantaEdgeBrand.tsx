@@ -34,24 +34,25 @@ export default function QuantaEdgeBrand({
   }
 
   const accessibleLabel = tenantName || (institutionContextRequested ? 'Learning space' : BRAND_LABEL);
-  const tenantLogoUrl = brand?.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')
-    ? brand.logoUrl : null;
-  const tenantIconUrl = brand?.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')
-    ? brand.appIconUrl : null;
-  // A wide logo uses its own responsive slot. Compact headers use the separate square icon.
-  // An unresolved/missing tenant logo never falls back to the QuantaEdge platform logo.
-  const wideLogoUrl = brand ? tenantLogoUrl : PLATFORM_LOGO_URL;
-  const useWideLogo = variant !== 'compact' && Boolean(wideLogoUrl);
+  // Platform and tenant brands share exactly the same URL slots and CSS role contract.
+  // Only the source differs: a canonical static asset for QuantaEdge, a validated versioned URL for tenants.
+  const logoUrl = brand
+    ? brand.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo') ? brand.logoUrl : null
+    : PLATFORM_LOGO_URL;
+  const appIconUrl = brand
+    ? brand.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon') ? brand.appIconUrl : null
+    : PLATFORM_ICON_URL;
+  const useWideLogo = variant !== 'compact' && Boolean(logoUrl);
 
   const lockup = useWideLogo
     ? <span className={'qe-brand qe-brand--' + variant}>
-        <img className="qe-brand__logo" src={wideLogoUrl || PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
+        <img className="qe-brand__logo" src={logoUrl || PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
       </span>
     : <span className={'qe-brand qe-brand--' + variant}>
         <span className="qe-brand__lockup">
           {brand
-            ? tenantIconUrl
-              ? <img className="qe-brand__icon qe-brand__tenant-icon" src={tenantIconUrl} alt="" width={192} height={192} aria-hidden="true" />
+            ? appIconUrl
+              ? <img className="qe-brand__icon qe-brand__tenant-icon" src={appIconUrl} alt="" width={192} height={192} aria-hidden="true" />
               : <span className="qe-brand__tenant-mark" aria-hidden="true">{(tenantName || 'S').slice(0, 1).toLocaleUpperCase()}</span>
             : <img className="qe-brand__icon" src={PLATFORM_ICON_URL} alt="" width={192} height={192} aria-hidden="true" />}
           <span className="qe-brand__copy">

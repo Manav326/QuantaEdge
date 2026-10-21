@@ -199,3 +199,7 @@
 .brandTemplateActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .brandTemplateActions>span{flex:1 1 220px;font-size:9px;line-height:1.6;color:#788196}
 @media(max-width:650px){.brandTemplate{padding:12px}.brandTemplateHeader{flex-direction:column}.brandTemplateFields,.brandTemplatePreviewGrid{grid-template-columns:1fr}.brandTemplateGenerated{align-items:stretch;flex-direction:column}.brandTemplateGenerated button,.brandTemplateActions button{width:100%;min-height:42px}.brandTemplateGenerated>span{flex:auto}}
+
+.brandTemplateLogoStageDark{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:100px;padding:12px;border:1px solid #263449;border-radius:9px;background:#111827}
+.brandTemplateLogoStageDark img{display:block;width:auto;height:auto;max-width:100%;max-height:78px;object-fit:contain;object-position:left center}
+.brandTemplateLogoStageDark>span{font-size:10px;color:#cbd5e1}

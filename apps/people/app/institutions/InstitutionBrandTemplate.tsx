@@ -19,7 +19,7 @@ type Props = {
   onApplied: () => Promise<void> | void;
 };
 type PackFile = { path: string; blob: Blob };
-type GeneratedPack = { zip: Blob; logo: Blob; applyLogo: Blob; icon: Blob; lockup: Blob; name: string; tagline: string; files: string[] };
+type GeneratedPack = { zip: Blob; logo: Blob; applyLogo: Blob; icon: Blob; lockup: Blob; name: string; tagline: string; themeFingerprint: string; files: string[] };
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 const MAX_DIMENSION = 4096;
@@ -401,6 +401,9 @@ export default function InstitutionBrandTemplate({
       const maskable512 = await renderSquareLimited(iconBitmap, 512, 0.23, '#FFFFFF');
       const brandLockup = await renderBrandLockup(iconBitmap, icon512, name, cleanTagline, themeTokens);
       const faviconBase64 = await blobBase64(favicon64);
+      const themePrimary = validThemeColour(themeTokens.brandPrimary ?? themeTokens.primary, '#F97316');
+      const themeAccent = validThemeColour(themeTokens.brandAccent ?? themeTokens.accent, '#0F766E');
+      const themeFingerprint = JSON.stringify(themeTokens);
       const faviconSvg = '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">' +
         '<image href="data:image/png;base64,' + faviconBase64 + '" x="0" y="0" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>' +
@@ -408,7 +411,7 @@ export default function InstitutionBrandTemplate({
       const manifest = {
         id: './', name, short_name: name.slice(0, 32),
         description: cleanTagline || (name + ' learning space'),
-        display: 'standalone', background_color: '#FFFFFF', theme_color: '#F97316',
+        display: 'standalone', background_color: '#FFFFFF', theme_color: themePrimary,
         icons: [
           { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
@@ -417,7 +420,7 @@ export default function InstitutionBrandTemplate({
       };
       const metadata = {
         schemaVersion: 1, displayName: name, tagline: cleanTagline,
-        theme: { defaultAccent: '#F97316', note: 'Theme colours may be configured by the institution; source image colours are not changed.' },
+        theme: { primary: themePrimary, accent: themeAccent, note: 'Theme colours come from the current institution settings; source image pixels are not changed.' },
         assets: {
           logo: { file: 'logo.png', sourceRatio: Number((logoBitmap.width / logoBitmap.height).toFixed(6)) },
           generatedLockup: { png: 'brand-lockup.png', svg: 'brand-lockup.svg', source: 'square icon plus the supplied institution name/tagline' },
@@ -461,7 +464,7 @@ export default function InstitutionBrandTemplate({
         { path: 'brand-assets/source/icon-original.' + (iconSource.type === 'image/jpeg' ? 'jpg' : 'png'), blob: iconSource },
       ];
       const zip = await createZip(files);
-      setPack({ zip, logo, applyLogo: logoForApply, icon: icon512, lockup: brandLockup.png, name, tagline: cleanTagline, files: files.map(file => file.path) });
+      setPack({ zip, logo, applyLogo: logoForApply, icon: icon512, lockup: brandLockup.png, name, tagline: cleanTagline, themeFingerprint, files: files.map(file => file.path) });
       setNotice('Asset pack generated with ' + files.length + ' files. Review the previews, then download or apply this pack.');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Brand assets could not be generated.');
@@ -489,8 +492,8 @@ export default function InstitutionBrandTemplate({
 
   async function applyPack() {
     if (!pack) return;
-    if (pack.name !== displayName.trim() || pack.tagline !== tagline.trim()) {
-      setError('The name or tagline changed after generation. Generate the asset pack again before applying it.');
+    if (pack.name !== displayName.trim() || pack.tagline !== tagline.trim() || pack.themeFingerprint !== JSON.stringify(themeTokens)) {
+      setError('The name, tagline or theme changed after generation. Generate the asset pack again before downloading or applying it.');
       return;
     }
     setApplying(true);
@@ -562,6 +565,15 @@ export default function InstitutionBrandTemplate({
         <small>Wide and responsive. The source aspect ratio is retained; it is never forced into a square.</small>
       </div>
       <div className={styles.brandTemplatePreviewCard}>
+        <span>Logo on a dark surface</span>
+        <div className={styles.brandTemplateLogoStageDark}>
+          {pack && previewUrls.logo ? <img src={previewUrls.logo} alt={pack.name + ' logo on dark surface'} />
+            : logoUrl ? <img src={logoUrl} alt={displayName + ' logo on dark surface'} />
+              : <span>Upload a logo to check dark-surface visibility.</span>}
+        </div>
+        <small>Checks contrast without automatically recolouring your institution’s artwork.</small>
+      </div>
+      <div className={styles.brandTemplatePreviewCard}>
         <span>Compact header slot</span>
         <div className={styles.brandTemplateCompactStage}>
           {pack && previewUrls.icon ? <img src={previewUrls.icon} alt="" />
@@ -583,8 +595,8 @@ export default function InstitutionBrandTemplate({
     {pack ? <div className={styles.brandTemplateGenerated} role="status">
       <strong>Generated asset pack</strong>
       <span>{pack.files.length} files · Primary upload renditions are validated against the 2 MiB per-file cap.</span>
-      <button type="button" className={styles.secondary} onClick={() => saveDownload(pack.zip, safeStem(pack.name) + '-brand-assets.zip')}>Download ZIP folder</button>
-      <button type="button" className={styles.primary} onClick={() => void applyPack()} disabled={applying || busy}>
+      <button type="button" className={styles.secondary} onClick={() => saveDownload(pack.zip, safeStem(pack.name) + '-brand-assets.zip')} disabled={pack.themeFingerprint !== JSON.stringify(themeTokens) || applying || busy}>Download ZIP folder</button>
+      <button type="button" className={styles.primary} onClick={() => void applyPack()} disabled={applying || busy || pack.themeFingerprint !== JSON.stringify(themeTokens)}>
         {applying ? 'Applying to institution…' : 'Apply pack to this institution'}
       </button>
     </div> : null}
