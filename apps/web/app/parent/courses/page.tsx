@@ -119,7 +119,7 @@ export default function ParentCoursesPage() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, language]);
 
   useEffect(() => { void load(); }, [load]);
 
