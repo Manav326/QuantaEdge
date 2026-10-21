@@ -516,10 +516,12 @@ const scopeComponent = read('../app/student/InstitutionCourseSubjectScope.tsx');
 assert.ok(scopeComponent.includes('useTenantBranding') && scopeComponent.includes('activeCourse?.subjects') && scopeComponent.includes('brand?.displayName'), 'Shared learner scope must display the validated institution and derive subjects from the selected course.');
 assert.ok(practiceClient.includes('subjectCode={practiceSubjectFilter}') &&
   practiceClient.includes('setPracticeSubjectFilter(next)') &&
-  practiceClient.includes('visiblePracticeSubjectGroups.map(group=>') &&
+  practiceClient.includes('pagedPracticeGroups.map(group=>') &&
+  practiceClient.includes('practiceCatalogueEntries=useMemo<PracticeCatalogueEntry[]>') &&
+  practiceClient.includes('PremiumPagination') &&
   practiceClient.includes("allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'}") &&
   practiceClient.includes('practiceSubjectGroups.filter(group=>group.code===practiceSubjectFilter)'),
-  'Practice navigation must offer a working all-subject/individual-subject filter derived from the selected course and retain that filter in the URL.');
+  'Practice must retain course-derived subject filtering and URL state while rendering its paginated sequence through the shared pagination component.');
 assert.ok(css.includes('.qe-practice-catalogue .qe-practice-course-subject-scope select') &&
   css.includes('.qe-practice-catalogue .qe-practice-course-subject-scope select[data-selected="true"]') &&
   css.includes('.qe-practice-next-row.is-eligible') &&
