@@ -197,7 +197,7 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const asset = block.asset || {};
           const canDisplay = isStudentRenderableAsset(asset);
           const canPreview = canDisplay || mode === 'admin-preview';
-          const url = typeof asset.url === 'string' ? asset.url : '';
+          const url = typeof asset.url === 'string' && (canDisplay || mode === 'admin-preview') ? asset.url : '';
           const alt = localized(asset.alt_by_locale, locale) || localized(block.alt_by_locale, locale);
           return <figure className="qe-structured-card qe-structured-image" key={block.id}>
             {canPreview && url ? <StructuredImageLightbox url={url} alt={alt} caption={localized(asset.caption_by_locale, locale) || localized(block.caption_by_locale, locale)} locale={locale} /> :

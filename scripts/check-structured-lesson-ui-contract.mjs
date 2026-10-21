@@ -62,6 +62,7 @@ assert.ok(
   source.webContent.includes('blocks.map(block =>') &&
   source.webContent.includes('qe-structured-unknown-block') &&
   source.webContent.includes('sort((a, b) => a.order - b.order') &&
+  source.webContent.includes("const url = typeof asset.url === 'string' && (canDisplay || mode === 'admin-preview') ? asset.url : '';") &&
   !source.webContent.includes("if (!canDisplay && mode === 'student') return null;"),
   'Web must preserve ordered structured blocks and display a safe placeholder/fallback instead of dropping blocks.');
 assert.ok(source.apiService.includes('safeBlocks.add(safeBlock)') &&
