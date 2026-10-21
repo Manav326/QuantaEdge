@@ -501,8 +501,10 @@ assert.ok(practiceClient.includes('subjectCode={practiceSubjectFilter}') &&
   practiceClient.includes('practiceSubjectGroups.filter(group=>group.code===practiceSubjectFilter)'),
   'Practice navigation must offer a working all-subject/individual-subject filter derived from the selected course and retain that filter in the URL.');
 assert.ok(css.includes('.qe-practice-catalogue .qe-practice-course-subject-scope select') &&
+  css.includes('.qe-practice-catalogue .qe-practice-course-subject-scope select[data-selected="true"]') &&
   css.includes('.qe-practice-next-row.is-eligible') &&
   css.includes('var(--qe-color-surface-elevated)') &&
+  css.includes('var(--qe-color-primary-container)') &&
   css.includes('var(--qe-color-text-muted)') &&
   css.includes('var(--qe-color-focus)') &&
   css.includes('var(--qe-color-success-container)'),
