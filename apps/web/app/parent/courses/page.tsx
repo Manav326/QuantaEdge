@@ -454,7 +454,9 @@ export default function ParentCoursesPage() {
                 .map(value => Number(value.trim())).filter(value => Number.isSafeInteger(value) && value > 0));
               const selectedChildAlreadyOwns = selectedChildValue > 0 && ownedChildIds.has(selectedChildValue);
               const selectedChild = selectedChildAlreadyOwns ? 0 : selectedChildValue;
-              const eligibleChildren = children.filter(child => !ownedChildIds.has(child.id));
+              // A course already owned by the parent must be transferred, not purchased again.
+              // Otherwise, keep other linked children eligible while excluding existing owners.
+              const eligibleChildren = ownedByParent ? [] : children.filter(child => !ownedChildIds.has(child.id));
               return <MarketplaceCourseCard
                 key={course.course_id}
                 title={course.title || course.course_name}
@@ -497,12 +499,16 @@ export default function ParentCoursesPage() {
                   </button>
                   <label><span><LocaleText hinglish="बच्चे के लिए" english="For child" /></span>
                     <select value={selectedChild || ''} onChange={e => setChildByCourse(current => ({ ...current, [course.course_id]: Number(e.target.value) || 0 }))}>
-                      <option value="">{eligibleChildren.length ? (english ? 'Choose child' : 'बच्चा चुनें') : (english ? 'All children already have access' : 'सभी बच्चों के पास पहले से पहुँच है')}</option>
+                      <option value="">{ownedByParent
+                        ? (english ? 'Course is yours — transfer it instead' : 'कोर्स आपके पास है — इसे ट्रांसफर करें')
+                        : eligibleChildren.length
+                          ? (english ? 'Choose child' : 'बच्चा चुनें')
+                          : (english ? 'All children already have access' : 'सभी बच्चों के पास पहले से पहुँच है')}</option>
                       {eligibleChildren.map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
-                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || !selectedChild || selectedChildAlreadyOwns}
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {busy === 'checkout-' + course.course_id + '-CHILD-' + selectedChild || busy === 'free-' + course.course_id + '-CHILD-' + selectedChild
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
