@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2180,
-    "successful_visual_analyses": 2079,
-    "missing_visual_analyses": 5308,
+    "raw_analysis_result_rows": 2183,
+    "successful_visual_analyses": 2082,
+    "missing_visual_analyses": 5305,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5409,
+    "unresolved_count": 5406,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89433,9 +89433,24 @@
       "asset_path": "assets/811769809de1041596f96d6e184e27c2a58a2af6c661d8c22a5539460d0dfefa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a metal object attached to it, possibly a scroll or scroll-like object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Now,N",
+          "I understand!"
+        ],
+        "concepts": [
+          "scroll",
+          "metal object"
+        ],
+        "context_relation": "The scroll is likely related to the concept of sonority and metals.",
+        "limitations": [
+          "The image does not provide specific details about the scroll or the metal object attached to it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89451,9 +89466,26 @@
       "asset_path": "assets/ffc582991c533050bfc1223978022a68f6ae5c454f29e72397c1629d1c147fd2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass filled with water containing two spoons, one metal and one wooden, partially submerged in the water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "glass",
+          "water",
+          "metal spoon",
+          "wooden spoon",
+          "submerged",
+          "ringing sound",
+          "sonority"
+        ],
+        "context_relation": "The image illustrates the concept of sonority, where metals produce a ringing sound when submerged in water.",
+        "limitations": [
+          "The image does not show the actual sound produced by the spoons."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89469,9 +89501,16 @@
       "asset_path": "assets/cef963a0435eebdb7802bd93ec9eb481e9323c1f4c28a07b37c1a7276e778c16.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person's feet wearing green beaded anklets.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
