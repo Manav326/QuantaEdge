@@ -375,6 +375,15 @@ private fun StructuredQuestionView(
     val prompt = localized(question.optJSONObject("prompt_by_locale"), locale)
     val options = question.optJSONArray("options").jsonObjects()
     val savedResponse = savedState.opt("response")
+    val legacyInteraction = question.optString("legacy_interaction_type")
+    val defaultOrder = options.map { it.optString("id") }
+    val restoredOrder = (savedResponse as? JSONArray)?.let { saved ->
+        (0 until saved.length()).map { saved.optString(it) }
+    }.orEmpty()
+    var orderedIds by remember(id) {
+        mutableStateOf(if (restoredOrder.size == defaultOrder.size &&
+            restoredOrder.toSet() == defaultOrder.toSet()) restoredOrder else defaultOrder)
+    }
     val response = remember(id) { mutableStateMapOf<String, String>().apply {
         when (type) {
             "multiple_choice", "scenario_based", "image_observation" -> if (savedResponse is String) put("selected", savedResponse)
@@ -464,11 +473,44 @@ private fun StructuredQuestionView(
                             }
                         }
                     }
-                    "fill_blank", "short_answer" -> OutlinedTextField(
+                    "fill_blank" -> OutlinedTextField(
                         value = textResponse, onValueChange = { textResponse = it }, enabled = !locked && !submitting,
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(if (locale == "hi") "उत्तर" else "Answer") },
-                        minLines = if (type == "short_answer") 3 else 1
+                        minLines = 1
+                    )
+                    "short_answer" -> if (legacyInteraction == "ORDER") {
+                        Text(if (locale == "hi") "सही क्रम बनाने के लिए items को ऊपर या नीचे करें।"
+                            else "Reorder the items using the up and down controls.")
+                        orderedIds.forEachIndexed { index, itemId ->
+                            val item = options.firstOrNull { it.optString("id") == itemId } ?: return@forEachIndexed
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text((index + 1).toString() + ". " +
+                                    localized(item.optJSONObject("text_by_locale"), locale),
+                                    modifier = Modifier.weight(1f))
+                                TextButton(enabled = !locked && !submitting && index > 0, onClick = {
+                                    val next = orderedIds.toMutableList()
+                                    val itemAt = next.removeAt(index)
+                                    next.add(index - 1, itemAt)
+                                    orderedIds = next
+                                }) { Text("↑") }
+                                TextButton(enabled = !locked && !submitting && index < orderedIds.lastIndex, onClick = {
+                                    val next = orderedIds.toMutableList()
+                                    val itemAt = next.removeAt(index)
+                                    next.add(index + 1, itemAt)
+                                    orderedIds = next
+                                }) { Text("↓") }
+                            }
+                        }
+                    } else OutlinedTextField(
+                        value = textResponse, onValueChange = { textResponse = it }, enabled = !locked && !submitting,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(if (locale == "hi") "उत्तर" else "Answer") },
+                        minLines = 3
                     )
                     else -> Text(if (locale == "hi") "यह प्रश्न प्रकार समर्थित नहीं है।" else "Unsupported question type.")
                 }
@@ -479,11 +521,17 @@ private fun StructuredQuestionView(
                     "matching" -> question.optJSONArray("left_items").jsonObjects().let { items ->
                         items.isNotEmpty() && items.all { !response[it.optString("id")].isNullOrBlank() }
                     }
-                    "fill_blank", "short_answer" -> textResponse.isNotBlank()
+                    "fill_blank" -> textResponse.isNotBlank()
+                    "short_answer" -> if (legacyInteraction == "ORDER") {
+                        defaultOrder.size >= 2 && orderedIds.size == defaultOrder.size &&
+                            orderedIds.toSet() == defaultOrder.toSet()
+                    } else textResponse.isNotBlank()
                     else -> false
                 }
                 Button(enabled = isAnswerComplete && !locked && !submitting, onClick = {
-                    val payloadJson = when (type) {
+                    val payloadJson = if (legacyInteraction == "ORDER") {
+                        JSONArray().also { array -> orderedIds.forEach { array.put(it) } }.toString()
+                    } else when (type) {
                         "multiple_choice", "scenario_based", "image_observation" -> JSONObject.quote(response["selected"] ?: "")
                         "true_false" -> response["boolean"]?.toBooleanStrictOrNull()?.toString() ?: "null"
                         "multiple_select" -> JSONArray().also { array ->
