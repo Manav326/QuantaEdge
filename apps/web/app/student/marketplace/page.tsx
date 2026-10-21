@@ -54,22 +54,22 @@ declare global {
   }
 }
 
-async function readJson(response: Response): Promise<any> {
+async function readJson(response: Response, fallbackMessage = 'The request could not be completed.'): Promise<any> {
   const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.message || body.detail || body.error || 'The request could not be completed.');
+  if (!response.ok) throw new Error(body.message || body.detail || body.error || fallbackMessage);
   return body;
 }
 
-async function ensureRazorpayCheckout(): Promise<void> {
+async function ensureRazorpayCheckout(english: boolean): Promise<void> {
   if (window.Razorpay) return;
   const existing = document.querySelector<HTMLScriptElement>('script[data-qe-razorpay="true"]');
   if (existing) {
     await new Promise<void>((resolve, reject) => {
       existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error('Payment checkout could not be loaded.')), { once: true });
+      existing.addEventListener('error', () => reject(new Error(english ? 'Payment checkout could not be loaded.' : 'भुगतान checkout लोड नहीं हो सका।')), { once: true });
     });
     if (window.Razorpay) return;
-    throw new Error('Payment checkout could not be loaded. Please retry.');
+    throw new Error(english ? 'Payment checkout could not be loaded. Please retry.' : 'भुगतान checkout लोड नहीं हो सका। फिर प्रयास करें।');
   }
   await new Promise<void>((resolve, reject) => {
     const script = document.createElement('script');
@@ -77,10 +77,10 @@ async function ensureRazorpayCheckout(): Promise<void> {
     script.async = true;
     script.dataset.qeRazorpay = 'true';
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Payment checkout could not be loaded. Please retry.'));
+    script.onerror = () => reject(new Error(english ? 'Payment checkout could not be loaded. Please retry.' : 'भुगतान checkout लोड नहीं हो सका। फिर प्रयास करें।'));
     document.head.appendChild(script);
   });
-  if (!window.Razorpay) throw new Error('Payment checkout could not be loaded. Please retry.');
+  if (!window.Razorpay) throw new Error(english ? 'Payment checkout could not be loaded. Please retry.' : 'भुगतान checkout लोड नहीं हो सका। फिर प्रयास करें।');
 }
 
 export default function StudentMarketplacePage() {
@@ -106,7 +106,7 @@ export default function StudentMarketplacePage() {
     try {
       const body = await readJson(await apiFetch('/api/v1/marketplace/courses', {
         credentials: 'same-origin', cache: 'no-store',
-      }));
+      }), tx('The request could not be completed.', 'अनुरोध पूरा नहीं हो सका।'));
       setOffers(Array.isArray(body) ? body : []);
     } catch (error: any) {
       setOffers([]);
@@ -270,7 +270,7 @@ export default function StudentMarketplacePage() {
       setPendingVerify(recoverableDraft);
       try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
       catch { /* In-page recovery still works when storage is disabled. */ }
-      await ensureRazorpayCheckout();
+      await ensureRazorpayCheckout(english);
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error(tx('Payment checkout is not available. Please retry.', 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।'));
       const checkout = new RazorpayCtor({
