@@ -333,8 +333,8 @@ assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   'Legacy certificate rows must be assigned to a course only when the existing class/subject mapping is unambiguous, preserving issued artifacts.');
 
 assert.ok(workspaceLayout.includes("{ href: '/student/learn', message: 'web.navigation.student.learnTopics'") &&
-  workspaceLayout.includes("{ href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons'"),
-  'The original Learn navigation remains primary while structured lessons remain an optional separate entry.');
+  !workspaceLayout.includes("{ href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons'"),
+  'The original Learn navigation remains primary; optional structured content must not replace it with a separate lesson UI.');
 const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
 assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
