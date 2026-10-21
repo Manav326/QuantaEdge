@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class7-en-maths-part1-d75e5b97",
+  "class": 7,
+  "source_book_id": "ncert-c7-english-gegp1",
+  "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class7-class7-en-maths-part1-d75e5b97-prep-76c7c44eaed81752d33ea3f2",
+    "bundle_tar_sha256": "1b74f96f967bc51d9f686b0caf06af84d9a3db2608122e74dd7c096b05d50a50",
+    "preparation_fingerprint": "76c7c44eaed81752d33ea3f2c49b711f4768d4d43684da7b19208cb3592fec83",
+    "inventory_json_sha256": "2ef22199abdb49e811db6a6fe297731cb2c80795ca80843f6f54532d816af811"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class7-class7-en-maths-part1-d75e5b97-prep-34c78a0476d0f30c2c12c38f",
+    "bundle_tar_sha256": "d3c077030faa0c07a83ff53f0a3a32ac332ad2ad391712145936b2da3d0409c6",
+    "preparation_fingerprint": "34c78a0476d0f30c2c12c38f9c55e771eda5972d1c2fa4344b5fb062305bd2c3",
+    "candidate_pack_sha256": "aecc48d7e9114d5d8ba6ae863c5e0e4d053a0cd9a48f2531185d9b9333400ee9"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}

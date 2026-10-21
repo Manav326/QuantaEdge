@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class7-en-science-93a8f46e",
+  "class": 7,
+  "source_book_id": "ncert-c7-english-gecu1",
+  "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class7-class7-en-science-93a8f46e-prep-8cea05a50039decbf0dbc7ff",
+    "bundle_tar_sha256": "0724173b868ea9cdb36e66c53c395becd793f9bf7ff1f7181bbb3e3356d3d4e1",
+    "preparation_fingerprint": "8cea05a50039decbf0dbc7ff8460b7dc9357846abbde32cb2ed62ee65b5db3bb",
+    "inventory_json_sha256": "32165e678faea0f710852a935b3ac0605ba485ea760aa0b1f80b93642f1cab94"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class7-class7-en-science-93a8f46e-prep-195b1a8e9f1ebb8b5d02e613",
+    "bundle_tar_sha256": "740e4050fd2c311bc5e6438e90db57956dc646fa4583debf2399bfcbc67b1957",
+    "preparation_fingerprint": "195b1a8e9f1ebb8b5d02e6134997f565dc72561303bbb1dbc000327d0bb1c390",
+    "candidate_pack_sha256": "b8d7981a36e285240fef44c2e0e57ce72219e257bc8485eae5959b6684be22ef"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}

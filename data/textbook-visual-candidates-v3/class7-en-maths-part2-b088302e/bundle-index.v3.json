@@ -6,7 +6,7 @@
   "subject": "maths",
   "maths_part": 2,
   "source_book_id": "ncert-c7-english-gegp2",
-  "source_pdf_sha256": "acdfb381c1c5fba015e2f77a2177408da423e78fb9a4a3579063b0f18d8bf8d7",
+  "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
   "candidate_pack_schema": "quantaedge.visual-candidate-pack.v3",
   "candidate_count": 1159,
   "candidate_pages": [
@@ -230,7 +230,19 @@
   "publication_allowed": false,
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
-  "version_tag": "candidates-v3-class7-class7-en-maths-part2-b088302e-run-38904464438",
-  "bundle_tar_sha256": "1da78892efd198b24d34314ec06d1508a644895c1357c5fb82e5b69a75b89ade",
-  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
+  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+  "version_tag": "candidates-v3-class7-class7-en-maths-part2-b088302e-prep-1c99e6b6f1a2834f89e503af",
+  "bundle_tar_sha256": "bc028fd7f62e2fc50847cc78b3d4ef77e44968bb321a0c9478c86600217079f1",
+  "restore_note": "Pull this exact ORAS artifact and verify bundle_tar_sha256 plus the embedded per-file manifest before reuse.",
+  "preparation_fingerprint": "1c99e6b6f1a2834f89e503af084ce55bd5e8480faf87cf44bfb8f8171e18e52e",
+  "candidate_pack_sha256": "42c198b7fd3386ea6be3df19ba055418a92e46a6887fd28b07893ff7345b09b3",
+  "bundle_manifest_sha256": "ac2af0a7502a0630e2b2236457c329eb402bb8899d409df200440cc4769e2c57",
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class7-class7-en-maths-part2-b088302e-prep-25981da2b3287a718e303bf1",
+    "bundle_tar_sha256": "891a2d23e8b30d0aee71f70689500b88c423c0b48f08364c24b5a3a5a5a96ae0",
+    "preparation_fingerprint": "25981da2b3287a718e303bf1a106bb20807256f5b3b9776ce8433721634c21ae",
+    "inventory_json_sha256": "eb3d1bea7a4ed1e92b9f77a9c8b9d3f001453440061ef27409dfbb215057292a"
+  }
 }

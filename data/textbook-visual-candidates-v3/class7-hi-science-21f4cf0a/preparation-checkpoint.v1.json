@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class7-hi-science-21f4cf0a",
+  "class": 7,
+  "source_book_id": "ncert-c7-hindi-ghcu1",
+  "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class7-class7-hi-science-21f4cf0a-prep-b6a33bb9db670f7817a5ae1a",
+    "bundle_tar_sha256": "9afc0d82c6deb84fa88d4fbafeaad29e3f6e7c35f5ae44cc4f3b601806964b47",
+    "preparation_fingerprint": "b6a33bb9db670f7817a5ae1a99daebf51349f16cadb4b3c5cd4d01347200205e",
+    "inventory_json_sha256": "53faae8a1f077e3632a0dbe8fe8ddae84c4889ecf6b65c59eda32af1c8043651"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class7-class7-hi-science-21f4cf0a-prep-d6fee752a8df073441adfa1a",
+    "bundle_tar_sha256": "af7ffe8b102ed45d762dd4a6820be20b63af596c34d4a151237ad5641046cb54",
+    "preparation_fingerprint": "d6fee752a8df073441adfa1a83f572440480379083f5096b6a5a21a6e10d83a8",
+    "candidate_pack_sha256": "bfcd724ec651a69befb3cd54aac4b93464a5c70e12756749d941cd0a983f86f3"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}
