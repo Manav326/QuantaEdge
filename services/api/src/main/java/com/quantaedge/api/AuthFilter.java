@@ -20,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthFilter extends OncePerRequestFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
   private static final long MAX_BRANDING_ASSET_REQUEST_BYTES = 2_250_000L;
+  private static final long MAX_BRANDING_TEMPLATE_REQUEST_BYTES = 4_500_000L;
   private static final long MAX_NOTIFICATION_MEDIA_REQUEST_BYTES = 101L * 1024L * 1024L;
   private final AuthService auth;
   private final StaffAuditService staffAudit;
@@ -150,8 +151,10 @@ public class AuthFilter extends OncePerRequestFilter {
 
   private static boolean isBrandingAssetUpload(HttpServletRequest request) {
     return "POST".equalsIgnoreCase(request.getMethod())
-        && request.getRequestURI().matches(
-            "^/api/v1/hrms/platform/institutions/[0-9]+/branding/assets/(logo|app-icon)$");
+        && (request.getRequestURI().matches(
+            "^/api/v1/hrms/platform/institutions/[0-9]+/branding/assets/(logo|app-icon)$")
+            || request.getRequestURI().matches(
+            "^/api/v1/hrms/platform/institutions/[0-9]+/branding/template-assets$"));
   }
 
   private static boolean isNotificationMediaUpload(HttpServletRequest request) {
@@ -378,9 +381,13 @@ public class AuthFilter extends OncePerRequestFilter {
         // Guard the request before Spring parses its multipart body to avoid buffering large
         // files ahead of the owner permission check or the controller's per-file validator.
         long contentLength = request.getContentLengthLong();
-        if (contentLength > MAX_BRANDING_ASSET_REQUEST_BYTES) {
+        boolean templatePack=request.getRequestURI().endsWith("/branding/template-assets");
+        long maximumBytes=templatePack?MAX_BRANDING_TEMPLATE_REQUEST_BYTES:MAX_BRANDING_ASSET_REQUEST_BYTES;
+        if (contentLength > maximumBytes) {
           writeJsonError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE,
-              "BRANDING_ASSET_TOO_LARGE", "Branding upload requests must be 2 MiB plus multipart overhead or smaller.");
+              "BRANDING_ASSET_TOO_LARGE", templatePack
+                  ? "Brand template requests must contain two validated images at 2 MiB each plus multipart overhead or smaller."
+                  : "Branding upload requests must be 2 MiB plus multipart overhead or smaller.");
           return;
         }
         if (context == null || authorization == null
