@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-14T14:20:48.635927+00:00",
+  "bundle_file": "ncert-c6-english-fecu1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c6-english-fecu1--whole-book.pdf",
+  "asset_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+  "original_book_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+  "book_id": "ncert-c6-english-fecu1",
+  "title": "Curiosity",
+  "source_title": "Curiosity",
+  "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
+  "edition": "Reprint 2026-27",
+  "subject": "Science",
+  "class": "6",
+  "language": "english",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 272,
+  "completed_pages": 272,
+  "pages_newly_extracted": 272,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 265,
+    "LOW_TEXT_REVIEW": 7
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.jsonl",
+  "published": false
+}

@@ -1,0 +1,66 @@
+# Optional no-API-key local AI tutor. Use alongside docker-compose.yml.
+# The model is downloaded into the persistent ollama volume on first start.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    pull_policy: missing
+    restart: unless-stopped
+    volumes:
+      - quantaedge_ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  ollama-model-init:
+    image: ollama/ollama:latest
+    pull_policy: missing
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    # Keep the entire script as ONE command argument for /bin/sh -c.
+    # A folded scalar directly under command is split into argv elements by Compose.
+    command:
+      - |-
+        until ollama list >/dev/null 2>&1; do
+          sleep 2
+        done
+        for attempt in 1 2 3 4 5; do
+          if ollama pull qwen2.5:0.5b; then
+            exit 0
+          fi
+          echo "Model pull failed; retrying if attempts remain." >&2
+          sleep 5
+        done
+        echo "Failed to pull qwen2.5:0.5b after five attempts." >&2
+        exit 2
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  api:
+    environment:
+      APP_AI_TUTOR_ENABLED: "true"
+      APP_AI_TUTOR_PRIMARY_API_KEY: "local-inference"
+      APP_AI_TUTOR_PRIMARY_MODEL: "qwen2.5:0.5b"
+      APP_AI_TUTOR_PRIMARY_BASE_URL: "http://ollama:11434"
+      APP_AI_TUTOR_PRIMARY_API_MODE: "CHAT_COMPLETIONS"
+      APP_AI_TUTOR_MAX_OUTPUT_TOKENS: "96"
+      APP_AI_TUTOR_HISTORY_MESSAGES: "3"
+      APP_AI_TUTOR_FALLBACK_ENABLED: "${APP_AI_TUTOR_FALLBACK_ENABLED:-false}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      APP_AI_TUTOR_FALLBACK_MODEL: "${APP_AI_TUTOR_FALLBACK_MODEL:-gpt-5.6-luna}"
+      APP_AI_TUTOR_FALLBACK_BASE_URL: "${APP_AI_TUTOR_FALLBACK_BASE_URL:-https://api.openai.com}"
+      APP_AI_TUTOR_FALLBACK_API_MODE: "${APP_AI_TUTOR_FALLBACK_API_MODE:-RESPONSES}"
+      APP_AI_TUTOR_MIN_OUTPUT_CHARS: "${APP_AI_TUTOR_MIN_OUTPUT_CHARS:-8}"
+    # Keep core API availability independent from the one-shot model download.
+    # Ollama must be reachable, but a failed model pull must not take API offline.
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+volumes:
+  quantaedge_ollama:

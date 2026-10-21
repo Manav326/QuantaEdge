@@ -1,0 +1,158 @@
+.page{max-width:1180px;margin:0 auto;padding:28px 22px 48px;color:var(--qe-text,#172033)}
+.hero{border:1px solid #f2d4bd;border-radius:22px;background:linear-gradient(135deg,#fff8f2 0%,#fff 66%);padding:26px;box-shadow:0 12px 34px rgba(45,30,15,.06)}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:#a14a16;font-weight:800}
+.hero h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:8px 0 10px;font-weight:800;color:#1b2335}
+.hero p{max-width:660px;color:#596273;line-height:1.65;margin:0}
+.heroActions{display:flex;align-items:center;gap:10px;margin-top:20px}
+.primaryButton,.secondaryButton,.disabledButton,.heroActions button,.stateCard button,.verifyCard button{border:0;border-radius:11px;padding:11px 15px;display:inline-flex;align-items:center;justify-content:center;font:inherit;font-weight:750;text-decoration:none;cursor:pointer}
+.primaryButton{background:#e87524;color:#fff}
+.primaryButton:hover{background:#cf6117}
+.secondaryButton{background:#fff;color:#a54b15;border:1px solid #edc5a5}
+.iconButton{height:42px;width:42px;background:#fff;color:#a54b15;border:1px solid #edc5a5;font-size:21px}
+.status{margin:16px 0;padding:12px 14px;border:1px solid #e7d9c7;border-radius:12px;background:#fffaf5;color:#723d18;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,285px),1fr));gap:16px;margin-top:22px}
+.courseCard{display:flex;flex-direction:column;gap:10px;border:1px solid #e6e8ed;border-radius:18px;padding:18px;background:#fff;box-shadow:0 8px 24px rgba(20,25,40,.045);min-width:0}
+.cardTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.courseMark{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#fff0e5;color:#c75d18;font-size:23px}
+.price{font-size:18px;font-weight:850;color:#bd5819;white-space:nowrap}
+.courseCard h2{font-size:19px;line-height:1.3;color:#20283a;margin:3px 0 0}
+.meta{font-size:12px;color:#71798a;margin:0}
+.description{font-size:14px;line-height:1.6;color:#555e6e;margin:0}
+.subjects{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.subjects span{border:1px solid #eceef2;background:#f8f9fb;color:#4b5565;border-radius:999px;padding:5px 9px;font-size:11px}
+.cardFooter{margin-top:auto;padding-top:10px}
+.cardFooter>*{width:100%}
+.disabledButton{background:#f0f1f4;color:#747b87;cursor:not-allowed}
+.stateCard{margin-top:22px;border:1px dashed #d8dce4;border-radius:16px;padding:22px;background:#fff}
+.stateCard h2{font-size:18px;margin:0 0 7px}
+.stateCard p{color:#656d7b;line-height:1.6;margin:0 0 14px}
+.verifyCard{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding:16px;border:1px solid #edc5a5;border-radius:16px;background:#fff8f1}
+.verifyCard strong{color:#803b12}.verifyCard p{color:#5e6674;line-height:1.5;margin:5px 0 0;font-size:13px}
+.verifyCard button,.stateCard button{background:#e87524;color:#fff;flex-shrink:0}
+@media(max-width:640px){.page{padding:16px 13px 30px}.hero{padding:19px;border-radius:17px}.verifyCard{align-items:stretch;flex-direction:column}.verifyCard button{width:100%}.grid{grid-template-columns:minmax(0,1fr)}}
+
+.requestStatus{font-size:12px;line-height:1.5;color:#7c451f;background:#fff8f2;border:1px solid #f0d5c0;border-radius:10px;padding:9px 11px;margin:0}
+
+.requestHistory{margin:20px 0 22px;border:1px solid #e4e7ed;border-radius:16px;background:#fff;padding:18px}
+.requestHistoryHeading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px}
+.requestHistoryHeading h2{font-size:18px;color:#1b2335;margin:0 0 4px}
+.requestHistoryHeading p{font-size:13px;color:#626b7b;margin:0;line-height:1.5}
+.requestHistoryHeading button{border:1px solid #e6c2a6;border-radius:9px;padding:8px 11px;background:#fff8f2;color:#984714;font:inherit;font-weight:700}
+.requestHistoryList{display:grid;gap:8px}
+.requestHistoryRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #eef0f4;border-radius:12px;min-width:0}
+.requestHistoryRow>div:first-child{display:grid;gap:4px;min-width:0}
+.requestHistoryRow strong{font-size:14px;color:#20283a}
+.requestHistoryRow span,.requestHistoryState small{font-size:12px;line-height:1.5;color:#6c7382}
+.requestHistoryState{display:grid;justify-items:end;gap:3px;flex-shrink:0}
+.requestPending,.requestComplete,.requestOther{border-radius:100px;padding:4px 9px;font-size:12px!important;font-weight:750;white-space:nowrap}
+.requestPending{background:#fff4df;color:#905b0c!important}
+.requestComplete{background:#e9f8ef;color:#22623c!important}
+.requestOther{background:#f1f2f5;color:#555d6c!important}
+@media(max-width:560px){
+  .requestHistory{padding:13px}
+  .requestHistoryRow{align-items:flex-start;flex-direction:column}
+  .requestHistoryState{justify-items:start}
+  .requestHistoryHeading{align-items:center}
+}
+
+
+/* Full dark-theme contract for this CSS-module route: neutral cards, quiet borders, semantic states. */
+html[data-qe-appearance="dark"] .page { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero {
+  background: radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--qe-color-primary) 12%, transparent), transparent 36%), var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .eyebrow,
+html[data-qe-appearance="dark"] .price { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .hero h1,
+html[data-qe-appearance="dark"] .courseCard h2,
+html[data-qe-appearance="dark"] .requestHistoryHeading h2,
+html[data-qe-appearance="dark"] .requestHistoryRow strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero p,
+html[data-qe-appearance="dark"] .meta,
+html[data-qe-appearance="dark"] .description,
+html[data-qe-appearance="dark"] .stateCard p,
+html[data-qe-appearance="dark"] .verifyCard p,
+html[data-qe-appearance="dark"] .requestHistoryHeading p,
+html[data-qe-appearance="dark"] .requestHistoryRow span,
+html[data-qe-appearance="dark"] .requestHistoryState small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .primaryButton,
+html[data-qe-appearance="dark"] .verifyCard button,
+html[data-qe-appearance="dark"] .stateCard button {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .primaryButton:hover,
+html[data-qe-appearance="dark"] .verifyCard button:hover,
+html[data-qe-appearance="dark"] .stateCard button:hover { filter: brightness(1.06); }
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .iconButton,
+html[data-qe-appearance="dark"] .requestHistoryHeading button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border: 1px solid var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .status,
+html[data-qe-appearance="dark"] .stateCard,
+html[data-qe-appearance="dark"] .requestHistory,
+html[data-qe-appearance="dark"] .courseCard {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .courseMark {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .subjects span {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .disabledButton {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+html[data-qe-appearance="dark"] .verifyCard {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestStatus {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestHistoryRow {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestPending {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container) !important;
+}
+html[data-qe-appearance="dark"] .requestComplete {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container) !important;
+}
+html[data-qe-appearance="dark"] .requestOther {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text) !important;
+}
+
+.discountCodeBox{display:grid;gap:8px;margin:18px 0;padding:16px 18px;border:1px solid #f2d7c2;border-radius:15px;background:linear-gradient(135deg,#fffaf5,#fff);box-shadow:0 5px 20px rgba(109,61,24,.045)}
+.discountCodeBox>label{font-size:13px;font-weight:800;color:#273247}
+.discountCodeBox>label span{font-weight:500;color:#778195}
+.discountCodeEntry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+.discountCodeEntry input{width:100%;min-width:0;min-height:42px;border:1px solid #dfd6ce;border-radius:10px;padding:10px 12px;background:#fff;color:#20283a;font-size:14px;letter-spacing:.04em}
+.discountCodeEntry input:focus{outline:2px solid #f4b17f;outline-offset:1px}
+.discountCodeEntry span{font-size:11px;color:#718096}
+.discountCodeBox p{margin:0;color:#687386;font-size:12px;line-height:1.6}
+html[data-qe-appearance="dark"] .discountCodeBox{background:var(--qe-color-surface-elevated);border-color:var(--qe-color-border-subtle);box-shadow:none}
+html[data-qe-appearance="dark"] .discountCodeBox>label{color:var(--qe-color-text)}
+html[data-qe-appearance="dark"] .discountCodeBox>label span,html[data-qe-appearance="dark"] .discountCodeEntry span,html[data-qe-appearance="dark"] .discountCodeBox p{color:var(--qe-color-text-muted)}
+html[data-qe-appearance="dark"] .discountCodeEntry input{background:var(--qe-color-surface);border-color:var(--qe-color-border-subtle);color:var(--qe-color-text)}
+@media(max-width:560px){.discountCodeEntry{grid-template-columns:1fr;gap:5px}}

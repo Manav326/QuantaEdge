@@ -1,0 +1,1249 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic02-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Data-only draft staged as Git objects during an active batch; no commit/ref update is performed here."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Ordinary Class 6 curriculum content only, not Navodaya entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    },
+    "chapter_scope_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 2,
+    "topic_id": "c6-sci-ch02-t02",
+    "title_by_locale": {
+      "en": "Grouping Plants by Observable Features",
+      "hi": "दिखाई देने वाली विशेषताओं के आधार पर पौधों का समूह बनाना"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          32,
+          33,
+          34,
+          35
+        ],
+        "printed_pages": [
+          14,
+          15,
+          16,
+          17
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Grouping based on observable similarities and differences",
+      "Using plant height, stem colour/texture/thickness and branch position as observation criteria",
+      "Basic descriptions of trees, shrubs and herbs",
+      "Introductory recognition of climbers and creepers"
+    ],
+    "excluded_scope": [
+      "Leaf venation and root systems, reserved for the next topic",
+      "Monocot/dicot seeds and cotyledons",
+      "Animal grouping and habitats",
+      "Detailed classification from outside this chapter"
+    ],
+    "source_text_rule": "Content is an original student-facing explanation based on the cited source pages, not verbatim NCERT text; these questions are supplementary, not the textbook's own assessment questions.",
+    "bilingual_parity_rule": "Both locales carry the same objective IDs, block IDs, question IDs, option IDs, answer keys, grading and learning demand.",
+    "language_runtime_rule": "One global app language selector governs all learner-visible content, including all practice labels and feedback. State-preserving runtime switching remains unimplemented.",
+    "visual_rule": "Plant groups diagram is an original structured draft and must be rendered/reviewed before use; no unapproved source preview is exposed to students."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t02-lo1",
+      "statement_by_locale": {
+        "en": "Explain why grouping plants by shared features makes them easier to study.",
+        "hi": "समझाएँ कि समान विशेषताओं के आधार पर पौधों का समूह बनाने से उनका अध्ययन करना आसान क्यों होता है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t02-lo2",
+      "statement_by_locale": {
+        "en": "Identify common observable features used to group plants, including height, stem nature and branch position.",
+        "hi": "पौधों का समूह बनाने के लिए उपयोग की जाने वाली सामान्य दिखाई देने वाली विशेषताएँ पहचानें, जैसे ऊँचाई, तने का प्रकार और शाखाओं की स्थिति।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t02-lo3",
+      "statement_by_locale": {
+        "en": "Distinguish trees, shrubs, herbs, climbers and creepers using the chapter's introductory descriptions.",
+        "hi": "अध्याय में दी गई प्रारंभिक विशेषताओं के आधार पर वृक्ष, झाड़ियाँ, शाक, आरोही और रेंगने वाले पौधों में अंतर करें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-p32-35",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "printed_pages": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "source_context": [
+        "PDF p.32 / printed p.14 introduces grouping by similarities and differences, then asks how to group plants.",
+        "PDF p.33 / printed p.15 describes using plant height, stem features and branch position; it directs learners to record observations.",
+        "PDF p.34 / printed p.16 includes a table comparing mango, rose and tomato as examples of tree, shrub and herb.",
+        "PDF p.35 / printed p.17 describes shrubs, herbs, climbers and creepers and transitions to leaf venation, which is deliberately excluded from this topic."
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "extraction_quality_note": "Table and figure text is interleaved in the whole-book JSONL. Compare exact labels and examples with the rendered source pages before marking source-complete."
+    },
+    {
+      "source_ref_id": "src-c2-hi-jigyasa-ch2-plant-grouping",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "note": "Verify Hindi phrasing, examples and corresponding page boundaries in Jigyasa."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t02",
+    "title_by_locale": {
+      "en": "Find Patterns in Plants",
+      "hi": "पौधों में समानताएँ पहचानें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t02-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo1",
+          "c6-sci-ch02-t02-lo2"
+        ],
+        "source_refs": [
+          "src-c2-en-p32-35",
+          "src-c2-hi-jigyasa-ch2-plant-grouping"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Grouping helps us compare",
+            "paragraphs": [
+              "Plants do not all look the same. We can compare features that are easy to notice, such as height, whether a stem is green or brown, whether it is tender or hard, how thick it is, and where its branches begin.",
+              "When we place plants with similar features into a group, it becomes easier to describe and study their similarities and differences. A group is based on the feature we chose; another feature could give us a different way to arrange the same plants."
+            ],
+            "key_point": "A useful grouping states the feature used to compare the plants."
+          },
+          "hi": {
+            "heading": "समूह बनाने से तुलना आसान होती है",
+            "paragraphs": [
+              "सभी पौधे एक जैसे नहीं दिखते। हम ऐसी विशेषताओं की तुलना कर सकते हैं जिन्हें आसानी से देखा जा सके—जैसे ऊँचाई, तना हरा है या भूरा, कोमल है या कठोर, कितना मोटा है, और उसकी शाखाएँ कहाँ से निकलती हैं।",
+              "जब समान विशेषताओं वाले पौधों को एक समूह में रखते हैं, तो उनकी समानताएँ और अंतर बताना तथा अध्ययन करना आसान हो जाता है। समूह चुनी गई विशेषता पर आधारित होता है; किसी दूसरी विशेषता के आधार पर उन्हीं पौधों का अलग समूह भी बन सकता है।"
+            ],
+            "key_point": "अच्छा समूह यह स्पष्ट करता है कि पौधों की तुलना किस विशेषता के आधार पर की गई है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-b02",
+        "type": "diagram",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo2",
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t02-plant-growth-forms",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Produce an original bilingual comparison diagram of a tree, shrub, herb, climber and creeper. Use simplified plant silhouettes and labels; make it clear this is an introductory grouping based on common visible growth/stem features and not an absolute rule for every species. Do not copy the NCERT figure.",
+        "diagram_data": {
+          "layout": "five_column_compare",
+          "items": [
+            {
+              "id": "tree",
+              "label_by_locale": {
+                "en": "Tree",
+                "hi": "वृक्ष"
+              },
+              "features_by_locale": {
+                "en": [
+                  "Often tall",
+                  "Hard, thick, woody stem",
+                  "Branches usually begin higher"
+                ],
+                "hi": [
+                  "अक्सर ऊँचा",
+                  "कठोर, मोटा, काष्ठीय तना",
+                  "शाखाएँ प्रायः ऊपर से निकलती हैं"
+                ]
+              },
+              "example_by_locale": {
+                "en": "Mango",
+                "hi": "आम"
+              }
+            },
+            {
+              "id": "shrub",
+              "label_by_locale": {
+                "en": "Shrub",
+                "hi": "झाड़ी"
+              },
+              "features_by_locale": {
+                "en": [
+                  "Usually shorter than trees",
+                  "Several hard woody stems",
+                  "Branches begin close to the ground"
+                ],
+                "hi": [
+                  "आमतौर पर वृक्ष से छोटा",
+                  "कई कठोर काष्ठीय तने",
+                  "शाखाएँ ज़मीन के पास से निकलती हैं"
+                ]
+              },
+              "example_by_locale": {
+                "en": "Rose",
+                "hi": "गुलाब"
+              }
+            },
+            {
+              "id": "herb",
+              "label_by_locale": {
+                "en": "Herb",
+                "hi": "शाक"
+              },
+              "features_by_locale": {
+                "en": [
+                  "Usually small",
+                  "Soft, green stem"
+                ],
+                "hi": [
+                  "आमतौर पर छोटा",
+                  "कोमल, हरा तना"
+                ]
+              },
+              "example_by_locale": {
+                "en": "Tomato plant",
+                "hi": "टमाटर का पौधा"
+              }
+            },
+            {
+              "id": "climber",
+              "label_by_locale": {
+                "en": "Climber",
+                "hi": "आरोही पौधा"
+              },
+              "features_by_locale": {
+                "en": [
+                  "Weak stem",
+                  "Grows upward with support"
+                ],
+                "hi": [
+                  "कमज़ोर तना",
+                  "सहारे से ऊपर बढ़ता है"
+                ]
+              },
+              "example_by_locale": {
+                "en": "Money plant grown with support (supplementary example)",
+                "hi": "सहारे से उगाया गया मनी प्लांट (अतिरिक्त उदाहरण)"
+              }
+            },
+            {
+              "id": "creeper",
+              "label_by_locale": {
+                "en": "Creeper",
+                "hi": "रेंगने वाला पौधा"
+              },
+              "features_by_locale": {
+                "en": [
+                  "Weak stem",
+                  "Spreads along the ground"
+                ],
+                "hi": [
+                  "कमज़ोर तना",
+                  "ज़मीन पर फैलता है"
+                ]
+              },
+              "example_by_locale": {
+                "en": "Pumpkin plant spreading along the ground (supplementary example)",
+                "hi": "ज़मीन पर फैलता कद्दू का पौधा (अतिरिक्त उदाहरण)"
+              }
+            }
+          ],
+          "footer_by_locale": {
+            "en": "These are introductory patterns for comparing plants; observe the actual plant before deciding its group.",
+            "hi": "ये पौधों की तुलना के प्रारंभिक तरीके हैं; किसी पौधे का समूह तय करने से पहले वास्तविक पौधे का अवलोकन करें।"
+          },
+          "example_note_by_locale": {
+            "en": "Mango, rose and tomato are examples from the cited source passage. Money plant and pumpkin are added as supplementary teaching examples, not quoted from that passage.",
+            "hi": "आम, गुलाब और टमाटर उद्धृत स्रोत अनुच्छेद के उदाहरण हैं। मनी प्लांट और कद्दू अतिरिक्त शिक्षण उदाहरण हैं, उस अनुच्छेद से उद्धृत नहीं।"
+          }
+        },
+        "alt_by_locale": {
+          "en": "Five-column original comparison of tree, shrub, herb, climber and creeper using common stem, height, branching or growth features. The labels and short descriptions are switchable between English and Hindi.",
+          "hi": "वृक्ष, झाड़ी, शाक, आरोही और रेंगने वाले पौधे की पाँच-भागों में मौलिक तुलना, जिसमें तने, ऊँचाई, शाखाओं या बढ़ने के सामान्य गुण दिए गए हैं। लेबल और विवरण अंग्रेज़ी तथा हिंदी में बदले जा सकते हैं।"
+        },
+        "caption_by_locale": {
+          "en": "Use visible features as clues; they are a starting point for grouping, not a substitute for careful observation.",
+          "hi": "समूह बनाने के संकेत के रूप में दिखाई देने वाली विशेषताओं का उपयोग करें; ये शुरुआत हैं, सावधानीपूर्वक अवलोकन का विकल्प नहीं।"
+        },
+        "provenance": {
+          "kind": "GENERATED_ORIGINAL",
+          "source_refs": [
+            "src-c2-en-p32-35",
+            "src-c2-hi-jigyasa-ch2-plant-grouping"
+          ],
+          "source_text_quoted": false
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-b03",
+        "type": "rich_text",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "source_refs": [
+          "src-c2-en-p32-35",
+          "src-c2-hi-jigyasa-ch2-plant-grouping"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Common introductory plant groups",
+            "paragraphs": [
+              "A tree is often tall and has a hard, thick, woody stem. Its branches usually start higher above the ground. Mango is the chapter's example.",
+              "A shrub is usually shorter than a tree and often has several hard, woody stems with branches close to the ground. Rose is the chapter's example. A herb is usually small and has a soft, green stem; tomato is the chapter's example.",
+              "Some plants with weak stems grow upward with support; these are climbers. Others spread along the ground; these are creepers. These descriptions help us begin comparing plants, but careful observation matters more than guessing from one feature alone."
+            ],
+            "callout": "Mango — tree; rose — shrub; tomato — herb (the examples used in the source passage)."
+          },
+          "hi": {
+            "heading": "पौधों के कुछ सामान्य प्रारंभिक समूह",
+            "paragraphs": [
+              "वृक्ष अक्सर ऊँचा होता है और उसका तना कठोर, मोटा तथा काष्ठीय होता है। उसकी शाखाएँ आमतौर पर ज़मीन से ऊपर की ओर निकलती हैं। अध्याय में आम इसका उदाहरण है।",
+              "झाड़ी आमतौर पर वृक्ष से छोटी होती है और उसमें कई कठोर, काष्ठीय तने हो सकते हैं जिनकी शाखाएँ ज़मीन के पास निकलती हैं। गुलाब अध्याय का उदाहरण है। शाक आमतौर पर छोटा होता है और उसका तना कोमल व हरा होता है; टमाटर अध्याय का उदाहरण है।",
+              "कमज़ोर तने वाले कुछ पौधे सहारा लेकर ऊपर बढ़ते हैं; इन्हें आरोही पौधे कहते हैं। कुछ पौधे ज़मीन पर फैलते हैं; इन्हें रेंगने वाले पौधे कहते हैं। ये विवरण पौधों की तुलना शुरू करने में मदद करते हैं, लेकिन केवल एक विशेषता देखकर अनुमान लगाने के बजाय ध्यान से अवलोकन करना महत्त्वपूर्ण है।"
+            ],
+            "callout": "आम — वृक्ष; गुलाब — झाड़ी; टमाटर — शाक (स्रोत अनुच्छेद में दिए उदाहरण)।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-b04",
+        "type": "activity",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo1",
+          "c6-sci-ch02-t02-lo2"
+        ],
+        "activity_kind": "feature_based_grouping",
+        "review_status": "NEEDS_REVIEW",
+        "instructions_by_locale": {
+          "en": [
+            "Choose three or more plants that you can observe safely without damaging them.",
+            "Record height, stem colour/feel (only if safe and allowed), thickness and where branches begin.",
+            "Choose one feature and group the plants by that feature.",
+            "Try a different feature and notice whether the groups change."
+          ],
+          "hi": [
+            "ऐसे तीन या अधिक पौधे चुनें जिनका बिना नुकसान पहुँचाए सुरक्षित रूप से अवलोकन किया जा सके।",
+            "ऊँचाई, तने का रंग/प्रकृति (केवल सुरक्षित और अनुमति होने पर), मोटाई और शाखाओं की स्थिति दर्ज करें।",
+            "एक विशेषता चुनें और उसी के आधार पर पौधों का समूह बनाएँ।",
+            "अब दूसरी विशेषता चुनकर देखें कि समूह बदलते हैं या नहीं।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "observed_feature",
+            "label_by_locale": {
+              "en": "Feature used",
+              "hi": "उपयोग की गई विशेषता"
+            }
+          },
+          {
+            "id": "plant_group",
+            "label_by_locale": {
+              "en": "How I grouped the plants",
+              "hi": "मैंने पौधों का समूह कैसे बनाया"
+            }
+          },
+          {
+            "id": "second_feature",
+            "label_by_locale": {
+              "en": "What changed with another feature?",
+              "hi": "दूसरी विशेषता से क्या बदला?"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "A clear grouping names the feature used and describes how it applies to each plant. Different reasonable groupings are possible.",
+          "hi": "स्पष्ट समूह में उपयोग की गई विशेषता का नाम और हर पौधे पर उसका उपयोग बताया जाता है। अलग-अलग उचित समूह बन सकते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo1",
+          "c6-sci-ch02-t02-lo2",
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Grouping makes similarities and differences easier to study.",
+              "Plant height, stem nature and branch position are useful observable features.",
+              "Trees, shrubs and herbs are described using common differences in height and stems.",
+              "Climbers grow upward with support; creepers spread along the ground.",
+              "Name the feature used when you create a group."
+            ],
+            "vocabulary": [
+              {
+                "term": "Grouping",
+                "meaning": "Arranging things by a chosen shared feature."
+              },
+              {
+                "term": "Woody stem",
+                "meaning": "A hard stem with a wood-like structure."
+              },
+              {
+                "term": "Climber",
+                "meaning": "A plant with a weak stem that grows upward using support."
+              },
+              {
+                "term": "Creeper",
+                "meaning": "A plant that spreads along the ground."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "समूह बनाने से समानताओं और अंतरों का अध्ययन आसान होता है।",
+              "पौधे की ऊँचाई, तने की प्रकृति और शाखाओं की स्थिति दिखाई देने वाली उपयोगी विशेषताएँ हैं।",
+              "वृक्ष, झाड़ी और शाक में ऊँचाई तथा तनों के सामान्य अंतर से पहचान की शुरुआत की जा सकती है।",
+              "आरोही पौधे सहारे से ऊपर बढ़ते हैं; रेंगने वाले पौधे ज़मीन पर फैलते हैं।",
+              "समूह बनाते समय उपयोग की गई विशेषता का नाम बताएँ।"
+            ],
+            "vocabulary": [
+              {
+                "term": "समूहीकरण",
+                "meaning": "किसी चुनी हुई समान विशेषता के आधार पर चीज़ों को समूह में रखना।"
+              },
+              {
+                "term": "काष्ठीय तना",
+                "meaning": "लकड़ी जैसा कठोर तना।"
+              },
+              {
+                "term": "आरोही पौधा",
+                "meaning": "कमज़ोर तने वाला पौधा जो सहारे से ऊपर बढ़ता है।"
+              },
+              {
+                "term": "रेंगने वाला पौधा",
+                "meaning": "ऐसा पौधा जो ज़मीन पर फैलता है।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t02",
+    "title_by_locale": {
+      "en": "Practise Grouping Plants",
+      "hi": "पौधों का समूह बनाने का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice for this exact topic, not verbatim NCERT assessment items.",
+      "hi": "इसी विषय के लिए AI द्वारा तैयार अतिरिक्त अभ्यास; ये NCERT के मूल मूल्यांकन प्रश्नों के शब्दशः रूप नहीं हैं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t02-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo2",
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Which description best fits the chapter's example of a tree?",
+          "hi": "वृक्ष के लिए अध्याय में दिए गए उदाहरण से कौन-सा वर्णन सबसे अधिक मेल खाता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A usually small plant with a soft green stem",
+              "hi": "कोमल हरे तने वाला आमतौर पर छोटा पौधा"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A tall plant with a hard, thick woody stem and branches higher above the ground",
+              "hi": "कठोर, मोटे काष्ठीय तने वाला ऊँचा पौधा जिसकी शाखाएँ ज़मीन से ऊपर निकलती हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A plant with a weak stem that spreads along the ground",
+              "hi": "कमज़ोर तने वाला पौधा जो ज़मीन पर फैलता है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A plant that grows upward only with support",
+              "hi": "ऐसा पौधा जो केवल सहारे से ऊपर बढ़ता है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The chapter describes a tree as commonly tall, with a hard, thick woody stem and branches that usually begin higher up.",
+          "hi": "सही। अध्याय में वृक्ष को सामान्यतः ऊँचा, कठोर-मोटे काष्ठीय तने वाला और ऊपर से शाखाएँ निकालने वाला बताया गया है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which features could be used to compare and group plants in this topic? Select all that apply.",
+          "hi": "इस विषय में पौधों की तुलना और समूह बनाने के लिए किन विशेषताओं का उपयोग किया जा सकता है? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Plant height",
+              "hi": "पौधे की ऊँचाई"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Stem colour and nature",
+              "hi": "तने का रंग और प्रकृति"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Where branches begin",
+              "hi": "शाखाएँ कहाँ से निकलती हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Whether we like the plant's name",
+              "hi": "हमें पौधे का नाम पसंद है या नहीं"
+            }
+          },
+          {
+            "id": "e",
+            "text_by_locale": {
+              "en": "How thick the stem is",
+              "hi": "तना कितना मोटा है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c",
+          "e"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The listed observable features help compare plants. Personal liking is not an observable plant feature.",
+          "hi": "सही। बताई गई दिखाई देने वाली विशेषताएँ पौधों की तुलना में मदद करती हैं। व्यक्तिगत पसंद पौधे की अवलोकनीय विशेषता नहीं है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "If we use a different feature to group the same plants, the grouping may change.",
+          "hi": "यदि उन्हीं पौधों का समूह बनाने के लिए दूसरी विशेषता चुनी जाए, तो समूह बदल सकता है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. A grouping depends on the feature selected for comparison.",
+          "hi": "सही। समूह इस बात पर निर्भर करता है कि तुलना के लिए कौन-सी विशेषता चुनी गई है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Match the introductory plant group with its description.",
+          "hi": "पौधों के प्रारंभिक समूह को उसके वर्णन से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "tree",
+            "label_by_locale": {
+              "en": "Tree",
+              "hi": "वृक्ष"
+            }
+          },
+          {
+            "id": "shrub",
+            "label_by_locale": {
+              "en": "Shrub",
+              "hi": "झाड़ी"
+            }
+          },
+          {
+            "id": "herb",
+            "label_by_locale": {
+              "en": "Herb",
+              "hi": "शाक"
+            }
+          },
+          {
+            "id": "climber",
+            "label_by_locale": {
+              "en": "Climber",
+              "hi": "आरोही पौधा"
+            }
+          },
+          {
+            "id": "creeper",
+            "label_by_locale": {
+              "en": "Creeper",
+              "hi": "रेंगने वाला पौधा"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "tree_desc",
+            "label_by_locale": {
+              "en": "Often tall with a hard, thick woody stem",
+              "hi": "अक्सर ऊँचा, कठोर-मोटे काष्ठीय तने वाला"
+            }
+          },
+          {
+            "id": "shrub_desc",
+            "label_by_locale": {
+              "en": "Often shorter, with several hard woody stems branching near the ground",
+              "hi": "अक्सर छोटा, कई कठोर काष्ठीय तनों और ज़मीन के पास शाखाओं वाला"
+            }
+          },
+          {
+            "id": "herb_desc",
+            "label_by_locale": {
+              "en": "Usually small with a soft green stem",
+              "hi": "आमतौर पर छोटा, कोमल हरे तने वाला"
+            }
+          },
+          {
+            "id": "climber_desc",
+            "label_by_locale": {
+              "en": "Weak stem; grows upward with support",
+              "hi": "कमज़ोर तना; सहारे से ऊपर बढ़ता है"
+            }
+          },
+          {
+            "id": "creeper_desc",
+            "label_by_locale": {
+              "en": "Weak stem; spreads along the ground",
+              "hi": "कमज़ोर तना; ज़मीन पर फैलता है"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "tree",
+            "right_id": "tree_desc"
+          },
+          {
+            "left_id": "shrub",
+            "right_id": "shrub_desc"
+          },
+          {
+            "left_id": "herb",
+            "right_id": "herb_desc"
+          },
+          {
+            "left_id": "climber",
+            "right_id": "climber_desc"
+          },
+          {
+            "left_id": "creeper",
+            "right_id": "creeper_desc"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 5,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each group is described by common growth or stem features. These descriptions are useful clues, not a reason to skip observing the plant.",
+          "hi": "हर समूह का वर्णन बढ़ने के तरीके या तने की सामान्य विशेषताओं से किया गया है। ये उपयोगी संकेत हैं, लेकिन पौधे का अवलोकन करने का विकल्प नहीं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A plant with a weak stem that grows upward using support is called a ______.",
+          "hi": "कमज़ोर तने वाला ऐसा पौधा जो सहारे से ऊपर बढ़ता है, उसे ______ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "climber",
+            "a climber"
+          ],
+          "hi": [
+            "आरोही पौधा",
+            "आरोही"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not remove meaningful Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The expected term is climber.",
+          "hi": "अपेक्षित शब्द है 'आरोही पौधा'।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo2",
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "visual_asset_ref": "c6-sci-ch02-t02-plant-growth-forms",
+        "prompt_by_locale": {
+          "en": "In the original comparison diagram, which group is described as usually small with a soft, green stem?",
+          "hi": "मौलिक तुलना-चित्र में किस समूह को आमतौर पर छोटे तथा कोमल हरे तने वाला बताया गया है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Tree",
+              "hi": "वृक्ष"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Herb",
+              "hi": "शाक"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Shrub",
+              "hi": "झाड़ी"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Creeper",
+              "hi": "रेंगने वाला पौधा"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The topic describes herbs as usually small with soft green stems.",
+          "hi": "सही। इस विषय में शाक को आमतौर पर छोटा और कोमल हरे तने वाला बताया गया है।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The structured comparison diagram is draft data until it has been rendered and reviewed.",
+            "hi": "संरचित तुलना-चित्र मसौदा डेटा है; इसे प्रस्तुत करके समीक्षा करना बाकी है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo2",
+          "c6-sci-ch02-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Give two observable differences between the chapter's example of a tree and its example of a shrub.",
+          "hi": "वृक्ष और झाड़ी के अध्याय में दिए गए उदाहरणों के बीच दो दिखाई देने वाले अंतर बताएँ।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "The tree example (mango) is tall with a hard, thick, woody stem and branches higher up.",
+              "The shrub example (rose) is shorter and has several woody stems with branches close to the ground."
+            ],
+            "sample_answer": "The mango tree is tall with a thick hard stem and branches higher up. The rose shrub is shorter and has several stems branching near the ground."
+          },
+          "hi": {
+            "key_points": [
+              "वृक्ष का उदाहरण (आम) ऊँचा है और उसका तना कठोर, मोटा व काष्ठीय है; शाखाएँ ऊपर से निकलती हैं।",
+              "झाड़ी का उदाहरण (गुलाब) छोटा है और उसमें कई काष्ठीय तने होते हैं जिनकी शाखाएँ ज़मीन के पास निकलती हैं।"
+            ],
+            "sample_answer": "आम का वृक्ष ऊँचा होता है, उसका तना मोटा और कठोर होता है तथा शाखाएँ ऊपर से निकलती हैं। गुलाब की झाड़ी छोटी होती है और उसमें कई तने ज़मीन के पास शाखाएँ निकालते हैं।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: states a relevant height difference.",
+              "1 point: states a relevant stem/branching difference."
+            ],
+            "hi": [
+              "1 अंक: ऊँचाई का उचित अंतर बताता है।",
+              "1 अंक: तने या शाखाओं की स्थिति का उचित अंतर बताता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t02-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t02-lo1",
+          "c6-sci-ch02-t02-lo2"
+        ],
+        "scenario_by_locale": {
+          "en": "A learner observes three plants. Plant A is tall with a hard, thick woody stem and branches higher up. Plant B is shorter and has several hard stems branching near the ground. Plant C is small with a soft green stem.",
+          "hi": "एक विद्यार्थी तीन पौधों का अवलोकन करता है। पौधा A ऊँचा है, उसका तना कठोर, मोटा और काष्ठीय है तथा शाखाएँ ऊपर से निकलती हैं। पौधा B छोटा है और उसके कई कठोर तनों की शाखाएँ ज़मीन के पास निकलती हैं। पौधा C छोटा है और उसका तना कोमल व हरा है।"
+        },
+        "prompt_by_locale": {
+          "en": "Which grouping best matches the descriptions?",
+          "hi": "कौन-सा समूह-विन्यास इन वर्णनों से सबसे अधिक मेल खाता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A: herb, B: tree, C: shrub",
+              "hi": "A: शाक, B: वृक्ष, C: झाड़ी"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A: tree, B: shrub, C: herb",
+              "hi": "A: वृक्ष, B: झाड़ी, C: शाक"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A: creeper, B: herb, C: climber",
+              "hi": "A: रेंगने वाला पौधा, B: शाक, C: आरोही पौधा"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "All three must be the same group",
+              "hi": "तीनों एक ही समूह के होने चाहिए"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The plant groups are identified by comparing the stated visible features.",
+          "hi": "सही। पौधों के समूह बताए गए दिखाई देने वाले गुणों की तुलना करके पहचाने गए हैं।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t02-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_rendering_registry_linked": true,
+    "question_components_implemented": false,
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi page boundaries/wording for this source range are pending.",
+      "English source text has figures/tables whose reading order needs page-image reconciliation.",
+      "Original plant-growth comparison diagram is not rendered or reviewed yet; q06 is blocked until visual review.",
+      "The exact chapter source completeness and semantic translation equivalence have not been approved."
+    ],
+    "generated_question_types": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch02-t02-q08"
+        ]
+      }
+    ]
+  },
+  "next_steps": [
+    "Verify Hindi source pages and terminology for this plant-grouping topic.",
+    "Check table and figures on English PDF pages 32-35 against the source page images.",
+    "Generate the next topic on leaf venation and root systems as a distinct topic, using only its mapped Chapter 2 pages.",
+    "Stage the updated production index and issue log with the new question counts; do not make a branch ref or commit until batch finalization."
+  ]
+}

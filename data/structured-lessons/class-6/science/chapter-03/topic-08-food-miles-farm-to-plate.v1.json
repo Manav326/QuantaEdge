@@ -1,0 +1,1159 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch03-topic08-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive content draft; no application code or publishing state changed."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 3,
+    "title_by_locale": {
+      "en": "Mindful Eating: A Path to a Healthy Body",
+      "hi": "उचित आहार—स्वस्थ शरीर का आधार"
+    },
+    "chapter_scope_status": "TEXT_EXTRACTION_BOUNDARY_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+  },
+  "topic": {
+    "topic_number": 8,
+    "topic_id": "c6-sci-ch03-t08",
+    "title_by_locale": {
+      "en": "Food Miles: From Farm to Our Plate",
+      "hi": "खाद्य मील—खेत से हमारी थाली तक"
+    },
+    "source_section_ids": [
+      "3.6"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          72,
+          73
+        ],
+        "printed_pages": [
+          54,
+          55
+        ],
+        "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": [
+          69,
+          71
+        ],
+        "printed_pages": [
+          53,
+          55
+        ],
+        "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_DERIVED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "3.6 Food Miles: From Farm to Our Plate",
+      "Fig. 3.10: growing, threshing/winnowing, storage, milling/packaging, retail transport and plate",
+      "Food miles definition; local producers, transport cost/pollution, food waste and suitable portions"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from other chapters.",
+      "Medical diagnosis/personal treatment advice; deficiency examples are textbook learning only.",
+      "Claiming a single food is enough for everyone.",
+      "English full-page source screenshots as student visuals.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable objective/block/visual/question IDs, equivalent answers and grading across EN/HI. One global app language controls every learner-visible string; switch without losing question/response/progress; no fallback or mixed-language views.",
+    "source_text_rule": "AI-authored supplementary learning aids, not verbatim NCERT explanation or NCERT questions.",
+    "asset_rule": "Diagram is a structured draft and requires review before student rendering; never show an untranslated English full-page source preview to students."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch03-t08-lo1",
+      "statement_by_locale": {
+        "en": "Define food miles as the distance from production to consumer.",
+        "hi": "खाद्य मील को उत्पादन-स्थान से उपभोक्ता तक की दूरी बताएँ।"
+      }
+    },
+    {
+      "id": "c6-sci-ch03-t08-lo2",
+      "statement_by_locale": {
+        "en": "Sequence the stages in the farm-to-plate illustration.",
+        "hi": "खेत से थाली तक के चित्र में चरण क्रम से बताएँ।"
+      }
+    },
+    {
+      "id": "c6-sci-ch03-t08-lo3",
+      "statement_by_locale": {
+        "en": "Suggest ways to reduce food miles and food waste and respect local producers.",
+        "hi": "खाद्य मील और बर्बादी कम करने तथा स्थानीय उत्पादकों का सम्मान करने के उपाय बताएँ।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c3-t08-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        72,
+        73
+      ],
+      "printed_pages": [
+        54,
+        55
+      ],
+      "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "Grounds this topic's explanation, activity and practice; consult Chapter 3 source coverage ledger for every figure/table/activity/end-matter dependency."
+    },
+    {
+      "source_ref_id": "src-c3-t08-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        69,
+        71
+      ],
+      "printed_pages": [
+        53,
+        55
+      ],
+      "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "Hindi Jigyasa counterpart mapped by extracted headings and pagination; OCR/layout noise means rendered-source and semantic review remain mandatory."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch03-t08",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch03-t08-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1",
+          "c6-sci-ch03-t08-lo2"
+        ],
+        "source_refs": [
+          "src-c3-t08-en",
+          "src-c3-t08-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Food Miles: From Farm to Our Plate",
+            "paragraphs": [
+              "Figure 3.10 follows wheat through growing, threshing/winnowing, storage, milling/packaging and transport before food reaches a plate. Food miles is the distance travelled from the place of production to the consumer. Transport may add cost and pollution; locally produced food can support local producers."
+            ],
+            "key_point": "Food miles is the distance a food item travels from its place of production to the consumer."
+          },
+          "hi": {
+            "heading": "खाद्य मील—खेत से हमारी थाली तक",
+            "paragraphs": [
+              "चित्र 3.10 में गेहूँ की यात्रा—खेती, मड़ाई/ओसाई, भंडारण, पिसाई/पैकिंग और परिवहन से लेकर थाली तक—दिखाई गई है। खाद्य मील उत्पादन-स्थान से उपभोक्ता तक तय दूरी है। परिवहन लागत और प्रदूषण बढ़ा सकता है; स्थानीय भोजन स्थानीय उत्पादकों की मदद कर सकता है।"
+            ],
+            "key_point": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo2",
+          "c6-sci-ch03-t08-lo3"
+        ],
+        "source_refs": [
+          "src-c3-t08-en",
+          "src-c3-t08-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Look closer",
+            "paragraphs": [
+              "The chapter asks learners to value the work involved in bringing food to the plate and avoid wasting food. Take only as much as you expect to consume. Reducing food waste and reducing food miles are related but different actions."
+            ],
+            "key_point": "Food miles is the distance a food item travels from its place of production to the consumer."
+          },
+          "hi": {
+            "heading": "आगे समझें",
+            "paragraphs": [
+              "अध्याय भोजन थाली तक पहुँचाने के श्रम का सम्मान करने और बर्बादी रोकने की बात करता है। उतना ही भोजन लें जितना खा सकें। खाद्य बर्बादी घटाना और खाद्य मील घटाना जुड़े हुए, लेकिन अलग कार्य हैं।"
+            ],
+            "key_point": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1",
+          "c6-sci-ch03-t08-lo2",
+          "c6-sci-ch03-t08-lo3"
+        ],
+        "source_refs": [
+          "src-c3-t08-en",
+          "src-c3-t08-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create an original, student-readable visual for Food Miles: From Farm to Our Plate; use localized labels from diagram_data. Do not display textbook page screenshots.",
+          "hi": "खाद्य मील—खेत से हमारी थाली तक के लिए मौलिक, पढ़ने योग्य चित्र बनाएँ; diagram_data से स्थानीयकृत लेबल दिखाएँ। पाठ्यपुस्तक पृष्ठ का स्क्रीनशॉट न दिखाएँ।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch03-t08-visual-01",
+          "kind": "chapter3-topic-08",
+          "rendering_hint": "compact flow, comparison or relationship diagram",
+          "nodes": [
+            {
+              "id": "grow",
+              "label_by_locale": {
+                "en": "Grow wheat",
+                "hi": "गेहूँ उगाना"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "harvest",
+              "label_by_locale": {
+                "en": "Thresh and winnow",
+                "hi": "मड़ाई और ओसाई"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "store",
+              "label_by_locale": {
+                "en": "Store grain",
+                "hi": "अनाज भंडारण"
+              },
+              "position": {
+                "order": 3
+              }
+            },
+            {
+              "id": "mill",
+              "label_by_locale": {
+                "en": "Mill and package",
+                "hi": "पिसाई और पैकिंग"
+              },
+              "position": {
+                "order": 4
+              }
+            },
+            {
+              "id": "transport",
+              "label_by_locale": {
+                "en": "Transport to retailer",
+                "hi": "दुकान तक परिवहन"
+              },
+              "position": {
+                "order": 5
+              }
+            },
+            {
+              "id": "plate",
+              "label_by_locale": {
+                "en": "Prepare and eat",
+                "hi": "बनाएँ और खाएँ"
+              },
+              "position": {
+                "order": 6
+              }
+            },
+            {
+              "id": "distance",
+              "label_by_locale": {
+                "en": "Production-to-consumer distance = food miles",
+                "hi": "उत्पादन से उपभोक्ता तक दूरी = खाद्य मील"
+              },
+              "position": {
+                "order": 7
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Diagram draft: Grow wheat; Thresh and winnow; Store grain; Mill and package; Transport to retailer; Prepare and eat; Production-to-consumer distance = food miles",
+          "hi": "चित्र-प्रारूप: गेहूँ उगाना؛ मड़ाई और ओसाई؛ अनाज भंडारण؛ पिसाई और पैकिंग؛ दुकान तक परिवहन؛ बनाएँ और खाएँ؛ उत्पादन से उपभोक्ता तक दूरी = खाद्य मील"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; समीक्षा लंबित है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1",
+          "c6-sci-ch03-t08-lo2"
+        ],
+        "activity_kind": "Trace a local food item",
+        "configuration": {
+          "activity_id": "c6-sci-ch03-t08-activity-01",
+          "title_by_locale": {
+            "en": "Trace a local food item",
+            "hi": "स्थानीय खाद्य पदार्थ की यात्रा दर्ज करें"
+          },
+          "instruction_by_locale": {
+            "en": "List likely steps from production to your plate, mark transport stages and suggest a way to avoid waste.",
+            "hi": "उत्पादन से थाली तक चरण लिखें, परिवहन चिह्नित करें और बर्बादी रोकने का उपाय सुझाएँ।"
+          },
+          "items": [
+            {
+              "id": "source",
+              "label_by_locale": {
+                "en": "Production",
+                "hi": "उत्पादन"
+              }
+            },
+            {
+              "id": "journey",
+              "label_by_locale": {
+                "en": "Processing/transport",
+                "hi": "प्रसंस्करण/परिवहन"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save response",
+              "reset": "Clear response"
+            },
+            "hi": {
+              "save": "उत्तर सहेजें",
+              "reset": "उत्तर मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral ids or learner text; preserve the response when global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Use respectful language and reliable observations. Follow teacher/lab safety instructions where relevant.",
+          "hi": "सम्मानजनक भाषा और विश्वसनीय अवलोकन अपनाएँ। जहाँ आवश्यक हो शिक्षक/प्रयोगशाला के सुरक्षा निर्देश मानें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1",
+          "c6-sci-ch03-t08-lo2",
+          "c6-sci-ch03-t08-lo3"
+        ],
+        "content_by_locale": {
+          "en": "Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch03-t08",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch03-t08-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1"
+        ],
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "prompt_by_locale": {
+          "en": "Which statement best matches this lesson? Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "इस पाठ से कौन-सा कथन मेल खाता है? खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Food miles is the distance a food item travels from its place of production to the consumer.",
+              "hi": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Food miles is the time taken to eat a meal.",
+              "hi": "खाद्य मील भोजन खाने में लगा समय है।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "It is the weight of food on a plate.",
+              "hi": "यह थाली में भोजन का भार है।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "It means only the distance from shop to kitchen.",
+              "hi": "इसका अर्थ केवल दुकान से रसोई तक की दूरी है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q02",
+        "type": "multiple_select",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo2"
+        ],
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "prompt_by_locale": {
+          "en": "Which statements fit the lesson? Select all that apply.",
+          "hi": "कौन-से कथन इस पाठ से मेल खाते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Food miles is the distance a food item travels from its place of production to the consumer.",
+              "hi": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Figure 3.10 follows wheat through growing, threshing/winnowing, storage, milling/packaging and transport before food reaches a plate. Food miles is the distance travelled from the place of production to the consumer. Transport may add cost and pollution; locally produced food can support local producers.",
+              "hi": "चित्र 3.10 में गेहूँ की यात्रा—खेती, मड़ाई/ओसाई, भंडारण, पिसाई/पैकिंग और परिवहन से लेकर थाली तक—दिखाई गई है। खाद्य मील उत्पादन-स्थान से उपभोक्ता तक तय दूरी है। परिवहन लागत और प्रदूषण बढ़ा सकता है; स्थानीय भोजन स्थानीय उत्पादकों की मदद कर सकता है।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The chapter asks learners to value the work involved in bringing food to the plate and avoid wasting food. Take only as much as you expect to consume. Reducing food waste and reducing food miles are related but different actions.",
+              "hi": "अध्याय भोजन थाली तक पहुँचाने के श्रम का सम्मान करने और बर्बादी रोकने की बात करता है। उतना ही भोजन लें जितना खा सकें। खाद्य बर्बादी घटाना और खाद्य मील घटाना जुड़े हुए, लेकिन अलग कार्य हैं।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Food miles is the time taken to eat a meal.",
+              "hi": "खाद्य मील भोजन खाने में लगा समय है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo3"
+        ],
+        "rendering_contract_id": "qtype-true-false.v1",
+        "prompt_by_locale": {
+          "en": "Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1"
+        ],
+        "rendering_contract_id": "qtype-matching.v1",
+        "prompt_by_locale": {
+          "en": "Match each item with its related description.",
+          "hi": "हर पद का संबंधित विवरण से मिलान करें।"
+        },
+        "left_items": [
+          {
+            "id": "grow",
+            "label_by_locale": {
+              "en": "Grow the crop",
+              "hi": "फसल उगाना"
+            }
+          },
+          {
+            "id": "store",
+            "label_by_locale": {
+              "en": "Store grain",
+              "hi": "अनाज भंडारण"
+            }
+          },
+          {
+            "id": "mill",
+            "label_by_locale": {
+              "en": "Mill/package",
+              "hi": "पिसाई/पैकिंग"
+            }
+          },
+          {
+            "id": "retail",
+            "label_by_locale": {
+              "en": "Transport to retailer",
+              "hi": "दुकान तक परिवहन"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "produce",
+            "label_by_locale": {
+              "en": "Production",
+              "hi": "उत्पादन"
+            }
+          },
+          {
+            "id": "after",
+            "label_by_locale": {
+              "en": "After harvest",
+              "hi": "कटाई के बाद"
+            }
+          },
+          {
+            "id": "pack",
+            "label_by_locale": {
+              "en": "Before distribution",
+              "hi": "वितरण से पहले"
+            }
+          },
+          {
+            "id": "shop",
+            "label_by_locale": {
+              "en": "Delivery to shop",
+              "hi": "दुकान तक पहुँचाना"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "grow",
+            "right_id": "produce"
+          },
+          {
+            "left_id": "store",
+            "right_id": "after"
+          },
+          {
+            "left_id": "mill",
+            "right_id": "pack"
+          },
+          {
+            "left_id": "retail",
+            "right_id": "shop"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo2"
+        ],
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "prompt_by_locale": {
+          "en": "The distance from production place to consumer is called food ____.",
+          "hi": "उत्पादन-स्थान से उपभोक्ता तक की दूरी खाद्य ____ कहलाती है।"
+        },
+        "accepted_answers": {
+          "en": [
+            "miles"
+          ],
+          "hi": [
+            "मील"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate the response.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo3"
+        ],
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "prompt_by_locale": {
+          "en": "Observe the bilingual diagram draft. Which statement is supported by its labels?",
+          "hi": "द्विभाषी चित्र-प्रारूप देखें। उसके लेबल से कौन-सा कथन समर्थित है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Food miles is the distance a food item travels from its place of production to the consumer.",
+              "hi": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Food miles is the time taken to eat a meal.",
+              "hi": "खाद्य मील भोजन खाने में लगा समय है।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "It is the weight of food on a plate.",
+              "hi": "यह थाली में भोजन का भार है।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "It means only the distance from shop to kitchen.",
+              "hi": "इसका अर्थ केवल दुकान से रसोई तक की दूरी है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch03-t08-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "The visual is a structured draft. Render and review correctness, bilingual labels, legibility, contrast, alt text and approval before student rendering.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        },
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo1"
+        ],
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "prompt_by_locale": {
+          "en": "Explain the key idea of this lesson and give one supporting detail.",
+          "hi": "इस पाठ के मुख्य विचार को समझाएँ और उसके समर्थन में एक विवरण दें।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Food miles is the distance a food item travels from its place of production to the consumer.",
+              "The chapter asks learners to value the work involved in bringing food to the plate and avoid wasting food. Take only as much as you expect to consume. Reducing food waste and reducing food miles are related but different actions."
+            ],
+            "sample_answer": "Food miles is the distance a food item travels from its place of production to the consumer. The chapter asks learners to value the work involved in bringing food to the plate and avoid wasting food. Take only as much as you expect to consume. Reducing food waste and reducing food miles are related but different actions."
+          },
+          "hi": {
+            "key_points": [
+              "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।",
+              "अध्याय भोजन थाली तक पहुँचाने के श्रम का सम्मान करने और बर्बादी रोकने की बात करता है। उतना ही भोजन लें जितना खा सकें। खाद्य बर्बादी घटाना और खाद्य मील घटाना जुड़े हुए, लेकिन अलग कार्य हैं।"
+            ],
+            "sample_answer": "खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है। अध्याय भोजन थाली तक पहुँचाने के श्रम का सम्मान करने और बर्बादी रोकने की बात करता है। उतना ही भोजन लें जितना खा सकें। खाद्य बर्बादी घटाना और खाद्य मील घटाना जुड़े हुए, लेकिन अलग कार्य हैं।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point: explains the key idea accurately.",
+              "1 point: includes a supporting detail."
+            ],
+            "hi": [
+              "1 अंक: मुख्य विचार सही समझाया।",
+              "1 अंक: समर्थन में विवरण दिया।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        },
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch03-t08-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch03-t08-lo2"
+        ],
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "prompt_by_locale": {
+          "en": "A learner leaves a lot of food on the plate. Which action best fits the chapter?",
+          "hi": "विद्यार्थी प्लेट में बहुत भोजन छोड़ देता है। कौन-सा कार्य अध्याय से मेल खाता है?"
+        },
+        "scenario_by_locale": {
+          "en": "The class is discussing food miles and waste.",
+          "hi": "कक्षा खाद्य मील और बर्बादी पर चर्चा कर रही है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Take a suitable portion and value the effort from farm to plate.",
+              "hi": "उचित मात्रा लें और खेत से थाली तक के श्रम का सम्मान करें।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Treat leftovers as unimportant.",
+              "hi": "बचे भोजन को महत्त्वहीन मानें।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Always take the largest portion.",
+              "hi": "हमेशा अधिकतम मात्रा लें।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Blame only one person in the supply chain.",
+              "hi": "पूरी श्रृंखला में केवल एक व्यक्ति को दोष दें।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Food miles is the distance a food item travels from its place of production to the consumer.",
+          "hi": "सही। खाद्य मील खाद्य पदार्थ द्वारा उत्पादन-स्थान से उपभोक्ता तक तय की गई दूरी है।"
+        }
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice based on the corresponding section of Chapter 3; not verbatim NCERT questions.",
+      "hi": "अध्याय 3 के संबंधित अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; ये NCERT के मूल प्रश्नों के शब्दशः रूप नहीं हैं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_QA"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch03-t08-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_asset_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "STRUCTURAL_CHECK_PENDING",
+    "known_limitations": [
+      "Source pages are heading/pagination derived and must be compared to rendered PDFs.",
+      "Hindi OCR and reading order are noisy; human bilingual/semantic review is required.",
+      "Visual is a structured draft; image-observation question is blocked from student rendering pending visual QA.",
+      "Chapter summary, 13 textbook questions, keywords and six Learning further activities are indexed in source-coverage.v1.json."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch03-t08-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
+  },
+  "next_steps": [
+    "Compare all cited pages, tables, figures, sidebars and activities against rendered English and Hindi NCERT PDFs.",
+    "Human-review Hindi semantic parity, nutrition table values and scientific correctness.",
+    "Render and review diagram/alt text; keep image-observation question gated until approval.",
+    "Run locale completeness, reference and renderer validation; do not approve/publish yet.",
+    "Implement/test UI renderers and app-wide language switch separately."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

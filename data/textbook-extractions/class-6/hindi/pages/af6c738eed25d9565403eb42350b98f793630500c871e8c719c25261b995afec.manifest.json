@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-14T14:20:15.190379+00:00",
+  "bundle_file": "ncert-c6-hindi-fhcu1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c6-hindi-fhcu1--whole-book.pdf",
+  "asset_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+  "original_book_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+  "book_id": "ncert-c6-hindi-fhcu1",
+  "title": "Jigyasa",
+  "source_title": "Jigyasa",
+  "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12",
+  "edition": "Reprint 2026-27",
+  "subject": "Science",
+  "class": "6",
+  "language": "hindi",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 264,
+  "completed_pages": 264,
+  "pages_newly_extracted": 264,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 263,
+    "LOW_TEXT_REVIEW": 1
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec.jsonl",
+  "published": false
+}

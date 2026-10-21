@@ -1,0 +1,39 @@
+name: AI training dataset validation
+
+on:
+  pull_request:
+    paths:
+      - "data/ai-training/**"
+      - "scripts/ai_training_dataset.py"
+      - "tests/test_ai_training_dataset.py"
+      - ".github/workflows/ai-training-dataset-validation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "data/ai-training/**"
+      - "scripts/ai_training_dataset.py"
+      - "tests/test_ai_training_dataset.py"
+      - ".github/workflows/ai-training-dataset-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run dataset regression tests
+        run: python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+      - name: Validate tracked dataset when exports exist
+        shell: bash
+        run: |
+          if [[ -f data/ai-training/datasets/dataset_master.jsonl ]]; then
+            python scripts/ai_training_dataset.py validate --dataset-dir data/ai-training/datasets
+          else
+            echo "No exported dataset yet; pipeline tests passed."
+          fi

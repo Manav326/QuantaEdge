@@ -1,0 +1,134 @@
+package com.quantaedge.api;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+@ExtendWith(MockitoExtension.class)
+class SourceIngestionControllerTest {
+  @Mock private JdbcTemplate jdbc;
+  @Mock private AuthorizationService authorization;
+  @Mock private StaffAuditService staffAudit;
+  @Mock private SourceIngestionWorker worker;
+  @Mock private TextbookCacheService textbookCache;
+  @Mock private PdfOcrService pdfOcrService;
+
+  private SourceIngestionController controller;
+  private final AuthContext reviewer = new AuthContext(1L, null, 9L, "CONTENT_REVIEWER", "Reviewer");
+
+  @BeforeEach
+  void setUp() {
+    controller = new SourceIngestionController(jdbc, authorization, staffAudit, worker, textbookCache, pdfOcrService);
+  }
+
+  @Test
+  void creatingDraftResourcesRequiresBothReviewAndEditPermissions() {
+    when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+    when(authorization.requirePermission(reviewer, "CONTENT_EDIT"))
+        .thenThrow(new SecurityException("Permission required: CONTENT_EDIT"));
+
+    assertThrows(SecurityException.class, () -> controller.createDraftResourcesFromReviewedRanges(
+        44L, 100L, Map.of("sourceTitle", "Textbook", "sourceUrl", "https://scert.bihar.gov.in/textbooks",
+            "edition", "2026 edition"), reviewer, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge")));
+    verifyNoInteractions(jdbc, staffAudit, pdfOcrService);
+  }
+
+  @Test
+  void sourceInventoryRequiresContentReviewPermission() {
+    when(authorization.requirePermission(null, "CONTENT_REVIEW"))
+        .thenThrow(new SecurityException("Permission required: CONTENT_REVIEW"));
+
+    assertThrows(SecurityException.class, () -> controller.listSources(null, null, null, null));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void sourceMetadataUpdateRequiresContentReviewPermission() {
+    when(authorization.requirePermission(null, "CONTENT_REVIEW"))
+        .thenThrow(new SecurityException("Permission required: CONTENT_REVIEW"));
+
+    assertThrows(SecurityException.class, () -> controller.updateJobMetadata(44L, 100L, Map.of(
+        "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
+        "edition", "2025 reprint"), null, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge")));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void verifiedEditionCannotBeUnverifiedBeforeDatabaseUpdate() {
+    when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+    InstitutionTenantContext tenant = new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge");
+    when(jdbc.queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L)))
+        .thenReturn(1L);
+
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.updateJobMetadata(44L, 100L, Map.of(
+            "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
+            "edition", "UNVERIFIED"), reviewer, tenant));
+    verify(jdbc).queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L));
+    verify(jdbc, org.mockito.Mockito.never()).update(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.<Object[]>any());
+  }
+
+  @Test
+  void cachedBookSubjectClassifierProtectsMathAndScienceTracks() {
+    assertEquals("Mathematics", SourceIngestionController.subjectFamily("गणित भाग-1 · Mathematics"));
+    assertEquals("Science", SourceIngestionController.subjectFamily("विज्ञान भाग-1 · Science"));
+    assertEquals("Other", SourceIngestionController.subjectFamily("Social Science and Political Life"));
+    assertEquals("Other", SourceIngestionController.subjectFamily("इतिहास की दुनिया"));
+    assertEquals(null, SourceIngestionController.subjectFamily("Panorama Reader"));
+  }
+
+  @Test
+  void finalApprovalCanExcludeRejectedChapterCandidates() {
+    Map<String, Object> approved = Map.of("status", "APPROVED", "chapter_id", 12L);
+    Map<String, Object> rejected = Map.of("status", "REJECTED", "chapter_id", 13L);
+
+    List<Map<String, Object>> ready = SourceIngestionController.chaptersReadyForPublishing(
+        List.of(approved, rejected));
+
+    assertEquals(1, ready.size());
+    assertTrue(ready.contains(approved));
+  }
+
+  @Test
+  void finalApprovalRequiresEveryChapterToHaveAnExplicitDecision() {
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> SourceIngestionController.chaptersReadyForPublishing(
+            List.of(Map.of("status", "APPROVED"), Map.of("status", "NEEDS_REVIEW"))));
+  }
+
+  @Test
+  void finalApprovalRequiresAtLeastOneApprovedChapter() {
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> SourceIngestionController.chaptersReadyForPublishing(
+            List.of(Map.of("status", "REJECTED"))));
+  }
+
+  @Test
+  void chapterMappingsAreReadFromExistingSourceRelationshipsAndRelatedPdfAssignments() {
+    when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+    when(jdbc.queryForObject(contains("select count(*) from curriculum_program p"), eq(Long.class), eq(1L), eq(100L)))
+        .thenReturn(1L);
+    when(jdbc.queryForList(contains("from chapter_source cs"), eq(1L), eq(100L), eq(77L), eq(100L))).thenReturn(List.of());
+
+    List<Map<String, Object>> rows = controller.listExistingChapterMappings(
+        77L, 100L, reviewer, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge"));
+
+    assertEquals(0, rows.size());
+    verify(jdbc).queryForList(
+        contains("a.source_content_id=src.id"), eq(1L), eq(100L), eq(77L), eq(100L));
+  }
+}

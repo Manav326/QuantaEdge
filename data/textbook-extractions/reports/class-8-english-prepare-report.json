@@ -1,0 +1,48 @@
+{
+  "registry": "pilot-output/cache/class-8/english",
+  "output_dir": "pilot-output/prepared/class-8/english",
+  "books_seen": 12,
+  "pdfs_created": 116,
+  "bundles_created": 116,
+  "partial_books": [],
+  "whole_books_over_library_limit": [],
+  "no_verified_chapter_boundaries": [],
+  "too_large_chapter_assets": [
+    {
+      "book_id": "ncert-c8-english-heky1",
+      "title": "Khel Yatra — Chapter 1",
+      "page_start": 21,
+      "page_end": 48,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c8-english-heky1",
+      "title": "Khel Yatra — Chapter 2",
+      "page_start": 49,
+      "page_end": 70,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c8-english-heky1",
+      "title": "Khel Yatra — Chapter 3",
+      "page_start": 71,
+      "page_end": 106,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c8-english-heky1",
+      "title": "Khel Yatra — Chapter 4",
+      "page_start": 107,
+      "page_end": 148,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c8-english-heky1",
+      "title": "Khel Yatra — Chapter 5",
+      "page_start": 149,
+      "page_end": 180,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_status": "DRAFT_EXTRACTION_ONLY",
+  "source": {
+    "pdf_filename": "ncert-c6-hindi-fhcu1--chapter-chapter-1.pdf",
+    "pdf_sha256": "047e86d3a3e24849d7c3d43c52d27d8383c34e34bb084a92f1e0740155cfd434",
+    "pdf_page_count": 8,
+    "title": "Jigyasa — Chapter 1",
+    "source_title": "Jigyasa",
+    "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12",
+    "edition": "Current official catalogue; retain printed reprint year from the source PDF",
+    "publisher": "NCERT",
+    "language": "hindi",
+    "class": "6",
+    "classes": [
+      "6"
+    ],
+    "subject": "Science",
+    "book_id": "ncert-c6-hindi-fhcu1",
+    "scope": "CHAPTER_PDF",
+    "content_availability": {
+      "status": "complete"
+    },
+    "asset_content_status": "complete",
+    "chapter_title": "Chapter 1",
+    "chapter_page_start": 17,
+    "chapter_page_end": 24,
+    "original_book_sha256": "81aecf297adb5fb0c6dd61e0790e8cc5ae0ea0800c6c109903ed680464c9e56d"
+  },
+  "pages": [],
+  "chapter_map": []
+}

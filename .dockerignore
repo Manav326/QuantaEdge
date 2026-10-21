@@ -1,0 +1,20 @@
+# The API image is built with the repository root as context.
+# Keep only the API source plus canonical lesson source needed by the publication staging gate.
+.git
+.github
+apps
+docs
+notebooks
+tests
+*.zip
+*.xlsx
+*.ipynb
+.env*
+data/*
+!data/structured-lessons
+!data/structured-lessons/**
+scripts/*
+!scripts/package_published_structured_lessons.py
+services/*
+!services/api
+!services/api/**

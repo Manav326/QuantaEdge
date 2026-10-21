@@ -1,0 +1,34 @@
+{
+  "registry": "pilot-output/cache/class-6/english",
+  "output_dir": "pilot-output/prepared/class-6/english",
+  "books_seen": 6,
+  "pdfs_created": 63,
+  "bundles_created": 63,
+  "partial_books": [],
+  "whole_books_over_library_limit": [],
+  "no_verified_chapter_boundaries": [],
+  "too_large_chapter_assets": [
+    {
+      "book_id": "ncert-c6-english-feky1",
+      "title": "Khel Yatra — Chapter 2",
+      "page_start": 36,
+      "page_end": 62,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c6-english-feky1",
+      "title": "Khel Yatra — Chapter 3",
+      "page_start": 63,
+      "page_end": 97,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    },
+    {
+      "book_id": "ncert-c6-english-feky1",
+      "title": "Khel Yatra — Chapter 4",
+      "page_start": 98,
+      "page_end": 130,
+      "reason": "Chapter split still exceeds the current 50 MiB library limit."
+    }
+  ],
+  "failures": []
+}

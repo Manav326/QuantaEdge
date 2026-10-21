@@ -1,0 +1,14 @@
+{
+  "class": 6,
+  "language": "english",
+  "book_id": "ncert-c6-english-fegp1",
+  "book_slug": "class6-en-maths-bde5606e",
+  "title": "Ganita Prakash",
+  "subject": "maths",
+  "maths_part": 1,
+  "file": "books/ncert-c6-english-fegp1.pdf",
+  "sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-6/english/pages/07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-6/english/pages/07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33.jsonl",
+  "text_jsonl_filename": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33.jsonl"
+}

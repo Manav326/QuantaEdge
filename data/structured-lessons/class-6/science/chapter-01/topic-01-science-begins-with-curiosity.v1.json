@@ -1,0 +1,1217 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch01-topic01-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive draft content artifact. Does not modify application code, existing lessons, extraction records, or publishing state."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 1,
+    "title_by_locale": {
+      "en": "The Wonderful World of Science",
+      "hi": "विज्ञान का अनूठा संसार"
+    },
+    "chapter_scope_status": "CHAPTER_BOUNDARIES_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 1,
+    "topic_id": "c6-sci-ch01-t01",
+    "title_by_locale": {
+      "en": "Science Begins with Curiosity",
+      "hi": "विज्ञान की शुरुआत जिज्ञासा से"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          19,
+          20,
+          21,
+          22
+        ],
+        "printed_pages": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Curiosity as the starting point for exploring the world",
+      "Science as observing, asking questions and investigating",
+      "Science-related questions can arise in many surroundings",
+      "The textbook's jigsaw-puzzle analogy for how discoveries add to or change understanding"
+    ],
+    "excluded_scope": [
+      "Detailed explanations of living-world topics introduced in later chapters",
+      "Food and nutrition instruction from Chapter 3",
+      "Magnets, measurement, materials, temperature, states of water, separation methods, living-creature classification, natural resources or astronomy lessons from later chapters",
+      "Navodaya entrance-exam preparation"
+    ],
+    "bilingual_parity_rule": "English and Hindi must use the same stable block IDs, learning objectives, visual IDs, practice item IDs, correct-answer IDs and intended difficulty. Every learner-visible field across explanation, activity, practice and shared lesson controls must be mapped in both locales. The global app language switch updates the entire visible experience immediately and preserves learner state. No cross-language fallback or mixed-language screen is permitted; missing translations block approval/publication.",
+    "source_text_rule": "Learning explanations and all practice questions are newly authored learning material based on the chapter, not claimed to be verbatim textbook text. Do not present generated questions as NCERT's own questions.",
+    "asset_rule": "V3 source visuals are provenance-linked candidates. They remain review-only until semantic fit, source fidelity, alt text, rights and approval are confirmed. Full-page source previews containing English text are editor-only references and must not appear as student-facing visuals in Hindi mode (or be treated as a localized visual in either mode)."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch01-t01-lo1",
+      "statement_by_locale": {
+        "en": "Explain that curiosity encourages us to notice things and ask questions about the world.",
+        "hi": "समझाएँ कि जिज्ञासा हमें अपने आसपास की चीज़ों पर ध्यान देने और उनके बारे में प्रश्न पूछने के लिए प्रेरित करती है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t01-lo2",
+      "statement_by_locale": {
+        "en": "Recognise that scientific questions can arise from many different surroundings and experiences.",
+        "hi": "पहचानें कि वैज्ञानिक प्रश्न अलग-अलग स्थानों और अनुभवों से उत्पन्न हो सकते हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t01-lo3",
+      "statement_by_locale": {
+        "en": "Describe how new observations or discoveries may lead us to reconsider an earlier idea.",
+        "hi": "बताएँ कि नए अवलोकन या खोज हमें किसी पुराने विचार पर दोबारा सोचने के लिए प्रेरित कर सकते हैं।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c1-en-p19-22",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        19,
+        20,
+        21,
+        22
+      ],
+      "printed_pages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "use": "Grounds the authored explanation and visual references. Full text/visual reconciliation is still pending."
+    },
+    {
+      "source_ref_id": "src-c1-hi-book",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "use": "Hindi counterpart textbook identified. Exact page mapping and paragraph-level reconciliation must be completed before source-completeness approval."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch01-t01",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch01-t01-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1"
+        ],
+        "source_refs": [
+          "src-c1-en-p19-22",
+          "src-c1-hi-book"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Start by wondering",
+            "paragraphs": [
+              "Look closely at the world around you. You may notice a mountain, a grain of sand, a flower opening, or stars in the night sky. Each can make you wonder how or why something happens.",
+              "Science begins with this curiosity. We observe, ask questions and look for ways to understand what we notice. It is not only a list of facts to memorise; it is a way of exploring the world."
+            ],
+            "key_point": "Curiosity turns noticing into questions worth exploring."
+          },
+          "hi": {
+            "heading": "आश्चर्य से शुरुआत करें",
+            "paragraphs": [
+              "अपने आसपास की दुनिया को ध्यान से देखें। आपको कोई पहाड़, रेत का कण, खिलता हुआ फूल या रात के आकाश में तारे दिखाई दे सकते हैं। इन्हें देखकर मन में प्रश्न उठ सकता है कि ऐसा कैसे या क्यों होता है।",
+              "विज्ञान की शुरुआत इसी जिज्ञासा से होती है। हम अवलोकन करते हैं, प्रश्न पूछते हैं और जो देखते हैं उसे समझने के तरीके खोजते हैं। विज्ञान केवल याद करने योग्य तथ्यों की सूची नहीं, बल्कि दुनिया को जानने का एक तरीका है।"
+            ],
+            "key_point": "जिज्ञासा, किसी चीज़ को देखने को उसके बारे में प्रश्न पूछने में बदल देती है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-b02",
+        "type": "image",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "source_refs": [
+          "src-c1-en-p19-22"
+        ],
+        "asset_refs": [
+          "v3-page-0020-fa1415dfc5"
+        ],
+        "asset": {
+          "asset_id": "v3-page-0020-fa1415dfc5",
+          "candidate_kind": "page_preview",
+          "candidate_pack": "data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/candidates.v3.json",
+          "source_book_id": "ncert-c6-english-fecu1",
+          "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+          "source_pdf_page_number": 20,
+          "source_asset_sha256": "fa1415dfc5421983b6f0df110c603b87426ae975c739a867d79129420edffbab",
+          "source_asset_path": "pages/page-0020-fa1415dfc542.jpg",
+          "media_type": "image/jpeg",
+          "url": "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/pages/page-0020-fa1415dfc542.jpg",
+          "visual_kind": "TEXTBOOK_FIGURE",
+          "review_status": "NEEDS_REVIEW",
+          "rights_status": "SOURCE_REFERENCE_ONLY",
+          "publication_allowed": false,
+          "render_policy": "EDITOR_PREVIEW_ONLY_REFERENCE; NEVER_RENDER_AS_STUDENT_CONTENT_IN_EITHER_LOCALE_UNLESS_A_LANGUAGE_APPROPRIATE_VERSION_IS_CREATED_AND_APPROVED",
+          "alt_by_locale": {
+            "en": "A textbook page showing a desert, a coast, an underwater ocean view and a galaxy, beside text comparing scientific knowledge to a jigsaw puzzle.",
+            "hi": "पाठ्यपुस्तक के एक पृष्ठ पर मरुस्थल, समुद्र-तट, समुद्र के भीतर का दृश्य और आकाशगंगा दिखाई गई हैं। साथ में वैज्ञानिक ज्ञान की तुलना जिग्सॉ पहेली से की गई है।"
+          },
+          "caption_by_locale": {
+            "en": "Questions can begin anywhere—from places on Earth to the wider universe. The page uses a jigsaw puzzle to show that discoveries add to our understanding.",
+            "hi": "प्रश्न कहीं से भी शुरू हो सकते हैं—पृथ्वी के स्थानों से लेकर विशाल ब्रह्मांड तक। इस पृष्ठ पर पहेली का उदाहरण दिखाता है कि नई खोजें हमारी समझ में नए हिस्से जोड़ती हैं।"
+          },
+          "integration_note": "This is an actual v3 source-page preview, not a mock image. It is kept as a provenance-linked reference and is not production-approved.",
+          "localization": {
+            "en": "This is an English source-page preview for provenance/review, not the final student visual.",
+            "hi": "यह अंग्रेज़ी स्रोत-पृष्ठ का पूर्वावलोकन केवल समीक्षा/स्रोत-सत्यापन के लिए है; इसे विद्यार्थी को दिखाए जाने वाले हिंदी दृश्य के रूप में न दिखाएँ।"
+          },
+          "student_renderable": false,
+          "localization_blocker": "Whole-page preview embeds English textbook text. The generated bilingual concept diagram is the student-facing visual draft until an appropriate reviewed visual is available."
+        },
+        "integration_note_by_locale": {
+          "en": "Actual V3 page preview retained for source verification only; it is not approved for student rendering.",
+          "hi": "वास्तविक V3 पृष्ठ-पूर्वावलोकन केवल स्रोत-सत्यापन के लिए रखा गया है; विद्यार्थी स्क्रीन पर दिखाने के लिए स्वीकृत नहीं है।"
+        },
+        "alt_by_locale": {
+          "en": "A textbook page showing a desert, a coast, an underwater ocean view and a galaxy, beside text comparing scientific knowledge to a jigsaw puzzle.",
+          "hi": "पाठ्यपुस्तक के एक पृष्ठ पर मरुस्थल, समुद्र-तट, समुद्र के भीतर का दृश्य और आकाशगंगा दिखाई गई हैं। साथ में वैज्ञानिक ज्ञान की तुलना जिग्सॉ पहेली से की गई है।"
+        },
+        "caption_by_locale": {
+          "en": "Questions can begin anywhere—from places on Earth to the wider universe. The page uses a jigsaw puzzle to show that discoveries add to our understanding.",
+          "hi": "प्रश्न कहीं से भी शुरू हो सकते हैं—पृथ्वी के स्थानों से लेकर विशाल ब्रह्मांड तक। इस पृष्ठ पर पहेली का उदाहरण दिखाता है कि नई खोजें हमारी समझ में नए हिस्से जोड़ती हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-b03",
+        "type": "rich_text",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "source_refs": [
+          "src-c1-en-p19-22",
+          "src-c1-hi-book"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Science is all around us",
+            "paragraphs": [
+              "The things we encounter in different places can lead to different questions. A picture of a desert may make us wonder about its surroundings; a coast or an ocean may raise other questions; a view of a galaxy can make us think beyond Earth.",
+              "The purpose of this lesson is not to answer every question about these places. It is to practise noticing what is there and framing a clear question that could be explored."
+            ],
+            "callout": "A useful scientific question starts from something you notice and asks how, why, or what."
+          },
+          "hi": {
+            "heading": "विज्ञान हमारे चारों ओर है",
+            "paragraphs": [
+              "अलग-अलग स्थानों पर दिखाई देने वाली चीज़ें अलग-अलग प्रश्न जगा सकती हैं। मरुस्थल का चित्र देखकर हम उसके परिवेश के बारे में सोच सकते हैं; समुद्र-तट या समुद्र को देखकर दूसरे प्रश्न उठ सकते हैं; आकाशगंगा का दृश्य हमें पृथ्वी से आगे सोचने के लिए प्रेरित कर सकता है।",
+              "इस पाठ का उद्देश्य इन सभी स्थानों के हर प्रश्न का उत्तर देना नहीं है। उद्देश्य है ध्यान से देखना और ऐसा स्पष्ट प्रश्न बनाना जिस पर आगे खोज की जा सके।"
+            ],
+            "callout": "एक उपयोगी वैज्ञानिक प्रश्न किसी देखी हुई चीज़ से शुरू होता है और पूछता है—कैसे, क्यों या क्या?"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-b04",
+        "type": "diagram",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo3"
+        ],
+        "source_refs": [
+          "src-c1-en-p19-22",
+          "src-c1-hi-book"
+        ],
+        "generated_original": true,
+        "visual_brief": "A clean, age-appropriate, original, language-switchable concept loop. Use simple rounded nodes and arrows; no copied textbook artwork. This is a conceptual learning aid, not a textbook source visual.",
+        "diagram_data": {
+          "diagram_id": "c6-sci-ch01-t01-curiosity-loop",
+          "layout": "horizontal_loop",
+          "nodes": [
+            {
+              "id": "notice",
+              "label_by_locale": {
+                "en": "Notice",
+                "hi": "ध्यान दें"
+              }
+            },
+            {
+              "id": "wonder",
+              "label_by_locale": {
+                "en": "Wonder",
+                "hi": "सोचें"
+              }
+            },
+            {
+              "id": "ask",
+              "label_by_locale": {
+                "en": "Ask a question",
+                "hi": "प्रश्न पूछें"
+              }
+            },
+            {
+              "id": "explore",
+              "label_by_locale": {
+                "en": "Explore",
+                "hi": "खोज करें"
+              }
+            },
+            {
+              "id": "learn",
+              "label_by_locale": {
+                "en": "Learn something",
+                "hi": "कुछ नया जानें"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "notice",
+              "to": "wonder"
+            },
+            {
+              "from": "wonder",
+              "to": "ask"
+            },
+            {
+              "from": "ask",
+              "to": "explore"
+            },
+            {
+              "from": "explore",
+              "to": "learn"
+            },
+            {
+              "from": "learn",
+              "to": "notice",
+              "label_by_locale": {
+                "en": "New questions may appear",
+                "hi": "नए प्रश्न उठ सकते हैं"
+              }
+            }
+          ]
+        },
+        "alt_by_locale": {
+          "en": "A loop: notice something, wonder about it, ask a question, explore it and learn; new learning may lead to fresh questions.",
+          "hi": "एक चक्र: किसी चीज़ पर ध्यान दें, उसके बारे में सोचें, प्रश्न पूछें, खोज करें और सीखें; नई सीख से नए प्रश्न उठ सकते हैं।"
+        },
+        "caption_by_locale": {
+          "en": "An original concept diagram for curiosity and exploration. It is not a replacement for the chapter's more detailed scientific-method explanation.",
+          "hi": "जिज्ञासा और खोज समझाने वाला मौलिक चित्र। यह अध्याय में दी गई वैज्ञानिक विधि की विस्तृत व्याख्या का विकल्प नहीं है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-b05",
+        "type": "interactive",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "activity_kind": "observation_and_question_prompt",
+        "configuration": {
+          "steps": [
+            {
+              "id": "step-observe",
+              "instruction_by_locale": {
+                "en": "Look at the source-page visual and write three things you can directly see.",
+                "hi": "स्रोत-चित्र को देखकर तीन ऐसी बातें लिखें जिन्हें आप सीधे देख सकते हैं।"
+              }
+            },
+            {
+              "id": "step-question",
+              "instruction_by_locale": {
+                "en": "Write two questions the visual makes you curious about.",
+                "hi": "चित्र देखकर मन में उठने वाले दो प्रश्न लिखें।"
+              }
+            },
+            {
+              "id": "step-check",
+              "instruction_by_locale": {
+                "en": "Mark each sentence as an observation or a question.",
+                "hi": "हर वाक्य को अवलोकन या प्रश्न के रूप में पहचानें।"
+              }
+            }
+          ],
+          "input_mode": "free_text_and_choice",
+          "grading_mode": "formative_no_single_correct_response",
+          "deterministic_feedback_by_locale": {
+            "en": "An observation describes what you can notice in the visual. A question asks for information you do not yet know. Several different questions can be reasonable.",
+            "hi": "अवलोकन वह बताता है जो चित्र में दिखाई देता है। प्रश्न ऐसी जानकारी पूछता है जो अभी ज्ञात नहीं है। एक ही चित्र से कई उचित प्रश्न बन सकते हैं।"
+          }
+        },
+        "safety_and_scope": "Do not turn responses into lessons about desert ecology, oceans, galaxies, or other later-chapter topics in this lesson."
+      },
+      {
+        "id": "c6-sci-ch01-t01-b06",
+        "type": "recap",
+        "order": 6,
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo2",
+          "c6-sci-ch01-t01-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Curiosity encourages us to observe and ask questions.",
+              "Questions can arise from many places and everyday experiences.",
+              "Scientific understanding grows as people explore and make discoveries.",
+              "When new evidence appears, an earlier idea may need to be reconsidered."
+            ],
+            "vocabulary": [
+              {
+                "term": "Curiosity",
+                "meaning": "A desire to know or understand something."
+              },
+              {
+                "term": "Observation",
+                "meaning": "Noticing something carefully using our senses or suitable tools."
+              },
+              {
+                "term": "Discovery",
+                "meaning": "Finding or learning something that was not known to us before."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "जिज्ञासा हमें अवलोकन करने और प्रश्न पूछने के लिए प्रेरित करती है।",
+              "प्रश्न अलग-अलग स्थानों और रोज़मर्रा के अनुभवों से उठ सकते हैं।",
+              "खोज और अन्वेषण से वैज्ञानिक समझ बढ़ती है।",
+              "नए प्रमाण मिलने पर पुराने विचार पर दोबारा विचार करना पड़ सकता है।"
+            ],
+            "vocabulary": [
+              {
+                "term": "जिज्ञासा",
+                "meaning": "कुछ जानने या समझने की इच्छा।"
+              },
+              {
+                "term": "अवलोकन",
+                "meaning": "इंद्रियों या उपयुक्त साधनों से किसी चीज़ को ध्यान से देखना या जानना।"
+              },
+              {
+                "term": "खोज",
+                "meaning": "ऐसी बात का पता लगाना या सीखना जो पहले हमें ज्ञात नहीं थी।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch01-t01",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch01-t01-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Which statement best describes how science begins?",
+          "hi": "विज्ञान की शुरुआत को कौन-सा कथन सबसे अच्छी तरह बताता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "By memorising every fact without asking questions",
+              "hi": "बिना प्रश्न पूछे हर तथ्य को याद करने से"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "By being curious, noticing things and asking questions",
+              "hi": "जिज्ञासु होने, चीज़ों पर ध्यान देने और प्रश्न पूछने से"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "By deciding that the first guess must be correct",
+              "hi": "यह तय कर लेने से कि पहला अनुमान ही सही है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Only by reading about things far away",
+              "hi": "केवल दूर की चीज़ों के बारे में पढ़ने से"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Curiosity encourages us to notice things and ask how or why they happen.",
+          "hi": "सही। जिज्ञासा हमें चीज़ों पर ध्यान देने और यह पूछने के लिए प्रेरित करती है कि वे कैसे या क्यों होती हैं।"
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1"
+      },
+      {
+        "id": "c6-sci-ch01-t01-q02",
+        "type": "multiple_select",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which of these can inspire a scientific question? Select all that apply.",
+          "hi": "इनमें से कौन-सी चीज़ें वैज्ञानिक प्रश्न उठाने की प्रेरणा दे सकती हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A view of a desert",
+              "hi": "मरुस्थल का दृश्य"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A picture of a galaxy",
+              "hi": "आकाशगंगा का चित्र"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A view of the coast or ocean",
+              "hi": "समुद्र-तट या समुद्र का दृश्य"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The rule that questions must never be asked",
+              "hi": "यह नियम कि प्रश्न कभी नहीं पूछने चाहिए"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct selections: the desert, galaxy, and coast/ocean. Observations from different surroundings can make us curious.",
+          "hi": "सही विकल्प: मरुस्थल, आकाशगंगा और समुद्र-तट/समुद्र। अलग-अलग परिवेश का अवलोकन जिज्ञासा जगा सकता है।"
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1"
+      },
+      {
+        "id": "c6-sci-ch01-t01-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "When a new discovery does not fit an old idea, we may need to reconsider that idea.",
+          "hi": "जब कोई नई खोज पुराने विचार से मेल नहीं खाती, तो हमें उस विचार पर दोबारा विचार करना पड़ सकता है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. New discoveries can change or improve our understanding.",
+          "hi": "सही। नई खोजें हमारी समझ को बदल सकती हैं या बेहतर बना सकती हैं।"
+        },
+        "rendering_contract_id": "qtype-true-false.v1"
+      },
+      {
+        "id": "c6-sci-ch01-t01-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each visual setting with a question a curious learner might ask.",
+          "hi": "हर दृश्य को उस प्रश्न से मिलाएँ जो एक जिज्ञासु विद्यार्थी पूछ सकता है।"
+        },
+        "left_items": [
+          {
+            "id": "desert",
+            "label_by_locale": {
+              "en": "Desert",
+              "hi": "मरुस्थल"
+            }
+          },
+          {
+            "id": "coast",
+            "label_by_locale": {
+              "en": "Coast",
+              "hi": "समुद्र-तट"
+            }
+          },
+          {
+            "id": "galaxy",
+            "label_by_locale": {
+              "en": "Galaxy",
+              "hi": "आकाशगंगा"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "q-desert",
+            "label_by_locale": {
+              "en": "What might I observe about this dry-looking place?",
+              "hi": "इस शुष्क दिखने वाले स्थान में मैं क्या देख सकता/सकती हूँ?"
+            }
+          },
+          {
+            "id": "q-coast",
+            "label_by_locale": {
+              "en": "What questions can I ask about where land meets the sea?",
+              "hi": "जहाँ ज़मीन और समुद्र मिलते हैं, उसके बारे में मैं क्या प्रश्न पूछ सकता/सकती हूँ?"
+            }
+          },
+          {
+            "id": "q-galaxy",
+            "label_by_locale": {
+              "en": "What might I wonder about this distant group of stars?",
+              "hi": "तारों के इस दूर स्थित समूह के बारे में मैं क्या जानना चाहूँगा/चाहूँगी?"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "desert",
+            "right_id": "q-desert"
+          },
+          {
+            "left_id": "coast",
+            "right_id": "q-coast"
+          },
+          {
+            "left_id": "galaxy",
+            "right_id": "q-galaxy"
+          }
+        ],
+        "feedback_by_locale": {
+          "en": "Each setting can start a different line of questioning. The aim is to ask a relevant question, not to answer a later-chapter science topic here.",
+          "hi": "हर दृश्य से अलग प्रकार के प्रश्न उठ सकते हैं। उद्देश्य उचित प्रश्न पूछना है, न कि इस पाठ में आगे के अध्यायों के विज्ञान-विषयों के उत्तर देना।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 3,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-q05",
+        "type": "fill_blank",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "The desire to know or understand something is called ______.",
+          "hi": "कुछ जानने या समझने की इच्छा को ______ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "curiosity"
+          ],
+          "hi": [
+            "जिज्ञासा"
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The word is curiosity. It motivates us to ask questions.",
+          "hi": "शब्द है 'जिज्ञासा'। यही हमें प्रश्न पूछने के लिए प्रेरित करती है।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim leading/trailing whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim leading/trailing whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate the response.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "visual_asset_ref": "v3-page-0020-fa1415dfc5",
+        "prompt_by_locale": {
+          "en": "Look at the source visual. Which option is a question rather than a direct observation?",
+          "hi": "स्रोत-चित्र देखें। कौन-सा विकल्प सीधे अवलोकन के बजाय एक प्रश्न है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "The page shows a desert.",
+              "hi": "पृष्ठ पर मरुस्थल दिखाया गया है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Why might a desert look different from a coast?",
+              "hi": "मरुस्थल, समुद्र-तट से अलग क्यों दिखाई दे सकता है?"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The page includes a galaxy picture.",
+              "hi": "पृष्ठ पर आकाशगंगा का चित्र है।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The page includes an ocean view.",
+              "hi": "पृष्ठ पर समुद्र का दृश्य है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The other options describe what can be seen; option B asks for an explanation.",
+          "hi": "सही। बाकी विकल्प दिखाई देने वाली चीज़ों का वर्णन करते हैं; विकल्प B किसी बात का कारण पूछता है।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "The referenced V3 page preview is a whole English source page marked editor-only and not student-renderable. Replace it with an approved bilingual/language-independent visual before this item is rendered or published.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t01-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "In one or two sentences, explain why a new discovery might make people reconsider an earlier idea.",
+          "hi": "एक या दो वाक्यों में समझाएँ कि नई खोज लोगों को पुराने विचार पर दोबारा सोचने के लिए क्यों प्रेरित कर सकती है।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "A new observation or discovery may not fit the earlier idea.",
+              "People should consider the new evidence and improve or change the idea when needed."
+            ],
+            "sample_answer": "A new discovery can show that an earlier idea did not explain everything. We should consider the new evidence and revise our understanding if needed."
+          },
+          "hi": {
+            "key_points": [
+              "नया अवलोकन या खोज पुराने विचार से मेल न खा सकती है।",
+              "ज़रूरत पड़ने पर नए प्रमाण के आधार पर विचार को सुधारना या बदलना चाहिए।"
+            ],
+            "sample_answer": "नई खोज दिखा सकती है कि पुराना विचार हर बात की व्याख्या नहीं करता। हमें नए प्रमाण पर विचार करके ज़रूरत पड़ने पर अपनी समझ बदलनी चाहिए।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point: mentions new evidence or discovery.",
+              "1 point: says the earlier idea may be updated or changed."
+            ],
+            "hi": [
+              "1 अंक: नए प्रमाण या खोज का उल्लेख।",
+              "1 अंक: पुराने विचार को सुधारने या बदलने की बात।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1"
+      },
+      {
+        "id": "c6-sci-ch01-t01-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t01-lo1",
+          "c6-sci-ch01-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which response best shows scientific curiosity?",
+          "hi": "कौन-सा उत्तर वैज्ञानिक जिज्ञासा को सबसे अच्छी तरह दर्शाता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Do not ask anything; the first thought is always enough.",
+              "hi": "कुछ मत पूछो; पहला विचार हमेशा पर्याप्त होता है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Choose one clear question and look for observations or information that could help answer it.",
+              "hi": "एक स्पष्ट प्रश्न चुनें और उसका उत्तर पाने में मदद करने वाले अवलोकन या जानकारी खोजें।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Decide an answer before looking carefully.",
+              "hi": "ध्यान से देखने से पहले ही उत्तर तय कर लें।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Assume the pictures have nothing to teach us.",
+              "hi": "मान लें कि इन चित्रों से कुछ सीखा ही नहीं जा सकता।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Curiosity leads to a clear question, followed by careful exploration rather than a guess treated as certain.",
+          "hi": "सही। जिज्ञासा से स्पष्ट प्रश्न उठता है और फिर सावधानी से खोज की जाती है; अनुमान को पक्का उत्तर नहीं मान लिया जाता।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "A learner sees the desert, coast, ocean and galaxy pictures and says, “I wonder what makes these places different.”",
+          "hi": "एक विद्यार्थी मरुस्थल, समुद्र-तट, समुद्र और आकाशगंगा के चित्र देखकर कहता है, “मैं जानना चाहता/चाहती हूँ कि ये स्थान अलग कैसे हैं।”"
+        }
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice based only on this topic's chapter-specific scope. These are not presented as verbatim NCERT questions.",
+      "hi": "इस विषय की अध्याय-विशिष्ट सीमा के आधार पर AI द्वारा तैयार अतिरिक्त अभ्यास। इन्हें NCERT के मूल प्रश्नों के शब्दशः रूप में प्रस्तुत नहीं किया गया है।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_IS_REPLACED_OR_APPROVED"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_asset_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "known_limitations": [
+      "Hindi source extraction file exists, but chapter-1 Hindi page mapping and paragraph-level reconciliation must be verified before completeness approval.",
+      "The English chapter page map is TOC-derived and still requires visual verification.",
+      "The V3 English full-page preview is editor-only because it embeds English text; the visual-review workflow must choose a bilingual generated visual or an approved locale-appropriate source asset for student display.",
+      "The generated curiosity-loop diagram is bilingual structured data and remains a draft until visual rendering and factual/accessibility review.",
+      "The global locale contract is recorded here, but shared app strings and runtime state-preserving language switching have not been implemented.",
+      "All eight generated question types now map to a central UI rendering contract; actual web/Android components are not implemented.",
+      "Image-observation question q06 is blocked from student rendering until its English full-page source-preview asset is replaced with a suitable reviewed visual.",
+      "Scenario-based q08 stores scenario context separately from the question prompt so UI renders both as distinct elements."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "shared_ui_status_labels_localized_in_lesson_contract": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
+  },
+  "next_steps": [
+    "Verify Hindi chapter-1 page boundaries against the matching Jigyasa PDF and reconcile the Hindi source text.",
+    "Visually verify English Chapter 1 source pages and confirm the intended student visual does not include untranslated source-page text.",
+    "Run locale-completeness and semantic-parity validation for every learner-visible string, question, answer key, feedback, rubric and shared practice label.",
+    "Review question correctness, translation equivalence and chapter-scope boundaries.",
+    "Generate topic 2: the scientific method, preserving its own chapter-specific explanation, relevant bilingual visual data and varied bilingual practice.",
+    "Generate topic 3: curiosity and everyday scientific thinking, collaboration and continuing questions.",
+    "Treat data/structured-lessons/question-rendering-registry.v1.json and .md as the canonical UI contract for all question types; do not implement or add types without updating both."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

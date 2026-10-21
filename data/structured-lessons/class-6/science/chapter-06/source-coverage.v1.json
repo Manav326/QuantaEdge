@@ -1,0 +1,325 @@
+{
+  "schema_version": "quantaedge.textbook-chapter-coverage.v1",
+  "artifact_type": "chapter_source_coverage_audit",
+  "status": "NUMBERED_SECTION_MAP_COMPLETE_RENDERED_SOURCE_AND_HUMAN_REVIEW_PENDING",
+  "updated_date": "2026-10-15",
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "chapter_number": 6,
+    "title_by_locale": {
+      "en": "Materials Around Us",
+      "hi": "हमारे आस-पास की सामग्री"
+    },
+    "sources": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
+        "chapter_url": "https://philoid.com/ncert/chapter/fecu106",
+        "pdf_pages": [
+          119,
+          134
+        ],
+        "printed_pages": [
+          101,
+          116
+        ],
+        "page_mapping_status": "PROVISIONAL_PENDING_RENDERED_PDF_CHECK"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "url": "https://ncert.nic.in/textbook.php?fhcu1=0-12",
+        "chapter_url": "https://philoid.com/ncert/chapter/fhcu106",
+        "pdf_pages": [
+          115,
+          130
+        ],
+        "printed_pages": [
+          97,
+          112
+        ],
+        "page_mapping_status": "PROVISIONAL_PENDING_RENDERED_PDF_CHECK"
+      }
+    }
+  },
+  "section_map": [
+    {
+      "section_id": "6.1",
+      "topic_number": 1,
+      "title_by_locale": {
+        "en": "Observing Objects Around Us",
+        "hi": "हमारे आस-पास की वस्तुओं का अवलोकन"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-01-observing-objects-around-us.v1.json",
+      "mapping_status": "HEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.2",
+      "topic_number": 2,
+      "title_by_locale": {
+        "en": "How to Group Materials?",
+        "hi": "सामग्रियों को समूहों में कैसे बाँटें?"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-02-how-to-group-materials.v1.json",
+      "mapping_status": "HEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.1",
+      "topic_number": 3,
+      "title_by_locale": {
+        "en": "Appearance and Lustre of Materials",
+        "hi": "सामग्रियों का स्वरूप और चमक"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-03-appearance-and-lustre.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.2",
+      "topic_number": 4,
+      "title_by_locale": {
+        "en": "Which Materials Are Hard?",
+        "hi": "कौन-सी सामग्रियाँ कठोर होती हैं?"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-04-hard-and-soft-materials.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.3",
+      "topic_number": 5,
+      "title_by_locale": {
+        "en": "Materials We Can See Through",
+        "hi": "जिन सामग्रियों के आर-पार देखा जा सकता है"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-05-transparent-translucent-and-opaque.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.4",
+      "topic_number": 6,
+      "title_by_locale": {
+        "en": "What Is Soluble in Water?",
+        "hi": "जल में क्या घुलनशील है?"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-06-soluble-and-insoluble-materials.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.5",
+      "topic_number": 7,
+      "title_by_locale": {
+        "en": "How Heavy or Light? Mass",
+        "hi": "कितना भारी या हल्का? द्रव्यमान"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-07-how-heavy-or-light-mass.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.3.6",
+      "topic_number": 8,
+      "title_by_locale": {
+        "en": "Space and Volume",
+        "hi": "स्थान और आयतन"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-08-space-and-volume.v1.json",
+      "mapping_status": "NUMBERED_SUBHEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    },
+    {
+      "section_id": "6.4",
+      "topic_number": 9,
+      "title_by_locale": {
+        "en": "What Is Matter?",
+        "hi": "द्रव्य क्या होता है?"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-06/topic-09-what-is-matter.v1.json",
+      "mapping_status": "HEADING_FOUND_IN_BOTH_LANGUAGES; RENDERED_PDF_BOUNDARY_PENDING"
+    }
+  ],
+  "coverage_inventory": {
+    "numbered_figures": {
+      "expected": [
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5",
+        "6.6",
+        "6.7",
+        "6.8"
+      ],
+      "count": 8,
+      "status": "FIGURE_SEQUENCE_FOUND_IN_TEXT; RENDERED_PDF_AND_LABEL_RECONCILIATION_PENDING",
+      "notes": [
+        "Objects around us; materials used for a tumbler; balls of different materials and bounce comparisons; sorting objects; visibility through materials; soluble/insoluble materials (panels a/b); a cup on a balance; tumblers with different water levels (panels a/b).",
+        "Other inline photographs/illustrations and possible numbering/layout differences must be checked against rendered PDFs."
+      ]
+    },
+    "tables": {
+      "expected": [
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5"
+      ],
+      "count": 5,
+      "status": "TABLE_SEQUENCE_FOUND_IN_TEXT; RENDERED_PDF_CHECK_PENDING",
+      "notes": [
+        "Identify materials",
+        "Bouncing levels of balls",
+        "Hard/soft objects and materials",
+        "Transparent/translucent/opaque classification",
+        "Predictions/observations from mixing materials with water"
+      ]
+    },
+    "activities": {
+      "expected": [
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5",
+        "6.6",
+        "6.7",
+        "6.8"
+      ],
+      "count": 8,
+      "status": "ACTIVITY_SEQUENCE_FOUND_IN_TEXT; RENDERED_PDF_CHECK_PENDING",
+      "items": [
+        "Identify objects and their materials",
+        "Group by common properties",
+        "Think about suitable material for a tumbler and cooking utensils",
+        "Compare bounce heights of same-size balls made from different materials dropped from a fixed height",
+        "Observe hard/soft objects and identify materials",
+        "Classify objects as transparent/translucent/opaque",
+        "Test sugar, salt, chalk powder, sand and sawdust in water after stirring and waiting",
+        "Compare mass using identical cups half-filled with water, sand and pebbles on a balance"
+      ]
+    },
+    "unnumbered_investigations": [
+      "Sort paper, cardboard, wood, chalk, copper wire, aluminium foil and alloys by shine, texture and colour.",
+      "Discuss whether water is transparent and whether it can be made opaque.",
+      "Observe different water levels in identical tumblers and connect occupied space with volume."
+    ],
+    "sidebars_and_special_notes": [
+      "Pottery-making: clay selection/preparation, shaping and firing",
+      "Traditional/Ayurvedic classification using pairs of properties",
+      "Think it over: changes introduced by plastic and whether they are a benefit or drawback",
+      "Non-lustrous examples include paper, wood, rubber and jute; polishing/coating can make surfaces shiny, and not all shiny objects are metals",
+      "Hardness can be compared through resistance to compression/scratching and is relative (rubber compared with sponge and iron)",
+      "Hide-and-seek context for transparency classes",
+      "ORS and dissolving context; learner content should direct actual ORS use to packet/health-worker guidance",
+      "Some liquids form separate layers; oxygen can dissolve in water",
+      "Mass and weighing: everyday speech may call it weight, but the section introduces mass",
+      "Volume units: L/mL for common liquid labels; SI cubic metre m³; 1 m³ = 1000 L",
+      "Unit notation: kg lowercase, mL lowercase m plus uppercase L, no space inside unit symbols, space between number and unit"
+    ],
+    "let_us_play": {
+      "expected_tasks": 2,
+      "status": "TWO GAMES FOUND; RENDERED LAYOUT CHECK PENDING",
+      "tasks": [
+        "Find the companion: connect related words such as iron, transparent, copper, solid, bottle, plastic, lustrous, wood, opaque and glass.",
+        "Word-hub: choose nine vocabulary words and mark them as the facilitator calls words or definitions."
+      ]
+    },
+    "chapter_end_questions": {
+      "expected_count": 10,
+      "status": "TEN NUMBERED QUESTIONS FOUND; RENDERED QUESTION LAYOUT CHECK PENDING",
+      "coverage": [
+        "Suggest an improved kitchen sorting method",
+        "Unscramble terms and match matter/soluble/transparent/lustre to properties",
+        "Explain why storage containers are often transparent",
+        "True/false on transparency, lustre, solubility and matter",
+        "Choose materials for chairs based on desired properties",
+        "Choose containers for food waste, broken glass and wastepaper",
+        "Classify air and wooden door by transparency",
+        "Infer properties of mysterious materials X and Y",
+        "Identify materials from riddles and write a new riddle",
+        "Pair provided liquids/solids by soluble/insoluble behaviour"
+      ]
+    },
+    "learning_further": {
+      "expected_tasks": 4,
+      "status": "FOUR TASKS FOUND; RENDERED SOURCE CHECK PENDING",
+      "tasks": [
+        "Research recyclable materials",
+        "Survey local recyclers about properties checked and materials rejected",
+        "Collect 20–30 household objects and classify them by material properties and use",
+        "Make a useful object from discarded materials and give constructive feedback"
+      ]
+    },
+    "keywords": {
+      "status": "FOUND_IN_TEXT; LOCALE_REVIEW_PENDING",
+      "words": [
+        "classification",
+        "non-lustrous",
+        "hard",
+        "opaque",
+        "insoluble",
+        "soft",
+        "lustrous",
+        "soluble",
+        "mass",
+        "translucent",
+        "material",
+        "transparent",
+        "matter",
+        "volume",
+        "classify",
+        "explore",
+        "identify",
+        "observe",
+        "predict",
+        "record"
+      ]
+    },
+    "summary": {
+      "status": "FOUND_IN_TEXT; VERIFY_COMPLETE_PARITY",
+      "coverage": [
+        "Objects may use one or multiple materials",
+        "Similar-function objects may use different materials",
+        "Classification groups by properties",
+        "Properties inform material use",
+        "Appearance/lustre, hardness/softness, transparency and solubility are properties",
+        "Matter has mass and occupies space",
+        "Volume is occupied space and mass quantifies amount of matter"
+      ]
+    }
+  },
+  "lesson_and_question_coverage": {
+    "lessons_generated": 9,
+    "questions_generated": 72,
+    "question_type_counts": {
+      "multiple_choice": 9,
+      "multiple_select": 9,
+      "true_false": 9,
+      "matching": 9,
+      "fill_blank": 9,
+      "image_observation": 9,
+      "short_answer": 9,
+      "scenario_based": 9
+    },
+    "image_observation_questions_blocked": 9
+  },
+  "review_status": {
+    "rendered_english_pages": "PENDING",
+    "rendered_hindi_pages": "PENDING",
+    "exact_page_boundary_and_reading_order": "PENDING",
+    "all_figures_and_tables_reconciled": "PENDING",
+    "bilingual_semantic_parity": "PENDING_HUMAN_REVIEW",
+    "scientific_accuracy_and_scope": "PENDING_HUMAN_REVIEW",
+    "visual_rendering_and_accessibility": "PENDING",
+    "runtime_renderer_implementation": "NOT_IMPLEMENTED",
+    "publication_allowed": false
+  },
+  "cautions": [
+    "This inventory is a source-reconciliation checklist, not proof of complete teaching or correct page placement.",
+    "Draft diagrams and image-observation questions must not render to students until visual/accessibility review passes.",
+    "Committed draft data is not automatically reviewed, approved or publishable."
+  ]
+}

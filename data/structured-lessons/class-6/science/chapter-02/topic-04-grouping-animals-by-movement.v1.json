@@ -1,0 +1,1176 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic04-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Staged as an uncommitted Git blob/tree during chapter-level batch authoring."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Regular Class 6 curriculum only, not entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    },
+    "chapter_scope_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 4,
+    "topic_id": "c6-sci-ch02-t04",
+    "title_by_locale": {
+      "en": "Grouping Animals by Movement",
+      "hi": "गति के आधार पर जानवरों का समूह बनाना"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          39,
+          40
+        ],
+        "printed_pages": [
+          21,
+          22
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Observing how different animals move",
+      "Grouping animals by movement type and the body parts involved",
+      "Chapter examples: ant, goat, pigeon, housefly and fish",
+      "Using shared observable features to compare animal diversity"
+    ],
+    "excluded_scope": [
+      "Animal habitats and adaptations, which are the next topic",
+      "Classification by internal anatomy or complex taxonomy",
+      "Claims that one body part always implies only one movement",
+      "Navodaya entrance-exam preparation"
+    ],
+    "source_text_rule": "Original authored teaching material based on the specified chapter passage, not verbatim NCERT text or assessment items.",
+    "bilingual_parity_rule": "English and Hindi use identical objective, block, visual and question IDs, answer logic and grading criteria.",
+    "language_runtime_rule": "Global locale changes all student-visible strings together while preserving state; runtime behavior is not implemented by this data artifact.",
+    "visual_rule": "Movement/body-part chart is an original diagram draft and must be reviewed before learner display."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t04-lo1",
+      "statement_by_locale": {
+        "en": "Identify movement types such as walking, flying, swimming, crawling and jumping from observations in the chapter.",
+        "hi": "अध्याय में दिए अवलोकनों के आधार पर चलना, उड़ना, तैरना, रेंगना और कूदना जैसी गतियों को पहचानें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t04-lo2",
+      "statement_by_locale": {
+        "en": "Describe the body parts used for movement in the chapter's animal examples.",
+        "hi": "अध्याय में दिए जानवरों के उदाहरणों में गति के लिए उपयोग होने वाले शरीर के अंगों का वर्णन करें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t04-lo3",
+      "statement_by_locale": {
+        "en": "Explain how observable similarities can be used to group animals.",
+        "hi": "समझाएँ कि दिखाई देने वाली समानताओं के आधार पर जानवरों का समूह कैसे बनाया जा सकता है।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-p39-40",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        39,
+        40
+      ],
+      "printed_pages": [
+        21,
+        22
+      ],
+      "source_context": [
+        "PDF p.39 / printed p.21 asks learners to list animals, their movement and body parts used, with an illustration of different animals.",
+        "PDF p.40 / printed p.22 includes a table: ant uses legs; goat walks and jumps with legs; pigeon and housefly walk and fly using legs and wings; fish uses fins. The passage states animals can fly, run, crawl, walk, hop or jump, and that body parts and movement can be used as grouping features."
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "extraction_quality_note": "Table and illustration labels are interleaved in extracted text; confirm exact figure/table values visually."
+    },
+    {
+      "source_ref_id": "src-c2-hi-jigyasa-ch2-animal-movement",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "note": "Verify translated terminology and corresponding source-page examples."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t04",
+    "title_by_locale": {
+      "en": "Compare How Animals Move",
+      "hi": "जानवरों की गति की तुलना करें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t04-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2"
+        ],
+        "source_refs": [
+          "src-c2-en-p39-40",
+          "src-c2-hi-jigyasa-ch2-animal-movement"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Different animals move in different ways",
+            "paragraphs": [
+              "Look carefully at animals around you or at pictures provided by your teacher. Some walk, some fly, some swim, and others crawl, hop or jump. Even two animals that both walk may use their bodies differently for another type of movement.",
+              "The chapter's examples include a goat that walks and jumps, a pigeon and a housefly that can walk and fly, and a fish that swims. These are examples for observation, not a rule that every member of a group behaves in exactly the same way."
+            ],
+            "key_point": "Record the movement you observe instead of assuming it from the animal's name."
+          },
+          "hi": {
+            "heading": "अलग-अलग जानवर अलग तरह से चलते हैं",
+            "paragraphs": [
+              "अपने आसपास के जानवरों या शिक्षक द्वारा दिए गए चित्रों को ध्यान से देखें। कुछ चलते हैं, कुछ उड़ते हैं, कुछ तैरते हैं और कुछ रेंगते, फुदकते या कूदते हैं। दो जानवर चलने में समान हो सकते हैं, लेकिन दूसरी गति में उनके तरीके अलग हो सकते हैं।",
+              "अध्याय में बकरी का चलना और कूदना, कबूतर तथा घरेलू मक्खी का चलना और उड़ना, और मछली का तैरना उदाहरण के रूप में दिए गए हैं। ये अवलोकन के उदाहरण हैं, ऐसा नियम नहीं कि समूह का हर जीव बिल्कुल एक जैसा व्यवहार करे।"
+            ],
+            "key_point": "जानवर के नाम से अनुमान लगाने के बजाय उसकी देखी गई गति दर्ज करें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo2",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "source_refs": [
+          "src-c2-en-p39-40",
+          "src-c2-hi-jigyasa-ch2-animal-movement"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Body parts help with movement",
+            "paragraphs": [
+              "Animals use different body parts to move. A goat uses its legs for walking and jumping. A pigeon uses legs to walk and wings to fly. A housefly also uses legs and wings for walking and flying. A fish uses fins to move through water.",
+              "When we compare animals, we can write both the movement and the body part involved. This makes the basis for a group clear—for example, animals that fly, or animals observed to use legs for walking. A useful grouping tells us which feature was chosen."
+            ],
+            "callout": "Compare what the animal does and the body part it uses; keep both observations in the record."
+          },
+          "hi": {
+            "heading": "गति में शरीर के अंग मदद करते हैं",
+            "paragraphs": [
+              "जानवर गति के लिए अलग-अलग शरीर-अंगों का उपयोग करते हैं। बकरी चलने और कूदने के लिए पैरों का उपयोग करती है। कबूतर चलने के लिए पैरों और उड़ने के लिए पंखों का उपयोग करता है। घरेलू मक्खी भी चलने और उड़ने में पैरों तथा पंखों का उपयोग करती है। मछली पानी में चलने के लिए पंखों का उपयोग करती है।",
+              "जानवरों की तुलना करते समय गति और उसमें उपयोग होने वाले अंग—दोनों दर्ज करें। इससे समूह बनाने का आधार स्पष्ट होता है, जैसे उड़ने वाले जानवर या पैरों से चलने वाले देखे गए जानवर। उपयोगी समूह यह बताता है कि कौन-सी विशेषता चुनी गई।"
+            ],
+            "callout": "जानवर क्या करता है और कौन-सा अंग उपयोग करता है—दोनों का अवलोकन दर्ज करें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t04-movement-bodypart-map",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original bilingual table/diagram pairing source animal examples with observed movement and body parts. Use simple icons or neutral illustrations; avoid copying textbook figures. Labels must be translated by the global locale.",
+        "diagram_data": {
+          "columns_by_locale": {
+            "en": [
+              "Animal example",
+              "Movement in the passage",
+              "Body parts noted"
+            ],
+            "hi": [
+              "जानवर का उदाहरण",
+              "अनुच्छेद में बताई गति",
+              "दर्ज शरीर-अंग"
+            ]
+          },
+          "rows": [
+            {
+              "id": "ant",
+              "animal_by_locale": {
+                "en": "Ant",
+                "hi": "चींटी"
+              },
+              "movement_by_locale": {
+                "en": "Move / walk (observe the actual animal)",
+                "hi": "चलना (वास्तविक जानवर का अवलोकन करें)"
+              },
+              "parts_by_locale": {
+                "en": "Legs",
+                "hi": "पैर"
+              }
+            },
+            {
+              "id": "goat",
+              "animal_by_locale": {
+                "en": "Goat",
+                "hi": "बकरी"
+              },
+              "movement_by_locale": {
+                "en": "Walks and jumps",
+                "hi": "चलती और कूदती है"
+              },
+              "parts_by_locale": {
+                "en": "Legs",
+                "hi": "पैर"
+              }
+            },
+            {
+              "id": "pigeon",
+              "animal_by_locale": {
+                "en": "Pigeon",
+                "hi": "कबूतर"
+              },
+              "movement_by_locale": {
+                "en": "Walks and flies",
+                "hi": "चलता और उड़ता है"
+              },
+              "parts_by_locale": {
+                "en": "Legs and wings",
+                "hi": "पैर और पंख"
+              }
+            },
+            {
+              "id": "housefly",
+              "animal_by_locale": {
+                "en": "Housefly",
+                "hi": "घरेलू मक्खी"
+              },
+              "movement_by_locale": {
+                "en": "Walks and flies",
+                "hi": "चलती और उड़ती है"
+              },
+              "parts_by_locale": {
+                "en": "Legs and wings",
+                "hi": "पैर और पंख"
+              }
+            },
+            {
+              "id": "fish",
+              "animal_by_locale": {
+                "en": "Fish",
+                "hi": "मछली"
+              },
+              "movement_by_locale": {
+                "en": "Swims",
+                "hi": "तैरती है"
+              },
+              "parts_by_locale": {
+                "en": "Fins",
+                "hi": "पंख"
+              }
+            }
+          ],
+          "footer_by_locale": {
+            "en": "Examples follow the chapter's table; observe real animals respectfully and never handle them to test a movement.",
+            "hi": "उदाहरण अध्याय की तालिका पर आधारित हैं; वास्तविक जानवरों का सम्मानपूर्वक अवलोकन करें और गति जाँचने के लिए उन्हें न पकड़ें।"
+          }
+        },
+        "alt_by_locale": {
+          "en": "An original comparison table pairs ant, goat, pigeon, housefly and fish with movement and the body parts listed in the chapter.",
+          "hi": "एक मौलिक तुलना-तालिका चींटी, बकरी, कबूतर, घरेलू मक्खी और मछली को अध्याय में दी गई गति तथा शरीर-अंगों से जोड़ती है।"
+        },
+        "caption_by_locale": {
+          "en": "A way to organise observations about animal movement and body parts.",
+          "hi": "जानवरों की गति और शरीर-अंगों से जुड़े अवलोकनों को व्यवस्थित करने का तरीका।"
+        },
+        "provenance": {
+          "kind": "GENERATED_ORIGINAL",
+          "source_refs": [
+            "src-c2-en-p39-40",
+            "src-c2-hi-jigyasa-ch2-animal-movement"
+          ],
+          "source_text_quoted": false
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-b04",
+        "type": "activity",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "activity_kind": "movement_observation_table",
+        "review_status": "NEEDS_REVIEW",
+        "instructions_by_locale": {
+          "en": [
+            "Use teacher-approved pictures or observe animals safely from a distance; do not catch or frighten animals.",
+            "For each example, record one movement you can see.",
+            "Record the body part visibly involved if the picture or observation supports it; mark anything uncertain as unknown.",
+            "Choose one movement feature and explain how it could be used to group your examples."
+          ],
+          "hi": [
+            "शिक्षक द्वारा स्वीकृत चित्रों का उपयोग करें या सुरक्षित दूरी से जानवरों का अवलोकन करें; उन्हें पकड़ें या डराएँ नहीं।",
+            "हर उदाहरण के लिए एक ऐसी गति दर्ज करें जिसे आप देख सकते हैं।",
+            "यदि चित्र या अवलोकन से स्पष्ट हो, तो गति में शामिल शरीर-अंग लिखें; अनिश्चित बात को अज्ञात के रूप में दर्ज करें।",
+            "गति की एक विशेषता चुनें और बताएँ कि उसके आधार पर उदाहरणों का समूह कैसे बनाया जा सकता है।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "animal",
+            "label_by_locale": {
+              "en": "Animal observed",
+              "hi": "देखा गया जानवर"
+            }
+          },
+          {
+            "id": "movement",
+            "label_by_locale": {
+              "en": "Movement",
+              "hi": "गति"
+            }
+          },
+          {
+            "id": "body_part",
+            "label_by_locale": {
+              "en": "Body part involved",
+              "hi": "शामिल शरीर-अंग"
+            }
+          },
+          {
+            "id": "group_basis",
+            "label_by_locale": {
+              "en": "Feature used for grouping",
+              "hi": "समूह बनाने की विशेषता"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "A clear record keeps the animal, observed movement and body part distinct. If something cannot be confirmed from your observation, say so.",
+          "hi": "स्पष्ट रिकॉर्ड में जानवर, देखी गई गति और शरीर-अंग अलग-अलग दर्ज होते हैं। यदि अवलोकन से कोई बात निश्चित न हो, तो उसे स्पष्ट लिखें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Animals differ in how they move.",
+              "Walking, flying, swimming, crawling, hopping and jumping are movement examples introduced in this topic.",
+              "Different body parts can be used for movement; record the part that is relevant to the observation.",
+              "Animals may be grouped by shared movement or body-part features, and the chosen basis should be stated."
+            ],
+            "vocabulary": [
+              {
+                "term": "Movement",
+                "meaning": "A way an animal moves from place to place."
+              },
+              {
+                "term": "Feature",
+                "meaning": "A characteristic used to describe or compare something."
+              },
+              {
+                "term": "Grouping",
+                "meaning": "Arranging examples by a chosen shared feature."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "जानवरों की गति के तरीके अलग-अलग होते हैं।",
+              "चलना, उड़ना, तैरना, रेंगना, फुदकना और कूदना इस विषय में दिए गए गति के उदाहरण हैं।",
+              "गति के लिए अलग-अलग शरीर-अंग उपयोग हो सकते हैं; अवलोकन से संबंधित अंग दर्ज करें।",
+              "समान गति या शरीर-अंग की विशेषताओं के आधार पर समूह बनाए जा सकते हैं और चुना गया आधार स्पष्ट होना चाहिए।"
+            ],
+            "vocabulary": [
+              {
+                "term": "गति",
+                "meaning": "एक स्थान से दूसरे स्थान तक जाने का तरीका।"
+              },
+              {
+                "term": "विशेषता",
+                "meaning": "किसी चीज़ का वर्णन या तुलना करने में उपयोग होने वाला गुण।"
+              },
+              {
+                "term": "समूहीकरण",
+                "meaning": "किसी चुनी हुई समान विशेषता के आधार पर उदाहरणों को समूह में रखना।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t04",
+    "title_by_locale": {
+      "en": "Practise Animal Movement",
+      "hi": "जानवरों की गति का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice from this topic's Chapter 2 scope; not verbatim NCERT questions.",
+      "hi": "अध्याय 2 के इस विषय की सीमा पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; ये NCERT के मूल प्रश्नों के शब्दशः रूप नहीं हैं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t04-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Which movement does the chapter use as the example for a fish?",
+          "hi": "अध्याय में मछली के लिए गति का कौन-सा उदाहरण दिया गया है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Flying",
+              "hi": "उड़ना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Swimming",
+              "hi": "तैरना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Walking on two legs",
+              "hi": "दो पैरों पर चलना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Jumping between branches",
+              "hi": "डालियों के बीच कूदना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The chapter describes a fish swimming with the help of fins.",
+          "hi": "सही। अध्याय में मछली को पंखों की मदद से तैरते हुए बताया गया है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which movement/body-part pairings match the chapter examples? Select all that apply.",
+          "hi": "कौन-से गति/शरीर-अंग के जोड़े अध्याय के उदाहरणों से मेल खाते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Goat — walks and jumps using legs",
+              "hi": "बकरी — पैरों से चलती और कूदती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Pigeon — walks and flies using legs and wings",
+              "hi": "कबूतर — पैरों और पंखों से चलता और उड़ता है"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Fish — flies using wings",
+              "hi": "मछली — पंखों से उड़ती है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Housefly — walks and flies using legs and wings",
+              "hi": "घरेलू मक्खी — पैरों और पंखों से चलती और उड़ती है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "d"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Goat, pigeon and housefly pairings match the passage; the fish example is swimming with fins.",
+          "hi": "सही। बकरी, कबूतर और घरेलू मक्खी के जोड़े अनुच्छेद से मेल खाते हैं; मछली का उदाहरण पंखों से तैरना है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Animals can be grouped by a chosen shared feature such as how they move.",
+          "hi": "जानवरों का समूह उनकी गति जैसी चुनी हुई समान विशेषता के आधार पर बनाया जा सकता है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. The chapter explains that movement and the body parts used can both help describe and group animals.",
+          "hi": "सही। अध्याय बताता है कि गति और उपयोग होने वाले शरीर-अंग जानवरों का वर्णन तथा समूह बनाने में मदद कर सकते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Match the animal example with the body part named in the chapter's movement table.",
+          "hi": "जानवर के उदाहरण को अध्याय की गति-तालिका में बताए गए शरीर-अंग से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "goat",
+            "label_by_locale": {
+              "en": "Goat",
+              "hi": "बकरी"
+            }
+          },
+          {
+            "id": "pigeon",
+            "label_by_locale": {
+              "en": "Pigeon",
+              "hi": "कबूतर"
+            }
+          },
+          {
+            "id": "housefly",
+            "label_by_locale": {
+              "en": "Housefly",
+              "hi": "घरेलू मक्खी"
+            }
+          },
+          {
+            "id": "fish",
+            "label_by_locale": {
+              "en": "Fish",
+              "hi": "मछली"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "legs",
+            "label_by_locale": {
+              "en": "Legs",
+              "hi": "पैर"
+            }
+          },
+          {
+            "id": "legs_wings",
+            "label_by_locale": {
+              "en": "Legs and wings",
+              "hi": "पैर और पंख"
+            }
+          },
+          {
+            "id": "fins",
+            "label_by_locale": {
+              "en": "Fins",
+              "hi": "पंख"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "goat",
+            "right_id": "legs"
+          },
+          {
+            "left_id": "pigeon",
+            "right_id": "legs_wings"
+          },
+          {
+            "left_id": "housefly",
+            "right_id": "legs_wings"
+          },
+          {
+            "left_id": "fish",
+            "right_id": "fins"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "The chapter lists legs for the goat, legs and wings for pigeon/housefly, and fins for fish.",
+          "hi": "अध्याय में बकरी के लिए पैर, कबूतर/घरेलू मक्खी के लिए पैर और पंख, तथा मछली के लिए पंख बताए गए हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A fish uses its ______ to move through water.",
+          "hi": "मछली पानी में गति करने के लिए अपने ______ का उपयोग करती है।"
+        },
+        "accepted_answers": {
+          "en": [
+            "fins"
+          ],
+          "hi": [
+            "पंख"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not remove meaningful Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The expected answer is fins.",
+          "hi": "अपेक्षित उत्तर है 'पंख'।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2"
+        ],
+        "visual_asset_ref": "c6-sci-ch02-t04-movement-bodypart-map",
+        "prompt_by_locale": {
+          "en": "According to the original comparison diagram, which body parts are listed for the pigeon?",
+          "hi": "मौलिक तुलना-चित्र के अनुसार कबूतर के लिए कौन-से शरीर-अंग बताए गए हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Fins only",
+              "hi": "केवल पंख"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Legs and wings",
+              "hi": "पैर और पंख"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Roots and leaves",
+              "hi": "जड़ें और पत्तियाँ"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Tail only",
+              "hi": "केवल पूँछ"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The chapter's table lists legs and wings for the pigeon.",
+          "hi": "सही। अध्याय की तालिका में कबूतर के लिए पैर और पंख दिए गए हैं।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The diagram is structured draft content and has not yet passed visual rendering/review.",
+            "hi": "चित्र संरचित मसौदा सामग्री है और अभी इसकी दृश्य प्रस्तुति/समीक्षा पूरी नहीं हुई है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Give two examples from this topic that show how animals may be grouped by movement or body parts.",
+          "hi": "इस विषय से दो उदाहरण दें जो दिखाते हैं कि गति या शरीर-अंगों के आधार पर जानवरों का समूह कैसे बनाया जा सकता है।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Names a correct animal and movement from the source examples.",
+              "Identifies the relevant body part or grouping feature."
+            ],
+            "sample_answer": "A goat walks and jumps using its legs, while a fish swims using fins. We can compare the movement and body parts to form groups."
+          },
+          "hi": {
+            "key_points": [
+              "स्रोत उदाहरणों में से सही जानवर और गति बताता है।",
+              "संबंधित शरीर-अंग या समूह बनाने की विशेषता बताता है।"
+            ],
+            "sample_answer": "बकरी पैरों से चलती और कूदती है, जबकि मछली पंखों से तैरती है। गति और शरीर-अंग की तुलना करके समूह बनाए जा सकते हैं।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: gives one correct animal/movement example.",
+              "1 point: gives a second correct feature or explains the grouping basis."
+            ],
+            "hi": [
+              "1 अंक: जानवर/गति का एक सही उदाहरण देता है।",
+              "1 अंक: दूसरी सही विशेषता देता है या समूह बनाने का आधार समझाता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t04-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t04-lo1",
+          "c6-sci-ch02-t04-lo2",
+          "c6-sci-ch02-t04-lo3"
+        ],
+        "scenario_by_locale": {
+          "en": "A learner is making a class chart. One card shows a pigeon; another shows a housefly. The source table says both can walk and fly and lists legs and wings for both.",
+          "hi": "एक विद्यार्थी कक्षा के लिए चार्ट बना रहा है। एक कार्ड पर कबूतर है और दूसरे पर घरेलू मक्खी। स्रोत तालिका में दोनों के लिए चलना और उड़ना तथा पैर और पंख दिए गए हैं।"
+        },
+        "prompt_by_locale": {
+          "en": "Which grouping is supported by the stated observations?",
+          "hi": "दिए गए अवलोकनों के आधार पर कौन-सा समूह उचित है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Group them together for the shared movement/body-part features, while noting they are different animals",
+              "hi": "समान गति/शरीर-अंग की विशेषताओं के आधार पर उन्हें एक समूह में रखें, साथ ही यह भी लिखें कि वे अलग जानवर हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Declare them to be the same species",
+              "hi": "उन्हें एक ही प्रजाति घोषित कर दें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Group them by leaf venation",
+              "hi": "पत्ती के शिराविन्यास के आधार पर समूह बनाएँ"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Ignore the stated observations",
+              "hi": "दिए गए अवलोकनों को अनदेखा करें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Shared features can be a basis for a group, but that does not mean the animals are the same.",
+          "hi": "सही। समान विशेषताएँ समूह बनाने का आधार हो सकती हैं, पर इसका अर्थ यह नहीं कि दोनों जानवर एक ही हैं।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t04-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_rendering_registry_linked": true,
+    "question_components_implemented": false,
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi source text/page mapping has not been verified.",
+      "English source table/figure reading order must be reconciled with page images.",
+      "The original diagram is not yet rendered/reviewed; q06 is blocked from student rendering.",
+      "The UI registry is specification-only; no question component is implemented."
+    ],
+    "generated_question_types": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch02-t04-q08"
+        ]
+      }
+    ]
+  },
+  "next_steps": [
+    "Verify the Hindi source pages and animal-movement terminology.",
+    "Visually reconcile PDF pages 39-40 and their movement table/illustration.",
+    "Render and review the original bilingual movement chart; keep q06 blocked until approved.",
+    "Continue with adaptations and habitat differences in the next topic; do not introduce unrelated chapters."
+  ]
+}

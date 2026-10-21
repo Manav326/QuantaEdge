@@ -1,0 +1,893 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch06-t04-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 6,
+    "title_by_locale": {
+      "en": "Materials Around Us",
+      "hi": "हमारे आस-पास की सामग्री"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 4,
+    "topic_id": "c6-sci-ch06-t04",
+    "title_by_locale": {
+      "en": "Which Materials Are Hard?",
+      "hi": "कौन-सी सामग्रियाँ कठोर होती हैं?"
+    },
+    "source_section_ids": [
+      "6.3.2"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          119,
+          134
+        ],
+        "printed_pages": [
+          101,
+          116
+        ],
+        "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PDF_REVIEW_PENDING"
+      },
+      "hi": {
+        "pdf_pages": [
+          115,
+          130
+        ],
+        "printed_pages": [
+          97,
+          112
+        ],
+        "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PDF_REVIEW_PENDING"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "6.3.2"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from another chapter.",
+      "Claim that every material has every property or dissolves in water.",
+      "Conflating mass and volume.",
+      "Unreviewed visuals or source screenshots shown as student content.",
+      "Verbatim NCERT prose or end questions.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable IDs and equivalent objectives, answers and rubrics in en/hi. One global app language controls learner-visible content and preserves state on switching; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary learning material, not verbatim NCERT prose/questions.",
+    "asset_rule": "Visuals are drafts and image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch06-t04-lo1",
+      "statement_by_locale": {
+        "en": "Distinguish hard and soft materials by their resistance to compression or scratching, using safe observation.",
+        "hi": "सुरक्षित अवलोकन से दबने या खरोंच लगने के प्रतिरोध के आधार पर कठोर और नरम सामग्रियों में अंतर करें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch06-t04-lo2",
+      "statement_by_locale": {
+        "en": "Connect hardness or softness with response to pressing.",
+        "hi": "कठोरता या कोमलता को दबाने पर प्रतिक्रिया से जोड़ें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch06-t04-lo3",
+      "statement_by_locale": {
+        "en": "Record observed properties without damaging objects.",
+        "hi": "वस्तुओं को नुकसान पहुँचाए बिना गुण दर्ज करें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c6-t04-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        119,
+        134
+      ],
+      "printed_pages": [
+        101,
+        116
+      ],
+      "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PAGE_BOUNDARY_AND_ORDER_REVIEW_PENDING",
+      "use": "Curiosity 2026–27; reconcile rendered pages, figure numbering and tables."
+    },
+    {
+      "source_ref_id": "src-c6-t04-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        115,
+        130
+      ],
+      "printed_pages": [
+        97,
+        112
+      ],
+      "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PAGE_BOUNDARY_AND_ORDER_REVIEW_PENDING",
+      "use": "जिज्ञासा 2026–27; मुद्रित पृष्ठक्रम, चित्र संख्या और तालिकाएँ जाँचें।"
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch06-t04",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch06-t04-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1",
+          "c6-sci-ch06-t04-lo2"
+        ],
+        "source_refs": [
+          "src-c6-t04-en",
+          "src-c6-t04-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Hard and soft",
+            "paragraphs": [
+              "A brick resists pressing and keeps its shape, while a pillow changes shape more easily. Hardness can also be compared by whether a material is scratched or compressed easily. These properties are relative: rubber is harder than a sponge but softer than iron."
+            ],
+            "key_point": "Distinguish hard and soft objects by safe observation."
+          },
+          "hi": {
+            "heading": "कठोर और नरम",
+            "paragraphs": [
+              "ईंट दबाने पर आसानी से आकार नहीं बदलती, जबकि तकिया आसानी से आकार बदलता है। सामग्री को कितनी आसानी से दबाया या खरोंचा जा सकता है, इससे भी कठोरता की तुलना होती है। ये गुण सापेक्ष हैं: रबर स्पंज से कठोर लेकिन लोहे से नरम है।"
+            ],
+            "key_point": "सुरक्षित अवलोकन से कठोर और नरम वस्तुओं में अंतर करें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo2",
+          "c6-sci-ch06-t04-lo3"
+        ],
+        "source_refs": [
+          "src-c6-t04-en",
+          "src-c6-t04-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Observe safely",
+            "paragraphs": [
+              "Compare objects gently and record how they feel and what they are made from. A teacher may demonstrate a safe scratch comparison on suitable samples. Do not scratch skin, glass, sharp objects or anything that may break and cause injury."
+            ],
+            "key_point": "Connect hardness or softness with response to pressing."
+          },
+          "hi": {
+            "heading": "सुरक्षा से अवलोकन",
+            "paragraphs": [
+              "वस्तुओं की सावधानी से तुलना करें और उनका स्पर्श-अनुभव तथा सामग्री लिखें। शिक्षक उपयुक्त नमूनों पर सुरक्षित खरोंच-परीक्षण दिखा सकते हैं। त्वचा, काँच, नुकीली वस्तु या टूटकर चोट पहुँचा सकने वाली वस्तु को खरोंचें नहीं।"
+            ],
+            "key_point": "कठोरता या कोमलता को दबाने पर प्रतिक्रिया से जोड़ें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1",
+          "c6-sci-ch06-t04-lo2",
+          "c6-sci-ch06-t04-lo3"
+        ],
+        "source_refs": [
+          "src-c6-t04-en",
+          "src-c6-t04-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create a compact original visual for Which Materials Are Hard?. Localize every label using diagram_data; do not use source-page screenshots.",
+          "hi": "“कौन-सी सामग्रियाँ कठोर होती हैं?” के लिए मौलिक संक्षिप्त चित्र बनाएँ। सभी लेबल diagram_data से स्थानीयकृत हों; स्रोत-पृष्ठ का स्क्रीनशॉट न लें।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch06-t04-visual-01",
+          "kind": "chapter6-topic-4",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "node1",
+              "label_by_locale": {
+                "en": "Brick resists pressing",
+                "hi": "ईंट दबाने पर आसानी से नहीं बदलती"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "node2",
+              "label_by_locale": {
+                "en": "Pillow changes shape",
+                "hi": "दबाने पर तकिया आकार बदलता है"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "node3",
+              "label_by_locale": {
+                "en": "Hardness or softness",
+                "hi": "कठोरता या कोमलता"
+              },
+              "position": {
+                "order": 3
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Draft visual: Brick resists pressing; Pillow changes shape; Hardness or softness.",
+          "hi": "चित्र-प्रारूप: ईंट दबाने पर आसानी से नहीं बदलती； दबाने पर तकिया आकार बदलता है； कठोरता या कोमलता।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1",
+          "c6-sci-ch06-t04-lo2"
+        ],
+        "activity_kind": "Chapter 6 activity: Which Materials Are Hard?",
+        "configuration": {
+          "activity_id": "c6-sci-ch06-t04-activity-01",
+          "title_by_locale": {
+            "en": "Try it yourself",
+            "hi": "स्वयं करके देखें"
+          },
+          "instruction_by_locale": {
+            "en": "Gently compare a pillow, book cover and plastic bottle. Record their hardness/softness and material.",
+            "hi": "तकिए, पुस्तक के आवरण और प्लास्टिक की बोतल की सावधानी से तुलना करें। उनकी कठोरता/कोमलता और सामग्री लिखें।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "Observe or test",
+                "hi": "अवलोकन या परीक्षण करें"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "Record the result",
+                "hi": "परिणाम लिखें"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "Explain the property",
+                "hi": "गुण समझाएँ"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear response"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "उत्तर मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Use safe classroom materials and teacher guidance; do not damage objects or use sharp items.",
+          "hi": "सुरक्षित सामग्री और शिक्षक के निर्देश उपयोग करें; वस्तुएँ न तोड़ें और नुकीली चीज़ें न लें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1",
+          "c6-sci-ch06-t04-lo2",
+          "c6-sci-ch06-t04-lo3"
+        ],
+        "content_by_locale": {
+          "en": "A brick resists pressing and keeps its shape; a pillow changes shape more easily. These are common examples of hard and soft objects. Compare objects gently and record how they feel and what they are made from. Do not squeeze glass, sharp objects or anything that may break and cause injury.",
+          "hi": "ईंट दबाने पर आसानी से आकार नहीं बदलती; तकिया अधिक आसानी से आकार बदलता है। ये कठोर और नरम वस्तुओं के उदाहरण हैं। वस्तुओं की सावधानी से तुलना करें और उनका स्पर्श-अनुभव व सामग्री लिखें। काँच, नुकीली वस्तु या टूटकर चोट पहुँचा सकने वाली वस्तु को न दबाएँ।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch06-t04",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch06-t04-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1"
+        ],
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "prompt_by_locale": {
+          "en": "Which is a common example of a soft object?",
+          "hi": "नरम वस्तु का सामान्य उदाहरण कौन-सा है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Pillow",
+              "hi": "तकिया"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Brick",
+              "hi": "ईंट"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Stone block",
+              "hi": "पत्थर का खंड"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Metal nail",
+              "hi": "धातु की कील"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Use the stated property and the evidence in this lesson.",
+          "hi": "इस पाठ में बताए गुण और प्रमाण का उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q02",
+        "type": "multiple_select",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo2"
+        ],
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "prompt_by_locale": {
+          "en": "Which observations help describe hardness or softness?",
+          "hi": "कठोरता या कोमलता बताने में कौन-से अवलोकन मदद करते हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Whether it resists gentle pressing",
+              "hi": "क्या वह हल्के दबाव का प्रतिरोध करती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Whether its shape changes easily",
+              "hi": "क्या उसका आकार आसानी से बदलता है"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "What material it is made from",
+              "hi": "वह किस सामग्री की बनी है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Colour alone",
+              "hi": "केवल रंग"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Use the stated property and the evidence in this lesson.",
+          "hi": "इस पाठ में बताए गुण और प्रमाण का उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo3"
+        ],
+        "rendering_contract_id": "qtype-true-false.v1",
+        "prompt_by_locale": {
+          "en": "A pillow and a brick typically respond in the same way when pressed.",
+          "hi": "दबाने पर तकिया और ईंट सामान्यतः एक जैसी प्रतिक्रिया देते हैं।"
+        },
+        "correct_answer": false,
+        "feedback_by_locale": {
+          "en": "Compare the statement with the explanation in the lesson.",
+          "hi": "कथन की तुलना पाठ की व्याख्या से करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1"
+        ],
+        "rendering_contract_id": "qtype-matching.v1",
+        "prompt_by_locale": {
+          "en": "Match each concept or example with its description.",
+          "hi": "प्रत्येक अवधारणा या उदाहरण को उसके वर्णन से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "l1",
+            "label_by_locale": {
+              "en": "Brick",
+              "hi": "ईंट"
+            }
+          },
+          {
+            "id": "l2",
+            "label_by_locale": {
+              "en": "Pillow",
+              "hi": "तकिया"
+            }
+          },
+          {
+            "id": "l3",
+            "label_by_locale": {
+              "en": "Sweater",
+              "hi": "स्वेटर"
+            }
+          },
+          {
+            "id": "l4",
+            "label_by_locale": {
+              "en": "Rigid table",
+              "hi": "कठोर मेज"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "r1",
+            "label_by_locale": {
+              "en": "Hard",
+              "hi": "कठोर"
+            }
+          },
+          {
+            "id": "r2",
+            "label_by_locale": {
+              "en": "Soft",
+              "hi": "नरम"
+            }
+          },
+          {
+            "id": "r3",
+            "label_by_locale": {
+              "en": "Soft",
+              "hi": "नरम"
+            }
+          },
+          {
+            "id": "r4",
+            "label_by_locale": {
+              "en": "Hard",
+              "hi": "कठोर"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "l1",
+            "right_id": "r1"
+          },
+          {
+            "left_id": "l2",
+            "right_id": "r2"
+          },
+          {
+            "left_id": "l3",
+            "right_id": "r3"
+          },
+          {
+            "left_id": "l4",
+            "right_id": "r4"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each pair links a concept to its matching description.",
+          "hi": "हर जोड़ी में अवधारणा और उसका सही वर्णन जुड़ा है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo2"
+        ],
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "prompt_by_locale": {
+          "en": "An object that resists pressing and does not easily change shape is ____.",
+          "hi": "दबाने पर प्रतिरोध करने और आसानी से आकार न बदलने वाली वस्तु ____ होती है।"
+        },
+        "accepted_answers": {
+          "en": [
+            "hard"
+          ],
+          "hi": [
+            "कठोर"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "Use the key term for this property.",
+          "hi": "इस गुण के लिए प्रमुख शब्द लिखें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo3"
+        ],
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "prompt_by_locale": {
+          "en": "Which object is shown changing shape more easily when pressed?",
+          "hi": "दबाने पर कौन-सी वस्तु अधिक आसानी से आकार बदलती दिखाई गई है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Pillow",
+              "hi": "तकिया"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Brick",
+              "hi": "ईंट"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Stone block",
+              "hi": "पत्थर का खंड"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Metal bar",
+              "hi": "धातु की छड़"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch06-t04-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Original diagram is only a draft. Review source fidelity, science, bilingual labels, readability, contrast, alt text and accessibility before display.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        },
+        "feedback_by_locale": {
+          "en": "Read the diagram only after it has been reviewed and approved.",
+          "hi": "चित्र की समीक्षा और स्वीकृति के बाद ही उसका उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo1"
+        ],
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "prompt_by_locale": {
+          "en": "How can you safely compare whether objects are hard or soft?",
+          "hi": "वस्तुएँ कठोर हैं या नरम, इसकी सुरक्षित तुलना कैसे करेंगे?"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Observe the material and gently check whether the shape resists or changes under light pressure. Record what you observe."
+            ],
+            "sample_answer": "Compare how easily safe materials compress or scratch, and record the observation. Hardness is relative: rubber is harder than sponge but softer than iron."
+          },
+          "hi": {
+            "key_points": [
+              "सामग्री देखें और हल्के दबाव पर आकार बदलता है या नहीं, इसकी सावधानी से जाँच करें। अवलोकन लिखें।"
+            ],
+            "sample_answer": "सुरक्षित सामग्रियों को दबाने या खरोंचने में लगने वाले प्रयास की तुलना कर अवलोकन लिखें। कठोरता सापेक्ष है: रबर स्पंज से कठोर, पर लोहे से नरम है।"
+          }
+        },
+        "feedback_by_locale": {
+          "en": "Include the key concept and the evidence or example requested.",
+          "hi": "प्रमुख अवधारणा तथा माँगा गया प्रमाण या उदाहरण शामिल करें।"
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the main concept.",
+              "1 point for a correct supporting explanation."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक व्याख्या के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t04-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t04-lo2"
+        ],
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "prompt_by_locale": {
+          "en": "A learner compares a pillow with a brick. Which conclusion fits the usual observation?",
+          "hi": "विद्यार्थी तकिए और ईंट की तुलना करता है। सामान्य अवलोकन से कौन-सा निष्कर्ष सही है?"
+        },
+        "scenario_by_locale": {
+          "en": "Both are inspected without damaging them.",
+          "hi": "दोनों को बिना नुकसान पहुँचाए देखा गया।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "The pillow changes shape more easily; the brick is hard",
+              "hi": "तकिया आसानी से आकार बदलता है; ईंट कठोर है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Both must be equally soft",
+              "hi": "दोनों समान नरम हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The brick is transparent",
+              "hi": "ईंट पारदर्शी है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The pillow must dissolve in water",
+              "hi": "तकिया पानी में अवश्य घुलेगा"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Choose the option that applies the lesson's property to the situation.",
+          "hi": "स्थिति पर पाठ का गुण लागू करने वाला विकल्प चुनें।"
+        }
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary questions mapped to the numbered section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त प्रश्न; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_many": "Select all that apply",
+        "true_label": "True",
+        "false_label": "False",
+        "submit": "Check answer",
+        "next": "Next question",
+        "pending_review": "Pending review"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_many": "सभी सही विकल्प चुनें",
+        "true_label": "सही",
+        "false_label": "गलत",
+        "submit": "उत्तर जाँचें",
+        "next": "अगला प्रश्न",
+        "pending_review": "समीक्षा लंबित"
+      }
+    }
+  },
+  "parity_audit": {
+    "stable_ids_across_locales": true,
+    "objectives_paired": true,
+    "question_types_each_once": true,
+    "locale_content_structurally_paired": true,
+    "semantic_human_review_status": "PENDING",
+    "source_page_reconciliation_status": "PENDING",
+    "science_accuracy_status": "PENDING",
+    "visual_accessibility_status": "PENDING",
+    "image_observation_renderable": false,
+    "notes": [
+      "Structural locale pairing does not prove semantic equivalence; human review is required.",
+      "All image-observation questions are blocked until the diagram is rendered and reviewed.",
+      "Page boundaries are provisional until compared with rendered official PDFs."
+    ]
+  },
+  "next_steps": [
+    "Compare official English and Hindi PDFs in rendered form and verify exact section/page boundaries.",
+    "Reconcile all figures, tables, activities, sidebars, keywords, summary, review questions and Learning further tasks.",
+    "Review Hindi terminology, semantic parity, scientific accuracy and visual accessibility.",
+    "Implement/test Web and Android renderer components and state-preserving language switching separately.",
+    "Keep publication disabled until review is complete."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

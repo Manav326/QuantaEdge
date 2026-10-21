@@ -1,0 +1,335 @@
+package com.quantaedge.api;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+@RestController
+@RequestMapping("/api/v1/admin/staff")
+public class AdminStaffController {
+  private static final Set<String> ROLES = Set.of(
+      "ADMIN", "MANAGER", "MODERATOR", "CONTENT_AUTHOR", "CONTENT_REVIEWER", "PUBLISHER");
+
+  private final JdbcTemplate jdbc;
+  private final AuthService auth;
+  private final AuthorizationService authorization;
+  private final StaffAuditService staffAudit;
+
+  public AdminStaffController(JdbcTemplate jdbc, AuthService auth, AuthorizationService authorization,
+      StaffAuditService staffAudit) {
+    this.jdbc = jdbc;
+    this.auth = auth;
+    this.authorization = authorization;
+    this.staffAudit = staffAudit;
+  }
+
+  @GetMapping
+  public List<Map<String,Object>> listStaff(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireStaffManager(context);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id, public_id, mobile_e164, display_name, role,
+               (active and education_access_enabled) as active,
+               active as identity_active, created_at, updated_at, last_login_at
+        from staff_account
+        where education_access_configured=true
+        order by case when role='ADMIN' then 0 else 1 end, lower(display_name), id
+        """);
+    for (Map<String,Object> row : rows) {
+      long id=((Number)row.get("id")).longValue();
+      row.put("permissions", auth.permissionsForStaff(id));
+      row.put("isCurrentStaff", context.staffId()!=null && context.staffId()==id);
+    }
+    return rows;
+  }
+
+  @GetMapping("/permissions")
+  public List<Map<String,Object>> listPermissions(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireStaffManager(context);
+    return jdbc.queryForList("""
+        select permission_key, display_name, description
+        from staff_permission_catalog
+        where permission_key not like 'HR\\_%' escape '\\'
+          and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
+        order by case when permission_key like 'CONTENT_%' then 0 else 1 end, display_name
+        """);
+  }
+
+  @PostMapping
+  @Transactional
+  public Map<String,Object> createStaff(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireStaffManager(context);
+    String name=requiredText(body.get("displayName"), 120, "Display name");
+    String mobile=auth.normalizeMobile(String.valueOf(body.getOrDefault("mobile","")));
+    if (!(mobile.startsWith("+91") && mobile.length()==13
+        && mobile.substring(3).chars().allMatch(Character::isDigit))) {
+      throw badRequest("Enter a valid 10-digit Indian mobile number.");
+    }
+    Boolean linkedParent=jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,mobile);
+    if(Boolean.TRUE.equals(linkedParent)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This mobile is already associated with a parent account. Staff identities must use a separate mobile number.");
+    }
+    String role=String.valueOf(body.getOrDefault("role","CONTENT_AUTHOR")).trim().toUpperCase();
+    if (!ROLES.contains(role)) throw badRequest("Choose a supported staff role.");
+    List<String> permissions=body.containsKey("permissions")
+        ? readPermissions(body.get("permissions"))
+        : defaultPermissions(role);
+    validateStaffPermissions(role, permissions);
+
+    Long id;
+    try {
+      id=jdbc.queryForObject("""
+          insert into staff_account(
+            public_id,mobile_e164,display_name,role,active,
+            education_access_enabled,education_access_configured,created_by_staff_id)
+          values (?,?,?,?,true,true,true,?) returning id
+          """, Long.class, UUID.randomUUID(), mobile, name, role, context.staffId());
+    } catch (org.springframework.dao.DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A staff account already exists for this mobile number.");
+    }
+    replacePermissions(id, permissions, context.staffId());
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+id+"/created",
+        "Created staff identity with role "+role+"; granted permissions: "+String.join(", ",permissions));
+    return staffById(id);
+  }
+
+  @PutMapping("/{staffId}/permissions")
+  @Transactional
+  public Map<String,Object> updateStaffRoleAndPermissions(
+      @PathVariable long staffId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireStaffManager(context);
+    Map<String,Object> existing=staffById(staffId);
+    if (context.staffId()!=null && context.staffId()==staffId) {
+      throw badRequest("You cannot change your own role or permissions.");
+    }
+    String role=String.valueOf(body.getOrDefault("role",existing.get("role"))).trim().toUpperCase();
+    if (!ROLES.contains(role)) throw badRequest("Choose a supported staff role.");
+    if (body.get("permissions")==null) throw badRequest("Select the permissions this staff member needs.");
+    if ("ADMIN".equals(existing.get("role")) && !"ADMIN".equals(role)) {
+      Long otherAdmins=jdbc.queryForObject("""
+          select count(*) from staff_account
+          where role='ADMIN' and active=true and id<>?
+          """,Long.class,staffId);
+      if (otherAdmins==null||otherAdmins<1) {
+        throw badRequest("At least one active administrator must remain.");
+      }
+    }
+    List<String> permissions=readPermissions(body.get("permissions"));
+    validateStaffPermissions(role,permissions);
+    String beforeRole=String.valueOf(existing.get("role"));
+    List<String> beforePermissions=auth.permissionsForStaff(staffId);
+    jdbc.update("update staff_account set role=?,updated_at=now() where id=?",role,staffId);
+    replacePermissions(staffId,permissions,context.staffId());
+    jdbc.update("""
+        update auth_session set revoked_at=now()
+        where staff_id=? and workspace_key in ('STAFF','EDUCATION_ADMIN') and revoked_at is null
+        """,staffId);
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/permissions",
+        "Role changed from "+beforeRole+" to "+role+"; permissions changed from ["+
+        String.join(", ",beforePermissions)+"] to ["+String.join(", ",permissions)+"]");
+    return staffById(staffId);
+  }
+
+  @PutMapping("/{staffId}/status")
+  @Transactional
+  public Map<String,Object> updateStaffStatus(
+      @PathVariable long staffId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireStaffManager(context);
+    Map<String,Object> staff=staffById(staffId);
+    if (!(body.get("active") instanceof Boolean)) {
+      throw badRequest("Choose whether the staff account should be active or suspended.");
+    }
+    boolean active=(Boolean)body.get("active");
+    if (context.staffId()!=null && context.staffId()==staffId && !active) {
+      throw badRequest("You cannot suspend your own staff account.");
+    }
+    if (active && !Boolean.TRUE.equals(staff.get("identity_active"))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This staff identity is globally suspended. Reactivate it through the approved identity-recovery process first.");
+    }
+    if (!active && "ADMIN".equals(staff.get("role"))) {
+      Long otherAdmins=jdbc.queryForObject("""
+          select count(*) from staff_account
+          where role='ADMIN' and active=true and education_access_enabled=true
+            and education_access_configured=true and id<>?
+          """, Long.class, staffId);
+      if (otherAdmins==null || otherAdmins<1) {
+        throw badRequest("At least one active Educational Admin must remain.");
+      }
+    }
+    jdbc.update("update staff_account set education_access_enabled=?,updated_at=now() where id=? and education_access_configured=true",active,staffId);
+    if (!active) {
+      jdbc.update("""
+          update auth_session set revoked_at=now()
+          where staff_id=? and workspace_key in ('STAFF','EDUCATION_ADMIN') and revoked_at is null
+          """,staffId);
+    }
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/status",
+        (active?"Enabled":"Disabled")+" Educational Admin access; "+(!active?"Education portal sessions were revoked.":""));
+    Map<String,Object> result=staffById(staffId);
+    result.put("message",active?"Educational Admin access enabled.":"Educational Admin access disabled; education portal sessions revoked.");
+    return result;
+  }
+
+  @GetMapping("/audit")
+  public Map<String,Object> auditTrail(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset) {
+    authorization.requirePermission(context,"AUDIT_VIEW");
+    int safeLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int safeOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
+        select a.id,a.actor_staff_id,a.actor_role,a.http_method,a.request_path,
+               a.response_status,a.remote_address,a.user_agent,a.details,a.created_at,
+               coalesce(s.display_name,'Removed staff account') as actor_name
+        from staff_audit_log a
+        left join staff_account s on s.id=a.actor_staff_id
+        order by a.created_at desc,a.id desc
+        limit ? offset ?
+        """,safeLimit,safeOffset);
+    Long total=jdbc.queryForObject("select count(*) from staff_audit_log",Long.class);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
+  }
+
+  private void requireStaffManager(AuthContext context) {
+    authorization.requireAdmin(context);
+  }
+
+  private Map<String,Object> staffById(long id) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id,public_id,mobile_e164,display_name,role,
+               (active and education_access_enabled) as active,
+               active as identity_active,education_access_enabled,education_access_configured,
+               created_at,updated_at,last_login_at,username
+        from staff_account where id=? and education_access_configured=true
+        """,id);
+    if (rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Staff account not found.");
+    Map<String,Object> row=rows.getFirst();
+    if ("hrms_admin".equalsIgnoreCase(String.valueOf(row.get("username")))) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The People Operations Super Admin identity is managed only through the protected HRMS bootstrap process.");
+    }
+    row.remove("username");
+    row.put("permissions",auth.permissionsForStaff(id));
+    return row;
+  }
+
+  private void replacePermissions(long staffId,List<String> permissions,Long grantedBy) {
+    // Education Admin may edit only education-workspace grants; HRMS grants are managed
+    // through the HRMS access screen and must survive education staff profile updates.
+    jdbc.update("delete from staff_permission_grant where staff_id=? and workspace_key='EDUCATION_ADMIN'",staffId);
+    for (String permission : permissions) {
+      jdbc.update("""
+          insert into staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
+          values (?,'EDUCATION_ADMIN',?,?)
+          on conflict(staff_id,workspace_key,permission_key) do nothing
+          """,staffId,permission,grantedBy);
+    }
+  }
+
+  private List<String> readPermissions(Object value) {
+    if (!(value instanceof List<?> requested)) throw badRequest("Permissions must be selected from the available list.");
+    Set<String> distinct=new LinkedHashSet<>();
+    for (Object item : requested) {
+      if (!(item instanceof String permission) || permission.isBlank()) {
+        throw badRequest("Each permission must be a valid permission key.");
+      }
+      String normalized = permission.trim().toUpperCase();
+      if (normalized.startsWith("HR_") || Set.of("HR_SELF_SERVICE_VIEW","TEACHING_ASSIGNMENT_VIEW","CLASS_SCHEDULE_POLICY_MANAGE").contains(normalized)) {
+        throw badRequest("HRMS permissions can only be assigned from the HRMS access-management workspace.");
+      }
+      distinct.add(normalized);
+    }
+    List<String> permissions=new ArrayList<>(distinct);
+    for (String permission : permissions) {
+      Boolean exists=jdbc.queryForObject(
+          "select exists(select 1 from staff_permission_catalog where permission_key=?)",
+          Boolean.class, permission);
+      if (!Boolean.TRUE.equals(exists)) throw badRequest("One or more selected permissions are not supported.");
+    }
+    return permissions;
+  }
+
+  private void validateStaffPermissions(String role,List<String> permissions) {
+    if (permissions.contains("STAFF_MANAGE") && !"ADMIN".equals(role)) {
+      throw badRequest("Only administrator identities may receive staff-management permission.");
+    }
+    boolean anyContentTask=permissions.stream().anyMatch(key -> Set.of(
+        "CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT","CONTENT_REVIEW","CONTENT_PUBLISH"
+        ).contains(key));
+    if (anyContentTask && !permissions.contains("CONTENT_VIEW")) {
+      throw badRequest("Any content task permission also requires View learning content.");
+    }
+    if (permissions.contains("CONTENT_CREATE") && !permissions.contains("CONTENT_EDIT")) {
+      throw badRequest("Create content also requires Edit content so the draft can be completed.");
+    }
+    if ("ADMIN".equals(role) && permissions.size()!=permissionCatalogSize()) {
+      throw badRequest("Administrator accounts must retain all permissions.");
+    }
+  }
+
+  private List<String> defaultPermissions(String role) {
+    return switch(role) {
+      case "ADMIN" -> jdbc.queryForList("""
+          select permission_key from staff_permission_catalog
+          where permission_key not like 'HR\\_%' escape '\\'
+            and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
+          order by permission_key
+          """,String.class);
+      case "MANAGER" -> List.of("CONTENT_VIEW","CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT",
+          "CONTENT_REVIEW","AUDIT_VIEW");
+      case "MODERATOR" -> List.of("CONTENT_VIEW","CONTENT_REVIEW");
+      case "CONTENT_AUTHOR" -> List.of("CONTENT_VIEW","CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT");
+      case "CONTENT_REVIEWER" -> List.of("CONTENT_VIEW","CONTENT_REVIEW");
+      case "PUBLISHER" -> List.of("CONTENT_VIEW","CONTENT_PUBLISH");
+      default -> List.of("CONTENT_VIEW");
+    };
+  }
+
+  private int permissionCatalogSize() {
+    Integer count=jdbc.queryForObject("""
+        select count(*) from staff_permission_catalog
+        where permission_key not like 'HR\\_%' escape '\\'
+          and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
+        """,Integer.class);
+    return count==null?0:count;
+  }
+
+  private String requiredText(Object value,int maxLength,String label) {
+    if (!(value instanceof String text) || text.trim().length()<2 || text.trim().length()>maxLength) {
+      throw badRequest(label+" must contain between 2 and "+maxLength+" characters.");
+    }
+    return text.trim();
+  }
+
+  private ResponseStatusException badRequest(String message) {
+    return new ResponseStatusException(HttpStatus.BAD_REQUEST,message);
+  }
+}

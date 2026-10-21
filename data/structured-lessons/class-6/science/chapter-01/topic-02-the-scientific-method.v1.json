@@ -1,0 +1,1284 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch01-topic02-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive draft content artifact. Does not alter existing lesson records or app code."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "A distinguishing project label for ordinary Class 6 curriculum content only; not Navodaya entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 1,
+    "title_by_locale": {
+      "en": "The Wonderful World of Science",
+      "hi": "विज्ञान का अनूठा संसार"
+    },
+    "chapter_scope_status": "CHAPTER_BOUNDARIES_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 2,
+    "topic_id": "c6-sci-ch01-t02",
+    "title_by_locale": {
+      "en": "The Scientific Method",
+      "hi": "वैज्ञानिक विधि"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          23,
+          24,
+          25
+        ],
+        "printed_pages": [
+          5,
+          6,
+          7
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "The textbook's everyday example of asking why a pen stopped writing",
+      "Observing, asking a question, suggesting a possible explanation, testing it, and analysing what happened",
+      "The idea that an initial guess may be wrong and should be checked",
+      "Brief examples of scientific thinking in everyday situations as introduced by Chapter 1",
+      "Curiosity, observation, questions and working with others to explore a problem"
+    ],
+    "excluded_scope": [
+      "Detailed science explanations about ink chemistry or pen construction",
+      "Detailed bicycle repair, electrical circuits, cooking chemistry or pressure-cooker mechanisms",
+      "Scientific-method details drawn from later chapters rather than this chapter",
+      "Navodaya entrance-exam preparation"
+    ],
+    "bilingual_parity_rule": "English and Hindi must have the same stable objective, block, diagram, question and answer IDs, the same expected knowledge and equivalent scoring. All learner-visible strings must exist in both locales and follow the app-wide language setting.",
+    "source_text_rule": "Teaching explanation and questions are newly authored learning aids grounded in the identified chapter passage, not verbatim NCERT content or NCERT assessment questions.",
+    "visual_rule": "The process diagram is an original structured visual definition, not an existing textbook image. It remains a draft pending factual, bilingual, accessibility and renderer validation.",
+    "language_runtime_rule": "The single global app locale switches the entire visible lesson/practice state at any time and must preserve response/progress state. Contract recorded; runtime not implemented."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch01-t02-lo1",
+      "statement_by_locale": {
+        "en": "Describe the main steps used to investigate a question: observe, ask, suggest a possible answer, test it and analyse the result.",
+        "hi": "जाँच के मुख्य चरण बताएँ: अवलोकन करना, प्रश्न पूछना, संभावित उत्तर सुझाना, उसे जाँचना और परिणाम का विश्लेषण करना।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t02-lo2",
+      "statement_by_locale": {
+        "en": "Explain why a guess should be tested rather than accepted immediately.",
+        "hi": "समझाएँ कि किसी अनुमान को तुरंत सही मानने के बजाय उसकी जाँच क्यों करनी चाहिए।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t02-lo3",
+      "statement_by_locale": {
+        "en": "Recognise examples of scientific thinking in everyday situations.",
+        "hi": "रोज़मर्रा की परिस्थितियों में वैज्ञानिक सोच के उदाहरण पहचानें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c1-en-p23-25",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        23,
+        24,
+        25
+      ],
+      "printed_pages": [
+        5,
+        6,
+        7
+      ],
+      "source_context": [
+        "PDF p.23 / printed p.5: example of a pen that stops writing; asking why; checking the refill as a possible test of the guess; named Activity 1.1.",
+        "PDF p.24 / printed p.6: sequence of observing, forming a question, guessing, testing through experiment or further observation, and analysing results; everyday illustrations involving spilled dal, a flat bicycle tyre, and a light bulb; named Activity 1.2.",
+        "PDF p.25 / printed p.7: scientific thinking and curiosity; named Activity 1.3; scientists work together; learners may have questions whose answers will come later."
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "extraction_quality_note": "The raw extracted page text has reading-order/column interleaving and character artefacts in this area; visually reconcile against the same-edition source PDF before marking complete."
+    },
+    {
+      "source_ref_id": "src-c1-hi-jigyasa-chapter1",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "note": "Matching Hindi Science book is identified in the extraction manifests. Verify the exact Hindi Chapter 1 page boundaries/text before declaring source-level bilingual alignment complete."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch01-t02",
+    "title_by_locale": {
+      "en": "How Do We Find an Answer?",
+      "hi": "हम उत्तर कैसे खोजते हैं?"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch01-t02-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "source_refs": [
+          "src-c1-en-p23-25",
+          "src-c1-hi-jigyasa-chapter1"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "A pen stops writing",
+            "paragraphs": [
+              "Imagine that your pen suddenly stops writing. You may ask, “Why did it stop?” One possible guess is that the ink has run out.",
+              "Instead of treating that guess as a fact, check the refill. If it is empty, the observation supports your guess. If ink is still present, the first guess does not explain what happened, so you need to think of another possibility and test it."
+            ],
+            "key_point": "A guess is a possible answer—not a fact until evidence supports it."
+          },
+          "hi": {
+            "heading": "कलम लिखना बंद कर देती है",
+            "paragraphs": [
+              "मान लीजिए आपकी कलम अचानक लिखना बंद कर देती है। आप पूछ सकते हैं, “यह क्यों रुक गई?” एक संभावित अनुमान यह है कि उसकी स्याही समाप्त हो गई है।",
+              "इस अनुमान को तथ्य मान लेने के बजाय रिफिल जाँचें। यदि वह खाली है, तो अवलोकन आपके अनुमान का समर्थन करता है। यदि स्याही अभी भी है, तो पहला अनुमान समस्या की व्याख्या नहीं करता; इसलिए किसी दूसरी संभावना पर विचार करके उसकी जाँच करें।"
+            ],
+            "key_point": "अनुमान एक संभावित उत्तर है—प्रमाण मिलने तक उसे तथ्य नहीं मानना चाहिए।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-b02",
+        "type": "diagram",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch01-t02-scientific-method-flow",
+        "render_contract": "quantaedge.structured-lesson.v1 diagram block",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original bilingual flow diagram. Keep each stage short, use directional arrows and a clear loop from analysing a result to revising a possible answer or asking a new question. Do not copy a textbook figure. No concept outside this chapter.",
+        "diagram_data": {
+          "layout": "vertical_process_with_feedback_loop",
+          "nodes": [
+            {
+              "id": "observe",
+              "label_by_locale": {
+                "en": "Observe",
+                "hi": "अवलोकन करें"
+              },
+              "detail_by_locale": {
+                "en": "Notice something",
+                "hi": "किसी बात पर ध्यान दें"
+              }
+            },
+            {
+              "id": "question",
+              "label_by_locale": {
+                "en": "Ask a question",
+                "hi": "प्रश्न पूछें"
+              },
+              "detail_by_locale": {
+                "en": "What do I want to find out?",
+                "hi": "मैं क्या जानना चाहता/चाहती हूँ?"
+              }
+            },
+            {
+              "id": "possible_answer",
+              "label_by_locale": {
+                "en": "Suggest a possible answer",
+                "hi": "संभावित उत्तर सोचें"
+              },
+              "detail_by_locale": {
+                "en": "Make a guess that can be checked",
+                "hi": "ऐसा अनुमान लगाएँ जिसकी जाँच हो सके"
+              }
+            },
+            {
+              "id": "test",
+              "label_by_locale": {
+                "en": "Test the guess",
+                "hi": "अनुमान की जाँच करें"
+              },
+              "detail_by_locale": {
+                "en": "Use a suitable observation or test",
+                "hi": "उपयुक्त अवलोकन या परीक्षण करें"
+              }
+            },
+            {
+              "id": "analyse",
+              "label_by_locale": {
+                "en": "Analyse the result",
+                "hi": "परिणाम का विश्लेषण करें"
+              },
+              "detail_by_locale": {
+                "en": "Does the evidence support the guess?",
+                "hi": "क्या प्रमाण अनुमान का समर्थन करता है?"
+              }
+            },
+            {
+              "id": "revise",
+              "label_by_locale": {
+                "en": "Think again if needed",
+                "hi": "ज़रूरत हो तो फिर सोचें"
+              },
+              "detail_by_locale": {
+                "en": "Revise the guess or ask a new question",
+                "hi": "अनुमान सुधारें या नया प्रश्न पूछें"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "observe",
+              "to": "question"
+            },
+            {
+              "from": "question",
+              "to": "possible_answer"
+            },
+            {
+              "from": "possible_answer",
+              "to": "test"
+            },
+            {
+              "from": "test",
+              "to": "analyse"
+            },
+            {
+              "from": "analyse",
+              "to": "revise"
+            },
+            {
+              "from": "revise",
+              "to": "question",
+              "edge_label_by_locale": {
+                "en": "If the result does not answer it",
+                "hi": "यदि परिणाम उत्तर न दे"
+              }
+            }
+          ]
+        },
+        "alt_by_locale": {
+          "en": "A bilingual process flow: observe something, ask a question, suggest a possible answer, test the guess, analyse the result, and revise the guess or ask again if needed.",
+          "hi": "एक प्रक्रिया-चित्र: अवलोकन करें, प्रश्न पूछें, संभावित उत्तर सोचें, अनुमान की जाँच करें, परिणाम का विश्लेषण करें और ज़रूरत पड़ने पर अनुमान सुधारें या फिर प्रश्न पूछें।"
+        },
+        "caption_by_locale": {
+          "en": "This is a simplified learning diagram based on the steps introduced in Chapter 1. Real investigations may revisit a step or use several observations.",
+          "hi": "यह अध्याय 1 में बताए गए चरणों पर आधारित एक सरल शिक्षण-चित्र है। वास्तविक जाँच में किसी चरण पर दोबारा लौटना या कई अवलोकन करना पड़ सकता है।"
+        },
+        "provenance": {
+          "kind": "GENERATED_ORIGINAL",
+          "source_refs": [
+            "src-c1-en-p23-25",
+            "src-c1-hi-jigyasa-chapter1"
+          ],
+          "source_text_quoted": false
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-b03",
+        "type": "rich_text",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "source_refs": [
+          "src-c1-en-p23-25",
+          "src-c1-hi-jigyasa-chapter1"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "The steps work together",
+            "paragraphs": [
+              "First, notice something you want to understand. Next, turn that observation into a clear question. Suggest a possible answer that you can check.",
+              "Then test the guess using a suitable observation or experiment. Look carefully at what happened and decide whether the result supports the guess. If it does not, do not force the result to fit; revise the guess or ask a better question."
+            ],
+            "numbered_steps": [
+              "Observe something.",
+              "Ask a question.",
+              "Suggest a possible answer.",
+              "Test the possible answer.",
+              "Analyse the result and decide what to do next."
+            ]
+          },
+          "hi": {
+            "heading": "सभी चरण एक-दूसरे से जुड़े हैं",
+            "paragraphs": [
+              "सबसे पहले उस बात पर ध्यान दें जिसे आप समझना चाहते हैं। फिर उस अवलोकन को स्पष्ट प्रश्न में बदलें। ऐसा संभावित उत्तर सोचें जिसकी जाँच की जा सके।",
+              "इसके बाद उपयुक्त अवलोकन या प्रयोग से अनुमान की जाँच करें। ध्यान से देखें कि क्या हुआ और तय करें कि परिणाम अनुमान का समर्थन करता है या नहीं। यदि नहीं, तो परिणाम को जबरन अनुमान के अनुसार न मानें; अनुमान सुधारें या बेहतर प्रश्न पूछें।"
+            ],
+            "numbered_steps": [
+              "किसी बात का अवलोकन करें।",
+              "प्रश्न पूछें।",
+              "संभावित उत्तर सोचें।",
+              "संभावित उत्तर की जाँच करें।",
+              "परिणाम का विश्लेषण करें और तय करें कि आगे क्या करना है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-b04",
+        "type": "activity",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "activity_kind": "guided_investigation_planner",
+        "review_status": "NEEDS_REVIEW",
+        "instructions_by_locale": {
+          "en": [
+            "Think of a simple problem you have actually noticed in everyday life.",
+            "Write the observation and one clear question.",
+            "Write one possible answer and describe a safe way to check it.",
+            "Record what result would support your guess and what result would make you reconsider it."
+          ],
+          "hi": [
+            "रोज़मर्रा के जीवन में देखी गई किसी सरल समस्या के बारे में सोचें।",
+            "अपना अवलोकन और एक स्पष्ट प्रश्न लिखें।",
+            "एक संभावित उत्तर लिखें और उसे जाँचने का सुरक्षित तरीका बताएँ।",
+            "लिखें कि कौन-सा परिणाम आपके अनुमान का समर्थन करेगा और कौन-सा परिणाम आपको उस पर दोबारा विचार करने के लिए प्रेरित करेगा।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "observation",
+            "label_by_locale": {
+              "en": "What did you observe?",
+              "hi": "आपने क्या देखा?"
+            }
+          },
+          {
+            "id": "question",
+            "label_by_locale": {
+              "en": "What is your question?",
+              "hi": "आपका प्रश्न क्या है?"
+            }
+          },
+          {
+            "id": "possible_answer",
+            "label_by_locale": {
+              "en": "What is one possible answer?",
+              "hi": "एक संभावित उत्तर क्या है?"
+            }
+          },
+          {
+            "id": "test",
+            "label_by_locale": {
+              "en": "How could you check it safely?",
+              "hi": "आप सुरक्षित रूप से इसकी जाँच कैसे करेंगे?"
+            }
+          },
+          {
+            "id": "result",
+            "label_by_locale": {
+              "en": "What would the result tell you?",
+              "hi": "परिणाम से आपको क्या पता चलेगा?"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "A useful plan connects an observation to a question and a test. Your guess is not required to be correct at first; the important thing is to check it safely and learn from the result.",
+          "hi": "एक उपयोगी योजना में अवलोकन, प्रश्न और जाँच का संबंध होता है। आपका प्रारंभिक अनुमान सही होना ज़रूरी नहीं है; महत्त्वपूर्ण है कि आप सुरक्षित रूप से उसकी जाँच करें और परिणाम से सीखें।"
+        },
+        "safety_note_by_locale": {
+          "en": "Choose a harmless situation. Do not experiment with electricity, heat, chemicals, pressure equipment, or anything unsafe; ask a responsible adult when needed.",
+          "hi": "कोई सुरक्षित और हानिरहित स्थिति चुनें। बिजली, गर्मी, रसायनों, दबाव वाले उपकरण या किसी असुरक्षित चीज़ पर प्रयोग न करें; ज़रूरत पड़ने पर किसी जिम्मेदार वयस्क की सहायता लें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-b05",
+        "type": "rich_text",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo3"
+        ],
+        "source_refs": [
+          "src-c1-en-p23-25",
+          "src-c1-hi-jigyasa-chapter1"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Scientific thinking in everyday life",
+            "paragraphs": [
+              "Chapter 1 points out that people may investigate everyday problems without calling it science. Someone may try to understand why food has spilled out of a cooker, where air is escaping from a bicycle tyre, or why a light is not turning on.",
+              "The important idea here is the way of thinking: notice the problem, ask a question, consider possible explanations, and look for evidence. This lesson does not try to teach the engineering or scientific details behind those examples."
+            ],
+            "callout": "You do not need to know the answer before you begin. You need a question and a careful way to investigate it."
+          },
+          "hi": {
+            "heading": "रोज़मर्रा के जीवन में वैज्ञानिक सोच",
+            "paragraphs": [
+              "अध्याय 1 बताता है कि लोग रोज़मर्रा की समस्याओं की जाँच करते हैं, भले ही वे उसे विज्ञान न कहें। कोई यह समझने की कोशिश कर सकता है कि कुकर से भोजन क्यों बाहर निकला, साइकिल के टायर से हवा कहाँ निकल रही है या बत्ती क्यों नहीं जल रही।",
+              "यहाँ महत्त्वपूर्ण है सोचने का तरीका: समस्या पर ध्यान दें, प्रश्न पूछें, संभावित कारणों पर विचार करें और प्रमाण खोजें। इस पाठ में इन उदाहरणों के पीछे के इंजीनियरिंग या वैज्ञानिक विवरण नहीं पढ़ाए जा रहे हैं।"
+            ],
+            "callout": "शुरू करने से पहले उत्तर जानना ज़रूरी नहीं है। एक प्रश्न और उसकी जाँच करने का सावधानीपूर्ण तरीका चाहिए।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-b06",
+        "type": "recap",
+        "order": 6,
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2",
+          "c6-sci-ch01-t02-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Observe the situation and form a clear question.",
+              "Suggest a possible answer that can be checked.",
+              "Test the guess and analyse the result.",
+              "If evidence does not support the guess, reconsider it rather than forcing the result.",
+              "Scientific thinking can be used in everyday situations, and people can investigate together."
+            ],
+            "vocabulary": [
+              {
+                "term": "Observation",
+                "meaning": "Carefully noticing something."
+              },
+              {
+                "term": "Possible answer / guess",
+                "meaning": "An explanation that may be right and needs checking."
+              },
+              {
+                "term": "Test",
+                "meaning": "A suitable check through an observation or experiment."
+              },
+              {
+                "term": "Analyse",
+                "meaning": "Look carefully at the result and consider what it tells you."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "स्थिति का अवलोकन करें और स्पष्ट प्रश्न बनाएँ।",
+              "ऐसा संभावित उत्तर सोचें जिसकी जाँच की जा सके।",
+              "अनुमान की जाँच करें और परिणाम का विश्लेषण करें।",
+              "यदि प्रमाण अनुमान का समर्थन न करे, तो परिणाम को जबरन सही मानने के बजाय अनुमान पर दोबारा विचार करें।",
+              "वैज्ञानिक सोच रोज़मर्रा की स्थितियों में काम आती है और लोग मिलकर भी जाँच कर सकते हैं।"
+            ],
+            "vocabulary": [
+              {
+                "term": "अवलोकन",
+                "meaning": "किसी बात पर ध्यानपूर्वक ध्यान देना।"
+              },
+              {
+                "term": "संभावित उत्तर / अनुमान",
+                "meaning": "एक ऐसी व्याख्या जो सही हो भी सकती है और जिसकी जाँच करना आवश्यक है।"
+              },
+              {
+                "term": "जाँच",
+                "meaning": "अवलोकन या प्रयोग द्वारा उपयुक्त तरीके से परखना।"
+              },
+              {
+                "term": "विश्लेषण",
+                "meaning": "परिणाम को ध्यान से देखकर समझना कि उससे क्या पता चलता है।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch01-t02",
+    "title_by_locale": {
+      "en": "Practise the Scientific Method",
+      "hi": "वैज्ञानिक विधि का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice based on this topic's chapter-specific scope. These are not verbatim NCERT questions.",
+      "hi": "इस विषय की अध्याय-विशिष्ट सीमा के आधार पर AI द्वारा तैयार अतिरिक्त अभ्यास। ये NCERT के मूल प्रश्नों के शब्दशः रूप नहीं हैं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch01-t02-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "After noticing that a pen has stopped writing, what is a sensible first step in investigating why?",
+          "hi": "कलम का लिखना बंद होने पर कारण की जाँच करने के लिए कौन-सा पहला कदम उचित है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Decide the cause without checking anything",
+              "hi": "बिना कुछ जाँचे कारण तय कर लेना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Ask a question about what happened",
+              "hi": "जो हुआ उसके बारे में प्रश्न पूछना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Ignore the problem",
+              "hi": "समस्या को अनदेखा करना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Assume every pen stops for the same reason",
+              "hi": "मान लेना कि हर कलम एक ही कारण से रुकती है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. First state the question clearly; then suggest a possible answer and plan a suitable check.",
+          "hi": "सही। पहले प्रश्न को स्पष्ट करें; फिर संभावित उत्तर सोचें और उसकी उचित जाँच की योजना बनाएँ।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which actions belong in a careful investigation? Select all that apply.",
+          "hi": "सावधानीपूर्ण जाँच में कौन-से कदम शामिल होते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Observe what happened",
+              "hi": "जो हुआ उसका अवलोकन करना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Ask a clear question",
+              "hi": "स्पष्ट प्रश्न पूछना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Test a possible answer",
+              "hi": "संभावित उत्तर की जाँच करना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Accept the first guess without evidence",
+              "hi": "बिना प्रमाण के पहले अनुमान को सही मान लेना"
+            }
+          },
+          {
+            "id": "e",
+            "text_by_locale": {
+              "en": "Analyse what the result tells you",
+              "hi": "परिणाम से क्या पता चलता है, इसका विश्लेषण करना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c",
+          "e"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct selections: observe, ask, test and analyse. An unchecked guess is not enough.",
+          "hi": "सही विकल्प हैं: अवलोकन करना, प्रश्न पूछना, जाँच करना और विश्लेषण करना। बिना जाँचा अनुमान पर्याप्त नहीं है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "If your first guess does not match the evidence, you should still keep it as the answer.",
+          "hi": "यदि आपका पहला अनुमान प्रमाण से मेल नहीं खाता, तब भी उसे उत्तर मानकर रखना चाहिए।"
+        },
+        "correct_answer": false,
+        "feedback_by_locale": {
+          "en": "False. Consider what the evidence shows and revise the guess or ask a better question.",
+          "hi": "गलत। प्रमाण क्या बताते हैं, यह देखें और अनुमान सुधारें या बेहतर प्रश्न पूछें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each investigation step with its purpose.",
+          "hi": "जाँच के प्रत्येक चरण को उसके उद्देश्य से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "observe",
+            "label_by_locale": {
+              "en": "Observe",
+              "hi": "अवलोकन करें"
+            }
+          },
+          {
+            "id": "ask",
+            "label_by_locale": {
+              "en": "Ask",
+              "hi": "प्रश्न पूछें"
+            }
+          },
+          {
+            "id": "guess",
+            "label_by_locale": {
+              "en": "Suggest a possible answer",
+              "hi": "संभावित उत्तर सोचें"
+            }
+          },
+          {
+            "id": "test",
+            "label_by_locale": {
+              "en": "Test",
+              "hi": "जाँच करें"
+            }
+          },
+          {
+            "id": "analyse",
+            "label_by_locale": {
+              "en": "Analyse",
+              "hi": "विश्लेषण करें"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "notice",
+            "label_by_locale": {
+              "en": "Notice what happened",
+              "hi": "जो हुआ उस पर ध्यान दें"
+            }
+          },
+          {
+            "id": "question",
+            "label_by_locale": {
+              "en": "State what you want to find out",
+              "hi": "बताएँ कि आप क्या जानना चाहते हैं"
+            }
+          },
+          {
+            "id": "possible",
+            "label_by_locale": {
+              "en": "Think of an explanation that can be checked",
+              "hi": "ऐसी व्याख्या सोचें जिसकी जाँच की जा सके"
+            }
+          },
+          {
+            "id": "check",
+            "label_by_locale": {
+              "en": "Collect evidence through a suitable check",
+              "hi": "उचित जाँच से प्रमाण प्राप्त करें"
+            }
+          },
+          {
+            "id": "result",
+            "label_by_locale": {
+              "en": "Decide what the result supports",
+              "hi": "तय करें कि परिणाम किस बात का समर्थन करता है"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "observe",
+            "right_id": "notice"
+          },
+          {
+            "left_id": "ask",
+            "right_id": "question"
+          },
+          {
+            "left_id": "guess",
+            "right_id": "possible"
+          },
+          {
+            "left_id": "test",
+            "right_id": "check"
+          },
+          {
+            "left_id": "analyse",
+            "right_id": "result"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 5,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each step has a different job. The test checks a possible answer; analysis considers what the evidence means.",
+          "hi": "हर चरण का अलग काम है। जाँच संभावित उत्तर को परखती है; विश्लेषण यह समझता है कि प्रमाण का क्या अर्थ है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "After suggesting a possible answer, we should ______ it using a suitable observation or experiment.",
+          "hi": "संभावित उत्तर सोचने के बाद उपयुक्त अवलोकन या प्रयोग से उसकी ______ करनी चाहिए।"
+        },
+        "accepted_answers": {
+          "en": [
+            "test",
+            "check"
+          ],
+          "hi": [
+            "जाँच",
+            "जांच",
+            "परख"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not remove meaningful Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The missing idea is test/check. A possible answer must be checked against evidence.",
+          "hi": "यहाँ सही विचार है 'जाँच' या 'परख'। संभावित उत्तर को प्रमाण के आधार पर जाँचना चाहिए।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1"
+        ],
+        "visual_asset_ref": "c6-sci-ch01-t02-scientific-method-flow",
+        "prompt_by_locale": {
+          "en": "In the process diagram, what comes immediately after suggesting a possible answer?",
+          "hi": "प्रक्रिया-चित्र में संभावित उत्तर सोचने के तुरंत बाद कौन-सा चरण आता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Test the guess",
+              "hi": "अनुमान की जाँच करें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Stop without checking",
+              "hi": "बिना जाँच किए रुक जाएँ"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Treat the guess as a proven fact",
+              "hi": "अनुमान को प्रमाणित तथ्य मान लें"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Forget the original question",
+              "hi": "मूल प्रश्न भूल जाएँ"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The next step is to test the possible answer, then analyse the result.",
+          "hi": "सही। अगला चरण संभावित उत्तर की जाँच करना है; उसके बाद परिणाम का विश्लेषण किया जाता है।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The referenced process diagram is structured draft data, not a reviewed, rendered visual yet.",
+            "hi": "संदर्भित प्रक्रिया-चित्र अभी संरचित मसौदा डेटा है; इसकी समीक्षा और दृश्य-रूप में प्रस्तुति बाकी है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Why should someone check the refill instead of immediately deciding that a pen stopped because its ink is finished?",
+          "hi": "कलम की स्याही समाप्त होने का तुरंत निष्कर्ष निकालने के बजाय उसकी रिफिल क्यों जाँचनी चाहिए?"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "The ink explanation is only a possible guess.",
+              "Checking provides evidence that may support or reject the guess."
+            ],
+            "sample_answer": "The pen stopping does not prove that its ink is finished. Checking the refill gives evidence to decide whether that guess is supported."
+          },
+          "hi": {
+            "key_points": [
+              "स्याही समाप्त होने की बात केवल एक संभावित अनुमान है।",
+              "रिफिल जाँचने से ऐसा प्रमाण मिलता है जो अनुमान का समर्थन कर सकता है या उसे गलत दिखा सकता है।"
+            ],
+            "sample_answer": "कलम का रुकना यह साबित नहीं करता कि स्याही खत्म हो गई है। रिफिल जाँचने से पता चलता है कि प्रमाण उस अनुमान का समर्थन करता है या नहीं।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: identifies the ink idea as a guess, not a proven fact.",
+              "1 point: explains that checking supplies evidence to support or reject it."
+            ],
+            "hi": [
+              "1 अंक: स्याही वाली बात को अनुमान बताता है, प्रमाणित तथ्य नहीं।",
+              "1 अंक: बताता है कि जाँच से अनुमान का समर्थन या खंडन करने वाला प्रमाण मिलता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t02-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t02-lo1",
+          "c6-sci-ch01-t02-lo2"
+        ],
+        "scenario_by_locale": {
+          "en": "A learner's pen stops writing. The learner guesses that the refill is empty but has not checked it.",
+          "hi": "एक विद्यार्थी की कलम लिखना बंद कर देती है। विद्यार्थी अनुमान लगाता है कि रिफिल खाली है, लेकिन उसने अभी जाँच नहीं की है।"
+        },
+        "prompt_by_locale": {
+          "en": "What is the best next action?",
+          "hi": "अब अगला सबसे उचित कदम क्या है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Tell everyone that the guess is definitely correct",
+              "hi": "सबको बता दें कि अनुमान निश्चित रूप से सही है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Check the refill and use the result as evidence",
+              "hi": "रिफिल जाँचें और परिणाम को प्रमाण के रूप में देखें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Change the question so the guess sounds correct",
+              "hi": "प्रश्न बदल दें ताकि अनुमान सही लगे"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Ignore any result that does not support the guess",
+              "hi": "जो परिणाम अनुमान का समर्थन न करे उसे अनदेखा करें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Test the guess and consider the evidence. If the refill is not empty, think of another possible explanation.",
+          "hi": "सही। अनुमान की जाँच करें और प्रमाण पर विचार करें। यदि रिफिल खाली नहीं है, तो किसी दूसरे संभावित कारण पर सोचें।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch01-t02-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_rendering_registry_linked": true,
+    "question_components_implemented": false,
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "known_limitations": [
+      "Hindi Chapter 1 source-page mapping and paragraph-level reconciliation remain pending.",
+      "English source extraction for the relevant pages has reading-order and character artefacts; compare the source page images before approving exact content coverage.",
+      "The original structured diagram is not yet rendered and reviewed; q06 must remain blocked from student rendering until visual validation passes.",
+      "The lesson's content and questions are drafts, not verified verbatim or exhaustive textbook content.",
+      "UI question components and app-wide runtime language switching are specified but not implemented."
+    ],
+    "generated_question_types": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch01-t02-q08"
+        ]
+      }
+    ]
+  },
+  "next_steps": [
+    "Verify Hindi Chapter 1 page boundaries and reconcile corresponding source passages from Jigyasa.",
+    "Review the Chapter 1 source pages visually and confirm the authored explanation covers intended ideas without extraction artefacts or omissions.",
+    "Review diagram labels, scientific-method sequence, alt text, bilingual parity and scope.",
+    "Run automated schema, locale-field, option/answer integrity and grading checks.",
+    "Generate Topic 3 as an independent bilingual lesson within Chapter 1; then update the chapter's question-type counts and the production index."
+  ]
+}

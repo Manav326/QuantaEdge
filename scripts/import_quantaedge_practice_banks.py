@@ -1,0 +1,497 @@
+#!/usr/bin/env python3
+"""Idempotently attach QuantaEdge's structured practice-bank JSON to CMS lessons as DRAFT questions.
+
+This is a JSON-to-CMS import stage, not a PDF importer and not a translator.
+It validates stable question IDs/answer payloads, maps (class, subject, chapter, lesson)
+to existing CMS records, then uses the admin append-drafts API. It never approves or publishes.
+Run the bilingual database translator after this importer so these questions are included.
+"""
+from __future__ import annotations
+
+import argparse
+import collections
+import datetime as dt
+import json
+import math
+import os
+import sys
+import urllib.parse
+from pathlib import Path
+from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+try:
+    from import_site_content_draft import AdminApi
+except ImportError as exc:  # pragma: no cover - checkout packaging error
+    raise SystemExit("Missing scripts/import_site_content_draft.py; run this from the QuantaEdge repository.") from exc
+
+CATALOG_SCHEMA = "quantaedge.practice-question-catalog-draft.v1"
+ALLOWED_CLASSES = {"6", "7", "8"}
+ALLOWED_SUBJECTS = {"maths", "science"}
+ALLOWED_TYPES = {"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL"}
+DIFFICULTY_MAP = {"EASY": "FOUNDATION", "MEDIUM": "CORE", "HARD": "CHALLENGE"}
+MAX_APPEND_BATCH = 200
+
+
+def csv_codes(raw: str, allowed: set[str], label: str) -> list[str]:
+    values = [part.strip().lower() for part in raw.split(",") if part.strip()]
+    if not values or any(value not in allowed for value in values):
+        raise ValueError(f"{label} must contain comma-separated values from: {', '.join(sorted(allowed))}")
+    return list(dict.fromkeys(values))
+
+
+def load_catalog(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        raise ValueError(f"JSON practice catalog does not exist: {path}")
+    try:
+        catalog = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Cannot read a valid UTF-8 JSON practice catalog: {exc}") from exc
+    if not isinstance(catalog, dict) or catalog.get("schema") != CATALOG_SCHEMA:
+        raise ValueError(f"Expected catalog schema {CATALOG_SCHEMA}.")
+    if catalog.get("publish_status") != "DRAFT" or catalog.get("student_delivery_allowed") is not False:
+        raise ValueError("The practice catalog must remain DRAFT with student_delivery_allowed=false.")
+    banks = catalog.get("chapter_banks")
+    if not isinstance(banks, list):
+        raise ValueError("chapter_banks must be a JSON array.")
+    seen_banks: set[tuple[str, str, str]] = set()
+    seen_question_ids: set[tuple[str, str, str, str]] = set()
+    for bank_index, bank in enumerate(banks):
+        where = f"chapter_banks[{bank_index}]"
+        if not isinstance(bank, dict) or bank.get("schema") != "quantaedge.practice-question-bank-draft.v1":
+            raise ValueError(f"{where}: unsupported question bank schema.")
+        class_code = str(bank.get("class_code", "")).strip()
+        subject_code = str(bank.get("subject_code", "")).strip().lower()
+        language = str(bank.get("language", "")).strip().lower()
+        chapter = bank.get("chapter")
+        if class_code not in ALLOWED_CLASSES or subject_code not in ALLOWED_SUBJECTS or language not in {"hi", "en"}:
+            raise ValueError(f"{where}: unsupported class/subject/language metadata.")
+        if bank.get("publish_status") != "DRAFT" or bank.get("student_delivery_allowed") is not False:
+            raise ValueError(f"{where}: each chapter bank must remain DRAFT with student_delivery_allowed=false.")
+        if bank.get("editorial_state") != "PENDING_HUMAN_REVIEW":
+            raise ValueError(f"{where}: only banks awaiting human review may be imported.")
+        if not isinstance(chapter, dict) or not str(chapter.get("code", "")).strip():
+            raise ValueError(f"{where}: chapter.code is required.")
+        key = (class_code, subject_code, str(chapter["code"]).strip())
+        if key in seen_banks:
+            raise ValueError(f"{where}: duplicate chapter bank {key}.")
+        seen_banks.add(key)
+        questions = bank.get("questions")
+        if not isinstance(questions, list):
+            raise ValueError(f"{where}: questions must be a JSON array.")
+        if int(bank.get("question_count", -1)) != len(questions):
+            raise ValueError(f"{where}: question_count does not match the actual questions array length.")
+        for question_index, question in enumerate(questions):
+            qwhere = f"{where}.questions[{question_index}]"
+            if not isinstance(question, dict):
+                raise ValueError(f"{qwhere}: question must be an object.")
+            stable_id = str(question.get("id", "")).strip()
+            question_identity = (class_code, subject_code, str(chapter["code"]).strip(), stable_id)
+            if not stable_id or question_identity in seen_question_ids:
+                raise ValueError(f"{qwhere}: question ID is blank or duplicated within this class/subject/chapter: {stable_id!r}.")
+            seen_question_ids.add(question_identity)
+            question_type = str(question.get("question_type", "")).strip().upper()
+            difficulty = str(question.get("difficulty", "")).strip().upper()
+            if question_type not in ALLOWED_TYPES or difficulty not in DIFFICULTY_MAP:
+                raise ValueError(f"{qwhere}: unsupported question_type/difficulty.")
+            if not isinstance(question.get("tags", []), list) or any(not isinstance(tag, str) for tag in question.get("tags", [])):
+                raise ValueError(f"{qwhere}: tags must be an array of strings.")
+            if isinstance(question.get("marks", 1), bool) or not isinstance(question.get("marks", 1), int) or question.get("marks", 1) < 1:
+                raise ValueError(f"{qwhere}: marks must be a positive integer.")
+            if not isinstance(question.get("lesson_code"), str) or not question["lesson_code"].strip():
+                raise ValueError(f"{qwhere}: lesson_code is required.")
+            if not isinstance(question.get("prompt"), str) or not question["prompt"].strip() or len(question["prompt"].strip()) > 1000:
+                raise ValueError(f"{qwhere}: prompt must be non-empty text of at most 1,000 characters.")
+            explanation = question.get("explanation", "")
+            if explanation is not None and (not isinstance(explanation, str) or len(explanation) > 1200):
+                raise ValueError(f"{qwhere}: explanation must be text of at most 1,200 characters.")
+            if len(str(question.get("exam_format", "Practice"))) > 40:
+                raise ValueError(f"{qwhere}: exam_format exceeds the CMS limit of 40 characters.")
+            for field_name, field_limit in (("source_title", 300), ("board", 80), ("topic", 200),
+                                            ("subtopic", 200), ("skill", 200)):
+                field_value = question.get(field_name)
+                if field_value is not None and len(str(field_value)) > field_limit:
+                    raise ValueError(f"{qwhere}: {field_name} exceeds the CMS limit of {field_limit} characters.")
+            answer = question.get("answer_payload")
+            if not isinstance(answer, dict):
+                raise ValueError(f"{qwhere}: answer_payload must be an object.")
+            options = question.get("options", [])
+            if not isinstance(options, list):
+                raise ValueError(f"{qwhere}: options must be an array.")
+            if question_type in {"MCQ", "TRUE_FALSE"}:
+                if len(options) < 2:
+                    raise ValueError(f"{qwhere}: choice questions need at least two options.")
+                keys = [str(opt.get("key", "")).strip() for opt in options if isinstance(opt, dict)]
+                correct = [str(opt.get("key", "")).strip() for opt in options
+                           if isinstance(opt, dict) and opt.get("correct") is True]
+                if len(keys) != len(options) or any(not value for value in keys) or len(set(keys)) != len(keys):
+                    raise ValueError(f"{qwhere}: option keys must be non-empty and unique.")
+                if any(len(key) > 20 for key in keys):
+                    raise ValueError(f"{qwhere}: option keys may not exceed 20 characters.")
+                if any(not isinstance(opt.get("label"), str) or not opt["label"].strip() or len(opt["label"]) > 500
+                       for opt in options):
+                    raise ValueError(f"{qwhere}: each option label must be non-empty text of at most 500 characters.")
+                if len(options) > 10:
+                    raise ValueError(f"{qwhere}: questions may not contain more than 10 options.")
+                if len(correct) != 1 or answer.get("kind") != "OPTION" or answer.get("value") != correct[0]:
+                    raise ValueError(f"{qwhere}: answer payload must match the single correct option.")
+            elif options:
+                raise ValueError(f"{qwhere}: only MCQ/true-false questions may have choice options.")
+            if question_type == "INPUT" and (answer.get("kind") != "TEXT" or not str(answer.get("value", "")).strip()):
+                raise ValueError(f"{qwhere}: INPUT requires a non-empty TEXT answer.")
+            if question_type == "NUMERICAL":
+                numeric_answer = answer.get("value")
+                if (answer.get("kind") != "NUMERIC" or isinstance(numeric_answer, bool)
+                        or not isinstance(numeric_answer, (int, float)) or not math.isfinite(float(numeric_answer))):
+                    raise ValueError(f"{qwhere}: NUMERICAL requires a finite numeric NUMERIC answer payload.")
+    return catalog
+
+
+def selected_banks(catalog: dict[str, Any], classes: list[str], subjects: list[str],
+                   chapter_code: str | None) -> list[dict[str, Any]]:
+    chosen = []
+    for bank in catalog["chapter_banks"]:
+        if str(bank["class_code"]) not in classes or str(bank["subject_code"]).lower() not in subjects:
+            continue
+        if chapter_code and str(bank["chapter"]["code"]) != chapter_code:
+            continue
+        chosen.append(bank)
+    if not chosen:
+        raise ValueError("No chapter banks match the selected class/subject/chapter filters.")
+    return sorted(chosen, key=lambda b: (int(b["class_code"]), b["subject_code"],
+                                        int(b["chapter"].get("sort_order", 0)), b["chapter"]["code"]))
+
+
+def question_payload(question: dict[str, Any], sort_order: int, class_code: str,
+                     subject_code: str, bank_language: str, chapter_code: str) -> dict[str, Any]:
+    question_type = str(question["question_type"]).upper()
+    tags = [str(tag) for tag in question.get("tags", []) if str(tag).strip()]
+    stable_tag = f"qe-practice-id:{class_code}:{subject_code}:{chapter_code}:{question['id']}"
+    tags = [tag for tag in tags if tag != stable_tag]
+    tags.append(stable_tag)
+    # Mark every imported item for staff review; don't treat AI-authored answer keys as verified.
+    if "editorial-review-required" not in tags:
+        tags.append("editorial-review-required")
+    options = []
+    for index, option in enumerate(question.get("options", []), start=1):
+        options.append({
+            "key": str(option["key"]),
+            "label": str(option["label"]),
+            "correct": bool(option.get("correct", False)),
+            "sort_order": index,
+        })
+    payload = {
+        "question_type": question_type,
+        "prompt": str(question["prompt"]).strip(),
+        "explanation": str(question.get("explanation", "")).strip(),
+        "difficulty": DIFFICULTY_MAP[str(question["difficulty"]).upper()],
+        "sort_order": sort_order,
+        "active": True,
+        "review_status": "DRAFT",
+        "marks": int(question.get("marks", 1)),
+        "exam_format": str(question.get("exam_format", "Practice"))[:40],
+        "source_kind": "AUTHOR_CREATED",
+        "source_title": str(question.get("source_title", "QuantaEdge original practice draft — human review required"))[:300],
+        "source_ref": None,
+        "source_year": None,
+        "source_id": None,
+        "board": str(question.get("board", "Bihar Board"))[:80],
+        "topic": question.get("topic"),
+        "subtopic": question.get("subtopic"),
+        "skill": question.get("skill"),
+        "tags": tags,
+        "answer_payload": question["answer_payload"],
+        "options": options,
+    }
+    # Class/subject/language tags aid later audit and never affect grading.
+    for tag in (f"qe-class:{class_code}", f"qe-subject:{subject_code}", f"qe-source-language:{bank_language}"):
+        if tag not in payload["tags"]:
+            payload["tags"].append(tag)
+    return payload
+
+
+def fetch_track_rows(api: AdminApi, class_code: str, subject_code: str) -> list[dict[str, Any]]:
+    query = urllib.parse.urlencode({
+        "classCode": class_code, "subjectCode": subject_code, "status": "ALL",
+    })
+    rows = api.request("GET", "/api/v1/admin/content?" + query)
+    if not isinstance(rows, list):
+        raise RuntimeError(f"Admin content inventory for class {class_code}/{subject_code} returned an unexpected shape.")
+    return [row for row in rows if isinstance(row, dict)]
+
+
+def map_question_lessons(bank: dict[str, Any], track_rows: list[dict[str, Any]]) -> dict[str, int]:
+    class_code = str(bank["class_code"])
+    subject_code = str(bank["subject_code"]).lower()
+    chapter_code = str(bank["chapter"]["code"])
+    chapter_rows = [
+        row for row in track_rows
+        if str(row.get("class_code")) == class_code
+        and str(row.get("subject_code", "")).lower() == subject_code
+        and str(row.get("chapter_code", "")) == chapter_code
+        and row.get("chapter_active") is not False
+        and row.get("lesson_active") is not False
+        and str(row.get("chapter_status", "")).upper() != "ARCHIVED"
+        and str(row.get("lesson_status", "")).upper() != "ARCHIVED"
+        and row.get("lesson_id") is not None
+    ]
+    lesson_ids: dict[str, int] = {}
+    for question in bank["questions"]:
+        requested_code = str(question["lesson_code"]).strip()
+        exact = [row for row in chapter_rows if str(row.get("lesson_code", "")) == requested_code]
+        matches = exact or [
+            row for row in chapter_rows
+            if str(row.get("lesson_code", "")).endswith("-" + requested_code)
+        ]
+        if len(matches) != 1:
+            raise RuntimeError(
+                f"Cannot safely map {class_code}/{subject_code}/{chapter_code}/{requested_code}: "
+                f"found {len(matches)} matching active lesson rows."
+            )
+        lesson_ids[requested_code] = int(matches[0]["lesson_id"])
+    return lesson_ids
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--package", type=Path, required=True, help="QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json")
+    parser.add_argument("--classes", default="6,7,8")
+    parser.add_argument("--subjects", default="maths,science")
+    parser.add_argument("--chapter-code", help="Optional exact chapter code for a controlled one-chapter run.")
+    parser.add_argument("--apply", action="store_true", help="Append missing questions as DRAFTs using the admin API.")
+    parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
+    parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "QuantaEdge_Bilingual_Draft_Bundle")
+    args = parser.parse_args()
+
+    try:
+        classes = csv_codes(args.classes, ALLOWED_CLASSES, "classes")
+        subjects = csv_codes(args.subjects, ALLOWED_SUBJECTS, "subjects")
+        catalog = load_catalog(args.package)
+        banks = selected_banks(catalog, classes, subjects, args.chapter_code)
+        session = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
+        if args.apply and not session:
+            parser.error("--apply requires QUANTAEDGE_ADMIN_SESSION from a fresh QE_SESSION cookie. Never pass the cookie as a command-line argument.")
+        if args.apply and not args.api_url.startswith(("https://", "http://localhost", "http://127.0.0.1")):
+            parser.error("Use HTTPS for remote APIs; HTTP is allowed only for localhost.")
+        if args.apply:
+            api = AdminApi(args.api_url, session)
+        else:
+            api = None
+
+        summary: dict[str, Any] = {
+            "mode": "APPLY_DRAFT_ONLY" if args.apply else "DRY_RUN",
+            "source_file": str(args.package),
+            "source_schema": catalog["schema"],
+            "selected_banks": len(banks),
+            "selected_questions": sum(len(bank["questions"]) for bank in banks),
+            "selected_banks_by_class_subject": dict(sorted(collections.Counter(
+                f"{bank['class_code']}:{bank['subject_code']}" for bank in banks
+            ).items())),
+            "question_types": dict(sorted(collections.Counter(
+                q["question_type"] for bank in banks for q in bank["questions"]
+            ).items())),
+            "student_delivery_allowed_by_import": False,
+            "publication_attempted": False,
+            "mapping_preflight": "NOT_RUN",
+            "results": [],
+        }
+
+        if not args.apply:
+            summary["mapping_preflight"] = "NOT_RUN_DRY_RUN_DOES_NOT_CALL_API"
+            print(json.dumps(summary, ensure_ascii=False, indent=2))
+            return 0
+
+        # Validate every class/subject/chapter/lesson mapping before the first write.
+        cache: dict[tuple[str, str], list[dict[str, Any]]] = {}
+        plans: list[dict[str, Any]] = []
+        mapping_errors: list[str] = []
+        for bank_index, bank in enumerate(banks, start=1):
+            track = (str(bank["class_code"]), str(bank["subject_code"]).lower())
+            try:
+                if track not in cache:
+                    print(
+                        f"[Preflight] Loading CMS inventory for class {track[0]} / {track[1]}...",
+                        file=sys.stderr, flush=True,
+                    )
+                    cache[track] = fetch_track_rows(api, *track)
+                lesson_ids = map_question_lessons(bank, cache[track])
+                per_lesson: dict[int, list[dict[str, Any]]] = collections.defaultdict(list)
+                requested_codes: dict[int, str] = {}
+                for question in sorted(bank["questions"], key=lambda q: (str(q["lesson_code"]), int(q.get("sort_order", 0)), str(q["id"]))):
+                    requested_code = str(question["lesson_code"]).strip()
+                    lesson_id = lesson_ids[requested_code]
+                    requested_codes[lesson_id] = requested_code
+                    per_lesson[lesson_id].append(question)
+                for lesson_id, questions in per_lesson.items():
+                    if len(questions) > MAX_APPEND_BATCH:
+                        mapping_errors.append(
+                            f"Class {track[0]} {track[1]} {bank['chapter']['code']} lesson {requested_codes[lesson_id]} "
+                            f"has {len(questions)} questions, greater than the API limit {MAX_APPEND_BATCH}."
+                        )
+                        continue
+                    # The class/subject/chapter listing already contains the canonical
+                    # lesson identity. Use its max sort-order aggregate instead of making
+                    # one expensive full lesson-detail request per lesson during preflight.
+                    metadata_matches = [
+                        row for row in cache[track]
+                        if row.get("lesson_id") is not None
+                        and int(row["lesson_id"]) == lesson_id
+                        and str(row.get("class_code")) == track[0]
+                        and str(row.get("subject_code", "")).lower() == track[1]
+                        and str(row.get("chapter_code", "")) == str(bank["chapter"]["code"])
+                        and row.get("lesson_active") is not False
+                        and row.get("chapter_active") is not False
+                        and str(row.get("lesson_status", "")).upper() != "ARCHIVED"
+                        and str(row.get("chapter_status", "")).upper() != "ARCHIVED"
+                    ]
+                    if len(metadata_matches) != 1:
+                        raise RuntimeError(
+                            f"Lesson #{lesson_id} is not uniquely represented in the class/subject/chapter inventory "
+                            f"(found {len(metadata_matches)} rows)."
+                        )
+                    if "max_question_sort_order" not in metadata_matches[0]:
+                        raise RuntimeError(
+                            "The Admin API inventory is missing max_question_sort_order. "
+                            "Rebuild API services from latest main and rerun; no content was written."
+                        )
+                    max_sort_order = int(metadata_matches[0].get("max_question_sort_order") or 0)
+                    plans.append({
+                        "bank": bank,
+                        "class_code": track[0],
+                        "subject_code": track[1],
+                        "chapter_code": str(bank["chapter"]["code"]),
+                        "lesson_id": lesson_id,
+                        "lesson_code": requested_codes[lesson_id],
+                        "bank_language": str(bank["language"]),
+                        "max_existing_sort_order": max_sort_order,
+                        "questions": questions,
+                    })
+                print(
+                    f"[Preflight {bank_index}/{len(banks)}] class {track[0]} / {track[1]} / "
+                    f"{bank['chapter']['code']}: mapped {len(per_lesson)} lesson batches.",
+                    file=sys.stderr, flush=True,
+                )
+            except Exception as exc:
+                mapping_errors.append(
+                    f"Class {track[0]} {track[1]} chapter {bank.get('chapter', {}).get('code')}: {exc}"
+                )
+        if mapping_errors:
+            summary["mapping_preflight"] = "FAILED_NO_WRITES"
+            summary["mapping_errors"] = mapping_errors
+            summary["failed"] = len(mapping_errors)
+            summary["added_as_draft"] = 0
+            summary["skipped_duplicate"] = 0
+            summary["failed_batches"] = 0
+            summary["not_attempted_batches"] = len(plans)
+            summary["publication_attempted"] = False
+            summary["student_delivery_allowed_by_import"] = False
+            args.output_dir.mkdir(parents=True, exist_ok=True)
+            timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+            report_path = args.output_dir / f"practice-bank-import-report-{timestamp}.json"
+            summary["report_file"] = str(report_path)
+            report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            print(json.dumps(summary, ensure_ascii=False, indent=2))
+            print(f"Report: {report_path}")
+            return 2
+
+        summary["mapping_preflight"] = "PASSED_ALL_SELECTED_BANKS"
+        summary["mapped_lesson_batches"] = len(plans)
+        total_added = total_skipped = 0
+        for plan_index, plan in enumerate(plans):
+            lesson_id = plan["lesson_id"]
+            bank = plan["bank"]
+            try:
+                questions_payload = []
+                for index, question in enumerate(plan["questions"], start=1):
+                    questions_payload.append(question_payload(
+                        question, plan["max_existing_sort_order"] + index,
+                        plan["class_code"], plan["subject_code"], plan["bank_language"],
+                        plan["chapter_code"]
+                    ))
+                result = api.request(
+                    "POST",
+                    f"/api/v1/admin/content/lessons/{lesson_id}/questions/append-drafts",
+                    {"questions": questions_payload},
+                )
+                if not isinstance(result, dict):
+                    raise RuntimeError("append-drafts API returned an unexpected response.")
+                added = int(result.get("added", 0))
+                skipped = int(result.get("skippedDuplicate", 0))
+                total_added += added
+                total_skipped += skipped
+                summary["results"].append({
+                    "class_code": plan["class_code"],
+                    "subject_code": plan["subject_code"],
+                    "chapter_code": plan["chapter_code"],
+                    "lesson_code": plan["lesson_code"],
+                    "lesson_id": lesson_id,
+                    "requested": len(questions_payload),
+                    "added": added,
+                    "skipped_duplicate": skipped,
+                    "status": "DRAFT_ONLY",
+                })
+                print(
+                    f"[Class {plan['class_code']} {plan['subject_code']} {plan['chapter_code']}/{plan['lesson_code']}] "
+                    f"added={added}, skipped_duplicate={skipped}",
+                    file=sys.stderr,
+                )
+            except Exception as exc:
+                error_text = str(exc)
+                summary["results"].append({
+                    "class_code": plan["class_code"], "subject_code": plan["subject_code"],
+                    "chapter_code": plan["chapter_code"], "lesson_code": plan["lesson_code"],
+                    "lesson_id": lesson_id, "requested": len(plan["questions"]),
+                    "error": error_text, "status": "FAILED_NO_PUBLISH",
+                })
+                # Stop on systemic failures. Repeating a broken/auth-failing request
+                # against every lesson is slow and obscures the first root cause.
+                systemic_failure = (
+                    any(f"HTTP {code}" in error_text for code in (401, 403, 408, 425, 429, 500, 501, 502, 503, 504))
+                    or "Cannot reach QuantaEdge admin API" in error_text
+                    or "timed out" in error_text.lower()
+                    or "remote end closed connection" in error_text.lower()
+                )
+                if systemic_failure:
+                    not_attempted = plans[plan_index + 1:]
+                    for remaining in not_attempted:
+                        summary["results"].append({
+                            "class_code": remaining["class_code"],
+                            "subject_code": remaining["subject_code"],
+                            "chapter_code": remaining["chapter_code"],
+                            "lesson_code": remaining["lesson_code"],
+                            "lesson_id": remaining["lesson_id"],
+                            "requested": len(remaining["questions"]),
+                            "status": "NOT_ATTEMPTED_SYSTEMIC_FAILURE",
+                            "reason": error_text,
+                        })
+                    print(
+                        f"Stopping safely after systemic API failure at lesson {lesson_id}; "
+                        f"{len(not_attempted)} batches were not attempted.",
+                        file=sys.stderr, flush=True,
+                    )
+                    break
+
+        failed = sum(1 for result in summary["results"] if result.get("error"))
+        summary.update({
+            "added_as_draft": total_added,
+            "skipped_duplicate": total_skipped,
+            "failed_batches": failed,
+            "not_attempted_batches": sum(1 for result in summary["results"] if result.get("status") == "NOT_ATTEMPTED_SYSTEMIC_FAILURE"),
+            "publication_attempted": False,
+            "student_delivery_allowed_by_import": False,
+        })
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        report_path = args.output_dir / f"practice-bank-import-report-{timestamp}.json"
+        summary["report_file"] = str(report_path)
+        report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 2 if failed else 0
+    except Exception as exc:
+        print(f"Practice-bank import stopped safely: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

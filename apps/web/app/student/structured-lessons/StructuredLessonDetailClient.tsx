@@ -1,0 +1,138 @@
+'use client';
+
+import { apiFetch } from '../../components/apiClient';
+import { UiText } from '../../i18n/useUiTranslation';
+import { translateUi } from '../../i18n/catalog';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from '../../components/LanguageProvider';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
+import StudentEmptyState from '../components/StudentEmptyState';
+import StructuredLessonExperience from './StructuredLessonExperience';
+import AssignedLearningResources from './AssignedLearningResources';
+import TutorDock from '../learn/TutorDock';
+import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
+import type { StructuredLesson, StructuredQuestion } from './contract';
+
+type SavedQuestion = { response: QuestionResponse; status: QuestionResult['status']; score?: number; maxScore?: number; feedback?: string; feedbackByLocale?: Partial<Record<'hi' | 'en', string>> };
+type SavedResponses = { questions?: Record<string, SavedQuestion>; activities?: Record<string, Record<string, string>> };
+export default function StructuredLessonDetailClient({ artifactId }: { artifactId: string }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseText = searchParams.get('courseId') || '';
+  const requestedCourseId = courseText || null;
+  const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
+  const subjectCode = searchParams.get('subjectCode') || ''; 
+  const { locale, learningLanguage } = useLocale();
+  const [lesson, setLesson] = useState<StructuredLesson | null>(null);
+  const [saved, setSaved] = useState<SavedResponses>({});
+  const [busy, setBusy] = useState(true);
+  const [error, setError] = useState('');
+  const [tutorOpen, setTutorOpen] = useState(false);
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  useEffect(() => {
+    let active = true;
+    setBusy(true); setError('');
+    if (courseId === null) {
+      setLesson(null);
+      setBusy(false);
+      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an enrolled course to open this lesson.' : 'यह पाठ खोलने के लिए नामांकित कोर्स चुनें।'));
+      return () => { active = false; };
+    }
+    (async () => {
+      try {
+        const base = '/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId);
+        const scopedQuery = '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) + '&language=' + learningLanguage;
+        const [lessonResponse, savedResponse] = await Promise.all([
+          apiFetch(base + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
+          apiFetch(base + '/responses' + scopedQuery, { credentials: 'same-origin', cache: 'no-store' }),
+        ]);
+        if ([lessonResponse, savedResponse].some(r => r.status === 401 || r.status === 403)) { router.replace('/login/student'); return; }
+        const body = await lessonResponse.json();
+        if (!lessonResponse.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.this.lesson.is.not.available.yet.09b6c21c'));
+        const savedBody = savedResponse.ok ? await savedResponse.json() : {};
+        if (!savedResponse.ok && savedResponse.status !== 404) throw new Error(savedBody.message || savedBody.detail || translateUi(locale, 'legacy.web.saved.progress.could.not.be.loaded.72d606a2'));
+        if (active) { setLesson(body as StructuredLesson); setSaved(savedBody || {}); }
+      } catch (error) {
+        if (active) setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.the.lesson.could.not.be.loaded.1765a64a'));
+      } finally { if (active) setBusy(false); }
+    })();
+    return () => { active = false; };
+  }, [artifactId, learningLanguage, locale, router, courseId, activeCourse?.public_id, loadingCourses, courseError]);
+  async function submitQuestion(question: StructuredQuestion, response: QuestionResponse): Promise<QuestionResult> {
+    const http = await apiFetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&language=' + learningLanguage, {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ response }),
+      });
+    const body = await http.json();
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6bba1'));
+    return { status: body.status, score: body.score, maxScore: body.maxScore, autoGraded: body.autoGraded,
+      feedback: body.feedback, feedbackByLocale: body.feedbackByLocale } as QuestionResult;
+  }
+  async function saveActivity(blockId: string, value: string): Promise<void> {
+    const http = await apiFetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')),  {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ response: value }),
+      });
+    const body = await http.json();
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
+  }
+  const responses: Record<string, QuestionResponse> = {};
+  const results: Record<string, QuestionResult> = {};
+  const submitted: Record<string, boolean> = {};
+  Object.entries(saved.questions || {}).forEach(([id, value]) => {
+    responses[id] = value.response;
+    results[id] = { status: value.status, score: value.score, maxScore: value.maxScore, feedback: value.feedback, feedbackByLocale: value.feedbackByLocale };
+    submitted[id] = value.status === 'correct' || value.status === 'pending_review';
+  });
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <StudentEmptyState icon="learn" title={<UiText message="student.empty.lesson.title" />}
+      message={<UiText message="student.empty.lesson.message" />}
+      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student/structured-lessons" secondaryActionLabel={<UiText message="web.navigation.student.structuredLessons" />} />
+  </section></div></main>;
+
+  return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading">
+      <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+        onCourseChange={async value => {
+          await selectCourse(value);
+          router.push('/student/structured-lessons?courseId=' + encodeURIComponent(courses.find(course => Number(course.id) === Number(value))?.public_id || value));
+        }}
+        subjectCode={subjectCode || 'ALL'}
+        onSubjectChange={value => {
+          const params = new URLSearchParams();
+          if (courseId !== null) params.set('courseId', String(activeCourse?.public_id || courseId));
+          if (value && value !== 'ALL') params.set('subjectCode', value);
+          router.push('/student/structured-lessons?' + params.toString());
+        }}
+        loading={loadingCourses} language={locale}
+        courseLabel={locale === 'english' ? 'Course' : 'कोर्स'}
+        subjectLabel={locale === 'english' ? 'Subject' : 'विषय'}
+        allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} />
+      <Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')} className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
+      {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}
+    </header>
+    {error ? <><p role="alert" className="error-message">{error}</p><Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')} className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
+      busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
+      <>
+        <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
+          onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
+          initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />
+        <div className="lesson-next">
+          <button type="button" className="button button-dark" onClick={()=>setTutorOpen(true)}>
+            {tx('AI Tutor से इस विषय पर पूछें','Ask the AI tutor about this topic')}
+          </button>
+        </div>
+        <TutorDock artifactId={artifactId} courseId={courseId ?? 0} open={tutorOpen}
+          onClose={()=>setTutorOpen(false)} />
+        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} courseId={courseId ?? 0} />
+      </>}
+  </section></div></main>;
+}

@@ -1,0 +1,19 @@
+{
+  "scope": {
+    "class_no": 7,
+    "language": "english",
+    "subjects": [
+      "Mathematics",
+      "Maths",
+      "Science"
+    ],
+    "asset_scope": "SUBJECT_BOOK",
+    "book_ids": []
+  },
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "assets_processed": 3,
+  "pages_processed": 755,
+  "pages_newly_extracted": 755,
+  "failures": [],
+  "publication": "NOT_PUBLISHED; extracted text is draft material requiring content review"
+}

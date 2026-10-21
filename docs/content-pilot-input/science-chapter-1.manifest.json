@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-10T11:25:09.679270+00:00",
+  "bundle_file": "ncert-c6-hindi-fhcu1--chapter-chapter-1.pdf.json",
+  "asset_pdf_filename": "ncert-c6-hindi-fhcu1--chapter-chapter-1.pdf",
+  "asset_pdf_sha256": "047e86d3a3e24849d7c3d43c52d27d8383c34e34bb084a92f1e0740155cfd434",
+  "original_book_sha256": "81aecf297adb5fb0c6dd61e0790e8cc5ae0ea0800c6c109903ed680464c9e56d",
+  "book_id": "ncert-c6-hindi-fhcu1",
+  "title": "Jigyasa — Chapter 1",
+  "source_title": "Jigyasa",
+  "subject": "Science",
+  "class": "6",
+  "language": "hindi",
+  "scope": "CHAPTER_PDF",
+  "chapter_title": "Chapter 1",
+  "source_page_start": 17,
+  "page_count": 8,
+  "completed_pages": 8,
+  "pages_newly_extracted": 0,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 8
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "047e86d3a3e24849d7c3d43c52d27d8383c34e34bb084a92f1e0740155cfd434.jsonl",
+  "published": false
+}

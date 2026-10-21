@@ -1,0 +1,53 @@
+name: Audit committed content package completeness
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/audit-content-package-completeness.yml"
+      - "scripts/audit_content_package_completeness.py"
+      - "tests/test_audit_content_package_completeness.py"
+      - "scripts/import_site_content_draft.py"
+      - "scripts/import_ncert_class6_drafts.py"
+      - "QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip"
+      - "quantaedge-class6-hindi-pilot-input.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: content-package-completeness-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Inspect package integrity and draft-import completeness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test the read-only auditor
+        run: python -m unittest discover -s tests -p "test_audit_content_package_completeness.py" -v
+      - name: Audit both committed ZIPs (no extraction, API or database writes)
+        run: |
+          set -euo pipefail
+          python scripts/audit_content_package_completeness.py \
+            --package QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip \
+            --package quantaedge-class6-hindi-pilot-input.zip \
+            --output content-package-completeness.json
+      - name: Upload machine-readable audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-content-package-completeness-${{ github.run_id }}
+          path: content-package-completeness.json
+          if-no-files-found: warn
+          retention-days: 30

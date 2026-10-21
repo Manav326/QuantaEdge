@@ -1,0 +1,845 @@
+package com.quantaedge.android.ui
+
+import com.quantaedge.android.BuildConfig
+
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.ApiFailure
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.io.IOException
+import java.net.URI
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
+
+private fun localizedCertificateSubject(code: String, displayName: String, language: String): String {
+    val hindi = language == "hi"
+    return when (code.trim().lowercase().replace('-', '_').replace(' ', '_')) {
+        "maths", "math", "mathematics" -> if (hindi) "गणित" else "Mathematics"
+        "science" -> if (hindi) "विज्ञान" else "Science"
+        "english" -> if (hindi) "अंग्रेज़ी" else "English"
+        "hindi" -> if (hindi) "हिन्दी" else "Hindi"
+        "social_science", "social_studies" -> if (hindi) "सामाजिक विज्ञान" else "Social Science"
+        "sanskrit" -> if (hindi) "संस्कृत" else "Sanskrit"
+        "computer", "computer_science", "computers" -> if (hindi) "कंप्यूटर विज्ञान" else "Computer Science"
+        else -> displayName.ifBlank { code }
+    }
+}
+
+@Composable
+fun StudentCertificatesScreen(
+    language: String,
+    courseId: Long,
+    certificateLanguage: String,
+    onCertificateLanguageChange: (String) -> Unit,
+    initialAssessmentAttemptId: Long = 0L,
+    noEnrolledCourses: Boolean = courseId <= 0L,
+    onMarketplace: () -> Unit = {},
+    onAllCourses: () -> Unit = {},
+    onBack: () -> Unit
+) {
+    val context = LocalContext.current
+    val institutionBrand = LocalInstitutionBrandIdentity.current
+    val institutionBrandResolving = LocalInstitutionBrandResolutionPending.current
+    val certificateFileStem = remember(institutionBrand?.institutionCode, institutionBrand?.displayName, institutionBrandResolving) {
+        val schoolName = institutionBrand?.displayName?.trim()
+        if (schoolName.isNullOrBlank()) {
+            if (institutionBrandResolving) "school-certificate" else "quantaedge-certificate"
+        } else {
+            schoolName.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
+                .take(72).ifBlank { "school" } + "-certificate"
+        }
+    }
+    val scope = rememberCoroutineScope()
+    val compact = LocalConfiguration.current.screenWidthDp < 390
+    var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var eligibleAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var subjectTracks by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var selectedTrackKey by remember { mutableStateOf("") }
+    var selectedAchievement by remember { mutableStateOf("SUBJECT_COMPLETION") }
+    var selectedAttemptId by remember { mutableStateOf("") }
+    var achievementMenuExpanded by remember { mutableStateOf(false) }
+    var subjectMenuExpanded by remember { mutableStateOf(false) }
+    var assessmentMenuExpanded by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf("") }
+    var notice by remember { mutableStateOf("") }
+    var pendingBytes by remember { mutableStateOf<ByteArray?>(null) }
+    var pendingName by remember(certificateFileStem) { mutableStateOf(certificateFileStem) }
+    var verification by remember { mutableStateOf<JSONObject?>(null) }
+    var verificationCode by remember { mutableStateOf("") }
+    var verifyingQr by remember { mutableStateOf(false) }
+    var showScanner by rememberSaveable { mutableStateOf(false) }
+
+    fun writeDownloadedFile(uri: android.net.Uri?) {
+        val bytes = pendingBytes
+        if (uri == null || bytes == null) {
+            pendingBytes = null
+            return
+        }
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
+                        ?: throw IOException(
+                            if (language == "hi") "चुनी गई जगह पर certificate save नहीं हो सका।"
+                            else "The certificate could not be saved to the selected location."
+                        )
+                }
+                notice = if (language == "hi") "Certificate आपके चुने हुए स्थान पर सुरक्षित कर दिया गया।"
+                    else "Certificate saved to your selected location."
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate save नहीं हो सका।" else "Certificate could not be saved."
+            } finally {
+                pendingBytes = null
+            }
+        }
+    }
+
+    val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { writeDownloadedFile(it) }
+    val pngLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { writeDownloadedFile(it) }
+
+    val courseAccessLoadError = localizedUiText("Course information could not be confirmed. Open My Courses to refresh it.")
+
+    suspend fun reload() {
+        loading = true
+        error = ""
+        if (courseId <= 0L) {
+            subjectTracks = emptyList()
+            certificates = emptyList()
+            eligibleAssessments = emptyList()
+            selectedTrackKey = ""
+            selectedAttemptId = ""
+            error = if (noEnrolledCourses) "" else courseAccessLoadError
+            loading = false
+            return
+        }
+        try {
+            // All certificate data in this screen belongs to the focused course.
+            // Load each section independently: a failed request must not hide saved records.
+            // prevent issued certificates or the assessment picker from appearing.
+            val tracksResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks?courseId=" + courseId)
+            }
+            val certificatesResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates?courseId=" + courseId)
+            }
+            val eligibleResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments?courseId=" + courseId)
+            }
+
+            subjectTracks = tracksResult.getOrNull()?.optJSONArray("items").toObjectList()
+            certificates = certificatesResult.getOrNull()?.optJSONArray("items").toObjectList()
+            eligibleAssessments = eligibleResult.getOrNull()?.optJSONArray("items").toObjectList()
+
+            if (subjectTracks.none { it.optString("track_key") == selectedTrackKey }) {
+                selectedTrackKey = subjectTracks.firstOrNull()?.optString("track_key").orEmpty()
+            }
+            val requestedAttempt = eligibleAssessments.firstOrNull {
+                it.optLongValue("attempt_id", "attemptId", "id") == initialAssessmentAttemptId
+            }
+            if (initialAssessmentAttemptId > 0L && requestedAttempt != null) {
+                selectedAchievement = "ASSESSMENT_PASS"
+                selectedAttemptId = initialAssessmentAttemptId.toString()
+            } else if (eligibleAssessments.none {
+                    it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                }) {
+                selectedAttemptId = eligibleAssessments.firstOrNull()
+                    ?.optLongValue("attempt_id", "attemptId", "id")
+                    ?.takeIf { it > 0 }?.toString().orEmpty()
+            }
+
+            val firstFailure = tracksResult.exceptionOrNull()
+                ?: certificatesResult.exceptionOrNull()
+                ?: eligibleResult.exceptionOrNull()
+            if (firstFailure != null) {
+                error = firstFailure.message ?: if (language == "hi") "प्रमाणपत्र की जानकारी लोड नहीं हो सकी।"
+                    else "Some certificate information could not be loaded."
+            }
+        } finally {
+            loading = false
+        }
+    }
+
+    LaunchedEffect(language, initialAssessmentAttemptId, courseId) { reload() }
+
+    fun verifyScannedCertificate(code: String) {
+        scope.launch {
+            verifyingQr = true
+            error = ""
+            notice = ""
+            verification = null
+            try {
+                verification = withContext(Dispatchers.IO) {
+                    ApiClient.getObject("/api/v1/certificates/verify/" + ApiClient.encodeQuery(code))
+                }
+            } catch (e: Exception) {
+                verification = null
+                error = if (e is ApiFailure && e.statusCode == 404) {
+                    if (language == "hi") "यह प्रमाणपत्र नहीं मिला। QR या प्रमाणपत्र नंबर जाँचें।"
+                    else "Certificate not found. Check the QR code or certificate number."
+                } else {
+                    e.message ?: if (language == "hi") "प्रमाणपत्र सत्यापित नहीं हो सका।" else "Certificate verification failed."
+                }
+            } finally {
+                verifyingQr = false
+            }
+        }
+    }
+
+    fun scanCertificateQr() {
+        error = ""
+        notice = ""
+        verification = null
+        showScanner = true
+    }
+
+    suspend fun prepareCertificateDownload(certificate: JSONObject, format: String) {
+        val id = certificate.optLongValue("id", "certificate_id", "certificateId")
+        if (id <= 0) throw IOException(
+            if (language == "hi") "प्रमाणपत्र रिकॉर्ड की पहचान नहीं मिली।"
+            else "Certificate record ID is missing."
+        )
+        val bytes = withContext(Dispatchers.IO) {
+            ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?courseId=" + courseId + "&format=" + format)
+        }
+        if (bytes.isEmpty()) throw IOException(
+            if (language == "hi") "Server से खाली certificate file मिली।"
+            else "The server returned an empty certificate file."
+        )
+        pendingBytes = bytes
+        val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
+            .replace(Regex("[^A-Za-z0-9_-]"), "_")
+        pendingName = "$certificateFileStem-$code.$format"
+        if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
+    }
+
+    fun downloadCertificate(certificate: JSONObject, format: String) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                prepareCertificateDownload(certificate, format)
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate download नहीं हो सका।"
+                    else "Certificate download failed."
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+    fun openExistingAssessmentCertificate(attempt: JSONObject) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val attemptId = attempt.optLongValue("attempt_id", "attemptId")
+                if (attemptId <= 0L) throw IOException(
+                    if (language == "hi") "टेस्ट प्रयास की पहचान नहीं मिली।"
+                    else "Assessment attempt ID is missing."
+                )
+                // Ask the API for the canonical, student-scoped issued record instead of
+                // trusting a cached picker row to carry all certificate metadata.
+                val attemptCourseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
+                if (attemptCourseId != courseId) throw IOException(
+                    if (language == "hi") "यह परिणाम चुने गए course का नहीं है।" else "This result does not belong to the focused course."
+                )
+                val body = JSONObject()
+                    .put("achievementType", "ASSESSMENT_PASS")
+                    .put("assessmentAttemptId", attemptId)
+                    .put("templateId", "CLASSIC")
+                    .put("language", certificateLanguage)
+                    .put("courseId", courseId)
+                institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
+                val knownId = attempt.optLongValue("certificate_id", "certificateId")
+                val canonical = if (knownId > 0L) runCatching {
+                    ApiClient.getObject("/api/v1/students/me/certificates/" + knownId + "?courseId=" + courseId)
+                }.getOrNull() else null
+                val existing = canonical ?: ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
+                prepareCertificateDownload(existing, "pdf")
+                notice = if (language == "hi") "मौजूदा प्रमाणपत्र डाउनलोड के लिए तैयार है।"
+                    else "Existing certificate is ready to save."
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate खोला नहीं जा सका।"
+                    else "Could not open this certificate."
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+
+    fun viewCertificate(certificate: JSONObject) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val id = certificate.optLongValue("id", "certificate_id", "certificateId")
+                if (id <= 0L) throw IOException("Certificate record की पहचान नहीं मिली।")
+                val bytes = withContext(Dispatchers.IO) {
+                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/view?courseId=" + courseId + "&format=pdf")
+                }
+                if (bytes.isEmpty()) throw IOException(
+            if (language == "hi") "Server से खाली certificate file मिली।"
+            else "The server returned an empty certificate file."
+        )
+                val directory = java.io.File(context.cacheDir, "certificates")
+                if (!directory.exists() && !directory.mkdirs()) throw IOException("प्रमाणपत्र preview तैयार नहीं हो सका।")
+                val file = java.io.File(directory, certificateFileStem + "-" + id + ".pdf")
+                withContext(Dispatchers.IO) { file.writeBytes(bytes) }
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context, context.packageName + ".fileprovider", file
+                )
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
+                    .setDataAndType(uri, "application/pdf")
+                    .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(android.content.Intent.createChooser(
+                    intent, if (language == "hi") "प्रमाणपत्र देखें" else "View certificate"
+                ))
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate खोला नहीं जा सका।" else "Could not open this certificate."
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+    fun issueCertificate() {
+        val selectedAttempt = eligibleAssessments.firstOrNull {
+            it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+        }
+        if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "ISSUED") {
+            openExistingAssessmentCertificate(selectedAttempt)
+            return
+        }
+        if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "REVOKED") {
+            error = if (language == "hi") "इस result का प्रमाणपत्र निरस्त है; इसे दोबारा जारी नहीं किया जा सकता।"
+                else "The certificate for this result is revoked and cannot be reissued. Contact support if this is unexpected."
+            notice = ""
+            return
+        }
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val body = JSONObject()
+                    .put("achievementType", selectedAchievement)
+                    .put("templateId", "CLASSIC")
+                    .put("language", certificateLanguage)
+                    .put("courseId", courseId)
+                institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
+                if (selectedAchievement == "SUBJECT_COMPLETION") {
+                    val selectedTrack = subjectTracks.firstOrNull {
+                        it.optString("track_key") == selectedTrackKey
+                    } ?: throw IOException(
+                        if (language == "hi") "पहले विषय ट्रैक चुनें।" else "Choose a subject track first."
+                    )
+                    body.put("subjectCode", selectedTrack.optString("subject_code"))
+                    val trackCourseId = selectedTrack.optLongValue("course_id", "courseId", "program_id", "programId")
+                    if (trackCourseId != courseId) throw IOException("Select a subject belonging to the focused course.")
+                } else {
+                    val attemptId = selectedAttemptId.toLongOrNull()
+                        ?: throw IOException(
+                            if (language == "hi") "पहले पात्र जारी टेस्ट चुनें।"
+                            else "Choose an eligible released test first."
+                        )
+                    body.put("assessmentAttemptId", attemptId)
+                    val selectedAttempt = eligibleAssessments.firstOrNull {
+                        it.optLongValue("attempt_id", "attemptId", "id") == attemptId
+                    }
+                    val attemptCourseId = selectedAttempt?.optLongValue("course_id", "courseId", "program_id", "programId") ?: 0L
+                    if (attemptCourseId != courseId) throw IOException("Select a test result belonging to the focused course.")
+                }
+                val issued = withContext(Dispatchers.IO) {
+                    ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
+                }
+                val issuedId = issued.optLongValue("id", "certificate_id", "certificateId")
+                if (issuedId <= 0L || issued.optString("status") != "ISSUED") {
+                    throw IOException(
+                        if (language == "hi") "Server से जारी प्रमाणपत्र की पुष्टि नहीं मिली।"
+                        else "The server did not confirm an issued certificate."
+                    )
+                }
+                reload()
+                prepareCertificateDownload(issued, "pdf")
+                notice = if (language == "hi") {
+                    "प्रमाणपत्र जारी हो गया। PDF सुरक्षित करने के लिए स्थान चुनें।"
+                } else {
+                    "Certificate issued. Choose where to save the PDF."
+                }
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate जारी नहीं हो सका।"
+                    else "Certificate could not be issued."
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+
+    if (noEnrolledCourses && !showScanner && verificationCode.isBlank() && error.isBlank() && notice.isBlank()) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            StudentEnrollmentEmptyState(
+                icon = "🏅",
+                title = localizedUiText("Your certificates are linked to courses"),
+                message = localizedUiText("Enrol in a course to see eligible achievements and issued certificates."),
+                primaryLabel = localizedUiText("Explore Marketplace"),
+                onPrimary = onMarketplace,
+                secondaryLabel = localizedUiText("Scan certificate"),
+                onSecondary = { showScanner = true }
+            )
+        }
+        return
+    }
+
+    if (showScanner) {
+        PremiumCodeScannerScreen(
+            language = language,
+            onBack = { showScanner = false },
+            onCodeScanned = { rawValue, _ ->
+                showScanner = false
+                val code = parseQuantaEdgeCertificateQr(rawValue, BuildConfig.DEBUG)
+                if (code == null) {
+                    verifyingQr = false
+                    error = if (language == "hi") {
+                        if (institutionBrand != null || institutionBrandResolving) "यह मान्य प्रमाणपत्र QR या बारकोड नहीं है।"
+                        else "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
+                    } else {
+                        if (institutionBrand != null || institutionBrandResolving) "This is not a valid certificate QR or barcode."
+                        else "This is not a valid QuantaEdge certificate QR or barcode."
+                    }
+                    notice = ""
+                } else {
+                    verificationCode = code
+                    verifyScannedCertificate(code)
+                }
+            }
+        )
+        return
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(if (language == "hi") "मेरे प्रमाणपत्र" else "My certificates", style = MaterialTheme.typography.headlineSmall)
+            TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+        }
+        if (loading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Text(if (language == "hi") "प्रमाणपत्र की जानकारी लोड हो रही है…" else "Loading certificate information…",
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(if (language == "hi") "प्रमाणपत्र स्कैन करें" else "Scan a certificate",
+                    style = MaterialTheme.typography.titleMedium)
+                Text(if (language == "hi") {
+                    if (institutionBrand != null || institutionBrandResolving) "प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                    else "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                } else {
+                    if (institutionBrand != null || institutionBrandResolving) "Scan the QR or linear barcode on a certificate. Its current status is checked with the server."
+                    else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server."
+                },
+                    style = MaterialTheme.typography.bodyMedium)
+                OutlinedTextField(
+                    value = verificationCode,
+                    onValueChange = { verificationCode = it },
+                    label = { Text(if (language == "hi") "प्रमाणपत्र ID / नंबर" else "Certificate ID / number") },
+                    placeholder = { Text("QE-2026-ABCDEF1234567890") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = { verifyScannedCertificate(verificationCode.trim()) },
+                        enabled = !verifyingQr && !busy && verificationCode.isNotBlank()
+                    ) {
+                        Text(if (language == "hi") "नंबर सत्यापित करें" else "Verify ID")
+                    }
+                    OutlinedButton(onClick = { scanCertificateQr() }, enabled = !verifyingQr && !busy) {
+                        Text(if (verifyingQr) {
+                            if (language == "hi") "जाँच हो रही है…" else "Checking…"
+                        } else {
+                            if (language == "hi") "QR / बारकोड स्कैन करें" else "Scan QR / barcode"
+                        })
+                    }
+                }
+            }
+        }
+        if (verifyingQr) CircularProgressIndicator()
+        verification?.let { result ->
+            val valid = result.optBoolean("verified", false) && result.optString("status") == "VALID"
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text(
+                        if (valid) {
+                            if (language == "hi") "✓ वैध प्रमाणपत्र" else "✓ Valid certificate"
+                        } else {
+                            if (language == "hi") "⚠ प्रमाणपत्र निरस्त" else "⚠ Certificate revoked"
+                        },
+                        style = MaterialTheme.typography.titleLarge,
+                        color = if (valid) LocalQuantaEdgeSemanticColors.current.success else MaterialTheme.colorScheme.error
+                    )
+                    Text((if (language == "hi") "प्रमाणपत्र नंबर: " else "Certificate ID: ") +
+                        result.optString("certificateNumber"))
+                    Text((if (language == "hi") "प्राप्तकर्ता: " else "Recipient: ") +
+                        result.optString("recipientName"))
+                    Text((if (language == "hi") "उपलब्धि: " else "Achievement: ") +
+                        result.optString("achievementTitle"))
+                    val classCode = result.optString("classCode")
+                    Text((if (language == "hi") "कोर्स: " else "Course: ") +
+                        result.optString("courseName", "—"))
+                    Text((if (language == "hi") "विषय ट्रैक: " else "Subject track: ") +
+                        result.optString("subjectTrack", "—"))
+                    val issuedAt = result.optString("issuedAt").substringBefore("T")
+                    Text((if (language == "hi") "जारी करने की तारीख: " else "Issue date: ") +
+                        if (issuedAt.isNotBlank()) issuedAt else "—")
+                    Text(if (language == "hi") "यह स्थिति सर्वर के वर्तमान रिकॉर्ड से सत्यापित है।"
+                        else "This status was checked against the server's current record.",
+                        style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+        Text(
+            if (language == "hi") "केवल सत्यापित उपलब्धि पर प्रमाणपत्र जारी होगा। नाम, अंक और पात्रता server से सत्यापित होते हैं।"
+            else "Certificates are issued only for verified achievements. The server verifies identity, scores and eligibility.",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        if (error.isNotBlank()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Text(error, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = { scope.launch { reload() } }, enabled = !loading && !busy) {
+                        Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+                    }
+                    if (courseId <= 0L && !noEnrolledCourses) {
+                        TextButton(onClick = onAllCourses, enabled = !busy) {
+                            Text(localizedUiText("My Courses"))
+                        }
+                    }
+                }
+            }
+        }
+        if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    if (language == "hi") "उपलब्धि प्रमाणपत्र जारी करें" else "Issue an achievement certificate",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    if (language == "hi") "प्रमाणपत्र सेटिंग्स" else "Certificate settings",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(if (language == "hi") "प्रमाणपत्र की भाषा" else "Certificate language")
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (certificateLanguage == "hi") Button(onClick = { onCertificateLanguageChange("hi") }) { Text("हिन्दी") }
+                    else OutlinedButton(onClick = { onCertificateLanguageChange("hi") }) { Text("हिन्दी") }
+                    if (certificateLanguage == "en") Button(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
+                    else OutlinedButton(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
+                }
+                Text(if (language == "hi") "उपलब्धि का प्रकार" else "Achievement type")
+                Box(Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { achievementMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            if (selectedAchievement == "SUBJECT_COMPLETION") {
+                                if (language == "hi") "विषय की पढ़ाई पूरी" else "Subject completion"
+                            } else if (language == "hi") "टेस्ट में पास" else "Assessment pass",
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text("▾")
+                    }
+                    DropdownMenu(expanded = achievementMenuExpanded, onDismissRequest = { achievementMenuExpanded = false }) {
+                        DropdownMenuItem(text = { Text(if (language == "hi") "विषय की पढ़ाई पूरी" else "Subject completion") }, onClick = {
+                            selectedAchievement = "SUBJECT_COMPLETION"; achievementMenuExpanded = false
+                        })
+                        DropdownMenuItem(text = { Text(if (language == "hi") "टेस्ट में पास" else "Assessment pass") }, onClick = {
+                            selectedAchievement = "ASSESSMENT_PASS"; assessmentMenuExpanded = false; achievementMenuExpanded = false
+                        })
+                    }
+                }
+
+                Text(
+                    if (language == "hi") "उपलब्धि का विवरण" else "Achievement details",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (selectedAchievement == "SUBJECT_COMPLETION") {
+                    val selectedTrack = subjectTracks.firstOrNull { it.optString("track_key") == selectedTrackKey }
+                    fun trackLabel(track: JSONObject?): String {
+                        if (track == null) return if (language == "hi") "विषय ट्रैक चुनें" else "Choose a subject track"
+                        val courseId = track.optLongValue("course_id", "courseId", "program_id", "programId")
+                        val scopeLabel = if (courseId > 0L) track.optString("course_name").ifBlank {
+                            if (language == "hi") "कोर्स" else "Course"
+                        } else if (language == "hi") "कोर्स" else "Course"
+                        val subject = localizedCertificateSubject(track.optString("subject_code"), track.optString("subject_name"), language)
+                        val completed = track.optInt("completed")
+                        val lessons = track.optInt("lessons")
+                        val progressLabel = if (lessons > 0) "$completed / $lessons" + (if (language == "hi") " पाठ पूरे" else " lessons complete") else ""
+                        return listOf(scopeLabel, subject, progressLabel).filter { it.isNotBlank() }.joinToString(" · ")
+                    }
+                    if (subjectTracks.isEmpty()) Text(
+                        if (language == "hi") "कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है।" else "No active subject track available.",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(if (language == "hi") "विषय ट्रैक" else "Subject track")
+                    Box(Modifier.fillMaxWidth()) {
+                        OutlinedButton(onClick = { subjectMenuExpanded = true }, enabled = !loading && subjectTracks.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
+                            Text(trackLabel(selectedTrack), modifier = Modifier.weight(1f), maxLines = 2)
+                            Text("▾")
+                        }
+                        DropdownMenu(expanded = subjectMenuExpanded, onDismissRequest = { subjectMenuExpanded = false }) {
+                            subjectTracks.forEach { track ->
+                                DropdownMenuItem(text = { Text(trackLabel(track), maxLines = 2) }, onClick = {
+                                    selectedTrackKey = track.optString("track_key"); subjectMenuExpanded = false
+                                })
+                            }
+                        }
+                    }
+                    Text(
+                        if (language == "hi") "इस सक्रिय ट्रैक के सभी प्रकाशित पाठ पूरे करें।" else "Complete all published lessons in this active track.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    val selectedAssessment = eligibleAssessments.firstOrNull {
+                        it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                    }
+                    fun assessmentLabel(item: JSONObject?): String {
+                        if (item == null) return if (language == "hi") "पात्र जारी टेस्ट चुनें" else "Choose an eligible released test"
+                        val trackName = localizedCertificateSubject(item.optString("subject_code"), item.optString("subject_name"), language)
+                        val courseId = item.optLongValue("course_id", "courseId", "program_id", "programId")
+                        val scopeLabel = if (courseId > 0L) item.optString("course_name") else
+                            item.optString("course_name", if (language == "hi") "कोर्स" else "Course")
+                        val score = item.optString("final_score", item.optString("score", "—")) + "/" + item.optString("max_score", "—")
+                        val status = when (item.optString("certificate_status")) {
+                            "ISSUED" -> if (language == "hi") "प्रमाणपत्र जारी" else "Certificate issued"
+                            "REVOKED" -> if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
+                            else -> ""
+                        }
+                        return listOf(scopeLabel, trackName, item.optString("assessment_title", item.optString("title", "Assessment")), score, status)
+                            .filter { it.isNotBlank() }.joinToString(" · ")
+                    }
+                    if (eligibleAssessments.isEmpty()) Text(
+                        if (language == "hi") "कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।" else "No eligible released admin-created test results.",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(if (language == "hi") "जारी टेस्ट परिणाम" else "Released assessment result")
+                    Box(Modifier.fillMaxWidth()) {
+                        OutlinedButton(onClick = { assessmentMenuExpanded = true }, enabled = !loading && eligibleAssessments.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
+                            Text(assessmentLabel(selectedAssessment), modifier = Modifier.weight(1f), maxLines = 2)
+                            Text("▾")
+                        }
+                        DropdownMenu(expanded = assessmentMenuExpanded, onDismissRequest = { assessmentMenuExpanded = false }) {
+                            eligibleAssessments.forEach { item ->
+                                DropdownMenuItem(text = { Text(assessmentLabel(item), maxLines = 3) }, onClick = {
+                                    selectedAttemptId = item.optLongValue("attempt_id", "attemptId", "id").toString()
+                                    assessmentMenuExpanded = false
+                                })
+                            }
+                        }
+                    }
+                    Text(
+                        if (language == "hi") "पास अंक वाले केवल जारी Admin-created टेस्ट पात्र हैं।"
+                        else "Only released admin-created tests with passing scores qualify.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                val selectedCertificateStatus = eligibleAssessments.firstOrNull {
+                    it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                }?.optString("certificate_status").orEmpty()
+                Button(
+                    onClick = { issueCertificate() },
+                    enabled = !busy && !loading && (
+                        if (selectedAchievement == "SUBJECT_COMPLETION") subjectTracks.any { it.optString("track_key") == selectedTrackKey }
+                        else selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        if (busy) { if (language == "hi") "जाँच हो रही है…" else "Checking eligibility…" }
+                        else if (selectedCertificateStatus == "ISSUED" && selectedAchievement == "ASSESSMENT_PASS") {
+                            if (language == "hi") "मौजूदा प्रमाणपत्र खोलें" else "Open existing certificate"
+                        } else if (selectedCertificateStatus == "REVOKED" && selectedAchievement == "ASSESSMENT_PASS") {
+                            if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
+                        } else if (language == "hi") "पात्रता जाँचें और जारी करें" else "Verify eligibility & issue"
+                    )
+                }
+            }
+        }
+        Text(if (language == "hi") "जारी किए गए प्रमाणपत्र" else "Issued certificates", style = MaterialTheme.typography.titleLarge)
+        if (loading) CircularProgressIndicator()
+        if (!loading && certificates.isEmpty()) {
+            Text(if (language == "hi") "अभी कोई प्रमाणपत्र जारी नहीं हुआ है। पात्र उपलब्धि पूरी होने पर यहाँ दिखेगा।" else "No certificates issued yet. Earned certificates will appear here.")
+        }
+        certificates.forEach { certificate ->
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text(certificate.optString("achievement_title", certificate.optString("achievementTitle",
+                        if (institutionBrand != null || institutionBrandResolving) "Achievement certificate" else "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
+                    val certificateCourse = certificate.optString("course_name", certificate.optString("courseName"))
+                    val subject = localizedCertificateSubject(
+                        certificate.optString("subject_code"), certificate.optString("subject_name"), language)
+                    if (certificateCourse.isNotBlank() && subject.isNotBlank()) {
+                        Text(certificateCourse + " · " + subject,
+                            style = MaterialTheme.typography.bodyMedium)
+                    }
+                    Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")), style = MaterialTheme.typography.bodySmall)
+                    val rawStatus = certificate.optString("status", "ISSUED").uppercase()
+                    val statusLabel = when (rawStatus) {
+                        "ISSUED" -> if (language == "hi") "जारी" else "Issued"
+                        "REVOKED" -> if (language == "hi") "निरस्त" else "Revoked"
+                        else -> rawStatus.replace('_', ' ')
+                    }
+                    val rawLanguage = certificate.optString("language", language).lowercase()
+                    val languageLabel = when (rawLanguage) {
+                        "hi" -> if (language == "hi") "हिंदी" else "Hindi"
+                        "en" -> if (language == "hi") "अंग्रेज़ी" else "English"
+                        else -> rawLanguage.uppercase()
+                    }
+                    Text(
+                        statusLabel + " · " + languageLabel,
+                        color = when (rawStatus) {
+                            "REVOKED" -> MaterialTheme.colorScheme.error
+                            "ISSUED" -> LocalQuantaEdgeSemanticColors.current.success
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+                    )
+                    if (certificate.optString("status", "ISSUED") == "ISSUED") {
+                        if (compact) {
+                            Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { viewCertificate(certificate) }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(if (language == "hi") "प्रमाणपत्र देखें" else "View certificate")
+                                }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("PDF")) }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("PNG")) }
+                            }
+                        } else {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { viewCertificate(certificate) }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) {
+                                    Text(if (language == "hi") "देखें" else "View")
+                                }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) { Text(localizedUiText("PDF")) }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) { Text(localizedUiText("PNG")) }
+                            }
+                        }
+                    } else {
+                        Text(if (language == "hi") "यह प्रमाणपत्र निरस्त है; मान्य प्रमाण के रूप में डाउनलोड नहीं किया जा सकता।" else "This certificate is revoked and cannot be downloaded as valid proof.", color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun org.json.JSONArray?.toObjectList(): List<JSONObject> =
+    if (this == null) emptyList() else (0 until length()).mapNotNull { optJSONObject(it) }
+
+private fun JSONObject.optLongValue(vararg keys: String): Long {
+    keys.forEach { key ->
+        val value = optLong(key, 0L)
+        if (value > 0L) return value
+    }
+    return 0L
+}
+
+
+/**
+ * Accept only the public QuantaEdge verification URL, plus local HTTP URLs in debug builds.
+ * Never trust a certificate number from an arbitrary QR payload.
+ */
+internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): String? {
+    val input = raw.trim()
+    val directCode = input.uppercase()
+    if (directCode.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}"))) return directCode
+    val uri = runCatching { URI(input) }.getOrNull() ?: return null
+    val host = uri.host?.lowercase() ?: return null
+    val production = uri.scheme.equals("https", ignoreCase = true) &&
+        host == "qe.thinkwithsujeet.in" && (uri.port == -1 || uri.port == 443)
+    val localDevelopment = debugBuild &&
+        uri.scheme.equals("http", ignoreCase = true) &&
+        host in setOf("localhost", "127.0.0.1") &&
+        (uri.port == -1 || uri.port in 1..65535)
+    if ((!production && !localDevelopment) || uri.rawUserInfo != null ||
+        !uri.rawFragment.isNullOrEmpty()) return null
+
+    // Accept both public QR links and the explicit verification API URL that can be
+    // encoded in a linear barcode. Host/scheme validation happens before either route.
+    val path = uri.path ?: return null
+    val apiPrefix = "/api/v1/certificates/verify/"
+    if (path.startsWith(apiPrefix)) {
+        if (!uri.rawQuery.isNullOrEmpty()) return null
+        val pathCode = path.removePrefix(apiPrefix).trim().uppercase()
+        return pathCode.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
+    }
+    if (path != "/certificate/verify") return null
+
+    val query = uri.rawQuery ?: return null
+    val codes = query.split("&").mapNotNull { pair ->
+        val parts = pair.split("=", limit = 2)
+        val key = runCatching { URLDecoder.decode(parts[0], StandardCharsets.UTF_8.name()) }.getOrNull()
+        if (key != "code" || parts.size != 2) null
+        else runCatching { URLDecoder.decode(parts[1], StandardCharsets.UTF_8.name()) }.getOrNull()
+    }
+    if (codes.size != 1) return null
+    val code = codes.single().trim().uppercase()
+    return code.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
+}

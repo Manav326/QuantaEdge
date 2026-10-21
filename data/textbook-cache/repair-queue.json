@@ -1,0 +1,36 @@
+{
+  "purpose": "One-time targeted repair of missing complete NCERT textbook bundles; never use chapter-URL fallbacks.",
+  "enabled": true,
+  "books": [
+    {
+      "class_no": 7,
+      "language": "english",
+      "book_code": "gegp2",
+      "title": "Ganita Prakash Part-II"
+    },
+    {
+      "class_no": 8,
+      "language": "hindi",
+      "book_code": "hhgp1",
+      "title": "Ganita Prakash Part-I (Hindi)"
+    },
+    {
+      "class_no": 8,
+      "language": "hindi",
+      "book_code": "hhgp2",
+      "title": "Ganita Prakash Part-II (Hindi)"
+    },
+    {
+      "class_no": 8,
+      "language": "hindi",
+      "book_code": "hhcu1",
+      "title": "Jigyasa (Hindi Science)"
+    },
+    {
+      "class_no": 8,
+      "language": "english",
+      "book_code": "hegp2",
+      "title": "Ganita Prakash Part-II"
+    }
+  ]
+}

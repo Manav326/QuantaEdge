@@ -1,0 +1,14 @@
+{
+  "class": 6,
+  "language": "hindi",
+  "book_id": "ncert-c6-hindi-fhcu1",
+  "book_slug": "class6-hi-science-f538ae2b",
+  "title": "Jigyasa",
+  "subject": "science",
+  "maths_part": null,
+  "file": "books/ncert-c6-hindi-fhcu1.pdf",
+  "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-6/hindi/pages/af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-6/hindi/pages/af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec.jsonl",
+  "text_jsonl_filename": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec.jsonl"
+}

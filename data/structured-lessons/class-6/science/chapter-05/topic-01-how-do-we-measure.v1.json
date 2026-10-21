@@ -1,0 +1,902 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch05-t01-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 5,
+    "title_by_locale": {
+      "en": "Measurement of Length and Motion",
+      "hi": "लंबाई एवं गति का मापन"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 1,
+    "topic_id": "c6-sci-ch05-t01",
+    "title_by_locale": {
+      "en": "How Do We Measure?",
+      "hi": "हम कैसे मापते हैं?"
+    },
+    "source_section_ids": [
+      "5.1"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          97,
+          114
+        ],
+        "printed_pages": [
+          79,
+          96
+        ],
+        "mapping_status": "CHAPTER_RANGE_HEADING_DERIVED_PAGE_BOUNDARY_REVIEW_PENDING"
+      },
+      "hi": {
+        "pdf_pages": [
+          93,
+          110
+        ],
+        "printed_pages": [
+          77,
+          94
+        ],
+        "mapping_status": "HINDI_CHAPTER_RANGE_HEADING_DERIVED_PAGE_BOUNDARY_REVIEW_PENDING"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "5.1"
+    ],
+    "excluded_scope": [
+      "Teaching concepts from another chapter as a lesson.",
+      "Unverified source readings presented as exact PDF page coverage.",
+      "Verbatim reproduction of NCERT prose/questions.",
+      "Draft diagrams shown as approved student visuals.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable IDs and equivalent learning objectives, answers and rubrics in en/hi. One global app language controls learner-visible content and preserves learner state across switching; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary learning material, not verbatim NCERT prose/questions.",
+    "asset_rule": "Visuals are draft structures; image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch05-t01-lo1",
+      "statement_by_locale": {
+        "en": "Explain why a measurement needs both a number and a unit.",
+        "hi": "समझाएँ कि मापन में संख्या और मात्रक दोनों क्यों आवश्यक हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch05-t01-lo2",
+      "statement_by_locale": {
+        "en": "Explain why body-part units can give different results.",
+        "hi": "बताएँ कि शरीर के अंगों पर आधारित मात्रकों से अलग-अलग परिणाम क्यों मिल सकते हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch05-t01-lo3",
+      "statement_by_locale": {
+        "en": "Recognise the need for a shared standard unit.",
+        "hi": "साझा मानक मात्रक की आवश्यकता पहचानें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c5-t01-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        97,
+        114
+      ],
+      "printed_pages": [
+        79,
+        96
+      ],
+      "mapping_status": "CHAPTER_RANGE_HEADING_DERIVED_PAGE_BOUNDARY_REVIEW_PENDING",
+      "use": "English Curiosity reprint 2026–27; reconcile rendered pages and visuals before approval."
+    },
+    {
+      "source_ref_id": "src-c5-t01-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        93,
+        110
+      ],
+      "printed_pages": [
+        77,
+        94
+      ],
+      "mapping_status": "CHAPTER_RANGE_HEADING_DERIVED_PAGE_BOUNDARY_REVIEW_PENDING",
+      "use": "Hindi Jigyasa reprint 2026–27; verify rendered page order and semantic parity."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch05-t01",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch05-t01-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1",
+          "c6-sci-ch05-t01-lo2"
+        ],
+        "source_refs": [
+          "src-c5-t01-en",
+          "src-c5-t01-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "How Do We Measure?",
+            "paragraphs": [
+              "A measurement of length has two parts: a number and a unit. For example, “13 handspans” gives the count and names the unit used."
+            ],
+            "key_point": "A measurement combines a number and a unit."
+          },
+          "hi": {
+            "heading": "हम कैसे मापते हैं?",
+            "paragraphs": [
+              "लंबाई के मापन के दो भाग होते हैं: संख्या और मात्रक। उदाहरण के लिए, “13 बालिश्त” में संख्या भी है और प्रयुक्त मात्रक भी।"
+            ],
+            "key_point": "मापन संख्या और मात्रक को जोड़ता है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo2",
+          "c6-sci-ch05-t01-lo3"
+        ],
+        "source_refs": [
+          "src-c5-t01-en",
+          "src-c5-t01-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Apply the idea",
+            "paragraphs": [
+              "People have different handspans, foot lengths and strides. Two learners can therefore count different handspans for the same table. Body-based units are useful for rough estimates, but a common standard unit makes comparison fairer."
+            ],
+            "key_point": "A measurement combines a number and a unit."
+          },
+          "hi": {
+            "heading": "अवधारणा का उपयोग",
+            "paragraphs": [
+              "लोगों की बालिश्त, पैर की लंबाई और कदम अलग-अलग होते हैं। इसलिए एक ही मेज को मापने पर दो विद्यार्थियों की बालिश्तों की संख्या अलग हो सकती है। शरीर-आधारित मात्रक मोटे अनुमान के लिए उपयोगी हैं, लेकिन साझा मानक मात्रक बेहतर तुलना देता है।"
+            ],
+            "key_point": "मापन संख्या और मात्रक को जोड़ता है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1",
+          "c6-sci-ch05-t01-lo2",
+          "c6-sci-ch05-t01-lo3"
+        ],
+        "source_refs": [
+          "src-c5-t01-en",
+          "src-c5-t01-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create an original compact schematic for How Do We Measure?; localize all labels with diagram_data and do not use source-page screenshots.",
+          "hi": "“हम कैसे मापते हैं?” के लिए मौलिक संक्षिप्त चित्र बनाएँ; सभी लेबल diagram_data से स्थानीयकृत हों और स्रोत-पृष्ठ के स्क्रीनशॉट का उपयोग न करें।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch05-t01-visual-01",
+          "kind": "chapter5-topic-1",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "table",
+              "label_by_locale": {
+                "en": "Same classroom table",
+                "hi": "एक ही कक्षा की मेज"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "a",
+              "label_by_locale": {
+                "en": "Learner A: 13 handspans",
+                "hi": "विद्यार्थी A: 13 बालिश्त"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "b",
+              "label_by_locale": {
+                "en": "Learner B: 14 handspans",
+                "hi": "विद्यार्थी B: 14 बालिश्त"
+              },
+              "position": {
+                "order": 3
+              }
+            },
+            {
+              "id": "why",
+              "label_by_locale": {
+                "en": "Different handspan sizes",
+                "hi": "बालिश्तों की लंबाई में अंतर"
+              },
+              "position": {
+                "order": 4
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Draft visual: Same classroom table; Learner A: 13 handspans; Learner B: 14 handspans; Different handspan sizes.",
+          "hi": "चित्र-प्रारूप: एक ही कक्षा की मेज； विद्यार्थी A: 13 बालिश्त； विद्यार्थी B: 14 बालिश्त； बालिश्तों की लंबाई में अंतर।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1",
+          "c6-sci-ch05-t01-lo2"
+        ],
+        "activity_kind": "Chapter 5 activity — How Do We Measure?",
+        "configuration": {
+          "activity_id": "c6-sci-ch05-t01-activity-01",
+          "title_by_locale": {
+            "en": "Try it yourself",
+            "hi": "स्वयं करके देखें"
+          },
+          "instruction_by_locale": {
+            "en": "Measure the same safe classroom object with a partner using handspans; compare the counts and hand sizes.",
+            "hi": "किसी सुरक्षित कक्षा-वस्तु को साथी के साथ बालिश्त से मापें; संख्या और बालिश्तों के आकार की तुलना करें।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "Observe or measure",
+                "hi": "अवलोकन या मापन करें"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "Record the result",
+                "hi": "परिणाम लिखें"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "Explain your reason",
+                "hi": "कारण बताएँ"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear response"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "उत्तर मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Use classroom-safe objects and follow teacher instructions. Do not run, throw objects or use sharp tools.",
+          "hi": "सुरक्षित कक्षा-वस्तुएँ उपयोग करें और शिक्षक के निर्देश मानें। दौड़ें नहीं, वस्तुएँ न फेंकें और नुकीले औज़ार न उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1",
+          "c6-sci-ch05-t01-lo2",
+          "c6-sci-ch05-t01-lo3"
+        ],
+        "content_by_locale": {
+          "en": "A measurement combines a number and a unit.",
+          "hi": "मापन संख्या और मात्रक को जोड़ता है।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch05-t01",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch05-t01-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Why can two learners count different handspans for the same table?",
+          "hi": "एक ही मेज के लिए दो विद्यार्थियों की बालिश्तों की संख्या अलग क्यों हो सकती है?"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Their handspans may have different lengths",
+              "hi": "उनकी बालिश्तों की लंबाई अलग हो सकती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "The table changes after every measurement",
+              "hi": "हर मापन के बाद मेज बदल जाती है"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A measurement needs no unit",
+              "hi": "मापन में मात्रक की आवश्यकता नहीं होती"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "All handspans are exactly equal",
+              "hi": "सभी बालिश्त बिल्कुल समान होती हैं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      },
+      {
+        "id": "c6-sci-ch05-t01-q02",
+        "type": "multiple_select",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which are non-standard body-based length measures? Select all that apply.",
+          "hi": "लंबाई के कौन-से शरीर-आधारित माप अमानक हैं? सभी चुनें।"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Handspan",
+              "hi": "बालिश्त"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Stride length",
+              "hi": "कदम की लंबाई"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Foot length",
+              "hi": "पैर की लंबाई"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Metre marked on a standard ruler",
+              "hi": "मानक पैमाने पर अंकित मीटर"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "id": "c6-sci-ch05-t01-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A complete length measurement should state both a number and a unit.",
+          "hi": "लंबाई के मापन में संख्या और मात्रक दोनों होने चाहिए।"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-true-false.v1",
+        "correct_answer": true
+      },
+      {
+        "id": "c6-sci-ch05-t01-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each example or step with its correct description.",
+          "hi": "प्रत्येक उदाहरण या कदम का सही वर्णन से मिलान करें।"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "left_items": [
+          {
+            "id": "l1",
+            "label_by_locale": {
+              "en": "Count: 13",
+              "hi": "गिनती: 13"
+            }
+          },
+          {
+            "id": "l2",
+            "label_by_locale": {
+              "en": "Handspan",
+              "hi": "बालिश्त"
+            }
+          },
+          {
+            "id": "l3",
+            "label_by_locale": {
+              "en": "Different hand sizes",
+              "hi": "हाथों के अलग आकार"
+            }
+          },
+          {
+            "id": "l4",
+            "label_by_locale": {
+              "en": "Shared standard unit",
+              "hi": "साझा मानक मात्रक"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "r1",
+            "label_by_locale": {
+              "en": "Number part",
+              "hi": "संख्या वाला भाग"
+            }
+          },
+          {
+            "id": "r2",
+            "label_by_locale": {
+              "en": "Chosen unit",
+              "hi": "चुना गया मात्रक"
+            }
+          },
+          {
+            "id": "r3",
+            "label_by_locale": {
+              "en": "Different results possible",
+              "hi": "अलग परिणाम संभव"
+            }
+          },
+          {
+            "id": "r4",
+            "label_by_locale": {
+              "en": "Comparable measurements",
+              "hi": "तुलनीय माप"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "l1",
+            "right_id": "r1"
+          },
+          {
+            "left_id": "l2",
+            "right_id": "r2"
+          },
+          {
+            "left_id": "l3",
+            "right_id": "r3"
+          },
+          {
+            "left_id": "l4",
+            "right_id": "r4"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A measurement combines a number with a ____.",
+          "hi": "मापन में संख्या के साथ एक ____ होता है।"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "accepted_answers": {
+          "en": [
+            "unit"
+          ],
+          "hi": [
+            "मात्रक"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Why can two learners count different handspans for the same table? The visual draft shows the lesson's key example.",
+          "hi": "एक ही मेज के लिए दो विद्यार्थियों की बालिश्तों की संख्या अलग क्यों हो सकती है? चित्र-प्रारूप में पाठ का मुख्य उदाहरण दिखाया गया है।"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Their handspans may have different lengths",
+              "hi": "उनकी बालिश्तों की लंबाई अलग हो सकती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "The table changes after every measurement",
+              "hi": "हर मापन के बाद मेज बदल जाती है"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A measurement needs no unit",
+              "hi": "मापन में मात्रक की आवश्यकता नहीं होती"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "All handspans are exactly equal",
+              "hi": "सभी बालिश्त बिल्कुल समान होती हैं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch05-t01-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Visual draft is unrendered and not approved; review source fit, labels, contrast, alt text and accessibility before display.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Why is handspan not a dependable standard unit?",
+          "hi": "बालिश्त विश्वसनीय मानक मात्रक क्यों नहीं है?"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Handspans differ from person to person, so the same object can produce different counts. A common standard unit supports fair comparison."
+            ],
+            "sample_answer": "Handspans differ from person to person, so the same object can produce different counts. A common standard unit supports fair comparison."
+          },
+          "hi": {
+            "key_points": [
+              "लोगों की बालिश्त अलग-अलग होती है, इसलिए एक ही वस्तु की गिनती बदल सकती है। साझा मानक मात्रक उचित तुलना देता है।"
+            ],
+            "sample_answer": "लोगों की बालिश्त अलग-अलग होती है, इसलिए एक ही वस्तु की गिनती बदल सकती है। साझा मानक मात्रक उचित तुलना देता है।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the core concept.",
+              "1 point for an accurate supporting explanation."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक व्याख्या के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch05-t01-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch05-t01-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Two teams report different handspan counts for the same classroom table. What should they do for a fair comparison?",
+          "hi": "दो समूह एक ही मेज के लिए बालिश्तों की अलग-अलग संख्या बताते हैं। उचित तुलना के लिए क्या करें?"
+        },
+        "feedback_by_locale": {
+          "en": "Use the definition and evidence described in this lesson to choose and explain the answer.",
+          "hi": "उत्तर चुनने और समझाने के लिए इस पाठ की परिभाषा और उदाहरण का उपयोग करें।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "Apply this lesson's idea to the described everyday situation.",
+          "hi": "वर्णित दैनिक स्थिति में इस पाठ की अवधारणा लागू करें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Use the same standard unit for both measurements",
+              "hi": "दोनों मापों के लिए समान मानक मात्रक उपयोग करें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Ignore the unit or reference point",
+              "hi": "मात्रक या संदर्भ बिंदु अनदेखा करें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Change the observation to match a guess",
+              "hi": "अनुमान से मिलाने के लिए अवलोकन बदल दें"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Record only a number without explaining it",
+              "hi": "बिना व्याख्या केवल संख्या लिखें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice mapped to the numbered textbook section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित पाठ्यपुस्तक अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_many": "Select all that apply",
+        "true_label": "True",
+        "false_label": "False",
+        "submit": "Check answer",
+        "next": "Next question",
+        "pending_review": "Pending review"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_many": "सभी सही विकल्प चुनें",
+        "true_label": "सही",
+        "false_label": "गलत",
+        "submit": "उत्तर जाँचें",
+        "next": "अगला प्रश्न",
+        "pending_review": "समीक्षा लंबित"
+      }
+    }
+  },
+  "parity_audit": {
+    "stable_ids_across_locales": true,
+    "objectives_paired": true,
+    "question_types_each_once": true,
+    "locale_content_structurally_paired": true,
+    "semantic_human_review_status": "PENDING",
+    "source_page_reconciliation_status": "PENDING",
+    "science_accuracy_status": "PENDING",
+    "visual_accessibility_status": "PENDING",
+    "image_observation_renderable": false,
+    "notes": [
+      "Bilingual structure does not guarantee semantic equivalence; human review remains required.",
+      "All image-observation questions are blocked until their original visual draft is rendered and reviewed.",
+      "Chapter scope is limited to the numbered section shown; validate boundaries against rendered official pages."
+    ]
+  },
+  "next_steps": [
+    "Compare both official language PDFs in rendered form and verify exact section/page boundaries.",
+    "Reconcile each figure, table, activity, sidebar, keyword, summary, review question and Learning further task.",
+    "Review Hindi scientific terminology, semantic parity, factual accuracy and diagram accessibility.",
+    "Implement/test Web and Android renderers and the state-preserving global language switch separately.",
+    "Keep publication disabled until content review is complete."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

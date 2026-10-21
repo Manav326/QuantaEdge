@@ -1,0 +1,82 @@
+package com.quantaedge.api;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class StaffAuditService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(StaffAuditService.class);
+  private final JdbcTemplate jdbc;
+
+  public StaffAuditService(JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
+  }
+
+  public void recordRequest(AuthContext actor, HttpServletRequest request, HttpServletResponse response) {
+    if (actor == null || !actor.isEmployee() || !request.getRequestURI().startsWith("/api/v1/admin/")) return;
+    try {
+      String path = request.getRequestURI();
+      if (path.length() > 500) path = path.substring(0, 500);
+      String userAgent = request.getHeader("User-Agent");
+      if (userAgent != null && userAgent.length() > 500) userAgent = userAgent.substring(0, 500);
+      String address = request.getRemoteAddr();
+      if (address != null && address.length() > 80) address = address.substring(0, 80);
+      jdbc.update("""
+          insert into staff_audit_log(
+            actor_staff_id, actor_role, http_method, request_path,
+            response_status, remote_address, user_agent, details
+          ) values (?,?,?,?,?,?,?,?)
+          """,
+          actor.staffId(),
+          actor.role() == null ? "UNKNOWN" : actor.role(),
+          request.getMethod(),
+          path,
+          response.getStatus(),
+          address,
+          userAgent,
+          null);
+    } catch (RuntimeException ex) {
+      LOGGER.error("Could not append staff audit trail entry for {}", request.getRequestURI(), ex);
+    }
+  }
+  public void recordAction(AuthContext actor, String requestPath, String details) {
+    if (actor == null || !actor.isEmployee()) return;
+    try {
+      String path=requestPath==null?"/api/v1/admin":requestPath;
+      if(path.length()>500)path=path.substring(0,500);
+      String summary=details==null?"Staff action":details;
+      if(summary.length()>2000)summary=summary.substring(0,2000);
+      jdbc.update("""
+          insert into staff_audit_log(
+            actor_staff_id,actor_role,http_method,request_path,response_status,
+            remote_address,user_agent,details
+          ) values (?,?, 'ACTION', ?,200,null,null,?)
+          """,actor.staffId(),actor.role()==null?"UNKNOWN":actor.role(),path,summary);
+    } catch (RuntimeException ex) {
+      LOGGER.error("Could not append staff action audit for {}",requestPath,ex);
+    }
+  }
+
+  /** Records local import-token usage without inventing a human staff identity. */
+  public void recordMachineAction(String requestPath, String details) {
+    try {
+      String path = requestPath == null ? "/api/v1/admin/textbook-extraction/ghcr-books" : requestPath;
+      if (path.length() > 500) path = path.substring(0, 500);
+      String summary = details == null ? "Local admin-token action" : details;
+      if (summary.length() > 2000) summary = summary.substring(0, 2000);
+      jdbc.update("""
+          insert into staff_audit_log(
+            actor_staff_id, actor_role, http_method, request_path,
+            response_status, remote_address, user_agent, details
+          ) values (null, 'ADMIN_TOKEN', 'ACTION', ?, 200, null, null, ?)
+          """, path, summary);
+    } catch (RuntimeException ex) {
+      LOGGER.error("Could not append local admin-token audit for {}", requestPath, ex);
+    }
+  }
+
+}

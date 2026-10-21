@@ -1,0 +1,1063 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic05-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Staged as an uncommitted Git blob/tree; no branch ref update or commit."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Regular Class 6 curriculum only; not entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    }
+  },
+  "topic": {
+    "topic_number": 5,
+    "topic_id": "c6-sci-ch02-t05",
+    "title_by_locale": {
+      "en": "Adaptations in Different Surroundings",
+      "hi": "अलग-अलग परिवेशों में अनुकूलन"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "printed_pages": [
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Definition of adaptation",
+      "Cactus, deodar, hot/cold desert camel, rhododendron and fish examples from Chapter 2",
+      "Conditions such as limited water, snowfall, sandy ground, cold and movement through water"
+    ],
+    "excluded_scope": [
+      "Detailed habitat classification deferred to the next topic",
+      "Evolutionary origins beyond the source passage",
+      "Unsupported claims about all members of a species"
+    ],
+    "generated_content_note": "Explanations, diagram data and questions are authored learning aids, not verbatim NCERT text.",
+    "global_locale_rule": "All learner-visible content is bilingual and controlled by the app-wide locale; runtime switching is not implemented in this artifact."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t05-lo1",
+      "statement_by_locale": {
+        "en": "Define adaptation as a feature that helps survival in particular surroundings.",
+        "hi": "अनुकूलन को ऐसी विशेषता के रूप में परिभाषित करें जो विशेष परिवेश में जीवित रहने में मदद करती है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t05-lo2",
+      "statement_by_locale": {
+        "en": "Relate chapter examples to conditions in the surroundings.",
+        "hi": "अध्याय के उदाहरणों को परिवेश की परिस्थितियों से जोड़ें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t05-lo3",
+      "statement_by_locale": {
+        "en": "Explain a possible benefit using the feature and condition described.",
+        "hi": "वर्णित विशेषता और परिस्थिति का उपयोग करके संभावित लाभ समझाएँ।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-p41-45",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "pdf_pages": [
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "printed_pages": [
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "source_context": [
+        "PDF p.42/printed p.24: cactus and deodar examples.",
+        "PDF pp.43-44/printed pp.25-26: hot/cold desert camels, rhododendron and fish.",
+        "PDF p.45/printed p.27: adaptation definition; habitat is introduced at the end and is deferred to Topic 6."
+      ]
+    },
+    {
+      "source_ref_id": "src-c2-hi-jigyasa-ch2-adaptation",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t05",
+    "title_by_locale": {
+      "en": "How Features Help Living Things Survive",
+      "hi": "विशेषताएँ जीवों को जीवित रहने में कैसे मदद करती हैं"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t05-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo1",
+          "c6-sci-ch02-t05-lo2"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Conditions differ by region",
+            "paragraphs": [
+              "A desert, a cold mountain region and an ocean do not provide the same conditions. Water, temperature, snowfall and movement through the surroundings may differ.",
+              "Plants and animals can have features that help them live in particular regions. The chapter calls such a feature an adaptation. Connect each feature to the conditions described, rather than assuming it helps everywhere."
+            ],
+            "key_point": "An adaptation is a feature that helps a living thing survive in particular surroundings."
+          },
+          "hi": {
+            "heading": "क्षेत्र के अनुसार परिस्थितियाँ बदलती हैं",
+            "paragraphs": [
+              "मरुस्थल, ठंडा पर्वतीय क्षेत्र और समुद्र एक जैसी परिस्थितियाँ नहीं देते। पानी, तापमान, हिमपात और परिवेश में गति करने के तरीके अलग हो सकते हैं।",
+              "पौधों और जानवरों में ऐसी विशेषताएँ हो सकती हैं जो उन्हें विशेष क्षेत्रों में रहने में मदद करती हैं। अध्याय में ऐसी विशेषता को अनुकूलन कहा गया है। हर विशेषता को बताई परिस्थिति से जोड़ें; यह न मानें कि वह हर जगह मदद करती है।"
+            ],
+            "key_point": "अनुकूलन ऐसी विशेषता है जो जीव को विशेष परिवेश में जीवित रहने में मदद करती है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo2",
+          "c6-sci-ch02-t05-lo3"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Link the feature to its surroundings",
+            "paragraphs": [
+              "A cactus has a thick, fleshy stem that can store water, which may help where water is limited. Deodar trees in snowy mountain regions have a conical shape and sloping branches that help snow slide off.",
+              "The chapter compares camels of hot and cold deserts. Long legs and wide hooves are described as helping a hot-desert camel walk on sand; comparatively shorter legs help the cold-desert camel move over mountainous terrain, and longer hair helps in cold winters. Rhododendrons can also differ in height and leaf size across mountain regions.",
+              "A fish has a streamlined body that helps it move through water. For every example, identify the condition, the feature and the possible help; do not add unsupported explanations."
+            ],
+            "callout": "Feature → condition → possible help."
+          },
+          "hi": {
+            "heading": "विशेषता को परिवेश से जोड़ें",
+            "paragraphs": [
+              "कैक्टस का तना मोटा और गूदेदार होता है तथा पानी जमा कर सकता है; कम पानी वाले स्थान में इससे मदद मिल सकती है। बर्फ वाले पर्वतीय क्षेत्रों में देवदार का आकार शंकु जैसा और शाखाएँ ढलानदार होती हैं, जिससे बर्फ फिसल सकती है।",
+              "अध्याय गर्म और ठंडे मरुस्थल के ऊँटों की तुलना करता है। गर्म मरुस्थल के ऊँट के लंबे पैर और चौड़े खुर उसे रेत पर चलने में मदद करते हैं; ठंडे मरुस्थल के ऊँट के अपेक्षाकृत छोटे पैर पर्वतीय भूमि पर चलने में मदद करते हैं और लंबे बाल सर्दियों में सहायक हैं। अलग-अलग पर्वतीय क्षेत्रों में रोडोडेंड्रॉन की ऊँचाई और पत्तियों के आकार में भी अंतर हो सकता है।",
+              "मछली का धारारेखीय शरीर पानी में गति करने में मदद करता है। हर उदाहरण में परिस्थिति, विशेषता और संभावित लाभ पहचानें; असमर्थित व्याख्या न जोड़ें।"
+            ],
+            "callout": "विशेषता → परिस्थिति → संभावित लाभ।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo1",
+          "c6-sci-ch02-t05-lo2",
+          "c6-sci-ch02-t05-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t05-adaptation-comparison",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original bilingual comparison. Connect each organism with a surrounding condition and a feature described in Chapter 2; do not copy textbook artwork or explain evolutionary origins.",
+        "diagram_data": {
+          "items": [
+            {
+              "id": "cactus",
+              "organism_by_locale": {
+                "en": "Cactus",
+                "hi": "कैक्टस"
+              },
+              "condition_by_locale": {
+                "en": "Limited water",
+                "hi": "पानी की कमी"
+              },
+              "feature_by_locale": {
+                "en": "Thick, fleshy stem can store water",
+                "hi": "मोटा, गूदेदार तना पानी जमा कर सकता है"
+              },
+              "help_by_locale": {
+                "en": "May help when water is scarce",
+                "hi": "पानी कम होने पर मदद कर सकता है"
+              }
+            },
+            {
+              "id": "deodar",
+              "organism_by_locale": {
+                "en": "Deodar",
+                "hi": "देवदार"
+              },
+              "condition_by_locale": {
+                "en": "Snowfall",
+                "hi": "हिमपात"
+              },
+              "feature_by_locale": {
+                "en": "Conical shape and sloping branches",
+                "hi": "शंकु जैसा आकार और ढलानदार शाखाएँ"
+              },
+              "help_by_locale": {
+                "en": "Snow can slide off more easily",
+                "hi": "बर्फ आसानी से फिसल सकती है"
+              }
+            },
+            {
+              "id": "camel",
+              "organism_by_locale": {
+                "en": "Hot-desert camel",
+                "hi": "गर्म मरुस्थल का ऊँट"
+              },
+              "condition_by_locale": {
+                "en": "Sandy ground",
+                "hi": "रेतीली ज़मीन"
+              },
+              "feature_by_locale": {
+                "en": "Long legs and wide hooves",
+                "hi": "लंबे पैर और चौड़े खुर"
+              },
+              "help_by_locale": {
+                "en": "Help walking on sand",
+                "hi": "रेत पर चलने में मदद"
+              }
+            },
+            {
+              "id": "fish",
+              "organism_by_locale": {
+                "en": "Fish",
+                "hi": "मछली"
+              },
+              "condition_by_locale": {
+                "en": "Moving through water",
+                "hi": "पानी में गति"
+              },
+              "feature_by_locale": {
+                "en": "Streamlined body",
+                "hi": "धारारेखीय शरीर"
+              },
+              "help_by_locale": {
+                "en": "Helps movement through water",
+                "hi": "पानी में गति करने में मदद"
+              }
+            }
+          ],
+          "footer_by_locale": {
+            "en": "These are chapter examples, not a claim that all habitats are alike.",
+            "hi": "ये अध्याय के उदाहरण हैं; इससे यह दावा नहीं होता कि सभी आवास एक जैसे हैं।"
+          }
+        },
+        "alt_by_locale": {
+          "en": "An original diagram connecting cactus, deodar, hot-desert camel and fish to conditions and features described in Chapter 2.",
+          "hi": "मौलिक चित्र कैक्टस, देवदार, गर्म मरुस्थल के ऊँट और मछली को अध्याय 2 की परिस्थितियों और विशेषताओं से जोड़ता है।"
+        },
+        "caption_by_locale": {
+          "en": "Adaptations are features that may help living things survive in particular surroundings.",
+          "hi": "अनुकूलन ऐसी विशेषताएँ हैं जो जीवों को विशेष परिवेश में जीवित रहने में मदद कर सकती हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-b04",
+        "type": "activity",
+        "order": 4,
+        "activity_kind": "feature_condition_reasoning",
+        "instructions_by_locale": {
+          "en": [
+            "Choose one example from the diagram.",
+            "Name its surrounding condition.",
+            "Record the feature described.",
+            "Explain how it may help, using only lesson evidence."
+          ],
+          "hi": [
+            "चित्र से एक उदाहरण चुनें।",
+            "परिवेश की परिस्थिति बताएँ।",
+            "वर्णित विशेषता दर्ज करें।",
+            "केवल पाठ में दिए प्रमाण से बताएँ कि यह कैसे मदद कर सकती है।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "organism",
+            "label_by_locale": {
+              "en": "Organism",
+              "hi": "जीव"
+            }
+          },
+          {
+            "id": "condition",
+            "label_by_locale": {
+              "en": "Condition",
+              "hi": "परिस्थिति"
+            }
+          },
+          {
+            "id": "feature",
+            "label_by_locale": {
+              "en": "Feature",
+              "hi": "विशेषता"
+            }
+          },
+          {
+            "id": "help",
+            "label_by_locale": {
+              "en": "How may it help?",
+              "hi": "यह कैसे मदद कर सकती है?"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "Connect the feature to a condition and plausible benefit. Do not invent facts.",
+          "hi": "विशेषता को परिस्थिति और संभावित लाभ से जोड़ें। तथ्य न गढ़ें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-b05",
+        "type": "recap",
+        "order": 5,
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Adaptations are features that may help survival in particular surroundings.",
+              "A cactus's fleshy stem can store water; deodar branches help snow slide off.",
+              "The chapter contrasts camel features in hot and cold deserts.",
+              "A fish's streamlined body helps movement through water."
+            ],
+            "vocabulary": [
+              {
+                "term": "Adaptation",
+                "meaning": "A feature that helps survival in particular surroundings."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "अनुकूलन ऐसी विशेषताएँ हैं जो विशेष परिवेश में जीवित रहने में मदद कर सकती हैं।",
+              "कैक्टस का गूदेदार तना पानी जमा कर सकता है; देवदार की ढलानदार शाखाएँ बर्फ फिसलने में मदद करती हैं।",
+              "अध्याय गर्म और ठंडे मरुस्थल के ऊँटों की विशेषताओं की तुलना करता है।",
+              "मछली का धारारेखीय शरीर पानी में गति करने में मदद करता है।"
+            ],
+            "vocabulary": [
+              {
+                "term": "अनुकूलन",
+                "meaning": "विशेष परिवेश में जीवित रहने में मदद करने वाली विशेषता।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t05",
+    "title_by_locale": {
+      "en": "Practise Adaptations",
+      "hi": "अनुकूलन का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice for this topic; not verbatim NCERT questions.",
+      "hi": "इस विषय पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों का शब्दशः रूप नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t05-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What is an adaptation in this chapter?",
+          "hi": "इस अध्याय में अनुकूलन किसे कहते हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A feature that helps a living thing survive in a particular region",
+              "hi": "ऐसी विशेषता जो किसी जीव को किसी क्षेत्र में जीवित रहने में मदद करती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A feature chosen for decoration",
+              "hi": "सजावट के लिए चुनी गई विशेषता"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A feature identical in every region",
+              "hi": "हर क्षेत्र में एक जैसी विशेषता"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A name for a place",
+              "hi": "किसी स्थान का नाम"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. An adaptation can help a plant or animal survive in particular surroundings.",
+          "hi": "सही। अनुकूलन किसी पौधे या जानवर को विशेष परिवेश में जीवित रहने में मदद कर सकता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which feature-condition pairs match examples in the chapter? Select all that apply.",
+          "hi": "अध्याय के उदाहरणों से कौन-से विशेषता-परिस्थिति संबंध मेल खाते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Cactus's fleshy stem can store water",
+              "hi": "कैक्टस का गूदेदार तना पानी जमा कर सकता है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Deodar's sloping branches help snow slide off",
+              "hi": "देवदार की ढलानदार शाखाएँ बर्फ फिसलने में मदद करती हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A fish's streamlined body helps movement through water",
+              "hi": "मछली का धारारेखीय शरीर पानी में गति करने में मदद करता है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A camel's hooves help it fly",
+              "hi": "ऊँट के खुर उसे उड़ने में मदद करते हैं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "The first three connections match the chapter's examples. The camel example concerns walking on sand, not flying.",
+          "hi": "पहले तीन संबंध अध्याय के उदाहरणों से मेल खाते हैं। ऊँट का उदाहरण रेत पर चलने से जुड़ा है, उड़ने से नहीं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "The chapter uses 'adaptation' for a feature that helps a plant or animal survive in a particular region.",
+          "hi": "अध्याय में 'अनुकूलन' उस विशेषता को कहा गया है जो पौधे या जानवर को किसी क्षेत्र में जीवित रहने में मदद करती है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. This is the introductory definition used in the chapter.",
+          "hi": "सही। अध्याय में यही प्रारंभिक परिभाषा दी गई है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each example with the condition or benefit described.",
+          "hi": "हर उदाहरण को बताई गई परिस्थिति या लाभ से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "cactus",
+            "label_by_locale": {
+              "en": "Cactus",
+              "hi": "कैक्टस"
+            }
+          },
+          {
+            "id": "deodar",
+            "label_by_locale": {
+              "en": "Deodar tree",
+              "hi": "देवदार"
+            }
+          },
+          {
+            "id": "fish",
+            "label_by_locale": {
+              "en": "Fish",
+              "hi": "मछली"
+            }
+          },
+          {
+            "id": "camel",
+            "label_by_locale": {
+              "en": "Hot-desert camel",
+              "hi": "गर्म मरुस्थल का ऊँट"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "water",
+            "label_by_locale": {
+              "en": "Fleshy stem can store water",
+              "hi": "गूदेदार तना पानी जमा कर सकता है"
+            }
+          },
+          {
+            "id": "snow",
+            "label_by_locale": {
+              "en": "Sloping branches help snow slide off",
+              "hi": "ढलानदार शाखाएँ बर्फ फिसलने में मदद करती हैं"
+            }
+          },
+          {
+            "id": "watermove",
+            "label_by_locale": {
+              "en": "Streamlined body helps movement through water",
+              "hi": "धारारेखीय शरीर पानी में गति करने में मदद करता है"
+            }
+          },
+          {
+            "id": "sand",
+            "label_by_locale": {
+              "en": "Long legs and wide hooves help walking on sand",
+              "hi": "लंबे पैर और चौड़े खुर रेत पर चलने में मदद करते हैं"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "cactus",
+            "right_id": "water"
+          },
+          {
+            "left_id": "deodar",
+            "right_id": "snow"
+          },
+          {
+            "left_id": "fish",
+            "right_id": "watermove"
+          },
+          {
+            "left_id": "camel",
+            "right_id": "sand"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each match connects a chapter example with the condition or movement it may help with.",
+          "hi": "हर मिलान अध्याय के उदाहरण को उस परिस्थिति या गति से जोड़ता है जिसमें वह मदद कर सकता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "A feature that helps an organism survive in its surroundings is called an ______.",
+          "hi": "जीव को उसके परिवेश में जीवित रहने में मदद करने वाली विशेषता को ______ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "adaptation"
+          ],
+          "hi": [
+            "अनुकूलन"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not strip Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The expected term is adaptation.",
+          "hi": "अपेक्षित शब्द 'अनुकूलन' है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "In the lesson diagram, which feature is linked to snowfall in cold mountain regions?",
+          "hi": "पाठ के चित्र में ठंडे पर्वतीय क्षेत्रों में हिमपात से कौन-सी विशेषता जोड़ी गई है?"
+        },
+        "visual_asset_ref": "c6-sci-ch02-t05-adaptation-comparison",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Deodar's conical shape and sloping branches",
+              "hi": "देवदार का शंकु जैसा आकार और ढलानदार शाखाएँ"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A fish's fins",
+              "hi": "मछली के पंख"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A cactus with no stem",
+              "hi": "बिना तने वाला कैक्टस"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A camel's wings",
+              "hi": "ऊँट के पंख"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The chapter says the shape and sloping branches help snow slide off.",
+          "hi": "सही। अध्याय के अनुसार आकार और ढलानदार शाखाएँ बर्फ को फिसलने में मदद करती हैं।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The original diagram is not reviewed/rendered yet; do not show this item to students until approved.",
+            "hi": "मौलिक चित्र की प्रस्तुति और समीक्षा बाकी है; स्वीकृति से पहले यह प्रश्न विद्यार्थियों को न दिखाएँ।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Choose one example from the lesson and explain how its feature may help in its surroundings.",
+          "hi": "पाठ से एक उदाहरण चुनें और समझाएँ कि उसकी विशेषता परिवेश में कैसे मदद कर सकती है।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Names an example and its feature.",
+              "Links the feature to the condition and a plausible benefit."
+            ],
+            "sample_answer": "A cactus has a thick, fleshy stem that can store water, which may help where water is limited."
+          },
+          "hi": {
+            "key_points": [
+              "एक उदाहरण और उसकी विशेषता बताता है।",
+              "विशेषता को परिस्थिति और संभावित लाभ से जोड़ता है।"
+            ],
+            "sample_answer": "कैक्टस का तना मोटा और गूदेदार होता है तथा पानी जमा कर सकता है, जिससे कम पानी वाले स्थान में मदद मिल सकती है।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: identifies a chapter example and feature.",
+              "1 point: links it to a relevant condition or benefit."
+            ],
+            "hi": [
+              "1 अंक: अध्याय का उदाहरण और विशेषता बताता है।",
+              "1 अंक: उसे संबंधित परिस्थिति या लाभ से जोड़ता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t05-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t05-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Which explanation stays closest to the chapter evidence?",
+          "hi": "कौन-सी व्याख्या अध्याय में दिए प्रमाण के सबसे करीब है?"
+        },
+        "scenario_by_locale": {
+          "en": "A student compares a cactus in a dry desert with a deodar tree in a snowy mountain region.",
+          "hi": "एक विद्यार्थी शुष्क मरुस्थल के कैक्टस और बर्फ वाले पर्वतीय क्षेत्र के देवदार की तुलना करता है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "The cactus's fleshy stem can store water; the deodar's shape and branches help snow slide off",
+              "hi": "कैक्टस का गूदेदार तना पानी जमा कर सकता है; देवदार का आकार और शाखाएँ बर्फ फिसलने में मदद करती हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Both plants need identical conditions",
+              "hi": "दोनों पौधों को एक जैसी परिस्थितियाँ चाहिए"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Plants decide to change features as soon as they move",
+              "hi": "पौधे स्थान बदलते ही अपनी विशेषताएँ बदलने का निर्णय लेते हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "These examples prove every plant survives in every region",
+              "hi": "ये उदाहरण साबित करते हैं कि हर पौधा हर क्षेत्र में जीवित रह सकता है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. It connects each feature to the condition described without making unsupported claims.",
+          "hi": "सही। यह हर विशेषता को बताई परिस्थिति से जोड़ता है और असमर्थित दावे नहीं करता।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "preserve_response_by_question_id": true,
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t05-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "shared_question_ids": true,
+    "shared_answer_logic": true,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_components_implemented": false,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi source page mapping remains unverified.",
+      "English figure/page alignment requires visual review.",
+      "The original diagram is draft data; q06 remains blocked until rendered and approved."
+    ]
+  },
+  "next_steps": [
+    "Verify Hindi Chapter 2 terminology/source alignment.",
+    "Visually reconcile English PDF pp.41-45.",
+    "Render and approve the diagram before q06 becomes student-renderable.",
+    "Continue with habitats in Topic 6."
+  ]
+}

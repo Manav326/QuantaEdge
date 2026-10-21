@@ -1,0 +1,86 @@
+# QuantaEdge bilingual content and curriculum architecture
+
+## Scope
+
+Migration V51 adds the foundation for contextual Hindi/English versions of existing student-facing content and an academic-program layer for future stream-based classes. It is additive: it does not delete curriculum, lesson, question, progress, assessment, PDF, or media rows.
+
+## Web UI localization vs. learning-content translation
+
+QuantaEdge tracks two different language concerns. The learning-content pipeline below localizes database-backed curriculum entities and keeps translations in the draft/review/approval/publication workflow. The web-interface localization layer separately owns static interface copy such as navigation, buttons, forms, notifications, and accessibility labels. UI message catalogs must not be used as a substitute for translating lesson data, and the AI content translator must not rewrite source questions or answer logic.
+
+The implementation tracker for the web UI catalog, locale preference sharing, route migration, CI validation, and remaining work is [Centralized Translation Implementation Tracker](engineering/centralized-translation-implementation-tracker.md). That tracker is authoritative for UI localization; the acceptance gates in this document remain authoritative for database-backed learning-content translation.
+
+## Language model
+
+- Stable curriculum, lesson, block, question, option and assessment identities remain language-independent.
+- Translations are stored against the entity they localize and target the explicit `hi` or `en` locale.
+- Every translation stores the MD5 source revision fingerprint, a version number, generation method/model, review metadata and publication metadata. A translation for an older source revision is kept as history and must not be served for changed source text.
+- The publication workflow is `DRAFT → IN_REVIEW → APPROVED → PUBLISHED`. The database prevents a row from being marked approved/published without reviewer metadata, and prevents publication without publisher metadata.
+- The script generates draft text only, using curriculum-aware pedagogical localization rather than word-for-word replacement. Prompts include class, subject, chapter, lesson and entity-type context, Hindi Devanagari and age-appropriate Indian textbook English rules, and a context-sensitive subject glossary. It never changes the source, answer payload, answer keys, assessment scores, progress, or publication status.
+
+Translations cover the structured curriculum JSON and text: class/program/subject/chapter names and descriptions, objectives, lesson titles/summaries, lesson-block JSON, question prompts/options/explanations/topic labels, assessment names/descriptions, assessment question snapshots, and live/recorded class titles and descriptions. The translation script's direct source of truth is the structured content already stored in the local database: JSONB lesson blocks and question options plus their associated learner-facing text and curriculum metadata. It does not open standalone ZIP/JSON source packages or PDFs directly. Chapter/lesson JSON bundles must first pass the existing draft importer so the CMS creates stable chapter, lesson, block and question IDs; the translator can then add language revisions against those records. The separate `QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json` catalog is a file-only source until it is imported and mapped to CMS question records; it must not be silently treated as translated by a database-only run. PDFs and textbook assets are deliberately out of scope. The script deliberately excludes private answer payloads and answer keys from question and assessment-question translations.
+
+## Academic program model
+
+- `curriculum_program` adds a class-level program/stream scope and curriculum-version label.
+- `curriculum_program_subject` maps subjects to a program with composite class constraints, so a subject cannot accidentally be attached to a program belonging to another class.
+- `student_program_enrollment` is the future program/stream enrollment layer. Existing students are backfilled into an active or paused `GENERAL` program. Existing `student_track_enrollment` records remain intact and continue to drive the current application.
+- A stream is optional; primary and middle-school classes do not need a stream.
+- This release establishes the database foundation. Admin program selection and program-aware student access must be integrated before enabling new streams for real students.
+
+## Media language
+
+Live sessions and recorded classes have an optional primary language. `recorded_class_language_asset` can represent language-specific subtitle files, transcripts, dubbed audio and audio descriptions. The existing recorded-video and live-session data is retained.
+
+## Local workflow
+
+After the V51 migration and student delivery/CMS changes are deployed, use Python 3.12 and the local Docker Compose services.
+
+1. **Place the existing practice-bank JSON in the repository root** and import it into existing CMS lessons first. This catalog contains 76 banks (Class 6: Maths 10 + Science 12; Class 7: Maths 15 + Science 12; Class 8: Maths 14 + Science 13) and 3,572 questions. The importer checks the full JSON and each answer key, then verifies every class/subject/chapter/lesson mapping before the first write. Run a no-write file validation first:
+
+       & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json"
+
+   For database mapping preflight and safe import, sign in to local Admin and set the session cookie in this PowerShell session without putting it on the command line:
+
+       $secure = Read-Host "Paste fresh QE_SESSION value" -AsSecureString
+       $env:QUANTAEDGE_ADMIN_SESSION = [System.Net.NetworkCredential]::new("", $secure).Password
+       Remove-Variable secure
+
+   Then run the draft-only import:
+
+       & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json" --apply --api-url "http://localhost:8080"
+
+   The importer writes only new DRAFT questions. It skips an existing stable identity or an exact content-and-answer duplicate, but does not collapse two questions merely because their prompts happen to match. Reused source IDs are namespaced by class, subject and chapter. The report lists new questions and duplicates skipped. Mapping-preflight failure means no writes; after a later network error, rerunning is safe.
+
+2. **Run a read-only inventory and bilingual-delivery audit of the local database:**
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
+
+   The summary now reports Class × subject × language coverage for the student-facing Learn path by entity type: curriculum labels, chapters, objectives, lessons, teaching blocks, and approved questions. Only a current-source `PUBLISHED` translation counts as delivered; `DRAFT`, `IN_REVIEW`, `APPROVED` and stale-source rows do not count. It explicitly marks tracks missing lesson/block/question content, so an empty track cannot pass a bilingual completeness check.
+
+   The same read-only run checks published text for likely wrong-script leakage (for example, Devanagari in English or long Latin-only text in a Hindi translation) and writes candidate entity IDs to `published-translation-script-review-<timestamp>.jsonl`. This is a triage heuristic only: it cannot verify meaning, scientific accuracy, mathematical correctness, or natural writing, and every flagged record needs a human decision.
+
+   PDF editions are reported separately and are not counted as translated structured Learn content. The Learn UI may still surface a fallback-medium PDF if no selected-language edition exists; its actual language is now labeled. A translated chapter title is no longer overwritten by fallback PDF metadata.
+
+3. **Generate and insert a representative 40-task pilot as DRAFT translations** across Hindi, English, and the main content types. This lets staff review the exact generated text inside the Language review panel and avoids paying to generate the same pilot twice. The script reads OPENAI_API_KEY, OPENAI_API_BASE_URL, and the model from the root .env file when present. Ensure OPENAI_API_KEY plus either OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL are configured:
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --apply
+
+   The run also saves a JSONL audit copy and a summary under QuantaEdge_Bilingual_Draft_Bundle. Check Hindi Devanagari quality, contextual terminology, worked explanations, number/fraction formatting, option labels, and answer-preservation checks in the Language review panel. These 40 records remain DRAFT and are not visible to students until staff separately approves and publishes them.
+
+4. **After the pilot is accepted, translate the remaining structured content:**
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --apply --batch-size 20 --max-retries 5
+
+   This processes all remaining eligible active Class 6–8 Maths and Science records in both locales. It is resumable and skips existing current-source drafts/reviewed translations, so it will not overwrite the pilot or staff edits. It covers curriculum labels, chapters, objectives, lessons, JSON teaching blocks, questions/options/explanations, assessments, and available live/recorded class metadata. It does not translate PDFs or textbook assets; those are a separate phase. Use --include-archived only when legacy/archived learning paths are explicitly required.
+
+The translator is resumable: current-source translations already in DRAFT, IN_REVIEW, APPROVED, or PUBLISHED are skipped; failures are logged for retry. Reports and JSONL files are written under QuantaEdge_Bilingual_Draft_Bundle, which is ignored by Git. The translation process never publishes. The staff workflow remains review → approve → publish.
+ 
+## Acceptance gates
+
+- Every required active lesson, block, question, option, assessment and media text has a current approved/published Hindi and English version.
+- Source-hash mismatch never serves a stale translation.
+- Correct-answer logic, question ordering, numerical values, formulas, units and assessment marking remain unchanged.
+- UI/API results indicate when the selected-language version is missing rather than claiming full bilingual coverage.
+- Translation review is visible and actionable in Content Studio.
+- The class/subject curriculum and learner progress remain stable for existing users.
