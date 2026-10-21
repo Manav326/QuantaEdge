@@ -9,6 +9,7 @@ import styles from './marketplace.module.css';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { UiText } from '../../i18n/useUiTranslation';
+import { useLocale } from '../../components/LanguageProvider';
 import StudentEmptyState from '../components/StudentEmptyState';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
@@ -85,6 +86,10 @@ async function ensureRazorpayCheckout(): Promise<void> {
 export default function StudentMarketplacePage() {
   const router = useRouter();
   const { brand, institutionContextRequested, isResolving } = useTenantBranding();
+  const { locale } = useLocale();
+  const english = locale === 'english';
+  const tx = (en: string, hi: string, values: Record<string, string | number> = {}) =>
+    (english ? en : hi).replace(/\{([a-zA-Z0-9_]+)\}/g, (_match, key: string) => String(values[key] ?? ''));
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -105,11 +110,11 @@ export default function StudentMarketplacePage() {
       setOffers(Array.isArray(body) ? body : []);
     } catch (error: any) {
       setOffers([]);
-      setLoadError(error?.message || 'Marketplace could not be loaded.');
+      setLoadError(error?.message || tx('Marketplace could not be loaded.', 'Marketplace लोड नहीं हो पाया।'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [english]);
 
   const loadPurchaseRequests = useCallback(async () => {
     try {
@@ -176,18 +181,18 @@ export default function StudentMarketplacePage() {
       }));
       setPendingVerify(null);
       try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
-      setStatus('Payment verified. Your course is now in All Courses.');
+      setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
       await loadOffers();
       await loadPurchaseRequests();
       router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
     } catch (error: any) {
       setPendingVerify(draft);
-      setStatus(error?.message || 'Payment verification could not be completed. Retry verification before paying again.');
+      setStatus(error?.message || tx('Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router]);
+  }, [loadOffers, loadPurchaseRequests, router, english]);
 
   const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
@@ -205,7 +210,7 @@ export default function StudentMarketplacePage() {
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
         setPendingVerify(null);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
-        setStatus('Payment verified. Your course is now in All Courses.');
+        setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
         router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
@@ -215,25 +220,25 @@ export default function StudentMarketplacePage() {
         setPendingVerify(null);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       }
-      setStatus(String(result.message || 'Payment status is still being reconciled. Do not pay again while verification is pending.'));
+      setStatus(String(result.message || tx('Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।')));
       await loadOffers();
     } catch (error: any) {
       setPendingVerify(draft);
-      setStatus(error?.message || 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.');
+      setStatus(error?.message || tx('Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router]);
+  }, [loadOffers, loadPurchaseRequests, router, english]);
 
   async function buyCourse(courseId: number) {
     if (pendingVerify) {
-      setStatus('A previous payment still needs verification. Retry verification before starting another checkout.');
+      setStatus(tx('A previous payment still needs verification. Retry verification before starting another checkout.', 'पिछले भुगतान की पुष्टि बाकी है। नया checkout शुरू करने से पहले उसी order की जाँच करें।'));
       return;
     }
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
     if (institutionContextRequested && (!brand || isResolving)) {
-      setStatus('We could not verify your school identity. Reopen the official link shared by your school before starting checkout.');
+      setStatus(tx('We could not verify your school identity. Reopen the official link shared by your school before starting checkout.', 'आपकी संस्था की पहचान सत्यापित नहीं हो सकी। भुगतान शुरू करने से पहले संस्था द्वारा भेजा गया आधिकारिक लिंक फिर खोलें।'));
       return;
     }
     setBusyCourseId(courseId);
@@ -250,10 +255,10 @@ export default function StudentMarketplacePage() {
       })) as CheckoutResponse;
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
           !order.keyId || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0 || order.currency !== 'INR') {
-        throw new Error('The course order could not be prepared. Please retry.');
+        throw new Error(tx('The course order could not be prepared. Please retry.', 'कोर्स का order तैयार नहीं हो सका। फिर प्रयास करें।'));
       }
       if (Number(order.discountPaise || 0) > 0) {
-        setStatus('Offer code '+String(order.discountCode || discountCode.trim())+' applied. You save '+money(Number(order.discountPaise))+'. The displayed Razorpay amount includes this server-calculated discount.');
+        setStatus(tx('Offer code {code} applied. You save {amount}. The displayed Razorpay amount includes this server-calculated discount.', 'Offer code {code} लागू हुआ। आपकी बचत {amount} है। Razorpay में दिखाई गई राशि में server-calculated discount शामिल है.', {code:String(order.discountCode || discountCode.trim()),amount:money(Number(order.discountPaise))}));
       }
       const recoverableDraft: VerifyDraft = {
         courseId,
@@ -267,7 +272,7 @@ export default function StudentMarketplacePage() {
       catch { /* In-page recovery still works when storage is disabled. */ }
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
-      if (!RazorpayCtor) throw new Error('Payment checkout is not available. Please retry.');
+      if (!RazorpayCtor) throw new Error(tx('Payment checkout is not available. Please retry.', 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।'));
       const checkout = new RazorpayCtor({
         key: order.keyId,
         amount: Number(order.amount),
@@ -285,7 +290,7 @@ export default function StudentMarketplacePage() {
             signature: String(response.razorpay_signature || ''),
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== order.orderId) {
-            setStatus('The payment confirmation did not match this order. Reconcile this order before starting another checkout.');
+            setStatus(tx('The payment confirmation did not match this order. Reconcile this order before starting another checkout.', 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।'));
             setPendingVerify(recoverableDraft);
             try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusyCourseId(null);
@@ -298,7 +303,7 @@ export default function StudentMarketplacePage() {
       checkout.open();
     } catch (error: any) {
       setBusyCourseId(null);
-      setStatus(error?.message || 'Checkout could not be started. Please retry.');
+      setStatus(error?.message || tx('Checkout could not be started. Please retry.', 'Checkout शुरू नहीं हो सका। फिर प्रयास करें।'));
     }
   }
 
@@ -317,9 +322,9 @@ export default function StudentMarketplacePage() {
       setOffers(current => current.map(offer => Number(offer.course_id) === courseId
         ? { ...offer, parent_request_status: request.status || 'PENDING', parent_request_requested_at: requestedAt }
         : offer));
-      setStatus('Purchase request sent at ' + formatUserTimestamp(requestedAt) + '. Your parent can review it from the family account.');
+      setStatus(tx('Purchase request sent at {time}. Your parent can review it from the family account.', '{time} पर खरीदने का अनुरोध भेजा गया। आपके parent इसे family account में देख सकते हैं।', {time:formatUserTimestamp(requestedAt)}));
     } catch (error: any) {
-      setStatus(error?.message || 'The purchase request could not be sent. Please retry.');
+      setStatus(error?.message || tx('The purchase request could not be sent. Please retry.', 'खरीदने का अनुरोध नहीं भेजा जा सका। फिर प्रयास करें।'));
     } finally {
       setBusyCourseId(null);
     }
@@ -333,10 +338,10 @@ export default function StudentMarketplacePage() {
       await readJson(await apiFetch('/api/v1/students/me/programs/id/' + courseId + '/enroll', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
-      setStatus('Free course added to All Courses.');
+      setStatus(tx('Free course added to All Courses.', 'निःशुल्क कोर्स All Courses में जोड़ दिया गया।'));
       router.push('/student/courses?focus=' + encodeURIComponent(String(courseId)));
     } catch (error: any) {
-      setStatus(error?.message || 'The course could not be added. Please retry.');
+      setStatus(error?.message || tx('The course could not be added. Please retry.', 'कोर्स नहीं जोड़ा जा सका। फिर प्रयास करें।'));
     } finally {
       setBusyCourseId(null);
     }
