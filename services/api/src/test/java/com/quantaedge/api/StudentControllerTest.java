@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -25,6 +27,8 @@ class StudentControllerTest {
   @Mock private AuthorizationService authorization;
   @Mock private LearningMetricsService learningMetrics;
 
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   private final AuthContext student = new AuthContext(70L, 7L, "STUDENT", "Preview Student");
   private StudentController controller;
 
@@ -32,6 +36,33 @@ class StudentControllerTest {
   void setUp() {
     when(authorization.requireStudent(student)).thenReturn(student);
     controller = new StudentController(jdbc, authorization, learningMetrics);
+  }
+
+  @Test
+  void learnerProgressPassesOnlyTheSelectedCourseMappedSubjectToMetrics() {
+    when(jdbc.queryForList(contains("select distinct p.id"), any(Object[].class)))
+        .thenReturn(java.util.List.of(Map.of("id", 91L, "display_name", "Class 6")));
+    when(jdbc.queryForObject(contains("from curriculum_program_subject cps"), eq(Long.class), eq(91L), eq("science")))
+        .thenReturn(1L);
+    when(learningMetrics.statsFor(70L, 91L, 1L, "science"))
+        .thenReturn(new java.util.LinkedHashMap<>(Map.of("lessonStats", Map.of("total_lessons", 20L))));
+
+    Map<String,Object> result = controller.me(91L, "science", student, TEST_TENANT);
+
+    assertEquals(91L, result.get("courseId"));
+    assertEquals("Class 6", result.get("courseName"));
+    verify(learningMetrics).statsFor(70L, 91L, 1L, "science");
+  }
+
+  @Test
+  void learnerProgressRejectsSubjectNotMappedToSelectedCourse() {
+    when(jdbc.queryForList(contains("select distinct p.id"), any(Object[].class)))
+        .thenReturn(java.util.List.of(Map.of("id", 91L, "display_name", "Class 6")));
+    when(jdbc.queryForObject(contains("from curriculum_program_subject cps"), eq(Long.class), eq(91L), eq("history")))
+        .thenReturn(0L);
+
+    assertThrows(SecurityException.class, () -> controller.me(91L, "history", student, TEST_TENANT));
+    verify(learningMetrics, never()).statsFor(70L, 91L, 1L, "history");
   }
 
   @Test
