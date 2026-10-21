@@ -87,7 +87,9 @@ export default function ProgressPage(){
     setData(null);
     (async()=>{
       try{
-        const response=await apiFetch('/api/v1/students/me?courseId='+encodeURIComponent(String(courseId)),{cache:'no-store',credentials:'same-origin'});
+        const metricsQuery=new URLSearchParams({courseId:String(courseId)});
+        if(subjectCode!=='ALL')metricsQuery.set('subjectCode',subjectCode);
+        const response=await apiFetch('/api/v1/students/me?'+metricsQuery.toString(),{cache:'no-store',credentials:'same-origin'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json().catch(()=>({}));
         if(!response.ok)throw new Error(body.message||body.detail||'Unable to load progress for this course.');
@@ -99,7 +101,7 @@ export default function ProgressPage(){
       }
     })();
     return ()=>{cancelled=true;};
-  },[router,refreshCertificateRecords,courseId,loadingCourses,courseError]);
+  },[router,refreshCertificateRecords,courseId,subjectCode,loadingCourses,courseError]);
 
   useEffect(()=>{
     if(courseId===null || searchParams.get('courseId')===String(courseId))return;
