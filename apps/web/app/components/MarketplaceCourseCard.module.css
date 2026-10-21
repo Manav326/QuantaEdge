@@ -57,6 +57,7 @@
   line-height: 1.45;
 }
 .courseCode,
+.publicId,
 .version,
 .coverage {
   display: inline-flex;
