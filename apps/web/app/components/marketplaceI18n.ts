@@ -77,6 +77,8 @@ export function localizeMarketplaceError(
   if (language === 'en') return message;
 
   const normalized = message.toLowerCase();
+  // If an Error contains the English fallback passed by the caller, use its paired translation.
+  if (normalized === fallbackEnglish.trim().toLowerCase()) return fallbackHindi;
   const translation = HINDI_ERROR_MESSAGES.find(item => item.matches(normalized));
   return translation?.message ?? message;
 }
