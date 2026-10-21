@@ -51,6 +51,23 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void verificationRejectsMissingFinancialSnapshotsBeforeProviderCapture() {
+    Map<String,Object> incomplete = new LinkedHashMap<>();
+    incomplete.put("status", "PENDING");
+    incomplete.put("tax_profile_id", null);
+    incomplete.put("revenue_share_policy_id", 7L);
+    incomplete.put("tax_calculation_snapshot_json", "{}");
+    incomplete.put("revenue_share_policy_snapshot_json", "{\\"policyId\\":7,\\"recipients\\":[]}");
+
+    var exception = org.junit.jupiter.api.Assertions.assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        () -> CourseMarketplaceController.requireLockedFinancialSnapshotsForVerification(incomplete));
+
+    assertEquals(409, exception.getStatusCode().value());
+    assertTrue(exception.getReason().contains("Do not pay again"));
+  }
+
+  @Test
   void capturedPaymentMustMatchPaymentIdOrderAmountAndCurrency() throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode payment = mapper.readTree("""
