@@ -57,6 +57,12 @@ for (const [type, contractId] of Object.entries(questionContracts)) {
   assert.ok(source.androidRenderer.includes('"' + type + '"'), 'Android renderer missing type branch: ' + type);
 }
 
+assert.ok(
+  source.webContent.includes('blocks.map(block =>') &&
+  source.webContent.includes('qe-structured-unknown-block') &&
+  source.webContent.includes('sort((a, b) => a.order - b.order') &&
+  !source.webContent.includes("if (!canDisplay && mode === 'student') return null;"),
+  'Web must preserve ordered structured blocks and display a safe placeholder/fallback instead of dropping blocks.');
 for (const type of blockTypes) {
   assert.ok(source.webContract.includes("'" + type + "'"), 'Web validator missing block type ' + type);
   assert.ok(source.webContent.includes("'" + type + "'"), 'Web block renderer missing ' + type);

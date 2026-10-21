@@ -685,6 +685,18 @@ assert.ok(tutorDock.includes('artifactId?: string') && tutorDock.includes('struc
   'The shared Web tutor dock must support both canonical database lessons and structured artifact contexts.');
 assert.ok(tutorDock.lastIndexOf('useEffect(()') < tutorDock.indexOf('if (!open) return null;'),
   'All Web tutor hooks must be declared before conditional returns.');
+assert.ok(learnClient.includes('return blocks.slice().sort((a,b) => a.sequence_no-b.sequence_no || a.id-b.id)') &&
+  !learnClient.includes('LEARNER_BLOCK_STAGE') &&
+  learnClient.includes('collectLegacyBlockText') &&
+  learnClient.includes('const learningBlocks=useMemo(()=>orderedBlocks,[orderedBlocks]);') &&
+  !learnClient.includes('recapBlock&&<section className="lesson-recap"'),
+  'Every backend lesson block must render exactly once in sequence order, including unknown types and all recap blocks.');
+assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
+  structuredLessonContent.includes('blocks.map(block =>') &&
+  structuredLessonContent.includes('sort((a, b) => a.order - b.order') &&
+  !structuredLessonContent.includes("if (!canDisplay && mode === 'student') return null;") &&
+  structuredLessonContent.includes('qe-structured-unknown-block'),
+  'Structured lesson blocks must keep backend order, show placeholders for blocked visuals and render unknown types safely.');
 assert.ok(learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('learningBlocks.map(block=><Block') &&

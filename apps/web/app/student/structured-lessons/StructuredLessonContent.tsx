@@ -13,6 +13,35 @@ function localized(value: unknown, locale: LessonLocale, fallback = ''): string 
   return readLocale(value, locale) || fallback;
 }
 
+const PRIVATE_BLOCK_KEYS = new Set([
+  'answerpayload', 'correctanswer', 'correctanswerids', 'correctpairs',
+  'acceptedanswers', 'answerguidebylocale', 'grading', 'iscorrect',
+  'correctoption', 'answerkey', 'solutionkey', 'modelanswer',
+  'expectedanswer', 'explanationkey'
+]);
+
+function collectStructuredBlockText(value: unknown, prefix = '', output: string[] = []): string[] {
+  if (value === null || value === undefined) return output;
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    const text = String(value).trim();
+    if (text) output.push(prefix ? prefix + ': ' + text : text);
+    return output;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => collectStructuredBlockText(item, prefix ? prefix + ' ' + (index + 1) : '', output));
+    return output;
+  }
+  if (typeof value !== 'object') return output;
+  Object.entries(value as Record<string, unknown>).forEach(([key, child]) => {
+    const normalized = key.replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+    if (PRIVATE_BLOCK_KEYS.has(normalized)) return;
+    if (['id','type','order','objectiveids','sourcerefs','url','asseturl','renderingcontractid','schemaVersion'.toLowerCase()].includes(normalized)) return;
+    const label = key.replace(/([A-Z])/g, ' $1').replace(/[_-]+/g, ' ').trim();
+    collectStructuredBlockText(child, prefix ? prefix + ' · ' + label : label, output);
+  });
+  return output;
+}
+
 export function StructuredDiagramView({ block, locale }: { block: StructuredExplainBlock; locale: LessonLocale }) {
   const uiT = useUiTranslation();
   const data = block.diagram_data || {};
@@ -142,7 +171,6 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const asset = block.asset || {};
           const canDisplay = isStudentRenderableAsset(asset);
           const canPreview = canDisplay || mode === 'admin-preview';
-          if (!canDisplay && mode === 'student') return null;
           const url = typeof asset.url === 'string' ? asset.url : '';
           const alt = localized(asset.alt_by_locale, locale) || localized(block.alt_by_locale, locale);
           return <figure className="qe-structured-card qe-structured-image" key={block.id}>
@@ -157,7 +185,6 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const reviewStatus = String((block as any).review_status || data.review_status || '').toUpperCase();
           const canDisplay = ((block as any).student_renderable ?? data.student_renderable) === true && ['APPROVED', 'APPROVED_FOR_STUDENT_RENDERING'].includes(reviewStatus);
           const canPreview = canDisplay || mode === 'admin-preview';
-          if (!canDisplay && mode === 'student') return null;
           return <article className="qe-structured-card" key={block.id}>
             {!canDisplay && <div className="qe-structured-muted" role="status">{uiT('structured.ui.diagramReviewPending')}</div>}
             {canPreview && <StructuredDiagramView block={block} locale={locale} />}
@@ -183,8 +210,44 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
             </div>}
           </aside>;
         }
-        if (mode === 'admin-preview') return <div className="qe-structured-muted" key={block.id} role="status">{uiT('structured.ui.unsupportedBlock')} {block.type}</div>;
-        return null;
+        // Keep unrecognized future/backend block types visible without exposing answer keys.
+        const fallbackText = block.text_by_locale?.[locale] || {};
+        const rawLocalized = content && typeof content === 'object'
+          ? ((content as Record<string, unknown>)[locale] ?? content) : content;
+        const fallbackInstructions = block.instructions_by_locale
+          ? (block.instructions_by_locale as unknown as Record<string, unknown>)[locale] : undefined;
+        const fallbackFields = collectStructuredBlockText({
+          text: fallbackText,
+          content: rawLocalized,
+          instructions: fallbackInstructions,
+          configuration: block.configuration,
+          diagram_data: block.diagram_data,
+          asset: block.asset,
+          caption: block.caption_by_locale ? (block.caption_by_locale as unknown as Record<string, unknown>)[locale] : undefined,
+        });
+        const fallbackAsset = block.asset || {};
+        const fallbackConfiguration = block.configuration || {};
+        const rawUrl = String(fallbackAsset.url || fallbackConfiguration.url || (block as any).url || '');
+        const fallbackUrl = /^https:\/\//i.test(rawUrl) ? rawUrl : '';
+        const fallbackPath = fallbackUrl.split('?')[0].toLowerCase();
+        const fallbackVideo = /\.(mp4|webm|mov|ogv)$/.test(fallbackPath) || /video/i.test(block.type);
+        const fallbackAudio = /\.(mp3|m4a|wav|aac|flac|oga)$/.test(fallbackPath) || /audio/i.test(block.type);
+        const fallbackImage = /\.(png|jpe?g|gif|webp|avif|svg)$/.test(fallbackPath);
+        const fallbackTitle = String(fallbackText.heading || fallbackText.title ||
+          localized(block.topic_by_locale, locale) || block.type.replaceAll('_', ' '));
+        return <article className="qe-structured-card qe-structured-unknown-block" key={block.id}>
+          <h3>{fallbackTitle}</h3>
+          {fallbackUrl && fallbackVideo && <video className="lesson-visual-video" controls preload="metadata" playsInline src={fallbackUrl}/>}
+          {fallbackUrl && fallbackAudio && <audio className="lesson-visual-audio" controls preload="metadata" src={fallbackUrl}/>}
+          {fallbackUrl && fallbackImage && <StructuredImageLightbox url={fallbackUrl}
+            alt={localized(fallbackAsset.alt_by_locale, locale) || fallbackTitle}
+            caption={localized(block.caption_by_locale, locale)} locale={locale} />}
+          {fallbackUrl && !fallbackVideo && !fallbackAudio && !fallbackImage &&
+            <a className="qe-structured-link" href={fallbackUrl} target="_blank" rel="noreferrer">{fallbackTitle} ↗</a>}
+          {fallbackFields.map((field, index) => <p key={index}>{field}</p>)}
+          {!fallbackFields.length && !fallbackUrl && <p>{uiT('structured.ui.unsupportedBlock')} {block.type}</p>}
+          {mode === 'admin-preview' && <small>{uiT('structured.ui.unsupportedBlock')} {block.type}</small>}
+        </article>;
       })}
     </div>
     {mode === 'admin-preview' && <details className="qe-structured-debug">

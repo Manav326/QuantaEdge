@@ -60,24 +60,39 @@ function parse<T=any>(value:string):T {
   try { return JSON.parse(value) as T; } catch { return {} as T; }
 }
 
-const LEARNER_BLOCK_STAGE: Record<string,number> = {
-  PREREQUISITE: 0,
-  EXPLANATION: 1,
-  IMAGE: 2, DIAGRAM: 2, VIDEO: 2, AUDIO: 2, ANIMATION: 2,
-  WORKED_EXAMPLE: 3,
-  GUIDED_PRACTICE: 4, HINT: 4,
-  INDEPENDENT_PRACTICE: 5, CHALLENGE: 5,
-  AI_HELP: 6,
-  SUMMARY: 7, RECAP: 7,
-};
-
 function orderLearnerBlocks(blocks: Detail['blocks']) {
-  // Match the Admin preview: preserve every active block in its authored sequence.
-  return blocks
-    .filter(block => Object.prototype.hasOwnProperty.call(LEARNER_BLOCK_STAGE, block.block_type))
-    .slice()
-    .sort((a,b) => a.sequence_no-b.sequence_no || a.id-b.id);
- }
+  // The API is authoritative: keep every returned block in backend-authored order.
+  return blocks.slice().sort((a,b) => a.sequence_no-b.sequence_no || a.id-b.id);
+}
+
+const PRIVATE_FALLBACK_KEYS = new Set([
+  'answerpayload', 'correctanswer', 'correctanswerids', 'correctpairs',
+  'acceptedanswers', 'answerguidebylocale', 'grading', 'iscorrect',
+  'correctoption', 'answerkey', 'solutionkey', 'modelanswer',
+  'expectedanswer', 'explanationkey'
+]);
+
+function collectLegacyBlockText(value: unknown, prefix = '', output: string[] = []): string[] {
+  if (value === null || value === undefined) return output;
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    const text = String(value).trim();
+    if (text) output.push(prefix ? prefix + ': ' + text : text);
+    return output;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => collectLegacyBlockText(item, prefix ? prefix + ' ' + (index + 1) : '', output));
+    return output;
+  }
+  if (typeof value !== 'object') return output;
+  Object.entries(value as Record<string, unknown>).forEach(([key, child]) => {
+    const normalized = key.replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+    if (PRIVATE_FALLBACK_KEYS.has(normalized)) return;
+    if (['id','type','blocktype','sequence','sequenceno','order','url','asseturl','sourcepageurl','html'].includes(normalized)) return;
+    const label = key.replace(/([A-Z])/g, ' $1').replace(/[_-]+/g, ' ').trim();
+    collectLegacyBlockText(child, prefix ? prefix + ' · ' + label : label, output);
+  });
+  return output;
+}
 
 function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
   const types=new Set(blocks.map(block=>block.block_type));
@@ -191,7 +206,27 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   }
   if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><UiText message="legacy.web.ai.tutor.30676145" /></strong><p><UiText message="legacy.web.if.you.get.stuck.ask.for.a.hint.explan.cc1a4459" /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><UiText message="legacy.web.open.tutor.3a75221b" /></button></div></div>;
   if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
-  return null;
+
+  // Unknown backend block types use the existing lesson card style rather than disappearing.
+  const fallbackTitle=String(data.heading || data.title || data.name || block.block_type.replaceAll('_',' ').toLowerCase());
+  const fallbackFields=collectLegacyBlockText(data).filter(value => !/^\s*$/.test(value));
+  const fallbackHtml=typeof data.html==='string' ? data.html : '';
+  const fallbackUrl=String(data.url || data.asset_url || data.asset?.url || '');
+  const safeFallbackUrl=/^https:\/\//i.test(fallbackUrl) ? fallbackUrl : '';
+  const fallbackPath=safeFallbackUrl.split('?')[0].toLowerCase();
+  const fallbackVideo=/\.(mp4|webm|mov|ogv)$/.test(fallbackPath);
+  const fallbackAudio=/\.(mp3|m4a|wav|aac|flac|oga)$/.test(fallbackPath);
+  const fallbackImage=/\.(png|jpe?g|gif|webp|avif|svg)$/.test(fallbackPath);
+  return <div className="concept-card qe-lesson-unknown-block">
+    <span className="concept-kicker">{fallbackTitle}</span>
+    {fallbackHtml && <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(stackFractionsInHtml(fallbackHtml))}}/>}
+    {safeFallbackUrl && fallbackVideo && <video className="lesson-visual-video" controls preload="metadata" playsInline src={safeFallbackUrl}/>}
+    {safeFallbackUrl && fallbackAudio && <audio className="lesson-visual-audio" controls preload="metadata" src={safeFallbackUrl}/>}
+    {safeFallbackUrl && fallbackImage && <img className="lesson-visual-media" src={safeFallbackUrl} alt={String(data.alt || fallbackTitle)} loading="lazy"/>}
+    {safeFallbackUrl && !fallbackVideo && !fallbackAudio && !fallbackImage && <a className="text-link" href={safeFallbackUrl} target="_blank" rel="noreferrer">{fallbackTitle} ↗</a>}
+    {fallbackFields.map((value,index)=><p key={index}><MathText text={value}/></p>)}
+    {!fallbackHtml && !safeFallbackUrl && fallbackFields.length===0 && <p>{fallbackTitle}</p>}
+  </div>;
 }
 
 function QuestionCard({q,index,onResult,onTutorOpen,courseId}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void;courseId:number}) {
@@ -297,17 +332,8 @@ export default function LearnClient() {
   const lessonSwipeStartRef=useRef<{x:number;y:number}|null>(null);
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
   const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
-  // The lesson screen teaches the concept first. Recap is rendered after the student's
-  // automatically selected micro-topic practice, not between the MCQ check and practice.
-  const learningBlocks=useMemo(
-    ()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),
-    [orderedBlocks]);
-  // Prefer the dedicated RECAP block; use SUMMARY only for older lessons that lack one.
-  // Rendering both types produced duplicate recap cards for lessons carrying both blocks.
-  const recapBlock=useMemo(
-    ()=>orderedBlocks.find(block=>block.block_type==='RECAP')
-      ?? orderedBlocks.find(block=>block.block_type==='SUMMARY'),
-    [orderedBlocks]);
+  // Render every backend block exactly once in its authored sequence.
+  const learningBlocks=useMemo(()=>orderedBlocks,[orderedBlocks]);
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
     [lesson]);
@@ -783,14 +809,6 @@ export default function LearnClient() {
           ? <Link href={'/student/practice?lessonId='+lesson.id+'&courseId='+encodeURIComponent(selectedCourseKey)} className="button button-dark"><UiText message="legacy.web.start.topic.practice.74092f61" /></Link>
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><UiText message="legacy.web.finish.the.mcqs.first.7354ffa5" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
-
-      {recapBlock&&<section className="lesson-recap" aria-label={translateUi(locale, 'legacy.web.lesson.recap.8d872474')}>
-        <div className="content-heading">
-          <h2><UiText message="legacy.web.recap.c772ab09" /></h2>
-          <span><UiText message="legacy.web.key.takeaways.0c7d1936" /></span>
-        </div>
-        <Block key={recapBlock.id} block={recapBlock} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>
-      </section>}
 
       {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={translateUi(locale, 'legacy.web.open.ai.tutor.5bd7c753')} title={translateUi(locale, 'legacy.web.open.ai.tutor.5bd7c753')}>
         <span className="tutor-launch-icon" aria-hidden="true">✦</span>
