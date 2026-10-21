@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2174,
-    "successful_visual_analyses": 2073,
-    "missing_visual_analyses": 5314,
+    "raw_analysis_result_rows": 2177,
+    "successful_visual_analyses": 2076,
+    "missing_visual_analyses": 5311,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5415,
+    "unresolved_count": 5412,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89229,9 +89229,26 @@
       "asset_path": "assets/aaf5a8b3f419fd7baddf3aa8fe0864ef71f4104b6fef3e0cc1035c3b59c1ef57.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The page discusses the properties of metals, specifically their ability to produce a ringing sound.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89247,9 +89264,27 @@
       "asset_path": "assets/cdf7640e79843a2c12bebdc1f649edc5feed807d2d30c3b89b366647809c6ee7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.",
+          "This property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not contain any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89265,9 +89300,27 @@
       "asset_path": "assets/8a87fdf3c576ab0c7bb2894cea95d330bc9e9e9bcf5a366d00322294716e404f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "sonorous",
+          "properties of metals"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concept."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
