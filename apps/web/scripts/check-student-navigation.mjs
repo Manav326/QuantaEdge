@@ -446,7 +446,9 @@ assert.ok(
   androidApp.includes('openedFromStructuredCatalogue || !lessonIsInCurrentList') &&
   androidApp.includes('val lessonSubjectCode = loadedLesson.textAny("subject_code", "subjectCode")') &&
   androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("db-lesson-42")') &&
-  androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("artifact-v1")'),
+  androidRouteCompatibilityTests.includes('assertEquals(null, databaseLessonIdFromArtifactId(artifactId))') &&
+  androidRouteCompatibilityTests.includes('"artifact-v1"') &&
+  androidRouteCompatibilityTests.includes('forEach { artifactId ->'),
   'Android relational lessons must use the legacy screen and matching course-scoped topic list; packaged artifacts keep structured routing.'
 );
 
