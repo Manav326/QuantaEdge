@@ -16,9 +16,18 @@ public class TutorController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant,
       @RequestBody Map<String,Object> body){
-    return tutor.startSession(context,Long.parseLong(String.valueOf(body.get("lessonId"))),
-        Boolean.parseBoolean(String.valueOf(body.getOrDefault("newChat",false))),requireInstitution(tenant),
-        Long.parseLong(String.valueOf(body.get("courseId"))));
+    long institutionId=requireInstitution(tenant);
+    long courseId=requirePositiveLong(body.get("courseId"),"courseId");
+    boolean newChat=Boolean.parseBoolean(String.valueOf(body.getOrDefault("newChat",false)));
+    String artifactId=body.get("artifactId")==null?"":String.valueOf(body.get("artifactId")).trim();
+    if(!artifactId.isBlank()){
+      Long databaseLessonId=RelationalStructuredLessonService.parseDatabaseLessonId(artifactId);
+      if(databaseLessonId!=null)
+        return tutor.startSession(context,databaseLessonId,newChat,institutionId,courseId);
+      return tutor.startStructuredSession(context,artifactId,newChat,institutionId,courseId);
+    }
+    return tutor.startSession(context,requirePositiveLong(body.get("lessonId"),"lessonId"),
+        newChat,institutionId,courseId);
   }
 
   @GetMapping("/sessions/{sessionId}/messages")
@@ -41,7 +50,14 @@ public class TutorController {
     return tutor.send(context,sessionId,String.valueOf(body.getOrDefault("message","")),
         String.valueOf(body.getOrDefault("mode","HINT")),
         body.get("questionId")==null?0L:Long.parseLong(String.valueOf(body.get("questionId"))),
+        body.get("structuredQuestionId")==null?null:String.valueOf(body.get("structuredQuestionId")),
         body.get("language")==null?"hi":String.valueOf(body.get("language")),requireInstitution(tenant),courseId);
+  }
+  private long requirePositiveLong(Object value,String field){
+    if(value==null)throw new IllegalArgumentException("The tutor request requires "+field+".");
+    try{long parsed=Long.parseLong(String.valueOf(value));if(parsed>0)return parsed;}
+    catch(NumberFormatException ignored){}
+    throw new IllegalArgumentException("The tutor request requires a valid "+field+".");
   }
   private long requireInstitution(InstitutionTenantContext tenant) {
     if (tenant == null || tenant.institutionId() < 1) {
