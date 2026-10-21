@@ -704,6 +704,10 @@ assert.ok(learnClient.includes('return blocks.slice().sort((a,b) => a.sequence_n
   learnClient.includes('const learningBlocks=useMemo(()=>orderedBlocks,[orderedBlocks]);') &&
   !learnClient.includes('recapBlock&&<section className="lesson-recap"'),
   'Every backend lesson block must render exactly once in sequence order, including unknown types and all recap blocks.');
+assert.ok(learnClient.includes("Array.isArray(data.points) ? data.points : Array.isArray(data.keyPoints) ? data.keyPoints : []") &&
+  learnClient.includes('const recapFallback = recapPoints.length ? [] : collectLegacyBlockText(data)') &&
+  learnClient.includes('!recapPoints.length && !recapFallback.length'),
+  'Legacy summary/recap blocks must show their content or a visible empty-content fallback, never silently render blank.');
 assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
   structuredLessonContent.includes('blocks.map(block =>') &&
   structuredLessonContent.includes('sort((a, b) => a.order - b.order') &&
