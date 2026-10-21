@@ -474,7 +474,7 @@ export default function StudentMarketplacePage() {
                     </button>
                   ) : (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => void buyCourse(offer.course_id)}>
-                      {pendingVerify ? tx('Verify previous payment first', 'पहले पिछले भुगतान की पुष्टि करें') : busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy with Razorpay', 'Razorpay से खरीदें')}
+                      {pendingVerify ? tx('Verify previous payment first', 'पहले पिछले भुगतान की पुष्टि करें') : busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy course', 'कोर्स खरीदें')}
                     </button>
                   )}
                 </div>
