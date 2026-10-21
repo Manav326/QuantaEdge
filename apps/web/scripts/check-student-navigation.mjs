@@ -345,7 +345,7 @@ assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   'Course-scoped learner answer writes must bind institution/course columns and keep answered_at as the database timestamp.');
 const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
 assert.ok(learnClient.includes("import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';") &&
-  learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
+  learnClient.includes('qe-structured-optional-insert') && learnClient.includes('inlineStructuredLesson && (') &&
   learnClient.includes('initialActivityResponses={structuredActivityResponses}') &&
   !learnClient.includes('if(lesson.structured_lesson) return') &&
   structuredLessonContent.includes('showHeader = true') &&
@@ -741,7 +741,7 @@ assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
   !structuredLessonContent.includes("if (!canDisplay && mode === 'student') return null;") &&
   structuredLessonContent.includes('qe-structured-unknown-block'),
   'Structured lesson blocks must keep backend order, show placeholders for blocked visuals and render unknown types safely.');
-assert.ok(learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
+assert.ok(learnClient.includes('qe-structured-optional-insert') && learnClient.includes('inlineStructuredLesson && (') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('learningBlocks.map(block=><Block') &&
   learnClient.includes('<section className="concept-card practice-launch-card">') &&
