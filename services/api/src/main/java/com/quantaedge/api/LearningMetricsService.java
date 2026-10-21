@@ -218,7 +218,8 @@ public class LearningMetricsService {
       order by qa.answered_at desc,qa.id desc limit 20
       """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
         .replace("__SUBJECT_SCOPE__",subjectScope).replace("__SELECTED_SUBJECT__",selectedSubjectScope),institutionId), tenantArgs(institutionId,
-          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId})));
+          subjectScopedArgs(selectedSubjectCode,
+            programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))))
 
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
