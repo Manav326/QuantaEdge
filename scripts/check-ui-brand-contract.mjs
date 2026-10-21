@@ -41,7 +41,7 @@ const schoolEntryPage = read('apps/web/app/school/[institutionCode]/page.tsx');
 const schoolEntryLayout = read('apps/web/app/school/[institutionCode]/layout.tsx');
 const androidTutorScreen = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
 const androidLiveClasses = read('apps/android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
-const hrmsInstitutionCropper = read('apps/people/app/institutions/InstitutionBrandAssetEditor.tsx');
+const hrmsInstitutionBrandTemplate = read('apps/people/app/institutions/InstitutionBrandTemplate.tsx');
 const institutionProfileTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionProfileControllerTest.java');
 const hrmsInstitutionPage = read('apps/people/app/institutions/page.tsx');
 const androidBuildConfig = read('apps/android/app/build.gradle.kts');
@@ -147,8 +147,14 @@ assert(institutionBrandAssetControlTests.includes('ownerCanRemoveAnAsset') && in
 assert(authFilter.includes('MAX_BRANDING_ASSET_REQUEST_BYTES') && authFilter.includes('authorization.hasPermission(context, "QE_PLATFORM_OWNER")'), 'The API filter must cap multipart branding uploads before parsing and require owner permission.');
 assert(authFilterTests.includes('oversizedBrandingUploadIsRejectedBeforeMultipartParsing') && authFilterTests.includes('anonymousBrandingUploadIsRejectedBeforeMultipartParsing'), 'Upload guard tests must cover oversized and anonymous requests before multipart parsing.');
 
-assert(hrmsInstitutionPage.includes("setPendingCrop({assetType:'logo',file})") && hrmsInstitutionPage.includes("setPendingCrop({assetType:'app-icon',file})") && hrmsInstitutionPage.includes('editingCard===\'branding\''), 'Institution logo and app-icon intake must use the crop editor inside the explicit branding edit state.');
-assert(hrmsInstitutionCropper.includes('onPointerDown') && hrmsInstitutionCropper.includes('type="range"') && hrmsInstitutionCropper.includes("label: 'Wide 3:1'") && hrmsInstitutionCropper.includes("label: 'Square 1:1'") && hrmsInstitutionCropper.includes('canvas.toBlob') && hrmsInstitutionCropper.includes('Use cropped image'), 'Institution branding cropper must provide reposition, zoom, aspect choices and normalized raster output with explicit confirmation.');
+assert(hrmsInstitutionPage.includes('InstitutionBrandTemplate') && !hrmsInstitutionPage.includes('pendingCrop'), 'HRMS institution settings must use the centralized brand template instead of a square crop-upload path.');
+assert(hrmsInstitutionBrandTemplate.includes('logo.png') && hrmsInstitutionBrandTemplate.includes('icon-192.png') && hrmsInstitutionBrandTemplate.includes('maskable-icon-512.png') && hrmsInstitutionBrandTemplate.includes('favicon-16.png') && hrmsInstitutionBrandTemplate.includes('site.webmanifest') && hrmsInstitutionBrandTemplate.includes('createZip'), 'The brand template must export proportion-preserving logo renditions, app icons, favicon sizes, a web manifest and source artwork as a ZIP.');
+assert(hrmsInstitutionBrandTemplate.includes('/branding/template-assets') && hrmsInstitutionBrandTemplate.includes('Apply pack to this institution') && hrmsInstitutionBrandTemplate.includes('Download ZIP folder'), 'The generated pack must be downloadable or atomically applied to the selected HRMS institution.');
+assert(institutionPlatformController.includes('/branding/template-assets') && institutionPlatformController.includes('normalizeBrandTagline') && institutionPlatformController.includes('BRANDING_TEMPLATE_APPLIED'), 'The HRMS asset-template API must validate the name/tagline and atomically audit both validated assets.');
+assert(institutionTenantController.includes('result.put("tagline"') && institutionPlatformController.includes('b.tagline'), 'Institution tagline must be available in public learner branding and HRMS settings.');
+assert(tenantBrandingProvider.includes("brand?.appIconUrl") && !tenantBrandingProvider.includes("brand?.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')\n      ? brand.logoUrl"), 'Browser favicons must use the square app-icon URL, never a wide logo URL.');
+assert(brandComponent.includes('PLATFORM_LOGO_URL') && brandComponent.includes('qe-brand__logo') && brandComponent.includes('qe-brand__tenant-icon') && brandComponent.includes("'app-icon'"), 'The learner brand renderer must use a full-logo slot and a distinct square icon slot for platform and tenant identity.');
+assert(adminBrandComponent.includes('quantaedge-logo.svg') && peopleBrandComponent.includes('quantaedge-logo.svg') && adminBrandComponent===peopleBrandComponent, 'QuantaEdge platform branding must use the same full-logo URL contract in Admin and HRMS.');
 assert(hrmsInstitutionPage.includes("editingCard==='profile'") && hrmsInstitutionPage.includes("editingCard==='courses'") && hrmsInstitutionPage.includes("editingCard==='branding'") && hrmsInstitutionPage.includes("editingCard==='billing'") && hrmsInstitutionPage.includes('Save profile') && hrmsInstitutionPage.includes('Save changes') && hrmsInstitutionPage.includes('Cancel'), 'Institution profile and settings must stay read-only until their individual card Edit action.');
 assert(institutionPlatformController.includes('@PutMapping("/{institutionId}/profile")') && institutionPlatformController.includes('INSTITUTION_PROFILE_CHANGED') && institutionPlatformController.includes('defaultBrandNameSynchronized'), 'Institution profile updates must be owner-only, audited, and preserve separately customized white-label identity.');
 assert(institutionProfileTests.includes('ownerCanUpdateProfileAndKeepDefaultBrandNameInSync') && institutionProfileTests.includes('profileUpdateRejectsNonOwnerBeforeReadingInstitutionData') && institutionProfileTests.includes('profileUpdateRejectsInvalidDisplayNameBeforeDatabaseWrites') && institutionProfileTests.includes('profileUpdateDoesNotOverwriteACustomizedBrandDisplayName'), 'Institution profile API tests must cover successful audit path, owner authorization, and validation.');assert(hrmsInstitutionPage.includes("removeBrandAsset(assetType:'logo'|'app-icon')") && hrmsInstitutionPage.includes("{method:'DELETE'}"), 'The HRMS owner UI must expose working remove controls for both branding assets.');
@@ -165,6 +171,7 @@ assert(!adminLogin.includes('quantaedge-wordmark.png'), 'Admin login must not re
 assert(!peopleWorkspace.includes('quantaedge-wordmark.png') && !peopleLogin.includes('quantaedge-wordmark.png') && !peopleChangePassword.includes('quantaedge-wordmark.png'), 'People workspace and authentication must not render the invalid legacy wordmark PNG.');
 assert(peopleLogin.includes('<QuantaEdgeBrand href={null} variant="auth"') && peopleChangePassword.includes('<QuantaEdgeBrand href={null} variant="auth"'), 'HRMS login and password-change screens must use the shared brand lockup.');
 assert(webLayout.includes('/branding/quantaedge-icon.png'), 'Learner web must retain the QuantaEdge fallback browser icon.');
+assert(webLayout.includes('/branding/quantaedge-logo.svg') === false, 'The document metadata must continue to point at the square icon, not the full logo asset.');
 assert(webLayout.includes('TenantBrandingProvider'), 'Learner web must mount the tenant branding provider globally.');
 assert(adminLayout.includes('/branding/quantaedge-icon.png'), 'Admin must configure the canonical browser/app icon.');
 assert(peopleLayout.includes('/branding/quantaedge-icon.png'), 'People Operations must configure the canonical browser/app icon.');
@@ -199,6 +206,20 @@ const brandAssets = brandAssetPaths.map(path => {
 });
 if (brandAssets.every(asset => asset.length > 0)) {
   assert(brandAssets[0].equals(brandAssets[1]) && brandAssets[0].equals(brandAssets[2]), 'All app contexts must package a byte-identical canonical Q-mark asset.');
+}
+
+const logoAssetPaths = [
+  'apps/web/public/branding/quantaedge-logo.svg',
+  'apps/admin/public/branding/quantaedge-logo.svg',
+  'apps/people/public/branding/quantaedge-logo.svg',
+];
+const logoAssets = logoAssetPaths.map(path => {
+  const absolute = join(root, path);
+  assert(existsSync(absolute) && statSync(absolute).size > 0, 'Missing shared full-logo asset: ' + path);
+  return existsSync(absolute) ? readFileSync(absolute) : Buffer.alloc(0);
+});
+if (logoAssets.every(asset => asset.length > 0)) {
+  assert(logoAssets[0].equals(logoAssets[1]) && logoAssets[0].equals(logoAssets[2]), 'All app contexts must package a byte-identical canonical full-logo asset.');
 }
 
 const institutionThemeTokens = read('services/api/src/main/java/com/quantaedge/api/InstitutionThemeTokens.java');
