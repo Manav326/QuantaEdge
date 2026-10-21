@@ -651,17 +651,10 @@ public class CourseMarketplaceController {
         if (hasLockedFinancialSnapshots(previous)) {
           return checkoutResponse(previous, courseId, title, institutionDisplayName);
         }
-        // A pending order from before tax/share snapshots were required must never be reused
-        // for another checkout. Expire it only after the provider confirms it is retryable.
-        String providerState = inspectProviderOrderForNewAttempt(previous);
-        if (!"RETRYABLE".equals(providerState)) {
-          throw new IllegalStateException(
-              "This older checkout is being reconciled with Razorpay and cannot be reused. Retry verification for the saved order; do not pay again.");
-        }
-        jdbc.update("""
-          update course_payment_order set status='EXPIRED',updated_at=now()
-          where id=? and institution_id=? and status='PENDING'
-          """,previous.get("id"),institutionId);
+        // Never expire or replace an order with missing financial facts from a checkout request.
+        // An audited reconciliation must resolve the original order without bypassing snapshot policy.
+        throw new IllegalStateException(
+            "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
       } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       } else {
@@ -673,31 +666,25 @@ public class CourseMarketplaceController {
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
+        if (!hasLockedFinancialSnapshots(prior)) {
+          throw new IllegalStateException(
+              "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
+        }
         String providerState = inspectProviderOrderForNewAttempt(prior);
         if ("PAID".equals(providerState)) {
           throw new IllegalStateException(
-              "Razorpay reports that this course order is already paid. Retry payment verification; do not start another checkout.");
+              "Razorpay reports that this course order is already paid. Retry payment verification for this same order; do not start another checkout.");
         }
         if (!"RETRYABLE".equals(providerState)) {
           throw new IllegalStateException(
               "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
         }
-        if (!hasLockedFinancialSnapshots(prior)) {
-          // An order created before the locked financial snapshot contract must never be reused.
-          // It is safe to retire only after Razorpay has confirmed that the order is unpaid and retryable.
-          jdbc.update("""
-            update course_payment_order
-            set status='EXPIRED',failure_code='MISSING_FINANCIAL_SNAPSHOT',updated_at=now()
-            where id=? and institution_id=? and status='PENDING'
-            """, prior.get("id"), institutionId);
-        } else {
-          String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
-          if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
-            throw new IllegalStateException(
-                "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
-          }
-          return checkoutResponse(prior,courseId,title,institutionDisplayName);
+        String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
+        if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
+          throw new IllegalStateException(
+              "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
         }
+        return checkoutResponse(prior,courseId,title,institutionDisplayName);
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -748,15 +735,10 @@ public class CourseMarketplaceController {
         if (hasLockedFinancialSnapshots(racedOrder)) {
           return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
         }
-        // Let the next attempt reconcile/expire this legacy order after checking the provider.
-        // Never hand an order with incomplete financial facts back to checkout.
-        String providerState = inspectProviderOrderForNewAttempt(racedOrder);
-        if ("PAID".equals(providerState)) {
-          throw new IllegalStateException(
-              "The existing order may already be paid but has no locked tax/share snapshot. Retry verification for this same order; do not pay again.", conflict);
-        }
+        // Never create a replacement checkout for an order whose original financial facts are missing.
+        // Keep the existing order untouched for an explicit, auditable reconciliation.
         throw new IllegalStateException(
-            "An older order has no locked tax/share snapshot and cannot be reused. Retry checkout once the existing order is confirmed unpaid; do not pay again while verification is pending.", conflict);
+            "An existing order has no locked tax/share snapshot. Do not pay again or create another order; the same order requires explicit financial reconciliation.", conflict);
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
