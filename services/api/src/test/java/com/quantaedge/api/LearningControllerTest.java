@@ -91,7 +91,11 @@ class LearningControllerTest {
     assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
     assertEquals(80, rows.getFirst().get("practice_best_percent"));
     org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq(91L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("maths"), eq(91L));
+    verify(jdbc).queryForList(sql.capture(),
+        eq(7L), eq(1L), eq(91L),
+        eq("hi"), eq("hi"), eq("hi"), eq("hi"),
+        eq(91L), eq(91L), eq(91L), eq(91L),
+        eq("maths"), eq(91L));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));

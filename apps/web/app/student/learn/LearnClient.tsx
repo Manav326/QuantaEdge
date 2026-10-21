@@ -633,8 +633,9 @@ export default function LearnClient() {
   // the lesson, reset the session, or issue a second progress-start request.
   useEffect(()=>{
     const subjectCode=trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
-    const scopedCourse=selectedCourseId!==null||Boolean(selectedProgram);
-    if(!subjectCode||(!scopedCourse&&!['maths','science'].includes(subjectCode))){
+    // Wait until CourseScope resolves the exact numeric course ID before requesting
+    // documents. The API rejects unscoped catalogue requests instead of using class-wide content.
+    if(loadingCourses||!subjectCode||selectedCourseId===null||selectedCourseId<=0){
       setStudentDocuments([]);
       setDocumentsLoaded(false);
       return;
@@ -677,7 +678,7 @@ export default function LearnClient() {
       })
       .finally(()=>{if(!cancelled)setDocumentsLoaded(true);});
     return()=>{cancelled=true;};
-  },[learningLanguage,trackBrowse?.subjectCode,lesson?.subject_code,searchParams,selectedCourseId,selectedProgram]);
+  },[learningLanguage,trackBrowse?.subjectCode,lesson?.subject_code,searchParams,selectedCourseId,loadingCourses]);
 
   useEffect(()=>{
     return ()=>{

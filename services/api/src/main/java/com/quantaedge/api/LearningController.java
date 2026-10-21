@@ -202,8 +202,11 @@ public class LearningController {
         and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """.replace("__PROGRAM_SCOPE__",programScope);
-    return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,courseId,courseId,courseId,courseId,
-        language,language,language,language,subjectCode,courseId);
+    // Bind values in SQL placeholder order: learner, tenant, course, translations,
+    // course-scoped history, subject code, and final course-scope predicate.
+    return jdbc.queryForList(sql,context.studentId(),institutionId,courseId,
+        language,language,language,language,
+        courseId,courseId,courseId,courseId,subjectCode,courseId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
