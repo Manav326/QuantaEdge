@@ -16,6 +16,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
@@ -170,4 +174,58 @@ class InstitutionBrandingAssetControlTest {
     assertEquals("\"" + digest + "\"", response.getHeaders().getETag());
     assertNull(response.getHeaders().getFirst("Content-Length"));
   }
+  @Test
+  void appliesBrandTemplateWithBothValidatedAssetsAndOneVersionChange() throws Exception {
+    when(authorization.requirePermission(platformOwner, "QE_PLATFORM_OWNER")).thenReturn(platformOwner);
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    Map<String,Object> existing = new LinkedHashMap<>();
+    existing.put("display_name", "Old School");
+    existing.put("tagline", "");
+    existing.put("logo_asset_key", "old-logo");
+    existing.put("app_icon_asset_key", "old-icon");
+    existing.put("store_listing_url", null);
+    existing.put("theme_tokens", "{}");
+    when(jdbc.queryForMap(anyString(), eq(42L))).thenReturn(existing);
+    when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
+    when(jdbc.queryForObject(anyString(), eq(Long.class), eq(42L))).thenReturn(13L);
+    when(jdbc.queryForObject(anyString(), eq(String.class), eq(42L))).thenReturn("SCHOOL-A");
+
+    MockMultipartFile logo = new MockMultipartFile("logo", "school-logo.png", "image/png", pngBytes(96, 32));
+    MockMultipartFile appIcon = new MockMultipartFile("appIcon", "school-icon.png", "image/png", pngBytes(32, 32));
+    PlatformInstitutionController controller =
+        new PlatformInstitutionController(jdbc, authorization, institutionAuth, objectMapper);
+
+    Map<String,Object> result = controller.applyBrandingTemplate(
+        42L, logo, appIcon, "North Star School", "Learn every day", "", "{}", platformOwner);
+
+    assertEquals("North Star School", result.get("displayName"));
+    assertEquals("Learn every day", result.get("tagline"));
+    assertEquals("/api/v1/institution/public/branding/SCHOOL-A/assets/logo?v=13", result.get("logoUrl"));
+    assertEquals("/api/v1/institution/public/branding/SCHOOL-A/assets/app-icon?v=13", result.get("appIconUrl"));
+    assertEquals(13L, result.get("brandingVersion"));
+
+    ArgumentCaptor<String> statements = ArgumentCaptor.forClass(String.class);
+    verify(jdbc, org.mockito.Mockito.atLeast(6)).update(statements.capture(), any(Object[].class));
+    assertEquals(2, statements.getAllValues().stream().filter(q ->
+        q.contains("insert into institution_branding_asset")).count());
+    assertTrue(statements.getAllValues().stream().anyMatch(q ->
+        q.contains("update institution_branding set display_name=?,tagline=?,logo_asset_key=?,app_icon_asset_key=?")
+            && q.contains("version=version+1")));
+    assertTrue(statements.getAllValues().stream().anyMatch(q ->
+        q.contains("update institution_branding_asset set active=false") && q.contains("asset_type='LOGO'")));
+    assertTrue(statements.getAllValues().stream().anyMatch(q ->
+        q.contains("update institution_branding_asset set active=false") && q.contains("asset_type='APP_ICON'")));
+    assertTrue(statements.getAllValues().stream().anyMatch(q ->
+        q.contains("BRANDING_TEMPLATE_APPLIED") && q.contains("logoSha256") && q.contains("appIconSha256")));
+    verify(authorization).requirePermission(platformOwner, "QE_PLATFORM_OWNER");
+  }
+
+  private static byte[] pngBytes(int width, int height) throws IOException {
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    image.setRGB(0, 0, 0xFFFF6600);
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    ImageIO.write(image, "png", output);
+    return output.toByteArray();
+  }
+
 }
