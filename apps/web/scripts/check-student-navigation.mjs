@@ -30,6 +30,11 @@ const studentProgressPage = read('../app/student/progress/page.tsx');
 const studentBooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
 const studentMarketplacePage = read('../app/student/marketplace/page.tsx');
 const parentMarketplacePage = read('../app/parent/courses/page.tsx');
+const marketplaceCourseCard = read('../app/components/MarketplaceCourseCard.tsx');
+const marketplaceCourseCardCss = read('../app/components/MarketplaceCourseCard.module.css');
+const guardianCourseProgramsApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
+const diagnosticApi = read('../../../services/api/src/main/java/com/quantaedge/api/DiagnosticController.java');
+const courseOrderFinancialService = read('../../../services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java');
 const courseMarketplaceApi = read('../../../services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java');
 const studentCoursesPage = read('../app/student/courses/page.tsx');
 const studentClassesClient = read('../app/student/classes/ClassesClient.tsx');
@@ -845,3 +850,59 @@ assert.ok(androidApp.includes('put("artifactId", activeArtifactId)') &&
   androidApp.includes('Ask the AI tutor about this topic') &&
   androidApp.includes('tutorScopeArtifactId == structuredLessonArtifactId'),
   'Android must start the same artifact-scoped tutor session and expose a tutor action for structured lessons.');
+
+// Both marketplace audiences must reuse the same course-summary component while keeping
+// their distinct, correctly-authorized purchase actions and learner/parent capabilities.
+assert.ok(studentMarketplacePage.includes("from '../../components/MarketplaceCourseCard'") &&
+  studentMarketplacePage.includes('<MarketplaceCourseCard') &&
+  parentMarketplacePage.includes("from '../../components/MarketplaceCourseCard'") &&
+  parentMarketplacePage.includes('<MarketplaceCourseCard'),
+  'Student and Parent marketplaces must use the single shared marketplace course card.');
+assert.ok(marketplaceCourseCard.includes('courseCode') &&
+  marketplaceCourseCard.includes('curriculumVersion') &&
+  marketplaceCourseCard.includes('priceLabel') &&
+  marketplaceCourseCard.includes('description') &&
+  marketplaceCourseCard.includes('subjects') &&
+  marketplaceCourseCard.includes('chapterCount') &&
+  marketplaceCourseCard.includes('lessonCount') &&
+  marketplaceCourseCardCss.includes('var(--qe-color-surface') &&
+  marketplaceCourseCardCss.includes('var(--qe-color-primary'),
+  'The common marketplace card must show course identity, syllabus coverage, commercial price and theme-aware surfaces.');
+
+// Parent course listing must resolve its path ID as a learner ID under a verified institution,
+// never bake in a selected learner or infer access from another tenant.
+const guardianProgramsStart = guardianCourseProgramsApi.indexOf('@GetMapping("/children/{studentId}/programs")');
+const guardianProgramsEnd = guardianCourseProgramsApi.indexOf('/** Paid offers', guardianProgramsStart);
+const guardianProgramsRoute = guardianCourseProgramsApi.slice(guardianProgramsStart, guardianProgramsEnd);
+assert.ok(guardianProgramsRoute.includes('@PathVariable long studentId') &&
+  guardianProgramsRoute.includes('long institutionId=requireInstitution(tenant)') &&
+  guardianProgramsRoute.includes('requireFullGuardianChildAccess(context.userId(),studentId)') &&
+  guardianProgramsRoute.includes('requireChildInstitutionMembership(studentId,institutionId)') &&
+  guardianProgramsRoute.includes('spe.institution_id=?') &&
+  guardianProgramsRoute.includes('ce.institution_id=?') &&
+  guardianProgramsRoute.includes('Failed to load guardian child course catalogue'),
+  'Guardian course catalogue must be tenant-scoped, child-authorized, and log SQL failures with safe request context.');
+
+// Initial diagnostic is intentionally course-specific. Question selection uses published,
+// reviewed question/lesson/chapter content, stores a frozen attempt snapshot, and records each
+// answer through learning state before marking the complete attempt submitted.
+assert.ok(diagnosticApi.includes('requireEnrolledCourse(studentId,courseId,institutionId)') &&
+  diagnosticApi.includes("q.review_status in ('APPROVED','PUBLISHED')") &&
+  diagnosticApi.includes("l.status='PUBLISHED'") &&
+  diagnosticApi.includes('questionHistory.snapshot(questionId)') &&
+  diagnosticApi.includes('learningState.recordAttempt') &&
+  diagnosticApi.includes('"DIAGNOSTIC",institutionId,courseId') &&
+  diagnosticApi.includes('Answer all diagnostic questions before submitting.'),
+  'Initial diagnostic question selection and analytics writes must remain course/institution-scoped and regression-tested.');
+
+// Both purchase entry points must call the same server-side order lifecycle. A missing seller/tax
+// profile and an order awaiting provider reconciliation are deliberately different safe states.
+assert.ok(courseMarketplaceApi.includes('@PostMapping("/courses/{courseId}/orders")') &&
+  courseMarketplaceApi.includes('@PostMapping("/family/courses/{courseId}/orders")') &&
+  (courseMarketplaceApi.match(/createOrderInternal\(/g) || []).length >= 3 &&
+  courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt') &&
+  courseMarketplaceApi.includes('The previous payment attempt is still being reconciled') &&
+  courseMarketplaceApi.includes('courseOrderFinancialService.prepareCheckout(') &&
+  courseOrderFinancialService.includes('Checkout is not configured: HRMS must activate the legal seller'),
+  'Student and family purchase routes must share the server lifecycle and retain seller/tax and no-double-payment guards.');
+
