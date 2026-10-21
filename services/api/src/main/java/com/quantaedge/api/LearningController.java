@@ -104,6 +104,7 @@ public class LearningController {
              (o.id is null or ot.id is not null) as objective_translated,
              coalesce(mcq.mcq_count,0) as mcq_count,
              coalesce(mcq.mcq_answered_count,0) as mcq_answered_count,
+              coalesce(mcq.practice_question_count,0) as practice_question_count,
              coalesce(practice_count.completed_attempt_count,0) as practice_completed_attempts,
              best.correct_count as practice_best_correct_count,
              best.graded_count as practice_best_graded_count,
@@ -144,7 +145,8 @@ public class LearningController {
       ) ot on true
       left join lateral (
         select count(*) filter(where q.question_type='MCQ') as mcq_count,
-               count(*) filter(where q.question_type='MCQ' and exists(
+               count(*) filter(where q.question_type<>'MCQ') as practice_question_count,
+                count(*) filter(where q.question_type='MCQ' and exists(
                  select 1 from student_question_attempt a
                  where a.student_id=learner.id and a.institution_id=(select institution_id from tenant_scope)
                    and a.course_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE'
