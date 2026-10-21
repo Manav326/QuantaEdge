@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fba35886b29020f5785863b2f726079c32bea5f93ce76d57587551ffa6a4582a",
+  "raw_analysis_sha256": "4b28347ade13dc4bc056718cdf441dcaa448b41b76c9aa7d99e8ed12a3407c3c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:27:12Z",
+      "checkpointed_at": "2026-10-21T20:31:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:27:36Z",
+      "checkpointed_at": "2026-10-21T20:31:35Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -125427,6 +125427,118 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "35d07607effc2e15f792f288",
+      "asset_sha256": "141a01362806463dfac34606af0ea1f7d3874b356531721eef171f37e081d5b1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/141a01362806463dfac34606af0ea1f7d3874b356531721eef171f37e081d5b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Not applicable",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:32:12Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Not applicable",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b056fbd32be0d8cd6c54b10",
+      "asset_sha256": "47ec4d947d31ce1480b01f9feb3b30997e429a8e639ae9deae3761a68c0488e9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/47ec4d947d31ce1480b01f9feb3b30997e429a8e639ae9deae3761a68c0488e9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electricity conduction by different materials.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:32:49Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electricity conduction by different materials.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a935be4f3ca08221e6ac7e68",
+      "asset_sha256": "126e3209e172856aa78465b297d97689e8ccbcd61212404b7d414c57c09e7365",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "assets/126e3209e172856aa78465b297d97689e8ccbcd61212404b7d414c57c09e7365.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of Table 4.2.",
+        "limitations": [
+          "The image does not provide specific details about the objects or materials being discussed in Table 4.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:33:27Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of Table 4.2.",
+        "limitations": [
+          "The image does not provide specific details about the objects or materials being discussed in Table 4.2."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
