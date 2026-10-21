@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStudentCourseScope } from '../CourseScope';
+import StudentEmptyState from '../components/StudentEmptyState';
 
 /**
  * The legacy navigation label now means Resume Lesson.
@@ -96,6 +97,21 @@ export default function StructuredLessonsClient() {
     });
     return () => { cancelled = true; };
   }, [activeCourse?.public_id, courseId, courseError, learningLanguage, loadingCourses, locale, requestedSubject, router]);
+
+  // Match the other learner screens: a successful empty enrollment list gets a clear
+  // marketplace path, while real API errors stay visible as errors.
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading"><h1><UiText message="student.empty.learn.title" /></h1></header>
+    <StudentEmptyState icon="learn"
+      title={<UiText message="student.empty.learn.title" />}
+      message={<UiText message="student.empty.learn.message" />}
+      primaryActionHref="/student/marketplace"
+      primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student/courses"
+      secondaryActionLabel={<UiText message="web.navigation.student.allCourses" />} />
+  </section></div></main>;
 
   if (error) {
     return <main className="lesson-page"><section className="lesson-wrap">
