@@ -163,6 +163,10 @@ export default function StructuredQuestionRenderer({
             onClick={() => { const next = [...orderedOptionIds]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; onResponseChange(next); }}>↓</button>
         </div>;
       })}
+      <button type="button" disabled={disabled || submitted || Array.isArray(response)}
+        onClick={() => onResponseChange(orderedOptionIds)}>
+        {locale === 'hi' ? 'इस क्रम को चुनें' : 'Use this order'}
+      </button>
     </div>}
 
     {question.type === 'matching' && <div className="qe-structured-matching">
