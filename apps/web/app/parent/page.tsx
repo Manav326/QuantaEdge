@@ -78,10 +78,20 @@ export default function ParentPage(){
 
       const previouslySelected=selected && Number(selected.id)===child.id ? selectedCourseId : null;
       const requested=(requestedCourseId!==undefined ? requestedCourseId : (switchingChild ? undefined : previouslySelected));
-      const course=requested!==undefined
+      const requestedCourse=requested!==undefined
         ? enrolled.find((item:ChildCourseRow)=>item.id===requested)
+        : undefined;
+      // URLs/bookmarks can retain a course that is no longer enrolled. Use the only
+      // currently enrolled course when unambiguous; otherwise return to the course picker.
+      const course=requested!==undefined
+        ? requestedCourse || (enrolled.length===1 ? enrolled[0] : undefined)
         : enrolled.length===1 ? enrolled[0] : undefined;
-      if(requested!==undefined && !course)throw new Error('Choose a course that this child is enrolled in at the selected institution.');
+      if(requested!==undefined && !requestedCourse && enrolled.length>1) {
+        setSelected(null);setChildCertificates([]);setSelectedCourseId(null);
+        setCourseChoiceError('The previously selected course is no longer enrolled. Select a currently enrolled course.');
+        window.history.replaceState(null, '', '/parent?childId='+encodeURIComponent(String(child.id)));
+        return;
+      }
       if(!course){
         setSelected(null);setChildCertificates([]);setSelectedCourseId(null);
         setCourseChoiceError('This child is enrolled in more than one course. Select which course report to view.');
