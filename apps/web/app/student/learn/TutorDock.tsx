@@ -393,6 +393,14 @@ export default function TutorDock({ lessonId, artifactId, courseId, open, onClos
 
   useEffect(() => { setError(''); }, [english, responseLanguage]);
 
+  useEffect(() => {
+    const keepBubbleInsideContent = () => {
+      setBubblePosition(current => current ? clampTutorBubble(current.left, current.top) : null);
+    };
+    window.addEventListener('resize', keepBubbleInsideContent);
+    return () => window.removeEventListener('resize', keepBubbleInsideContent);
+  }, []);
+
   function beginPanelMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (window.innerWidth <= 700 || event.button !== 0 || (event.target as HTMLElement).closest('button')) return;
     const rect = panelRef.current?.getBoundingClientRect();
@@ -646,14 +654,6 @@ export default function TutorDock({ lessonId, artifactId, courseId, open, onClos
     left: frame.left, top: frame.top, width: frame.width, height: frame.height,
     right: 'auto', bottom: 'auto',
   } : undefined;
-  useEffect(() => {
-    const keepBubbleInsideContent = () => {
-      setBubblePosition(current => current ? clampTutorBubble(current.left, current.top) : null);
-    };
-    window.addEventListener('resize', keepBubbleInsideContent);
-    return () => window.removeEventListener('resize', keepBubbleInsideContent);
-  }, []);
-
   const bubbleStyle: CSSProperties | undefined = bubblePosition ? {
     left: bubblePosition.left, top: bubblePosition.top, right: 'auto', bottom: 'auto',
   } : undefined;

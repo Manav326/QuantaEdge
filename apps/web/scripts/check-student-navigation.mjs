@@ -652,6 +652,8 @@ console.log('Navigation, localization, student empty-state fallbacks, live-class
 assert.ok(tutorDock.includes('artifactId?: string') && tutorDock.includes('structuredQuestionId') &&
   tutorDock.includes('...(lessonId && lessonId > 0 ? { lessonId } : {})'),
   'The shared Web tutor dock must support both canonical database lessons and structured artifact contexts.');
+assert.ok(tutorDock.lastIndexOf('useEffect(()') < tutorDock.indexOf('if (!open) return null;'),
+  'All Web tutor hooks must be declared before conditional returns.');
 assert.ok(learnClient.includes('if(lesson.structured_lesson)') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('setTutorQuestionId(undefined);setTutorOpen(true)'),
