@@ -671,6 +671,6 @@ assert.ok(tutorRetriever.includes('retrieveStructured') &&
   tutorMigration.includes('tutor_session_context_source_check'),
   'Tutor retrieval must respect the selected course and persist structured artifact session scope explicitly.');
 assert.ok(androidApp.includes('put("artifactId", activeArtifactId)') &&
-  androidApp.includes('structuredQuestionId') &&
-  androidApp.includes('Ask the AI tutor about this topic'),
+  androidApp.includes('Ask the AI tutor about this topic') &&
+  androidApp.includes('tutorScopeArtifactId == structuredLessonArtifactId'),
   'Android must start the same artifact-scoped tutor session and expose a tutor action for structured lessons.');

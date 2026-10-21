@@ -163,6 +163,7 @@ private val uiPhrases = listOf(
     UiPhrase("go_to_page", "Go", "जाएँ"),
     UiPhrase("fit_page", "Fit page", "पृष्ठ में फिट करें"),
     UiPhrase("tutor_help", "Get help from Tutor", "Tutor से मदद लें"),
+    UiPhrase("Ask the AI tutor about this topic", "Ask the AI tutor about this topic", "इस विषय के बारे में AI Tutor से पूछें"),
     UiPhrase("order_items_help", "Arrange the items in the correct order using ↑ / ↓.", "नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।"),
     UiPhrase("offline", "Offline", "ऑफ़लाइन"),
     UiPhrase("child_restore_title", "Restore profile?", "प्रोफ़ाइल restore करें?"),

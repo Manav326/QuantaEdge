@@ -541,6 +541,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var tutorConnecting by remember { mutableStateOf(false) }
     var tutorOpen by rememberSaveable { mutableStateOf(false) }
     var tutorScopeLessonId by rememberSaveable { mutableStateOf(0L) }
+    var tutorScopeArtifactId by rememberSaveable { mutableStateOf("") }
     var tutorMinimized by rememberSaveable { mutableStateOf(false) }
     var tutorHasOlderMessages by remember { mutableStateOf(false) }
     var tutorOlderBeforeId by remember { mutableStateOf<Long?>(null) }
@@ -567,22 +568,28 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         pendingTaskCounts.getOrPut(targetRoute) { mutableStateOf(0) }
     val busy = pendingTasksFor(route).value > 0
 
-    LaunchedEffect(route, lesson.longAny("id", "lesson_id"), tutorScopeLessonId) {
+    LaunchedEffect(route, lesson.longAny("id", "lesson_id"), tutorScopeLessonId,
+        structuredLessonMode, structuredLessonArtifactId, tutorScopeArtifactId) {
         val activeLessonId = lesson.longAny("id", "lesson_id")
+        val hasActiveTutorContext = activeLessonId > 0L ||
+            (structuredLessonMode && structuredLessonArtifactId.isNotBlank())
         if (route == AppRoute.TUTOR) {
-            // The tutor is now a lesson overlay. Recover old saved navigation state
-            // without leaving a full-screen tutor route available outside a lesson.
-            route = if (activeLessonId > 0L) AppRoute.LESSON else AppRoute.SUBJECT_LESSONS
-            tutorOpen = activeLessonId > 0L
+            // Recover old saved navigation state into the current lesson/artifact overlay.
+            route = if (hasActiveTutorContext) AppRoute.LESSON else AppRoute.SUBJECT_LESSONS
+            tutorOpen = hasActiveTutorContext
             tutorMinimized = false
             tutorScopeLessonId = activeLessonId.takeIf { it > 0L } ?: 0L
+            tutorScopeArtifactId = if (structuredLessonMode) structuredLessonArtifactId else ""
         } else if (route != AppRoute.LESSON ||
+            (structuredLessonMode && tutorScopeArtifactId != structuredLessonArtifactId) ||
+            (!structuredLessonMode && tutorScopeArtifactId.isNotBlank()) ||
             (tutorScopeLessonId > 0L && activeLessonId > 0L && tutorScopeLessonId != activeLessonId)) {
-            // A tutor session belongs to one lesson only. Drop both its visible state
-            // and cached history before another lesson can be opened.
+            // A conversation is bound to one canonical lesson or one structured artifact.
+            // Clear both visible state and cached history before another context opens.
             tutorOpen = false
             tutorMinimized = false
             tutorScopeLessonId = 0L
+            tutorScopeArtifactId = ""
             tutorSession = JSONObject()
             tutorMessages = emptyList()
             tutorQuestionId = 0L
@@ -2391,17 +2398,27 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun isCurrentTutorScope(lessonId: Long, sessionId: Long? = null): Boolean {
-        if (lessonId <= 0L || route != AppRoute.LESSON ||
-            lesson.longAny("id", "lesson_id") != lessonId || tutorScopeLessonId != lessonId) return false
+        val legacyLessonScope = !structuredLessonMode && lessonId > 0L &&
+            route == AppRoute.LESSON &&
+            lesson.longAny("id", "lesson_id") == lessonId &&
+            tutorScopeLessonId == lessonId
+        val structuredArtifactScope = structuredLessonMode && route == AppRoute.LESSON &&
+            structuredLessonArtifactId.isNotBlank() &&
+            tutorScopeArtifactId == structuredLessonArtifactId
+        if (!legacyLessonScope && !structuredArtifactScope) return false
         return sessionId == null || tutorSession.longAny("sessionId", "session_id") == sessionId
     }
 
     fun openTutorWithQuestion(questionId: Long) {
         val activeLessonId = lesson.longAny("id", "lesson_id")
-        if (route != AppRoute.LESSON || activeLessonId <= 0L) return
+        val activeArtifactId = if (structuredLessonMode && route == AppRoute.LESSON) {
+            structuredLessonArtifactId.takeIf { it.isNotBlank() }
+        } else null
+        if (route != AppRoute.LESSON || (activeLessonId <= 0L && activeArtifactId == null)) return
         val activeLearningLanguage = learningContentLanguage
         tutorQuestionId = questionId
-        tutorScopeLessonId = activeLessonId
+        tutorScopeLessonId = activeLessonId.takeIf { it > 0L } ?: 0L
+        tutorScopeArtifactId = activeArtifactId.orEmpty()
         tutorOpen = true
         tutorMinimized = false
         tutorConnecting = true
@@ -2415,9 +2432,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         error = ""
         runTask {
             try {
-                val createdSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", activeLessonId).put("courseId", currentCourseId)
-                        .put("language", activeLearningLanguage))
+                val sessionRequest = JSONObject()
+                    .put("courseId", currentCourseId)
+                    .put("language", activeLearningLanguage)
+                if (activeArtifactId != null) sessionRequest.put("artifactId", activeArtifactId)
+                else sessionRequest.put("lessonId", activeLessonId)
+                val createdSession = ApiClient.postObject("/api/v1/tutor/sessions", sessionRequest)
                 if (!isCurrentTutorScope(activeLessonId)) return@runTask
                 tutorSession = createdSession
                 tutorAvailable = createdSession.optBoolean("available")
@@ -2471,9 +2491,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         error = ""
         runTask {
             try {
-                val newSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", activeLessonId).put("courseId", currentCourseId)
-                        .put("language", activeLearningLanguage).put("newChat", true))
+                val activeArtifactId = if (structuredLessonMode) {
+                    structuredLessonArtifactId.takeIf { it.isNotBlank() }
+                } else null
+                val newChatRequest = JSONObject()
+                    .put("courseId", currentCourseId)
+                    .put("language", activeLearningLanguage)
+                    .put("newChat", true)
+                if (activeArtifactId != null) newChatRequest.put("artifactId", activeArtifactId)
+                else newChatRequest.put("lessonId", activeLessonId)
+                val newSession = ApiClient.postObject("/api/v1/tutor/sessions", newChatRequest)
                 if (!isCurrentTutorScope(activeLessonId, activeSessionId)) return@runTask
                 tutorSession = newSession
                 expectedSessionId = newSession.longAny("sessionId", "session_id")
@@ -4347,6 +4374,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         )
                     } else if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
                         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                            Button(
+                                onClick = ::openTutor,
+                                enabled = currentCourseId > 0L,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
+                                Text(localizedUiText("Ask the AI tutor about this topic"))
+                            }
                             StructuredLessonRenderer(
                         lesson = lesson,
                         language = learningLanguage,
@@ -4716,11 +4750,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                 }
                 }
-                    if (route == AppRoute.LESSON && lesson.longAny("id", "lesson_id") > 0L) {
+                    if (route == AppRoute.LESSON &&
+                        (lesson.longAny("id", "lesson_id") > 0L ||
+                            (structuredLessonMode && structuredLessonArtifactId.isNotBlank()))) {
                         FloatingTutorDock(
                             opened = tutorOpen,
                             minimized = tutorMinimized,
-                            lessonTitle = lesson.textAny("title"),
+                            lessonTitle = lesson.textAny("title").ifBlank {
+                                lesson.optJSONObject("topic")?.optJSONObject("title_by_locale")
+                                    ?.optString(learningContentLanguage).orEmpty()
+                            },
                             learningLanguage = learningContentLanguage,
                             sessionId = tutorSession.longAny("sessionId", "session_id"),
                             connecting = tutorConnecting,
@@ -4741,6 +4780,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                 tutorOpen = false
                                 tutorMinimized = false
                                 tutorScopeLessonId = 0L
+                                tutorScopeArtifactId = ""
                             }
                         )
                     }
