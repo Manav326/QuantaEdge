@@ -156,6 +156,8 @@ export default function ProgressPage(){
   const curriculum = (Array.isArray(data.curriculum) ? data.curriculum : []).filter((item:any)=>subjectCode==='ALL'||String(item.subject_code||'')===subjectCode);
   const masteryDetails = (Array.isArray(data.masteryDetails) ? data.masteryDetails : []).filter((item:any)=>subjectCode==='ALL'||String(item.subject_code||'')===subjectCode);
   const assessmentStats = data.assessmentStats || {};
+  const diagnosticStats = data.diagnosticStats || {};
+  const diagnosticSubjects = Array.isArray(data.diagnosticSubjects) ? data.diagnosticSubjects : [];
   const assessmentByType = Array.isArray(data.assessmentByType) ? data.assessmentByType : [];
   const recentAssessments = (Array.isArray(data.recentAssessments) ? data.recentAssessments : []).filter((item:any)=>subjectCode==='ALL'||String(item.subject_code||'')===subjectCode);
   const assessmentTypeLabel = (kind:string) => kind==='TOPIC_END'?translateUi(locale, 'legacy.web.topic.end.test.8a9ba225'):kind==='CHAPTER_END'?translateUi(locale, 'legacy.web.chapter.end.test.fede453c'):translateUi(locale, 'legacy.web.admin.created.test.7c1bcdfd');
@@ -166,6 +168,29 @@ export default function ProgressPage(){
         loading={loadingCourses} language={locale} courseLabel={locale==='english'?'Course':'कोर्स'}
         subjectLabel={locale==='english'?'Subject':'विषय'} allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'}/></div>
       <div className="progress-grid"><article><span><UiText message="legacy.web.lessons.micro.topics.ad57ed28" /></span><strong>{displayCount(lessons.completed)} / {displayCount(lessons.total)}</strong><small><UiText message="legacy.web.each.lesson.is.a.published.micro.topic.b2433996" /></small></article><article><span><UiText message="legacy.web.practice.accuracy.761c6990" /></span><strong>{displayPercent(accuracy)}</strong><small>{displayCount(safeCount(q.attempts))} <UiText message="legacy.web.responses.6ccf67eb" /> · {displayCount(safeCount(q.graded_attempts))} <UiText message="legacy.web.graded.de067772" /></small></article><article><span><UiText message="legacy.web.curriculum.6b69620f" /></span><strong>{displayPercent(lessons.percent)}</strong><small><UiText message="legacy.web.published.lessons.completed.68f842b9" /></small></article><article><span><UiText message="legacy.web.formal.tests.b493c4c1" /></span><strong>{displayCount(safeCount(assessmentStats.released))}</strong><small>{displayCount(safeCount(assessmentStats.awaiting_review))} <UiText message="legacy.web.awaiting.review.5579170f" /> · {displayPercent(safePercent(assessmentStats.average_released_percent))} <UiText message="legacy.web.average.released.score.52d7549b" /></small></article></div>
+      <div className="mastery-card">
+        <div>
+          <span><LocaleText hinglish="प्रारंभिक डायग्नोस्टिक" english="Initial diagnostic baseline" /></span>
+          <strong>{Number(diagnosticStats.completed_attempts||0)>0
+            ? displayPercent(safePercent(diagnosticStats.accuracy_percent))
+            : Number(diagnosticStats.in_progress_attempts||0)>0
+              ? <LocaleText hinglish="जारी है" english="In progress" />
+              : <LocaleText hinglish="अभी नहीं दिया गया" english="Not attempted" />}</strong>
+          <small className="qe-progress-card-help">
+            <LocaleText hinglish="यह शुरुआती baseline अलग रहता है; इसे नियमित practice accuracy या concept mastery में नहीं जोड़ा जाता।"
+              english="This baseline is kept separate; it is not added to routine practice accuracy or concept mastery." />
+          </small>
+        </div>
+        {Number(diagnosticStats.completed_attempts||0)>0 ? <>
+          <div className="topic-line"><b><LocaleText hinglish="सही उत्तर" english="Correct answers" /></b>
+            <span>{displayCount(safeCount(diagnosticStats.correct_answers))} / {displayCount(safeCount(diagnosticStats.graded_answers))}</span></div>
+          {diagnosticSubjects.length ? diagnosticSubjects.map((item:any)=><div className="mastery-row" key={item.subject_code}>
+            <span>{item.subject_name||item.subject_code}</span><i><b style={{width:(safePercent(item.accuracy_percent)??0)+'%'}}/></i>
+            <strong>{displayPercent(safePercent(item.accuracy_percent))}</strong>
+          </div>) : <div className="topic-line"><span><LocaleText hinglish="विषयवार baseline उपलब्ध नहीं है।" english="No subject-level diagnostic baseline is available." /></span></div>}
+        </> : <div className="topic-line"><span><LocaleText hinglish="पूरा होने पर यहाँ शुरुआती test के परिणाम और विषयवार प्रदर्शन दिखेंगे।"
+            english="Once completed, the initial test result and subject-level performance will appear here." /></span></div>}
+      </div>
       {(certificateError||certificateNotice)&&<div className={certificateError?'feedback':'parent-notice'} role={certificateError?'alert':'status'}>{certificateError||certificateNotice}</div>}
       <div className="mastery-card"><div><span><UiText message="legacy.web.your.test.results.0b8d5440" /></span><strong>{displayCount(safeCount(assessmentStats.submitted))} <UiText message="legacy.web.submitted.367b8358" /> · {displayCount(safeCount(assessmentStats.released))} <UiText message="legacy.web.released.ffcb67dc" /></strong><small className="qe-progress-card-help"><UiText message="legacy.web.submitted.means.the.test.was.finished..456da266" /></small></div>{assessmentByType.length?assessmentByType.map((item:any)=><div className="topic-line" key={item.assessment_type}><b>{assessmentTypeLabel(item.assessment_type)}</b><span>{displayCount(safeCount(item.released))} <UiText message="legacy.web.released.7fac6ede" /> · {displayPercent(safePercent(item.average_released_percent))} <UiText message="legacy.web.average.79b0b3c2" /></span></div>):<div className="topic-line"><span><UiText message="legacy.web.no.formal.test.results.yet.642fb2cf" /></span></div>}</div>
       <div className="mastery-card"><div><span><UiText message="legacy.web.curriculum.coverage.c5d41a31" /></span><strong>{courseId!==null?(data.programName||translateUi(locale, 'legacy.web.selected.course.45273acf')):translateUi(locale, 'legacy.web.select.a.course.2b4ae614')}</strong></div>{curriculum.length ? curriculum.map((item:any)=>{const metric=curriculumProgress(item);const label=metric.percent===null?(metric.total===0?'Not published':'—'):metric.percent+'%';return <div className="mastery-row" key={item.subject_code || item.subject_name}><span>{item.subject_name || item.subject_code || 'Subject'}</span><i><b style={{width:(metric.percent ?? 0)+'%'}}/></i><strong>{label}</strong></div>}) : <div className="topic-line"><span><UiText message="legacy.web.curriculum.coverage.is.not.available.y.8f3020d8" /></span></div>}</div>
