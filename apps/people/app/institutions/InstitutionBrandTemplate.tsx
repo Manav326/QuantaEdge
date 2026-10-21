@@ -382,24 +382,27 @@ export default function InstitutionBrandTemplate({
         loadSource(logoFile, logoUrl, 'Logo'),
         loadSource(iconFile, appIconUrl, 'Icon'),
       ]);
-      [logoBitmap, iconBitmap] = await Promise.all([
+      const [decodedLogoBitmap, decodedIconBitmap] = await Promise.all([
         decodeImage(logoSource, 'Logo'),
         decodeImage(iconSource, 'Icon'),
       ]);
+      // Keep owned references for deterministic cleanup, and use non-null decoded values below.
+      logoBitmap = decodedLogoBitmap;
+      iconBitmap = decodedIconBitmap;
 
-      const logo = await renderLogo(logoBitmap, 1600);
-      const logo1024 = await renderLogo(logoBitmap, 1024);
-      const logo512 = await renderLogo(logoBitmap, 512);
-      const logoForApply = await renderLogoLimited(logoBitmap, 1600);
-      const icon512 = await renderSquareLimited(iconBitmap, 512, 0.12);
-      const icon192 = await renderSquareLimited(iconBitmap, 192, 0.12);
-      const apple180 = await renderSquareLimited(iconBitmap, 180, 0.12, '#FFFFFF');
-      const favicon64 = await renderSquareLimited(iconBitmap, 64, 0.12);
-      const favicon48 = await renderSquareLimited(iconBitmap, 48, 0.12);
-      const favicon32 = await renderSquareLimited(iconBitmap, 32, 0.12);
-      const favicon16 = await renderSquareLimited(iconBitmap, 16, 0.12);
-      const maskable512 = await renderSquareLimited(iconBitmap, 512, 0.23, '#FFFFFF');
-      const androidForeground = await renderSquareLimited(iconBitmap, 432, 0.19);
+      const logo = await renderLogo(decodedLogoBitmap, 1600);
+      const logo1024 = await renderLogo(decodedLogoBitmap, 1024);
+      const logo512 = await renderLogo(decodedLogoBitmap, 512);
+      const logoForApply = await renderLogoLimited(decodedLogoBitmap, 1600);
+      const icon512 = await renderSquareLimited(decodedIconBitmap, 512, 0.12);
+      const icon192 = await renderSquareLimited(decodedIconBitmap, 192, 0.12);
+      const apple180 = await renderSquareLimited(decodedIconBitmap, 180, 0.12, '#FFFFFF');
+      const favicon64 = await renderSquareLimited(decodedIconBitmap, 64, 0.12);
+      const favicon48 = await renderSquareLimited(decodedIconBitmap, 48, 0.12);
+      const favicon32 = await renderSquareLimited(decodedIconBitmap, 32, 0.12);
+      const favicon16 = await renderSquareLimited(decodedIconBitmap, 16, 0.12);
+      const maskable512 = await renderSquareLimited(decodedIconBitmap, 512, 0.23, '#FFFFFF');
+      const androidForeground = await renderSquareLimited(decodedIconBitmap, 432, 0.19);
       const androidDensitySizes = [
         { density: 'mdpi', size: 48 },
         { density: 'hdpi', size: 72 },
@@ -408,9 +411,9 @@ export default function InstitutionBrandTemplate({
         { density: 'xxxhdpi', size: 192 },
       ];
       const androidDensityIcons = await Promise.all(androidDensitySizes.map(async item => ({
-        ...item, blob: await renderSquareLimited(iconBitmap, item.size, 0.12),
+        ...item, blob: await renderSquareLimited(decodedIconBitmap, item.size, 0.12),
       })));
-      const brandLockup = await renderBrandLockup(iconBitmap, icon512, name, cleanTagline, themeTokens);
+      const brandLockup = await renderBrandLockup(decodedIconBitmap, icon512, name, cleanTagline, themeTokens);
       const faviconBase64 = await blobBase64(favicon64);
       const themePrimary = validThemeColour(themeTokens.brandPrimary ?? themeTokens.primary, '#F97316');
       const themeAccent = validThemeColour(themeTokens.brandAccent ?? themeTokens.accent, '#0F766E');
@@ -433,7 +436,7 @@ export default function InstitutionBrandTemplate({
         schemaVersion: 1, displayName: name, tagline: cleanTagline,
         theme: { primary: themePrimary, accent: themeAccent, presetId: themeTokens.presetId ?? '', appearance: themeTokens.appearance ?? 'system', note: 'Theme colours come from the current institution settings; source image pixels are not changed.' },
         assets: {
-          logo: { file: 'logo.png', sourceRatio: Number((logoBitmap.width / logoBitmap.height).toFixed(6)) },
+          logo: { file: 'logo.png', sourceRatio: Number((decodedLogoBitmap.width / decodedLogoBitmap.height).toFixed(6)) },
           generatedLockup: { png: 'brand-lockup.png', svg: 'brand-lockup.svg', source: 'square icon plus the supplied institution name/tagline' },
           icon: { file: 'icon-512.png', sourceRatio: 1 },
           favicons: ['favicon.svg', 'favicon-64.png', 'favicon-48.png', 'favicon-32.png', 'favicon-16.png'],
