@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2165,
-    "successful_visual_analyses": 2064,
-    "missing_visual_analyses": 5323,
+    "raw_analysis_result_rows": 2168,
+    "successful_visual_analyses": 2067,
+    "missing_visual_analyses": 5320,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5424,
+    "unresolved_count": 5421,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -88921,9 +88921,18 @@
       "asset_path": "assets/556511c0a55254ebebdbd6e04d8b7c965097498189c3d8eb59df135756bcf904.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be analyzed for context or relation to the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88939,9 +88948,22 @@
       "asset_path": "assets/cbe7a9ea68338be6b44645b0560826b1d04b05eeb308a1f43695d13d887ec44a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person in traditional attire performing a spinning motion with a circular object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional attire",
+          "spinning motion",
+          "circular object"
+        ],
+        "context_relation": "The image likely represents a cultural or traditional activity, possibly related to a festival or ceremony.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the attire."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88957,9 +88979,29 @@
       "asset_path": "assets/59323f6e5f900d67790ce9df3dccf8e5871242f3a8fba07cab97cae461156024.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a metal spoon and a metal coin, with a blue arrow pointing towards them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "metal spoon",
+          "metal coin",
+          "ringing sound",
+          "sonority",
+          "sonorous"
+        ],
+        "concepts": [
+          "metal",
+          "sound",
+          "sonority",
+          "ringing"
+        ],
+        "context_relation": "The image is related to the concept of sonority in metals.",
+        "limitations": [
+          "The image does not provide a full page context, only a close-up of the metal spoon and coin."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

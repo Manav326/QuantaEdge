@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1c999b83f141d9cba4960781d0079125344957c2a45e2f29e499e469266ef3de",
+  "raw_analysis_sha256": "b9400985c3d0bec89839cb3494a4533c17261c06554584e28f99b678ca35d39f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:49:39Z",
+      "checkpointed_at": "2026-10-21T19:53:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:50:02Z",
+      "checkpointed_at": "2026-10-21T19:53:28Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -123518,6 +123518,156 @@
         "context_relation": "The text discusses the difference between the sounds produced by different materials, focusing on the ability of metals to produce a ringing sound.",
         "limitations": [
           "The text does not provide visual aids or diagrams to support the explanation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4a9e693484194c697d15084c",
+      "asset_sha256": "556511c0a55254ebebdbd6e04d8b7c965097498189c3d8eb59df135756bcf904",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/556511c0a55254ebebdbd6e04d8b7c965097498189c3d8eb59df135756bcf904.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be analyzed for context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:54:07Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be analyzed for context or relation to the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2ac8084438d4fc467b4cb07d",
+      "asset_sha256": "cbe7a9ea68338be6b44645b0560826b1d04b05eeb308a1f43695d13d887ec44a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/cbe7a9ea68338be6b44645b0560826b1d04b05eeb308a1f43695d13d887ec44a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in traditional attire performing a spinning motion with a circular object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional attire",
+          "spinning motion",
+          "circular object"
+        ],
+        "context_relation": "The image likely represents a cultural or traditional activity, possibly related to a festival or ceremony.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the attire."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:54:48Z",
+      "effective_analysis": {
+        "visual_summary": "A person in traditional attire performing a spinning motion with a circular object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional attire",
+          "spinning motion",
+          "circular object"
+        ],
+        "context_relation": "The image likely represents a cultural or traditional activity, possibly related to a festival or ceremony.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the attire."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "26804ed805582953c7151e27",
+      "asset_sha256": "59323f6e5f900d67790ce9df3dccf8e5871242f3a8fba07cab97cae461156024",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/59323f6e5f900d67790ce9df3dccf8e5871242f3a8fba07cab97cae461156024.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a metal spoon and a metal coin, with a blue arrow pointing towards them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "metal spoon",
+          "metal coin",
+          "ringing sound",
+          "sonority",
+          "sonorous"
+        ],
+        "concepts": [
+          "metal",
+          "sound",
+          "sonority",
+          "ringing"
+        ],
+        "context_relation": "The image is related to the concept of sonority in metals.",
+        "limitations": [
+          "The image does not provide a full page context, only a close-up of the metal spoon and coin."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:55:31Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a metal spoon and a metal coin, with a blue arrow pointing towards them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "metal spoon",
+          "metal coin",
+          "ringing sound",
+          "sonority",
+          "sonorous"
+        ],
+        "concepts": [
+          "metal",
+          "sound",
+          "sonority",
+          "ringing"
+        ],
+        "context_relation": "The image is related to the concept of sonority in metals.",
+        "limitations": [
+          "The image does not provide a full page context, only a close-up of the metal spoon and coin."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
