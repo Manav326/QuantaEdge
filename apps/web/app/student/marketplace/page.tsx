@@ -90,8 +90,8 @@ export default function StudentMarketplacePage() {
   const { locale } = useLocale();
   const english = locale === 'english';
   const language = english ? 'en' : 'hi';
-  const tx = (en: string, hi: string, values: Record<string, string | number> = {}) =>
-    (english ? en : hi).replace(/\{([a-zA-Z0-9_]+)\}/g, (_match, key: string) => String(values[key] ?? ''));
+  const tx = useCallback((en: string, hi: string, values: Record<string, string | number> = {}) =>
+    (english ? en : hi).replace(/\{([a-zA-Z0-9_]+)\}/g, (_match, key: string) => String(values[key] ?? '')), [english]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -116,7 +116,7 @@ export default function StudentMarketplacePage() {
     } finally {
       setLoading(false);
     }
-  }, [english]);
+  }, [language, tx]);
 
   const loadPurchaseRequests = useCallback(async () => {
     try {
