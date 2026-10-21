@@ -46,7 +46,7 @@ export default function MarketplaceCourseCard({
     subject.chapters !== undefined || subject.lessons !== undefined);
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} lang={language}>
       <div className={styles.top}>
         <div className={styles.mark} aria-hidden="true">✦</div>
         <div className={styles.price}>{priceLabel}</div>
