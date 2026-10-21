@@ -420,7 +420,7 @@ export default function InstitutionBrandTemplate({
       };
       const metadata = {
         schemaVersion: 1, displayName: name, tagline: cleanTagline,
-        theme: { primary: themePrimary, accent: themeAccent, note: 'Theme colours come from the current institution settings; source image pixels are not changed.' },
+        theme: { primary: themePrimary, accent: themeAccent, presetId: themeTokens.presetId ?? '', appearance: themeTokens.appearance ?? 'system', note: 'Theme colours come from the current institution settings; source image pixels are not changed.' },
         assets: {
           logo: { file: 'logo.png', sourceRatio: Number((logoBitmap.width / logoBitmap.height).toFixed(6)) },
           generatedLockup: { png: 'brand-lockup.png', svg: 'brand-lockup.svg', source: 'square icon plus the supplied institution name/tagline' },
@@ -600,6 +600,7 @@ export default function InstitutionBrandTemplate({
         {applying ? 'Applying to institution…' : 'Apply pack to this institution'}
       </button>
     </div> : null}
+    {pack && pack.themeFingerprint !== JSON.stringify(themeTokens) ? <p className={styles.cropError} role="status">Institution theme colours changed after generation. Regenerate the asset pack before downloading or applying it.</p> : null}
     {error ? <p className={styles.cropError} role="alert">{error}</p> : null}
     {notice ? <p className={styles.disclaimer} role="status">{notice}</p> : null}
     <div className={styles.brandTemplateActions}>
