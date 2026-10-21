@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2168,
-    "successful_visual_analyses": 2067,
-    "missing_visual_analyses": 5320,
+    "raw_analysis_result_rows": 2171,
+    "successful_visual_analyses": 2070,
+    "missing_visual_analyses": 5317,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5421,
+    "unresolved_count": 5418,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89017,9 +89017,32 @@
       "asset_path": "assets/30a8e4804af9e889ade5ef797ad560cbe5fbaeffe04f4b6ace72d93d81d48da4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person's hand holding a metal spoon, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin",
+          "produce a ringing sound. Coal and wood, on the other hand,",
+          "produce dull sounds.",
+          "This property of metals that enables them to produce a ringing",
+          "sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "sonorous nature"
+        ],
+        "context_relation": "The image is a close-up of a person's hand holding a metal spoon, with a blurred background. The visible text discusses the properties of metals, specifically sonority and the difference between ringing and dull sounds.",
+        "limitations": [
+          "The image is a close-up, so the background is blurred and not clearly visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89035,9 +89058,18 @@
       "asset_path": "assets/a4fd9cf8862a4482c66cd2fee5b2f59ee66451679689dbd0b8258270d16fe323.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person wearing a green sweater, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is not clear enough to identify specific details or objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89053,9 +89085,26 @@
       "asset_path": "assets/f34ace0e798476ff29f9e4e1b9181ab1d1fb464198b4b531e70d169cd655501b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a hand holding a yellow object, possibly a coin or a small metal item, against a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Now,N",
+          "I understand!"
+        ],
+        "concepts": [
+          "ringing sound",
+          "sonority",
+          "metal"
+        ],
+        "context_relation": "The image is related to the concept of sonority and the properties of metals.",
+        "limitations": [
+          "The image is blurry and the details are not clear.",
+          "The text in the image is partially obscured and not fully legible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

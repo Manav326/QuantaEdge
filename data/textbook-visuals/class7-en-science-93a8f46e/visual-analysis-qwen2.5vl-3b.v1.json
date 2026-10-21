@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2067,
+    "assets_selected": 2070,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2065,
-    "assets_remaining": 5423,
+    "assets_analyzed": 2068,
+    "assets_remaining": 5420,
     "assets_completion_percent": 27.6,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2062,
+    "assets_skipped_from_checkpoint": 2065,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:53:04Z"
+      "checkpointed_at": "2026-10-21T19:56:18Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:53:28Z"
+      "checkpointed_at": "2026-10-21T19:56:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79094,6 +79094,112 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T19:55:31Z"
+    },
+    {
+      "asset_id": "f9cd49236eb865529a78e332",
+      "asset_sha256": "30a8e4804af9e889ade5ef797ad560cbe5fbaeffe04f4b6ace72d93d81d48da4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/30a8e4804af9e889ade5ef797ad560cbe5fbaeffe04f4b6ace72d93d81d48da4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's hand holding a metal spoon, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin",
+          "produce a ringing sound. Coal and wood, on the other hand,",
+          "produce dull sounds.",
+          "This property of metals that enables them to produce a ringing",
+          "sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "sonorous nature"
+        ],
+        "context_relation": "The image is a close-up of a person's hand holding a metal spoon, with a blurred background. The visible text discusses the properties of metals, specifically sonority and the difference between ringing and dull sounds.",
+        "limitations": [
+          "The image is a close-up, so the background is blurred and not clearly visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:57:30Z"
+    },
+    {
+      "asset_id": "cfa4f96a4e7aa7873d574aed",
+      "asset_sha256": "a4fd9cf8862a4482c66cd2fee5b2f59ee66451679689dbd0b8258270d16fe323",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/a4fd9cf8862a4482c66cd2fee5b2f59ee66451679689dbd0b8258270d16fe323.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person wearing a green sweater, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is not clear enough to identify specific details or objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:58:08Z"
+    },
+    {
+      "asset_id": "755c388d6034026764b3adb5",
+      "asset_sha256": "f34ace0e798476ff29f9e4e1b9181ab1d1fb464198b4b531e70d169cd655501b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/f34ace0e798476ff29f9e4e1b9181ab1d1fb464198b4b531e70d169cd655501b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a hand holding a yellow object, possibly a coin or a small metal item, against a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Now,N",
+          "I understand!"
+        ],
+        "concepts": [
+          "ringing sound",
+          "sonority",
+          "metal"
+        ],
+        "context_relation": "The image is related to the concept of sonority and the properties of metals.",
+        "limitations": [
+          "The image is blurry and the details are not clear.",
+          "The text in the image is partially obscured and not fully legible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:58:51Z"
     }
   ]
 }
