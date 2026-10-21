@@ -63,6 +63,51 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
   const itemLabel = (item: { message: string }) => t(item.message);
+  const showWorkspaceBack = role !== null
+    && pathname !== '/student'
+    && pathname !== '/parent'
+    && !(parentLearningRoute && pathname === '/parent/learning');
+
+  function goBackWithinWorkspace() {
+    const params = new URLSearchParams(window.location.search);
+
+    // A lesson's route keeps the same pathname; remove only its lesson ID to restore
+    // the Lessons and Topics list and retain its course/subject filter.
+    if (pathname === '/student/learn' && params.has('lessonId')) {
+      params.delete('lessonId');
+      if (!params.has('subjectCode')) params.set('subjectCode', 'ALL');
+      router.push('/student/learn' + (params.size ? '?' + params.toString() : ''));
+      return;
+    }
+
+    if (pathname === '/student/certificates' && params.has('certificateId')) {
+      params.delete('certificateId');
+      router.push('/student/certificates' + (params.size ? '?' + params.toString() : ''));
+      return;
+    }
+
+    // Honour an explicit in-app return link (for example, a protected textbook reader).
+    const returnTo = params.get('returnTo');
+    if (returnTo && (returnTo.startsWith('/student/') || returnTo.startsWith('/parent/'))
+        && !returnTo.startsWith('//')) {
+      router.push(returnTo);
+      return;
+    }
+
+    let sameOriginReferrer = false;
+    try {
+      sameOriginReferrer = Boolean(document.referrer)
+        && new URL(document.referrer).origin === window.location.origin;
+    } catch {
+      sameOriginReferrer = false;
+    }
+    if (sameOriginReferrer && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push(parentLearningRoute ? '/parent/learning' : role === 'parent' ? '/parent' : '/student');
+  }
   const enrollmentIssueText = enrollmentIssue === 'invalid'
     ? locale === 'english'
       ? 'This invitation is expired, revoked, or no longer valid. Ask your school for a new learning link. Your enrollment has not been confirmed by this invitation.'
@@ -428,6 +473,14 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     <div className="qe-workspace-content">
       <header className="qe-workspace-topbar">
         <QuantaEdgeBrand href={parentLearningRoute ? '/parent/learning' : role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
+        {showWorkspaceBack ? (
+          <button type="button" className="qe-parent-learning-return qe-workspace-global-back"
+            onClick={goBackWithinWorkspace}
+            aria-label={locale === 'english' ? 'Back' : locale === 'hinglish' ? 'Back' : 'वापस जाएँ'}>
+            <span aria-hidden="true">←</span>
+            <span>{locale === 'english' ? 'Back' : locale === 'hinglish' ? 'Back' : 'वापस'}</span>
+          </button>
+        ) : null}
         <div className="qe-workspace-topbar-actions">
           {parentLearningRoute ? (
             <button type="button" className="qe-parent-learning-return" onClick={() => router.push('/parent')}
