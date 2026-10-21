@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4c54fa76686f4af4acee9dc9c3bca8dea1f7464fa2791275353647106569e3c2",
+  "raw_analysis_sha256": "83514bbe817d4efc263f51c4b791a80960e0ada744fd8a9ac4df27c73014dede",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T21:01:32Z",
+      "checkpointed_at": "2026-10-21T21:04:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T21:01:54Z",
+      "checkpointed_at": "2026-10-21T21:05:13Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -127281,6 +127281,120 @@
           "The image does not provide any specific context or relation to the text.",
           "The image is a cartoon illustration and does not provide any specific context or relation to the text."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9310b2e5bab6aaa9e502d3df",
+      "asset_sha256": "25c0c78f4c692052977dc0bc62e8d99440061bd40189568b25e4b444844d6af5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/25c0c78f4c692052977dc0bc62e8d99440061bd40189568b25e4b444844d6af5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context or information related to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text.",
+          "The image is a cartoon character holding a magnifying glass, which does not provide any context or information related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:05:52Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context or information related to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text.",
+          "The image is a cartoon character holding a magnifying glass, which does not provide any context or information related to the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eeb4212fc81252eb3bcf8710",
+      "asset_sha256": "d40d2e1e87b6a3948d0531a74ce1c42ee0c1d4f6ebb9523959cf21622b03ab0f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/d40d2e1e87b6a3948d0531a74ce1c42ee0c1d4f6ebb9523959cf21622b03ab0f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a purple pencil with a textured grip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:06:26Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a purple pencil with a textured grip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "05060558338ae8e5c59a2b8c",
+      "asset_sha256": "2ca62c3ba8bc894f1f71eb77a3a2c27b72872eb9616101dc6c50f20141f4b161",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/2ca62c3ba8bc894f1f71eb77a3a2c27b72872eb9616101dc6c50f20141f4b161.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a gothic-style window with stained glass panels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:07:02Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a gothic-style window with stained glass panels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
