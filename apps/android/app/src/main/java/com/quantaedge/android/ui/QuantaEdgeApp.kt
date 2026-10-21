@@ -496,7 +496,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
     var structuredLessons by remember { mutableStateOf(emptyList<JSONObject>()) }
-    var structuredLessonMode by rememberSaveable { mutableStateOf(true) }
+    var structuredLessonMode by rememberSaveable { mutableStateOf(false) }
     var structuredSubjectFilter by rememberSaveable { mutableStateOf("") }
     var structuredLessonArtifactId by rememberSaveable { mutableStateOf("") }
     var structuredLessonSavedResponses by remember { mutableStateOf(JSONObject()) }
@@ -1661,9 +1661,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
         if (targetCourseId <= 0L && studentHasNoCourses()) {
             error = ""
-            structuredLessonMode = true
+            structuredLessonMode = false
             structuredSubjectFilter = subjectCode
             structuredLessons = emptyList()
+            lessons = emptyList()
             route = AppRoute.SUBJECT_LESSONS
             return
         }
@@ -1686,7 +1687,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         preferences.edit().putLong("activeCourseId", targetCourseId).apply()
         currentSubject = subjectCode
         structuredSubjectFilter = subjectCode
-        structuredLessonMode = true
+        structuredLessonMode = false
         structuredLessons = emptyList()
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
@@ -1696,11 +1697,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 refreshStudentPrograms()
             }
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
-            val path = "/api/v1/learning/structured-lessons?courseId=" + targetCourseId +
-                "&subjectCode=" + ApiClient.encodeQuery(subjectCode) +
-                "&language=" + ApiClient.encodeQuery(learningLanguage)
-            val array = ApiClient.getArray(path)
-            structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
+            val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
+                "&language=" + ApiClient.encodeQuery(learningContentLanguage) +
+                "&courseId=" + targetCourseId
+            lessons = ApiClient.getArray(path).objectItems()
             route = AppRoute.SUBJECT_LESSONS
         }
     }
@@ -3589,7 +3589,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             AppRoute.PROFILE -> openStudentProfile()
             AppRoute.ACCOUNT_LIFECYCLE -> refreshAccountLifecycle()
             AppRoute.PROGRESS -> openProgress()
-            AppRoute.SUBJECT_LESSONS -> openStructuredLessons()
+            AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject, currentCourseId)
             AppRoute.DIAGNOSTIC -> openDiagnostic()
             AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
             AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
@@ -4349,20 +4349,21 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
-                    AppRoute.SUBJECT_LESSONS -> StructuredLessonCatalogueScreen(
-                        noEnrolledCourses = studentHasNoCourses(),
-                        items = structuredLessons,
-                        courseName = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optString("display_name").orEmpty(),
-                        subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { arr ->
-                            (0 until arr.length()).mapNotNull { index -> arr.optJSONObject(index) }
-                        }.orEmpty(),
-                        selectedSubjectCode = structuredSubjectFilter,
+                    AppRoute.SUBJECT_LESSONS -> if (studentHasNoCourses()) {
+                        StudentEnrollmentEmptyState(
+                            icon = "▤",
+                            title = localizedUiText("Your learning space starts with a course"),
+                            message = localizedUiText("Your lessons will appear here once you enroll in a course."),
+                            primaryLabel = localizedUiText("Explore Marketplace"),
+                            onPrimary = ::openMarketplace
+                        )
+                    } else LessonListScreen(
+                        subject = currentSubject,
+                        lessons = lessons,
                         language = language,
                         busy = busy,
-                        onRefresh = { openStructuredLessons(structuredSubjectFilter) },
-                        onSelectSubject = { code -> openStructuredLessons(code) },
-                        onOpenLesson = ::openStructuredLesson,
-                        onMarketplace = ::openMarketplace
+                        onRefresh = { openSubject(currentSubject, currentCourseId) },
+                        onOpenLesson = ::openLesson
                     )
                     AppRoute.LESSON -> if (studentHasNoCourses()) {
                         StudentEnrollmentEmptyState(
@@ -5708,8 +5709,7 @@ private fun LessonListScreen(
     language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
-    onOpenLesson: (JSONObject) -> Unit,
-    onOpenStructuredLessons: () -> Unit
+    onOpenLesson: (JSONObject) -> Unit
 ) {
     val initialIndex = lessons.indexOfFirst { it.optInt("progress_percent", 0) < 100 }
         .let { if (it >= 0) it else (lessons.lastIndex).coerceAtLeast(0) }
@@ -5731,10 +5731,6 @@ private fun LessonListScreen(
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
-        }
-        OutlinedButton(onClick = onOpenStructuredLessons, enabled = !busy,
-            modifier = Modifier.fillMaxWidth().height(40.dp)) {
-            Text(if (language == "hi") "Structured lessons खोलें" else "Open structured lessons")
         }
         if (lessons.isEmpty() && !busy) {
             EmptyState("अभी कोई पाठ उपलब्ध नहीं", "इस कक्षा और विषय के प्रकाशित पाठ सर्वर पर उपलब्ध होने पर वे यहाँ दिखेंगे।")

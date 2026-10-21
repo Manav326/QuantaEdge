@@ -342,12 +342,14 @@ assert.ok(courseScope.includes("String(course.public_id || '').toUpperCase() ===
   structuredLessonsApi.includes('value.matches("[A-Z]{3}[A-Z0-9]{5}")'),
   'Web structured learning must route by 8-character public course IDs and resolve them server-side to the internal row ID.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
-  androidApp.includes('Selected structured course opened.') &&
-  androidApp.includes('"/api/v1/learning/structured-lessons?" + params') &&
-  androidApp.includes('fun structuredPublicCourseId(courseId: Long): String') &&
-  androidApp.includes('"courseId=" + structuredPublicCourseId(courseId) + "&language="') &&
-  androidApp.includes('Regex("^[A-Z]{3}[A-Z0-9]{5}$")'),
-  'Android course cards must route structured catalogues with the 8-character public course ID, not the internal numeric row ID.');
+  androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
+  androidApp.includes('AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject, currentCourseId)') &&
+  androidApp.includes('val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode)') &&
+  androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (studentHasNoCourses())') &&
+  androidApp.includes('onRefresh = { openSubject(currentSubject, currentCourseId) }') &&
+  androidApp.includes('onOpenLesson = ::openLesson'),
+  'Android course subjects must open the original course-scoped lesson list and lesson screen by default.');
+
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
   parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
   'Parent reports must require explicit course selection for multi-course children.');
