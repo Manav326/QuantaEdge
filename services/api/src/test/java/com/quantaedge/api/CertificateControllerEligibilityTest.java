@@ -81,7 +81,7 @@ class CertificateControllerEligibilityTest {
     row.put("status", "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.myCertificate(3001L, 12L, student, TEST_TENANT);
+    Map<String, Object> response = controller.myCertificate(3001L, "12", student, TEST_TENANT);
 
     assertEquals(row, response);
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);

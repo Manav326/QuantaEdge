@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
+import StudentEmptyState from '../components/StudentEmptyState';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
@@ -680,6 +681,22 @@ export default function LearnClient() {
   }
 
   const lastOpenedLesson=trackBrowse?.lessons.find(item=>Number(item.id)===lastOpenedLessonId);
+
+  // A genuinely empty enrollment list is different from an enrollment/API error.
+  // Render the explicit next steps before stale lesson-load errors from the initial render.
+  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
+    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
+  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
+    <header className="content-heading"><h1><UiText message="student.empty.learn.title" /></h1></header>
+    <StudentEmptyState icon="learn"
+      title={<UiText message="student.empty.learn.title" />}
+      message={<UiText message="student.empty.learn.message" />}
+      primaryActionHref="/student/marketplace"
+      primaryActionLabel={<UiText message="student.empty.dashboard.action" />}
+      secondaryActionHref="/student/courses"
+      secondaryActionLabel={<UiText message="web.navigation.student.allCourses" />} />
+  </section></div></main>;
+
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.lesson.2df59c7d" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.c4ae779f" /></Link></div></section></main>;
   if(chooseTrack) return <main className="lesson-page qe-subject-reading-page"><section className="lesson-wrap"><div className="lesson-meta"><span className="eyebrow">{locale==='english'?'Institution → Course → Subject':'संस्थान → कोर्स → विषय'}</span><span>{courses.length} {locale==='english'?'available courses':'उपलब्ध कोर्स'}</span></div><h1>{locale==='english'?'Choose a course and subject':'कोर्स और विषय चुनें'}</h1><p className="lesson-intro">{locale==='english'?'Continue through the familiar chapters, topics, lessons and saved practice for your selected course.':'अपने चुने हुए कोर्स के अध्याय, विषय, पाठ और सुरक्षित अभ्यास जारी रखें।'}</p><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={selectedCourseId} onCourseChange={value=>{const next=courses.find(course=>Number(course.id)===Number(value));void selectCourse(value).then(()=>router.push('/student/learn?courseId='+encodeURIComponent(String(next?.public_id||value))));}} subjectCode="ALL" onSubjectChange={value=>{if(value)router.push('/student/learn?courseId='+encodeURIComponent(String(activeCourse?.public_id||selectedCourseKey))+'&subjectCode='+encodeURIComponent(value));}} loading={loadingCourses} language={locale} includeAllSubjects={true} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} />{courseError&&<p role="alert" className="error-message">{courseError}</p>}<div className="lesson-next"><Link href="/student/courses" className="button button-dark"><UiText message="web.navigation.student.allCourses" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">

@@ -188,7 +188,7 @@ assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.in
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
 
 const emptyStatePages = [
-  ['Learn', structuredLessonsClient, 'student.empty.learn.message'],
+  ['Learn', learnClient, 'student.empty.learn.message'],
   ['Practice', practiceClient, 'student.empty.practice.message'],
   ['Progress', studentProgressPage, 'student.empty.progress.message'],
   ['Books', studentBooksClient, 'student.empty.books.message'],

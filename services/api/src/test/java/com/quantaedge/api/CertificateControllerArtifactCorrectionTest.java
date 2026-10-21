@@ -97,7 +97,7 @@ class CertificateControllerArtifactCorrectionTest {
     CertificateController controller = new CertificateController(
         jdbc, authorization, renderer, storage, new ObjectMapper(), java.math.BigDecimal.valueOf(80));
 
-    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, 91L, "pdf", student, TEST_TENANT);
+    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, "91", "pdf", student, TEST_TENANT);
 
     assertEquals(200, response.getStatusCode().value());
     assertArrayEquals(new byte[] {9, 8, 7}, response.getBody());
