@@ -20,8 +20,20 @@ public class LearningMetricsService {
     return statsFor(studentId, programId, null);
   }
 
-  /** Tenant-aware metrics path used by authenticated learner endpoints. */
+  /** Tenant-aware course metrics retained for callers that do not select one subject. */
   public Map<String,Object> statsFor(long studentId, Long programId, Long institutionId) {
+    return statsFor(studentId, programId, institutionId, null);
+  }
+
+  /** Tenant- and subject-aware metrics for the learner's current course filter. */
+  public Map<String,Object> statsFor(long studentId, Long programId, Long institutionId, String requestedSubjectCode) {
+    String selectedSubjectCode = requestedSubjectCode == null || requestedSubjectCode.isBlank()
+        || requestedSubjectCode.trim().equalsIgnoreCase("ALL")
+        ? null : requestedSubjectCode.trim().toLowerCase(java.util.Locale.ROOT);
+    if (selectedSubjectCode != null && !selectedSubjectCode.matches("[a-z0-9][a-z0-9_-]{0,39}")) {
+      throw new IllegalArgumentException("Choose a subject from the selected course.");
+    }
+    String selectedSubjectScope = selectedSubjectCode == null ? "true" : "lower(s.code)=lower(?)";
     String subjectScope = programId == null ? "s.program_id is null" : """
       exists(select 1 from curriculum_program_subject cps
         join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE'
@@ -65,10 +77,10 @@ public class LearningMetricsService {
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=st.id __TENANT_P__
         and __COURSE_PROGRESS_SCOPE__
-      where st.id=? and st.active=true and __SUBJECT_SCOPE__
+      where st.id=? and st.active=true and __SUBJECT_SCOPE__ and __SELECTED_SUBJECT__
       """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_JOIN__",lessonSubjectJoin)
-         .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope).replace("__SUBJECT_SCOPE__",subjectScope);
-    result.put("lessonStats",jdbc.queryForMap(tenantSql(lessonSql,institutionId),tenantArgs(institutionId,lessonArgs)));
+         .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope).replace("__SUBJECT_SCOPE__",subjectScope).replace("__SELECTED_SUBJECT__",selectedSubjectScope);
+    result.put("lessonStats",jdbc.queryForMap(tenantSql(lessonSql,institutionId),tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,lessonArgs))));
 
     Object[] questionStatsArgs = programId == null
         ? new Object[]{studentId}
@@ -86,7 +98,7 @@ public class LearningMetricsService {
       where qa.student_id=? __TENANT_QA__ and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
         and __COURSE_ATTEMPT_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_ATTEMPT_SCOPE__",courseAttemptScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,questionStatsArgs)));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,questionStatsArgs))));
 
     String curriculumClassScope = programId == null
         ? "c.code=(select class_code from student where id=? and active=true)"
@@ -118,7 +130,7 @@ public class LearningMetricsService {
          .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope)
          .replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
          .replace("__SUBJECT_SCOPE__",subjectScope);
-    result.put("curriculum",jdbc.queryForList(tenantSql(curriculumSql,institutionId),tenantArgs(institutionId,curriculumArgs)));
+    result.put("curriculum",jdbc.queryForList(tenantSql(curriculumSql,institutionId),tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,curriculumArgs))));
 
     Object[] masteryArgs = programId == null
         ? new Object[]{studentId}
@@ -133,7 +145,7 @@ public class LearningMetricsService {
       join curriculum_subject s on s.id=ch.subject_id
       where m.student_id=? __TENANT_M__ and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,masteryArgs)));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,masteryArgs))));
 
     result.put("masteryDetails",jdbc.queryForList(tenantSql("""
       select cc.id as concept_id,cc.title as concept_title,ch.display_name as chapter_name,
@@ -146,8 +158,8 @@ public class LearningMetricsService {
         and __COURSE_MASTERY_SCOPE__ and __SUBJECT_SCOPE__
       order by m.mastery_percent asc,ch.teaching_order,ch.sort_order,cc.concept_order,cc.id limit 30
       """.replace("__COURSE_MASTERY_SCOPE__",courseMasteryScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,
-          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId})));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,
+          programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
 
     Object[] assessmentArgs = programId == null
         ? new Object[]{studentId}
@@ -164,7 +176,7 @@ public class LearningMetricsService {
       join curriculum_subject s on s.id=a.subject_id
       where att.student_id=? __TENANT_ATT__ and __COURSE_ASSESSMENT_SCOPE__ and __SUBJECT_SCOPE__
       """.replace("__COURSE_ASSESSMENT_SCOPE__",courseAssessmentScope)
-        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,assessmentArgs)));
+        .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,assessmentArgs))));
 
     result.put("assessmentByType",jdbc.queryForList(tenantSql("""
       select a.assessment_type,count(att.id) filter(where att.status<>'ABANDONED') as attempts,
@@ -313,6 +325,13 @@ public class LearningMetricsService {
     result[0] = institutionId;
     System.arraycopy(args,0,result,1,args.length);
     return result;
+  }
+
+  private Object[] subjectScopedArgs(String subjectCode, Object[] args) {
+    if (subjectCode == null) return args;
+    Object[] scoped = Arrays.copyOf(args, args.length + 1);
+    scoped[scoped.length - 1] = subjectCode;
+    return scoped;
   }
 
   private Object[] scopedArgs(Long programId,Object... args) {
