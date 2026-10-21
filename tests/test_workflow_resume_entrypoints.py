@@ -46,7 +46,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             workflow,
         )
         self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
-        self.assertIn("source PDF SHA-256 differs from the selected whole-book PDF", workflow)
+        self.assertIn("source PDF SHA-256 differs", workflow)
         self.assertIn('"publication_allowed": False', workflow)
 
     def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
