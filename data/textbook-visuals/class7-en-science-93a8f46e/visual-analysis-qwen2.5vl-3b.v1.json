@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2085,
+    "assets_selected": 2088,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2083,
-    "assets_remaining": 5405,
-    "assets_completion_percent": 27.8,
+    "assets_analyzed": 2086,
+    "assets_remaining": 5402,
+    "assets_completion_percent": 27.9,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2080,
+    "assets_skipped_from_checkpoint": 2083,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:12:54Z"
+      "checkpointed_at": "2026-10-21T20:16:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:13:17Z"
+      "checkpointed_at": "2026-10-21T20:16:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79717,6 +79717,115 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T20:15:21Z"
+    },
+    {
+      "asset_id": "f10e5c37a9f8a64621a19907",
+      "asset_sha256": "fad65822095f310f13d6df901785f582d01f8575eaa480c069fb0721dc804b73",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/fad65822095f310f13d6df901785f582d01f8575eaa480c069fb0721dc804b73.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced by the materials mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:17:18Z"
+    },
+    {
+      "asset_id": "bbea72d3065e6e6571063681",
+      "asset_sha256": "ffd24727228689559bae91a1d96bafeb23c8176726fb718c48d4656725244054",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/ffd24727228689559bae91a1d96bafeb23c8176726fb718c48d4656725244054.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a metal spoon and a metal coin, with a blue line connecting them.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin",
+          "produce a ringing sound. Coal and wood, on the other hand,",
+          "produce dull sounds.",
+          "This property of metals that enables them to produce a ringing",
+          "sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The image illustrates the concept of sonority in metals.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show a comparison between different materials.",
+          "The image does not include any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:18:06Z"
+    },
+    {
+      "asset_id": "0575668efc952b83d1c86d2b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:18:14Z"
     }
   ]
 }

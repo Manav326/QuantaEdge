@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2186,
-    "successful_visual_analyses": 2085,
-    "missing_visual_analyses": 5302,
+    "raw_analysis_result_rows": 2189,
+    "successful_visual_analyses": 2088,
+    "missing_visual_analyses": 5299,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5403,
+    "unresolved_count": 5400,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89622,9 +89622,26 @@
       "asset_path": "assets/fad65822095f310f13d6df901785f582d01f8575eaa480c069fb0721dc804b73.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced by the materials mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89640,9 +89657,35 @@
       "asset_path": "assets/ffd24727228689559bae91a1d96bafeb23c8176726fb718c48d4656725244054.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a metal spoon and a metal coin, with a blue line connecting them.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin",
+          "produce a ringing sound. Coal and wood, on the other hand,",
+          "produce dull sounds.",
+          "This property of metals that enables them to produce a ringing",
+          "sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The image illustrates the concept of sonority in metals.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show a comparison between different materials.",
+          "The image does not include any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89658,9 +89701,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
