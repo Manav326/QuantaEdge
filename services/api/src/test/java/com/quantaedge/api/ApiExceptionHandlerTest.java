@@ -18,6 +18,19 @@ class ApiExceptionHandlerTest {
   }
 
   @Test
+  void responseStatusConflictsReturnTheBusinessReason() {
+    var exception = new org.springframework.web.server.ResponseStatusException(
+        org.springframework.http.HttpStatus.CONFLICT,
+        "This existing certificate has no matching course association.");
+
+    var response = new ApiExceptionHandler().responseStatus(exception);
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals("HTTP_409", response.getBody().get("error"));
+    assertEquals("This existing certificate has no matching course association.", response.getBody().get("message"));
+  }
+
+  @Test
   void institutionAccessFailuresPreserveTheirForbiddenStatus() {
     var exception = new InstitutionTenantContextService.InvalidInstitutionContextException(
         403, "INSTITUTION_UNAVAILABLE", "The selected institution is unavailable.");
