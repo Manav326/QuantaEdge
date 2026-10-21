@@ -159,7 +159,7 @@ export default function PracticePage(){
   [practiceSubjectGroups,practiceSubjectFilter]);
   // Paginate practice items, not questions inside a scored session, so each catalogue row
   // keeps its existing subject sequence, completion score, and eligibility gate.
-  const practiceCatalogueEntries=useMemo<PracticeCatalogueEntry[]>(()=>visiblePracticeSubjectGroups.flatMap(group=>{
+  const practiceCatalogueEntries=useMemo<PracticeCatalogueEntry[]>(()=>visiblePracticeSubjectGroups.flatMap<PracticeCatalogueEntry>(group=>{
     const passedCount=group.lessons.filter(entry=>entry.passed).length;
     if(group.lessons.length===0) return [{
       kind:'empty' as const,key:'empty-'+group.code,code:group.code,name:group.name,total:0,passedCount:0
