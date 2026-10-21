@@ -221,6 +221,56 @@ public class LearningMetricsService {
           subjectScopedArgs(selectedSubjectCode,
             programId == null ? new Object[]{studentId} : new Object[]{studentId,programId,programId}))));
 
+    // Diagnostic answers are a separate baseline assessment. They are not added to routine
+    // practice accuracy or long-term concept mastery; keeping the aggregates separate preserves
+    // the meaning of both sets of measurements while making diagnostic performance usable.
+    String diagnosticCourseScope = programId == null ? "da.course_id is null" : "da.course_id=?";
+    Object[] diagnosticArgs = programId == null
+        ? new Object[]{studentId}
+        : new Object[]{studentId,programId};
+    String diagnosticSummarySql = """
+      select
+        count(distinct da.id) filter (where da.status='SUBMITTED') as completed_attempts,
+        count(distinct da.id) filter (where da.status='IN_PROGRESS') as in_progress_attempts,
+        count(daq.id) filter (where da.status='SUBMITTED') as questions,
+        count(daq.id) filter (where da.status='SUBMITTED' and daq.answered_at is not null) as answered_questions,
+        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=true) as correct_answers,
+        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=false) as incorrect_answers,
+        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct is not null) as graded_answers,
+        coalesce(round(100.0*count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=true)/
+          nullif(count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct is not null),0),1),0) as accuracy_percent,
+        max(da.submitted_at) filter (where da.status='SUBMITTED') as completed_at
+      from student_diagnostic_attempt da
+      left join student_diagnostic_attempt_question daq on daq.diagnostic_attempt_id=da.id
+      where da.student_id=? __TENANT_DA__ and __DIAGNOSTIC_COURSE_SCOPE__
+      """.replace("__DIAGNOSTIC_COURSE_SCOPE__",diagnosticCourseScope);
+    result.put("diagnosticStats",jdbc.queryForMap(
+        tenantSql(diagnosticSummarySql,institutionId),tenantArgs(institutionId,diagnosticArgs)));
+
+    String diagnosticSubjectScope = selectedSubjectCode == null ? "true" : "lower(s.code)=lower(?)";
+    String diagnosticSubjectsSql = """
+      select s.code as subject_code,s.display_name as subject_name,
+        count(daq.id) as questions,
+        count(daq.id) filter (where daq.answered_at is not null) as answered_questions,
+        count(daq.id) filter (where daq.is_correct=true) as correct_answers,
+        count(daq.id) filter (where daq.is_correct is not null) as graded_answers,
+        coalesce(round(100.0*count(daq.id) filter (where daq.is_correct=true)/
+          nullif(count(daq.id) filter (where daq.is_correct is not null),0),1),0) as accuracy_percent
+      from student_diagnostic_attempt da
+      join student_diagnostic_attempt_question daq on daq.diagnostic_attempt_id=da.id
+      join lesson l on l.id=daq.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
+        and __DIAGNOSTIC_COURSE_SCOPE__ and __DIAGNOSTIC_SUBJECT_SCOPE__
+      group by s.code,s.display_name,s.sort_order
+      order by s.sort_order,s.code
+      """.replace("__DIAGNOSTIC_COURSE_SCOPE__",diagnosticCourseScope)
+         .replace("__DIAGNOSTIC_SUBJECT_SCOPE__",diagnosticSubjectScope);
+    result.put("diagnosticSubjects",jdbc.queryForList(
+        tenantSql(diagnosticSubjectsSql,institutionId),
+        tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,diagnosticArgs))));
+
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
     result.put("sessionStats",sessionStatsFor(studentId,institutionId,programId));
