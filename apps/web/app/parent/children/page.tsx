@@ -73,7 +73,7 @@ export default function ParentChildrenPage(){
     setArchivedChildren(archivedBody);
     const programLists=await Promise.all(childrenBody.map(async(child:Child)=>{
       try{
-        const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs',{credentials:'same-origin',cache:'no-store'});
+        const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs?includeSubjects=true',{credentials:'same-origin',cache:'no-store'});
         const body=await readJson(response);
         return [child.id,response.ok&&Array.isArray(body)?body:[]] as const;
       }catch{return [child.id,[]] as const;}

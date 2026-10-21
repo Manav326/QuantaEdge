@@ -32,6 +32,9 @@ class ApplicationStartupSmokeTest {
   @Autowired
   private InstitutionMembershipService institutionMembershipService;
 
+  @Autowired
+  private GuardianController guardianController;
+
 
   @Test
   @Transactional
@@ -148,6 +151,52 @@ class ApplicationStartupSmokeTest {
       """, Long.class);
     List<Map<String,Object>> subjects = controller.subjectsForProgram(classSixCourseId);
     assertTrue(subjects != null, "The course-subject query must execute against the migrated schema.");
+  }
+
+  @Test
+  @Transactional
+  void guardianChildProgramsCatalogueSqlExecutesAgainstMigratedTenantSchema() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant
+      where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+
+    // Use isolated test identities so the catalogue query can be exercised without
+    // borrowing a real family's child or changing any existing enrollment data.
+    Long parentUserId = jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role,mobile_verified_at)
+      values(gen_random_uuid(), '+918'||lpad((floor(random()*1000000000))::bigint::text,9,'0'),
+        'Guardian catalogue SQL regression','PARENT',now())
+      returning id
+      """, Long.class);
+    Long learnerUserId = jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role,mobile_verified_at)
+      values(gen_random_uuid(), '+917'||lpad((floor(random()*1000000000))::bigint::text,9,'0'),
+        'Guardian catalogue SQL regression learner','LEARNER',now())
+      returning id
+      """, Long.class);
+    Long studentId = jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active,user_account_id)
+      values(gen_random_uuid(),'Guardian catalogue SQL regression learner','6','Bihar Board','hi','PRODUCTION',true,?)
+      returning id
+      """, Long.class, learnerUserId);
+
+    institutionMembershipService.ensureStudentMembership(
+        studentId, institutionId, "GUARDIAN_CATALOGUE_SQL_REGRESSION", null);
+    jdbc.update("""
+      insert into guardian_student(
+        guardian_user_id,student_id,relationship,consent_status,consent_version,
+        consent_source,consented_by,active,access_level)
+      values (?,?,'PARENT','CONSENTED',?,'PARENT_PORTAL',?,true,'FULL')
+      """, parentUserId, studentId, AuthService.GUARDIAN_CONSENT_VERSION, parentUserId);
+
+    AuthContext parent = new AuthContext(
+        parentUserId, null, null, "PARENT", "Guardian catalogue SQL regression", "PARENT");
+    List<Map<String,Object>> courses = guardianController.childPrograms(
+        studentId, false, parent,
+        new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));
+    assertTrue(courses != null,
+        "The parent dashboard course catalogue SQL must execute against the migrated tenant schema.");
   }
 
   @Test

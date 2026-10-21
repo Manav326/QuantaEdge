@@ -35,6 +35,7 @@ const marketplaceCourseCardCss = read('../app/components/MarketplaceCourseCard.m
 const marketplaceI18n = read('../app/components/marketplaceI18n.ts');
 const marketplaceTimestamp = read('../app/components/formatUserTimestamp.ts');
 const guardianCourseProgramsApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
+const certificateApi = read('../../../services/api/src/main/java/com/quantaedge/api/CertificateController.java');
 const diagnosticApi = read('../../../services/api/src/main/java/com/quantaedge/api/DiagnosticController.java');
 const courseOrderFinancialService = read('../../../services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java');
 const learningMetricsService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMetricsService.java');
@@ -194,6 +195,16 @@ assert.ok(courseMarketplaceApi.includes('@PostMapping("/orders/{localOrderId}/re
   'Server must reconcile both student and parent orders and refuse reuse of a paid Razorpay order.');
 assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.includes('/student/courses') && dashboardPage.includes('/student/marketplace'),
   'Dashboard must show the active course and link to dedicated Courses and Marketplace screens.');
+assert.ok(dashboardPage.includes("'&lessonId='+encodeURIComponent(String(rec.lesson.id))"),
+  'The recommended Quick Action must open the exact recommended lesson, while the Learning action retains the course lesson/topic list.');
+assert.ok(practiceClient.indexOf('const searchParams=useSearchParams();') < practiceClient.indexOf('useState(()=>searchParams.get'),
+  'Practice must initialize URL-dependent state only after declaring the searchParams hook.');
+assert.ok((certificateApi.match(/@RequestParam\("courseId"\) String suppliedCourseId/g)||[]).length >= 4,
+  'Certificate GET routes must bind the public courseId query parameter consistently.');
+assert.ok(guardianCourseProgramsApi.includes('@RequestParam(name="includeSubjects",defaultValue="false") boolean includeSubjects') &&
+  read('../app/parent/children/page.tsx').includes("'/programs?includeSubjects=true'") &&
+  guardianCourseProgramsApi.includes('if(includeSubjects)') && read('../app/parent/page.tsx').includes('/programs?includeSubjects=false'),
+  'The parent dashboard must avoid loading unused subject details; course assignment screens retain the default subject catalogue.');
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
 
 const emptyStatePages = [

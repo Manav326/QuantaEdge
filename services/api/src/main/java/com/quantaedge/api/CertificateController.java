@@ -98,7 +98,7 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates")
   public Map<String, Object> myCertificates(
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -118,7 +118,7 @@ public class CertificateController {
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
   @GetMapping("/students/me/certificates/{certificateId}")
   public Map<String, Object> myCertificate(@PathVariable long certificateId,
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -136,7 +136,7 @@ public class CertificateController {
   /** Subjects mapped to the selected enrolled course and eligible for course completion certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -264,7 +264,7 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -335,7 +335,7 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/assessment-eligibility")
   public Map<String, Object> assessmentCertificateEligibility(
       @RequestParam String attemptIds,
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -856,7 +856,7 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -870,7 +870,7 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
-      @RequestParam String suppliedCourseId,
+      @RequestParam("courseId") String suppliedCourseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
