@@ -494,6 +494,22 @@ const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
 assert.ok(textbooksClient.includes('displayChapterTitle(item, learningLanguage === \'en\')'), 'Textbook chapter titles must follow selected content language.');
 const scopeComponent = read('../app/student/InstitutionCourseSubjectScope.tsx');
 assert.ok(scopeComponent.includes('useTenantBranding') && scopeComponent.includes('activeCourse?.subjects') && scopeComponent.includes('brand?.displayName'), 'Shared learner scope must display the validated institution and derive subjects from the selected course.');
+assert.ok(practiceClient.includes('subjectCode={practiceSubjectFilter}') &&
+  practiceClient.includes('setPracticeSubjectFilter(next)') &&
+  practiceClient.includes('visiblePracticeSubjectGroups.map(group=>') &&
+  practiceClient.includes("allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'}") &&
+  practiceClient.includes('practiceSubjectGroups.filter(group=>group.code===practiceSubjectFilter)'),
+  'Practice navigation must offer a working all-subject/individual-subject filter derived from the selected course and retain that filter in the URL.');
+assert.ok(css.includes('.qe-practice-catalogue .qe-practice-course-subject-scope select') &&
+  css.includes('.qe-practice-next-row.is-eligible') &&
+  css.includes('var(--qe-color-surface-elevated)') &&
+  css.includes('var(--qe-color-text-muted)') &&
+  css.includes('var(--qe-color-focus)') &&
+  css.includes('var(--qe-color-success-container)'),
+  'Practice course/subject controls and sequence cards must use the shared semantic theme tokens for surfaces, text, focus and status in light and dark appearances.');
+assert.ok(learningController.includes('as practice_question_count') &&
+  learningController.includes("count(*) filter(where q.question_type<>'MCQ') as practice_question_count"),
+  'The practice sequence must be based on the count of approved non-MCQ questions from the selected lesson catalogue.');
 assert.ok(testsClient.includes('InstitutionCourseSubjectScope') && testsClient.includes('resultsParams.set(\'subjectCode\',subjectFilter)'), 'Tests and results must carry selected course and subject scope.');
 const studentClassesScope = read('../app/student/classes/ClassesClient.tsx');
 assert.ok(studentClassesScope.includes('InstitutionCourseSubjectScope') && studentClassesScope.includes('params.set(\'courseId\',String(activeCourseId))'), 'Live and recorded classes must be scoped to the selected course and its subjects.');
