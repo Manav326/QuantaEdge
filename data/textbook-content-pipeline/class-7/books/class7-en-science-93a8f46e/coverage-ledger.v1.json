@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2183,
-    "successful_visual_analyses": 2082,
-    "missing_visual_analyses": 5305,
+    "raw_analysis_result_rows": 2186,
+    "successful_visual_analyses": 2085,
+    "missing_visual_analyses": 5302,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5406,
+    "unresolved_count": 5403,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89526,9 +89526,27 @@
       "asset_path": "assets/b1da35b2f0c9d00a3281f6067a9db9cad29b39d84f38ec4ae5dc182b7ae753be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.",
+          "This property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in\nnature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "sonorous",
+          "property of metals"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, focusing on metals.",
+        "limitations": [
+          "The text does not provide visual aids or diagrams to support the explanation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89544,9 +89562,26 @@
       "asset_path": "assets/dbb551cf3afbdde31420dc63ff015c7ebc23a30993c1e3e312652b61b4baf3b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, focusing on the ability of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89562,9 +89597,16 @@
       "asset_path": "assets/e213d42b2154518ccf6070a75d2dc10fa3b5ec3bdcb43cb18752ae45d0ca3418.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a blue border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with a blue border.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
