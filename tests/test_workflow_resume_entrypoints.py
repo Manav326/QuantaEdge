@@ -58,6 +58,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         )
         self.assertIn("cancel-in-progress:", workflow)
         self.assertIn("publication_allowed", workflow)
+        self.assertIn("source PDF SHA-256 differs", workflow)
 
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
