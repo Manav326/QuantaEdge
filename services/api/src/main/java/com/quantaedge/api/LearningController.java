@@ -448,7 +448,7 @@ public class LearningController {
     return result;
   }
 
-  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId,long courseId,String language,long institutionId){
+  List<Map<String,Object>> publicQuestions(long lessonId,long studentId,long courseId,String language,long institutionId){
     return jdbc.queryForList("""
       with tenant_scope as (select ?::bigint as institution_id) 
       select q.id,q.question_type,coalesce(qt.prompt,q.prompt) as prompt,q.difficulty,q.sort_order,q.concept_id,
