@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2141,
+    "assets_selected": 2144,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2139,
-    "assets_remaining": 5349,
+    "assets_analyzed": 2142,
+    "assets_remaining": 5346,
     "assets_completion_percent": 28.6,
     "assets_failed": 102,
-    "assets_skipped_from_checkpoint": 2136,
+    "assets_skipped_from_checkpoint": 2139,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T21:07:45Z"
+      "checkpointed_at": "2026-10-21T21:10:33Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T21:08:06Z"
+      "checkpointed_at": "2026-10-21T21:10:56Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -81651,6 +81651,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T21:09:50Z"
+    },
+    {
+      "asset_id": "16b2be9b7f0fe61b4c38dba6",
+      "asset_sha256": "cbca8f4b5db7f34256f339cd8158f71c870dd587fffaae9f1b2e8835914aa7ed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/cbca8f4b5db7f34256f339cd8158f71c870dd587fffaae9f1b2e8835914aa7ed.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not mention the type of iron nails used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:11:08Z"
+    },
+    {
+      "asset_id": "a8dbdc83bb0ac2ab8628aa5a",
+      "asset_sha256": "4c9cdeed0f21a96a10d9201fa033b1314bab7baee04dcb8409a1642c98043965",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/4c9cdeed0f21a96a10d9201fa033b1314bab7baee04dcb8409a1642c98043965.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Observation of iron nails in different environments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B). However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment observation"
+        ],
+        "context_relation": "Observation of iron nails in different environments",
+        "limitations": [
+          "The experiment does not specify the duration of the observation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:11:53Z"
+    },
+    {
+      "asset_id": "14729a4b0e51b03b3bdc225d",
+      "asset_sha256": "1672cbbf51f3392e8ffbf77acecaae87ad3dc4df83ca9fc5c593fe2bf2df6f9f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/1672cbbf51f3392e8ffbf77acecaae87ad3dc4df83ca9fc5c593fe2bf2df6f9f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not specify the type of iron nails used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T21:12:37Z"
     }
   ]
 }

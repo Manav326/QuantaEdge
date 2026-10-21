@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2243,
-    "successful_visual_analyses": 2141,
-    "missing_visual_analyses": 5245,
+    "raw_analysis_result_rows": 2246,
+    "successful_visual_analyses": 2144,
+    "missing_visual_analyses": 5242,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5347,
+    "unresolved_count": 5344,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -91501,9 +91501,30 @@
       "asset_path": "assets/cbca8f4b5db7f34256f339cd8158f71c870dd587fffaae9f1b2e8835914aa7ed.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not mention the type of iron nails used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -91519,9 +91540,29 @@
       "asset_path": "assets/4c9cdeed0f21a96a10d9201fa033b1314bab7baee04dcb8409a1642c98043965.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Observation of iron nails in different environments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B). However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment observation"
+        ],
+        "context_relation": "Observation of iron nails in different environments",
+        "limitations": [
+          "The experiment does not specify the duration of the observation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -91537,9 +91578,30 @@
       "asset_path": "assets/1672cbbf51f3392e8ffbf77acecaae87ad3dc4df83ca9fc5c593fe2bf2df6f9f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not specify the type of iron nails used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
