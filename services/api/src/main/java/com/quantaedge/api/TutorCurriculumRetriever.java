@@ -264,7 +264,12 @@ public class TutorCurriculumRetriever {
       from tutor_session ts
       join lesson current_lesson on current_lesson.id=ts.lesson_id
       join curriculum_chapter current_chapter on current_chapter.id=current_lesson.chapter_id
-      join curriculum_subject s on s.id=current_chapter.subject_id
+      join curriculum_subject s on s.id=current_chapter.subject_id and s.active=true
+      join curriculum_program program on program.id=ts.course_id
+        and program.status='ACTIVE' and program.code<>'GENERAL'
+      join curriculum_program_subject course_subject on course_subject.program_id=program.id
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_class current_class on current_class.id=s.class_id and current_class.active=true
       join textbook_extracted_page p on p.subject_id=current_chapter.subject_id
         and p.class_id=s.class_id and p.language=?
       left join learning_pdf_asset a on a.id=p.pdf_asset_id
@@ -272,6 +277,7 @@ public class TutorCurriculumRetriever {
       left join learning_document d on d.id=p.learning_document_id
       left join curriculum_chapter ch on ch.id=p.chapter_id
       where ts.id=? and ts.ended_at is null __TENANT_SCOPE__
+        and (s.program_id=program.id or (s.program_id is null and program.class_id=s.class_id))
         and p.quality_status='READY'
         and p.extraction_method in ('PDF_TEXT','OCR')
         and length(trim(p.extracted_text))>=35
