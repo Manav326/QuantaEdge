@@ -44,6 +44,11 @@ export default function MarketplaceCourseCard({
     count + (Number.isFinite(Number(subject.lessons)) ? Number(subject.lessons) : 0), 0);
   const hasCoverageCounts = subjects.some(subject =>
     subject.chapters !== undefined || subject.lessons !== undefined);
+  // Never expose the internal CURRENT enum as though it were a user-facing curriculum name.
+  const curriculumVersionLabel = !curriculumVersion ? undefined
+    : curriculumVersion.trim().toUpperCase() === 'CURRENT'
+      ? (language === 'hi' ? 'वर्तमान पाठ्यक्रम' : 'Current curriculum')
+      : curriculumVersion;
 
   return (
     <article className={styles.card} lang={language}>
@@ -58,7 +63,7 @@ export default function MarketplaceCourseCard({
         <div className={styles.metadata}>
           {courseCode && <span className={styles.courseCode}>{courseCode}</span>}
           {publicId && <span className={styles.publicId}>{language === 'hi' ? 'कोर्स ID' : 'Course ID'}: {publicId}</span>}
-          {curriculumVersion && <span className={styles.version}>{curriculumVersion}</span>}
+          {curriculumVersionLabel && <span className={styles.version}>{curriculumVersionLabel}</span>}
           {subjects.length > 0 && (
             <span className={styles.coverage}>
               {language === 'hi'
