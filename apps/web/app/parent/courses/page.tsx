@@ -11,6 +11,7 @@ import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 import { localizeMarketplaceError } from '../../components/marketplaceI18n';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
@@ -23,6 +24,7 @@ type Course = {
 type PurchaseRequest = {
   request_id: number; student_id: number; course_id: number; status: string;
   student_name: string; course_name: string; price_paise: number; currency: string;
+  requested_at?: string;
 };
 type Entitlement = {
   entitlement_id: number; course_id: number; course_name: string; current_learner_name: string;
@@ -415,7 +417,9 @@ export default function ParentCoursesPage() {
             : <div className="parent-courses-page__requests">{requests.map(request => (
               <article className="parent-courses-page__request" key={request.request_id}>
                 <div><strong>{request.student_name}</strong><span>{request.course_name}</span>
-                  <small>{money(Number(request.price_paise))} · <LocaleText hinglish="कोर्स खरीदने का अनुरोध" english="Purchase request" /></small></div>
+                  <small>{money(Number(request.price_paise))} · <LocaleText hinglish="कोर्स खरीदने का अनुरोध" english="Purchase request" /></small>
+                  {request.requested_at && <small><LocaleText hinglish="अनुरोध भेजा गया" english="Requested" /> · {formatUserTimestamp(request.requested_at, language)}</small>}
+                </div>
                 <div className="parent-courses-page__request-actions">
                   <button type="button" className="button button-dark button-small" disabled={busy !== '' || (Number(request.price_paise) > 0 && pendingVerify !== null)}
                     onClick={() => {
