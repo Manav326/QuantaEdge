@@ -24735,7 +24735,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -24744,12 +24744,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "Eclipse",
+          "eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "Day and night",
-          "Science experiments",
-          "Questioning answers"
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [

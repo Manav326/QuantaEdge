@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3aac8c1abd1ea8d7ae8f3f8fa3f2b47fecc865e1ffa432d83132c587bee6d434",
+  "raw_analysis_sha256": "0a7b41dd00a1e2e90e2df0e6a24f2b347afde8985fcbaefe7025eb848ff7d0b2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -18272,9 +18272,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39683378254",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -19848,7 +19848,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -19857,12 +19857,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "Eclipse",
+          "eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "Day and night",
-          "Science experiments",
-          "Questioning answers"
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -19872,10 +19872,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T21:10:56Z",
+      "run_id": "39683378254",
+      "checkpointed_at": "2026-10-21T22:44:38Z",
       "effective_analysis": {
-        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -19884,12 +19884,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "Eclipse",
+          "eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "Day and night",
-          "Science experiments",
-          "Questioning answers"
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -39000,9 +39000,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39683378254",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -57128,7 +57128,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39683378254",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57944,7 +57944,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39683378254",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
