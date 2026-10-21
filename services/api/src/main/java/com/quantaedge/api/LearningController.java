@@ -28,7 +28,7 @@ public class LearningController {
   }
 
   // Keep the narrow constructor used by isolated controller tests and older callers.
-  LearningController(JdbcTemplate jdbc, AuthorizationService authorization,
+  public LearningController(JdbcTemplate jdbc, AuthorizationService authorization,
       LearningStateService state, QuestionAnswerService answerService) {
     this(jdbc, authorization, state, answerService, null);
   }
