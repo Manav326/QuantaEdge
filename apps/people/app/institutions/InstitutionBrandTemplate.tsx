@@ -399,6 +399,17 @@ export default function InstitutionBrandTemplate({
       const favicon32 = await renderSquareLimited(iconBitmap, 32, 0.12);
       const favicon16 = await renderSquareLimited(iconBitmap, 16, 0.12);
       const maskable512 = await renderSquareLimited(iconBitmap, 512, 0.23, '#FFFFFF');
+      const androidForeground = await renderSquareLimited(iconBitmap, 432, 0.19);
+      const androidDensitySizes = [
+        { density: 'mdpi', size: 48 },
+        { density: 'hdpi', size: 72 },
+        { density: 'xhdpi', size: 96 },
+        { density: 'xxhdpi', size: 144 },
+        { density: 'xxxhdpi', size: 192 },
+      ];
+      const androidDensityIcons = await Promise.all(androidDensitySizes.map(async item => ({
+        ...item, blob: await renderSquareLimited(iconBitmap, item.size, 0.12),
+      })));
       const brandLockup = await renderBrandLockup(iconBitmap, icon512, name, cleanTagline, themeTokens);
       const faviconBase64 = await blobBase64(favicon64);
       const themePrimary = validThemeColour(themeTokens.brandPrimary ?? themeTokens.primary, '#F97316');
@@ -428,6 +439,12 @@ export default function InstitutionBrandTemplate({
           favicons: ['favicon.svg', 'favicon-64.png', 'favicon-48.png', 'favicon-32.png', 'favicon-16.png'],
           webManifest: 'site.webmanifest',
           nativeIcons: ['icon-192.png', 'icon-512.png', 'maskable-icon-512.png', 'apple-touch-icon.png'],
+          androidLauncher: {
+            legacyDensityFolders: androidDensitySizes.map(item => 'android/res/mipmap-' + item.density + '/'),
+            adaptiveForeground: 'android/res/drawable-nodpi/institution_brand_icon_foreground.png',
+            adaptiveBackground: 'android/res/values/institution_brand_colors.xml',
+            adaptiveIconXml: ['android/res/mipmap-anydpi-v26/ic_launcher.xml', 'android/res/mipmap-anydpi-v26/ic_launcher_round.xml'],
+          },
         },
       };
       const files: PackFile[] = [
@@ -438,6 +455,20 @@ export default function InstitutionBrandTemplate({
         { path: 'brand-assets/brand-lockup.svg', blob: brandLockup.svg },
         { path: 'brand-assets/icon-512.png', blob: icon512 },
         { path: 'brand-assets/icon-192.png', blob: icon192 },
+        ...androidDensityIcons.flatMap(item => [
+          { path: 'brand-assets/android/res/mipmap-' + item.density + '/ic_launcher.png', blob: item.blob },
+          { path: 'brand-assets/android/res/mipmap-' + item.density + '/ic_launcher_round.png', blob: item.blob },
+        ]),
+        { path: 'brand-assets/android/res/drawable-nodpi/institution_brand_icon_foreground.png', blob: androidForeground },
+        { path: 'brand-assets/android/res/values/institution_brand_colors.xml', blob: new Blob([
+          '<?xml version="1.0" encoding="utf-8"?>\\n<resources>\\n  <color name="institution_brand_icon_background">' + themePrimary + '</color>\\n</resources>\\n',
+        ], { type: 'application/xml;charset=utf-8' }) },
+        { path: 'brand-assets/android/res/mipmap-anydpi-v26/ic_launcher.xml', blob: new Blob([
+          '<?xml version="1.0" encoding="utf-8"?>\\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\\n  <background android:drawable="@color/institution_brand_icon_background"/>\\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\\n</adaptive-icon>\\n',
+        ], { type: 'application/xml;charset=utf-8' }) },
+        { path: 'brand-assets/android/res/mipmap-anydpi-v26/ic_launcher_round.xml', blob: new Blob([
+          '<?xml version="1.0" encoding="utf-8"?>\\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\\n  <background android:drawable="@color/institution_brand_icon_background"/>\\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\\n</adaptive-icon>\\n',
+        ], { type: 'application/xml;charset=utf-8' }) },
         { path: 'brand-assets/apple-touch-icon.png', blob: apple180 },
         { path: 'brand-assets/maskable-icon-512.png', blob: maskable512 },
         { path: 'brand-assets/favicon.svg', blob: new Blob([faviconSvg], { type: 'image/svg+xml;charset=utf-8' }) },
@@ -454,6 +485,7 @@ export default function InstitutionBrandTemplate({
           '- logo-1024.png and logo-512.png: responsive logo renditions.\n' +
           '- brand-lockup.png and brand-lockup.svg: optional icon + institution name/tagline composition, coloured from the current theme settings.\n' +
           '- icon-512.png, icon-192.png and apple-touch-icon.png: square icon renditions.\n' +
+          '- android/res: legacy launcher-density icons plus adaptive launcher foreground/background/XML; copy this folder into app/src/main/res when preparing a tenant-branded Android package.\n' +
           '- maskable-icon-512.png: opaque padded icon for launchers that apply a mask.\n' +
           '- favicon.svg and favicon-*.png: browser tab icons.\n' +
           '- site.webmanifest: web app identity and icon declarations.\n' +
