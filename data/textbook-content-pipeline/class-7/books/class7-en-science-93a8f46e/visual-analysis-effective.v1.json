@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "39b7d7950389477755fdbf651f485193552590497d301b2011ac653db656a303",
+  "raw_analysis_sha256": "31ef3b8abfea1c12839c270ad05ddcfec479864df5009e27a4079e91a44c322f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:38:24Z",
+      "checkpointed_at": "2026-10-21T20:40:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:38:48Z",
+      "checkpointed_at": "2026-10-21T20:41:10Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -125962,6 +125962,154 @@
         "context_relation": "The table is a summary of observations made during an experiment to determine the conduction of electricity by different materials.",
         "limitations": [
           "The table does not provide specific details about the materials tested or the conditions under which the observations were made."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "913ad52c7fe8b50f2112ab07",
+      "asset_sha256": "6f4b2af7939ad5b61cf4581c891b17cbaee123ce45b7a599db205355ec8ba6ac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 68,
+      "asset_path": "page-0068.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b0e7ab826fbfe8b38896252ef5be0f8ac20af7d01c73f84d856101e0e7691ec7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table comparing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "S.No. Object/Material Observation (bulb glows/does not glow)",
+          "1. Piece of aluminium foil",
+          "2. Iron nail",
+          "3. Lump of sulfur (pea-sized)",
+          "4. ..."
+        ],
+        "concepts": [
+          "conduction of electricity",
+          "good conductor",
+          "poor conductor"
+        ],
+        "context_relation": "Comparison of materials based on their ability to conduct electricity",
+        "limitations": [
+          "The table does not specify the exact materials used for each observation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:42:43Z",
+      "effective_analysis": {
+        "visual_summary": "Table comparing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "S.No. Object/Material Observation (bulb glows/does not glow)",
+          "1. Piece of aluminium foil",
+          "2. Iron nail",
+          "3. Lump of sulfur (pea-sized)",
+          "4. ..."
+        ],
+        "concepts": [
+          "conduction of electricity",
+          "good conductor",
+          "poor conductor"
+        ],
+        "context_relation": "Comparison of materials based on their ability to conduct electricity",
+        "limitations": [
+          "The table does not specify the exact materials used for each observation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8ac6e812587ee5e317a8baef",
+      "asset_sha256": "23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane with a dashed line indicating motion or direction.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, possibly used to illustrate a concept related to motion or direction.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:42:49Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a dashed line indicating motion or direction.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, possibly used to illustrate a concept related to motion or direction.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6d842881648c42bae0f99953",
+      "asset_sha256": "1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a dashed circle with a small circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "\\(\\)"
+        ],
+        "concepts": [
+          "circle",
+          "dashed line"
+        ],
+        "context_relation": "The dashed circle represents a boundary or a limit.",
+        "limitations": [
+          "The image does not provide specific details about the context or the equation it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:42:56Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a dashed circle with a small circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "\\(\\)"
+        ],
+        "concepts": [
+          "circle",
+          "dashed line"
+        ],
+        "context_relation": "The dashed circle represents a boundary or a limit.",
+        "limitations": [
+          "The image does not provide specific details about the context or the equation it represents."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2213,
-    "successful_visual_analyses": 2111,
-    "missing_visual_analyses": 5275,
+    "raw_analysis_result_rows": 2216,
+    "successful_visual_analyses": 2114,
+    "missing_visual_analyses": 5272,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5377,
+    "unresolved_count": 5374,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90480,9 +90480,29 @@
       "asset_path": "page-0068.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table comparing the conduction of electricity by different objects or materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.2: Conduction of electricity by different objects or materials",
+          "S.No. Object/Material Observation (bulb glows/does not glow)",
+          "1. Piece of aluminium foil",
+          "2. Iron nail",
+          "3. Lump of sulfur (pea-sized)",
+          "4. ..."
+        ],
+        "concepts": [
+          "conduction of electricity",
+          "good conductor",
+          "poor conductor"
+        ],
+        "context_relation": "Comparison of materials based on their ability to conduct electricity",
+        "limitations": [
+          "The table does not specify the exact materials used for each observation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90498,9 +90518,16 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a dashed line indicating motion or direction.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, possibly used to illustrate a concept related to motion or direction.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90516,9 +90543,23 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a dashed circle with a small circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "\\(\\)"
+        ],
+        "concepts": [
+          "circle",
+          "dashed line"
+        ],
+        "context_relation": "The dashed circle represents a boundary or a limit.",
+        "limitations": [
+          "The image does not provide specific details about the context or the equation it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
