@@ -41,7 +41,6 @@ export default function ParentChildrenPage(){
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
   const [childPrograms,setChildPrograms]=useState<Record<number,any[]>>({});
-  const [busyCourse,setBusyCourse]=useState<string>('');
   const [profileDrafts,setProfileDrafts]=useState<Record<number,ChildProfileDraft>>({});
   const [credentialDrafts,setCredentialDrafts]=useState<Record<number,CredentialDraft>>({});
   const [archivedChildren,setArchivedChildren]=useState<Child[]>([]);
@@ -147,21 +146,6 @@ export default function ParentChildrenPage(){
       await load();
       setNotice(t('parent.children.credentialsSaved',{ name: child.display_name }));
     }catch(e:any){setError(e.message||t('parent.children.saveCredentialsFailed'));}
-  }
-
-  async function assignCourse(child:Child,course:any){
-    const key=child.id+':'+course.id;
-    setError('');setNotice('');setBusyCourse(key);
-    try{
-      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs/'+course.id+'/enroll',{
-        method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
-      });
-      const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||t('parent.children.assignCourseFailed'));
-      await load();
-      setNotice(t('parent.children.courseAssigned',{ course: course.display_name }));
-    }catch(e:any){setError(e.message||t('parent.children.assignCourseFailed'));}
-    finally{setBusyCourse('');}
   }
 
   async function restoreChild(child:Child){
