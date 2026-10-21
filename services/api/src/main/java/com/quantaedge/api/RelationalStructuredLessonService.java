@@ -682,7 +682,7 @@ public class RelationalStructuredLessonService {
     return result;
   }
 
-  private ArrayNode questions(long lessonId) {
+  ArrayNode questions(long lessonId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select q.id,q.question_type,q.prompt,q.explanation,q.review_status,q.answer_payload::text as answer_payload,
              coalesce(qte.prompt,q.prompt) as prompt_en,
