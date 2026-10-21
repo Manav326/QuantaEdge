@@ -320,6 +320,10 @@ const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/a
 const parentPage = read('../app/parent/page.tsx');
 assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
   coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open structured course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
+assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
+  !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
+  'Course-scoped learner answer writes must bind institution/course columns and keep answered_at as the database timestamp.');
 const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
 assert.ok(learnClient.includes("import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';") &&
   learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
