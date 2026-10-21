@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2189,
-    "successful_visual_analyses": 2088,
-    "missing_visual_analyses": 5299,
+    "raw_analysis_result_rows": 2192,
+    "successful_visual_analyses": 2091,
+    "missing_visual_analyses": 5296,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5400,
+    "unresolved_count": 5397,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89728,9 +89728,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89746,9 +89755,28 @@
       "asset_path": "page-0066.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of sonority in metals and its application in sound production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.",
+          "This property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in\nnature.",
+          "Now, I understand! The ringing sound of the school bell is\ndue to the sonority of metals.",
+          "Oh! The ringing sound of my ghungroos is also due to the\nsonority of metals."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "sonorous",
+          "school bell",
+          "ghungroos"
+        ],
+        "context_relation": "explanation",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89764,9 +89792,28 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two spoons, one made of metal and the other made of wood, with the metal spoon being hotter to touch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Material properties",
+          "Temperature comparison"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and material properties.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

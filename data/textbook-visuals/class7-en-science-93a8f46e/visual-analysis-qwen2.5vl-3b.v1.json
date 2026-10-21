@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2088,
+    "assets_selected": 2091,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2086,
-    "assets_remaining": 5402,
+    "assets_analyzed": 2089,
+    "assets_remaining": 5399,
     "assets_completion_percent": 27.9,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2083,
+    "assets_skipped_from_checkpoint": 2086,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:16:08Z"
+      "checkpointed_at": "2026-10-21T20:19:01Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:16:31Z"
+      "checkpointed_at": "2026-10-21T20:19:23Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79826,6 +79826,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T20:18:14Z"
+    },
+    {
+      "asset_id": "40800d849f65084a47961602",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:19:31Z"
+    },
+    {
+      "asset_id": "2b4bf4fae3c0670e19b3113b",
+      "asset_sha256": "b1dedaa79b56cfeee07e5b77314ee5bd1639b0a20dfbab8fa264facaa831e14d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "page-0066.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of sonority in metals and its application in sound production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.",
+          "This property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in\nnature.",
+          "Now, I understand! The ringing sound of the school bell is\ndue to the sonority of metals.",
+          "Oh! The ringing sound of my ghungroos is also due to the\nsonority of metals."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "sonorous",
+          "school bell",
+          "ghungroos"
+        ],
+        "context_relation": "explanation",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:21:08Z"
+    },
+    {
+      "asset_id": "eeba670f9fdc77d583e048c4",
+      "asset_sha256": "23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two spoons, one made of metal and the other made of wood, with the metal spoon being hotter to touch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Material properties",
+          "Temperature comparison"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and material properties.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:21:20Z"
     }
   ]
 }
