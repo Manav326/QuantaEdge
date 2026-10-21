@@ -228,7 +228,7 @@ export default function ParentCoursesPage() {
       setError(english ? 'Choose a child first.' : 'पहले बच्चे का चयन करें।');
       return;
     }
-    setBusy('checkout-' + courseId);
+    setBusy('checkout-' + courseId + '-' + recipientType + '-' + (recipientType === 'CHILD' ? String(studentId) : 'self'));
     setError(''); setNotice('');
     try {
       const body = await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/orders', {
@@ -300,7 +300,7 @@ export default function ParentCoursesPage() {
       setError(english ? 'Choose a child first.' : 'पहले बच्चे का चयन करें।');
       return;
     }
-    setBusy('free-' + courseId); setError(''); setNotice('');
+    setBusy('free-' + courseId + '-' + recipientType + '-' + (recipientType === 'CHILD' ? String(studentId) : 'self')); setError(''); setNotice('');
     try {
       await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/enroll-free', {
         method: 'POST', credentials: 'same-origin',
@@ -449,10 +449,12 @@ export default function ParentCoursesPage() {
               const ownedByParent = course.owned_by_parent === true;
               const transferableByParent = course.transferable_by_parent === true;
               const isFree = Number(course.price_paise) === 0;
-              const selectedChild = Number(childByCourse[course.course_id] || 0);
+              const selectedChildValue = Number(childByCourse[course.course_id] || 0);
               const ownedChildIds = new Set(String(course.owned_child_ids || '').split(',')
                 .map(value => Number(value.trim())).filter(value => Number.isSafeInteger(value) && value > 0));
-              const selectedChildAlreadyOwns = selectedChild > 0 && ownedChildIds.has(selectedChild);
+              const selectedChildAlreadyOwns = selectedChildValue > 0 && ownedChildIds.has(selectedChildValue);
+              const selectedChild = selectedChildAlreadyOwns ? 0 : selectedChildValue;
+              const eligibleChildren = children.filter(child => !ownedChildIds.has(child.id));
               return <MarketplaceCourseCard
                 key={course.course_id}
                 title={course.title || course.course_name}
@@ -485,9 +487,9 @@ export default function ParentCoursesPage() {
               >
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
-                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || (ownedByParent && (isFree || !transferableByParent))}
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
-                    {busy === 'checkout-' + course.course_id || busy === 'free-' + course.course_id
+                    {busy === 'checkout-' + course.course_id + '-SELF-self' || busy === 'free-' + course.course_id + '-SELF-self'
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
                       : ownedByParent
                         ? (english ? 'Already in your courses' : 'आपके कोर्स में पहले से है')
@@ -495,8 +497,8 @@ export default function ParentCoursesPage() {
                   </button>
                   <label><span><LocaleText hinglish="बच्चे के लिए" english="For child" /></span>
                     <select value={selectedChild || ''} onChange={e => setChildByCourse(current => ({ ...current, [course.course_id]: Number(e.target.value) || 0 }))}>
-                      <option value="">{english ? 'Choose child' : 'बच्चा चुनें'}</option>
-                      {children.map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
+                      <option value="">{eligibleChildren.length ? (english ? 'Choose child' : 'बच्चा चुनें') : (english ? 'All children already have access' : 'सभी बच्चों के पास पहले से पहुँच है')}</option>
+                      {eligibleChildren.map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
