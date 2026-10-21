@@ -59,6 +59,7 @@ function StudentCertificatesContent() {
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [certificateInventoryAvailable, setCertificateInventoryAvailable] = useState(false);
   const [directCertificate, setDirectCertificate] = useState<Certificate | null>(null);
   const [certificateLookupLoading, setCertificateLookupLoading] = useState(false);
   const [eligibleAttempts, setEligibleAttempts] = useState<any[]>([]);
@@ -83,7 +84,7 @@ function StudentCertificatesContent() {
     setError('');
     if (loadingCourses) return;
     if (courseId === null) {
-      setProfile(null); setCertificates([]); setEligibleAttempts([]); setSelectedTrackKey('');
+      setProfile(null); setCertificates([]); setCertificateInventoryAvailable(false); setEligibleAttempts([]); setSelectedTrackKey('');
       setError(courseError || (locale === 'english' ? 'Choose an enrolled course to view its certificates.' : 'प्रमाणपत्र देखने के लिए नामांकित कोर्स चुनें।'));
       return;
     }
@@ -122,6 +123,7 @@ function StudentCertificatesContent() {
     const availableTracks = Array.isArray(trackPayload.items) ? trackPayload.items : [];
     // Keep selectors and stored certificate records available if a separate endpoint fails.
     setProfile({ ...progress, curriculum: availableTracks });
+    setCertificateInventoryAvailable(certificateResult.status === 'fulfilled');
     if (certificateResult.status === 'fulfilled') setCertificates(Array.isArray(certs.items) ? certs.items : []);
     if (eligibleResult.status === 'fulfilled') {
       setEligibleAttempts(Array.isArray(eligible.items) ? eligible.items : []);
@@ -365,7 +367,7 @@ function StudentCertificatesContent() {
         throw new Error(translateUi(locale, 'legacy.web.the.server.did.not.return.a.confirmed..dcf66796'));
       }
       setNotice(translateUi(locale, 'legacy.web.certificate.issued.opening.the.certifi.410f199a'));
-      router.push('/student/certificates?certificateId=' + id);
+      router.push('/student/certificates?courseId=' + encodeURIComponent(publicCourseRef) + '&certificateId=' + id);
     } catch (e: any) {
       setError(e?.message || translateUi(locale, 'legacy.web.certificate.could.not.be.issued.505ce13b'));
     } finally {
@@ -551,7 +553,7 @@ function StudentCertificatesContent() {
             <div><span className={styles.eyebrow}>03 · {translateUi(locale, 'legacy.web.your.records.c4304201')}</span><h2>{translateUi(locale, 'legacy.web.issued.certificates.3cbbcab6')}</h2></div>
             <span className={styles.meta}>{certificates.length} {translateUi(locale, 'legacy.web.records.415b5a7c')}</span>
           </div>
-          {error && certificates.length === 0 ? null : !certificates.length ? (
+          {!certificateInventoryAvailable && error && certificates.length === 0 ? null : !certificates.length ? (
             <StudentEmptyState
               icon="certificates"
               title={translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}
