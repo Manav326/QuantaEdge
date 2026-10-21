@@ -93,6 +93,17 @@ export default function PracticePage(){
   const lessonId=/^\d+$/.test(lessonIdRaw)?Number(lessonIdRaw):0;
   const requestedSessionId=/^\d+$/.test(sessionIdRaw)?Number(sessionIdRaw):0;
 
+  // Keep the subject selector aligned with the URL when navigating between courses,
+  // restoring browser history, or following a saved course/subject link.
+  useEffect(()=>{
+    const requestedSubject=searchParams.get('subjectCode')||'ALL';
+    const mappedSubjects=activeCourse?.subjects||[];
+    const isMapped=requestedSubject==='ALL'||mappedSubjects.some(subject=>
+      String(subject.subject_code||subject.code||'')===requestedSubject
+    );
+    setPracticeSubjectFilter(isMapped?requestedSubject:'ALL');
+  },[courseKey,searchParams,activeCourse]);
+
   const current=questions[index];
   const options=current?parse<{key:string;label:string}[]>(current.options||'[]'):[];
   const correctCount=Object.values(scoreByQuestion).filter(value=>value?.correct===true).length;
