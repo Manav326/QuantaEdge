@@ -514,8 +514,8 @@ public class TutorService {
         "uri","sha256","hash","asset_id","asset_url","file","correct_answer_ids","correct_answer",
         "correct_pairs","accepted_answers","answer_guide_by_locale","grading","solution",
         "feedback","feedback_by_locale","options","is_correct","correct","answer_key").contains(key)
-        ||key.contains("grading")||key.contains("correct_answer")||key.contains("solution")
-        ||key.contains("feedback")||key.contains("answer_key")||key.equals("options")||key.endsWith("_url"))return;
+        ||key.contains("grading")||key.contains("correct")||key.contains("answer")
+        ||key.contains("solution")||key.contains("feedback")||key.equals("options")||key.endsWith("_url"))return;
     if(node.isObject()){
       if(key.endsWith("_by_locale")){
         String value=localized(node,language);

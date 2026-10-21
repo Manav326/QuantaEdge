@@ -16,7 +16,8 @@ ALTER TABLE tutor_session
   );
 
 CREATE INDEX idx_tutor_session_structured_artifact_owner
-  ON tutor_session(institution_id,student_id,course_id,structured_artifact_id,created_at DESC,id DESC);
+  ON tutor_session(institution_id,student_id,course_id,structured_artifact_id,created_at DESC,id DESC)
+  WHERE structured_artifact_id IS NOT NULL;
 
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','structured-artifact-ai-tutor-sessions-v160')
