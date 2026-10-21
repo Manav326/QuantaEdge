@@ -9,11 +9,12 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
+import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
   course_id: number; title: string; course_name: string; course_code: string;
-  description?: string | null; price_paise: number; currency: string;
+  curriculum_version?: string; description?: string | null; price_paise: number; currency: string;
   owned_by_parent?: boolean; owned_by_child?: boolean; owned_child_ids?: string | null;
   transferable_by_parent?: boolean;
   subjects?: Array<{ subject_code?: string; subject_name?: string; chapters?: number; lessons?: number }>;
@@ -446,25 +447,34 @@ export default function ParentCoursesPage() {
               const ownedChildIds = new Set(String(course.owned_child_ids || '').split(',')
                 .map(value => Number(value.trim())).filter(value => Number.isSafeInteger(value) && value > 0));
               const selectedChildAlreadyOwns = selectedChild > 0 && ownedChildIds.has(selectedChild);
-              return <article className="parent-courses-page__course" key={course.course_id}>
-                <div className="parent-courses-page__course-top"><span className="parent-courses-page__course-icon" aria-hidden="true">✦</span>
-                  <span className="parent-courses-page__price">{ownedByParent && !isFree
-                    ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')
-                    : course.owned_by_child === true
-                      ? (english ? 'A child has access' : 'एक बच्चे के पास पहुँच है')
-                      : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}</span></div>
-                <h3>{course.title || course.course_name}</h3>
-                <small className="parent-courses-page__course-code">{course.course_code}</small>
-                {course.description && <p>{course.description}</p>}
-                {!!course.subjects?.length && <div className="parent-courses-page__subjects">{course.subjects.map(subject =>
-                  <span key={subject.subject_code}>{subject.subject_name || subject.subject_code}</span>)}</div>}
-                {ownedByParent && !isFree && <p className="parent-courses-page__owned-note">
-                    {transferableByParent
-                      ? <LocaleText hinglish="यह paid कोर्स आपके पास है। चाहें तो नीचे से किसी जुड़े बच्चे को स्थायी रूप से ट्रांसफर करें।"
-                          english="You own this paid course. You can permanently transfer it to a linked child below." />
-                      : <LocaleText hinglish="यह कोर्स आपकी व्यक्तिगत learning profile में पहले से उपलब्ध है।"
-                          english="This course is already available in your personal learning profile." />}
-                  </p>}
+              return <MarketplaceCourseCard
+                key={course.course_id}
+                title={course.title || course.course_name}
+                courseCode={course.course_code}
+                curriculumVersion={course.curriculum_version}
+                priceLabel={ownedByParent && !isFree
+                  ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')
+                  : course.owned_by_child === true
+                    ? (english ? 'A child has access' : 'एक बच्चे के पास पहुँच है')
+                    : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}
+                description={course.description}
+                subjects={course.subjects}
+                status={
+                  <>
+                    {ownedByParent && !isFree && <p className="parent-courses-page__owned-note">
+                      {transferableByParent
+                        ? <LocaleText hinglish="यह paid कोर्स आपके पास है। चाहें तो नीचे से किसी जुड़े बच्चे को स्थायी रूप से ट्रांसफर करें।"
+                            english="You own this paid course. You can permanently transfer it to a linked child below." />
+                        : <LocaleText hinglish="यह कोर्स आपकी व्यक्तिगत learning profile में पहले से उपलब्ध है।"
+                            english="This course is already available in your personal learning profile." />}
+                    </p>}
+                    {selectedChildAlreadyOwns && <p className="parent-courses-page__owned-note">
+                      <LocaleText hinglish="चुने गए बच्चे के पास इस कोर्स की पहुँच पहले से है। किसी दूसरे बच्चे को चुनें।"
+                        english="The selected child already has access to this course. Choose another child." />
+                    </p>}
+                  </>
+                }
+              >
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
                     disabled={busy !== '' || (!isFree && pendingVerify !== null) || (ownedByParent && (isFree || !transferableByParent))}
@@ -488,12 +498,8 @@ export default function ParentCoursesPage() {
                       ? (english ? 'Already has access' : 'पहले से पहुँच है')
                       : <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />}
                   </button>
-                  {selectedChildAlreadyOwns && <p className="parent-courses-page__owned-note">
-                    <LocaleText hinglish="चुने गए बच्चे के पास इस कोर्स की पहुँच पहले से है। किसी दूसरे बच्चे को चुनें।"
-                      english="The selected child already has access to this course. Choose another child." />
-                  </p>}
                 </div>
-              </article>;
+              </MarketplaceCourseCard>;
             })}</div>}
         </section>
 
