@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2222,
-    "successful_visual_analyses": 2120,
-    "missing_visual_analyses": 5266,
+    "raw_analysis_result_rows": 2225,
+    "successful_visual_analyses": 2123,
+    "missing_visual_analyses": 5263,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5368,
+    "unresolved_count": 5365,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90772,9 +90772,28 @@
       "asset_path": "assets/3aad917f6a3442c40b36015449b9e478eb759bf5dfb420b62bca8ea7c0519d2c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90790,9 +90809,16 @@
       "asset_path": "assets/5433869a2511bd7548b44499e13ab5b2f639babbb286714c784fcbba278e7cd5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass bottle with a black lid containing a yellow liquid and a metal rod submerged in it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a glass bottle with a black lid containing a yellow liquid and a metal rod submerged in it.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90808,9 +90834,29 @@
       "asset_path": "assets/8c6ea85a5015906b8ff84e61246baaad8e4ee97d4958047da2bb1efa5b0c747f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass bottle with a metal rod inside, partially submerged in water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Experimentation",
+          "Handling iron nails",
+          "Removing brown deposits",
+          "Non-metals"
+        ],
+        "context_relation": "Experimental setup",
+        "limitations": [
+          "No specific measurements or formulas provided",
+          "No specific instructions for the experiment"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

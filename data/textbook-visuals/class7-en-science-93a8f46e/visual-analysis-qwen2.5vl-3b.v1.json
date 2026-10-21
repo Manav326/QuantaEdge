@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2120,
+    "assets_selected": 2123,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2118,
-    "assets_remaining": 5370,
+    "assets_analyzed": 2121,
+    "assets_remaining": 5367,
     "assets_completion_percent": 28.3,
     "assets_failed": 102,
-    "assets_skipped_from_checkpoint": 2115,
+    "assets_skipped_from_checkpoint": 2118,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:45:50Z"
+      "checkpointed_at": "2026-10-21T20:48:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:46:13Z"
+      "checkpointed_at": "2026-10-21T20:49:17Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -80901,6 +80901,109 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T20:48:09Z"
+    },
+    {
+      "asset_id": "78c840779c56eb8c48d829ea",
+      "asset_sha256": "3aad917f6a3442c40b36015449b9e478eb759bf5dfb420b62bca8ea7c0519d2c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/3aad917f6a3442c40b36015449b9e478eb759bf5dfb420b62bca8ea7c0519d2c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:50:00Z"
+    },
+    {
+      "asset_id": "f91c1e0d2ccb95fe79a1ceda",
+      "asset_sha256": "5433869a2511bd7548b44499e13ab5b2f639babbb286714c784fcbba278e7cd5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/5433869a2511bd7548b44499e13ab5b2f639babbb286714c784fcbba278e7cd5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass bottle with a black lid containing a yellow liquid and a metal rod submerged in it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a glass bottle with a black lid containing a yellow liquid and a metal rod submerged in it.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:50:39Z"
+    },
+    {
+      "asset_id": "58a09eaf52cdc98020e04de8",
+      "asset_sha256": "8c6ea85a5015906b8ff84e61246baaad8e4ee97d4958047da2bb1efa5b0c747f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/8c6ea85a5015906b8ff84e61246baaad8e4ee97d4958047da2bb1efa5b0c747f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass bottle with a metal rod inside, partially submerged in water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Experimentation",
+          "Handling iron nails",
+          "Removing brown deposits",
+          "Non-metals"
+        ],
+        "context_relation": "Experimental setup",
+        "limitations": [
+          "No specific measurements or formulas provided",
+          "No specific instructions for the experiment"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:51:22Z"
     }
   ]
 }
