@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import { apiFetch } from '../../components/apiClient';
 import StudentEmptyState from '../components/StudentEmptyState';
 
@@ -18,6 +19,13 @@ type Question={
   topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean;attemptCount?:number;lastCorrect?:boolean|null;translated?:boolean
 };
 type LessonBlock={id:number;sequence_no:number;block_type:string;content:string};
+type PracticeCatalogueLesson={
+  id:number;code:string;title:string;estimated_minutes:number;class_code:string;
+  chapter_name:string;chapter_code:string;subject_name:string;subject_code:string;
+  practice_question_count?:number;practice_completed_attempts?:number;
+  practice_best_percent?:number|null;practice_best_correct_count?:number|null;
+  practice_best_graded_count?:number|null;
+};
 type LessonDetail={
   id:number;title:string;summary?:string;class_code?:string;chapter_name?:string;
   subject_name?:string;subject_code?:string;objective_title?:string;blocks:LessonBlock[];
@@ -55,6 +63,7 @@ function recapBlocks(lesson:LessonDetail|null){
 
 export default function PracticePage(){
   const [questions,setQuestions]=useState<Question[]>([]);
+  const [catalogueLessons,setCatalogueLessons]=useState<PracticeCatalogueLesson[]>([]);
   const [lesson,setLesson]=useState<LessonDetail|null>(null);
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStatus,setSessionStatus]=useState('IN_PROGRESS');
@@ -77,7 +86,7 @@ export default function PracticePage(){
   const lessonIdRaw=searchParams.get('lessonId')||'';
   const sessionIdRaw=searchParams.get('sessionId')||'';
   const rawCourseId=searchParams.get('courseId')||searchParams.get('programCode')||'';
-  const { courses, activeCourse, courseId:selectedCourseId, loadingCourses, courseError } = useStudentCourseScope(rawCourseId || null);
+  const { courses, activeCourse, courseId:selectedCourseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(rawCourseId || null);
   const courseKey=String(activeCourse?.public_id || (selectedCourseId!==null ? selectedCourseId : ''));
   const courseQuery=selectedCourseId!==null?'&courseId='+selectedCourseId:'';
   const lessonId=/^\d+$/.test(lessonIdRaw)?Number(lessonIdRaw):0;
@@ -88,17 +97,67 @@ export default function PracticePage(){
   const correctCount=Object.values(scoreByQuestion).filter(value=>value?.correct===true).length;
   const gradedCount=Object.values(scoreByQuestion).filter(value=>value?.autoGraded&&typeof value?.correct==='boolean').length;
   const recap=useMemo(()=>recapBlocks(lesson),[lesson]);
+  const practiceSubjectGroups=useMemo(()=>{
+    const grouped=new Map<string,{code:string;name:string;lessons:PracticeCatalogueLesson[]}>();
+    catalogueLessons.forEach(item=>{
+      const code=String(item.subject_code||'').trim();
+      if(!code)return;
+      const group=grouped.get(code)||{code,name:String(item.subject_name||code),lessons:[]};
+      group.lessons.push(item);
+      grouped.set(code,group);
+    });
+    return Array.from(grouped.values()).map(group=>{
+      // A lesson with no approved practice items cannot block the subject sequence.
+      // Existing attempts remain visible if the question pool was later retired.
+      const lessons=group.lessons.filter(item=>
+        Number(item.practice_question_count||0)>0 ||
+        Number(item.practice_completed_attempts||0)>0 ||
+        item.practice_best_percent!==null&&item.practice_best_percent!==undefined
+      );
+      const firstUnpassedIndex=lessons.findIndex(item=>
+        item.practice_best_percent===null||item.practice_best_percent===undefined||
+        !Number.isFinite(Number(item.practice_best_percent))||Number(item.practice_best_percent)<70
+      );
+      return {
+        ...group,
+        lessons:lessons.map((item,index)=>({
+          item,
+          passed:item.practice_best_percent!==null&&item.practice_best_percent!==undefined&&
+            Number.isFinite(Number(item.practice_best_percent))&&Number(item.practice_best_percent)>=70,
+          eligible:firstUnpassedIndex===index,
+          locked:firstUnpassedIndex>=0&&index>firstUnpassedIndex,
+          score:item.practice_best_percent===null||item.practice_best_percent===undefined
+            ? null : Number(item.practice_best_percent),
+        })),
+      };
+    });
+  },[catalogueLessons]);
 
   useEffect(()=>{
     let active=true;
     async function load(){
       setLoading(true);setError('');setNoPractice(false);setAnswerError('');
-      if(!lessonId&&!requestedSessionId){
+      if(loadingCourses)return;
+      if(selectedCourseId===null){
+        setCatalogueLessons([]);
+        setError(courseError||tx('इस अभ्यास के लिए नामांकित कोर्स चुनें।','Select an enrolled course for this practice session.'));
         setLoading(false);
         return;
       }
-      if(loadingCourses)return;
-      if(selectedCourseId===null){setError(courseError||tx('इस अभ्यास के लिए नामांकित कोर्स चुनें।','Select an enrolled course for this practice session.'));setLoading(false);return;}
+      if(!lessonId&&!requestedSessionId){
+        try{
+          const response=await apiFetch('/api/v1/learning/lessons?language='+encodeURIComponent(learningLanguage)+'&courseId='+encodeURIComponent(String(selectedCourseId)),{cache:'no-store'});
+          if(response.status===401||response.status===403){router.replace('/login/student');return;}
+          const body=await readBody(response);
+          if(!response.ok)throw new Error(body.detail||body.message||tx('अभ्यास सूची नहीं खुल पाई।','Practice catalogue could not be loaded.'));
+          if(active)setCatalogueLessons(Array.isArray(body)?body as PracticeCatalogueLesson[]:[]);
+        }catch(e:any){
+          if(active)setError(e.message||tx('अभ्यास सूची नहीं खुल पाई।','Practice catalogue could not be loaded.'));
+        }finally{
+          if(active)setLoading(false);
+        }
+        return;
+      }
       try{
         const me=await apiFetch('/api/v1/students/me?courseId='+selectedCourseId,{cache:'no-store'});
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
@@ -179,7 +238,7 @@ export default function PracticePage(){
     }
     void load();
     return()=>{active=false;};
-  },[lessonId,requestedSessionId,router,learningLanguage,locale,selectedCourseId,loadingCourses,courseError]);
+  },[lessonId,requestedSessionId,router,learningLanguage,locale,selectedCourseId,loadingCourses,courseError,tx]);
 
   async function answer(value:string|object){
     if(!current||!sessionId||saving||result?.correct===true)return;
@@ -243,12 +302,61 @@ export default function PracticePage(){
     <Link href="/student/courses" className="button button-dark" style={{marginTop:20}}><UiText message="web.navigation.student.allCourses" /></Link>
   </section></main>;
 
-  if(!lessonId&&!requestedSessionId)return <main className="practice-page">
+  if(!lessonId&&!requestedSessionId)return <main className="practice-page qe-practice-catalogue">
     <section className="practice-wrap">
       <div className="eyebrow"><UiText message="legacy.web.learn.practise.bb602a9d" /></div>
-      <h1><UiText message="legacy.web.start.with.a.lesson.936fa9e6" /></h1>
-      <p>{locale==='english'?'After the lesson MCQs, you will practise the same micro-topic. The app selects the questions automatically.':'Lesson MCQ के बाद आप उसी micro-topic का अभ्यास करेंगे। App प्रश्न अपने-आप चुनेगा।'}</p>
-      <div className="concept-card"><Link href="/student/learn" className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link></div>
+      <h1>{locale==='english'?'Your next practices':'आपके अगले अभ्यास'}</h1>
+      <p>{locale==='english'
+        ? 'Practices unlock in order within each subject. Score at least 70% to unlock the next practice. You can still practise any topic directly from Lessons and Topics.'
+        : 'हर विषय में अभ्यास क्रम से खुलेंगे। अगला अभ्यास खोलने के लिए कम-से-कम 70% अंक पाएं। पाठ और विषय से आप किसी भी टॉपिक का अभ्यास कर सकते हैं।'}</p>
+      <InstitutionCourseSubjectScope
+        courses={courses} activeCourse={activeCourse} courseId={selectedCourseId}
+        onCourseChange={value=>{
+          const next=courses.find(course=>String(course.id)===String(value));
+          void selectCourse(value).then(()=>router.push('/student/practice?courseId='+encodeURIComponent(String(next?.public_id||value))));
+        }}
+        subjectCode="ALL" onSubjectChange={()=>{}}
+        loading={loadingCourses} language={locale} showSubject={false}
+        courseLabel={locale==='english'?'Course':'कोर्स'} />
+      {error&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong>{locale==='english'?'Practice list unavailable':'अभ्यास सूची उपलब्ध नहीं'}</strong><span>{error}</span></div>}
+      {!error&&practiceSubjectGroups.length===0&&<div className="concept-card">
+        <h2>{locale==='english'?'No practices available yet':'अभी कोई अभ्यास उपलब्ध नहीं है'}</h2>
+        <p>{locale==='english'?'Approved practice questions will appear here for subjects in your selected course.':'चुने गए कोर्स के विषयों के लिए स्वीकृत अभ्यास प्रश्न यहाँ दिखेंगे।'}</p>
+        <Link href={'/student/learn?courseId='+encodeURIComponent(courseKey)+'&subjectCode=ALL'} className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link>
+      </div>}
+      {practiceSubjectGroups.map(group=><section className="concept-card qe-practice-subject-group" key={group.code}>
+        <div className="content-heading"><div><span className="eyebrow">{group.code}</span><h2>{group.name}</h2></div><span>{group.lessons.filter(entry=>entry.passed).length}/{group.lessons.length} {locale==='english'?'passed':'उत्तीर्ण'}</span></div>
+        {group.lessons.length===0
+          ? <p>{locale==='english'?'No approved practice questions are ready in this subject yet.':'इस विषय में अभी स्वीकृत अभ्यास प्रश्न उपलब्ध नहीं हैं।'}</p>
+          : <div className="qe-practice-next-list">{group.lessons.map(({item,passed,eligible,locked,score},index)=>{
+              const title=item.title||item.chapter_name||item.code;
+              const status=passed
+                ? (locale==='english'?'Passed':'उत्तीर्ण')
+                : eligible
+                  ? (locale==='english'?'Ready now':'अब अभ्यास करें')
+                  : (locale==='english'?'Locked':'लॉक');
+              return <article className={'qe-practice-next-row'+(passed?' is-passed':eligible?' is-eligible':' is-locked')} key={item.id}>
+                <div className="qe-practice-next-index">{String(index+1).padStart(2,'0')}</div>
+                <div className="qe-practice-next-copy">
+                  <strong>{title}</strong>
+                  <small>{item.chapter_name||item.chapter_code}{typeof score==='number'?' · '+(locale==='english'?'Best':'सर्वोत्तम')+' '+score+'%':''}</small>
+                  <span>{passed
+                    ? (locale==='english'?'You can revisit this topic from Lessons and Topics.':'आप इसे पाठ और विषय से फिर खोल सकते हैं।')
+                    : eligible
+                      ? (locale==='english'?'Pass with 70% or more to unlock the next practice.':'अगला अभ्यास खोलने के लिए 70% या अधिक अंक पाएं।')
+                      : (locale==='english'?'Pass each earlier practice in this subject first.':'पहले इस विषय के पिछले सभी अभ्यासों में उत्तीर्ण हों।')}</span>
+                </div>
+                {passed
+                  ? <span className="qe-practice-next-status">{status}</span>
+                  : eligible
+                    ? <Link href={'/student/practice?lessonId='+item.id+'&courseId='+encodeURIComponent(courseKey)} className="button button-dark">{locale==='english'?'Start / retry':'शुरू करें / दोहराएँ'}</Link>
+                    : <span className="qe-practice-next-status" aria-label={status}>{status}</span>}
+              </article>;
+            })}</div>}
+      </section>)}
+      <div className="practice-footer">
+        <Link href={'/student/learn?courseId='+encodeURIComponent(courseKey)+'&subjectCode=ALL'} className="text-link"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link>
+      </div>
     </section>
   </main>;
 
