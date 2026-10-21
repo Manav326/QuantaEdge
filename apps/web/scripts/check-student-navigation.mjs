@@ -877,7 +877,8 @@ assert.ok(marketplaceCourseCard.includes('courseCode') &&
   marketplaceCourseCardCss.includes('data-qe-appearance="dark"') &&
   marketplaceCourseCardCss.includes('data-qe-appearance="light"') &&
   studentMarketplacePage.includes('useLocale()') &&
-  studentMarketplacePage.includes("language={english ? 'en' : 'hi'}") &&
+  studentMarketplacePage.includes("const language = english ? 'en' : 'hi'") &&
+  studentMarketplacePage.includes("language={language}") &&
   studentMarketplacePage.includes("tx('Course Marketplace"),
   'The common marketplace card must show course identity, syllabus coverage, commercial price and theme-aware surfaces.');
 
