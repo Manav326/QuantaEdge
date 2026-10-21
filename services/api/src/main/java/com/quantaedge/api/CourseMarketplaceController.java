@@ -653,7 +653,8 @@ public class CourseMarketplaceController {
         }
         // Never expire or replace an order with missing financial facts from a checkout request.
         // An audited reconciliation must resolve the original order without bypassing snapshot policy.
-        throw new IllegalStateException(
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
             "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
       } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
@@ -667,7 +668,8 @@ public class CourseMarketplaceController {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
         if (!hasLockedFinancialSnapshots(prior)) {
-          throw new IllegalStateException(
+          throw new org.springframework.web.server.ResponseStatusException(
+              org.springframework.http.HttpStatus.CONFLICT,
               "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
         }
         String providerState = inspectProviderOrderForNewAttempt(prior);
@@ -737,7 +739,8 @@ public class CourseMarketplaceController {
         }
         // Never create a replacement checkout for an order whose original financial facts are missing.
         // Keep the existing order untouched for an explicit, auditable reconciliation.
-        throw new IllegalStateException(
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
             "An existing order has no locked tax/share snapshot. Do not pay again or create another order; the same order requires explicit financial reconciliation.", conflict);
       }
       if (!racedOrders.isEmpty()) {
