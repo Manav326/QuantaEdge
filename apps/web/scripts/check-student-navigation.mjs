@@ -203,7 +203,7 @@ assert.ok((certificateApi.match(/@RequestParam\("courseId"\) String suppliedCour
   'Certificate GET routes must bind the public courseId query parameter consistently.');
 assert.ok(guardianCourseProgramsApi.includes('@RequestParam(name="includeSubjects",defaultValue="false") boolean includeSubjects') &&
   read('../app/parent/children/page.tsx').includes("'/programs?includeSubjects=true'") &&
-  guardianCourseProgramsApi.includes('if(includeSubjects)') && parentPage.includes('/programs?includeSubjects=false'),
+  guardianCourseProgramsApi.includes('if(includeSubjects)') && read('../app/parent/page.tsx').includes('/programs?includeSubjects=false'),
   'The parent dashboard must avoid loading unused subject details; course assignment screens retain the default subject catalogue.');
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
 
