@@ -6,7 +6,7 @@
   "subject": "science",
   "maths_part": null,
   "source_book_id": "ncert-c8-hindi-hhcu1",
-  "source_pdf_sha256": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332",
+  "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
   "candidate_pack_schema": "quantaedge.visual-candidate-pack.v3",
   "candidate_count": 1042,
   "candidate_pages": [
@@ -262,7 +262,19 @@
   "publication_allowed": false,
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
-  "version_tag": "candidates-v3-class8-class8-hi-science-0be682f4-run-38904509019",
-  "bundle_tar_sha256": "bfe4897d1248ed0e1418d3cf9879fe909208ad4713bc37d9beb33cd111d66c02",
-  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
+  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+  "version_tag": "candidates-v3-class8-class8-hi-science-0be682f4-prep-a24f766cf84b8075d487b283",
+  "bundle_tar_sha256": "8bc6865daa2ef3534f07778ed309596b697a453046a176895e2b2e8211aef50b",
+  "restore_note": "Pull this exact ORAS artifact and verify bundle_tar_sha256 plus the embedded per-file manifest before reuse.",
+  "preparation_fingerprint": "a24f766cf84b8075d487b2835f01df19514ea316de41688a69fe3193a5add78a",
+  "candidate_pack_sha256": "a1e11f5ebdd86fa8e1f38ff6b08447a6fcdf596180ad59be281d3d213b3cb372",
+  "bundle_manifest_sha256": "7b57ba3b5bb88f3320ac5da43a6a7f64550dadf61b2dac29771d124a999c64a0",
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class8-class8-hi-science-0be682f4-prep-5eac2fe2fb1e8522190593c8",
+    "bundle_tar_sha256": "eb1a4a7d91c221ebb80652b3a80fa49f9f6312cf65c6e3b704212557063adb3e",
+    "preparation_fingerprint": "5eac2fe2fb1e8522190593c841a05d9a9918e3e4bd127cca2e747032d4abb5d5",
+    "inventory_json_sha256": "f78fd55662e7e4a0b35ad2f6ea6295e6a28da2b7f5e65957dbce7abccf76b9e2"
+  }
 }

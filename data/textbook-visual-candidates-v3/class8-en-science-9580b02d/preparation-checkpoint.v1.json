@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class8-en-science-9580b02d",
+  "class": 8,
+  "source_book_id": "ncert-c8-english-hecu1",
+  "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class8-class8-en-science-9580b02d-prep-523d6de8418da535c80d347e",
+    "bundle_tar_sha256": "bfa71dab033a3dae408435369fea08b942b254a75f2e25f827f8ca200996b501",
+    "preparation_fingerprint": "523d6de8418da535c80d347e5a266fc06e3ad3dee801d7ffb142e9e1d5d7cb6c",
+    "inventory_json_sha256": "06e24848d9685b564fab1049ab0dfa060ebe6e93ca1f4427cdf66d3c61f3dc65"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class8-class8-en-science-9580b02d-prep-4b22c6e6ac02970f678b3694",
+    "bundle_tar_sha256": "f4380183d7f933b1dc86c0916ab3919fbfd98e1609f788608ea525a5eae0c5da",
+    "preparation_fingerprint": "4b22c6e6ac02970f678b369424eaf1ce2eeb68567e8ecd486c74ac309e6bbd7b",
+    "candidate_pack_sha256": "7c7d8fa9552093cc4bdaac77f75a0251cf90aeda85a3750bd3b644c82084dded"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}

@@ -7,8 +7,8 @@
   "subject": "science",
   "maths_part": null,
   "file": "books/ncert-c8-hindi-hhcu1.pdf",
-  "sha256": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332",
-  "extraction_manifest_repo_path": "data/textbook-extractions/class-8/hindi/pages/517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332.manifest.json",
-  "text_jsonl_repo_path": "data/textbook-extractions/class-8/hindi/pages/517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332.jsonl",
-  "text_jsonl_filename": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332.jsonl"
+  "sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-8/hindi/pages/98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-8/hindi/pages/98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1.jsonl",
+  "text_jsonl_filename": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1.jsonl"
 }

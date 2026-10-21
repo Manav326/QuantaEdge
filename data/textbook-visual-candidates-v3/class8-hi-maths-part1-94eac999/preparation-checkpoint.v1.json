@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class8-hi-maths-part1-94eac999",
+  "class": 8,
+  "source_book_id": "ncert-c8-hindi-hhgp1",
+  "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class8-class8-hi-maths-part1-94eac999-prep-798801863e71101d1b7643fd",
+    "bundle_tar_sha256": "8120532dd5398c605fe0a0405ff9d2186ad19109a3c417d18cb5d2c155044774",
+    "preparation_fingerprint": "798801863e71101d1b7643fdd366be9c6324c13da92e6cba17b0c179950f6ab7",
+    "inventory_json_sha256": "a7385cd0787155e8074cca48e61a7769e5adde57a880344a57c18bed2192b797"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class8-class8-hi-maths-part1-94eac999-prep-33b3ea89801763eee9eb34a9",
+    "bundle_tar_sha256": "ee323d357c605c1972620193f33d6f02a1a40ed461f9627f3d1cc7d873dd9389",
+    "preparation_fingerprint": "33b3ea89801763eee9eb34a94aaed008429a83ff08ccced13a4602b200d0718c",
+    "candidate_pack_sha256": "6828ecde341028bfbd6a3ecac8ee1aef5820c79cf5c480e71a12b8328d36132d"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}

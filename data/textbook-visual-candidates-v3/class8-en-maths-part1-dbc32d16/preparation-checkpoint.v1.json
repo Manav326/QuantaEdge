@@ -1,0 +1,30 @@
+{
+  "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+  "book_slug": "class8-en-maths-part1-dbc32d16",
+  "class": 8,
+  "source_book_id": "ncert-c8-english-hegp1",
+  "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE"
+  },
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class8-class8-en-maths-part1-dbc32d16-prep-0e29b547a50fe6a0595088c4",
+    "bundle_tar_sha256": "5b91bfa6ea4c6f6b18327a0646fafcf8ba4a50b1dd40e4e439ff46ed882baf09",
+    "preparation_fingerprint": "0e29b547a50fe6a0595088c4fd1680a432c758c5c338139e6d249f7564f4a954",
+    "inventory_json_sha256": "efce8d27d2fa35465cfc8f6cc02e5873bf9f2534cba46f0463e07cfdde36707a"
+  },
+  "candidate_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+    "version_tag": "candidates-v3-class8-class8-en-maths-part1-dbc32d16-prep-0c967c715b87ef89fd8d070d",
+    "bundle_tar_sha256": "ddab53c22b5519ec5a1fd264a38bf740345dc242b9a4e0c37463997cccd0b63f",
+    "preparation_fingerprint": "0c967c715b87ef89fd8d070df15b9ff5f2f6d8a3c6d90e74cef6030699903433",
+    "candidate_pack_sha256": "0cb23fdfb881d3a92e99d9b6e369fa723ee3c3b73c32f6d3346507218234da16"
+  },
+  "publication_allowed": false,
+  "human_review_required": true
+}
