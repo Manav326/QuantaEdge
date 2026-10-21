@@ -393,6 +393,8 @@ assert.ok(androidApp.includes('!question.optBoolean("attempted")') &&
   androidApp.includes('question.optBoolean("saved_correct") || answerLocks[id] == true') &&
   androidApp.includes('Open optional structured lesson') &&
   androidApp.includes('fun submitStructuredQuestionResponse') &&
+  androidApp.includes('showPractice = false') &&
+  androidStructuredRenderer.includes('if (showPractice)') &&
   androidStructuredRenderer.includes('legacy_question_type_by_locale'),
   'Android must restore legacy answers and keep the full structured lesson as an opt-in extension using shared save handlers.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&

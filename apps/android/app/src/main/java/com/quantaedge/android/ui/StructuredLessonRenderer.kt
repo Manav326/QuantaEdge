@@ -40,6 +40,7 @@ fun StructuredLessonRenderer(
     lesson: JSONObject,
     language: String,
     studentMode: Boolean = true,
+    showPractice: Boolean = true,
     onSubmitResponse: (questionId: String, responseJson: String) -> Unit,
     onSaveActivity: ((blockId: String, responseJson: String) -> Unit)? = null,
     savedResponses: JSONObject = JSONObject(),
@@ -91,7 +92,8 @@ fun StructuredLessonRenderer(
                 activityStates.optJSONObject(block.optString("id")) ?: JSONObject(),
                 block.optString("id") in savingActivityIds)
         }
-        Text(localized(practice.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.titleLarge)
+        if (showPractice) {
+            Text(localized(practice.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.titleLarge)
         if (questions.isEmpty()) {
             Text(if (locale == "hi") "इस पाठ में अभी अभ्यास प्रश्न उपलब्ध नहीं हैं।" else "No practice questions are available in this lesson yet.")
         } else {
@@ -112,6 +114,7 @@ fun StructuredLessonRenderer(
                     Text(if (locale == "hi") "अगला प्रश्न" else "Next")
                 }
             }
+        }
         }
     }
 }

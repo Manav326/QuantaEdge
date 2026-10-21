@@ -6151,6 +6151,7 @@ private fun LessonScreen(
                         lesson = optionalStructuredLesson,
                         language = structuredLanguage,
                         studentMode = true,
+                        showPractice = false,
                         savedResponses = structuredSavedResponses,
                         submittingQuestionIds = structuredSubmittingQuestionIds,
                         savingActivityIds = structuredSavingActivityIds,
