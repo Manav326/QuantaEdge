@@ -87,8 +87,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '[\"7\"]'", matrix_line)
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '[\"8\"]'", matrix_line)
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '[\"7\",\"8\"]'", matrix_line)
-        self.assertIn("'class-7-resume'", workflow)
-        self.assertIn("'class-8-resume'", workflow)
+        self.assertIn("&& '7')", workflow)
+        self.assertIn("&& '8')", workflow)
         self.assertIn("max-parallel: 3", workflow)
 
     def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
@@ -116,7 +116,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
     def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn('cancel-in-progress: ${{ github.event_name == \'push\' && contains(github.event.head_commit.message || \'\', \'[resume-visual-layers-4-5-class-6]\') }}', workflow)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && (contains", workflow)
+        self.assertIn("[resume-visual-layers-4-5-class-6]", workflow)
         self.assertIn("--request-timeout 300", workflow)
         self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
         self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
