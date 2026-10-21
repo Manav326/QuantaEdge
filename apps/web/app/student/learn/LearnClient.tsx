@@ -11,8 +11,9 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
-import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';
-import type { StructuredLesson } from '../structured-lessons/contract';
+import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';
+import type { QuestionResponse, QuestionResult } from '../structured-lessons/StructuredQuestionRenderer';
+import type { StructuredLesson, StructuredQuestion } from '../structured-lessons/contract';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
@@ -42,6 +43,13 @@ type Question = {
   id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string; translated?:boolean;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
   topic?:string; subtopic?:string; skill?:string; response_mode?:string; attempted?:boolean;
+  saved_answer?:string|null; saved_correct?:boolean|null; saved_answered_at?:string|null;
+};
+type StructuredSavedSnapshot = {
+  activities: Record<string, Record<string, string>>;
+  responses: Record<string, QuestionResponse>;
+  results: Record<string, QuestionResult>;
+  submitted: Record<string, boolean>;
 };
 type Detail = Lesson & {
   class_code:string; class_name:string;
@@ -239,9 +247,14 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
 
 function QuestionCard({q,index,onResult,onTutorOpen,courseId}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void;courseId:number}) {
   const { locale, learningLanguage } = useLocale();
-  const [value,setValue]=useState('');
+  const [value,setValue]=useState(()=>q.saved_answer == null ? '' : String(q.saved_answer));
   const [busy,setBusy]=useState(false);
-  const [result,setResult]=useState<any>(null);
+  const [result,setResult]=useState<any>(() => {
+    if (!q.attempted) return null;
+    if (q.saved_correct === true) return { correct: true, autoGraded: true, explanation: q.explanation };
+    if (q.saved_correct === false) return { correct: false, autoGraded: true, explanation: q.explanation };
+    return { correct: null, autoGraded: false, explanation: q.explanation };
+  });
   const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
   const submitted=result?.correct===true;
@@ -326,6 +339,9 @@ export default function LearnClient() {
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
   const [mcqAttempted,setMcqAttempted]=useState<Record<number,boolean>>({});
   const [structuredActivityResponses,setStructuredActivityResponses]=useState<Record<string,Record<string,string>>>({});
+  const [structuredQuestionResponses,setStructuredQuestionResponses]=useState<Record<string,QuestionResponse>>({});
+  const [structuredQuestionResults,setStructuredQuestionResults]=useState<Record<string,QuestionResult>>({});
+  const [structuredQuestionSubmitted,setStructuredQuestionSubmitted]=useState<Record<string,boolean>>({});
   const router=useRouter();
   const searchParams=useSearchParams();
   const courseIdValue=searchParams.get('courseId')||searchParams.get('programCode')||'';
@@ -345,6 +361,16 @@ export default function LearnClient() {
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
     [lesson]);
+  const inlineStructuredLesson=useMemo(()=>{
+    const structured=lesson?.structured_lesson;
+    if(!structured)return null;
+    // Keep the original MCQ cards as the primary path and only add questions not shown there.
+    const legacyMcqIds=new Set((lesson?.questions||[])
+      .filter(question=>question.question_type==='MCQ')
+      .map(question=>'db-q-'+question.id));
+    return {...structured,practice:{...structured.practice,
+      questions:structured.practice.questions.filter(question=>!legacyMcqIds.has(question.id))}};
+  },[lesson]);
   const attemptedMcqs=lessonMcqs.filter(question=>mcqAttempted[question.id]).length;
   const canStartTopicPractice=lessonMcqs.length===0||attemptedMcqs===lessonMcqs.length;
   const trackGroups=useMemo(()=>{
@@ -378,19 +404,44 @@ export default function LearnClient() {
     return Array.from(grouped.values());
   },[trackBrowse,studentDocuments,locale,learningLanguage]);
 
-  async function loadStructuredActivityResponses(detail: Detail): Promise<Record<string,Record<string,string>>> {
+  function emptyStructuredSavedSnapshot(): StructuredSavedSnapshot {
+    return { activities: {}, responses: {}, results: {}, submitted: {} };
+  }
+
+  async function loadStructuredActivityResponses(detail: Detail): Promise<StructuredSavedSnapshot> {
     const artifactId = String(detail.structured_lesson?.artifact_id || (detail.structured_lesson as any)?.artifactId || '').trim();
-    if (!artifactId || selectedCourseId === null) return {};
+    if (!artifactId || selectedCourseId === null) return emptyStructuredSavedSnapshot();
     try {
       const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
         '/responses?courseId=' + encodeURIComponent(selectedCourseKey) + '&language=' + learningLanguage, { cache: 'no-store' });
-      if (!response.ok) return {};
+      if (!response.ok) return emptyStructuredSavedSnapshot();
       const body = await response.json();
-      return body && body.activities && typeof body.activities === 'object'
-        ? body.activities as Record<string,Record<string,string>> : {};
+      const snapshot = emptyStructuredSavedSnapshot();
+      if (body?.activities && typeof body.activities === 'object') {
+        snapshot.activities = body.activities as Record<string,Record<string,string>>;
+      }
+      if (body?.questions && typeof body.questions === 'object') {
+        for (const [id, saved] of Object.entries(body.questions as Record<string, any>)) {
+          if (!saved || saved.response === undefined || saved.response === null) continue;
+          const status = String(saved.status || '').toLowerCase() as QuestionResult['status'];
+          if (!['correct','incorrect','partially_correct','pending_review'].includes(status)) continue;
+          snapshot.responses[id] = saved.response as QuestionResponse;
+          snapshot.results[id] = {
+            status,
+            score: typeof saved.score === 'number' ? saved.score : undefined,
+            maxScore: typeof saved.maxScore === 'number' ? saved.maxScore : undefined,
+            feedback: typeof saved.feedback === 'string' ? saved.feedback : undefined,
+            feedbackByLocale: saved.feedbackByLocale && typeof saved.feedbackByLocale === 'object'
+              ? saved.feedbackByLocale : undefined,
+            autoGraded: saved.autoGraded === true,
+          };
+          snapshot.submitted[id] = status === 'correct' || status === 'pending_review';
+        }
+      }
+      return snapshot;
     } catch {
-      // Structured inserts are optional; an unavailable optional progress endpoint must not block the original lesson.
-      return {};
+      // Structured state is additive and must never block the original lesson.
+      return emptyStructuredSavedSnapshot();
     }
   }
 
@@ -415,6 +466,32 @@ export default function LearnClient() {
     setStructuredActivityResponses(previous => ({ ...previous, [blockId]: parsed }));
   }
 
+  async function saveStructuredQuestionResponse(
+    question: StructuredQuestion, responseValue: QuestionResponse
+  ): Promise<QuestionResult> {
+    const artifactId = String(lesson?.structured_lesson?.artifact_id || (lesson?.structured_lesson as any)?.artifactId || '').trim();
+    if (!artifactId || selectedCourseId === null) {
+      throw new Error(translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6b21a'));
+    }
+    const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' +
+      encodeURIComponent(selectedCourseKey) + '&language=' + learningLanguage, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ response: responseValue }),
+      });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.detail || body.message || body.error ||
+      translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6b21a'));
+    return {
+      status: body.status,
+      score: typeof body.score === 'number' ? body.score : undefined,
+      maxScore: typeof body.maxScore === 'number' ? body.maxScore : undefined,
+      feedback: typeof body.feedback === 'string' ? body.feedback : undefined,
+      feedbackByLocale: body.feedbackByLocale && typeof body.feedbackByLocale === 'object' ? body.feedbackByLocale : undefined,
+      autoGraded: body.autoGraded === true,
+    } as QuestionResult;
+  }
+
   async function loadLesson(id:number) {
     try {
       const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+courseStartQuery,{method:'POST'});
@@ -423,7 +500,11 @@ export default function LearnClient() {
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
-      setStructuredActivityResponses(await loadStructuredActivityResponses(detail));
+      const saved = await loadStructuredActivityResponses(detail);
+      setStructuredActivityResponses(saved.activities);
+      setStructuredQuestionResponses(saved.responses);
+      setStructuredQuestionResults(saved.results);
+      setStructuredQuestionSubmitted(saved.submitted);
       setLesson(detail);
       localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
       setMcqAttempted(Object.fromEntries(detail.questions
@@ -489,7 +570,12 @@ export default function LearnClient() {
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
           localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+d.class_code+':'+d.subject_code,String(d.id));
-          setStudentDocuments([]);setTrackBrowse(null);setStructuredActivityResponses(savedStructuredActivities);setLesson(d);
+          setStudentDocuments([]);setTrackBrowse(null);
+          setStructuredActivityResponses(savedStructuredActivities.activities);
+          setStructuredQuestionResponses(savedStructuredActivities.responses);
+          setStructuredQuestionResults(savedStructuredActivities.results);
+          setStructuredQuestionSubmitted(savedStructuredActivities.submitted);
+          setLesson(d);
           setMcqAttempted(Object.fromEntries(d.questions
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
             .map(question=>[question.id,true])));
@@ -795,19 +881,27 @@ export default function LearnClient() {
       <div className="feedback"><span><UiText message="legacy.web.learning.path.43212585" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
-      {lesson.structured_lesson && <StructuredLessonContent
-        lesson={lesson.structured_lesson}
-        locale={learningLanguage}
-        mode="student"
-        showHeader={false}
-        initialActivityResponses={structuredActivityResponses}
-        onActivitySave={saveStructuredActivityResponse}
-      />}
+      {inlineStructuredLesson && (inlineStructuredLesson.explain.blocks.length > 0 || inlineStructuredLesson.practice.questions.length > 0) && <details className="qe-structured-optional-insert">
+        <summary>{locale==='english' ? 'Optional structured lesson view' : 'वैकल्पिक संरचित पाठ दृश्य'}</summary>
+        <StructuredLessonExperience
+          key={lesson.id}
+          lesson={inlineStructuredLesson}
+          locale={learningLanguage}
+          mode="student"
+          showExplanation={true}
+          initialActivityResponses={structuredActivityResponses}
+          initialResponses={structuredQuestionResponses}
+          initialResults={structuredQuestionResults}
+          initialSubmitted={structuredQuestionSubmitted}
+          onActivitySave={saveStructuredActivityResponse}
+          onQuestionSubmit={saveStructuredQuestionResponse}
+        />
+      </details>}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <UiText message="legacy.web.help.0201f8c2" /></b><span><UiText message="legacy.web.explain.the.concept.in.your.own.words..8ad26ef4" /></span></div>}
 
       <div className="content-heading"><h2><UiText message="legacy.web.check.your.understanding.with.mcqs.858bdd53" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <UiText message="legacy.web.attempted.b3b638cd" /></span></div>
       {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={translateUi(locale, 'legacy.web.mcq.progress.392d6eb6')}><div><span><UiText message="legacy.web.answer.every.question.to.continue.5dafc788" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
-      {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}} courseId={selectedCourseId!}/>) : <div className="concept-card"><p><UiText message="legacy.web.mcqs.have.not.been.published.for.this..18b64bb6" /></p></div>}
+      {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={String(selectedCourseId)+'-'+q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}} courseId={selectedCourseId!}/>) : <div className="concept-card"><p><UiText message="legacy.web.mcqs.have.not.been.published.for.this..18b64bb6" /></p></div>}
 
       <section className="concept-card practice-launch-card">
         <span className="concept-kicker"><UiText message="legacy.web.next.step.0a765b4d" /></span>

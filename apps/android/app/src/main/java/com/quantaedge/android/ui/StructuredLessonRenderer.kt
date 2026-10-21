@@ -395,6 +395,11 @@ private fun StructuredQuestionView(
                     else "This question is unavailable until its visual is approved.")
             } else {
                 Text(prompt, style = MaterialTheme.typography.titleMedium)
+                question.optJSONObject("legacy_question_type_by_locale")?.let { localized(it, locale) }
+                    ?.takeIf { it.isNotBlank() }?.let { sourceType ->
+                        Text(sourceType, style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 if (type == "image_observation") {
                     val visualBlock = findQuestionVisualBlock(question, lessonBlocks)
                     if (visualBlock != null) {

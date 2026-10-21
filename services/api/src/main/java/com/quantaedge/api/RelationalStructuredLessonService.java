@@ -692,18 +692,41 @@ public class RelationalStructuredLessonService {
           option.put("id", key);
           option.set("text_by_locale", bilingual(labelEn, labelHi));
         }
-        if (options.size() < 2) continue;
       }
       ObjectNode question = result.addObject();
       question.put("id", QUESTION_PREFIX + number(row.get("id")));
+      // A malformed option list must not cause an approved question to disappear.
       question.put("type", options.size() >= 2 ? "multiple_choice" : "short_answer");
       question.put("rendering_contract_id", options.size() >= 2
           ? "qtype-multiple-choice.v1" : "qtype-short-answer.v1");
+      question.put("legacy_question_type", rawType);
+      question.set("legacy_question_type_by_locale", bilingual(
+          legacyQuestionTypeLabel(rawType, "en"), legacyQuestionTypeLabel(rawType, "hi")));
       question.set("prompt_by_locale", bilingual(text(row.get("prompt_en")), text(row.get("prompt_hi"))));
       if (!options.isEmpty()) question.set("options", options);
       // Deliberately omit answer_payload, correct answers, grading keys and rubric fields.
     }
     return result;
+  }
+
+  private String legacyQuestionTypeLabel(String rawType, String language) {
+    boolean hi = "hi".equals(language);
+    return switch (rawType) {
+      case "MCQ" -> hi ? "बहुविकल्पीय प्रश्न" : "Multiple-choice question";
+      case "TRUE_FALSE" -> hi ? "सही या गलत" : "True or false";
+      case "INPUT" -> hi ? "उत्तर लिखें" : "Input answer";
+      case "NUMERICAL", "NUMERIC" -> hi ? "संख्यात्मक प्रश्न" : "Numerical question";
+      case "MATCH" -> hi ? "मिलान करें" : "Matching question";
+      case "ORDER" -> hi ? "सही क्रम में रखें" : "Ordering question";
+      case "ASSERTION_REASON" -> hi ? "कथन और कारण" : "Assertion and reason";
+      case "CASE_BASED" -> hi ? "प्रकरण आधारित प्रश्न" : "Case-based question";
+      case "SHORT_ANSWER" -> hi ? "लघु उत्तरीय प्रश्न" : "Short-answer question";
+      case "LONG_ANSWER" -> hi ? "दीर्घ उत्तरीय प्रश्न" : "Long-answer question";
+      case "DIAGRAM" -> hi ? "आरेख आधारित प्रश्न" : "Diagram question";
+      case "MAP" -> hi ? "मानचित्र आधारित प्रश्न" : "Map question";
+      case "SOURCE_BASED" -> hi ? "स्रोत आधारित प्रश्न" : "Source-based question";
+      default -> hi ? "प्रश्न" : "Question";
+    };
   }
 
   private ObjectNode bilingual(String en, String hi) {

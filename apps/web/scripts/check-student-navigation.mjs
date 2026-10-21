@@ -17,6 +17,10 @@ const tutorDock = read('../app/student/learn/TutorDock.tsx');
 const tutorService = read('../../../services/api/src/main/java/com/quantaedge/api/TutorService.java');
 const tutorController = read('../../../services/api/src/main/java/com/quantaedge/api/TutorController.java');
 const tutorRetriever = read('../../../services/api/src/main/java/com/quantaedge/api/TutorCurriculumRetriever.java');
+const learningController = read('../../../services/api/src/main/java/com/quantaedge/api/LearningController.java');
+const relationalStructuredLessonService = read('../../../services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java');
+const learningStateServiceTest = read('../../../services/api/src/test/java/com/quantaedge/api/LearningStateServiceTest.java');
+const structuredLessonExperience = read('../app/student/structured-lessons/StructuredLessonExperience.tsx');
 const tutorMigration = read('../../../services/api/src/main/resources/db/migration/V160__structured_artifact_ai_tutor_sessions.sql');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
@@ -341,11 +345,24 @@ assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   'Course-scoped learner answer writes must bind institution/course columns and keep answered_at as the database timestamp.');
 const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
 assert.ok(learnClient.includes("import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';") &&
-  learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
+  learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
   learnClient.includes('initialActivityResponses={structuredActivityResponses}') &&
   !learnClient.includes('if(lesson.structured_lesson) return') &&
-  structuredLessonContent.includes('showHeader = true'),
-  'Optional structured inserts must preserve the original lesson screen and practice journey.');
+  structuredLessonContent.includes('showHeader = true') &&
+  learnClient.includes('onQuestionSubmit={saveStructuredQuestionResponse}') &&
+  learnClient.includes('setStructuredQuestionResponses(saved.responses)') &&
+  learnClient.includes('q.saved_answer') &&
+  learnClient.includes('q.saved_correct') &&
+  learningController.includes('result.put("structured_lesson", structuredPayload)') &&
+  learningController.includes('coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer') &&
+  learningController.includes('latest_attempt.correct as saved_correct') &&
+  relationalStructuredLessonService.includes('question.put("legacy_question_type", rawType)') &&
+  !relationalStructuredLessonService.includes('if (options.size() < 2) continue;') &&
+  structuredLessonExperience.includes('showExplanation = true') &&
+  structuredLessonExperience.includes('{showExplanation && <StructuredLessonContent') &&
+  learningStateServiceTest.includes('courseScopedAnswerInsertBindsTenantAndCourseWithMatchingPlaceholderCount') &&
+  learningStateServiceTest.includes('values(?,?,?,?,?,?,?,now(),?,?)'),
+  'Structured lesson data, saved answers, question types and course-scoped writes must all have regression coverage.');
 
 assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
   courseScope.includes('This course is not enrolled in your current institution account.') &&
@@ -370,6 +387,14 @@ assert.ok(androidLessonContentBlock.includes('collectCompleteBlockText') &&
   androidStructuredRenderer.includes('collectStructuredTextValue'),
   'Android must render all legacy/structured block types in order with media and safe unknown-type fallbacks.');
 
+assert.ok(androidApp.includes('!question.optBoolean("attempted")') &&
+  androidApp.includes('question.optString("saved_answer")') &&
+  androidApp.includes('question.optBoolean("saved_correct")') &&
+  androidApp.includes('question.optBoolean("saved_correct") || answerLocks[id] == true') &&
+  androidApp.includes('Open optional structured lesson') &&
+  androidApp.includes('fun submitStructuredQuestionResponse') &&
+  androidStructuredRenderer.includes('legacy_question_type_by_locale'),
+  'Android must restore legacy answers and keep the full structured lesson as an opt-in extension using shared save handlers.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
@@ -714,7 +739,7 @@ assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
   !structuredLessonContent.includes("if (!canDisplay && mode === 'student') return null;") &&
   structuredLessonContent.includes('qe-structured-unknown-block'),
   'Structured lesson blocks must keep backend order, show placeholders for blocked visuals and render unknown types safely.');
-assert.ok(learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
+assert.ok(learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('learningBlocks.map(block=><Block') &&
   learnClient.includes('<section className="concept-card practice-launch-card">') &&

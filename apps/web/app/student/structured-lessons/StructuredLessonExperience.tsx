@@ -13,8 +13,9 @@ type Props = {
   lesson: StructuredLesson;
   locale: LessonLocale;
   mode?: 'student' | 'admin-preview';
-  onActivitySave?: (blockId: string, value: string) => void;
+  onActivitySave?: (blockId: string, value: string) => void | Promise<void>;
   onQuestionSubmit?: (question: StructuredQuestion, response: QuestionResponse) => Promise<QuestionResult> | QuestionResult;
+  showExplanation?: boolean;
   initialResponses?: Record<string, QuestionResponse>;
   initialResults?: Record<string, QuestionResult>;
   initialSubmitted?: Record<string, boolean>;
@@ -69,7 +70,7 @@ function gradeAdminPreview(question: StructuredQuestion, response: QuestionRespo
 }
 
 export default function StructuredLessonExperience({
-  lesson, locale, mode = 'student', onActivitySave, onQuestionSubmit,
+  lesson, locale, mode = 'student', onActivitySave, onQuestionSubmit, showExplanation = true,
   initialResponses, initialResults, initialSubmitted, initialActivityResponses,
 }: Props) {
   const { locale: uiLocale } = useLocale();
@@ -154,7 +155,8 @@ export default function StructuredLessonExperience({
   }
 
   return <div className="qe-structured-experience">
-    <StructuredLessonContent lesson={lesson} locale={locale} mode={mode} onActivitySave={onActivitySave} initialActivityResponses={initialActivityResponses} />
+    {showExplanation && <StructuredLessonContent lesson={lesson} locale={locale} mode={mode}
+      onActivitySave={onActivitySave} initialActivityResponses={initialActivityResponses} />}
     <section className="qe-structured-practice" aria-labelledby="qe-structured-practice-title">
       <header className="qe-structured-practice__header">
         <p className="qe-structured-eyebrow">{translateUi(uiLocale, 'legacy.web.explain.practice.be1cc225')}</p>

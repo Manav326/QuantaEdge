@@ -4,9 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/learning")
@@ -15,9 +17,20 @@ public class LearningController {
   private final AuthorizationService authorization;
   private final LearningStateService state;
   private final QuestionAnswerService answerService;
+  private final RelationalStructuredLessonService relationalLessons;
 
-  public LearningController(JdbcTemplate jdbc, AuthorizationService authorization, LearningStateService state, QuestionAnswerService answerService) {
-    this.jdbc=jdbc; this.authorization=authorization; this.state=state; this.answerService=answerService;
+  @Autowired
+  public LearningController(JdbcTemplate jdbc, AuthorizationService authorization,
+      LearningStateService state, QuestionAnswerService answerService,
+      RelationalStructuredLessonService relationalLessons) {
+    this.jdbc=jdbc; this.authorization=authorization; this.state=state;
+    this.answerService=answerService; this.relationalLessons=relationalLessons;
+  }
+
+  // Keep the narrow constructor used by isolated controller tests and older callers.
+  LearningController(JdbcTemplate jdbc, AuthorizationService authorization,
+      LearningStateService state, QuestionAnswerService answerService) {
+    this(jdbc, authorization, state, answerService, null);
   }
 
   @GetMapping("/lessons")
@@ -302,6 +315,22 @@ public class LearningController {
     List<Map<String,Object>> questions=publicQuestions(lessonId,context.studentId(),courseId,language,institutionId);
     result.put("blocks",blocks);
     result.put("questions",questions);
+
+    // Reuse the exact database lesson/course/tenant IDs already authorised above. Do not
+    // guess mappings from translated titles or synthesize a global artifact identity.
+    if (relationalLessons != null) {
+      try {
+        var structured = relationalLessons.requirePublishedLesson(
+            "db-lesson-" + lessonId, context.studentId(), institutionId, courseId);
+        var structuredPayload = structured.payload().deepCopy();
+        structuredPayload.put("requested_language", language);
+        result.put("structured_lesson", structuredPayload);
+      } catch (ResponseStatusException unavailable) {
+        // Structured content is optional; preserve the original lesson payload on 404.
+        if (unavailable.getStatusCode().value() != 404) throw unavailable;
+      }
+    }
+
     long translatedBlocks=blocks.stream().filter(block -> Boolean.TRUE.equals(block.get("translated"))).count();
     long translatedQuestions=questions.stream().filter(question -> Boolean.TRUE.equals(question.get("translated"))).count();
     List<String> translationGaps=new java.util.ArrayList<>();
@@ -430,6 +459,9 @@ public class LearningController {
              exists(select 1 from student_question_attempt a
                     where a.student_id=? and a.institution_id=(select institution_id from tenant_scope)
                        and a.course_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE') as attempted,
+             coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer,
+             latest_attempt.correct as saved_correct,
+             latest_attempt.answered_at as saved_answered_at,
              case when qt.id is not null then coalesce(qt.options,'[]'::jsonb)
                   when q.question_type in ('MCQ','TRUE_FALSE') then
                     coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
@@ -439,6 +471,14 @@ public class LearningController {
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode
       from question q
+      left join lateral (
+        select a.answer_text,a.selected_option,a.correct,a.answered_at
+        from student_question_attempt a
+        where a.student_id=? and a.institution_id=(select institution_id from tenant_scope)
+          and a.course_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE'
+        order by a.answered_at desc,a.id desc
+        limit 1
+      ) latest_attempt on true
       left join lateral (
         select t.id,t.prompt,t.explanation,t.options,t.topic,t.subtopic,t.skill,t.tags
         from question_translation t
@@ -452,7 +492,7 @@ public class LearningController {
         order by t.version_no desc,t.id desc limit 1
       ) qt on true
       where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
-      """,institutionId,studentId,courseId,language,lessonId);
+      """,institutionId,studentId,courseId,studentId,courseId,language,lessonId);
   }
 
   // Legacy Java-only wrappers are retained for binary/source compatibility but fail closed:

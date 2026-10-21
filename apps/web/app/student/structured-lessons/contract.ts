@@ -24,6 +24,8 @@ export type StructuredQuestion = {
   rendering_contract_id: string;
   prompt_by_locale: LocalizedText;
   feedback_by_locale?: LocalizedText;
+  legacy_question_type?: string;
+  legacy_question_type_by_locale?: LocalizedText;
   options?: StructuredOption[];
   correct_answer_ids?: string[];
   correct_answer?: boolean;

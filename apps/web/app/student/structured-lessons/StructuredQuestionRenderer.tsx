@@ -98,7 +98,9 @@ export default function StructuredQuestionRenderer({
 
   return <section className="qe-structured-question" aria-labelledby={'question-' + question.id}>
     <div className="qe-structured-question__header">
-      <span className="qe-structured-question__type">{typeLabel(question.type, uiLocale)}</span>
+      <span className="qe-structured-question__type">
+        {text(question.legacy_question_type_by_locale, locale) || typeLabel(question.type, uiLocale)}
+      </span>
       {question.difficulty && <span className="qe-structured-question__difficulty">{question.difficulty}</span>}
     </div>
     {question.type === 'scenario_based' && question.scenario_by_locale && <div className="qe-structured-scenario">
