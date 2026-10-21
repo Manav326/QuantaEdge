@@ -10,6 +10,19 @@ def read(name: str) -> str:
 
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
+    def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
+        workflow = read("textbook-extraction-pilot.yml")
+        self.assertIn("[reextract-textbook-class-7]", workflow)
+        self.assertIn("[reextract-textbook-class-8]", workflow)
+        self.assertIn(
+            "contains(github.event.head_commit.message || '', '[reextract-textbook-class-7]') && fromJSON('[7]')",
+            workflow,
+        )
+        self.assertIn(
+            "contains(github.event.head_commit.message || '', '[reextract-textbook-class-8]') && fromJSON('[8]')",
+            workflow,
+        )
+
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         self.assertIn("workflow_dispatch:", workflow)

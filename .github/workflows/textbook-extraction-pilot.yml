@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        class_no: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('[{0}]', inputs.class_no)) || fromJSON('[7,8]') }}
+        class_no: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('[{0}]', inputs.class_no)) || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[reextract-textbook-class-7]') && fromJSON('[7]')) || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[reextract-textbook-class-8]') && fromJSON('[8]')) || fromJSON('[7,8]') }}
     name: Extract selected Class ${{ matrix.class_no }} in English and Hindi
     runs-on: ubuntu-latest
     timeout-minutes: 360
