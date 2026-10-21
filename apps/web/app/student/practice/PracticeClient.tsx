@@ -238,7 +238,7 @@ export default function PracticePage(){
     }
     void load();
     return()=>{active=false;};
-  },[lessonId,requestedSessionId,router,learningLanguage,locale,selectedCourseId,loadingCourses,courseError,tx]);
+  },[lessonId,requestedSessionId,router,learningLanguage,locale,selectedCourseId,loadingCourses,courseError]);
 
   async function answer(value:string|object){
     if(!current||!sessionId||saving||result?.correct===true)return;
