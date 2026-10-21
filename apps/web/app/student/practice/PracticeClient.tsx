@@ -64,6 +64,7 @@ function recapBlocks(lesson:LessonDetail|null){
 export default function PracticePage(){
   const [questions,setQuestions]=useState<Question[]>([]);
   const [catalogueLessons,setCatalogueLessons]=useState<PracticeCatalogueLesson[]>([]);
+  const [practiceSubjectFilter,setPracticeSubjectFilter]=useState(()=>searchParams.get('subjectCode')||'ALL');
   const [lesson,setLesson]=useState<LessonDetail|null>(null);
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStatus,setSessionStatus]=useState('IN_PROGRESS');
@@ -132,6 +133,11 @@ export default function PracticePage(){
       };
     });
   },[catalogueLessons]);
+  const visiblePracticeSubjectGroups=useMemo(()=>
+    practiceSubjectFilter==='ALL'
+      ? practiceSubjectGroups
+      : practiceSubjectGroups.filter(group=>group.code===practiceSubjectFilter),
+  [practiceSubjectGroups,practiceSubjectFilter]);
 
   useEffect(()=>{
     let active=true;
@@ -310,21 +316,36 @@ export default function PracticePage(){
         ? 'Practices unlock in order within each subject. Score at least 70% to unlock the next practice. You can still practise any topic directly from Lessons and Topics.'
         : 'हर विषय में अभ्यास क्रम से खुलेंगे। अगला अभ्यास खोलने के लिए कम-से-कम 70% अंक पाएं। पाठ और विषय से आप किसी भी टॉपिक का अभ्यास कर सकते हैं।'}</p>
       <InstitutionCourseSubjectScope
+        className="qe-practice-course-subject-scope"
         courses={courses} activeCourse={activeCourse} courseId={selectedCourseId}
         onCourseChange={value=>{
           const next=courses.find(course=>String(course.id)===String(value));
-          void selectCourse(value).then(()=>router.push('/student/practice?courseId='+encodeURIComponent(String(next?.public_id||value))));
+          setPracticeSubjectFilter('ALL');
+          void selectCourse(value).then(()=>{
+            router.push('/student/practice?courseId='+encodeURIComponent(String(next?.public_id||value)));
+          });
         }}
-        subjectCode="ALL" onSubjectChange={()=>{}}
-        loading={loadingCourses} language={locale} showSubject={false}
-        courseLabel={locale==='english'?'Course':'कोर्स'} />
+        subjectCode={practiceSubjectFilter}
+        onSubjectChange={value=>{
+          const next=value||'ALL';
+          setPracticeSubjectFilter(next);
+          const params=new URLSearchParams(window.location.search);
+          if(next==='ALL')params.delete('subjectCode');
+          else params.set('subjectCode',next);
+          if(courseKey)params.set('courseId',courseKey);
+          router.replace('/student/practice'+(params.size?'?'+params.toString():''));
+        }}
+        loading={loadingCourses} language={locale} includeAllSubjects={true}
+        courseLabel={locale==='english'?'Course':'कोर्स'}
+        subjectLabel={locale==='english'?'Subject':'विषय'}
+        allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'} />
       {error&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong>{locale==='english'?'Practice list unavailable':'अभ्यास सूची उपलब्ध नहीं'}</strong><span>{error}</span></div>}
-      {!error&&practiceSubjectGroups.length===0&&<div className="concept-card">
+      {!error&&visiblePracticeSubjectGroups.length===0&&<div className="concept-card">
         <h2>{locale==='english'?'No practices available yet':'अभी कोई अभ्यास उपलब्ध नहीं है'}</h2>
         <p>{locale==='english'?'Approved practice questions will appear here for subjects in your selected course.':'चुने गए कोर्स के विषयों के लिए स्वीकृत अभ्यास प्रश्न यहाँ दिखेंगे।'}</p>
         <Link href={'/student/learn?courseId='+encodeURIComponent(courseKey)+'&subjectCode=ALL'} className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link>
       </div>}
-      {practiceSubjectGroups.map(group=><section className="concept-card qe-practice-subject-group" key={group.code}>
+      {visiblePracticeSubjectGroups.map(group=><section className="concept-card qe-practice-subject-group" key={group.code}>
         <div className="content-heading"><div><span className="eyebrow">{group.code}</span><h2>{group.name}</h2></div><span>{group.lessons.filter(entry=>entry.passed).length}/{group.lessons.length} {locale==='english'?'passed':'उत्तीर्ण'}</span></div>
         {group.lessons.length===0
           ? <p>{locale==='english'?'No approved practice questions are ready in this subject yet.':'इस विषय में अभी स्वीकृत अभ्यास प्रश्न उपलब्ध नहीं हैं।'}</p>
