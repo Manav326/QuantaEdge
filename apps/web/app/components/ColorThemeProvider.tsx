@@ -218,7 +218,7 @@ export function AppearanceModeButton() {
   const { brand } = useTenantBranding();
   const nextMode: AppearanceMode =
     mode === 'institution' ? 'system' : mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'institution';
-  const defaultModeLabel = brand?.displayName ? 'School' : 'Default';
+  const defaultModeLabel = brand?.displayName || 'Default';
   const modeName: Record<AppearanceMode, string> = {
     institution: defaultModeLabel, system: 'System', dark: 'Dark', light: 'Light',
   };
