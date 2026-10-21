@@ -760,7 +760,7 @@ export default function LearnClient() {
       {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={translateUi(locale, 'legacy.web.open.ai.tutor.5bd7c753')} title={translateUi(locale, 'legacy.web.open.ai.tutor.5bd7c753')}>
         <span className="tutor-launch-icon" aria-hidden="true">✦</span>
       </button>}
-      <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
+      <TutorDock lessonId={lesson.id} courseId={selectedCourseId!} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
         {currentIndex>0 ? <button type="button" className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><UiText message="legacy.web.previous.c5e11564" /></button> : <span/>}
