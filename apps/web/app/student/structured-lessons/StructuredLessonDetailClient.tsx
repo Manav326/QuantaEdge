@@ -12,6 +12,7 @@ import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import StudentEmptyState from '../components/StudentEmptyState';
 import StructuredLessonExperience from './StructuredLessonExperience';
 import AssignedLearningResources from './AssignedLearningResources';
+import TutorDock from '../learn/TutorDock';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
 import type { StructuredLesson, StructuredQuestion } from './contract';
 
@@ -29,6 +30,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   const [saved, setSaved] = useState<SavedResponses>({});
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
+  const [tutorOpen, setTutorOpen] = useState(false);
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   useEffect(() => {
     let active = true;
@@ -123,6 +125,13 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
           onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
           initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />
+        <div className="lesson-next">
+          <button type="button" className="button button-dark" onClick={()=>setTutorOpen(true)}>
+            {tx('AI Tutor से इस विषय पर पूछें','Ask the AI tutor about this topic')}
+          </button>
+        </div>
+        <TutorDock artifactId={artifactId} courseId={courseId ?? 0} open={tutorOpen}
+          onClose={()=>setTutorOpen(false)} />
         <AssignedLearningResources artifactId={artifactId} language={learningLanguage} courseId={courseId ?? 0} />
       </>}
   </section></div></main>;

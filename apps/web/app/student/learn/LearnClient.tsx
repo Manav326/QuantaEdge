@@ -699,7 +699,14 @@ export default function LearnClient() {
         <span>{lesson.class_code} · {lesson.subject_name}</span>
       </div>
       <StructuredLessonExperience lesson={lesson.structured_lesson} locale={learningLanguage} mode="student" />
-      <div className="lesson-next"><Link href="/student" className="button button-dark button-small"><UiText message="legacy.web.student.home.15fbe96d" /></Link></div>
+      <div className="lesson-next">
+        <button type="button" className="button button-dark button-small" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}>
+          <UiText message="legacy.web.open.ai.tutor.5bd7c753" />
+        </button>
+        <Link href="/student" className="button button-dark button-small"><UiText message="legacy.web.student.home.15fbe96d" /></Link>
+      </div>
+      <TutorDock lessonId={lesson.id} courseId={selectedCourseId!} open={tutorOpen}
+        onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
     </section>
   </main>;
 

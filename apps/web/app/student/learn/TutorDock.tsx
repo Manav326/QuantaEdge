@@ -250,12 +250,13 @@ function TutorMessageBody({ message, locale }: { message: string; locale: string
   </div>;
 }
 
-export default function TutorDock({ lessonId, courseId, open, onClose, currentQuestionId }: {
-  lessonId: number;
+export default function TutorDock({ lessonId, artifactId, courseId, open, onClose, currentQuestionId }: {
+  lessonId?: number;
+  artifactId?: string;
   courseId: number;
   open: boolean;
   onClose: () => void;
-  currentQuestionId?: number;
+  currentQuestionId?: number | string;
 }) {
   const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale, learningLanguage, languageReady } = useLocale();
@@ -313,7 +314,11 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ lessonId, courseId, language: languageRef.current.responseLanguage }),
+          body: JSON.stringify({
+            ...(lessonId && lessonId > 0 ? { lessonId } : {}),
+            ...(artifactId?.trim() ? { artifactId: artifactId.trim() } : {}),
+            courseId, language: languageRef.current.responseLanguage,
+          }),
         });
         const body = await readBody(response);
         if (cancelled) return;
@@ -357,7 +362,7 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
       }
     })();
     return () => { cancelled = true; };
-  }, [open, lessonId, courseId, languageReady, retryAttempt]);
+  }, [open, lessonId, artifactId, courseId, languageReady, retryAttempt]);
 
   useEffect(() => {
     if (!open || !languageReady) return;
@@ -533,7 +538,11 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ lessonId, courseId, language: languageRef.current.responseLanguage, newChat: true }),
+        body: JSON.stringify({
+          ...(lessonId && lessonId > 0 ? { lessonId } : {}),
+          ...(artifactId?.trim() ? { artifactId: artifactId.trim() } : {}),
+          courseId, language: languageRef.current.responseLanguage, newChat: true,
+        }),
       });
       const body = await readBody(response);
       const nextSessionId = Number(body.sessionId);
@@ -579,7 +588,13 @@ export default function TutorDock({ lessonId, courseId, open, onClose, currentQu
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ message, mode: selectedMode, questionId: currentQuestionId || 0, language: languageRef.current.responseLanguage }),
+        body: JSON.stringify({
+          message, mode: selectedMode,
+          questionId: typeof currentQuestionId === 'number' ? currentQuestionId : 0,
+          ...(typeof currentQuestionId === 'string' && currentQuestionId.trim()
+            ? { structuredQuestionId: currentQuestionId.trim() } : {}),
+          language: languageRef.current.responseLanguage,
+        }),
       });
       const body = await readBody(response);
       const current = languageRef.current;

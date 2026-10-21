@@ -13,6 +13,11 @@ const practiceClient = read('../app/student/practice/PracticeClient.tsx');
 const learnClient = read('../app/student/learn/LearnClient.tsx');
 const structuredLessonsClient = read('../app/student/structured-lessons/StructuredLessonsClient.tsx');
 const structuredLessonDetailClient = read('../app/student/structured-lessons/StructuredLessonDetailClient.tsx');
+const tutorDock = read('../app/student/learn/TutorDock.tsx');
+const tutorService = read('../../../services/api/src/main/java/com/quantaedge/api/TutorService.java');
+const tutorController = read('../../../services/api/src/main/java/com/quantaedge/api/TutorController.java');
+const tutorRetriever = read('../../../services/api/src/main/java/com/quantaedge/api/TutorCurriculumRetriever.java');
+const tutorMigration = read('../../../services/api/src/main/resources/db/migration/V149__structured_artifact_ai_tutor_sessions.sql');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
 const studentProgressPage = read('../app/student/progress/page.tsx');
@@ -216,9 +221,10 @@ assert.ok(androidApp.includes('if (noEnrolledCourses)') &&
   androidProgressScreen.includes('if (noEnrolledCourses)'),
   'Android must suppress course/subject filtering UI when no courses are enrolled.');
 assert.ok(androidApp.includes('FloatingTutorDock(') &&
-  androidApp.includes('route == AppRoute.LESSON && lesson.longAny("id", "lesson_id") > 0L') &&
+  androidApp.includes('lesson.longAny("id", "lesson_id") > 0L') &&
+  androidApp.includes('structuredLessonArtifactId.isNotBlank()') &&
   !androidApp.includes('if (tutorMinimized)'),
-  'Android AI Tutor must use one dock/bubble scoped to the active lesson, without a second LessonScreen bubble.');
+  'Android AI Tutor must use one dock scoped to a canonical lesson or structured artifact, without a second LessonScreen bubble.');
 assert.ok(!androidApp.includes('Text(if (language == "hi") "ट्यूटर" else "Tutor")'),
   'The Learn submenu must not expose the unusable Tutor text link.');
 assert.ok(androidApp.includes('StudentAllCoursesScreen(') && androidApp.includes('StudentMarketplaceScreen('),
@@ -641,3 +647,30 @@ for (const relative of ['english.json', 'hinglish.json']) {
     'Missing localized student empty-state copy: ' + key + ' in ' + relative);
 }
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
+
+
+assert.ok(tutorDock.includes('artifactId?: string') && tutorDock.includes('structuredQuestionId') &&
+  tutorDock.includes('...(lessonId && lessonId > 0 ? { lessonId } : {})'),
+  'The shared Web tutor dock must support both canonical database lessons and structured artifact contexts.');
+assert.ok(learnClient.includes('if(lesson.structured_lesson)') &&
+  learnClient.includes('<TutorDock lessonId={lesson.id}') &&
+  learnClient.includes('setTutorQuestionId(undefined);setTutorOpen(true)'),
+  'The embedded structured lesson reader must expose the existing tutor dock, without replacing its lesson renderer.');
+assert.ok(structuredLessonDetailClient.includes('<TutorDock artifactId={artifactId}') &&
+  structuredLessonDetailClient.includes('Ask the AI tutor about this topic'),
+  'The standalone structured lesson detail must launch the shared tutor with its stable artifact ID.');
+assert.ok(tutorController.includes('startStructuredSession') &&
+  tutorController.includes('structuredQuestionId') &&
+  tutorService.includes('COURSE, SUBJECT, CHAPTER AND CURRENT LESSON/TOPIC') &&
+  tutorService.includes('boolean useLessonContext=true') &&
+  tutorService.includes('ensureStructuredArtifactAccess'),
+  'The API must resolve tenant/course scoped context server-side and include it for every tutor inference turn.');
+assert.ok(tutorRetriever.includes('retrieveStructured') &&
+  tutorRetriever.includes('ts.course_id is not null') &&
+  tutorMigration.includes('structured_artifact_id') &&
+  tutorMigration.includes('tutor_session_context_source_check'),
+  'Tutor retrieval must respect the selected course and persist structured artifact session scope explicitly.');
+assert.ok(androidApp.includes('put("artifactId", activeArtifactId)') &&
+  androidApp.includes('structuredQuestionId') &&
+  androidApp.includes('Ask the AI tutor about this topic'),
+  'Android must start the same artifact-scoped tutor session and expose a tutor action for structured lessons.');
