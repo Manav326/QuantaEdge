@@ -674,8 +674,10 @@ assert.ok(tutorRetriever.includes('retrieveStructured') &&
   'Tutor retrieval must respect the selected course and persist structured artifact session scope explicitly.');
 assert.ok(tutorService.includes('key.contains("answer")') &&
   tutorService.includes('key.contains("correct")') &&
-  tutorService.includes('toStudentPayload(structuredContext.artifact())'),
-  'Structured tutor grounding must only consume learner-safe content and omit hidden answer/grading fields.');
+  tutorService.includes('toStudentPayload(structuredContext.artifact())') &&
+  tutorService.includes('stripTutorPrivateFields(node)') &&
+  tutorService.includes('normalized.contains("grading")'),
+  'Tutor grounding must use learner-safe structured artifacts and recursively strip hidden answers/grading from legacy lesson blocks.');
 assert.ok(androidApp.includes('put("artifactId", activeArtifactId)') &&
   androidApp.includes('Ask the AI tutor about this topic') &&
   androidApp.includes('tutorScopeArtifactId == structuredLessonArtifactId'),

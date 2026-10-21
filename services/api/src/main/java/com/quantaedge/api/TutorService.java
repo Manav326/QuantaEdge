@@ -948,21 +948,43 @@ public class TutorService {
     for(Map<String,Object> row:raw){
       String type=String.valueOf(row.get("block_type"));
       Object content=row.get("content");
-      if(Set.of("QUESTION","MCQ","TRUE_FALSE","INPUT","MATCH","ORDER","ASSERTION_REASON","CASE_BASED","NUMERICAL","SOURCE_BASED").contains(type)
-          && content!=null){
+      if(content!=null){
         try{
           var node=mapper.readTree(String.valueOf(content));
-          if(node.isObject()){
-            for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) ((tools.jackson.databind.node.ObjectNode)node).remove(field);
+          if(node.isObject()||node.isArray()){
+            stripTutorPrivateFields(node);
+            compactJsonNode(node,220,6);
+            safe.add(Map.of("block_type",type,"content",node));
+            continue;
           }
-          compactJsonNode(node, 220, 6);
-          safe.add(Map.of("block_type",type,"content",node));
-          continue;
         }catch(Exception ignored){}
       }
       safe.add(Map.of("block_type",type,"content",compactText(content==null?"":String.valueOf(content),450)));
     }
     return safe;
+  }
+
+  /** Remove hidden grading/answer material at every depth before lesson JSON enters the prompt. */
+  private void stripTutorPrivateFields(tools.jackson.databind.JsonNode node){
+    if(node==null)return;
+    if(node.isObject()){
+      var object=(tools.jackson.databind.node.ObjectNode)node;
+      List<String> names=new ArrayList<>();
+      node.properties().forEach(entry->names.add(entry.getKey()));
+      for(String name:names){
+        String normalized=name.replaceAll("([a-z0-9])([A-Z])","$1_$2")
+            .replaceAll("[^A-Za-z0-9]+","_").toLowerCase(Locale.ROOT);
+        if(normalized.contains("answer")||normalized.contains("correct")
+            ||normalized.contains("solution")||normalized.contains("grading")
+            ||normalized.contains("marking_scheme")||normalized.contains("feedback")){
+          object.remove(name);
+        }else{
+          stripTutorPrivateFields(object.get(name));
+        }
+      }
+    }else if(node.isArray()){
+      for(tools.jackson.databind.JsonNode child:node)stripTutorPrivateFields(child);
+    }
   }
 
   private static String compactText(String value, int maxChars) {
