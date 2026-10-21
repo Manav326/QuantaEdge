@@ -6161,7 +6161,12 @@ private fun LessonScreen(
                     )
                 }
             }
-            val optionalStructuredLesson = lesson.optJSONObject("structured_lesson")
+            // Keep legacy MCQs in their original cards, while retaining extra structured question types.
+            val optionalStructuredLesson = remember(lessonId, lesson) {
+                lesson.optJSONObject("structured_lesson")?.let { structuredLesson ->
+                    structuredLessonWithoutLegacyMcqDuplicates(structuredLesson, lesson)
+                }
+            }
             val optionalArtifactId = optionalStructuredLesson?.optString("artifact_id").orEmpty()
             var showOptionalStructured by rememberSaveable(lessonId) { mutableStateOf(false) }
             if (optionalStructuredLesson != null && optionalArtifactId.isNotBlank()) {

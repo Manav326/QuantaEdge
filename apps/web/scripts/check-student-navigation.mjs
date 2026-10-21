@@ -41,6 +41,8 @@ const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidLessonContentBlock = read('../../android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt');
 const androidStructuredRenderer = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt');
+const androidResponseCompatibility = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningResponseCompatibility.kt');
+const androidResponseCompatibilityTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/LearningResponseCompatibilityTest.kt');
 const androidLocalization = read('../../android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
 const androidProgressScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
 const androidEnrollmentEmptyState = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentEnrollmentEmptyState.kt');
@@ -394,16 +396,21 @@ assert.ok(androidLessonContentBlock.includes('collectCompleteBlockText') &&
   androidStructuredRenderer.includes('collectStructuredTextValue'),
   'Android must render all legacy/structured block types in order with media and safe unknown-type fallbacks.');
 
-assert.ok(androidApp.includes('!question.optBoolean("attempted")') &&
-  androidApp.includes('question.optString("saved_answer")') &&
-  androidApp.includes('question.optBoolean("saved_correct")') &&
+assert.ok(androidResponseCompatibility.includes('restoreLegacyLessonAnswers') &&
+  androidResponseCompatibility.includes('!question.optBoolean("attempted")') &&
+  androidResponseCompatibility.includes('question.optString("saved_answer")') &&
+  androidResponseCompatibility.includes('question.optBoolean("saved_correct")') &&
   androidApp.includes('question.optBoolean("saved_correct") || answerLocks[id] == true') &&
+  androidApp.includes('restoreLegacyLessonAnswers(loadedLesson, language)') &&
+  androidApp.includes('loadStructuredResponsesForLegacyLesson(') &&
   androidApp.includes('Open optional structured lesson') &&
   androidApp.includes('fun submitStructuredQuestionResponse') &&
-  androidApp.includes('showPractice = false') &&
+  androidApp.includes('fun saveStructuredActivityResponse') &&
+  androidApp.includes('structuredLessonWithoutLegacyMcqDuplicates') &&
+  androidResponseCompatibilityTests.includes('optionalStructuredLessonFiltersOnlyDuplicateLegacyMcqs') &&
   androidStructuredRenderer.includes('if (showPractice)') &&
   androidStructuredRenderer.includes('legacy_question_type_by_locale'),
-  'Android must restore legacy answers and keep the full structured lesson as an opt-in extension using shared save handlers.');
+  'Android must restore saved lesson answers, avoid duplicate legacy MCQs, retain other structured question types, and use shared save handlers.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
