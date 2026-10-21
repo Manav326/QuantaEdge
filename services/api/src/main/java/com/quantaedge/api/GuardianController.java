@@ -587,7 +587,7 @@ public class GuardianController {
               left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
               left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
               where ps.program_id=?
-              group by s.id,s.code,s.display_name,c.code,s.sort_order
+              group by ps.sort_order,s.id,s.code,s.display_name,c.code,s.sort_order
               order by ps.sort_order,s.sort_order,s.id
               """,courseId));
           }
