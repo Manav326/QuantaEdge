@@ -11,9 +11,6 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
-import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';
-import type { QuestionResponse, QuestionResult } from '../structured-lessons/StructuredQuestionRenderer';
-import type { StructuredLesson, StructuredQuestion } from '../structured-lessons/contract';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
@@ -45,22 +42,15 @@ type Question = {
   topic?:string; subtopic?:string; skill?:string; response_mode?:string; attempted?:boolean;
   saved_answer?:string|null; saved_correct?:boolean|null; saved_answered_at?:string|null;
 };
-type StructuredSavedSnapshot = {
-  activities: Record<string, Record<string, string>>;
-  responses: Record<string, QuestionResponse>;
-  results: Record<string, QuestionResult>;
-  submitted: Record<string, boolean>;
-};
 type Detail = Lesson & {
   class_code:string; class_name:string;
-  blocks:{id:number;sequence_no:number;block_type:string;content:string;translated?:boolean}[];
+  blocks:{id:number;sequence_no:number;block_type:string;content:string;translated?:boolean;asset_id?:number|null;asset_url?:string|null;asset_alt?:string|null}[];
   questions:Question[];
   requested_language?:'hi'|'en';
   translation_complete?:boolean;
   lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
   class_translated?:boolean; objective_translated?:boolean;
   translation_gaps?:string[];
-  structured_lesson?:StructuredLesson;
   translation_coverage?:{blocks_total:number;blocks_published:number;questions_total:number;questions_published:number;class?:boolean;lesson?:boolean;chapter?:boolean;subject?:boolean;objective?:boolean};
 };
 
@@ -182,17 +172,17 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
     <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<UiText message="legacy.web.try.together.2813d564" />:block.block_type==='HINT'?<UiText message="legacy.web.helpful.hint.e653ab3f" />:<UiText message="legacy.web.try.it.yourself.817b2366" />)}</span><p><MathText text={String(data.prompt || data.body || '')}/></p>{data.hint && <div className="feedback"><span><UiText message="legacy.web.hint.0b3b3ecd" /> <MathText text={String(data.hint)}/></span></div>}
   </div>;
-  if (['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
-    const url=String(data.url||'');
+  if (['IMAGE','DIAGRAM','GIF','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
+    const url=String(data.url||block.asset_url||data.asset_url||data.assetUrl||data.asset?.url||'');
     const directVideo=/\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
     const youtube=/youtube\.com\/watch\?/i.test(url)||/youtu\.be\//i.test(url);
     let embed=url;
     if(youtube){try{const parsedUrl=new URL(url);const id=parsedUrl.hostname.includes('youtu.be')?parsedUrl.pathname.slice(1):parsedUrl.searchParams.get('v')||'';if(id)embed='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)}catch{}}
-    const isVisual=['IMAGE','DIAGRAM','ANIMATION'].includes(block.block_type);
+    const isVisual=['IMAGE','DIAGRAM','GIF','ANIMATION'].includes(block.block_type);
     const localized=(key:string)=>String((locale==='english'?data[key]:data[key+'_hi'])||data[key]||'');
     const title=localized('title')||(block.block_type==='AUDIO'?(locale==='english'?'Listen and learn':'सुनकर समझें'):block.block_type==='VIDEO'?(locale==='english'?'Watch and learn':'देखकर समझें'):(locale==='english'?'Learning visual':'सीखने का चित्र'));
     const description=localized('description');
-    const alt=String((locale==='english'?data.alt:data.alt_hi)||data.alt||title||'Learning visual');
+    const alt=String((locale==='english'?data.alt:data.alt_hi)||data.alt||block.asset_alt||'')||title||'Learning visual';
     const caption=localized('caption');
     const visualKind=visualKindLabel(String(data.visual_kind|| (block.block_type==='DIAGRAM'?'DIAGRAM':'TEXTBOOK_FIGURE')),locale);
     return <div className="concept-card qe-lesson-media-card">
@@ -227,7 +217,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   const fallbackTitle=String(data.heading || data.title || data.name || block.block_type.replaceAll('_',' ').toLowerCase());
   const fallbackFields=collectLegacyBlockText(data).filter(value => !/^\s*$/.test(value));
   const fallbackHtml=typeof data.html==='string' ? data.html : '';
-  const fallbackUrl=String(data.url || data.asset_url || data.asset?.url || '');
+  const fallbackUrl=String(data.url || block.asset_url || data.asset_url || data.assetUrl || data.asset?.url || '');
   const safeFallbackUrl=/^https:\/\//i.test(fallbackUrl) ? fallbackUrl : '';
   const fallbackPath=safeFallbackUrl.split('?')[0].toLowerCase();
   const fallbackVideo=/\.(mp4|webm|mov|ogv)$/.test(fallbackPath);
@@ -339,10 +329,6 @@ export default function LearnClient() {
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
   const [mcqAttempted,setMcqAttempted]=useState<Record<number,boolean>>({});
-  const [structuredActivityResponses,setStructuredActivityResponses]=useState<Record<string,Record<string,string>>>({});
-  const [structuredQuestionResponses,setStructuredQuestionResponses]=useState<Record<string,QuestionResponse>>({});
-  const [structuredQuestionResults,setStructuredQuestionResults]=useState<Record<string,QuestionResult>>({});
-  const [structuredQuestionSubmitted,setStructuredQuestionSubmitted]=useState<Record<string,boolean>>({});
   const router=useRouter();
   const searchParams=useSearchParams();
   const courseIdValue=searchParams.get('courseId')||searchParams.get('programCode')||'';
@@ -362,135 +348,56 @@ export default function LearnClient() {
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
     [lesson]);
-  const inlineStructuredLesson=useMemo(()=>{
-    const structured=lesson?.structured_lesson;
-    if(!structured)return null;
-    // Keep the original MCQ cards as the primary path and only add questions not shown there.
-    const legacyMcqIds=new Set((lesson?.questions||[])
-      .filter(question=>question.question_type==='MCQ')
-      .map(question=>'db-q-'+question.id));
-    return {...structured,practice:{...structured.practice,
-      questions:structured.practice.questions.filter(question=>!legacyMcqIds.has(question.id))}};
-  },[lesson]);
   const attemptedMcqs=lessonMcqs.filter(question=>mcqAttempted[question.id]).length;
   const canStartTopicPractice=lessonMcqs.length===0||attemptedMcqs===lessonMcqs.length;
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
-    const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
+    const grouped=new Map<string,{code:string;chapterCode:string;subjectCode:string;subjectName:string;name:string;lessons:Lesson[]}>();
     const sameName=(left:string,right:string)=>left.trim().toLocaleLowerCase()===right.trim().toLocaleLowerCase();
     trackBrowse.lessons.forEach(item=>{
-      const key=item.chapter_code||item.chapter_name||'chapter';
-      const current=grouped.get(key)||{code:key,name:item.chapter_name||'Chapter',lessons:[]};
+      const chapterCode=item.chapter_code||item.chapter_name||'chapter';
+      // All-subject listings can contain identical chapter codes in different subjects.
+      const key=trackBrowse.subjectCode==='ALL'?item.subject_code+'::'+chapterCode:chapterCode;
+      const current=grouped.get(key)||{
+        code:key,chapterCode,subjectCode:item.subject_code,subjectName:item.subject_name,
+        name:item.chapter_name||'Chapter',lessons:[]
+      };
       current.lessons.push(item);grouped.set(key,current);
     });
     // A reviewed, published chapter PDF can establish its chapter section even if authored lesson content
     // is not published yet. Merge on curriculum code first, then display name as a safe fallback.
     studentDocuments
-      .filter(item=>item.scope==='CHAPTER_PDF'&&item.subject_code===trackBrowse.subjectCode)
+      .filter(item=>trackBrowse.subjectCode!=='ALL'&&item.scope==='CHAPTER_PDF'&&item.subject_code===trackBrowse.subjectCode)
       .forEach(document=>{
         const existing=Array.from(grouped.values()).find(group=>
-          (Boolean(document.chapter_code)&&group.code===document.chapter_code)||
+          (Boolean(document.chapter_code)&&group.chapterCode===document.chapter_code)||
           (Boolean(document.chapter_name)&&sameName(group.name,document.chapter_name!))
         );
         if(existing){
-          if(document.chapter_code&&existing.code===existing.name)existing.code=document.chapter_code;
+          if(document.chapter_code&&existing.chapterCode===existing.name)existing.chapterCode=document.chapter_code;
           // The lesson list is already localized for the selected learning language.
           // A fallback PDF must never overwrite that canonical translated chapter title.
           return;
         }
         const name=textbookChapterTitle(document,learningLanguage);
         const key=document.chapter_code||name||('chapter-'+document.document_id);
-        grouped.set(key,{code:key,name,lessons:[]});
+        grouped.set(key,{code:key,chapterCode:key,subjectCode:document.subject_code,subjectName:document.subject_name||document.subject_code,name,lessons:[]});
       });
     return Array.from(grouped.values());
   },[trackBrowse,studentDocuments,locale,learningLanguage]);
 
-  function emptyStructuredSavedSnapshot(): StructuredSavedSnapshot {
-    return { activities: {}, responses: {}, results: {}, submitted: {} };
-  }
-
-  async function loadStructuredActivityResponses(detail: Detail): Promise<StructuredSavedSnapshot> {
-    const artifactId = String(detail.structured_lesson?.artifact_id || (detail.structured_lesson as any)?.artifactId || '').trim();
-    if (!artifactId || selectedCourseId === null) return emptyStructuredSavedSnapshot();
-    try {
-      const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-        '/responses?courseId=' + encodeURIComponent(selectedCourseKey) + '&language=' + learningLanguage, { cache: 'no-store' });
-      if (!response.ok) return emptyStructuredSavedSnapshot();
-      const body = await response.json();
-      const snapshot = emptyStructuredSavedSnapshot();
-      if (body?.activities && typeof body.activities === 'object') {
-        snapshot.activities = body.activities as Record<string,Record<string,string>>;
-      }
-      if (body?.questions && typeof body.questions === 'object') {
-        for (const [id, saved] of Object.entries(body.questions as Record<string, any>)) {
-          if (!saved || saved.response === undefined || saved.response === null) continue;
-          const status = String(saved.status || '').toLowerCase() as QuestionResult['status'];
-          if (!['correct','incorrect','partially_correct','pending_review'].includes(status)) continue;
-          snapshot.responses[id] = saved.response as QuestionResponse;
-          snapshot.results[id] = {
-            status,
-            score: typeof saved.score === 'number' ? saved.score : undefined,
-            maxScore: typeof saved.maxScore === 'number' ? saved.maxScore : undefined,
-            feedback: typeof saved.feedback === 'string' ? saved.feedback : undefined,
-            feedbackByLocale: saved.feedbackByLocale && typeof saved.feedbackByLocale === 'object'
-              ? saved.feedbackByLocale : undefined,
-            autoGraded: saved.autoGraded === true,
-          };
-          snapshot.submitted[id] = status === 'correct' || status === 'pending_review';
-        }
-      }
-      return snapshot;
-    } catch {
-      // Structured state is additive and must never block the original lesson.
-      return emptyStructuredSavedSnapshot();
-    }
-  }
-
-  async function saveStructuredActivityResponse(blockId: string, value: string): Promise<void> {
-    const artifactId = String(lesson?.structured_lesson?.artifact_id || (lesson?.structured_lesson as any)?.artifactId || '').trim();
-    if (!artifactId || selectedCourseId === null) {
-      throw new Error(translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
-    }
-    const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(selectedCourseKey), {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response: value }),
-      });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.detail || body.message || body.error ||
-      translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
-    let parsed: Record<string,string> = {};
-    try {
-      const candidate = JSON.parse(value);
-      if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) parsed = candidate;
-    } catch { /* response validation is authoritative on the API */ }
-    setStructuredActivityResponses(previous => ({ ...previous, [blockId]: parsed }));
-  }
-
-  async function saveStructuredQuestionResponse(
-    question: StructuredQuestion, responseValue: QuestionResponse
-  ): Promise<QuestionResult> {
-    const artifactId = String(lesson?.structured_lesson?.artifact_id || (lesson?.structured_lesson as any)?.artifactId || '').trim();
-    if (!artifactId || selectedCourseId === null) {
-      throw new Error(translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6b21a'));
-    }
-    const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
-      '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' +
-      encodeURIComponent(selectedCourseKey) + '&language=' + learningLanguage, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response: responseValue }),
-      });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.detail || body.message || body.error ||
-      translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6b21a'));
-    return {
-      status: body.status,
-      score: typeof body.score === 'number' ? body.score : undefined,
-      maxScore: typeof body.maxScore === 'number' ? body.maxScore : undefined,
-      feedback: typeof body.feedback === 'string' ? body.feedback : undefined,
-      feedbackByLocale: body.feedbackByLocale && typeof body.feedbackByLocale === 'object' ? body.feedbackByLocale : undefined,
-      autoGraded: body.autoGraded === true,
-    } as QuestionResult;
+  function rememberLastOpenedLesson(detail: Detail) {
+    const resumeState = {
+      courseId: selectedCourseKey,
+      lessonId: detail.id,
+      classCode: detail.class_code,
+      subjectCode: detail.subject_code,
+      savedAt: Date.now(),
+    };
+    localStorage.setItem(
+      'qe:student:last-opened-lesson:course-' + selectedCourseKey,
+      JSON.stringify(resumeState),
+    );
   }
 
   async function loadLesson(id:number) {
@@ -501,13 +408,9 @@ export default function LearnClient() {
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
-      const saved = await loadStructuredActivityResponses(detail);
-      setStructuredActivityResponses(saved.activities);
-      setStructuredQuestionResponses(saved.responses);
-      setStructuredQuestionResults(saved.results);
-      setStructuredQuestionSubmitted(saved.submitted);
       setLesson(detail);
       localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
+      rememberLastOpenedLesson(detail);
       setMcqAttempted(Object.fromEntries(detail.questions
         .filter(question=>question.question_type==='MCQ'&&question.attempted)
         .map(question=>[question.id,true])));
@@ -529,20 +432,23 @@ export default function LearnClient() {
         if(!me.ok) throw new Error(student.message||translateUi(locale, 'legacy.web.student.profile.was.not.found.0d806b0d'));
         setCourseDisplayName(String(activeCourse?.display_name || student.programName || ''));
         const requestedId=Number(searchParams.get('lessonId')||0);
-        const selectedSubject=searchParams.get('subjectCode');
+        const selectedSubject=searchParams.get('subjectCode') || (selectedCourseId!==null ? 'ALL' : null);
         if(!requestedId && !selectedSubject){setChooseTrack(true);setTrackBrowse(null);setLesson(null);setLessons([]);setStudentDocuments([]);return;}
         const scopedCourse=selectedCourseId!==null||Boolean(selectedProgram);
         if(!requestedId && selectedSubject && (!/^[a-z0-9][a-z0-9_-]{0,39}$/i.test(selectedSubject)||(!scopedCourse&&!['maths','science'].includes(selectedSubject)))) throw new Error(translateUi(locale, 'legacy.web.invalid.subject.4f71f3e5'));
         const programQuery=courseQuery;
         if(!requestedId && selectedSubject){
           const selectedLanguage=learningLanguage;
-          const listResponse=await fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage+programQuery);
+          const subjectQuery=selectedSubject==='ALL'?'':'subjectCode='+encodeURIComponent(selectedSubject)+'&';
+          const listResponse=await fetch('/api/v1/learning/lessons?'+subjectQuery+'language='+selectedLanguage+programQuery);
           const listBody=await listResponse.json();
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
           if(cancelled)return;
           const trackLessons=listBody as Lesson[];
           if(cancelled)return;
-          const subjectName=selectedSubject==='maths'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):translateUi(locale, 'legacy.web.science.f85a10aa');
+          const subjectName=selectedSubject==='ALL'
+            ? (locale==='english'?'All subjects':'सभी विषय')
+            : String(trackLessons[0]?.subject_name || selectedSubject);
           setChooseTrack(false);
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
@@ -563,7 +469,6 @@ export default function LearnClient() {
         const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
-        const savedStructuredActivities=await loadStructuredActivityResponses(d);
         const list=await fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start'+courseStartQuery,{method:'POST'});
@@ -571,11 +476,8 @@ export default function LearnClient() {
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
           localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+d.class_code+':'+d.subject_code,String(d.id));
+          rememberLastOpenedLesson(d);
           setStudentDocuments([]);setTrackBrowse(null);
-          setStructuredActivityResponses(savedStructuredActivities.activities);
-          setStructuredQuestionResponses(savedStructuredActivities.responses);
-          setStructuredQuestionResults(savedStructuredActivities.results);
-          setStructuredQuestionSubmitted(savedStructuredActivities.submitted);
           setLesson(d);
           setMcqAttempted(Object.fromEntries(d.questions
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
@@ -632,7 +534,7 @@ export default function LearnClient() {
   // Fetch the selected language edition independently: changing locale must not restart
   // the lesson, reset the session, or issue a second progress-start request.
   useEffect(()=>{
-    const subjectCode=trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
+    const subjectCode=trackBrowse?.subjectCode==='ALL'?'':trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
     // Wait until CourseScope resolves the exact numeric course ID before requesting
     // documents. The API rejects unscoped catalogue requests instead of using class-wide content.
     if(loadingCourses||!subjectCode||selectedCourseId===null||selectedCourseId<=0){
@@ -704,7 +606,13 @@ export default function LearnClient() {
   useEffect(()=>{
     if(!trackBrowse||!chapterStorageScope){setLastOpenedLessonId(null);return;}
     const legacyScope='course-'+trackBrowse.courseId+':'+trackBrowse.classCode+':'+trackBrowse.subjectCode;
-    const remembered=Number(localStorage.getItem('qe:student:last-open-lesson:'+chapterStorageScope)||localStorage.getItem('qe:student:last-open-lesson:'+legacyScope)||0);
+    let remembered=Number(localStorage.getItem('qe:student:last-open-lesson:'+chapterStorageScope)||localStorage.getItem('qe:student:last-open-lesson:'+legacyScope)||0);
+    if(trackBrowse.subjectCode==='ALL'){
+      try{
+        const saved=JSON.parse(localStorage.getItem('qe:student:last-opened-lesson:course-'+trackBrowse.courseKey)||'{}');
+        remembered=Number(saved.lessonId||remembered);
+      }catch{/* Keep the per-subject bookmark if older browser state is malformed. */}
+    }
     setLastOpenedLessonId(trackBrowse.lessons.some(item=>Number(item.id)===remembered)?remembered:null);
   },[trackBrowse?.classCode,trackBrowse?.subjectCode,trackBrowse?.lessons,chapterStorageScope]);
 
@@ -767,10 +675,10 @@ export default function LearnClient() {
 
   const lastOpenedLesson=trackBrowse?.lessons.find(item=>Number(item.id)===lastOpenedLessonId);
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.lesson.2df59c7d" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.c4ae779f" /></Link></div></section></main>;
-  if(chooseTrack) return <main className="lesson-page qe-subject-reading-page"><section className="lesson-wrap"><div className="lesson-meta"><span className="eyebrow">{locale==='english'?'Institution → Course → Subject':'संस्थान → कोर्स → विषय'}</span><span>{courses.length} {locale==='english'?'available courses':'उपलब्ध कोर्स'}</span></div><h1>{locale==='english'?'Choose a course and subject':'कोर्स और विषय चुनें'}</h1><p className="lesson-intro">{locale==='english'?'Continue through the familiar chapters, topics, lessons and saved practice for your selected course.':'अपने चुने हुए कोर्स के अध्याय, विषय, पाठ और सुरक्षित अभ्यास जारी रखें।'}</p><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={selectedCourseId} onCourseChange={value=>{const next=courses.find(course=>Number(course.id)===Number(value));void selectCourse(value).then(()=>router.push('/student/learn?courseId='+encodeURIComponent(String(next?.public_id||value))));}} subjectCode="" onSubjectChange={value=>{if(value&&value!=='ALL')router.push('/student/learn?courseId='+encodeURIComponent(String(activeCourse?.public_id||selectedCourseKey))+'&subjectCode='+encodeURIComponent(value));}} loading={loadingCourses} language={locale} includeAllSubjects={false} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} />{courseError&&<p role="alert" className="error-message">{courseError}</p>}<div className="lesson-next"><Link href="/student/courses" className="button button-dark"><UiText message="web.navigation.student.allCourses" /></Link></div></section></main>;
+  if(chooseTrack) return <main className="lesson-page qe-subject-reading-page"><section className="lesson-wrap"><div className="lesson-meta"><span className="eyebrow">{locale==='english'?'Institution → Course → Subject':'संस्थान → कोर्स → विषय'}</span><span>{courses.length} {locale==='english'?'available courses':'उपलब्ध कोर्स'}</span></div><h1>{locale==='english'?'Choose a course and subject':'कोर्स और विषय चुनें'}</h1><p className="lesson-intro">{locale==='english'?'Continue through the familiar chapters, topics, lessons and saved practice for your selected course.':'अपने चुने हुए कोर्स के अध्याय, विषय, पाठ और सुरक्षित अभ्यास जारी रखें।'}</p><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={selectedCourseId} onCourseChange={value=>{const next=courses.find(course=>Number(course.id)===Number(value));void selectCourse(value).then(()=>router.push('/student/learn?courseId='+encodeURIComponent(String(next?.public_id||value))));}} subjectCode="ALL" onSubjectChange={value=>{if(value)router.push('/student/learn?courseId='+encodeURIComponent(String(activeCourse?.public_id||selectedCourseKey))+'&subjectCode='+encodeURIComponent(value));}} loading={loadingCourses} language={locale} includeAllSubjects={true} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} />{courseError&&<p role="alert" className="error-message">{courseError}</p>}<div className="lesson-next"><Link href="/student/courses" className="button button-dark"><UiText message="web.navigation.student.allCourses" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
-      <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={selectedCourseId} onCourseChange={value=>{const next=courses.find(course=>Number(course.id)===Number(value));void selectCourse(value).then(()=>router.push('/student/learn?courseId='+encodeURIComponent(String(next?.public_id||value))));}} subjectCode={trackBrowse.subjectCode} onSubjectChange={value=>{if(value&&value!=='ALL')router.push('/student/learn?courseId='+encodeURIComponent(String(activeCourse?.public_id||selectedCourseKey))+'&subjectCode='+encodeURIComponent(value));}} loading={loadingCourses} language={locale} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'} />
+      <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={selectedCourseId} onCourseChange={value=>{const next=courses.find(course=>Number(course.id)===Number(value));void selectCourse(value).then(()=>router.push('/student/learn?courseId='+encodeURIComponent(String(next?.public_id||value))));}} subjectCode={trackBrowse.subjectCode} onSubjectChange={value=>{if(value)router.push('/student/learn?courseId='+encodeURIComponent(String(activeCourse?.public_id||selectedCourseKey))+'&subjectCode='+encodeURIComponent(value));}} loading={loadingCourses} language={locale} courseLabel={locale==='english'?'Course':'कोर्स'} subjectLabel={locale==='english'?'Subject':'विषय'} allSubjectsLabel={locale==='english'?'All subjects':'सभी विषय'} />
       <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||translateUi(locale, 'legacy.web.course.0d5ab113'))+' · '+trackBrowse.subjectName:<><UiText message="legacy.web.class.98aaaa31" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <UiText message="legacy.web.chapters.b7609a1c" /> · {trackBrowse.lessons.length} <UiText message="legacy.web.published.lessons.b59dcc4d" /></span></div>
       <h1>{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?trackBrowse.subjectName:trackBrowse.subjectCode==='maths'?<UiText message="legacy.web.mathematics.learning.f39c3269" />:<UiText message="legacy.web.science.learning.38127305" />}</h1>
       <p className="lesson-intro"><UiText message="legacy.web.open.a.chapter.to.see.its.topics.and.p.2ba51701" /></p>
@@ -791,7 +699,7 @@ export default function LearnClient() {
         <p><Link href="/student" className="text-link"><UiText message="legacy.web.return.to.student.home.bc1b2e2f" /></Link></p>
       </div> : trackGroups.map((group,index)=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
-          (Boolean(item.chapter_code)&&item.chapter_code===group.code)||
+          (Boolean(item.chapter_code)&&item.chapter_code===group.chapterCode)||
           (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===group.name.trim().toLocaleLowerCase())));
         const expanded=openChapter===group.code;
         return <section className={'qe-student-chapter '+(expanded?'expanded':'')} id={'qe-chapter-'+encodeURIComponent(group.code)} key={group.code}>
@@ -802,7 +710,7 @@ export default function LearnClient() {
             else localStorage.removeItem('qe:student:open-chapter:'+chapterStorageScope);
           }}>
             <span className="qe-student-chapter-number">{String(index+1).padStart(2,'0')}</span>
-            <span className="qe-student-chapter-title"><small><UiText message="legacy.web.chapter.17e373cd" /> {group.code!==group.name?'· '+group.code:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
+            <span className="qe-student-chapter-title">{trackBrowse.subjectCode==='ALL'&&<small>{group.subjectName}</small>}<small><UiText message="legacy.web.chapter.17e373cd" /> {group.chapterCode!==group.name?'· '+group.chapterCode:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
             <span className="qe-student-chapter-indicator">{expanded?'−':'+'}</span>
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
@@ -822,7 +730,7 @@ export default function LearnClient() {
               const bestPercent=Number(item.practice_best_percent||0);
               const activeAnswered=Math.max(0,Number(item.practice_active_answered_count||0));
               const activeQuestionCount=Math.max(0,Number(item.practice_active_question_count||0));
-              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseKey?'&courseId='+encodeURIComponent(trackBrowse.courseKey):'')+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
+              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+encodeURIComponent(trackBrowse.subjectCode==='ALL'?'ALL':item.subject_code)+(trackBrowse.courseKey?'&courseId='+encodeURIComponent(trackBrowse.courseKey):'')+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
                 <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
                 <span className="qe-student-topic-copy"><strong>{item.title}</strong>
                   <small>{item.estimated_minutes} <UiText message="legacy.web.min.published.microtopic.c9b9be28" /></small>
@@ -883,22 +791,6 @@ export default function LearnClient() {
       <div className="feedback"><span><UiText message="legacy.web.learning.path.43212585" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
-      {inlineStructuredLesson && (inlineStructuredLesson.explain.blocks.length > 0 || inlineStructuredLesson.practice.questions.length > 0) && <details className="qe-structured-optional-insert">
-        <summary>{locale==='english' ? 'Optional structured lesson view' : 'वैकल्पिक संरचित पाठ दृश्य'}</summary>
-        <StructuredLessonExperience
-          key={lesson.id}
-          lesson={inlineStructuredLesson}
-          locale={learningLanguage}
-          mode="student"
-          showExplanation={true}
-          initialActivityResponses={structuredActivityResponses}
-          initialResponses={structuredQuestionResponses}
-          initialResults={structuredQuestionResults}
-          initialSubmitted={structuredQuestionSubmitted}
-          onActivitySave={saveStructuredActivityResponse}
-          onQuestionSubmit={saveStructuredQuestionResponse}
-        />
-      </details>}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <UiText message="legacy.web.help.0201f8c2" /></b><span><UiText message="legacy.web.explain.the.concept.in.your.own.words..8ad26ef4" /></span></div>}
 
       <div className="content-heading"><h2><UiText message="legacy.web.check.your.understanding.with.mcqs.858bdd53" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <UiText message="legacy.web.attempted.b3b638cd" /></span></div>
