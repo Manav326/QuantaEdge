@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2219,
-    "successful_visual_analyses": 2117,
-    "missing_visual_analyses": 5269,
+    "raw_analysis_result_rows": 2222,
+    "successful_visual_analyses": 2120,
+    "missing_visual_analyses": 5266,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5371,
+    "unresolved_count": 5368,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90682,9 +90682,28 @@
       "asset_path": "assets/12e21fb2dd2f0b9010de92f18912ebdbfe56f763f805439df8a7d0e69560aa47.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90700,9 +90719,19 @@
       "asset_path": "assets/8bf37d5dfc40667c7e356041af9e6066d79de35792307a250c3c304c8bd1417b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Activity 4.5: Let us experiment",
+        "limitations": [
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90718,9 +90747,16 @@
       "asset_path": "assets/e652427b53a31278f85f3e58348560e11992c9fcb98fbbd31942498d5be94ba3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass bottle with a black lid and a string attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity of handling iron nails as per the caution note.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
