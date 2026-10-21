@@ -216,6 +216,21 @@ export default function InstitutionsAdminPage() {
     setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
     setEditingCard('billing');
   }
+  async function removeBrandAsset(assetType:'logo'|'app-icon'):Promise<boolean>{
+    if(!detail)return false;
+    const label=assetType==='logo'?'institution full logo':'institution square icon';
+    if(!window.confirm('Remove the saved '+label+'? This change is recorded and will update the branding version.'))return false;
+    setSaving(true);setError('');setNotice('');
+    try{
+      await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{method:'DELETE'});
+      await loadBase();
+      await loadDetail(detail.id);
+      setEditingCard('branding');
+      setNotice('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.');
+      return true;
+    }finally{setSaving(false);}
+  }
+
   async function saveBranding(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
@@ -381,6 +396,8 @@ export default function InstitutionsAdminPage() {
                   themeTokens={{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent}}
                   onDisplayNameChange={value=>setBrand(current=>({...current,displayName:value}))}
                   onTaglineChange={value=>setBrand(current=>({...current,tagline:value}))}
+                  onRemoveAsset={removeBrandAsset}
+                  busy={saving}
                   onApplied={async()=>{await loadBase();await loadDetail(detail.id);setEditingCard('branding');}}
                 />
                 <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>

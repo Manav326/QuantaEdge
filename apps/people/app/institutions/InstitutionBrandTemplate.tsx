@@ -14,6 +14,8 @@ type Props = {
   themeTokens: Record<string, unknown>;
   onDisplayNameChange: (value: string) => void;
   onTaglineChange: (value: string) => void;
+  onRemoveAsset: (assetType: 'logo' | 'app-icon') => Promise<boolean>;
+  busy?: boolean;
   onApplied: () => Promise<void> | void;
 };
 type PackFile = { path: string; blob: Blob };
@@ -325,7 +327,7 @@ function checkText(name: string, tagline: string) {
 
 export default function InstitutionBrandTemplate({
   institutionId, displayName, tagline, logoUrl, appIconUrl, storeListingUrl, themeTokens,
-  onDisplayNameChange, onTaglineChange, onApplied,
+  onDisplayNameChange, onTaglineChange, onRemoveAsset, busy = false, onApplied,
 }: Props) {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [iconFile, setIconFile] = useState<File | null>(null);
@@ -461,6 +463,21 @@ export default function InstitutionBrandTemplate({
     }
   }
 
+  async function removeAsset(assetType: 'logo' | 'app-icon') {
+    setError('');
+    try {
+      const removed = await onRemoveAsset(assetType);
+      if (removed) {
+        if (assetType === 'logo') setLogoFile(null);
+        else setIconFile(null);
+        setPack(null);
+        setNotice(assetType === 'logo' ? 'Full logo removed. Upload a new logo to generate a new pack.' : 'Square icon removed. Upload a new icon to generate a new pack.');
+      }
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'The branding asset could not be removed.');
+    }
+  }
+
   async function applyPack() {
     if (!pack) return;
     if (pack.name !== displayName.trim() || pack.tagline !== tagline.trim()) {
@@ -517,10 +534,12 @@ export default function InstitutionBrandTemplate({
       <label>Full logo (PNG/JPEG) *
         <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setLogoFile(file); setPack(null); setError(''); }} />
         <small>{logoFile ? logoFile.name : logoUrl ? 'Current saved logo will be reused unless replaced.' : 'Choose a full-logo asset.'}</small>
+        {logoUrl ? <button type="button" className={styles.quiet} onClick={() => void removeAsset('logo')} disabled={busy || applying || generating}>Remove saved full logo</button> : null}
       </label>
       <label>Square icon (PNG/JPEG) *
         <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setIconFile(file); setPack(null); setError(''); }} />
         <small>{iconFile ? iconFile.name : appIconUrl ? 'Current saved icon will be reused unless replaced.' : 'Choose a square symbol or icon.'}</small>
+        {appIconUrl ? <button type="button" className={styles.quiet} onClick={() => void removeAsset('app-icon')} disabled={busy || applying || generating}>Remove saved square icon</button> : null}
       </label>
     </div>
     <div className={styles.brandTemplatePreviewGrid}>
@@ -556,7 +575,7 @@ export default function InstitutionBrandTemplate({
       <strong>Generated asset pack</strong>
       <span>{pack.files.length} files · Primary upload renditions are validated against the 2 MiB per-file cap.</span>
       <button type="button" className={styles.secondary} onClick={() => saveDownload(pack.zip, safeStem(pack.name) + '-brand-assets.zip')}>Download ZIP folder</button>
-      <button type="button" className={styles.primary} onClick={() => void applyPack()} disabled={applying}>
+      <button type="button" className={styles.primary} onClick={() => void applyPack()} disabled={applying || busy}>
         {applying ? 'Applying to institution…' : 'Apply pack to this institution'}
       </button>
     </div> : null}
