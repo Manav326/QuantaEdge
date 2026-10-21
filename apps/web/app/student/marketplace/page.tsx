@@ -12,6 +12,7 @@ import { UiText } from '../../i18n/useUiTranslation';
 import StudentEmptyState from '../components/StudentEmptyState';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
+import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
@@ -430,25 +431,21 @@ export default function StudentMarketplacePage() {
             const owned = offer.has_access || offer.purchased;
             const validPrice = Number.isSafeInteger(Number(offer.price_paise)) && offer.price_paise >= 0 && offer.currency === 'INR';
             return (
-              <article className={styles.courseCard} key={offer.course_id}>
-                <div className={styles.cardTop}>
-                  <div className={styles.courseMark} aria-hidden="true">✦</div>
-                  <div className={styles.price}>{owned ? 'Owned' : validPrice ? offer.price_paise === 0 ? 'Free' : money(offer.price_paise) : 'Unavailable'}</div>
-                </div>
-                <h2>{offer.title || offer.course_name}</h2>
-                <p className={styles.meta}>{offer.curriculum_version || offer.course_code}</p>
-                {offer.description && <p className={styles.description}>{offer.description}</p>}
-                {!!offer.subjects?.length && (
-                  <div className={styles.subjects}>
-                    {offer.subjects.map((subject) => <span key={subject.subject_code}>{subject.subject_name || subject.subject_code}</span>)}
-                  </div>
-                )}
-                {offer.parent_request_status === 'PENDING' && (
+              <MarketplaceCourseCard
+                key={offer.course_id}
+                title={offer.title || offer.course_name}
+                courseCode={offer.course_code}
+                curriculumVersion={offer.curriculum_version}
+                priceLabel={owned ? 'Owned' : validPrice ? offer.price_paise === 0 ? 'Free' : money(offer.price_paise) : 'Unavailable'}
+                description={offer.description}
+                subjects={offer.subjects}
+                status={offer.parent_request_status === 'PENDING' ? (
                   <p className={styles.requestStatus} role="status">
                     Parent purchase request pending{offer.parent_request_requested_at
                       ? ' · sent ' + formatUserTimestamp(offer.parent_request_requested_at) : ''}
                   </p>
-                )}
+                ) : null}
+              >
                 <div className={styles.cardFooter}>
                   {owned ? (
                     <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
@@ -471,7 +468,7 @@ export default function StudentMarketplacePage() {
                     </button>
                   )}
                 </div>
-              </article>
+              </MarketplaceCourseCard>
             );
           })}
         </section>
