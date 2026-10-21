@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "92c83815896e049f4eca1e40ed72071ccdc6890ccd9895f8ac6096c59ef4da30",
+  "raw_analysis_sha256": "40693fac6eae298d5851824378725d6eac8f95f11e0016bdfa38c695b1889f88",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:43:15Z",
+      "checkpointed_at": "2026-10-21T19:46:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:43:37Z",
+      "checkpointed_at": "2026-10-21T19:46:46Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -123192,6 +123192,164 @@
         "limitations": [
           "The image does not contain any visual elements.",
           "The text is a continuous sentence without any diagrams or charts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "65799304a923ec3b34d698e5",
+      "asset_sha256": "e096cb6b2abe9ff041b9edf0e18c16a7457ef73780d33c91e14b150b759d7e84",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/e096cb6b2abe9ff041b9edf0e18c16a7457ef73780d33c91e14b150b759d7e84.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a blue border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with a blue border.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:47:23Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a blue border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with a blue border.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b980716c064595f8339b67e4",
+      "asset_sha256": "0200998ea009f8d19f7518b7c8ce0a504e93c9448fa5b2453c049458fb3d8104",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/0200998ea009f8d19f7518b7c8ce0a504e93c9448fa5b2453c049458fb3d8104.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced by the materials mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:48:09Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced by the materials mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bab93ac9ae6c49ef006ac247",
+      "asset_sha256": "7137de2dfb5d06bf65d40b218a1f8e580b6e4754287e775afae601e12bd815f9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/7137de2dfb5d06bf65d40b218a1f8e580b6e4754287e775afae601e12bd815f9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a blue border, possibly a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonorous nature"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on the sound produced by metal objects compared to other materials.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or sounds mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:48:53Z",
+      "effective_analysis": {
+        "visual_summary": "A white page with a blue border, possibly a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonorous nature"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on the sound produced by metal objects compared to other materials.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or sounds mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

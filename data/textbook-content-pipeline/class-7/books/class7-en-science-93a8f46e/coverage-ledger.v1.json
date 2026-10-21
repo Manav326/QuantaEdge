@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2159,
-    "successful_visual_analyses": 2058,
-    "missing_visual_analyses": 5329,
+    "raw_analysis_result_rows": 2162,
+    "successful_visual_analyses": 2061,
+    "missing_visual_analyses": 5326,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5430,
+    "unresolved_count": 5427,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -88716,9 +88716,16 @@
       "asset_path": "assets/e096cb6b2abe9ff041b9edf0e18c16a7457ef73780d33c91e14b150b759d7e84.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a blue border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with a blue border.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88734,9 +88741,26 @@
       "asset_path": "assets/0200998ea009f8d19f7518b7c8ce0a504e93c9448fa5b2453c049458fb3d8104.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the sounds produced by the materials mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88752,9 +88776,31 @@
       "asset_path": "assets/7137de2dfb5d06bf65d40b218a1f8e580b6e4754287e775afae601e12bd815f9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a blue border, possibly a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonorous nature"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on the sound produced by metal objects compared to other materials.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or sounds mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
