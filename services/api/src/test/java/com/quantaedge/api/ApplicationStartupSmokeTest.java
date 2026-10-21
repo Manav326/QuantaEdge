@@ -463,6 +463,8 @@ class ApplicationStartupSmokeTest {
     assertTrue(metrics.get("curriculum") instanceof List<?>);
     assertTrue(metrics.get("mastery") instanceof Map<?,?>);
     assertTrue(metrics.get("assessmentStats") instanceof Map<?,?>);
+    assertTrue(metrics.get("diagnosticStats") instanceof Map<?,?>);
+    assertTrue(metrics.get("diagnosticSubjects") instanceof List<?>);
     assertTrue(metrics.get("sessionStats") instanceof Map<?,?>);
   }
 
