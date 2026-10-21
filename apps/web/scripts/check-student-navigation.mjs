@@ -34,6 +34,8 @@ const studentEmptyState = read('../app/student/components/StudentEmptyState.tsx'
 const englishUiCatalog = read('../app/i18n/catalogs/english.json');
 const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidLessonContentBlock = read('../../android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt');
+const androidStructuredRenderer = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt');
 const androidLocalization = read('../../android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
 const androidProgressScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
 const androidEnrollmentEmptyState = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentEnrollmentEmptyState.kt');
@@ -357,6 +359,17 @@ assert.ok(courseScope.includes("String(course.public_id || '').toUpperCase() ===
 assert.ok(androidAllCourses.includes('if (!active)') &&
   androidAllCourses.includes('Focus on this course'),
   'An already-focused Android course must not add a new Open course action; other courses keep the original focus action.');
+assert.ok(androidApp.includes('lesson.optJSONArray("blocks")?.objectItems()?.sortedWith(') &&
+  androidApp.includes('it.optInt("sequence_no", Int.MAX_VALUE)') &&
+  androidApp.includes('it.optLong("id", Long.MAX_VALUE)'),
+  'Android legacy lessons must preserve backend sequence_no/id order.');
+assert.ok(androidLessonContentBlock.includes('collectCompleteBlockText') &&
+  androidLessonContentBlock.includes('LessonPlayableMedia(url = url, audioOnly = false') &&
+  androidStructuredRenderer.includes('sortedBy { it.optInt("order", Int.MAX_VALUE) }') &&
+  androidStructuredRenderer.includes('structuredBlockVisibleText') &&
+  androidStructuredRenderer.includes('collectStructuredTextValue'),
+  'Android must render all legacy/structured block types in order with media and safe unknown-type fallbacks.');
+
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&

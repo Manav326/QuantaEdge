@@ -6032,7 +6032,11 @@ private fun LessonScreen(
     onNextTopic: () -> Unit
 ) {
     val lessonId = lesson.longAny("id", "lesson_id")
-    val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
+    // Sort explicitly by the sequence authored in the backend; keep a stable ID tie-breaker.
+    val blocks = lesson.optJSONArray("blocks")?.objectItems()?.sortedWith(
+        compareBy<JSONObject> { it.optInt("sequence_no", Int.MAX_VALUE) }
+            .thenBy { it.optLong("id", Long.MAX_VALUE) }
+    ) ?: emptyList()
     val questions = lesson.optJSONArray("questions")?.objectItems() ?: emptyList()
     Box(modifier = Modifier.fillMaxSize().pointerInput(lessonId, hasPreviousTopic, hasNextTopic) {
         var dragX = 0f

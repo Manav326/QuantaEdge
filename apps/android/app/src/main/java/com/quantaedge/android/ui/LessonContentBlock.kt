@@ -221,8 +221,34 @@ fun LessonContentBlock(
                     if (points.isEmpty() && body.isNotBlank()) LearningMathText(body, style = MaterialTheme.typography.bodyLarge)
                 }
                 else -> {
-                    val fallback = block.safeContentText()
+                    val fallbackHtml = data.textAny("html")
+                    if (fallbackHtml.isNotBlank()) {
+                        LearningMathText(htmlToPlainText(fallbackHtml), style = MaterialTheme.typography.bodyLarge)
+                    }
+                    val fallbackPath = url.substringBefore("?").lowercase()
+                    val fallbackVideo = fallbackPath.endsWith(".mp4") || fallbackPath.endsWith(".webm") ||
+                        fallbackPath.endsWith(".mov") || fallbackPath.endsWith(".ogv")
+                    val fallbackAudio = fallbackPath.endsWith(".mp3") || fallbackPath.endsWith(".m4a") ||
+                        fallbackPath.endsWith(".wav") || fallbackPath.endsWith(".aac") ||
+                        fallbackPath.endsWith(".flac") || fallbackPath.endsWith(".oga")
+                    val fallbackImage = listOf(".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif").any(fallbackPath::endsWith)
+                    if (url.startsWith("https://") && fallbackVideo) {
+                        LessonPlayableMedia(url = url, audioOnly = false, language = language)
+                    } else if (url.startsWith("https://") && fallbackAudio) {
+                        LessonPlayableMedia(url = url, audioOnly = true, language = language)
+                    } else if (url.startsWith("https://") && fallbackImage) {
+                        LessonImage(url = url, alt = data.textAny("alt", "alt_hi").ifBlank { title })
+                    }
+                    val fallback = collectCompleteBlockText(data).joinToString("\n\n")
                     if (fallback.isNotBlank()) LearningMathText(fallback, style = MaterialTheme.typography.bodyLarge)
+                    if (url.startsWith("https://") && !fallbackVideo && !fallbackAudio && !fallbackImage) {
+                        TextButton(onClick = {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        }) {
+                            Text(if (language == "hi") "सामग्री खोलें ↗" else "Open resource ↗")
+                        }
+                    }
                 }
             }
         }
@@ -415,6 +441,51 @@ private fun LessonPlayableMedia(url: String, audioOnly: Boolean, language: Strin
             update = { it.player = player },
             modifier = Modifier.fillMaxWidth().height(if (audioOnly) 82.dp else 220.dp)
         )
+    }
+}
+
+private val PRIVATE_UNKNOWN_BLOCK_KEYS = setOf(
+    "answerpayload", "answerkey", "correctanswer", "correctanswerids", "correctpairs",
+    "acceptedanswers", "answerguidebylocale", "grading", "gradingnotes", "iscorrect",
+    "correctoption", "solutionkey", "modelanswer", "expectedanswer", "explanationkey"
+)
+
+private fun collectCompleteBlockText(value: Any?, prefix: String = "", depth: Int = 0): List<String> {
+    if (depth > 10 || value == null || value == JSONObject.NULL) return emptyList()
+    return when (value) {
+        is JSONObject -> {
+            val output = mutableListOf<String>()
+            val keys = value.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                val normalized = key.replace(Regex("[^A-Za-z0-9]"), "").lowercase()
+                val privateKey = normalized in PRIVATE_UNKNOWN_BLOCK_KEYS ||
+                    normalized.startsWith("correct") || normalized.startsWith("grading") ||
+                    normalized.startsWith("answerpayload") || normalized.startsWith("solutionkey") ||
+                    normalized.startsWith("acceptedanswer") || normalized.startsWith("modelanswer") ||
+                    normalized.startsWith("expectedanswer")
+                if (privateKey || normalized in setOf(
+                        "id", "type", "blocktype", "sequence", "sequenceno", "order", "layout",
+                        "style", "assetid", "url", "asseturl", "html"
+                    )) continue
+                if (depth == 0 && normalized in setOf("heading", "title", "name")) continue
+                val label = key.replace(Regex("([A-Z])"), " $1").replace('_', ' ').replace('-', ' ').trim()
+                val childPrefix = if (prefix.isBlank()) label else "$prefix · $label"
+                output += collectCompleteBlockText(value.opt(key), childPrefix, depth + 1)
+            }
+            output
+        }
+        is JSONArray -> buildList {
+            for (index in 0 until value.length()) {
+                val childPrefix = if (prefix.isBlank()) "" else "$prefix ${index + 1}"
+                addAll(collectCompleteBlockText(value.opt(index), childPrefix, depth + 1))
+            }
+        }
+        is String -> value.trim().takeIf(String::isNotBlank)?.let {
+            listOf(if (prefix.isBlank()) it else "$prefix: $it")
+        } ?: emptyList()
+        is Number, is Boolean -> listOf(if (prefix.isBlank()) value.toString() else "$prefix: $value")
+        else -> emptyList()
     }
 }
 

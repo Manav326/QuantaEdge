@@ -1,5 +1,7 @@
 package com.quantaedge.android.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.json.JSONArray
 import org.json.JSONObject
@@ -141,6 +144,7 @@ private fun StructuredExplainBlockView(
     savedActivity: JSONObject = JSONObject(),
     savingActivity: Boolean = false
 ) {
+    val context = LocalContext.current
     val type = block.optString("type")
     val text = block.optJSONObject("text_by_locale")?.optJSONObject(locale) ?: JSONObject()
     val content = block.optJSONObject("content_by_locale")
@@ -212,7 +216,57 @@ private fun StructuredExplainBlockView(
                     }
                 }
                 "interactive", "activity" -> StructuredActivityContent(block, locale, onSaveActivity, savedActivity, savingActivity)
-                else -> Text(if (locale == "hi") "यह सामग्री प्रकार समर्थित नहीं है।" else "Unsupported content type.")
+                else -> {
+                    // Unknown published/backend block types remain visible; only private answer/grading keys are omitted.
+                    val fallbackFields = structuredBlockVisibleText(block, locale)
+                    val fallbackAsset = block.optJSONObject("asset") ?: JSONObject()
+                    val fallbackConfig = block.optJSONObject("configuration") ?: JSONObject()
+                    val rawUrl = fallbackAsset.optString("url").ifBlank {
+                        fallbackConfig.optString("url").ifBlank { block.optString("url") }
+                    }
+                    val safeUrl = rawUrl.takeIf { it.startsWith("https://") }.orEmpty()
+                    val mediaPath = safeUrl.substringBefore("?").lowercase()
+                    val fallbackMediaType = when {
+                        mediaPath.endsWith(".mp4") || mediaPath.endsWith(".webm") ||
+                            mediaPath.endsWith(".mov") || mediaPath.endsWith(".ogv") ||
+                            type.contains("video", ignoreCase = true) -> "VIDEO"
+                        mediaPath.endsWith(".mp3") || mediaPath.endsWith(".m4a") ||
+                            mediaPath.endsWith(".wav") || mediaPath.endsWith(".aac") ||
+                            mediaPath.endsWith(".flac") || mediaPath.endsWith(".oga") ||
+                            type.contains("audio", ignoreCase = true) -> "AUDIO"
+                        listOf(".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".svg")
+                            .any(mediaPath::endsWith) || type.contains("image", ignoreCase = true) -> "IMAGE"
+                        else -> ""
+                    }
+                    if (safeUrl.isNotBlank() && fallbackMediaType.isNotBlank()) {
+                        val alt = fallbackAsset.optJSONObject("alt_by_locale")?.optString(locale)
+                            .orEmpty().ifBlank { fallbackFields.firstOrNull().orEmpty().ifBlank { title } }
+                        val caption = block.optJSONObject("caption_by_locale")?.optString(locale).orEmpty()
+                        val mediaContent = JSONObject().put("title", title)
+                            .put("description", alt).put("alt", alt).put("caption", caption)
+                        LessonContentBlock(
+                            block = JSONObject().put("block_type", fallbackMediaType)
+                                .put("asset_url", safeUrl).put("content", mediaContent.toString()),
+                            language = if (locale == "hi") "hi" else "en",
+                            onTutorOpen = {}
+                        )
+                    }
+                    fallbackFields.forEach { field ->
+                        Text(field, style = MaterialTheme.typography.bodyLarge)
+                    }
+                    if (safeUrl.isNotBlank() && fallbackMediaType.isBlank()) {
+                        TextButton(onClick = {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(safeUrl))
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        }) {
+                            Text(if (locale == "hi") "सामग्री खोलें ↗" else "Open resource ↗")
+                        }
+                    }
+                    if (fallbackFields.isEmpty() && safeUrl.isBlank()) {
+                        Text(if (locale == "hi") "इस सामग्री के लिए कोई पढ़ने योग्य फ़ील्ड नहीं है।"
+                            else "No displayable fields are available for this content type.")
+                    }
+                }
             }
             val caption = localized(block.optJSONObject("caption_by_locale"), locale)
             if (caption.isNotBlank() && type != "image") {
@@ -463,6 +517,73 @@ private fun StructuredQuestionView(
                 }
             }
         }
+    }
+}
+
+private val PRIVATE_STRUCTURED_BLOCK_KEYS = setOf(
+    "answerpayload", "answerkey", "correctanswer", "correctanswerids", "correctpairs",
+    "acceptedanswers", "answerguidebylocale", "grading", "gradingnotes", "iscorrect",
+    "correctoption", "solutionkey", "modelanswer", "expectedanswer", "explanationkey"
+)
+
+private fun structuredBlockVisibleText(block: JSONObject, locale: String): List<String> {
+    val output = mutableListOf<String>()
+    block.optJSONObject("text_by_locale")?.optJSONObject(locale)?.let {
+        output += collectStructuredTextValue(it)
+    }
+    block.optJSONObject("content_by_locale")?.let { content ->
+        val selected = content.opt(locale)
+        output += collectStructuredTextValue(selected ?: content)
+    }
+    block.optJSONObject("instructions_by_locale")?.opt(locale)?.let {
+        output += collectStructuredTextValue(it)
+    }
+    listOf("configuration", "diagram_data", "asset").forEach { key ->
+        block.optJSONObject(key)?.let { output += collectStructuredTextValue(it) }
+    }
+    block.optJSONObject("caption_by_locale")?.opt(locale)?.let {
+        output += collectStructuredTextValue(it)
+    }
+    return output.distinct().filter(String::isNotBlank)
+}
+
+private fun collectStructuredTextValue(value: Any?, prefix: String = "", depth: Int = 0): List<String> {
+    if (depth > 10 || value == null || value == JSONObject.NULL) return emptyList()
+    return when (value) {
+        is JSONObject -> {
+            val output = mutableListOf<String>()
+            val keys = value.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                val normalized = key.replace(Regex("[^A-Za-z0-9]"), "").lowercase()
+                val privateKey = normalized in PRIVATE_STRUCTURED_BLOCK_KEYS ||
+                    normalized.startsWith("correct") || normalized.startsWith("grading") ||
+                    normalized.startsWith("answerpayload") || normalized.startsWith("solutionkey") ||
+                    normalized.startsWith("acceptedanswer") || normalized.startsWith("modelanswer") ||
+                    normalized.startsWith("expectedanswer")
+                if (privateKey || normalized in setOf(
+                        "id", "type", "order", "objectiveids", "sourcerefs", "url", "asseturl",
+                        "renderingcontractid", "reviewstatus", "studentrenderable", "publicationallowed",
+                        "assetid", "assetrefs"
+                    )) continue
+                if (depth == 0 && normalized in setOf("heading", "title", "name")) continue
+                val label = key.replace(Regex("([A-Z])"), " $1").replace('_', ' ').replace('-', ' ').trim()
+                val childPrefix = if (prefix.isBlank()) label else "$prefix · $label"
+                output += collectStructuredTextValue(value.opt(key), childPrefix, depth + 1)
+            }
+            output
+        }
+        is JSONArray -> buildList {
+            for (index in 0 until value.length()) {
+                val childPrefix = if (prefix.isBlank()) "" else "$prefix ${index + 1}"
+                addAll(collectStructuredTextValue(value.opt(index), childPrefix, depth + 1))
+            }
+        }
+        is String -> value.trim().takeIf(String::isNotBlank)?.let {
+            listOf(if (prefix.isBlank()) it else "$prefix: $it")
+        } ?: emptyList()
+        is Number, is Boolean -> listOf(if (prefix.isBlank()) value.toString() else "$prefix: $value")
+        else -> emptyList()
     }
 }
 
