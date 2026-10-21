@@ -23,6 +23,20 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             workflow,
         )
 
+    def test_targeted_analyze_all_markers_rebuild_stale_books_per_class(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        for grade in ("7", "8"):
+            marker = f"[analyze-all-visual-layers-4-5-class-{grade}]"
+            self.assertIn(marker, workflow)
+            self.assertIn(f"contains(github.event.head_commit.message || '', '{marker}') && '[\"{grade}\"]'", workflow)
+        self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
+        self.assertIn("cancel-in-progress:", workflow)
+        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
+        self.assertIn('"Mirror verified textbook extraction artifact to main"', coordinator)
+        self.assertIn('TRIGGER_CONCLUSION', coordinator)
+        self.assertIn('textbook-extraction-pilot.yml/runs', coordinator)
+        self.assertIn("active source extraction or Layer 4–5 work", coordinator)
+
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         self.assertIn("workflow_dispatch:", workflow)
@@ -84,7 +98,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("for grade in (6,7,8)", coordinator)
         self.assertIn('p=root/f"class-{grade}.v1.json"', coordinator)
         self.assertIn("active_classes", coordinator)
-        self.assertIn("already has an active Layer 4–5 run", coordinator)
+        self.assertIn("already has active source extraction or Layer 4–5 work", coordinator)
         self.assertIn('else job.get("started_at")', coordinator)
         self.assertIn("checkpoint_baseline=", coordinator)
     def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
