@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2055,
+    "assets_selected": 2058,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2053,
-    "assets_remaining": 5435,
-    "assets_completion_percent": 27.4,
+    "assets_analyzed": 2056,
+    "assets_remaining": 5432,
+    "assets_completion_percent": 27.5,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2050,
+    "assets_skipped_from_checkpoint": 2053,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:39:12Z"
+      "checkpointed_at": "2026-10-21T19:43:15Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:39:34Z"
+      "checkpointed_at": "2026-10-21T19:43:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -78682,6 +78682,108 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T19:42:29Z"
+    },
+    {
+      "asset_id": "f521e1138dce6719f1ba42b9",
+      "asset_sha256": "231d4bbf9acd0b4907d2e0e2381fb1d1c306f0e12fb992673b29fcdb27ede6e1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/231d4bbf9acd0b4907d2e0e2381fb1d1c306f0e12fb992673b29fcdb27ede6e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue arrow pointing upwards, possibly indicating an increase or upward trend.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Now,N",
+          "I understand!"
+        ],
+        "concepts": [
+          "increase",
+          "upward trend"
+        ],
+        "context_relation": "The visual is related to the concept of sonority in metals.",
+        "limitations": [
+          "The arrow's direction suggests a positive or upward trend, but the specific context is not clear without more information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:44:16Z"
+    },
+    {
+      "asset_id": "5ee6c92fdae450adb5687e98",
+      "asset_sha256": "a9300555acf6342ddc01aa6be6f1dee96457ddb938c939f32670171f8777e8cb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/a9300555acf6342ddc01aa6be6f1dee96457ddb938c939f32670171f8777e8cb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue line forming a right angle.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a right angle.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:44:52Z"
+    },
+    {
+      "asset_id": "0e2556ffb619815e296d1d39",
+      "asset_sha256": "ab71456923ea1c2ecfa1ca4dc00f942561005f4b8fdcb8d890dd536c6a7aac22",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/ab71456923ea1c2ecfa1ca4dc00f942561005f4b8fdcb8d890dd536c6a7aac22.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a blue horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.\nThis property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in nature.\nNow,N     I understand! Oh!",
+          "The ringing sound"
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonorous nature"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on the sound produced by metal objects compared to other materials.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a continuous sentence without any diagrams or charts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:45:38Z"
     }
   ]
 }
