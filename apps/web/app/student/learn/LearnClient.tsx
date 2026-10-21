@@ -537,6 +537,12 @@ export default function LearnClient() {
     const subjectCode=trackBrowse?.subjectCode==='ALL'?'':trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
     // Wait until CourseScope resolves the exact numeric course ID before requesting
     // documents. The API rejects unscoped catalogue requests instead of using class-wide content.
+    if(trackBrowse?.subjectCode==='ALL'&&!loadingCourses&&selectedCourseId!==null&&selectedCourseId>0){
+      // The course-wide lesson catalogue is already loaded; PDFs remain separately subject-scoped.
+      setStudentDocuments([]);
+      setDocumentsLoaded(true);
+      return;
+    }
     if(loadingCourses||!subjectCode||selectedCourseId===null||selectedCourseId<=0){
       setStudentDocuments([]);
       setDocumentsLoaded(false);
