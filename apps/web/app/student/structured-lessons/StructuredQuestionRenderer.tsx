@@ -83,8 +83,15 @@ export default function StructuredQuestionRenderer({
   const visualBlock = useMemo(() => lesson ? findQuestionVisual(lesson, question) : null, [lesson, question]);
   const visualApproved = Boolean(lesson && isQuestionVisualApproved(lesson, question));
   const matchingRows = question.type === 'matching' ? (question.left_items || []).length : 0;
-  const canSubmit = response !== null && response !== '' && !(Array.isArray(response) && response.length === 0) &&
-    !(typeof response === 'object' && !Array.isArray(response) && (Object.keys(response).length === 0 || (question.type === 'matching' && (Object.keys(mapResponse).length < matchingRows || Object.values(mapResponse).some(value => !value)))));
+  const isLegacyOrdering = question.legacy_interaction_type === 'ORDER';
+  const orderedOptionIds = Array.isArray(response) && response.length === options.length &&
+    response.every(id => options.some(option => option.id === id))
+    ? response : options.map(option => option.id);
+  const canSubmit = isLegacyOrdering
+    ? Array.isArray(response) && response.length === options.length &&
+      new Set(response).size === options.length && options.every(option => response.includes(option.id))
+    : response !== null && response !== '' && !(Array.isArray(response) && response.length === 0) &&
+      !(typeof response === 'object' && !Array.isArray(response) && (Object.keys(response).length === 0 || (question.type === 'matching' && (Object.keys(mapResponse).length < matchingRows || Object.values(mapResponse).some(value => !value)))));
   const statusLabel = result?.status === 'correct' ? ui.correct :
     result?.status === 'incorrect' ? ui.incorrect :
     result?.status === 'partially_correct' ? ui.partial : result?.status === 'pending_review' ? ui.pending : '';
@@ -142,6 +149,25 @@ export default function StructuredQuestionRenderer({
         <span>{value ? ui.trueLabel : ui.falseLabel}</span>
       </label>)}
     </fieldset>}
+
+    {isLegacyOrdering && <div className="qe-structured-ordering">
+      <p className="qe-structured-muted">{locale === 'hi' ? 'नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।' : 'Arrange the items in the correct order using the up and down controls.'}</p>
+      {orderedOptionIds.map((id, index) => {
+        const option = options.find(item => item.id === id);
+        if (!option) return null;
+        return <div className="qe-structured-ordering__row" key={id}>
+          <span>{index + 1}. {text(option.text_by_locale, locale)}</span>
+          <button type="button" disabled={disabled || submitted || index === 0}
+            onClick={() => { const next = [...orderedOptionIds]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; onResponseChange(next); }}>↑</button>
+          <button type="button" disabled={disabled || submitted || index === orderedOptionIds.length - 1}
+            onClick={() => { const next = [...orderedOptionIds]; [next[index], next[index + 1]] = [next[index + 1], next[index]]; onResponseChange(next); }}>↓</button>
+        </div>;
+      })}
+      <button type="button" disabled={disabled || submitted || Array.isArray(response)}
+        onClick={() => onResponseChange(orderedOptionIds)}>
+        {locale === 'hi' ? 'इस क्रम को चुनें' : 'Use this order'}
+      </button>
+    </div>}
 
     {question.type === 'matching' && <div className="qe-structured-matching">
       {(question.left_items || []).map(left => <label className="qe-structured-match-row" key={left.id}>

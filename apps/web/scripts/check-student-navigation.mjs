@@ -21,6 +21,7 @@ const learningController = read('../../../services/api/src/main/java/com/quantae
 const relationalStructuredLessonService = read('../../../services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java');
 const learningStateServiceTest = read('../../../services/api/src/test/java/com/quantaedge/api/LearningStateServiceTest.java');
 const structuredLessonExperience = read('../app/student/structured-lessons/StructuredLessonExperience.tsx');
+const structuredQuestionRenderer = read('../app/student/structured-lessons/StructuredQuestionRenderer.tsx');
 const tutorMigration = read('../../../services/api/src/main/resources/db/migration/V160__structured_artifact_ai_tutor_sessions.sql');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
@@ -357,7 +358,12 @@ assert.ok(learnClient.includes("import StructuredLessonExperience from '../struc
   learningController.includes('result.put("structured_lesson", structuredPayload)') &&
   learningController.includes('coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer') &&
   learningController.includes('latest_attempt.correct as saved_correct') &&
+  learningController.includes("when q.question_type='ORDER' then") &&
+  learningController.includes("when q.question_type='MATCH' then") &&
   relationalStructuredLessonService.includes('question.put("legacy_question_type", rawType)') &&
+  relationalStructuredLessonService.includes('question.put("legacy_interaction_type", legacyInteraction)') &&
+  relationalStructuredLessonService.includes('question.set("left_items", leftItems)') &&
+  structuredQuestionRenderer.includes("question.legacy_interaction_type === 'ORDER'") &&
   !relationalStructuredLessonService.includes('if (options.size() < 2) continue;') &&
   structuredLessonExperience.includes('showExplanation = true') &&
   structuredLessonExperience.includes('{showExplanation && <StructuredLessonContent') &&
@@ -394,6 +400,8 @@ assert.ok(androidApp.includes('!question.optBoolean("attempted")') &&
   androidApp.includes('question.optBoolean("saved_correct") || answerLocks[id] == true') &&
   androidApp.includes('Open optional structured lesson') &&
   androidApp.includes('fun submitStructuredQuestionResponse') &&
+  androidApp.includes('showPractice = false') &&
+  androidStructuredRenderer.includes('if (showPractice)') &&
   androidStructuredRenderer.includes('legacy_question_type_by_locale'),
   'Android must restore legacy answers and keep the full structured lesson as an opt-in extension using shared save handlers.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
@@ -500,7 +508,10 @@ assert.ok(offlineVideoWorker.includes('Range') && offlineVideoWorker.includes('C
 assert.ok(offlineVideoStore.includes('filesDir, "offline_learning_videos/"') && offlineVideoStore.includes('removeOfflineCopy') && offlineVideoStore.includes('pendingProgressUploads'), 'Offline video files must stay in account-namespaced app-private storage, support deletion and preserve unsynced progress.');
 assert.ok(offlineVideoContract.includes('MAX_VIDEO_BYTES') && offlineVideoContract.includes('parseContentRange') && offlineVideoTests.includes('interruptedTransferCanAppendOnlyAtTheExactAuthorizedOffset'), 'Offline transfer size/range boundaries must have unit coverage.');
 assert.ok(androidClasses.includes('offlineDownloadedIds') && androidClasses.includes('onDownloadRecording') && androidClasses.includes('onRemoveOfflineRecording'), 'Android recorded-class UI must expose permitted download, local playback state and local-copy removal.');
-assert.ok(androidApp.includes('StructuredLessonResourcesPanel(') && androidApp.includes('onOpenLearningDocument = ::openAssignedLearningDocument'), 'Android structured lessons must expose the published resource catalogue and reuse the protected document reader.');
+assert.ok(androidApp.includes('StructuredLessonResourcesPanel(') &&
+  androidApp.includes('onOpenDocument = ::openAssignedLearningDocument') &&
+  androidApp.includes('onOpenLearningDocument = onOpenDocument'),
+  'Android structured lessons must expose published resources and forward the protected document-reader callback through the route helper.');
 assert.ok(androidLessonResources.includes('/api/v1/learning/resources?artifactId=') && androidLessonResources.includes('/progress?assignmentId=') && androidLessonResources.includes('renderPdfPreviewPage'), 'Android lesson resources must load only assigned published resources, save media progress and preview private PDFs in-app.');
 assert.ok(androidLessonResources.includes('downloadAllowed') && androidLessonResources.includes('downloadUrl') && androidLessonResources.includes('allowDownload = true') && androidLessonResources.includes('openLocalFile'), 'Android may hand a resource to an external file viewer only through the API-supplied download URL when downloads are enabled.');
 assert.ok(assignedResources.includes("item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE'") && assignedResources.includes('Open resource online'), 'Student web must be able to open a private assigned document online even when download is disabled.');
@@ -740,7 +751,7 @@ assert.ok(structuredLessonContent.includes('collectStructuredBlockText') &&
   !structuredLessonContent.includes("if (!canDisplay && mode === 'student') return null;") &&
   structuredLessonContent.includes('qe-structured-unknown-block'),
   'Structured lesson blocks must keep backend order, show placeholders for blocked visuals and render unknown types safely.');
-assert.ok(learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
+assert.ok(learnClient.includes('qe-structured-optional-insert') && learnClient.includes('inlineStructuredLesson && (') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
   learnClient.includes('learningBlocks.map(block=><Block') &&
   learnClient.includes('<section className="concept-card practice-launch-card">') &&
