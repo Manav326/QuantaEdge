@@ -1,0 +1,113 @@
+.card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--qe-color-border-subtle, #e6e8ed);
+  border-radius: 18px;
+  background: var(--qe-color-surface, #fff);
+  color: var(--qe-color-text, #172033);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(20 25 40 / 5%));
+  transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.card:hover {
+  border-color: var(--qe-color-focus, #edb184);
+  transform: translateY(-2px);
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border: 1px solid var(--qe-color-focus, #f0c9ad);
+  border-radius: 13px;
+  background: var(--qe-color-primary-container, #fff0e5);
+  color: var(--qe-color-primary, var(--qe-brand-primary, #e87524));
+  font-size: 22px;
+}
+.price {
+  color: var(--qe-color-primary, var(--qe-brand-primary, #c75d18));
+  font-size: 16px;
+  font-weight: 850;
+  text-align: right;
+}
+.title {
+  margin: 3px 0 0;
+  color: var(--qe-color-text, #20283a);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+.metadata {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--qe-color-text-muted, #71798a);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.courseCode,
+.version,
+.coverage {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border-radius: 6px;
+  padding: 3px 7px;
+  background: var(--qe-color-surface-container, #f6f7f9);
+}
+.courseCode {
+  font-weight: 800;
+  letter-spacing: .035em;
+}
+.description {
+  margin: 0;
+  color: var(--qe-color-text-muted, #596273);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.subjects span {
+  max-width: 100%;
+  border: 1px solid var(--qe-color-border-subtle, #eceef2);
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--qe-color-surface-container, #f8f9fb);
+  color: var(--qe-color-text-muted, #4b5565);
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.status {
+  display: grid;
+  gap: 7px;
+}
+.actions {
+  margin-top: auto;
+  padding-top: 8px;
+  min-width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
+@media (max-width: 560px) {
+  .card { padding: 15px; border-radius: 16px; }
+  .title { font-size: 18px; }
+}
