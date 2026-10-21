@@ -12,6 +12,7 @@ import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import { apiFetch } from '../../components/apiClient';
 import StudentEmptyState from '../components/StudentEmptyState';
+import PremiumPagination from '../../components/PremiumPagination';
 
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
@@ -26,6 +27,11 @@ type PracticeCatalogueLesson={
   practice_best_percent?:number|null;practice_best_correct_count?:number|null;
   practice_best_graded_count?:number|null;
 };
+type PracticeCatalogueEntry =
+  | {kind:'empty';key:string;code:string;name:string;total:number;passedCount:number}
+  | {kind:'practice';key:string;code:string;name:string;total:number;passedCount:number;lessonIndex:number;
+      item:PracticeCatalogueLesson;passed:boolean;eligible:boolean;locked:boolean;score:number|null};
+type PracticeCatalogueGroup = {code:string;name:string;total:number;passedCount:number;entries:PracticeCatalogueEntry[]};
 type LessonDetail={
   id:number;title:string;summary?:string;class_code?:string;chapter_name?:string;
   subject_name?:string;subject_code?:string;objective_title?:string;blocks:LessonBlock[];
@@ -67,6 +73,8 @@ export default function PracticePage(){
   const [questions,setQuestions]=useState<Question[]>([]);
   const [catalogueLessons,setCatalogueLessons]=useState<PracticeCatalogueLesson[]>([]);
   const [practiceSubjectFilter,setPracticeSubjectFilter]=useState(()=>searchParams.get('subjectCode')||'ALL');
+  const [practicePage,setPracticePage]=useState(0);
+  const [practicePageSize,setPracticePageSize]=useState(10);
   const [lesson,setLesson]=useState<LessonDetail|null>(null);
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStatus,setSessionStatus]=useState('IN_PROGRESS');
@@ -149,6 +157,38 @@ export default function PracticePage(){
       ? practiceSubjectGroups
       : practiceSubjectGroups.filter(group=>group.code===practiceSubjectFilter),
   [practiceSubjectGroups,practiceSubjectFilter]);
+  // Paginate practice items, not questions inside a scored session, so each catalogue row
+  // keeps its existing subject sequence, completion score, and eligibility gate.
+  const practiceCatalogueEntries=useMemo<PracticeCatalogueEntry[]>(()=>visiblePracticeSubjectGroups.flatMap(group=>{
+    const passedCount=group.lessons.filter(entry=>entry.passed).length;
+    if(group.lessons.length===0) return [{
+      kind:'empty' as const,key:'empty-'+group.code,code:group.code,name:group.name,total:0,passedCount:0
+    }];
+    return group.lessons.map(({item,passed,eligible,locked,score},lessonIndex)=>({
+      kind:'practice' as const,key:String(item.id),code:group.code,name:group.name,
+      total:group.lessons.length,passedCount,lessonIndex,item,passed,eligible,locked,score
+    }));
+  }),[visiblePracticeSubjectGroups]);
+  const practicePageCount=Math.max(1,Math.ceil(practiceCatalogueEntries.length/practicePageSize));
+  const pagedPracticeEntries=useMemo(()=>practiceCatalogueEntries.slice(
+    practicePage*practicePageSize,(practicePage+1)*practicePageSize
+  ),[practiceCatalogueEntries,practicePage,practicePageSize]);
+  const pagedPracticeGroups=useMemo(()=>{
+    const groups:PracticeCatalogueGroup[]=[];
+    for(const entry of pagedPracticeEntries){
+      let group=groups.find(candidate=>candidate.code===entry.code);
+      if(!group){
+        group={code:entry.code,name:entry.name,total:entry.total,passedCount:entry.passedCount,entries:[]};
+        groups.push(group);
+      }
+      group.entries.push(entry);
+    }
+    return groups;
+  },[pagedPracticeEntries]);
+  useEffect(()=>{setPracticePage(0);},[courseKey,practiceSubjectFilter]);
+  useEffect(()=>{
+    if(practicePage>=practicePageCount)setPracticePage(Math.max(0,practicePageCount-1));
+  },[practicePage,practicePageCount]);
 
   useEffect(()=>{
     let active=true;
@@ -356,36 +396,41 @@ export default function PracticePage(){
         <p>{locale==='english'?'Approved practice questions will appear here for subjects in your selected course.':'चुने गए कोर्स के विषयों के लिए स्वीकृत अभ्यास प्रश्न यहाँ दिखेंगे।'}</p>
         <Link href={'/student/learn?courseId='+encodeURIComponent(courseKey)+'&subjectCode=ALL'} className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link>
       </div>}
-      {visiblePracticeSubjectGroups.map(group=><section className="concept-card qe-practice-subject-group" key={group.code}>
-        <div className="content-heading"><div><span className="eyebrow">{group.code}</span><h2>{group.name}</h2></div><span>{group.lessons.filter(entry=>entry.passed).length}/{group.lessons.length} {locale==='english'?'passed':'उत्तीर्ण'}</span></div>
-        {group.lessons.length===0
-          ? <p>{locale==='english'?'No approved practice questions are ready in this subject yet.':'इस विषय में अभी स्वीकृत अभ्यास प्रश्न उपलब्ध नहीं हैं।'}</p>
-          : <div className="qe-practice-next-list">{group.lessons.map(({item,passed,eligible,locked,score},index)=>{
-              const title=item.title||item.chapter_name||item.code;
-              const status=passed
-                ? (locale==='english'?'Passed':'उत्तीर्ण')
+      {pagedPracticeGroups.map(group=><section className="concept-card qe-practice-subject-group" key={group.code}>
+        <div className="content-heading"><div><span className="eyebrow">{group.code}</span><h2>{group.name}</h2></div><span>{group.passedCount}/{group.total} {locale==='english'?'passed':'उत्तीर्ण'}</span></div>
+        <div className="qe-practice-next-list">{group.entries.map(entry=>{
+          if(entry.kind==='empty') return <p key={entry.key}>{locale==='english'?'No approved practice questions are ready in this subject yet.':'इस विषय में अभी स्वीकृत अभ्यास प्रश्न उपलब्ध नहीं हैं।'}</p>;
+          const {item,passed,eligible,score}=entry;
+          const title=item.title||item.chapter_name||item.code;
+          const status=passed
+            ? (locale==='english'?'Passed':'उत्तीर्ण')
+            : eligible
+              ? (locale==='english'?'Ready now':'अब अभ्यास करें')
+              : (locale==='english'?'Locked':'लॉक');
+          return <article className={'qe-practice-next-row'+(passed?' is-passed':eligible?' is-eligible':' is-locked')} key={item.id}>
+            <div className="qe-practice-next-index">{String(entry.lessonIndex+1).padStart(2,'0')}</div>
+            <div className="qe-practice-next-copy">
+              <strong>{title}</strong>
+              <small>{item.chapter_name||item.chapter_code}{typeof score==='number'?' · '+(locale==='english'?'Best':'सर्वोत्तम')+' '+score+'%':''}</small>
+              <span>{passed
+                ? (locale==='english'?'You can revisit this topic from Lessons and Topics.':'आप इसे पाठ और विषय से फिर खोल सकते हैं।')
                 : eligible
-                  ? (locale==='english'?'Ready now':'अब अभ्यास करें')
-                  : (locale==='english'?'Locked':'लॉक');
-              return <article className={'qe-practice-next-row'+(passed?' is-passed':eligible?' is-eligible':' is-locked')} key={item.id}>
-                <div className="qe-practice-next-index">{String(index+1).padStart(2,'0')}</div>
-                <div className="qe-practice-next-copy">
-                  <strong>{title}</strong>
-                  <small>{item.chapter_name||item.chapter_code}{typeof score==='number'?' · '+(locale==='english'?'Best':'सर्वोत्तम')+' '+score+'%':''}</small>
-                  <span>{passed
-                    ? (locale==='english'?'You can revisit this topic from Lessons and Topics.':'आप इसे पाठ और विषय से फिर खोल सकते हैं।')
-                    : eligible
-                      ? (locale==='english'?'Pass with 70% or more to unlock the next practice.':'अगला अभ्यास खोलने के लिए 70% या अधिक अंक पाएं।')
-                      : (locale==='english'?'Pass each earlier practice in this subject first.':'पहले इस विषय के पिछले सभी अभ्यासों में उत्तीर्ण हों।')}</span>
-                </div>
-                {passed
-                  ? <span className="qe-practice-next-status">{status}</span>
-                  : eligible
-                    ? <Link href={'/student/practice?lessonId='+item.id+'&courseId='+encodeURIComponent(courseKey)} className="button button-dark">{locale==='english'?'Start / retry':'शुरू करें / दोहराएँ'}</Link>
-                    : <span className="qe-practice-next-status" aria-label={status}>{status}</span>}
-              </article>;
-            })}</div>}
+                  ? (locale==='english'?'Pass with 70% or more to unlock the next practice.':'अगला अभ्यास खोलने के लिए 70% या अधिक अंक पाएं।')
+                  : (locale==='english'?'Pass each earlier practice in this subject first.':'पहले इस विषय के पिछले सभी अभ्यासों में उत्तीर्ण हों।')}</span>
+            </div>
+            {passed
+              ? <span className="qe-practice-next-status">{status}</span>
+              : eligible
+                ? <Link href={'/student/practice?lessonId='+item.id+'&courseId='+encodeURIComponent(courseKey)} className="button button-dark">{locale==='english'?'Start / retry':'शुरू करें / दोहराएँ'}</Link>
+                : <span className="qe-practice-next-status" aria-label={status}>{status}</span>}
+          </article>;
+        })}</div>
       </section>)}
+      {practiceCatalogueEntries.length>practicePageSize&&<PremiumPagination
+        page={practicePage} total={practiceCatalogueEntries.length} pageSize={practicePageSize}
+        onPageChange={setPracticePage}
+        onPageSizeChange={size=>{setPracticePageSize(size);setPracticePage(0);}}
+        itemLabel={locale==='english'?'practices':'अभ्यास'} loading={loading} />}
       <div className="practice-footer">
         <Link href={'/student/learn?courseId='+encodeURIComponent(courseKey)+'&subjectCode=ALL'} className="text-link"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link>
       </div>
