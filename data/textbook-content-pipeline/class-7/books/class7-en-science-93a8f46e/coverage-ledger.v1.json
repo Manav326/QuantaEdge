@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2207,
-    "successful_visual_analyses": 2105,
-    "missing_visual_analyses": 5281,
+    "raw_analysis_result_rows": 2210,
+    "successful_visual_analyses": 2108,
+    "missing_visual_analyses": 5278,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5383,
+    "unresolved_count": 5380,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90286,9 +90286,18 @@
       "asset_path": "assets/040cf8325e4f7686b027eb5145461ad61c7401da823653f6c93aa89ae1af4f0d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of Table 4.2 about conduction of electricity by different objects or materials.",
+        "limitations": [
+          "The image does not provide any specific information about the objects or materials being discussed in Table 4.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90304,9 +90313,19 @@
       "asset_path": "assets/edfd4a986797305ff806005a02db07095752ccc16c3d17ccf1451f36d63ccaae.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or another conductive material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of Table 4.2 about conduction of electricity by different objects or materials.",
+        "limitations": [
+          "The image is blurry and not clearly visible.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90322,9 +90341,23 @@
       "asset_path": "assets/edfd4a986797305ff806005a02db07095752ccc16c3d17ccf1451f36d63ccaae.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or another conductive material.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Piece of"
+        ],
+        "concepts": [
+          "coiled rope",
+          "conductivity"
+        ],
+        "context_relation": "The image is related to the table in the text, which discusses the conduction of electricity by different objects or materials.",
+        "limitations": [
+          "The image is not clear enough to identify the exact material or type of the rope/cable, and the text is incomplete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
