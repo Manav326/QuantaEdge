@@ -432,7 +432,8 @@ public class CourseOrderFinancialService {
     Map<String,Object> shareSnapshot=parseObject(order.get("share_snapshot_json"));
     Map<String,Object> buyerSnapshot=parseObject(order.get("buyer_snapshot_json"));
     if(taxSnapshot.isEmpty()||shareSnapshot.isEmpty())
-      throw new IllegalStateException("This order has no locked tax/share policy snapshot. Do not issue a document against incomplete financial facts.");
+      throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
+          "This order has no locked tax/share policy snapshot. Do not issue a document against incomplete financial facts.");
     if(number(taxSnapshot.get("customerPayablePaise"))!=capturedAmountPaise
         ||number(taxSnapshot.get("taxProfileId"))!=number(order.get("tax_profile_id"))
         ||number(shareSnapshot.get("policyId"))!=number(order.get("revenue_share_policy_id"))) {
