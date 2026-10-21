@@ -10,6 +10,7 @@ import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBr
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { UiText } from '../../i18n/useUiTranslation';
 import { useLocale } from '../../components/LanguageProvider';
+import { localizeMarketplaceError } from '../../components/marketplaceI18n';
 import StudentEmptyState from '../components/StudentEmptyState';
 import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
@@ -88,6 +89,7 @@ export default function StudentMarketplacePage() {
   const { brand, institutionContextRequested, isResolving } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
+  const language = english ? 'en' : 'hi';
   const tx = (en: string, hi: string, values: Record<string, string | number> = {}) =>
     (english ? en : hi).replace(/\{([a-zA-Z0-9_]+)\}/g, (_match, key: string) => String(values[key] ?? ''));
   const [offers, setOffers] = useState<Offer[]>([]);
