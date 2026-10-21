@@ -45,22 +45,11 @@ public class RecommendationController {
     if(enrolled==null || enrolled==0L) throw new SecurityException("The selected course is not enrolled in this institution.");
 
     Long diagnostics=jdbc.queryForObject("""
-      select count(distinct diagnostic.id)
+      select count(*)
       from student_diagnostic_attempt diagnostic
-      join student_diagnostic_attempt_question picked
-        on picked.diagnostic_attempt_id=diagnostic.id
-      join lesson l on l.id=picked.lesson_id and l.active=true
-      join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true and ch.content_status='PUBLISHED'
-      join curriculum_subject s on s.id=ch.subject_id and s.active=true
-      join curriculum_program_subject mapped
-        on mapped.program_id=? and mapped.subject_id=s.id and mapped.class_id=s.class_id
-      join curriculum_program course on course.id=mapped.program_id and course.status='ACTIVE'
-      join student_program_enrollment enrollment
-        on enrollment.student_id=diagnostic.student_id and enrollment.institution_id=diagnostic.institution_id
-           and enrollment.program_id=course.id and enrollment.status='ACTIVE'
-      where diagnostic.student_id=? and diagnostic.institution_id=? and diagnostic.status='SUBMITTED'
-        and (s.program_id=course.id or s.program_id is null)
-      """,Long.class,courseId,context.studentId(),institutionId);
+      where diagnostic.student_id=? and diagnostic.institution_id=? and diagnostic.course_id=?
+        and diagnostic.status='SUBMITTED'
+      """,Long.class,context.studentId(),institutionId,courseId);
     if(diagnostics==null||diagnostics==0)
       return Map.of("available",true,"kind","DIAGNOSTIC","reason","INITIAL_DIAGNOSTIC","courseId",courseId);
 
@@ -68,7 +57,8 @@ public class RecommendationController {
       select l.id,l.code,l.title,l.summary,l.estimated_minutes,
              ch.code as chapter_code,ch.display_name as chapter_name,
              s.code as subject_code,s.display_name as subject_name,
-             coalesce(round(avg(coalesce(m.mastery_percent,0))),0) as mastery,
+             coalesce(round(avg(coalesce(m.mastery_percent,diagnostic_result.percent,0))),0) as mastery,
+             diagnostic_result.percent as initial_diagnostic_percent,
              test_result.percent as latest_assessment_percent,
              selected_course.id as course_id,selected_course.display_name as course_name
       from curriculum_program selected_course
@@ -87,6 +77,16 @@ public class RecommendationController {
       left join question q on q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
       left join student_concept_mastery m
         on m.student_id=? and m.institution_id=spe.institution_id and m.concept_id=q.concept_id
+      left join lateral (
+        select round(100.0*count(*) filter (where picked.is_correct=true)/
+          nullif(count(*) filter (where picked.is_correct is not null),0))::int as percent
+        from student_diagnostic_attempt diagnostic
+        join student_diagnostic_attempt_question picked
+          on picked.diagnostic_attempt_id=diagnostic.id
+        where diagnostic.student_id=? and diagnostic.institution_id=spe.institution_id
+          and diagnostic.course_id=selected_course.id and diagnostic.status='SUBMITTED'
+          and picked.lesson_id=l.id
+      ) diagnostic_result on true
       left join student_lesson_progress p
         on p.student_id=? and p.institution_id=spe.institution_id and p.lesson_id=l.id
       left join lateral (
@@ -99,16 +99,18 @@ public class RecommendationController {
         order by att.released_at desc,att.id desc limit 1
       ) test_result on true
       where selected_course.id=? and selected_course.status='ACTIVE'
-      group by l.id,ch.id,s.id,p.status,test_result.percent,selected_course.id,selected_course.display_name
+      group by l.id,ch.id,s.id,p.status,test_result.percent,diagnostic_result.percent,selected_course.id,selected_course.display_name
       having coalesce(p.status,'NOT_STARTED') <> 'COMPLETED'
           or (test_result.percent is not null and test_result.percent < 80)
+          or (diagnostic_result.percent is not null and diagnostic_result.percent < 80)
           or (count(m.id)>0 and avg(m.mastery_percent)<80)
       order by case when coalesce(p.status,'NOT_STARTED')='COMPLETED' then 1 else 0 end,
-               coalesce(round(avg(coalesce(m.mastery_percent,0))*0.7 + coalesce(test_result.percent,avg(coalesce(m.mastery_percent,0)))*0.3),0),
+               coalesce(round(avg(coalesce(m.mastery_percent,diagnostic_result.percent,0))*0.7 +
+                 coalesce(test_result.percent,avg(coalesce(m.mastery_percent,diagnostic_result.percent,0)))*0.3),0),
                s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       limit 1
-      """,context.studentId(),institutionId,context.studentId(),context.studentId(),context.studentId(),courseId);
+      """,context.studentId(),institutionId,context.studentId(),context.studentId(),context.studentId(),context.studentId(),courseId);
     if(rows.isEmpty()) return Map.of("available",false,"courseId",courseId);
-    return Map.of("available",true,"reason","PROGRESS_MASTERY_AND_RELEASED_ASSESSMENTS","courseId",courseId,"lesson",rows.getFirst());
+    return Map.of("available",true,"reason","PROGRESS_DIAGNOSTIC_MASTERY_AND_RELEASED_ASSESSMENTS","courseId",courseId,"lesson",rows.getFirst());
   }
 }
