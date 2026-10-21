@@ -96,5 +96,8 @@ class LearningStateServiceTest {
     assertEquals(42L, bound[3]);
     assertEquals("A", bound[4]);
     assertEquals("A", bound[5]);
+    assertTrue(bound[6] == null, "Unknown grading stays null rather than false.");
+    assertTrue(bound[7] == null, "Inline lesson answers have no practice session ID.");
+    assertEquals("LESSON_INLINE", bound[8]);
   }
 }
