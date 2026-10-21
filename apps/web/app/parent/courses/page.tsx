@@ -111,7 +111,7 @@ export default function ParentCoursesPage() {
       setRequests(Array.isArray(results[2]) ? results[2] : []);
       setEntitlements(Array.isArray(results[3]) ? results[3] : []);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Family courses could not be loaded.');
+      setError(e instanceof Error ? e.message : english ? 'Family courses could not be loaded.' : 'परिवार के कोर्स लोड नहीं हो सके।');
     } finally {
       setLoading(false);
     }
@@ -172,7 +172,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Payment verification could not be completed. Retry verification before paying again.');
+      setError(e instanceof Error ? e.message : english ? 'Payment verification could not be completed. Retry verification before paying again.' : 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।');
     } finally { setBusy(''); }
   }
 
@@ -202,11 +202,11 @@ export default function ParentCoursesPage() {
         setPendingVerify(null);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       }
-      setError(String(result.message || 'Payment status is still being reconciled. Do not pay again while verification is pending.'));
+      setError(String(result.message || (english ? 'Payment status is still being reconciled. Do not pay again while verification is pending.' : 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।')));
       await load();
     } catch (e) {
       setPendingVerify(draft);
-      setError(e instanceof Error ? e.message : 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.');
+      setError(e instanceof Error ? e.message : english ? 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.' : 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।');
     } finally {
       setBusy('');
     }
@@ -272,7 +272,7 @@ export default function ParentCoursesPage() {
             signature: String(response.razorpay_signature || ''),
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== body.orderId) {
-            setError('The payment confirmation did not match this order. Reconcile this order before starting another checkout.');
+            setError(english ? 'The payment confirmation did not match this order. Reconcile this order before starting another checkout.' : 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।');
             setPendingVerify(recoverableDraft);
             try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusy('');
@@ -285,7 +285,7 @@ export default function ParentCoursesPage() {
       });
       checkout.open();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Checkout could not be started.');
+      setError(e instanceof Error ? e.message : english ? 'Checkout could not be started.' : 'Checkout शुरू नहीं हो सका।');
       setBusy('');
     }
   }
@@ -306,7 +306,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Free course added to the selected learning account.' : 'निःशुल्क कोर्स चुने गए learning खाते में जोड़ दिया गया।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The free course could not be added.');
+      setError(e instanceof Error ? e.message : english ? 'The free course could not be added.' : 'निःशुल्क कोर्स नहीं जोड़ा जा सका।');
     } finally { setBusy(''); }
   }
 
@@ -319,7 +319,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Purchase request dismissed.' : 'कोर्स खरीद अनुरोध हटाया गया।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The request could not be dismissed.');
+      setError(e instanceof Error ? e.message : english ? 'The request could not be dismissed.' : 'अनुरोध खारिज नहीं हो सका।');
     } finally { setBusy(''); }
   }
 
@@ -344,7 +344,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Course transferred permanently. The parent no longer owns this entitlement.' : 'कोर्स स्थायी रूप से ट्रांसफर हो गया। अब यह entitlement माता-पिता के पास नहीं है।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The course transfer could not be completed.');
+      setError(e instanceof Error ? e.message : english ? 'The course transfer could not be completed.' : 'कोर्स ट्रांसफर पूरा नहीं हो सका।');
     } finally { setBusy(''); }
   }
 
@@ -359,7 +359,7 @@ export default function ParentCoursesPage() {
       }
       window.location.assign('/parent/learning');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not open personal learning.');
+      setError(e instanceof Error ? e.message : english ? 'Could not open personal learning.' : 'व्यक्तिगत पढ़ाई नहीं खुल सकी।');
       setBusy('');
     }
   }
@@ -418,7 +418,7 @@ export default function ParentCoursesPage() {
                   <button type="button" className="button button-dark button-small" disabled={busy !== '' || (Number(request.price_paise) > 0 && pendingVerify !== null)}
                     onClick={() => {
                       const kid = children.find(child => child.id === request.student_id);
-                      if (!kid) { setError('This child is no longer linked to your account.'); return; }
+                      if (!kid) { setError(english ? 'This child is no longer linked to your account.' : 'यह बच्चा अब आपके खाते से लिंक नहीं है।'); return; }
                       if (Number(request.price_paise) === 0) void addFreeCourse(request.course_id, 'CHILD', request.student_id);
                       else void startPaidCheckout(request.course_id, 'CHILD', request.student_id);
                     }}>
