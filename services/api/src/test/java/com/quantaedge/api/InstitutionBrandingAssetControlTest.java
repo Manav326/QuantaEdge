@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -216,7 +217,7 @@ class InstitutionBrandingAssetControlTest {
     assertTrue(statements.getAllValues().stream().anyMatch(q ->
         q.contains("update institution_branding_asset set active=false") && q.contains("asset_type='APP_ICON'")));
     assertTrue(statements.getAllValues().stream().anyMatch(q ->
-        q.contains("BRANDING_TEMPLATE_APPLIED") && q.contains("logoSha256") && q.contains("appIconSha256")));
+        q.contains("BRANDING_CHANGED") && q.contains("templatePackApplied") && q.contains("logoSha256") && q.contains("appIconSha256")));
     verify(authorization).requirePermission(platformOwner, "QE_PLATFORM_OWNER");
   }
 
