@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39544239305",
-      "checkpointed_at": "2026-10-21T05:23:50Z"
+      "checkpointed_at": "2026-10-21T05:30:04Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39544239305",
-      "checkpointed_at": "2026-10-21T05:24:30Z"
+      "checkpointed_at": "2026-10-21T05:30:45Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39544239305",
-      "checkpointed_at": "2026-10-21T05:25:22Z"
+      "checkpointed_at": "2026-10-21T05:31:39Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36778,7 +36778,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39513497778",
+      "run_id": "39544239305",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -36847,7 +36847,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39513497778",
+      "run_id": "39544239305",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
