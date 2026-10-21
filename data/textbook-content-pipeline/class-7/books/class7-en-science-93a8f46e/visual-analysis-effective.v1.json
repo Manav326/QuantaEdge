@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "895ecb18ac1c2bd9794d898bdcfe4f3de669d675ea2301c4b8aa4b3fdd7228a8",
+  "raw_analysis_sha256": "35cd58f3e8b2decde99da557e70fe2244920140f963ec9f6da051906a696795c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:22:10Z",
+      "checkpointed_at": "2026-10-21T20:23:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:22:34Z",
+      "checkpointed_at": "2026-10-21T20:24:14Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -125128,6 +125128,188 @@
         "limitations": [
           "No specific measurements or data provided",
           "Focus on visual comparison only"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8a0a3e63c5c4a74e5c1f0df5",
+      "asset_sha256": "e3e69527f60a00267a0db3b150ff0447ae6fb7ee141bdbc188bd883350981e43",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/e3e69527f60a00267a0db3b150ff0447ae6fb7ee141bdbc188bd883350981e43.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal spoon and a wooden spoon are shown side by side, with the metal spoon being hotter to touch.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Temperature",
+          "Material properties"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and material properties.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:24:58Z",
+      "effective_analysis": {
+        "visual_summary": "A metal spoon and a wooden spoon are shown side by side, with the metal spoon being hotter to touch.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Temperature",
+          "Material properties"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and material properties.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "af0b34708d7f4f523d620788",
+      "asset_sha256": "b3e045d50f8f06594b6fa394ed171bf5782ca767a31c6a709aa7506caa6d3673",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/b3e045d50f8f06594b6fa394ed171bf5782ca767a31c6a709aa7506caa6d3673.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Comparison of two spoons, one metal and one wooden, showing the metal spoon being hotter.",
+        "visual_type": "photo",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Comparison of materials",
+          "Temperature measurement"
+        ],
+        "context_relation": "Experimental observation",
+        "limitations": [
+          "No specific measurements or data provided",
+          "Focus on qualitative observation rather than quantitative data"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:25:41Z",
+      "effective_analysis": {
+        "visual_summary": "Comparison of two spoons, one metal and one wooden, showing the metal spoon being hotter.",
+        "visual_type": "photo",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Comparison of materials",
+          "Temperature measurement"
+        ],
+        "context_relation": "Experimental observation",
+        "limitations": [
+          "No specific measurements or data provided",
+          "Focus on qualitative observation rather than quantitative data"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f1c22de25c623f921c5d997",
+      "asset_sha256": "b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 67,
+      "asset_path": "assets/b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal spoon and a wooden spoon are shown side by side, with the metal spoon being hotter to touch.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Temperature comparison",
+          "Material properties"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and temperature comparison between metal and wooden spoons.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:26:25Z",
+      "effective_analysis": {
+        "visual_summary": "A metal spoon and a wooden spoon are shown side by side, with the metal spoon being hotter to touch.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch"
+        ],
+        "concepts": [
+          "Heat transfer",
+          "Temperature comparison",
+          "Material properties"
+        ],
+        "context_relation": "The image is related to the discussion points about heat transfer and temperature comparison between metal and wooden spoons.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
