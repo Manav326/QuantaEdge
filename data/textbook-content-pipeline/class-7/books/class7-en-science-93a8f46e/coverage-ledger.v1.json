@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2138,
-    "successful_visual_analyses": 2037,
-    "missing_visual_analyses": 5350,
+    "raw_analysis_result_rows": 2141,
+    "successful_visual_analyses": 2040,
+    "missing_visual_analyses": 5347,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5451,
+    "unresolved_count": 5448,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -87920,9 +87920,28 @@
       "asset_path": "assets/4d677d7d092d1a9cc456185225d82ae05c833e3b6003ac8916951522dae4724e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the composition of steel and its properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel",
+          "Mixture of metal (iron) and non-metal (carbon)",
+          "Wires made of steel can support heavy loads",
+          "Used in suspension bridges and cranes to lift heavy objects"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel"
+        ],
+        "context_relation": "The text discusses the properties and applications of steel, specifically focusing on its ability to support heavy loads.",
+        "limitations": [
+          "The image does not provide specific details about the properties of steel or the composition of the mixture.",
+          "The text does not provide a diagram or illustration of the composition of steel."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -87938,9 +87957,37 @@
       "asset_path": "assets/c4f2c06ba32f4b3009dc7c8d9d700afaa714aa5d20e806de902837c5398a291f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of coal and sulfur",
+          "ductility of steel",
+          "properties of metals and non-metals",
+          "suspension bridges",
+          "cranes"
+        ],
+        "context_relation": "The page discusses the properties of different materials, comparing the ductility of coal and sulfur to that of steel.",
+        "limitations": [
+          "The page does not provide specific examples or measurements of the ductility of coal, sulfur, and steel."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -87956,9 +88003,33 @@
       "asset_path": "assets/eefa9270fd0c996a73cedb099e7e0357977832389da2d54fa355b2b38e9a79d2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of materials"
+        ],
+        "context_relation": "The page discusses the properties of different materials, comparing coal and sulfur to steel in terms of their ductility.",
+        "limitations": [
+          "The page does not provide specific examples or measurements of the ductility of coal and sulfur compared to steel."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
