@@ -363,8 +363,8 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode)') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> StudentCourseLearningScreen(') &&
   androidApp.includes('if (noEnrolledCourses)') &&
-  androidApp.includes('onRefresh = { openSubject(currentSubject, currentCourseId) }') &&
-  androidApp.includes('onOpenLesson = ::openLesson'),
+  androidApp.includes('onRefreshLegacy = { openSubject(currentSubject, currentCourseId) }') &&
+  androidApp.includes('onOpenLegacyLesson = ::openLesson'),
   'Android course subjects must open the original course-scoped lesson list and lesson screen by default.');
 
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
