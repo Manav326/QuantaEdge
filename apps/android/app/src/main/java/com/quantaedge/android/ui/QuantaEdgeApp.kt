@@ -257,6 +257,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         return InstitutionBrandIdentity(
             code,
             if (packagedForSchool) BuildConfig.INSTITUTION_DISPLAY_NAME else "Your school",
+            "",
             if (packagedForSchool) packagedTenantLogo else null,
             null,
             0L,
@@ -434,7 +435,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 val fallbackName = if (BuildConfig.IS_TENANT_BRANDED && code == configuredTenantCode) {
                     BuildConfig.INSTITUTION_DISPLAY_NAME
                 } else "Your school"
-                InstitutionBrandIdentity(code, fallbackName, packagedLogo, null, 0L, "{}")
+                InstitutionBrandIdentity(code, fallbackName, "", packagedLogo, null, 0L, "{}")
             } else null
             themeController.clearInstitutionTheme()
         } finally {
