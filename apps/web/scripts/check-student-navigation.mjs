@@ -864,6 +864,8 @@ assert.ok(studentMarketplacePage.includes("from '../../components/MarketplaceCou
   'Student and Parent marketplaces must use the single shared marketplace course card.');
 assert.ok(marketplaceCourseCard.includes('courseCode') &&
   marketplaceCourseCard.includes('curriculumVersion') &&
+  marketplaceCourseCard.includes('Current curriculum') &&
+  marketplaceCourseCard.includes('वर्तमान पाठ्यक्रम') &&
   marketplaceCourseCard.includes('priceLabel') &&
   marketplaceCourseCard.includes('description') &&
   marketplaceCourseCard.includes('subjects') &&
