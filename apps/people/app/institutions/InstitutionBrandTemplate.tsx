@@ -217,7 +217,16 @@ async function createZip(files: PackFile[]): Promise<Blob> {
   ev.setUint32(12, centralLength, true);
   ev.setUint32(16, localOffset, true);
   ev.setUint16(20, 0, true);
-  return new Blob([...localParts, ...centralParts, end], { type: 'application/zip' });
+
+  // Build one owned ArrayBuffer so TypeScript and Blob agree on the backing-store type.
+  const parts = [...localParts, ...centralParts, end];
+  const archive = new Uint8Array(parts.reduce((sum, part) => sum + part.length, 0));
+  let archiveOffset = 0;
+  for (const part of parts) {
+    archive.set(part, archiveOffset);
+    archiveOffset += part.length;
+  }
+  return new Blob([archive.buffer], { type: 'application/zip' });
 }
 
 function safeStem(value: string): string {
