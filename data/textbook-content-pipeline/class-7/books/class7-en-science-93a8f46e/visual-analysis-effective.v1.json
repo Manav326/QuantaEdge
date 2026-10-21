@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "49dbdfec425e2d0126413939be51d3b815e8341bc676b60ade0b99d83e807dfb",
+  "raw_analysis_sha256": "d953cbf3b5d3038c999674af056811e6068d540c361fc146c47a5d036e6f4740",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T18:32:15Z",
+      "checkpointed_at": "2026-10-21T18:37:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T18:32:38Z",
+      "checkpointed_at": "2026-10-21T18:38:21Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -114624,7 +114624,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
+      "run_id": "39623490257",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -119803,8 +119803,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39461594059",
-      "checkpointed_at": "2026-10-20T22:55:22Z",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T18:44:13Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the properties of coal, sulfur, wood, and iron in the context of civilisation progress.",
         "visual_type": "uncertain",
@@ -119838,6 +119838,54 @@
         "limitations": [
           "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "42e2bad6ce513928f9ecea9b",
+      "asset_sha256": "23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane with a dotted line indicating its path.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "paper airplane",
+          "path",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the concept of paper airplanes and their paths.",
+        "limitations": [
+          "The image does not provide specific details about the paper airplane or its path."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T18:44:50Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a dotted line indicating its path.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "paper airplane",
+          "path",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the concept of paper airplanes and their paths.",
+        "limitations": [
+          "The image does not provide specific details about the paper airplane or its path."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

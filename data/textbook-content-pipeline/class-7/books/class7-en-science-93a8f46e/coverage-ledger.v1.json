@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2105,
-    "successful_visual_analyses": 2006,
-    "missing_visual_analyses": 5383,
+    "raw_analysis_result_rows": 2106,
+    "successful_visual_analyses": 2007,
+    "missing_visual_analyses": 5382,
     "failed_visual_analyses": 99,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5482,
+    "unresolved_count": 5481,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -86659,9 +86659,22 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a dotted line indicating its path.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "paper airplane",
+          "path",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the concept of paper airplanes and their paths.",
+        "limitations": [
+          "The image does not provide specific details about the paper airplane or its path."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
