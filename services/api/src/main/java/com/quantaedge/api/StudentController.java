@@ -24,6 +24,7 @@ public class StudentController {
   @GetMapping("/me")
   public Map<String,Object> me(
       @RequestParam Long courseId,
+      @RequestParam(required=false) String subjectCode,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
@@ -49,7 +50,26 @@ public class StudentController {
       throw new SecurityException("The selected course is not actively enrolled and assigned in this institution.");
     Map<String,Object> course=enrolled.getFirst();
     long stableCourseId=((Number)course.get("id")).longValue();
-    Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId,institutionId);
+    String selectedSubject=subjectCode==null||subjectCode.isBlank()||subjectCode.trim().equalsIgnoreCase("ALL")
+        ? null : subjectCode.trim().toLowerCase(java.util.Locale.ROOT);
+    if(selectedSubject!=null) {
+      if(!selectedSubject.matches("[a-z0-9][a-z0-9_-]{0,39}"))
+        throw new IllegalArgumentException("Choose a subject from the selected course.");
+      Long mappedSubjectCount=jdbc.queryForObject("""
+        select count(*)
+        from curriculum_program_subject cps
+        join curriculum_program selected_course
+          on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+        join curriculum_subject s
+          on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+          and (s.program_id=cps.program_id
+            or (s.program_id is null and selected_course.class_id=s.class_id and cps.class_id=s.class_id))
+        where cps.program_id=? and lower(s.code)=lower(?)
+        """,Long.class,stableCourseId,selectedSubject);
+      if(mappedSubjectCount==null||mappedSubjectCount<1L)
+        throw new SecurityException("This subject does not belong to the selected course.");
+    }
+    Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId,institutionId,selectedSubject);
     result.put("courseId",stableCourseId);
     result.put("courseName",course.get("display_name"));
     return result;
