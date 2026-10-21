@@ -38,7 +38,7 @@ internal fun restoreLegacyLessonAnswers(lesson: JSONObject, language: String): L
     return LegacyLessonAnswerRestore(answers, feedbacks, locks)
 }
 
-internal fun loadStructuredResponsesForLegacyLesson(lesson: JSONObject, courseId: Long, language: String): JSONObject {
+internal suspend fun loadStructuredResponsesForLegacyLesson(lesson: JSONObject, courseId: Long, language: String): JSONObject {
     val artifactId = lesson.optJSONObject("structured_lesson")?.optString("artifact_id").orEmpty()
     if (artifactId.isBlank() || courseId <= 0L) return JSONObject()
     return runCatching {
@@ -47,7 +47,7 @@ internal fun loadStructuredResponsesForLegacyLesson(lesson: JSONObject, courseId
     }.getOrDefault(JSONObject())
 }
 
-internal fun postStructuredQuestionResponse(
+internal suspend fun postStructuredQuestionResponse(
     artifactId: String,
     questionId: String,
     courseId: Long,
@@ -73,7 +73,7 @@ internal fun postStructuredQuestionResponse(
     return all.put("questions", questions)
 }
 
-internal fun postStructuredActivityResponse(
+internal suspend fun postStructuredActivityResponse(
     artifactId: String,
     blockId: String,
     courseId: Long,
