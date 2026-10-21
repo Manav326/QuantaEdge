@@ -111,7 +111,7 @@ export default function ParentCoursesPage() {
       setRequests(Array.isArray(results[2]) ? results[2] : []);
       setEntitlements(Array.isArray(results[3]) ? results[3] : []);
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'Family courses could not be loaded.' : 'परिवार के कोर्स लोड नहीं हो सके।');
+      setError(e instanceof Error ? e.message : english ? 'Family courses could not be loaded.' : 'परिवार के कोर्स लोड नहीं हो सके。');
     } finally {
       setLoading(false);
     }
@@ -461,7 +461,7 @@ export default function ParentCoursesPage() {
                     : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}
                 description={course.description}
                 subjects={course.subjects}
-                status={ownedByParent && !isFree || selectedChildAlreadyOwns ? (
+                status={(ownedByParent && !isFree) || selectedChildAlreadyOwns ? (
                   <>
                     {ownedByParent && !isFree && <p className="parent-courses-page__owned-note">
                       {transferableByParent
@@ -473,6 +473,68 @@ export default function ParentCoursesPage() {
                     {selectedChildAlreadyOwns && <p className="parent-courses-page__owned-note">
                       <LocaleText hinglish="चुने गए बच्चे के पास इस कोर्स की पहुँच पहले से है। किसी दूसरे बच्चे को चुनें।"
                         english="The selected child already has access to this course. Choose another child." />
-                            </p>}
+                    </p>}
                   </>
                 ) : null}
+              >
+                <div className="parent-courses-page__buy-actions">
+                  <button className="button button-dark button-small" type="button"
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || (ownedByParent && (isFree || !transferableByParent))}
+                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
+                    {busy === 'checkout-' + course.course_id || busy === 'free-' + course.course_id
+                      ? (english ? 'Working…' : 'प्रक्रिया जारी…')
+                      : ownedByParent
+                        ? (english ? 'Already in your courses' : 'आपके कोर्स में पहले से है')
+                        : <LocaleText hinglish="अपने लिए" english="Buy for me" />}
+                  </button>
+                  <label><span><LocaleText hinglish="बच्चे के लिए" english="For child" /></span>
+                    <select value={selectedChild || ''} onChange={e => setChildByCourse(current => ({ ...current, [course.course_id]: Number(e.target.value) || 0 }))}>
+                      <option value="">{english ? 'Choose child' : 'बच्चा चुनें'}</option>
+                      {children.map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
+                    </select>
+                  </label>
+                  <button className="button button-light button-small" type="button"
+                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || !selectedChild || selectedChildAlreadyOwns}
+                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
+                    {selectedChildAlreadyOwns
+                      ? (english ? 'Already has access' : 'पहले से पहुँच है')
+                      : <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />}
+                  </button>
+                </div>
+              </MarketplaceCourseCard>;
+            })}</div>}
+        </section>
+
+        <section className="parent-courses-page__section">
+          <div className="parent-courses-page__section-heading">
+            <div><h2><LocaleText hinglish="आपके ट्रांसफर किए जा सकने वाले कोर्स" english="Courses you can transfer" /></h2>
+              <p><LocaleText hinglish="केवल आपके लिए खरीदे गए कोर्स यहाँ होंगे। ट्रांसफर स्थायी है और वापस नहीं लिया जा सकता।" english="Only courses you own personally appear here. A transfer is permanent and cannot be revoked." /></p></div>
+            <span className="parent-courses-page__count">{entitlements.length}</span>
+          </div>
+          {loading ? <p className="parent-courses-page__empty"><LocaleText hinglish="कोर्स लोड हो रहे हैं…" english="Loading your entitlements…" /></p>
+            : entitlements.length === 0 ? <p className="parent-courses-page__empty"><LocaleText hinglish="अभी कोई व्यक्तिगत कोर्स ट्रांसफर के लिए उपलब्ध नहीं है।" english="You do not currently have any personally owned courses to transfer." /></p>
+            : <div className="parent-courses-page__requests">{entitlements.map(entitlement => {
+              const selected = Number(transferTo[entitlement.entitlement_id] || 0);
+              return <article className="parent-courses-page__request" key={entitlement.entitlement_id}>
+                <div><strong>{entitlement.course_name}</strong><span>{english ? 'Currently assigned to your personal learning profile' : 'अभी आपके personal learning profile में है'}</span></div>
+                <div className="parent-courses-page__transfer-actions">
+                  <select aria-label={english ? 'Child receiving the course' : 'कोर्स पाने वाला बच्चा'}
+                    value={selected || ''} onChange={e => setTransferTo(current => ({ ...current, [entitlement.entitlement_id]: Number(e.target.value) || 0 }))}>
+                    <option value="">{english ? 'Choose child' : 'बच्चा चुनें'}</option>
+                    {children.filter(child => child.id !== entitlement.holder_student_id).map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
+                  </select>
+                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || !selected}
+                    onClick={() => void transferCourse(entitlement)}>
+                    {busy === 'transfer-' + entitlement.entitlement_id
+                      ? (english ? 'Transferring…' : 'ट्रांसफर हो रहा है…')
+                      : <LocaleText hinglish="स्थायी ट्रांसफर" english="Transfer permanently" />}
+                  </button>
+                </div>
+              </article>;
+            })}</div>}
+        </section>
+        <p className="parent-courses-page__footnote"><LocaleText hinglish="भुगतान और कोर्स का अधिकार सर्वर पर सत्यापित होता है। ट्रांसफर के बाद मूल अभिभावक इस कोर्स को वापस नहीं ले सकता।" english="Payments and course ownership are verified on the server. Once transferred, the original parent cannot reclaim or revoke the course." /></p>
+      </div>
+    </main>
+  );
+}
