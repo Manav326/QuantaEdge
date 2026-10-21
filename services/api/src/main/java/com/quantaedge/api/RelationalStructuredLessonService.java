@@ -5,10 +5,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -313,7 +316,41 @@ public class RelationalStructuredLessonService {
     }
     if (question == null) throw notAvailable();
     String type = question.path("type").asText("");
-    if ("multiple_choice".equals(type)) {
+    String legacyInteraction = question.path("legacy_interaction_type").asText("");
+    if ("ORDER".equals(legacyInteraction)) {
+      if (!(response instanceof List<?> ordered)) {
+        throw new IllegalArgumentException("Arrange every item in the required order.");
+      }
+      Set<String> allowed = new LinkedHashSet<>();
+      for (JsonNode option : question.path("options")) allowed.add(option.path("id").asText());
+      Set<String> submitted = new LinkedHashSet<>();
+      for (Object item : ordered) {
+        if (!(item instanceof String key) || !allowed.contains(key) || !submitted.add(key)) {
+          throw new IllegalArgumentException("The ordering response contains an unknown or repeated item.");
+        }
+      }
+      if (allowed.size() < 2 || submitted.size() != allowed.size()) {
+        throw new IllegalArgumentException("Arrange each item exactly once.");
+      }
+    } else if ("MATCH".equals(legacyInteraction)) {
+      if (!(response instanceof Map<?, ?> pairs)) {
+        throw new IllegalArgumentException("Provide a matching choice for each item.");
+      }
+      Set<String> leftIds = new LinkedHashSet<>();
+      Set<String> rightIds = new LinkedHashSet<>();
+      for (JsonNode item : question.path("left_items")) leftIds.add(item.path("id").asText());
+      for (JsonNode item : question.path("right_items")) rightIds.add(item.path("id").asText());
+      Set<String> submittedRight = new LinkedHashSet<>();
+      if (leftIds.isEmpty() || rightIds.isEmpty() || pairs.size() != leftIds.size()) {
+        throw new IllegalArgumentException("Complete every matching row.");
+      }
+      for (String left : leftIds) {
+        Object value = pairs.get(left);
+        if (!(value instanceof String right) || !rightIds.contains(right) || !submittedRight.add(right)) {
+          throw new IllegalArgumentException("Choose a valid, unused matching option for every row.");
+        }
+      }
+    } else if ("multiple_choice".equals(type)) {
       if (!(response instanceof String selected) || selected.isBlank()) {
         throw new IllegalArgumentException("Choose an answer option.");
       }
@@ -388,6 +425,13 @@ public class RelationalStructuredLessonService {
       Object answer = row.get("selected_option");
       if (answer == null) answer = row.get("answer_text");
       if (answer == null) continue;
+      if (answer instanceof String raw) {
+        String trimmed = raw.trim();
+        if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+          try { answer = mapper.readTree(trimmed); }
+          catch (JacksonException ignored) { /* Keep a genuine free-text answer unchanged. */ }
+        }
+      }
       Object correctValue = row.get("correct");
       String status = correctValue instanceof Boolean b
           ? (b ? "correct" : "incorrect") : "pending_review";
@@ -640,7 +684,7 @@ public class RelationalStructuredLessonService {
 
   private ArrayNode questions(long lessonId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select q.id,q.question_type,q.prompt,q.explanation,q.review_status,
+      select q.id,q.question_type,q.prompt,q.explanation,q.review_status,q.answer_payload::text as answer_payload,
              coalesce(qte.prompt,q.prompt) as prompt_en,
              coalesce(qth.prompt,q.prompt) as prompt_hi,
              coalesce(qte.explanation,q.explanation,'') as explanation_en,
@@ -681,29 +725,87 @@ public class RelationalStructuredLessonService {
     ArrayNode result = mapper.createArrayNode();
     for (Map<String, Object> row : rows) {
       String rawType = text(row.get("question_type")).toUpperCase(Locale.ROOT);
+      Map<String, String> labelsEn = optionLabels(text(row.get("options_en")));
+      Map<String, String> labelsHi = optionLabels(text(row.get("options_hi")));
+      JsonNode answerPayload = readJson(text(row.get("answer_payload")));
+      JsonNode answerValue = answerPayload.path("value");
       ArrayNode options = mapper.createArrayNode();
+      ArrayNode leftItems = mapper.createArrayNode();
+      ArrayNode rightItems = mapper.createArrayNode();
+      String structuredType = "short_answer";
+      String renderingContract = "qtype-short-answer.v1";
+      String legacyInteraction = "";
+
       if ("MCQ".equals(rawType) || "TRUE_FALSE".equals(rawType)) {
-        Map<String, String> labelsEn = optionLabels(text(row.get("options_en")));
-        Map<String, String> labelsHi = optionLabels(text(row.get("options_hi")));
         for (String key : labelsEn.keySet()) {
-          String labelEn = labelsEn.get(key);
-          String labelHi = labelsHi.getOrDefault(key, labelEn);
           ObjectNode option = options.addObject();
           option.put("id", key);
-          option.set("text_by_locale", bilingual(labelEn, labelHi));
+          option.set("text_by_locale", bilingual(labelsEn.get(key), labelsHi.getOrDefault(key, labelsEn.get(key))));
+        }
+        if (options.size() >= 2) {
+          structuredType = "multiple_choice";
+          renderingContract = "qtype-multiple-choice.v1";
+        }
+      } else if ("INPUT".equals(rawType) || "NUMERICAL".equals(rawType) || "NUMERIC".equals(rawType)) {
+        structuredType = "fill_blank";
+        renderingContract = "qtype-fill-blank.v1";
+      } else if ("ORDER".equals(rawType)) {
+        Set<String> orderIds = new TreeSet<>();
+        if (answerValue.isArray()) {
+          for (JsonNode item : answerValue) if (!item.asText("").isBlank()) orderIds.add(item.asText());
+        }
+        if (orderIds.isEmpty()) orderIds.addAll(labelsEn.keySet());
+        // Expose only the item set, sorted independently from the expected sequence.
+        for (String key : orderIds) {
+          ObjectNode option = options.addObject();
+          option.put("id", key);
+          option.set("text_by_locale", bilingual(labelsEn.getOrDefault(key, key), labelsHi.getOrDefault(key, labelsEn.getOrDefault(key, key))));
+        }
+        if (options.size() >= 2) legacyInteraction = "ORDER";
+      } else if ("MATCH".equals(rawType) && answerValue.isObject()) {
+        Set<String> leftIds = new TreeSet<>();
+        Set<String> rightIds = new TreeSet<>();
+        var pairs = answerValue.properties().iterator();
+        while (pairs.hasNext()) {
+          var pair = pairs.next();
+          String left = pair.getKey();
+          String right = pair.getValue().asText("");
+          if (!left.isBlank() && !right.isBlank()) {
+            leftIds.add(left);
+            rightIds.add(right);
+          }
+        }
+        for (String key : leftIds) {
+          ObjectNode item = leftItems.addObject();
+          item.put("id", key);
+          item.set("label_by_locale", bilingual(labelsEn.getOrDefault(key, key), labelsHi.getOrDefault(key, labelsEn.getOrDefault(key, key))));
+        }
+        for (String key : rightIds) {
+          ObjectNode item = rightItems.addObject();
+          item.put("id", key);
+          item.set("label_by_locale", bilingual(labelsEn.getOrDefault(key, key), labelsHi.getOrDefault(key, labelsEn.getOrDefault(key, key))));
+        }
+        if (!leftIds.isEmpty() && !rightIds.isEmpty()) {
+          structuredType = "matching";
+          renderingContract = "qtype-matching.v1";
+          legacyInteraction = "MATCH";
         }
       }
+
       ObjectNode question = result.addObject();
       question.put("id", QUESTION_PREFIX + number(row.get("id")));
-      // A malformed option list must not cause an approved question to disappear.
-      question.put("type", options.size() >= 2 ? "multiple_choice" : "short_answer");
-      question.put("rendering_contract_id", options.size() >= 2
-          ? "qtype-multiple-choice.v1" : "qtype-short-answer.v1");
+      question.put("type", structuredType);
+      question.put("rendering_contract_id", renderingContract);
       question.put("legacy_question_type", rawType);
       question.set("legacy_question_type_by_locale", bilingual(
           legacyQuestionTypeLabel(rawType, "en"), legacyQuestionTypeLabel(rawType, "hi")));
+      if (!legacyInteraction.isBlank()) question.put("legacy_interaction_type", legacyInteraction);
       question.set("prompt_by_locale", bilingual(text(row.get("prompt_en")), text(row.get("prompt_hi"))));
       if (!options.isEmpty()) question.set("options", options);
+      if ("matching".equals(structuredType)) {
+        question.set("left_items", leftItems);
+        question.set("right_items", rightItems);
+      }
       // Deliberately omit answer_payload, correct answers, grading keys and rubric fields.
     }
     return result;
