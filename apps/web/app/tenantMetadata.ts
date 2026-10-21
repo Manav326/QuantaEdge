@@ -8,6 +8,7 @@ const NEUTRAL_DESCRIPTION = 'Your school learning space.';
 type PublicBranding = {
   institutionCode?: string;
   displayName?: string;
+  tagline?: string | null;
   logoUrl?: string | null;
   appIconUrl?: string | null;
 };
@@ -69,12 +70,10 @@ export async function learnerMetadataForTenantCookie(cookieName: string): Promis
   const displayName = brand?.displayName?.trim();
   if (!brand || !displayName) return neutralSchoolMetadata();
 
-  const icon = approvedAssetUrl(brand.appIconUrl, code, 'app-icon')
-    || approvedAssetUrl(brand.logoUrl, code, 'logo')
-    || '/favicon.svg';
+  const icon = approvedAssetUrl(brand.appIconUrl, code, 'app-icon') || '/favicon.svg';
   return {
     title: { absolute: displayName },
-    description: 'Learning and progress with ' + displayName + '.',
+    description: brand.tagline?.trim() || 'Learning and progress with ' + displayName + '.',
     applicationName: displayName,
     icons: { icon, shortcut: icon, apple: icon },
   };

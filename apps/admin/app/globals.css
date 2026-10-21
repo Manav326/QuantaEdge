@@ -1075,3 +1075,9 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
   .admin-main :where(.qe-section-head, .qe-editor-section-title, .qe-readiness-summary) { align-items: stretch; }
   .admin-main .qe-rich-toolbar button { flex: 1 1 38px; }
 }
+
+/* Canonical full-logo asset is used at wide slots; compact sidebar variants still use the square Q icon. */
+.qe-admin-brand-lockup .qe-brand__logo{max-width:230px;max-height:50px}
+.qe-admin-global-brand .qe-brand__logo{max-width:165px;max-height:36px}
+.qe-admin-login-brand-lockup .qe-brand__logo{max-width:300px;max-height:68px}
+@media(max-width:620px){.qe-admin-brand-lockup .qe-brand__logo,.qe-admin-login-brand-lockup .qe-brand__logo{max-width:220px;max-height:48px}}
