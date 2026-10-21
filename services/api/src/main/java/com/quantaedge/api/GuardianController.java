@@ -523,6 +523,7 @@ public class GuardianController {
   @GetMapping("/children/{studentId}/programs")
   @Transactional(readOnly = true)
   public List<Map<String,Object>> childPrograms(@PathVariable long studentId,
+      @RequestParam(defaultValue="true") boolean includeSubjects,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -574,9 +575,10 @@ public class GuardianController {
             order by p.display_name,p.id
             """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
                 institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
-            for(Map<String,Object> program:programs) {
-            long courseId=((Number)program.get("id")).longValue();
-            program.put("subjects",jdbc.queryForList("""
+    if(includeSubjects) {
+      for(Map<String,Object> program:programs) {
+        long courseId=((Number)program.get("id")).longValue();
+        program.put("subjects",jdbc.queryForList("""
               select s.id,s.code as subject_code,s.display_name as subject_name,
                 c.code as curriculum_class_code,count(distinct ch.id) as chapters,count(distinct l.id) as lessons
               from curriculum_program_subject ps
@@ -590,8 +592,9 @@ public class GuardianController {
               group by ps.sort_order,s.id,s.code,s.display_name,c.code,s.sort_order
               order by ps.sort_order,s.sort_order,s.id
               """,courseId));
-          }
-          } catch (DataAccessException ex) {
+      }
+    }
+    } catch (DataAccessException ex) {
       // Keep the tenant and caller context in the server log so a genuine database/schema
       // failure can be diagnosed without exposing SQL details to the browser.
       LOGGER.error("Failed to load guardian child course catalogue (guardianUserId={}, studentId={}, institutionId={})",
