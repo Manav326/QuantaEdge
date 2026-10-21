@@ -17,7 +17,7 @@ type Props = {
   onApplied: () => Promise<void> | void;
 };
 type PackFile = { path: string; blob: Blob };
-type GeneratedPack = { zip: Blob; logo: Blob; icon: Blob; name: string; tagline: string; files: string[] };
+type GeneratedPack = { zip: Blob; logo: Blob; icon: Blob; lockup: Blob; name: string; tagline: string; files: string[] };
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 const MAX_DIMENSION = 4096;
@@ -224,6 +224,84 @@ function safeStem(value: string): string {
   return stem || 'institution';
 }
 
+function xmlEscape(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function validThemeColour(value: unknown, fallback: string): string {
+  return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value) ? value.toUpperCase() : fallback;
+}
+
+function lockupLayout(name: string, tagline: string) {
+  const longest = Math.max(name.length * 32, tagline.length * 13.3);
+  const width = Math.max(720, Math.min(4400, 220 + Math.ceil(longest) + 40));
+  const nameSize = Math.min(56, Math.max(24, (width - 220) / Math.max(1, name.length * 0.58)));
+  const taglineSize = Math.min(20, Math.max(12, (width - 220) / Math.max(1, tagline.length * 0.56)));
+  return { width, height: 176, nameSize, taglineSize };
+}
+
+async function blobBase64(blob: Blob): Promise<string> {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let binary = '';
+  const chunkSize = 0x8000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(offset, Math.min(bytes.length, offset + chunkSize)));
+  }
+  return btoa(binary);
+}
+
+async function renderBrandLockup(
+  iconBitmap: ImageBitmap,
+  iconPng: Blob,
+  name: string,
+  tagline: string,
+  themeTokens: Record<string, unknown>,
+): Promise<{ png: Blob; svg: Blob }> {
+  const layout = lockupLayout(name, tagline);
+  const primary = validThemeColour(themeTokens.brandPrimary ?? themeTokens.primary, '#152038');
+  const accent = validThemeColour(themeTokens.brandAccent ?? themeTokens.accent, '#566176');
+  const iconBase64 = await blobBase64(iconPng);
+  const nameSvg = xmlEscape(name);
+  const taglineSvg = xmlEscape(tagline);
+  const svg = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<svg xmlns="http://www.w3.org/2000/svg" width="' + layout.width + '" height="' + layout.height +
+    '" viewBox="0 0 ' + layout.width + ' ' + layout.height + '" role="img" aria-labelledby="brand-title brand-tagline">' +
+    '<title id="brand-title">' + nameSvg + '</title>' +
+    (taglineSvg ? '<desc id="brand-tagline">' + taglineSvg + '</desc>' : '') +
+    '<image href="data:image/png;base64,' + iconBase64 + '" x="12" y="18" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>' +
+    '<text x="176" y="79" font-family="DM Sans, Arial, sans-serif" font-size="' + layout.nameSize +
+    '" font-weight="800" fill="' + primary + '">' + nameSvg + '</text>' +
+    (taglineSvg ? '<text x="179" y="124" font-family="DM Sans, Arial, sans-serif" font-size="' +
+      layout.taglineSize + '" font-weight="600" fill="' + accent + '">' + taglineSvg + '</text>' : '') +
+    '</svg>\n';
+
+  const canvas = document.createElement('canvas');
+  canvas.width = layout.width;
+  canvas.height = layout.height;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('The browser could not create the generated brand lockup.');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  const iconSize = 140;
+  const iconScale = Math.min(iconSize / iconBitmap.width, iconSize / iconBitmap.height);
+  const iconWidth = iconBitmap.width * iconScale;
+  const iconHeight = iconBitmap.height * iconScale;
+  context.drawImage(iconBitmap, 12 + (iconSize - iconWidth) / 2, 18 + (iconSize - iconHeight) / 2, iconWidth, iconHeight);
+  context.fillStyle = primary;
+  context.font = '800 ' + layout.nameSize + 'px "DM Sans", "Noto Sans Devanagari", Arial, sans-serif';
+  context.textBaseline = 'alphabetic';
+  context.fillText(name, 176, 79, Math.max(1, layout.width - 190));
+  if (tagline) {
+    context.fillStyle = accent;
+    context.font = '600 ' + layout.taglineSize + 'px "DM Sans", "Noto Sans Devanagari", Arial, sans-serif';
+    context.fillText(tagline, 179, 124, Math.max(1, layout.width - 193));
+  }
+  return {
+    png: await pngBlob(canvas),
+    svg: new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }),
+  };
+}
+
 function saveDownload(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
@@ -252,7 +330,7 @@ export default function InstitutionBrandTemplate({
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [pack, setPack] = useState<GeneratedPack | null>(null);
-  const [previewUrls, setPreviewUrls] = useState<{ logo: string; icon: string }>({ logo: '', icon: '' });
+  const [previewUrls, setPreviewUrls] = useState<{ logo: string; icon: string; lockup: string }>({ logo: '', icon: '', lockup: '' });
   const [generating, setGenerating] = useState(false);
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState('');
@@ -260,15 +338,17 @@ export default function InstitutionBrandTemplate({
 
   useEffect(() => {
     if (!pack) {
-      setPreviewUrls({ logo: '', icon: '' });
+      setPreviewUrls({ logo: '', icon: '', lockup: '' });
       return;
     }
     const logo = URL.createObjectURL(pack.logo);
     const icon = URL.createObjectURL(pack.icon);
-    setPreviewUrls({ logo, icon });
+    const lockup = URL.createObjectURL(pack.lockup);
+    setPreviewUrls({ logo, icon, lockup });
     return () => {
       URL.revokeObjectURL(logo);
       URL.revokeObjectURL(icon);
+      URL.revokeObjectURL(lockup);
     };
   }, [pack]);
 
@@ -296,9 +376,10 @@ export default function InstitutionBrandTemplate({
         decodeImage(iconSource, 'Icon'),
       ]);
 
-      const logo = await renderLogoLimited(logoBitmap, 1600);
-      const logo1024 = await renderLogoLimited(logoBitmap, 1024);
-      const logo512 = await renderLogoLimited(logoBitmap, 512);
+      const logo = await renderLogo(logoBitmap, 1600);
+      const logo1024 = await renderLogo(logoBitmap, 1024);
+      const logo512 = await renderLogo(logoBitmap, 512);
+      const logoForApply = await renderLogoLimited(logoBitmap, 1600);
       const icon512 = await renderSquareLimited(iconBitmap, 512, 0.12);
       const icon192 = await renderSquareLimited(iconBitmap, 192, 0.12);
       const apple180 = await renderSquareLimited(iconBitmap, 180, 0.12, '#FFFFFF');
@@ -307,10 +388,11 @@ export default function InstitutionBrandTemplate({
       const favicon32 = await renderSquareLimited(iconBitmap, 32, 0.12);
       const favicon16 = await renderSquareLimited(iconBitmap, 16, 0.12);
       const maskable512 = await renderSquareLimited(iconBitmap, 512, 0.23, '#FFFFFF');
-
+      const brandLockup = await renderBrandLockup(iconBitmap, icon512, name, cleanTagline, themeTokens);
+      const faviconBase64 = await blobBase64(favicon64);
       const faviconSvg = '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">' +
-        '<image href="./favicon-64.png" x="0" y="0" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>' +
+        '<image href="data:image/png;base64,' + faviconBase64 + '" x="0" y="0" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>' +
         '</svg>\n';
       const manifest = {
         id: './', name, short_name: name.slice(0, 32),
@@ -327,6 +409,7 @@ export default function InstitutionBrandTemplate({
         theme: { defaultAccent: '#F97316', note: 'Theme colours may be configured by the institution; source image colours are not changed.' },
         assets: {
           logo: { file: 'logo.png', sourceRatio: Number((logoBitmap.width / logoBitmap.height).toFixed(6)) },
+          generatedLockup: { png: 'brand-lockup.png', svg: 'brand-lockup.svg', source: 'square icon plus the supplied institution name/tagline' },
           icon: { file: 'icon-512.png', sourceRatio: 1 },
           favicons: ['favicon.svg', 'favicon-64.png', 'favicon-48.png', 'favicon-32.png', 'favicon-16.png'],
           webManifest: 'site.webmanifest',
@@ -337,6 +420,8 @@ export default function InstitutionBrandTemplate({
         { path: 'brand-assets/logo.png', blob: logo },
         { path: 'brand-assets/logo-1024.png', blob: logo1024 },
         { path: 'brand-assets/logo-512.png', blob: logo512 },
+        { path: 'brand-assets/brand-lockup.png', blob: brandLockup.png },
+        { path: 'brand-assets/brand-lockup.svg', blob: brandLockup.svg },
         { path: 'brand-assets/icon-512.png', blob: icon512 },
         { path: 'brand-assets/icon-192.png', blob: icon192 },
         { path: 'brand-assets/apple-touch-icon.png', blob: apple180 },
@@ -353,6 +438,7 @@ export default function InstitutionBrandTemplate({
           'Generated by the QuantaEdge HRMS Brand Template.\n\n' +
           '- logo.png: high-resolution proportional logo with safe padding.\n' +
           '- logo-1024.png and logo-512.png: responsive logo renditions.\n' +
+          '- brand-lockup.png and brand-lockup.svg: optional icon + institution name/tagline composition, coloured from the current theme settings.\n' +
           '- icon-512.png, icon-192.png and apple-touch-icon.png: square icon renditions.\n' +
           '- maskable-icon-512.png: opaque padded icon for launchers that apply a mask.\n' +
           '- favicon.svg and favicon-*.png: browser tab icons.\n' +
@@ -364,7 +450,7 @@ export default function InstitutionBrandTemplate({
         { path: 'brand-assets/source/icon-original.' + (iconSource.type === 'image/jpeg' ? 'jpg' : 'png'), blob: iconSource },
       ];
       const zip = await createZip(files);
-      setPack({ zip, logo, icon: icon512, name, tagline: cleanTagline, files: files.map(file => file.path) });
+      setPack({ zip, logo, icon: icon512, lockup: brandLockup.png, name, tagline: cleanTagline, files: files.map(file => file.path) });
       setNotice('Asset pack generated with ' + files.length + ' files. Review the previews, then download or apply this pack.');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Brand assets could not be generated.');
@@ -456,6 +542,14 @@ export default function InstitutionBrandTemplate({
           <div><strong>{displayName.trim() || 'Institution name'}</strong>{tagline.trim() ? <small>{tagline.trim()}</small> : null}</div>
         </div>
         <small>Square icon plus readable, theme-aware text; the icon is not stretched.</small>
+      </div>
+      <div className={styles.brandTemplatePreviewCard}>
+        <span>Generated icon + name + tagline lockup</span>
+        <div className={styles.brandTemplateLogoStage}>
+          {pack && previewUrls.lockup ? <img src={previewUrls.lockup} alt={pack.name + ' generated branded lockup'} />
+            : <span>Generated from the square icon, institution name and tagline.</span>}
+        </div>
+        <small>A downloadable static lockup for environments that need a single logo image; live UI text remains theme-aware.</small>
       </div>
     </div>
     {pack ? <div className={styles.brandTemplateGenerated} role="status">
