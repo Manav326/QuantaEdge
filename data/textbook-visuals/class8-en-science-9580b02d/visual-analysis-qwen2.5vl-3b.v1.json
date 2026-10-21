@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:00:15Z"
+      "checkpointed_at": "2026-10-21T11:09:40Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:01:11Z"
+      "checkpointed_at": "2026-10-21T11:10:34Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574878522",
-      "checkpointed_at": "2026-10-21T11:01:55Z"
+      "checkpointed_at": "2026-10-21T11:11:16Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33957,7 +33957,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39490257224",
+      "run_id": "39574878522",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -34424,17 +34424,16 @@
           "Incandescent lamp",
           "Electric current in household appliances"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, emphasizing the importance of safety precautions and the scientific reasoning behind it.",
         "limitations": [
-          "The page does not provide specific instructions for the experiment described, only general guidelines.",
-          "The page does not include any visual aids or diagrams to support the explanation."
+          "The page does not provide specific instructions for the activity described, only general guidelines."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39490257224",
-      "checkpointed_at": "2026-10-21T02:13:15Z"
+      "run_id": "39574878522",
+      "checkpointed_at": "2026-10-21T11:20:57Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
