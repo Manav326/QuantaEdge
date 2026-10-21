@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8c17a20bb4de23f8fd99975d4afc3a4eb3bd2cc118fcd47b9d77f54a33969330",
+  "raw_analysis_sha256": "cc0f1f779fd7f7c4d277990ec189d467523d026ea233784c6eddb30681f6e915",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:37:01Z",
+      "checkpointed_at": "2026-10-21T19:39:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:37:25Z",
+      "checkpointed_at": "2026-10-21T19:39:34Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -122863,6 +122863,180 @@
         "limitations": [
           "unclear"
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e4f43d1dd6092a1ea4b6a276",
+      "asset_sha256": "943442799f43947892906559e4f3522b83562f9a8c5dc5fb11c30d6e6ab9fc68",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "page-0065.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a suspension bridge and a diver, with text explaining the use of steel ropes in construction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects.",
+          "Suspension bridge",
+          "I use the difference in",
+          "sound when my stick",
+          "hits wood or metal to",
+          "help find my way."
+        ],
+        "concepts": [
+          "steel ropes",
+          "suspension bridges",
+          "cranes",
+          "ductility",
+          "non-metal",
+          "metal",
+          "iron",
+          "carbon",
+          "sound",
+          "metal spoon",
+          "metal plate",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonority"
+        ],
+        "context_relation": "The image explains the use of steel ropes in construction, specifically in suspension bridges and cranes, and contrasts their properties with coal and sulfur.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur, nor does it show the actual construction of a suspension bridge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:41:15Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a suspension bridge and a diver, with text explaining the use of steel ropes in construction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects.",
+          "Suspension bridge",
+          "I use the difference in",
+          "sound when my stick",
+          "hits wood or metal to",
+          "help find my way."
+        ],
+        "concepts": [
+          "steel ropes",
+          "suspension bridges",
+          "cranes",
+          "ductility",
+          "non-metal",
+          "metal",
+          "iron",
+          "carbon",
+          "sound",
+          "metal spoon",
+          "metal plate",
+          "metal coin",
+          "coal",
+          "wood",
+          "sonority"
+        ],
+        "context_relation": "The image explains the use of steel ropes in construction, specifically in suspension bridges and cranes, and contrasts their properties with coal and sulfur.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur, nor does it show the actual construction of a suspension bridge."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b691a87a65cba85c8184393",
+      "asset_sha256": "3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue, stylized illustration of a person with a circular object in front of them, possibly representing a microphone or a similar device.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of sonority in metals, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the sonority of metals or the properties of the objects in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:41:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized illustration of a person with a circular object in front of them, possibly representing a microphone or a similar device.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of sonority in metals, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the sonority of metals or the properties of the objects in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8a7da463845fbc9ae51baba4",
+      "asset_sha256": "04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:42:29Z",
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
