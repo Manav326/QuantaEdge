@@ -32,6 +32,8 @@ const studentMarketplacePage = read('../app/student/marketplace/page.tsx');
 const parentMarketplacePage = read('../app/parent/courses/page.tsx');
 const marketplaceCourseCard = read('../app/components/MarketplaceCourseCard.tsx');
 const marketplaceCourseCardCss = read('../app/components/MarketplaceCourseCard.module.css');
+const marketplaceI18n = read('../app/components/marketplaceI18n.ts');
+const marketplaceTimestamp = read('../app/components/formatUserTimestamp.ts');
 const guardianCourseProgramsApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
 const diagnosticApi = read('../../../services/api/src/main/java/com/quantaedge/api/DiagnosticController.java');
 const courseOrderFinancialService = read('../../../services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java');
@@ -921,4 +923,15 @@ assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
   studentMarketplacePage.includes('useLocale()') &&
   studentMarketplacePage.includes("tx('Buy with Razorpay'"),
   'The initial diagnostic baseline must be exposed separately and used in course-specific recommendations; marketplace labels must follow the selected language.');
+assert.ok(studentMarketplacePage.includes('lang={language}') &&
+  parentMarketplacePage.includes('lang={language}') &&
+  studentMarketplacePage.includes("new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN'") &&
+  parentMarketplacePage.includes("new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN'") &&
+  marketplaceTimestamp.includes("language === 'hi' ? 'hi-IN' : 'en-IN'") &&
+  marketplaceI18n.includes('legal seller') &&
+  marketplaceI18n.includes('previous payment attempt is still being reconciled') &&
+  marketplaceI18n.includes('fallbackEnglish.trim().toLowerCase()') &&
+  marketplaceCourseCardCss.includes('data-qe-appearance="dark"') &&
+  marketplaceCourseCardCss.includes('data-qe-appearance="light"'),
+  'Marketplace routes, shared card, timestamps, currency and high-risk checkout errors must be language- and appearance-aware.');
 
