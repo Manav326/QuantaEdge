@@ -129,7 +129,8 @@ public class LearningMetricsService {
       """.replace("__TRACK_JOIN__",curriculumTrackJoin)
          .replace("__COURSE_PROGRESS_SCOPE__",courseProgressScope)
          .replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
-         .replace("__SUBJECT_SCOPE__",subjectScope);
+         .replace("__SUBJECT_SCOPE__",subjectScope)
+         .replace("__SELECTED_SUBJECT__",selectedSubjectScope);
     result.put("curriculum",jdbc.queryForList(tenantSql(curriculumSql,institutionId),tenantArgs(institutionId,subjectScopedArgs(selectedSubjectCode,curriculumArgs))));
 
     Object[] masteryArgs = programId == null
