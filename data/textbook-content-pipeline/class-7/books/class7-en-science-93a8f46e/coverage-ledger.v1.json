@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2135,
-    "successful_visual_analyses": 2034,
-    "missing_visual_analyses": 5353,
+    "raw_analysis_result_rows": 2138,
+    "successful_visual_analyses": 2037,
+    "missing_visual_analyses": 5350,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5454,
+    "unresolved_count": 5451,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -87799,9 +87799,32 @@
       "asset_path": "assets/60e9918ef1329175a07c41ddb092de4ebe1fd540b5e456324bae69d1a1410862.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a scroll holder on the right side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The text discusses the properties and uses of steel wires compared to coal and sulfur.",
+        "limitations": [
+          "The image does not provide any numerical data or specific examples.",
+          "The text is a general discussion and does not include specific examples or measurements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -87817,9 +87840,30 @@
       "asset_path": "assets/832a669fc71894ac13799f2978925b296e120ce2fa6797137ea163cc7d335c69.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the composition of steel ropes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel ropes",
+          "Ropes made of steel",
+          "Mixture of metal (iron) and non-metal (carbon)",
+          "Support heavy loads",
+          "Used in suspension bridges and cranes",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel in construction"
+        ],
+        "context_relation": "The text discusses the composition and properties of steel ropes, emphasizing their strength and applications.",
+        "limitations": [
+          "The image does not show the actual composition of steel ropes.",
+          "The text does not provide specific details about the exact composition of steel ropes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -87835,9 +87879,32 @@
       "asset_path": "assets/948bace3a677a2cbf8ef7999ee44ca77fbd99591bbb6ec9cf8dee8105250ab53.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue horizontal line across a white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The text discusses the properties of coal and sulfur compared to steel, highlighting their non-ductile nature and the applications of steel ropes.",
+        "limitations": [
+          "The image does not provide any visual representation of the concepts discussed in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
