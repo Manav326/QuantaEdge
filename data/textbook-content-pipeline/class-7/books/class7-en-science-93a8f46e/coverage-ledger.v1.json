@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2147,
-    "successful_visual_analyses": 2046,
-    "missing_visual_analyses": 5341,
+    "raw_analysis_result_rows": 2150,
+    "successful_visual_analyses": 2049,
+    "missing_visual_analyses": 5338,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5442,
+    "unresolved_count": 5439,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -88292,9 +88292,31 @@
       "asset_path": "assets/5ac19344e71fd266bdb5334ccbbb2301b1bc2af4c04e03980907f02b1cd04111.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously not!",
+          "We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture of metal (iron) and non-metal (carbon)] wires can support heavy loads?",
+          "Therefore, they are used in suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of materials"
+        ],
+        "context_relation": "The page discusses the properties of different materials, comparing coal and sulfur to steel in terms of their ductility.",
+        "limitations": [
+          "The page does not provide specific examples or measurements of the ductility of coal and sulfur."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88310,9 +88332,33 @@
       "asset_path": "assets/d0d6bd56e73187d1b24ae203642ff6ca6b97f75e55e22189dc981c6114328841.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the properties of coal and sulfur compared to steel.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "iron",
+          "carbon",
+          "suspension bridges",
+          "cranes"
+        ],
+        "context_relation": "The text compares the properties of coal and sulfur to steel, highlighting the difference in ductility and the applications of steel in construction.",
+        "limitations": [
+          "The text does not provide specific details about the properties of coal and sulfur, nor does it discuss the exact composition of steel.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88328,9 +88374,26 @@
       "asset_path": "assets/5aa069a1f432d16367d59ceafad4c5cc92015eaeecf6e1d3f1de7f8a8953f11a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the composition of steel, highlighting iron and carbon as the main components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel",
+          "Iron",
+          "Carbon"
+        ],
+        "concepts": [
+          "Composition of Steel",
+          "Ductility",
+          "Applications of Steel"
+        ],
+        "context_relation": "The text discusses the properties and uses of steel, emphasizing its composition and applications.",
+        "limitations": [
+          "The diagram does not show the exact percentages of iron and carbon in steel."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
