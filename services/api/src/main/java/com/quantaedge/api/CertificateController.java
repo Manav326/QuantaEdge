@@ -63,14 +63,21 @@ public class CertificateController {
   private final SecureRandom secureRandom = new SecureRandom();
 
   public record IssueRequest(String achievementType, String subjectCode, Long assessmentAttemptId,
-      String templateId, String language, Long courseId, String institutionCode) {
+      String templateId, String language, String courseId, String institutionCode) {
     public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
         String templateId,String language) {
-      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,null,null);
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,(String)null,null);
     }
+    /** Numeric callers remain compatible while Web can send the stable public course ID. */
     public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
         String templateId,String language,Long courseId) {
-      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,courseId,null);
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,
+          courseId==null?null:String.valueOf(courseId),null);
+    }
+    public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
+        String templateId,String language,Long courseId,String institutionCode) {
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,
+          courseId==null?null:String.valueOf(courseId),institutionCode);
     }
   }
 
@@ -91,13 +98,13 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates")
   public Map<String, Object> myCertificates(
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    requireCourseId(courseId);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
@@ -111,14 +118,14 @@ public class CertificateController {
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
   @GetMapping("/students/me/certificates/{certificateId}")
   public Map<String, Object> myCertificate(@PathVariable long certificateId,
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     if (certificateId < 1) throw new IllegalArgumentException("Choose a valid certificate.");
-    requireCourseId(courseId);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     Map<String,Object> certificate=publicCertificateById(certificateId,context.studentId(),institutionId);
     if(number(certificate.get("course_id"))!=courseId)
@@ -129,13 +136,13 @@ public class CertificateController {
   /** Subjects mapped to the selected enrolled course and eligible for course completion certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    requireCourseId(courseId);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT 'COURSE:' || p.id::text || ':' || s.code AS track_key,
@@ -257,13 +264,13 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    requireCourseId(courseId);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
@@ -328,13 +335,13 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/assessment-eligibility")
   public Map<String, Object> assessmentCertificateEligibility(
       @RequestParam String attemptIds,
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    requireCourseId(courseId);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
 
     Set<Long> uniqueIds = new LinkedHashSet<>();
@@ -464,10 +471,7 @@ public class CertificateController {
     if (studentRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Active student profile not found.");
     Map<String, Object> student = studentRows.get(0);
 
-    Long courseId=request.courseId();
-    if(courseId==null || courseId<1) {
-      throw new IllegalArgumentException("Select an enrolled course before issuing a certificate.");
-    }
+    long courseId=resolveStudentCourseId(request.courseId());
     requireActiveCourseEnrollment(studentId,courseId,institutionId);
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
@@ -852,23 +856,29 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    return studentCertificateArtifact(certificateId,courseId,format,context,false,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    context=authorization.requireStudent(context);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
+    return studentCertificateArtifact(certificateId,courseId,format,context,false,institutionId);
   }
 
   @GetMapping("/students/me/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
-      @RequestParam Long courseId,
+      @RequestParam String suppliedCourseId,
       @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    return studentCertificateArtifact(certificateId,courseId,format,context,true,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    context=authorization.requireStudent(context);
+    long courseId=resolveStudentCourseId(suppliedCourseId);
+    return studentCertificateArtifact(certificateId,courseId,format,context,true,institutionId);
   }
 
   private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId,Long courseId,String format,
@@ -1461,6 +1471,36 @@ public class CertificateController {
     String code = subjectCode == null ? "" : subjectCode.trim();
     String name = clean(storedName);
     return name.isBlank() ? code : name;
+  }
+
+  /**
+   * Web-facing certificate routes accept the stable public course ID. Numeric IDs remain
+   * supported for old links and installed clients, but SQL and authorization always use
+   * the internal course row ID after this boundary.
+   */
+  private long resolveStudentCourseId(String suppliedCourseId) {
+    String value=clean(suppliedCourseId);
+    if(value.isBlank()) throw new IllegalArgumentException("Select an enrolled course before accessing certificates.");
+    long courseId;
+    if(value.matches("[0-9]+")) {
+      try {
+        courseId=Long.parseLong(value);
+      } catch(NumberFormatException ex) {
+        throw new IllegalArgumentException("Choose a valid course.");
+      }
+    } else {
+      if(!value.matches("(?i)[A-Z]{3}[A-Z0-9]{5}"))
+        throw new IllegalArgumentException("Choose a valid course ID.");
+      List<Map<String,Object>> matches=jdbc.queryForList("""
+        SELECT id FROM curriculum_program
+        WHERE upper(public_id)=upper(?) AND status='ACTIVE' AND code<>'GENERAL'
+        """,value);
+      if(matches.size()!=1)
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The selected course could not be found.");
+      courseId=number(matches.getFirst().get("id"));
+    }
+    requireCourseId(courseId);
+    return courseId;
   }
 
   private void requireCourseId(Long courseId) {
