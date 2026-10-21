@@ -935,7 +935,7 @@ assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
   recommendationApi.includes('diagnostic_result.percent') &&
   recommendationApi.includes('PROGRESS_DIAGNOSTIC_MASTERY_AND_RELEASED_ASSESSMENTS') &&
   studentMarketplacePage.includes('useLocale()') &&
-  studentMarketplacePage.includes("tx('Buy with Razorpay'"),
+  studentMarketplacePage.includes("tx('Buy course'"),
   'The initial diagnostic baseline must be exposed separately and used in course-specific recommendations; marketplace labels must follow the selected language.');
 assert.ok(studentMarketplacePage.includes('lang={language}') &&
   parentMarketplacePage.includes('lang={language}') &&
