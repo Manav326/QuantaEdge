@@ -61,7 +61,7 @@ export default function ParentPage(){
       if(!child){setSelected(null);setChildCertificates([]);setChildCourses([]);setSelectedChildId(null);return;}
       setSelectedChildId(child.id);
 
-      const coursesResponse=await apiFetch(`/api/v1/guardians/children/${child.id}/programs`,{cache:'no-store'});
+      const coursesResponse=await apiFetch(`/api/v1/guardians/children/${child.id}/programs?includeSubjects=false`,{cache:'no-store'});
       const coursesBody=await readApi(coursesResponse);
       if(!coursesResponse.ok)throw new Error(coursesBody.message||`Unable to load this child's courses (HTTP ${coursesResponse.status}).`);
       const enrolled:ChildCourseRow[]=(Array.isArray(coursesBody)?coursesBody:[]).filter((course:ChildCourseRow)=>
