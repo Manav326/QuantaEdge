@@ -320,7 +320,8 @@ const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
 assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
-  coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+  coursesPage.includes("String(course.public_id || id)") &&
+  coursesPage.includes("!active && (") && coursesPage.includes('Focus on this course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
 const certificateCourseBackfill = read('../../../services/api/src/main/resources/db/migration/V161__backfill_legacy_certificate_course_identity.sql');
 assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   certificateCourseBackfill.includes("program.code = 'CLASS_' || source_class.code") &&
@@ -353,6 +354,9 @@ assert.ok(courseScope.includes("String(course.public_id || '').toUpperCase() ===
   structuredLessonsApi.includes('private long resolveCourseId(String suppliedCourseId)') &&
   structuredLessonsApi.includes('value.matches("[A-Z]{3}[A-Z0-9]{5}")'),
   'Web structured learning must route by 8-character public course IDs and resolve them server-side to the internal row ID.');
+assert.ok(androidAllCourses.includes('if (!active)') &&
+  androidAllCourses.includes('Focus on this course'),
+  'An already-focused Android course must not add a new Open course action; other courses keep the original focus action.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
