@@ -682,15 +682,22 @@ public class CourseMarketplaceController {
           throw new IllegalStateException(
               "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
         }
-        // Keep the local order and its discount reservation alive while Razorpay still permits
-        // another payment attempt against that provider order. Expiring locally here would
-        // release a limited coupon slot even though an old checkout could still be paid.
-        String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
-        if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
-          throw new IllegalStateException(
-              "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
+        if (!hasLockedFinancialSnapshots(prior)) {
+          // An order created before the locked financial snapshot contract must never be reused.
+          // It is safe to retire only after Razorpay has confirmed that the order is unpaid and retryable.
+          jdbc.update("""
+            update course_payment_order
+            set status='EXPIRED',failure_code='MISSING_FINANCIAL_SNAPSHOT',updated_at=now()
+            where id=? and institution_id=? and status='PENDING'
+            """, prior.get("id"), institutionId);
+        } else {
+          String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
+          if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
+            throw new IllegalStateException(
+                "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
+          }
+          return checkoutResponse(prior,courseId,title,institutionDisplayName);
         }
-        return checkoutResponse(prior,courseId,title,institutionDisplayName);
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -737,7 +744,19 @@ public class CourseMarketplaceController {
     } catch (DuplicateKeyException conflict) {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
-        return checkoutResponse(racedOrders.getFirst(), courseId, title, institutionDisplayName);
+        Map<String,Object> racedOrder = racedOrders.getFirst();
+        if (hasLockedFinancialSnapshots(racedOrder)) {
+          return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
+        }
+        // Let the next attempt reconcile/expire this legacy order after checking the provider.
+        // Never hand an order with incomplete financial facts back to checkout.
+        String providerState = inspectProviderOrderForNewAttempt(racedOrder);
+        if ("PAID".equals(providerState)) {
+          throw new IllegalStateException(
+              "The existing order may already be paid but has no locked tax/share snapshot. Retry verification for this same order; do not pay again.", conflict);
+        }
+        throw new IllegalStateException(
+            "An older order has no locked tax/share snapshot and cannot be reused. Retry checkout once the existing order is confirmed unpaid; do not pay again while verification is pending.", conflict);
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
@@ -845,7 +864,10 @@ public class CourseMarketplaceController {
 
   private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
     return jdbc.queryForList("""
-        select id,offer_price_paise,currency,provider_order_id,status,discount_reference
+        select id,offer_price_paise,currency,provider_order_id,status,discount_reference,
+          tax_profile_id,revenue_share_policy_id,
+          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where student_id=? and institution_id=? and course_id=?
           and purchaser_user_id is not distinct from ?
