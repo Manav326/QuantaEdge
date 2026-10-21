@@ -318,8 +318,16 @@ const coursesPage = read('../app/student/courses/page.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
-assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
+assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
   coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open structured course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
+assert.ok(learnClient.includes("import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';") &&
+  learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
+  learnClient.includes('initialActivityResponses={structuredActivityResponses}') &&
+  !learnClient.includes('if(lesson.structured_lesson) return') &&
+  structuredLessonContent.includes('showHeader = true'),
+  'Optional structured inserts must preserve the original lesson screen and practice journey.');
+
 assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
   courseScope.includes('This course is not enrolled in your current institution account.') &&
   courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
@@ -597,7 +605,7 @@ assert.ok(studentClassesClient.includes('StudentEmptyState icon="classes"') &&
   studentClassesClient.includes("retryLabel={translateUi(locale, 'legacy.web.refresh.e9337860')}"),
   'Empty live and recorded classes must use the shared card and offer a retry.');
 assert.ok(testsClient.includes('StudentEmptyState icon="tests"') &&
-  testsClient.includes('primaryActionHref="/student/structured-lessons"'),
+  testsClient.includes('primaryActionHref="/student/learn"'),
   'Empty tests must offer a route into lessons, and test results must offer a refresh action.');
 assert.ok(studentBooksClient.includes('StudentEmptyState icon="book"') &&
   studentBooksClient.includes("primaryActionLabel={translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}"),

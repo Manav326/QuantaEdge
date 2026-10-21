@@ -135,7 +135,7 @@ public class LearningStateService {
       jdbc.update("""
         insert into student_question_attempt(
           student_id,institution_id,course_id,question_id,selected_option,answer_text,correct,answered_at,practice_session_id,activity_kind
-        ) values(?,?,?,?,?,?,?,?,now(),?,?)
+        ) values(?,?,?,?,?,?,?,now(),?,?)
         """,studentId,institutionId,courseId,questionId,selected,answer,correct,practiceSessionId,source);
     }
 

@@ -7,7 +7,7 @@ import { isStudentRenderableAsset, readLocale } from './contract';
 import StructuredImageLightbox from './StructuredImageLightbox';
 
 type Mode = 'student' | 'admin-preview';
-type Props = { lesson: StructuredLesson; locale: LessonLocale; mode?: Mode; onActivitySave?: (blockId: string, value: string) => void | Promise<void>; initialActivityResponses?: Record<string, Record<string, string>> };
+type Props = { lesson: StructuredLesson; locale: LessonLocale; mode?: Mode; showHeader?: boolean; onActivitySave?: (blockId: string, value: string) => void | Promise<void>; initialActivityResponses?: Record<string, Record<string, string>> };
 
 function localized(value: unknown, locale: LessonLocale, fallback = ''): string {
   return readLocale(value, locale) || fallback;
@@ -114,12 +114,12 @@ function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { bloc
   </section>;
 }
 
-export default function StructuredLessonContent({ lesson, locale, mode = 'student', onActivitySave, initialActivityResponses }: Props) {
+export default function StructuredLessonContent({ lesson, locale, mode = 'student', showHeader = true, onActivitySave, initialActivityResponses }: Props) {
   const uiT = useUiTranslation();
   const [showBlocked, setShowBlocked] = useState(false);
   const blocks = lesson.explain.blocks.slice().sort((a, b) => a.order - b.order);
   return <section className="qe-structured-lesson" aria-label={localized(lesson.topic.title_by_locale, locale, 'Lesson')}>
-    <header className="qe-structured-lesson__header">
+    {showHeader && <header className="qe-structured-lesson__header">
       <p className="qe-structured-eyebrow">{uiT('structured.ui.class')} {String((lesson.curriculum as any)?.class ?? 6)} · {localized((lesson.curriculum as any)?.subject_by_locale || (lesson.curriculum as any)?.subject, locale, locale === 'hi' ? 'विज्ञान' : 'Science')}</p>
       <h1>{localized(lesson.chapter.title_by_locale, locale)}</h1>
       <h2>{localized(lesson.topic.title_by_locale, locale)}</h2>
@@ -127,7 +127,7 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
         <h3>{uiT('structured.ui.whatLearn')}</h3>
         <ul>{lesson.learning_objectives.map(item => <li key={item.id}>{localized(item.statement_by_locale, locale)}</li>)}</ul>
       </div> : null}
-    </header>
+    </header>}
     <div className="qe-structured-blocks">
       {blocks.map(block => {
         const text = block.text_by_locale?.[locale];

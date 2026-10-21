@@ -124,7 +124,7 @@ export default function StudentCoursesPage() {
       }
       setActiveCourseId(courseId);
       try { window.localStorage.setItem('qe:student:activeCourseId', String(courseId)); } catch { /* storage is optional */ }
-      if (navigate) router.push('/student/structured-lessons?courseId=' + encodeURIComponent(String(selected.public_id || courseId)));
+      if (navigate) router.push('/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId)));
     } catch (e: any) {
       setError(e?.message || 'The selected course could not be opened.');
     } finally {
@@ -190,7 +190,7 @@ export default function StudentCoursesPage() {
                   <div className={styles.subjectHeading}>Subjects</div>
                   {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
                     (course.subjects || []).map(subject => (
-                      <Link key={subject.subject_code} href={'/student/structured-lessons?courseId=' + encodeURIComponent(String(course.public_id || id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
+                      <Link key={subject.subject_code} href={'/student/learn?courseId=' + encodeURIComponent(String(course.public_id || id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
                         <span><strong>{subject.subject_name || subject.subject_code}</strong><small>{Number(subject.chapters || 0)} chapters · {Number(subject.lessons || 0)} lessons</small></span>
                         <span aria-hidden="true">→</span>
                       </Link>

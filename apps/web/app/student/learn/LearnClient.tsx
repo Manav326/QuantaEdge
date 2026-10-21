@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
-import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';
+import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';
 import type { StructuredLesson } from '../structured-lessons/contract';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
@@ -282,6 +282,7 @@ export default function LearnClient() {
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
   const [mcqAttempted,setMcqAttempted]=useState<Record<number,boolean>>({});
+  const [structuredActivityResponses,setStructuredActivityResponses]=useState<Record<string,Record<string,string>>>({});
   const router=useRouter();
   const searchParams=useSearchParams();
   const courseIdValue=searchParams.get('courseId')||searchParams.get('programCode')||'';
@@ -343,6 +344,43 @@ export default function LearnClient() {
     return Array.from(grouped.values());
   },[trackBrowse,studentDocuments,locale,learningLanguage]);
 
+  async function loadStructuredActivityResponses(detail: Detail): Promise<Record<string,Record<string,string>>> {
+    const artifactId = String(detail.structured_lesson?.artifact_id || (detail.structured_lesson as any)?.artifactId || '').trim();
+    if (!artifactId || selectedCourseId === null) return {};
+    try {
+      const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+        '/responses?courseId=' + encodeURIComponent(selectedCourseKey) + '&language=' + learningLanguage, { cache: 'no-store' });
+      if (!response.ok) return {};
+      const body = await response.json();
+      return body && body.activities && typeof body.activities === 'object'
+        ? body.activities as Record<string,Record<string,string>> : {};
+    } catch {
+      // Structured inserts are optional; an unavailable optional progress endpoint must not block the original lesson.
+      return {};
+    }
+  }
+
+  async function saveStructuredActivityResponse(blockId: string, value: string): Promise<void> {
+    const artifactId = String(lesson?.structured_lesson?.artifact_id || (lesson?.structured_lesson as any)?.artifactId || '').trim();
+    if (!artifactId || selectedCourseId === null) {
+      throw new Error(translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
+    }
+    const response = await fetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
+      '/activities/' + encodeURIComponent(blockId) + '/responses?courseId=' + encodeURIComponent(selectedCourseKey), {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ response: value }),
+      });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.detail || body.message || body.error ||
+      translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
+    let parsed: Record<string,string> = {};
+    try {
+      const candidate = JSON.parse(value);
+      if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) parsed = candidate;
+    } catch { /* response validation is authoritative on the API */ }
+    setStructuredActivityResponses(previous => ({ ...previous, [blockId]: parsed }));
+  }
+
   async function loadLesson(id:number) {
     try {
       const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+courseStartQuery,{method:'POST'});
@@ -351,6 +389,7 @@ export default function LearnClient() {
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
+      setStructuredActivityResponses(await loadStructuredActivityResponses(detail));
       setLesson(detail);
       localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
       setMcqAttempted(Object.fromEntries(detail.questions
@@ -408,6 +447,7 @@ export default function LearnClient() {
         const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
+        const savedStructuredActivities=await loadStructuredActivityResponses(d);
         const list=await fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start'+courseStartQuery,{method:'POST'});
@@ -415,7 +455,7 @@ export default function LearnClient() {
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
           localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+d.class_code+':'+d.subject_code,String(d.id));
-          setStudentDocuments([]);setTrackBrowse(null);setLesson(d);
+          setStudentDocuments([]);setTrackBrowse(null);setStructuredActivityResponses(savedStructuredActivities);setLesson(d);
           setMcqAttempted(Object.fromEntries(d.questions
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
             .map(question=>[question.id,true])));
@@ -690,26 +730,6 @@ export default function LearnClient() {
   </main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><UiText message="legacy.web.loading.lesson.7b69e4b9" /></div></section></main>;
 
-  // Additive adapter: current database lessons continue through the legacy path below.
-  // The API may embed a server-sanitized, explicitly published structured artifact when that delivery path is enabled.
-  if(lesson.structured_lesson) return <main className="lesson-page qe-structured-student-page">
-    <section className="lesson-wrap">
-      <div className="lesson-meta">
-        <span className="eyebrow">{translateUi(locale, 'legacy.web.structured.lesson.17db6801')} · {lesson.chapter_name}</span>
-        <span>{lesson.class_code} · {lesson.subject_name}</span>
-      </div>
-      <StructuredLessonExperience lesson={lesson.structured_lesson} locale={learningLanguage} mode="student" />
-      <div className="lesson-next">
-        <button type="button" className="button button-dark button-small" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}>
-          <UiText message="legacy.web.open.ai.tutor.5bd7c753" />
-        </button>
-        <Link href="/student" className="button button-dark button-small"><UiText message="legacy.web.student.home.15fbe96d" /></Link>
-      </div>
-      <TutorDock lessonId={lesson.id} courseId={selectedCourseId!} open={tutorOpen}
-        onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
-    </section>
-  </main>;
-
   return <main className="lesson-page">
     <section className="lesson-wrap"
       onTouchStart={event=>{
@@ -741,6 +761,14 @@ export default function LearnClient() {
       <div className="feedback"><span><UiText message="legacy.web.learning.path.43212585" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
+      {lesson.structured_lesson && <StructuredLessonContent
+        lesson={lesson.structured_lesson}
+        locale={learningLanguage}
+        mode="student"
+        showHeader={false}
+        initialActivityResponses={structuredActivityResponses}
+        onActivitySave={saveStructuredActivityResponse}
+      />}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <UiText message="legacy.web.help.0201f8c2" /></b><span><UiText message="legacy.web.explain.the.concept.in.your.own.words..8ad26ef4" /></span></div>}
 
       <div className="content-heading"><h2><UiText message="legacy.web.check.your.understanding.with.mcqs.858bdd53" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <UiText message="legacy.web.attempted.b3b638cd" /></span></div>
