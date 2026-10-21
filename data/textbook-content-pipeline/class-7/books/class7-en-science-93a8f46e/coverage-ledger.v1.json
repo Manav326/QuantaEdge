@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2216,
-    "successful_visual_analyses": 2114,
-    "missing_visual_analyses": 5272,
+    "raw_analysis_result_rows": 2219,
+    "successful_visual_analyses": 2117,
+    "missing_visual_analyses": 5269,
     "failed_visual_analyses": 102,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5374,
+    "unresolved_count": 5371,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -90575,9 +90575,28 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90593,9 +90612,27 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for handling iron nails, including a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Safety precautions",
+          "Removing brown deposits from iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -90611,9 +90648,25 @@
       "asset_path": "assets/04a9ff19250788913520425230622fd27ed458de9b337cb03223594662efbfc0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with text about handling iron nails and a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Caution— Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Removing brown deposits",
+          "Scrubbing"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific equations or formulas are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

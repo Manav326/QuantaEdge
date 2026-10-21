@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "31ef3b8abfea1c12839c270ad05ddcfec479864df5009e27a4079e91a44c322f",
+  "raw_analysis_sha256": "68d70dcea5a599482a57ba34f1d3fe4a4c2788a16c4aebb76a80001ddcd73c70",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:40:48Z",
+      "checkpointed_at": "2026-10-21T20:43:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:41:10Z",
+      "checkpointed_at": "2026-10-21T20:44:05Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -126110,6 +126110,178 @@
         "context_relation": "The dashed circle represents a boundary or a limit.",
         "limitations": [
           "The image does not provide specific details about the context or the equation it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21c3075cb9ea42dfa1a2fb88",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:44:16Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an experiment involving iron nails.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Experiment",
+          "Iron nails",
+          "Safety precautions",
+          "Cleaning iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "88ff7954337745a40c497d74",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for handling iron nails, including a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Safety precautions",
+          "Removing brown deposits from iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:44:25Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for handling iron nails, including a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "49",
+          "Activity 4.5: Let us experiment",
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Safety precautions",
+          "Removing brown deposits from iron nails"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f25de5433cf8cd71fe6083b5",
+      "asset_sha256": "04a9ff19250788913520425230622fd27ed458de9b337cb03223594662efbfc0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/04a9ff19250788913520425230622fd27ed458de9b337cb03223594662efbfc0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text about handling iron nails and a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Caution— Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Removing brown deposits",
+          "Scrubbing"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific equations or formulas are present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:45:06Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with text about handling iron nails and a caution note.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Caution— Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron nails, make sure to remove brown deposits from their surface by scrubbing them."
+        ],
+        "concepts": [
+          "Handling iron nails",
+          "Removing brown deposits",
+          "Scrubbing"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific equations or formulas are present."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
