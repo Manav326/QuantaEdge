@@ -41,6 +41,7 @@ export default function ParentChildrenPage(){
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
   const [childPrograms,setChildPrograms]=useState<Record<number,any[]>>({});
+  const [busyCourse,setBusyCourse]=useState<string>('');
   const [profileDrafts,setProfileDrafts]=useState<Record<number,ChildProfileDraft>>({});
   const [credentialDrafts,setCredentialDrafts]=useState<Record<number,CredentialDraft>>({});
   const [archivedChildren,setArchivedChildren]=useState<Child[]>([]);
@@ -148,6 +149,21 @@ export default function ParentChildrenPage(){
     }catch(e:any){setError(e.message||t('parent.children.saveCredentialsFailed'));}
   }
 
+  async function assignCourse(child:Child,course:any){
+    const key=child.id+':'+course.id;
+    setError('');setNotice('');setBusyCourse(key);
+    try{
+      const response=await apiFetch('/api/v1/guardians/children/'+child.id+'/programs/'+course.id+'/enroll',{
+        method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
+      });
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.message||t('parent.children.assignCourseFailed'));
+      await load();
+      setNotice(t('parent.children.courseAssigned',{ course: course.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.assignCourseFailed'));}
+    finally{setBusyCourse('');}
+  }
+
   async function restoreChild(child:Child){
     if(!window.confirm(t('parent.children.restoreConfirm')))return;
     setError('');setNotice('');
@@ -239,6 +255,34 @@ export default function ParentChildrenPage(){
                       : <UiText message="legacy.web.assigned.f5b576f5" />}</span>
                   </div>
                 ))}</div>}
+              {((childPrograms[child.id]||[]).some((course:any)=>
+                !(course.enrolled===true||course.is_enrolled===true||course.paused===true) && course.free_offer===true)
+                || (childPrograms[child.id]||[]).some((course:any)=>
+                  !(course.enrolled===true||course.is_enrolled===true||course.paused===true) && course.free_offer!==true))&&
+                <details className="parent-course-assignments">
+                  <summary>{locale==='english'?'Add another course':'एक और कोर्स जोड़ें'}</summary>
+                  <div className="parent-course-options">
+                    {(childPrograms[child.id]||[])
+                      .filter((course:any)=>!(course.enrolled===true||course.is_enrolled===true||course.paused===true) && course.free_offer===true)
+                      .map((course:any)=>(
+                        <div className="parent-course-option" key={'available-'+course.id}>
+                          <div><strong>{course.display_name}</strong><small>{course.public_id||course.code} · {course.curriculum_version}</small></div>
+                          <button type="button" className="button button-light button-small"
+                            disabled={busyCourse!==''}
+                            onClick={()=>void assignCourse(child,course)}>
+                            {busyCourse===child.id+':'+course.id
+                              ? <UiText message="legacy.web.assigning.f0834a8f" />
+                              : <UiText message="legacy.web.assign.course.c9842149" />}
+                          </button>
+                        </div>
+                      ))}
+                    {(childPrograms[child.id]||[]).some((course:any)=>
+                      !(course.enrolled===true||course.is_enrolled===true||course.paused===true) && course.free_offer!==true) &&
+                      <Link href="/parent/courses" className="button button-light button-small">
+                        {locale==='english'?'Paid courses in Family Marketplace':'Family Marketplace में सशुल्क कोर्स'}
+                      </Link>}
+                  </div>
+                </details>}
             </div>
           </article>)}
         </div>}
