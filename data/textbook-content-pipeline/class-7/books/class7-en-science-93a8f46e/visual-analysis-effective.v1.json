@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "afbeda6ecd983d0a78f4ac3e435e1c1bb10445441916ffedb3b85d9488c09017",
+  "raw_analysis_sha256": "73a2636c0a6f21ef2d1b17c6865bc96023d58866f7985496791ef1876283f36d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:09:46Z",
+      "checkpointed_at": "2026-10-21T19:13:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:10:09Z",
+      "checkpointed_at": "2026-10-21T19:13:31Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -121304,6 +121304,200 @@
         "context_relation": "The image illustrates the use of steel ropes in suspension bridges and cranes, emphasizing their ability to support heavy loads.",
         "limitations": [
           "The image does not provide specific details about the materials used in the ropes or the exact types of bridges and cranes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "37ac15718dcd71be0723ee9d",
+      "asset_sha256": "3f3ea2659078f76ae79bd3297c4db2006d4183aecf6ff6f951413dd9f30a0dac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/3f3ea2659078f76ae79bd3297c4db2006d4183aecf6ff6f951413dd9f30a0dac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a tool to remove a wire from a fence.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The image does not directly relate to the text.",
+        "limitations": [
+          "The image does not show the properties of coal and sulfur."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:14:16Z",
+      "effective_analysis": {
+        "visual_summary": "A person using a tool to remove a wire from a fence.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The image does not directly relate to the text.",
+        "limitations": [
+          "The image does not show the properties of coal and sulfur."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2118e04b3281790860a99f90",
+      "asset_sha256": "5df4a4a616fca4d456059b97165531b1c03246ab92a739a266efba778bc85f69",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/5df4a4a616fca4d456059b97165531b1c03246ab92a739a266efba778bc85f69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue sky with clouds and a ship in the distance.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "coal",
+          "sulfur",
+          "steel",
+          "ductile",
+          "suspension bridges",
+          "cranes"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a general illustration of a sky and clouds, not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:15:02Z",
+      "effective_analysis": {
+        "visual_summary": "A blue sky with clouds and a ship in the distance.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "coal",
+          "sulfur",
+          "steel",
+          "ductile",
+          "suspension bridges",
+          "cranes"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a general illustration of a sky and clouds, not a diagram or chart."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "54453bb1a978a6808e42ba1f",
+      "asset_sha256": "8b9327d9c4b90c143c6820e7cd5f251af23e05ea0a3bffe4e566a4c9f6c3f927",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/8b9327d9c4b90c143c6820e7cd5f251af23e05ea0a3bffe4e566a4c9f6c3f927.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a suspension bridge with cables extending from the bridge to the ground.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "45\n  Have you ever seen wires made of coal or sulfur? Obviously\n  not! We can say that coal and sulfur are not ductile.\n\n  Do you know that ropes made of steel [a mixture\n  of metal (iron) and non-metal (carbon)] wires can\n  support heavy loads? Therefore, they are used in\n  suspension bridges and i",
+          "Non-metals"
+        ],
+        "concepts": [
+          "suspension bridge",
+          "steel ropes",
+          "ductility",
+          "non-metals"
+        ],
+        "context_relation": "The image illustrates the use of steel ropes in suspension bridges and cranes, which are supported by non-metals.",
+        "limitations": [
+          "The image does not provide specific details about the materials used in the ropes or the bridge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:15:49Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a suspension bridge with cables extending from the bridge to the ground.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "45\n  Have you ever seen wires made of coal or sulfur? Obviously\n  not! We can say that coal and sulfur are not ductile.\n\n  Do you know that ropes made of steel [a mixture\n  of metal (iron) and non-metal (carbon)] wires can\n  support heavy loads? Therefore, they are used in\n  suspension bridges and i",
+          "Non-metals"
+        ],
+        "concepts": [
+          "suspension bridge",
+          "steel ropes",
+          "ductility",
+          "non-metals"
+        ],
+        "context_relation": "The image illustrates the use of steel ropes in suspension bridges and cranes, which are supported by non-metals.",
+        "limitations": [
+          "The image does not provide specific details about the materials used in the ropes or the bridge."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
