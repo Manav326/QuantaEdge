@@ -113,9 +113,27 @@ public class StructuredLessonArtifactService {
     ObjectNode explain = objectAt(safe, "explain");
     ArrayNode safeBlocks = mapper.createArrayNode();
     for (JsonNode block : arrayAt(explain, "blocks")) {
+      if (!block.isObject()) continue;
       String type = block.path("type").asText("");
-      if ((type.equals("image") || type.equals("diagram")) && !isRenderableVisual(block)) continue;
-      safeBlocks.add(block.deepCopy());
+      ObjectNode safeBlock = ((ObjectNode) block).deepCopy();
+      if (type.equals("image") && !isRenderableVisual(block)) {
+        ObjectNode asset = objectAt(safeBlock, "asset");
+        asset.remove("url");
+        asset.put("publication_allowed", false);
+        asset.put("student_renderable", false);
+        if (asset.path("review_status").asText("").isBlank()) asset.put("review_status", "REVIEW_PENDING");
+      } else if (type.equals("diagram") && !isRenderableVisual(block)) {
+        String review = block.path("review_status").asText(block.path("diagram_data").path("review_status").asText(""));
+        ObjectNode placeholder = mapper.createObjectNode();
+        placeholder.put("student_renderable", false);
+        placeholder.put("review_status", review.isBlank() ? "REVIEW_PENDING" : review);
+        safeBlock.set("diagram_data", placeholder);
+        safeBlock.put("student_renderable", false);
+        safeBlock.put("review_status", review.isBlank() ? "REVIEW_PENDING" : review);
+      }
+      // Preserve authored array order; only private grading fields are removed.
+      stripPrivateFields(safeBlock);
+      safeBlocks.add(safeBlock);
     }
     explain.set("blocks", safeBlocks);
 
@@ -373,7 +391,8 @@ public class StructuredLessonArtifactService {
         String id = block.path("id").asText("");
         String type = block.path("type").asText("");
         if (id.isBlank() || !ids.add(id)) errors.add("explain.blocks.id");
-        if (!BLOCK_TYPES.contains(type)) errors.add("explain.blocks.type");
+        // Unknown non-empty block types use the visible learner fallback renderer.
+        if (type.isBlank()) errors.add("explain.blocks.type");
         if (type.equals("rich_text") && !hasLocalizedContentObject(block.path("text_by_locale"))) {
           errors.add("explain.blocks.text_by_locale");
         }

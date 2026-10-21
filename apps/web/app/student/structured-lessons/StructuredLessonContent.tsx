@@ -161,12 +161,38 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
       {blocks.map(block => {
         const text = block.text_by_locale?.[locale];
         const content = block.content_by_locale;
-        if (block.type === 'rich_text') return <article className="qe-structured-card" key={block.id}>
-          {text?.heading && <h3>{text.heading}</h3>}
-          {(text?.paragraphs || []).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-          {typeof text?.callout === 'string' && <aside className="qe-structured-callout">{text.callout}</aside>}
-          {typeof text?.key_point === 'string' && <p className="qe-structured-keypoint"><strong>{uiT('structured.ui.keyPoint')}</strong> {text.key_point}</p>}
-        </article>;
+        if (block.type === 'rich_text') {
+          const media = (block as any).media_by_locale?.[locale] || {};
+          const mediaType = String(media.type || '').toLowerCase();
+          const mediaUrl = typeof media.url === 'string' && /^https:\/\//i.test(media.url) ? media.url : '';
+          const resourceUrl = (block as any).resource_url_by_locale?.[locale];
+          const safeResourceUrl = typeof resourceUrl === 'string' && /^https:\/\//i.test(resourceUrl) ? resourceUrl : '';
+          const youtubeEmbed = (() => {
+            if (mediaType !== 'video' || !mediaUrl) return '';
+            try {
+              const parsed = new URL(mediaUrl);
+              const host = parsed.hostname.toLowerCase();
+              if (!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(host)) return '';
+              const id = host === 'youtu.be' ? parsed.pathname.split('/').filter(Boolean)[0] : parsed.searchParams.get('v');
+              return id && /^[A-Za-z0-9_-]{6,20}$/.test(id) ? 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) : '';
+            } catch { return ''; }
+          })();
+          const directVideo = mediaType === 'video' && /\.(mp4|webm|ogg|mov|ogv)(\?.*)?$/i.test(mediaUrl);
+          const directAnimation = mediaType === 'animation' && /\.(mp4|webm|ogg|mov|ogv)(\?.*)?$/i.test(mediaUrl);
+          return <article className="qe-structured-card" key={block.id}>
+            {text?.heading && <h3>{text.heading}</h3>}
+            {(text?.paragraphs || []).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+            {typeof text?.callout === 'string' && <aside className="qe-structured-callout">{text.callout}</aside>}
+            {typeof text?.key_point === 'string' && <p className="qe-structured-keypoint"><strong>{uiT('structured.ui.keyPoint')}</strong> {text.key_point}</p>}
+            {mediaUrl && mediaType === 'audio' && <audio controls preload="metadata" className="qe-structured-media" src={mediaUrl}>{locale === 'hi' ? 'ऑडियो उपलब्ध नहीं है।' : 'Audio is not supported by this browser.'}</audio>}
+            {mediaUrl && (directVideo || directAnimation) && <video controls preload="metadata" playsInline className="qe-structured-media" src={mediaUrl}>{locale === 'hi' ? 'वीडियो उपलब्ध नहीं है।' : 'Video is not supported by this browser.'}</video>}
+            {mediaUrl && mediaType === 'video' && !directVideo && youtubeEmbed && <div className="lesson-visual-embed"><iframe src={youtubeEmbed} title={String(media.title || text?.heading || 'Lesson video')} allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" /></div>}
+            {mediaUrl && mediaType === 'animation' && !directAnimation && <a href={mediaUrl} target="_blank" rel="noreferrer">{locale === 'hi' ? 'एनिमेशन खोलें' : 'Open animation'}</a>}
+            {mediaUrl && !['audio','video','animation'].includes(mediaType) && <a href={mediaUrl} target="_blank" rel="noreferrer">{locale === 'hi' ? 'सीखने का संसाधन खोलें' : 'Open learning resource'}</a>}
+            {!mediaUrl && mediaType && <p className="qe-structured-muted" role="status">{locale === 'hi' ? 'इस ब्लॉक का मीडिया लिंक अभी उपलब्ध नहीं है।' : 'The media link for this block is not available yet.'}</p>}
+            {safeResourceUrl && <p><a href={safeResourceUrl} target="_blank" rel="noreferrer">{locale === 'hi' ? 'स्रोत / संसाधन खोलें' : 'Open source / resource'}</a></p>}
+          </article>;
+        }
         if (block.type === 'image') {
           const asset = block.asset || {};
           const canDisplay = isStudentRenderableAsset(asset);

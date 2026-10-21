@@ -523,25 +523,29 @@ public class RelationalStructuredLessonService {
       String id = BLOCK_PREFIX + number(row.get("id"));
       if ("IMAGE".equals(type)) {
         String url = text(row.get("asset_url"));
-        String alt = nonBlank(text(row.get("asset_alt")), text(en.path("alt").asText("")), text(hi.path("alt").asText("")));
-        if (!url.startsWith("https://") || alt.isBlank()) continue;
+        String altEn = nonBlank(text(en.path("alt").asText("")), text(row.get("asset_alt")));
+        String altHi = nonBlank(text(hi.path("alt").asText("")), text(row.get("asset_alt")));
+        String visibleAltEn = nonBlank(altEn, "Visual awaiting review");
+        String visibleAltHi = nonBlank(altHi, "चित्र समीक्षा की प्रतीक्षा में");
+        boolean renderable = url.startsWith("https://") && !altEn.isBlank() && !altHi.isBlank();
         ObjectNode block = result.addObject();
         block.put("id", id);
         block.put("type", "image");
         block.put("order", number(row.get("sequence_no")));
-        block.set("alt_by_locale", bilingual(alt, alt));
+        block.set("alt_by_locale", bilingual(visibleAltEn, visibleAltHi));
         ObjectNode asset = block.putObject("asset");
-        asset.put("url", url);
-        asset.put("title", nonBlank(text(row.get("asset_title")), text(en.path("title").asText(""))));
-        asset.put("publication_allowed", true);
-        asset.put("student_renderable", true);
-        asset.put("review_status", "APPROVED");
-        asset.set("alt_by_locale", bilingual(alt, alt));
+        if (renderable) asset.put("url", url);
+        asset.put("title", nonBlank(text(row.get("asset_title")), text(en.path("title").asText("")), "Learning visual"));
+        asset.put("publication_allowed", renderable);
+        asset.put("student_renderable", renderable);
+        asset.put("review_status", renderable ? "APPROVED" : "REVIEW_PENDING");
+        asset.set("alt_by_locale", bilingual(visibleAltEn, visibleAltHi));
         String captionEnglish = nonBlank(text(en.path("caption").asText("")),
             text(en.path("description").asText("")));
         String captionHindi = nonBlank(text(hi.path("caption").asText("")),
             text(hi.path("description").asText("")));
         asset.set("caption_by_locale", bilingual(captionEnglish, captionHindi));
+        block.set("caption_by_locale", bilingual(captionEnglish, captionHindi));
         continue;
       }
       if ("DIAGRAM".equals(type)) {
@@ -549,22 +553,29 @@ public class RelationalStructuredLessonService {
         JsonNode dataHi = hi.path("diagram_data").isObject() ? hi.path("diagram_data") : hi;
         String review = nonBlank(text(dataEn.path("review_status").asText("")),
             text(en.path("review_status").asText("")));
-        boolean renderable = dataEn.path("student_renderable").asBoolean(false)
+        boolean reviewApproved = dataEn.path("student_renderable").asBoolean(false)
             && ("APPROVED".equalsIgnoreCase(review)
                 || "APPROVED_FOR_STUDENT_RENDERING".equalsIgnoreCase(review));
         String altEn = nonBlank(text(en.path("alt").asText("")), text(dataEn.path("alt").asText("")));
-        String altHi = nonBlank(text(hi.path("alt").asText("")), text(dataHi.path("alt").asText("")), altEn);
-        if (!renderable || altEn.isBlank() || altHi.isBlank() || !dataEn.path("nodes").isArray()
-            || dataEn.path("nodes").isEmpty()) continue;
+        String altHi = nonBlank(text(hi.path("alt").asText("")), text(dataHi.path("alt").asText("")));
+        boolean diagramReady = reviewApproved && !altEn.isBlank() && !altHi.isBlank()
+            && dataEn.path("nodes").isArray() && !dataEn.path("nodes").isEmpty();
+        String visibleAltEn = nonBlank(altEn, "Diagram awaiting review");
+        String visibleAltHi = nonBlank(altHi, "आरेख समीक्षा की प्रतीक्षा में");
         ObjectNode block = result.addObject();
         block.put("id", id);
         block.put("type", "diagram");
         block.put("order", number(row.get("sequence_no")));
-        block.put("student_renderable", true);
-        block.put("review_status", review);
-        block.set("alt_by_locale", bilingual(altEn, altHi));
-        block.set("diagram_data", stripPrivateFields(dataEn).deepCopy());
-        block.put("review_status", review);
+        block.put("student_renderable", diagramReady);
+        block.put("review_status", diagramReady ? review : "REVIEW_PENDING");
+        block.set("alt_by_locale", bilingual(visibleAltEn, visibleAltHi));
+        if (diagramReady) {
+          block.set("diagram_data", stripPrivateFields(dataEn).deepCopy());
+        } else {
+          ObjectNode placeholder = block.putObject("diagram_data");
+          placeholder.put("student_renderable", false);
+          placeholder.put("review_status", "REVIEW_PENDING");
+        }
         continue;
       }
       if ("SUMMARY".equals(type)) {
@@ -584,22 +595,26 @@ public class RelationalStructuredLessonService {
         block.put("order", number(row.get("sequence_no")));
         String instructionsEnglish = nonBlank(
             text(en.path("prompt").asText("")), text(en.path("instructions").asText("")),
-            text(en.path("title").asText("")), text(en.path("body").asText("")));
+            text(en.path("title").asText("")), text(en.path("body").asText("")),
+            "Activity content is available in this lesson.");
         String instructionsHindi = nonBlank(
             text(hi.path("prompt").asText("")), text(hi.path("instructions").asText("")),
-            text(hi.path("title").asText("")), text(hi.path("body").asText("")));
+            text(hi.path("title").asText("")), text(hi.path("body").asText("")),
+            "इस पाठ में गतिविधि-सामग्री उपलब्ध है।");
         block.set("instructions_by_locale", bilingual(instructionsEnglish, instructionsHindi));
         block.set("configuration", stripPrivateFields(en).deepCopy());
         continue;
       }
 
-      // Narrative blocks are normalized to bilingual rich-text blocks without transmitting
-      // grading keys. Unsupported video embeds remain accessible via the course resource panel.
-      String headingEn = nonBlank(text(en.path("heading").asText("")), text(en.path("title").asText("")));
-      String headingHi = nonBlank(text(hi.path("heading").asText("")), text(hi.path("title").asText("")));
+      // Preserve any remaining block kind as learner-safe content; never skip a row
+      // simply because the specialized renderer does not recognize its type.
+      String fallbackLabel = type.replace('_', ' ').toLowerCase(Locale.ROOT);
+      String headingEn = nonBlank(text(en.path("heading").asText("")), text(en.path("title").asText("")), fallbackLabel);
+      String headingHi = nonBlank(text(hi.path("heading").asText("")), text(hi.path("title").asText("")), "पाठ सामग्री");
       List<String> paragraphEn = narrative(en);
       List<String> paragraphHi = narrative(hi);
-      if (headingEn.isBlank() && headingHi.isBlank() && paragraphEn.isEmpty() && paragraphHi.isEmpty()) continue;
+      if (paragraphEn.isEmpty()) paragraphEn = fallbackNarrative(en);
+      if (paragraphHi.isEmpty()) paragraphHi = fallbackNarrative(hi);
       ObjectNode block = result.addObject();
       block.put("id", id);
       block.put("type", "rich_text");
@@ -607,6 +622,18 @@ public class RelationalStructuredLessonService {
       ObjectNode localizedText = block.putObject("text_by_locale");
       localizedText.set("en", richText(headingEn, paragraphEn));
       localizedText.set("hi", richText(headingHi, paragraphHi));
+
+      String mediaUrlEn = nonBlank(text(en.path("url").asText("")), text(row.get("asset_url")));
+      String mediaUrlHi = nonBlank(text(hi.path("url").asText("")), text(row.get("asset_url")), mediaUrlEn);
+      if (List.of("VIDEO", "AUDIO", "ANIMATION").contains(type)) {
+        ObjectNode mediaByLocale = block.putObject("media_by_locale");
+        putMediaInfo(mediaByLocale.putObject("en"), type, mediaUrlEn, headingEn, en);
+        putMediaInfo(mediaByLocale.putObject("hi"), type, mediaUrlHi, headingHi, hi);
+      } else {
+        ObjectNode resourceUrls = block.putObject("resource_url_by_locale");
+        resourceUrls.put("en", mediaUrlEn.startsWith("https://") ? mediaUrlEn : "");
+        resourceUrls.put("hi", mediaUrlHi.startsWith("https://") ? mediaUrlHi : "");
+      }
     }
     return result;
   }
@@ -708,9 +735,48 @@ public class RelationalStructuredLessonService {
     return node;
   }
 
+  private List<String> fallbackNarrative(JsonNode source) {
+    List<String> values = new ArrayList<>();
+    flattenDisplayText(source, "", values, 0);
+    return values;
+  }
+
+  private void flattenDisplayText(JsonNode node, String label, List<String> target, int depth) {
+    if (node == null || node.isNull() || depth > 5) return;
+    if (node.isTextual() || node.isNumber() || node.isBoolean()) {
+      String value = node.asText("").trim();
+      if (!value.isBlank() && !value.startsWith("https://")) target.add(label.isBlank() ? value : label + ": " + value);
+      return;
+    }
+    if (node.isArray()) {
+      for (JsonNode item : node) flattenDisplayText(item, label, target, depth + 1);
+      return;
+    }
+    if (!node.isObject()) return;
+    node.properties().forEach(entry -> {
+      String key = entry.getKey();
+      String normalized = key.replaceAll("[^A-Za-z0-9]", "").toLowerCase(Locale.ROOT);
+      if (List.of("id", "type", "order", "sequenceno", "url", "href", "src", "asseturl",
+          "resourceurl", "mediaurl", "sourcepageurl", "html", "answer", "answers",
+          "correctanswer", "correctanswerids", "correctpairs", "acceptedanswers", "grading",
+          "solution", "modelanswer", "expectedanswer", "answerguidebylocale").contains(normalized)) return;
+      String nextLabel = label.isBlank() ? key.replace('_', ' ') : label + " · " + key.replace('_', ' ');
+      flattenDisplayText(entry.getValue(), nextLabel, target, depth + 1);
+    });
+  }
+
+  private void putMediaInfo(ObjectNode target, String type, String rawUrl, String title, JsonNode source) {
+    target.put("type", type.toLowerCase(Locale.ROOT));
+    if (rawUrl != null && rawUrl.startsWith("https://")) target.put("url", rawUrl);
+    target.put("title", nonBlank(text(source.path("title").asText("")), title));
+    target.put("description", nonBlank(text(source.path("description").asText("")), text(source.path("body").asText(""))));
+    target.put("caption", nonBlank(text(source.path("caption").asText(""))));
+    target.put("alt", nonBlank(text(source.path("alt").asText(""))));
+  }
+
   private List<String> narrative(JsonNode source) {
     List<String> values = new ArrayList<>();
-    for (String key : List.of("body","text","content","description","prompt","explanation","hint","details")) {
+    for (String key : List.of("body","text","content","description","prompt","explanation","hint","details","steps","points","keyPoints","caption","instructions")) {
       JsonNode value = source.path(key);
       if (value.isTextual() && !value.asText().isBlank()) values.add(value.asText().trim());
       else if (value.isArray()) for (JsonNode item : value) {

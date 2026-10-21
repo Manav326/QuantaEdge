@@ -39,6 +39,7 @@ const files = {
   androidVisualGateTest: 'apps/android/app/src/test/java/com/quantaedge/android/ui/StructuredLessonVisualGateTest.kt',
   apiService: 'services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java',
   apiController: 'services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java',
+  apiRelational: 'services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java',
 };
 const source = Object.fromEntries(Object.entries(files).map(([key, path]) => {
   const value = read(path);
@@ -63,6 +64,15 @@ assert.ok(
   source.webContent.includes('sort((a, b) => a.order - b.order') &&
   !source.webContent.includes("if (!canDisplay && mode === 'student') return null;"),
   'Web must preserve ordered structured blocks and display a safe placeholder/fallback instead of dropping blocks.');
+assert.ok(source.apiService.includes('safeBlocks.add(safeBlock)') &&
+  !source.apiService.includes('if ((type.equals("image") || type.equals("diagram")) && !isRenderableVisual(block)) continue;'),
+  'The published structured API must retain blocked visual blocks as safe placeholders.');
+assert.ok(source.apiRelational.includes('order by b.sequence_no,b.id') &&
+  source.apiRelational.includes('block.put("order", number(row.get("sequence_no")))') &&
+  !source.apiRelational.includes('if (!url.startsWith("https://") || alt.isBlank()) continue;') &&
+  !source.apiRelational.includes('if (!renderable || altEn.isBlank() || altHi.isBlank() || !dataEn.path("nodes").isArray()'),
+  'Relational lesson conversion must preserve backend block order and keep unapproved or incomplete visuals represented.');
+
 for (const type of blockTypes) {
   assert.ok(source.webContract.includes("'" + type + "'"), 'Web validator missing block type ' + type);
   assert.ok(source.webContent.includes("'" + type + "'"), 'Web block renderer missing ' + type);

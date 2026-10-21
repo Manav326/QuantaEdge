@@ -62,6 +62,44 @@ class StructuredLessonArtifactServiceTest {
   }
 
   @Test
+  void studentPayloadRetainsUnknownAndUnapprovedVisualBlocksInAuthoredOrder() throws Exception {
+    ObjectNode root = (ObjectNode) mapper.readTree(fixture(true, true));
+    ArrayNode blocks = (ArrayNode) root.path("explain").path("blocks");
+    int originalCount = blocks.size();
+
+    ObjectNode unknown = blocks.addObject();
+    unknown.put("id", "future-block-test");
+    unknown.put("type", "future_widget");
+    unknown.put("order", 50);
+    unknown.putObject("content_by_locale")
+        .put("en", "Backend-authored future block")
+        .put("hi", "भविष्य का पाठ ब्लॉक");
+
+    ObjectNode image = blocks.addObject();
+    image.put("id", "pending-image-test");
+    image.put("type", "image");
+    image.put("order", 60);
+    image.set("alt_by_locale", bilingual("Pending image", "लंबित चित्र"));
+    ObjectNode asset = image.putObject("asset");
+    asset.put("url", "https://assets.example.test/pending.png");
+    asset.put("publication_allowed", false);
+    asset.put("student_renderable", false);
+    asset.put("review_status", "PENDING");
+    asset.set("alt_by_locale", bilingual("Pending image", "लंबित चित्र"));
+
+    StructuredLessonArtifactService service =
+        new StructuredLessonArtifactService(mapper, mapper.writeValueAsString(root));
+    var artifact = service.requirePublished("qe-test-topic-v1");
+    ArrayNode payloadBlocks = (ArrayNode) service.toStudentPayload(artifact).path("explain").path("blocks");
+
+    assertEquals(originalCount + 2, payloadBlocks.size());
+    assertEquals("future_widget", payloadBlocks.get(originalCount).path("type").asText());
+    assertEquals("pending-image-test", payloadBlocks.get(originalCount + 1).path("id").asText());
+    assertFalse(payloadBlocks.get(originalCount + 1).path("asset").has("url"));
+    assertFalse(payloadBlocks.get(originalCount + 1).path("asset").path("student_renderable").asBoolean());
+  }
+
+  @Test
   void currentInteractiveStepSchemaIsAcceptedAndActivityIdsRemainStringKeys() throws Exception {
     ObjectNode root = (ObjectNode) mapper.readTree(fixture(true, true));
     ArrayNode blocks = (ArrayNode) root.path("explain").path("blocks");

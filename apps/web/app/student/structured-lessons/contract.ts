@@ -109,6 +109,24 @@ export function readLocale(value: unknown, locale: LessonLocale): string | null 
   return text || null;
 }
 
+const PRIVATE_BLOCK_KEYS = new Set([
+  'answerpayload', 'correctanswer', 'correctanswerids', 'correctpairs',
+  'acceptedanswers', 'answerguidebylocale', 'grading', 'iscorrect',
+  'correctoption', 'answerkey', 'solutionkey', 'modelanswer',
+  'expectedanswer', 'explanationkey'
+]);
+
+function stripPrivateBlockFields(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stripPrivateBlockFields);
+  if (!isRecord(value)) return value;
+  const safe: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value)) {
+    if (PRIVATE_BLOCK_KEYS.has(key.replace(/[^A-Za-z0-9]/g, '').toLowerCase())) continue;
+    safe[key] = stripPrivateBlockFields(child);
+  }
+  return safe;
+}
+
 export function isStudentRenderableAsset(asset: unknown): boolean {
   if (!isRecord(asset)) return false;
   const review = String(asset.review_status || '').toUpperCase();
@@ -166,7 +184,9 @@ export function validateStructuredLesson(input: unknown): ValidationResult {
     if (!nonEmpty(block.id)) add(path + '.id', 'REQUIRED', 'Block id is required.');
     else if (seenBlocks.has(block.id)) add(path + '.id', 'DUPLICATE_ID', 'Block IDs must be unique within a lesson.');
     else seenBlocks.add(block.id);
-    if (!BLOCK_TYPES.has(String(block.type))) add(path + '.type', 'UNKNOWN_BLOCK_TYPE', 'Unsupported block type: ' + String(block.type));
+    const blockType = String(block.type || '');
+    const isRegisteredBlockType = BLOCK_TYPES.has(blockType);
+    if (!nonEmpty(blockType)) add(path + '.type', 'REQUIRED', 'Block type is required.');
     if (!Number.isFinite(block.order)) add(path + '.order', 'INVALID_ORDER', 'Block order must be numeric.');
     if (Array.isArray(block.objective_ids)) block.objective_ids.forEach((id: unknown, refIndex: number) => {
       if (typeof id !== 'string' || !objectiveIds.has(id)) add(path + '.objective_ids[' + refIndex + ']', 'INVALID_OBJECTIVE_REF', 'Block refers to a learning objective that does not exist.');
@@ -175,7 +195,7 @@ export function validateStructuredLesson(input: unknown): ValidationResult {
       if (typeof id !== 'string' || !sourceRefIds.has(id)) add(path + '.source_refs[' + refIndex + ']', 'INVALID_SOURCE_REF', 'Block refers to a source reference that does not exist.');
     });
 
-    if (block.type === 'rich_text') {
+    if (isRegisteredBlockType && blockType === 'rich_text') {
       const text = block.text_by_locale;
       if (!isRecord(text) || !isRecord(text.en) || !isRecord(text.hi)) add(path + '.text_by_locale', 'LOCALE_GAP', 'Rich text needs English and Hindi content.');
       else {
@@ -289,15 +309,33 @@ export function sanitizePublishedLessonForStudent(input: unknown): StudentSaniti
       message: 'Only explicitly published, publication-allowed lessons may be delivered to students.',
     }] };
   }
-  const safeBlocks = lesson.explain.blocks.filter(block => {
-    if (block.type === 'image') return isStudentRenderableAsset(block.asset);
+  // Preserve every backend-authored block in its existing array order. Unapproved
+  // images/diagrams remain as safe placeholders rather than disappearing.
+  const safeBlocks = lesson.explain.blocks.map(sourceBlock => {
+    const block = stripPrivateBlockFields(sourceBlock) as StructuredExplainBlock;
+    if (block.type === 'image' && !isStudentRenderableAsset(block.asset)) {
+      const asset = { ...(block.asset || {}) };
+      delete asset.url;
+      asset.publication_allowed = false;
+      asset.student_renderable = false;
+      asset.review_status = String(asset.review_status || 'REVIEW_PENDING');
+      return { ...block, asset };
+    }
     if (block.type === 'diagram') {
       const data = block.diagram_data || {};
       const renderable = (block as any).student_renderable ?? data.student_renderable;
       const review = String((block as any).review_status || data.review_status || '').toUpperCase();
-      return renderable === true && ['APPROVED', 'APPROVED_FOR_STUDENT_RENDERING'].includes(review) && localized(block.alt_by_locale);
+      if (!(renderable === true && ['APPROVED', 'APPROVED_FOR_STUDENT_RENDERING'].includes(review) && localized(block.alt_by_locale))) {
+        const reviewStatus = review || 'REVIEW_PENDING';
+        return {
+          ...block,
+          student_renderable: false,
+          review_status: reviewStatus,
+          diagram_data: { student_renderable: false, review_status: reviewStatus },
+        };
+      }
     }
-    return true;
+    return block;
   });
   const safeQuestions = lesson.practice.questions
     .filter(question => question.type !== 'image_observation' || isQuestionVisualApproved(lesson, question))
