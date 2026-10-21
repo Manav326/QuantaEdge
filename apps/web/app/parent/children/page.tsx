@@ -241,18 +241,18 @@ export default function ParentChildrenPage(){
               <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><UiText message="legacy.web.save.login.details.bcf9bcd7" /></button>
             </div>
             <div className="parent-track-editor qe-child-course-editor">
-              <div><strong><UiText message="legacy.web.independent.courses.13023fbd" /></strong><small><UiText message="legacy.web.assign.a.course.to.this.child.s.accoun.b2c771e2" /></small></div>
-              {(childPrograms[child.id]||[]).length===0
-                ? <p className="eyebrow"><UiText message="legacy.web.no.independent.courses.are.available.y.7da2a26b" /></p>
-                : <div className="parent-course-options">{(childPrograms[child.id]||[]).map((course:any)=>(
+              <div><strong>{locale==='english'?'Courses enrolled for this child':'इस बच्चे के नामांकित कोर्स'}</strong>
+                <small>{locale==='english'?'Only this child’s current course access is listed here. Browse Family Marketplace to add another course.':'यहाँ केवल इस बच्चे के मौजूदा कोर्स दिखते हैं। नया कोर्स जोड़ने के लिए Family Marketplace देखें।'}</small></div>
+              {((childPrograms[child.id]||[]).filter((course:any)=>course.enrolled===true||course.is_enrolled===true||course.paused===true)).length===0
+                ? <div><p className="eyebrow">{locale==='english'?'No courses enrolled for this child yet.':'इस बच्चे के लिए अभी कोई कोर्स नामांकित नहीं है।'}</p>
+                    <Link href="/parent/courses" className="button button-light button-small">{locale==='english'?'Browse Family Marketplace':'Family Marketplace देखें'}</Link></div>
+                : <div className="parent-course-options">{(childPrograms[child.id]||[]).filter((course:any)=>course.enrolled===true||course.is_enrolled===true||course.paused===true).map((course:any)=>(
                   <div className="parent-course-option" key={course.id}>
                     <div><strong>{course.display_name}</strong><small>{course.public_id||course.code} · {course.curriculum_version}</small>
                       <small>{(course.subjects||[]).map((subject:any)=>subject.subject_name+' ('+Number(subject.lessons||0)+' lessons)').join(' · ')}</small></div>
-                    {course.is_enrolled||course.enrolled||course.paused
-                      ? <span className="track-pill"><UiText message="legacy.web.assigned.f5b576f5" /></span>
-                      : course.free_offer
-                        ? <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<UiText message="legacy.web.assigning.f0834a8f" />:<UiText message="legacy.web.assign.course.c9842149" />}</button>
-                        : <Link href="/parent/courses" className="button button-light button-small">{locale==='english'?'Get course in Family Marketplace':'Family Marketplace से कोर्स लें'}</Link>}
+                    <span className="track-pill">{course.paused===true
+                      ? (locale==='english'?'Paused':'रुका हुआ')
+                      : <UiText message="legacy.web.assigned.f5b576f5" />}</span>
                   </div>
                 ))}</div>}
             </div>
