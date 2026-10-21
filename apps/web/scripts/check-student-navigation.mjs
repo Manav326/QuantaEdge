@@ -35,6 +35,8 @@ const marketplaceCourseCardCss = read('../app/components/MarketplaceCourseCard.m
 const guardianCourseProgramsApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
 const diagnosticApi = read('../../../services/api/src/main/java/com/quantaedge/api/DiagnosticController.java');
 const courseOrderFinancialService = read('../../../services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java');
+const learningMetricsService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMetricsService.java');
+const recommendationApi = read('../../../services/api/src/main/java/com/quantaedge/api/RecommendationController.java');
 const courseMarketplaceApi = read('../../../services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java');
 const studentCoursesPage = read('../app/student/courses/page.tsx');
 const studentClassesClient = read('../app/student/classes/ClassesClient.tsx');
@@ -865,8 +867,14 @@ assert.ok(marketplaceCourseCard.includes('courseCode') &&
   marketplaceCourseCard.includes('subjects') &&
   marketplaceCourseCard.includes('chapterCount') &&
   marketplaceCourseCard.includes('lessonCount') &&
+  marketplaceCourseCard.includes("language === 'hi'") &&
   marketplaceCourseCardCss.includes('var(--qe-color-surface') &&
-  marketplaceCourseCardCss.includes('var(--qe-color-primary'),
+  marketplaceCourseCardCss.includes('var(--qe-color-primary') &&
+  marketplaceCourseCardCss.includes('data-qe-appearance="dark"') &&
+  marketplaceCourseCardCss.includes('data-qe-appearance="light"') &&
+  studentMarketplacePage.includes('useLocale()') &&
+  studentMarketplacePage.includes("language={english ? 'en' : 'hi'}") &&
+  studentMarketplacePage.includes("tx('Course Marketplace"),
   'The common marketplace card must show course identity, syllabus coverage, commercial price and theme-aware surfaces.');
 
 // Parent course listing must resolve its path ID as a learner ID under a verified institution,
@@ -880,6 +888,7 @@ assert.ok(guardianProgramsRoute.includes('@PathVariable long studentId') &&
   guardianProgramsRoute.includes('requireChildInstitutionMembership(studentId,institutionId)') &&
   guardianProgramsRoute.includes('spe.institution_id=?') &&
   guardianProgramsRoute.includes('ce.institution_id=?') &&
+  guardianProgramsRoute.includes('group by ps.sort_order,s.id,s.code,s.display_name,c.code,s.sort_order') &&
   guardianProgramsRoute.includes('Failed to load guardian child course catalogue'),
   'Guardian course catalogue must be tenant-scoped, child-authorized, and log SQL failures with safe request context.');
 
@@ -905,4 +914,11 @@ assert.ok(courseMarketplaceApi.includes('@PostMapping("/courses/{courseId}/order
   courseMarketplaceApi.includes('courseOrderFinancialService.prepareCheckout(') &&
   courseOrderFinancialService.includes('Checkout is not configured: HRMS must activate the legal seller'),
   'Student and family purchase routes must share the server lifecycle and retain seller/tax and no-double-payment guards.');
+assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
+  learningMetricsService.includes('result.put("diagnosticSubjects"') &&
+  recommendationApi.includes('diagnostic_result.percent') &&
+  recommendationApi.includes('PROGRESS_DIAGNOSTIC_MASTERY_AND_RELEASED_ASSESSMENTS') &&
+  studentMarketplacePage.includes('useLocale()') &&
+  studentMarketplacePage.includes("tx('Buy with Razorpay'"),
+  'The initial diagnostic baseline must be exposed separately and used in course-specific recommendations; marketplace labels must follow the selected language.');
 
