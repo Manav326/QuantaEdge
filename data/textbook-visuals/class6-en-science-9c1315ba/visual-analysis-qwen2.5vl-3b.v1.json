@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683375813",
-      "checkpointed_at": "2026-10-21T23:39:53Z"
+      "checkpointed_at": "2026-10-21T23:44:46Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683375813",
-      "checkpointed_at": "2026-10-21T23:40:36Z"
+      "checkpointed_at": "2026-10-21T23:45:28Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683375813",
-      "checkpointed_at": "2026-10-21T23:41:32Z"
+      "checkpointed_at": "2026-10-21T23:46:22Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37542,7 +37542,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683375813",
-      "checkpointed_at": "2026-10-21T23:42:05Z"
+      "checkpointed_at": "2026-10-21T23:46:54Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43588,36 +43588,36 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "Diarrhoea",
-          "Dehydration",
-          "Primary health centres",
-          "Market availability",
-          "Home preparation",
-          "Sugar",
-          "Common salt",
-          "Boiled and cooled water",
-          "Liquids",
-          "Oil",
-          "Vinegar",
-          "Honey",
-          "Dissolution",
-          "Separate layer",
-          "Soluble gases",
-          "Oxygen gas",
-          "Survival",
-          "Animals",
-          "Plants"
+          "diarrhoea",
+          "dehydration",
+          "primary health centres",
+          "market",
+          "packet",
+          "dissolution",
+          "home preparation",
+          "sugar",
+          "salt",
+          "boiled and cooled water",
+          "liquids",
+          "oil",
+          "vinegar",
+          "honey",
+          "dissolution in water",
+          "gases",
+          "water",
+          "survival",
+          "animals"
         ],
         "context_relation": "The image is a page from a textbook that explains the use of Oral Rehydration Solution (ORS) and a related activity involving the measurement of density using paper cups filled with different materials.",
         "limitations": [
-          "The image does not provide specific details about the materials used in the activity or the exact steps involved in the measurement process."
+          "The image does not provide specific details about the ORS packets or their preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683375813",
-      "checkpointed_at": "2026-10-21T23:43:57Z"
+      "checkpointed_at": "2026-10-21T23:47:31Z"
     }
   ]
 }
