@@ -59,7 +59,7 @@ class CertificateControllerEligibilityTest {
     row.put("status", "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.myCertificates(12L, student, TEST_TENANT);
+    Map<String, Object> response = controller.myCertificates("12", student, TEST_TENANT);
 
     assertEquals(List.of(row), response.get("items"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
@@ -105,7 +105,7 @@ class CertificateControllerEligibilityTest {
     row.put("completed", 4L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.subjectTracks(12L, student, TEST_TENANT);
+    Map<String, Object> response = controller.subjectTracks("12", student, TEST_TENANT);
 
     assertEquals(List.of(row), response.get("items"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
@@ -119,7 +119,7 @@ class CertificateControllerEligibilityTest {
   @Test
   void issuedAssessmentCertificatesBypassLiveEligibilityInTheCertificatePicker() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
-    controller.eligibleAssessments(12L, student, TEST_TENANT);
+    controller.eligibleAssessments("12", student, TEST_TENANT);
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
     assertTrue(sql.getValue().contains("existing.id IS NOT NULL"));
@@ -131,7 +131,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(attemptRow(
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6L, 0L, true, null)));
 
-    Map<String, Object> response = controller.assessmentCertificateEligibility("9001", 12L, student, TEST_TENANT);
+    Map<String, Object> response = controller.assessmentCertificateEligibility("9001", "12", student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
 
     assertEquals(true, item.get("eligible"));
@@ -145,7 +145,7 @@ class CertificateControllerEligibilityTest {
       when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
           attemptRow(type, true, "RELEASED", "95", "100", 6L, 6L, true, null)));
 
-      Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9002", 12L, student, TEST_TENANT));
+      Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9002", "12", student, TEST_TENANT));
 
       assertEquals(false, item.get("eligible"));
       assertEquals("ADMIN_CREATED_TEST_ONLY", item.get("eligibility_reason"));
@@ -157,7 +157,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "79.999", "100", 6L, 6L, true, null)));
 
-    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9003", 12L, student, TEST_TENANT));
+    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9003", "12", student, TEST_TENANT));
 
     assertEquals(false, item.get("eligible"));
     assertEquals("PASS_THRESHOLD_NOT_MET", item.get("eligibility_reason"));
@@ -168,7 +168,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "90", "100", 6L, 1L, true, null)));
 
-    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9004", 12L, student, TEST_TENANT));
+    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9004", "12", student, TEST_TENANT));
 
     assertEquals(true, item.get("eligible"));
     assertEquals(null, item.get("eligibility_reason"));
@@ -179,13 +179,13 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "95", "100", 6L, 6L, true, "ISSUED")));
 
-    Map<String, Object> issued = firstItem(controller.assessmentCertificateEligibility("9005", 12L, student, TEST_TENANT));
+    Map<String, Object> issued = firstItem(controller.assessmentCertificateEligibility("9005", "12", student, TEST_TENANT));
     assertEquals(false, issued.get("eligible"));
     assertEquals("ALREADY_ISSUED", issued.get("eligibility_reason"));
 
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "95", "100", 6L, 6L, true, "REVOKED")));
-    Map<String, Object> revoked = firstItem(controller.assessmentCertificateEligibility("9006", 12L, student, TEST_TENANT));
+    Map<String, Object> revoked = firstItem(controller.assessmentCertificateEligibility("9006", "12", student, TEST_TENANT));
     assertEquals(false, revoked.get("eligible"));
     assertEquals("CERTIFICATE_REVOKED", revoked.get("eligibility_reason"));
   }
@@ -408,7 +408,7 @@ class CertificateControllerEligibilityTest {
   void eligibleAssessmentPickerUsesReleasedPassingAdminCreatedTestsWithoutCourseCompletionGate() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
-    controller.eligibleAssessments(12L, student, TEST_TENANT);
+    controller.eligibleAssessments("12", student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
@@ -427,7 +427,7 @@ class CertificateControllerEligibilityTest {
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6, 0, true, "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.eligibleAssessments(12L, student, TEST_TENANT);
+    Map<String, Object> response = controller.eligibleAssessments("12", student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
 
     assertEquals(3001L, item.get("certificate_id"));
