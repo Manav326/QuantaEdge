@@ -1181,11 +1181,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
-        "visual_type": "uncertain",
+        "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
+          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -1195,23 +1196,33 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
+          "inclusive",
           "safety precautions",
-          "ever heard of",
-          "step further",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts",
+          "safety first",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "fascinating facts",
+          "interesting observations",
+          "curiosity-driven questions",
+          "advanced concepts",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "context_relation": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The text does not provide specific examples or details about the activities or questions."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683380946",
-      "checkpointed_at": "2026-10-21T22:17:25Z"
+      "checkpointed_at": "2026-10-21T22:37:32Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1725,7 +1736,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
+        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -1741,26 +1752,20 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "Keywords",
           "NEP 2020",
-          "Indian texts",
-          "pictorial questions",
-          "puzzles",
-          "multiple choice questions",
-          "challenging and engaging experience",
-          "competencies",
-          "evaluation"
+          "Keywords",
+          "scientific activities"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
+        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
         "limitations": [
-          "The page does not provide specific examples or exercises for the exercises mentioned."
+          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683380946",
-      "checkpointed_at": "2026-10-21T22:21:55Z"
+      "checkpointed_at": "2026-10-21T22:38:25Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20137,7 +20142,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20146,15 +20151,17 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Contributors",
-          "Editors",
-          "Support",
-          "Publication process"
+          "Acknowledgment",
+          "Textbook",
+          "Freelance Language Editor",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors",
+        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations mentioned",
+          "The page does not contain any visual elements.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20162,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39683380946",
-      "checkpointed_at": "2026-10-21T22:31:12Z"
+      "checkpointed_at": "2026-10-21T22:39:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22487,7 +22494,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574881477",
+      "run_id": "39683380946",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -23465,7 +23472,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574881477",
+      "run_id": "39683380946",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
