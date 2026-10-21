@@ -2,6 +2,7 @@ package com.quantaedge.android.ui
 
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.domain.LessonAnswerPolicy
+import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 
@@ -36,6 +37,49 @@ internal fun restoreLegacyLessonAnswers(lesson: JSONObject, language: String): L
         }
     }
     return LegacyLessonAnswerRestore(answers, feedbacks, locks)
+}
+
+/**
+ * Removes only MCQs already shown by the original lesson UI.
+ *
+ * The remaining structured question types stay available in the optional insert.
+ * Work on a copy so opening the optional view never mutates the API response.
+ */
+internal fun structuredLessonWithoutLegacyMcqDuplicates(
+    structuredLesson: JSONObject,
+    legacyLesson: JSONObject
+): JSONObject {
+    val filteredLesson = JSONObject(structuredLesson.toString())
+    val legacyQuestions = legacyLesson.optJSONArray("questions") ?: return filteredLesson
+
+    val legacyMcqIds = mutableSetOf<String>()
+    for (index in 0 until legacyQuestions.length()) {
+        val question = legacyQuestions.optJSONObject(index) ?: continue
+        if (!question.optString("question_type").equals("MCQ", ignoreCase = true)) continue
+
+        val questionId = question.optLong("id", question.optLong("question_id", 0L))
+        if (questionId > 0L) {
+            legacyMcqIds.add("db-q-$questionId")
+        }
+    }
+    if (legacyMcqIds.isEmpty()) return filteredLesson
+
+    val practice = filteredLesson.optJSONObject("practice") ?: return filteredLesson
+    val structuredQuestions = practice.optJSONArray("questions") ?: return filteredLesson
+    val retainedQuestions = JSONArray()
+
+    for (index in 0 until structuredQuestions.length()) {
+        val rawQuestion = structuredQuestions.opt(index)
+        val question = rawQuestion as? JSONObject
+
+        // Preserve unknown entries; remove only the exact MCQs shown by the legacy UI.
+        if (question == null || !legacyMcqIds.contains(question.optString("id"))) {
+            retainedQuestions.put(rawQuestion ?: JSONObject.NULL)
+        }
+    }
+
+    practice.put("questions", retainedQuestions)
+    return filteredLesson
 }
 
 internal suspend fun loadStructuredResponsesForLegacyLesson(lesson: JSONObject, courseId: Long, language: String): JSONObject {
