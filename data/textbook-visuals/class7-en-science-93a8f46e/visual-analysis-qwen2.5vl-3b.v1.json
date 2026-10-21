@@ -14,7 +14,7 @@
     "assets_analyzed": 2001,
     "assets_remaining": 5487,
     "assets_completion_percent": 26.7,
-    "assets_failed": 102,
+    "assets_failed": 101,
     "assets_skipped_from_checkpoint": 2001,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9817,7 +9817,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -9826,10 +9826,8 @@
         ],
         "concepts": [
           "science",
-          "exploration",
           "curiosity",
-          "questions",
-          "unknown",
+          "open-mindedness",
           "process",
           "environment",
           "society",
@@ -9838,24 +9836,18 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnected",
-          "scientific ideas",
-          "discoveries",
-          "questions",
-          "environment",
-          "society",
-          "human activities"
+          "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The page does not provide specific examples or activities for the reader to engage with."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T15:31:59Z"
+      "checkpointed_at": "2026-10-21T15:32:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12244,9 +12236,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574835077",
+      "run_id": "39623490257",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -13286,19 +13278,42 @@
     {
       "asset_id": "e16d4a62f7889b707898ea77",
       "asset_sha256": "ff62d9e1ae71752cc5f7a797bf0d6fadcbd8d4748f021e98609919142f00dad0",
-      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 25,
       "asset_path": "page-0025.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574835077",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer"
+        ],
+        "concepts": [
+          "eclipse",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific thinking",
+          "hands-on experiments"
+        ],
+        "context_relation": "Introduction to scientific concepts and experiments",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T15:36:52Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -24984,7 +24999,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574835077",
+      "run_id": "39623490257",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -36551,7 +36566,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574835077",
+      "run_id": "39623490257",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
