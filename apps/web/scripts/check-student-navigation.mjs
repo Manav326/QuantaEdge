@@ -442,6 +442,8 @@ assert.ok(
   androidNavigationContract.includes('databaseLessonIdFromArtifactId(artifactId: String): Long?') &&
   androidApp.includes('databaseLessonIdFromArtifactId(item.optString("artifactId"))') &&
   androidApp.includes('openLesson(JSONObject().put("id", databaseLessonId))') &&
+  androidApp.includes('val openedFromStructuredCatalogue = structuredLessonMode') &&
+  androidApp.includes('openedFromStructuredCatalogue || !lessonIsInCurrentList') &&
   androidApp.includes('val lessonSubjectCode = loadedLesson.textAny("subject_code", "subjectCode")') &&
   androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("db-lesson-42")') &&
   androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("artifact-v1")'),

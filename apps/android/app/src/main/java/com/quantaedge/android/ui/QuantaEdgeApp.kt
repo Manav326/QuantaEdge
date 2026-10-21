@@ -1810,6 +1810,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openLesson(lessonRow: JSONObject) {
+        // Remember the route before switching back to the legacy screen.
+        val openedFromStructuredCatalogue = structuredLessonMode
         structuredLessonMode = false
         lessonReturnRoute = route.takeIf {
             it !in setOf(AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.TUTOR, AppRoute.RECORDING_PLAYER)
@@ -1823,8 +1825,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val lessonSubjectCode = loadedLesson.textAny("subject_code", "subjectCode")
             val lessonIsInCurrentList = currentSubject == lessonSubjectCode &&
                 lessons.any { it.longAny("id", "lesson_id") == id }
-            if (lessonSubjectCode.isNotBlank() && !lessonIsInCurrentList) {
-                // Refresh only when the active list cannot navigate within this lesson's subject.
+            val shouldRefreshLessonList =
+                openedFromStructuredCatalogue || !lessonIsInCurrentList
+            if (lessonSubjectCode.isNotBlank() && shouldRefreshLessonList) {
+                // A structured catalogue can leave a stale course/subject list behind.
                 currentSubject = lessonSubjectCode
                 val path = "/api/v1/learning/lessons?subjectCode=" +
                     ApiClient.encodeQuery(lessonSubjectCode) +
