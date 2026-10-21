@@ -18,7 +18,9 @@ export default function QuantaEdgeBrand({
 }: QuantaEdgeBrandProps) {
   const lockup = variant !== 'compact'
     ? <span className={'qe-brand qe-brand--' + variant}>
-        <img className="qe-brand__logo" src={PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
+        <span className="qe-brand__lockup qe-brand__full-lockup">
+          <img className="qe-brand__logo" src={PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
+        </span>
       </span>
     : <span className={'qe-brand qe-brand--' + variant}>
         <span className="qe-brand__lockup">

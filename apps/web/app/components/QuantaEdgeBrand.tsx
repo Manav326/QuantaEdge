@@ -46,7 +46,9 @@ export default function QuantaEdgeBrand({
 
   const lockup = useWideLogo
     ? <span className={'qe-brand qe-brand--' + variant}>
-        <img className="qe-brand__logo" src={logoUrl || PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
+        <span className="qe-brand__lockup qe-brand__full-lockup">
+          <img className="qe-brand__logo" src={logoUrl || PLATFORM_LOGO_URL} alt="" aria-hidden="true" />
+        </span>
       </span>
     : <span className={'qe-brand qe-brand--' + variant}>
         <span className="qe-brand__lockup">
