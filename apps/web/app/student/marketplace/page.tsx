@@ -17,6 +17,7 @@ import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
   course_id: number;
+  public_id?: string;
   title: string;
   course_name: string;
   course_code: string;
@@ -435,6 +436,7 @@ export default function StudentMarketplacePage() {
                 key={offer.course_id}
                 title={offer.title || offer.course_name}
                 courseCode={offer.course_code}
+                publicId={offer.public_id}
                 curriculumVersion={offer.curriculum_version}
                 priceLabel={owned ? 'Owned' : validPrice ? offer.price_paise === 0 ? 'Free' : money(offer.price_paise) : 'Unavailable'}
                 description={offer.description}
