@@ -156,3 +156,125 @@ html[data-qe-appearance="dark"] .discountCodeBox>label{color:var(--qe-color-text
 html[data-qe-appearance="dark"] .discountCodeBox>label span,html[data-qe-appearance="dark"] .discountCodeEntry span,html[data-qe-appearance="dark"] .discountCodeBox p{color:var(--qe-color-text-muted)}
 html[data-qe-appearance="dark"] .discountCodeEntry input{background:var(--qe-color-surface);border-color:var(--qe-color-border-subtle);color:var(--qe-color-text)}
 @media(max-width:560px){.discountCodeEntry{grid-template-columns:1fr;gap:5px}}
+
+
+/* Apply the active institution palette to every marketplace surface in both modes. */
+.page {
+  color: var(--qe-color-on-surface, var(--qe-color-text, var(--qe-text, #172033)));
+}
+.hero {
+  border-color: var(--qe-color-border-subtle, #f2d4bd);
+  background: linear-gradient(135deg, var(--qe-color-primary-container, #fff8f2), var(--qe-color-surface, #fff) 72%);
+  box-shadow: var(--qe-elevation-2, 0 12px 34px rgb(45 30 15 / 6%));
+}
+.hero h1, .requestHistoryHeading h2, .requestHistoryRow strong {
+  color: var(--qe-color-on-surface, var(--qe-color-text, #1b2335));
+}
+.hero p, .meta, .description, .stateCard p, .verifyCard p,
+.requestHistoryHeading p, .requestHistoryRow span, .requestHistoryState small {
+  color: var(--qe-color-text-muted, #626b7b);
+}
+.primaryButton, .verifyCard button, .stateCard button {
+  background: var(--qe-color-primary, var(--qe-brand-orange, #e87524));
+  color: var(--qe-color-on-primary, #fff);
+  border-color: var(--qe-color-primary, var(--qe-brand-orange, #e87524));
+}
+.secondaryButton, .iconButton, .requestHistoryHeading button {
+  background: var(--qe-color-surface-elevated, var(--qe-color-surface, #fff));
+  color: var(--qe-color-on-surface, var(--qe-color-text, #263247));
+  border-color: var(--qe-color-border-subtle, #edc5a5);
+}
+.status, .requestStatus {
+  background: var(--qe-color-primary-container, #fff8f2);
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary-text, #7c451f));
+  border-color: var(--qe-color-border-subtle, #f0d5c0);
+}
+.courseCard, .stateCard, .requestHistory, .requestHistoryRow {
+  background: var(--qe-color-surface, #fff);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #172033));
+  border-color: var(--qe-color-border-subtle, #e6e8ed);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(20 25 40 / 4%));
+}
+.courseMark {
+  background: var(--qe-color-primary-container, #fff0e5);
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary-text, #c75d18));
+}
+.subjects span {
+  background: var(--qe-color-surface-elevated, var(--qe-color-surface, #f8f9fb));
+  color: var(--qe-color-text-muted, #4b5565);
+  border-color: var(--qe-color-border-subtle, #eceef2);
+}
+.disabledButton {
+  background: var(--qe-color-disabled-background, #f0f1f4);
+  color: var(--qe-color-disabled-text, #747b87);
+}
+.discountCodeBox {
+  background: linear-gradient(135deg, var(--qe-color-primary-container, #fffaf5), var(--qe-color-surface, #fff));
+  border-color: var(--qe-color-border-subtle, #f2d7c2);
+  box-shadow: var(--qe-elevation-1, 0 5px 20px rgb(109 61 24 / 5%));
+}
+.discountCodeBox > label, .discountCodeEntry input {
+  color: var(--qe-color-on-surface, var(--qe-color-text, #273247));
+}
+.discountCodeEntry input {
+  background: var(--qe-color-surface, #fff);
+  border-color: var(--qe-color-border-subtle, #dfd6ce);
+}
+.discountCodeBox > label span, .discountCodeEntry span, .discountCodeBox p {
+  color: var(--qe-color-text-muted, #778195);
+}
+.requestPending {
+  background: var(--qe-color-warning-container, #fff4df);
+  color: var(--qe-color-on-warning-container, #905b0c) !important;
+}
+.requestComplete {
+  background: var(--qe-color-success-container, #e9f8ef);
+  color: var(--qe-color-on-success-container, #22623c) !important;
+}
+.requestOther {
+  background: var(--qe-color-disabled-background, #f1f2f5);
+  color: var(--qe-color-disabled-text, #555d6c) !important;
+}
+html[data-qe-appearance="light"] .hero {
+  background: linear-gradient(135deg, var(--qe-color-primary-container, #fff8f2), var(--qe-color-surface, #fff) 72%);
+}
+html[data-qe-appearance="dark"] .hero {
+  background: radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--qe-color-primary) 12%, transparent), transparent 36%), var(--qe-color-surface);
+}
+html[data-qe-appearance="dark"] .status,
+html[data-qe-appearance="dark"] .requestStatus,
+html[data-qe-appearance="dark"] .discountCodeBox {
+  background: var(--qe-color-surface-elevated, #292e37);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #f2f4f7));
+  border-color: var(--qe-color-border-subtle, #424751);
+}
+html[data-qe-appearance="dark"] .courseCard,
+html[data-qe-appearance="dark"] .stateCard,
+html[data-qe-appearance="dark"] .requestHistory,
+html[data-qe-appearance="dark"] .requestHistoryRow {
+  background: var(--qe-color-surface, #20242c);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #f2f4f7));
+  border-color: var(--qe-color-border-subtle, #424751);
+}
+html[data-qe-appearance="dark"] .subjects span,
+html[data-qe-appearance="dark"] .discountCodeEntry input {
+  background: var(--qe-color-surface, #20242c);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #f2f4f7));
+  border-color: var(--qe-color-border-subtle, #424751);
+}
+html[data-qe-appearance="dark"] .requestPending {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container) !important;
+}
+html[data-qe-appearance="dark"] .requestComplete {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container) !important;
+}
+html[data-qe-appearance="dark"] .requestOther, html[data-qe-appearance="dark"] .disabledButton {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton, .secondaryButton, .iconButton, .courseCard { transition: none; }
+  .courseCard:hover { transform: none; }
+}
