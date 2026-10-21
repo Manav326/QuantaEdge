@@ -49,6 +49,16 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("source PDF SHA-256 differs from the selected whole-book PDF", workflow)
         self.assertIn('"publication_allowed": False', workflow)
 
+    def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("&& '8')", workflow)
+        self.assertIn(
+            "contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')",
+            workflow,
+        )
+        self.assertIn("cancel-in-progress:", workflow)
+        self.assertIn("publication_allowed", workflow)
+
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         self.assertIn("workflow_dispatch:", workflow)
