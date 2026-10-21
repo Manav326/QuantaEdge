@@ -354,47 +354,47 @@ export default function StudentMarketplacePage() {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
-        <div className={styles.eyebrow}>LEARN SOMETHING NEW</div>
-        <h1>Course Marketplace</h1>
-        <p>Choose a learning path that fits your goals. Your course price and access are confirmed securely before checkout.</p>
+        <div className={styles.eyebrow}>{tx('LEARN SOMETHING NEW', 'कुछ नया सीखें')}</div>
+        <h1>{tx('Course Marketplace', 'कोर्स मार्केटप्लेस')}</h1>
+        <p>{tx('Choose a learning path that fits your goals. Your course price and access are confirmed securely before checkout.', 'अपने लक्ष्य के अनुसार कोर्स चुनें। भुगतान से पहले कीमत और पहुँच सुरक्षित रूप से सत्यापित होती है।')}</p>
         <div className={styles.heroActions}>
-          <Link className={styles.secondaryButton} href="/student/courses">All Courses</Link>
-          <button className={styles.iconButton} type="button" onClick={() => void loadOffers()} disabled={loading} aria-label="Reload course offers" title="Reload course offers">↻</button>
+          <Link className={styles.secondaryButton} href="/student/courses">{tx('All Courses', 'सभी कोर्स')}</Link>
+          <button className={styles.iconButton} type="button" onClick={() => void loadOffers()} disabled={loading} aria-label={tx("Reload course offers", "कोर्स ऑफर फिर लोड करें")} title={tx("Reload course offers", "कोर्स ऑफर फिर लोड करें")}>↻</button>
         </div>
       </header>
 
       {status && <p className={styles.status} role="status">{status}</p>}
-      <section className={styles.discountCodeBox} aria-label="Course offer code">
-        <label htmlFor="qe-student-discount-code">Offer code <span>(optional)</span></label>
+      <section className={styles.discountCodeBox} aria-label={tx("Course offer code", "कोर्स ऑफर कोड")}>
+        <label htmlFor="qe-student-discount-code">{tx('Offer code', 'ऑफर कोड')} <span>({tx('optional', 'वैकल्पिक')})</span></label>
         <div className={styles.discountCodeEntry}>
           <input id="qe-student-discount-code" autoComplete="off" maxLength={40} value={discountCode}
             onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
-            placeholder="Enter a code supplied by your institution" disabled={busyCourseId!==null||!!pendingVerify}/>
-          <span>Validated securely when you start checkout</span>
+            placeholder={tx("Enter a code supplied by your institution", "अपनी संस्था द्वारा दिया गया कोड डालें")} disabled={busyCourseId!==null||!!pendingVerify}/>
+          <span>{tx('Validated securely when you start checkout', 'Checkout शुरू करते समय सुरक्षित रूप से जाँचा जाएगा')}</span>
         </div>
-        <p>Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.</p>
+        <p>{tx('Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.', 'Offer code केवल उसी course और institution पर लागू होगा जिसे HRMS ने मंज़ूरी दी है। भुगतान और tax की गणना server पर होती है।')}</p>
       </section>
-      <BillingProfileEditor workspace="STUDENT" english />
-      <InvoiceDownloads workspace="STUDENT" english />
+      <BillingProfileEditor workspace="STUDENT" english={english} />
+      <InvoiceDownloads workspace="STUDENT" english={english} />
       {purchaseRequests.length > 0 && (
         <section className={styles.requestHistory} aria-labelledby="qe-purchase-request-history">
           <div className={styles.requestHistoryHeading}>
-            <div><h2 id="qe-purchase-request-history">Parent purchase requests</h2>
-              <p>Check when you asked and whether the request is still pending.</p></div>
-            <button type="button" disabled={busyCourseId !== null} onClick={() => void loadPurchaseRequests()}>Refresh</button>
+            <div><h2 id="qe-purchase-request-history">{tx('Parent purchase requests', 'Parent से खरीद अनुरोध')}</h2>
+              <p>{tx('Check when you asked and whether the request is still pending.', 'देखें अनुरोध कब भेजा गया था और क्या वह अभी लंबित है।')}</p></div>
+            <button type="button" disabled={busyCourseId !== null} onClick={() => void loadPurchaseRequests()}>{tx('Refresh', 'रिफ्रेश करें')}</button>
           </div>
           <div className={styles.requestHistoryList}>
             {purchaseRequests.map(request => {
               const status = String(request.status || '').toUpperCase();
-              const label = status === 'PENDING' ? 'Waiting for parent'
-                : status === 'PURCHASED' ? 'Course purchased'
-                : status === 'DISMISSED' ? 'Request dismissed' : status.replaceAll('_', ' ').toLowerCase();
+              const label = status === 'PENDING' ? tx('Waiting for parent', 'Parent की प्रतीक्षा में')
+                : status === 'PURCHASED' ? tx('Course purchased', 'कोर्स खरीदा गया')
+                : status === 'DISMISSED' ? tx('Request dismissed', 'अनुरोध खारिज किया गया') : status.replaceAll('_', ' ').toLowerCase();
               return <article className={styles.requestHistoryRow} key={request.request_id}>
                 <div><strong>{request.course_name || 'Course'}</strong>
-                  <span>Request #{request.request_id} · Submitted {formatUserTimestamp(request.requested_at)}</span></div>
+                  <span>{tx('Request #{id} · Submitted {time}', 'अनुरोध #{id} · भेजने का समय {time}', {id:request.request_id,time:formatUserTimestamp(request.requested_at)})}</span></div>
                 <div className={styles.requestHistoryState}>
                   <span className={status === 'PENDING' ? styles.requestPending : status === 'PURCHASED' ? styles.requestComplete : styles.requestOther}>{label}</span>
-                  {request.resolved_at && <small>Updated {formatUserTimestamp(request.resolved_at)}</small>}
+                  {request.resolved_at && <small>{tx('Updated {time}', '{time} पर अपडेट हुआ', {time:formatUserTimestamp(request.resolved_at)})}</small>}
                 </div>
               </article>;
             })}
@@ -402,20 +402,20 @@ export default function StudentMarketplacePage() {
         </section>
       )}
       {pendingVerify && (
-        <section className={styles.verifyCard} aria-label="Retry payment verification">
-          <div><strong>Complete course access</strong><p>The checkout response is saved for retry. Verify this payment before starting another checkout.</p></div>
+        <section className={styles.verifyCard} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
+          <div><strong>{tx('Complete course access', 'कोर्स की पहुँच पूरी करें')}</strong><p>{tx('The checkout response is saved for retry. Verify this payment before starting another checkout.', 'Checkout का विवरण सुरक्षित है। नया checkout शुरू करने से पहले इस भुगतान की पुष्टि करें।')}</p></div>
           <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(pendingVerify)}>
-            {verifying ? 'Verifying…' : 'Retry verification'}
+            {verifying ? tx('Verifying…', 'जाँच हो रही है…') : tx('Retry verification', 'फिर सत्यापित करें')}
           </button>
         </section>
       )}
 
-      {loading && <div className={styles.stateCard} role="status">Loading course offers…</div>}
+      {loading && <div className={styles.stateCard} role="status">{tx('Loading course offers…', 'कोर्स ऑफर लोड हो रहे हैं…')}</div>}
       {!loading && loadError && (
         <div className={styles.stateCard}>
-          <h2>Marketplace could not be loaded</h2>
+          <h2>{tx('Marketplace could not be loaded', 'Marketplace लोड नहीं हो पाया')}</h2>
           <p>{loadError}</p>
-          <button type="button" onClick={() => void loadOffers()}>Try again</button>
+          <button type="button" onClick={() => void loadOffers()}>{tx('Try again', 'फिर प्रयास करें')}</button>
         </div>
       )}
       {!loading && !loadError && offers.length === 0 && (
@@ -432,7 +432,7 @@ export default function StudentMarketplacePage() {
       )}
 
       {!loading && !loadError && offers.length > 0 && (
-        <section className={styles.grid} aria-label="Available course offers">
+        <section className={styles.grid} aria-label={tx("Available course offers", "उपलब्ध कोर्स ऑफर")}>
           {offers.map((offer) => {
             const owned = offer.has_access || offer.purchased;
             const validPrice = Number.isSafeInteger(Number(offer.price_paise)) && offer.price_paise >= 0 && offer.currency === 'INR';
@@ -443,35 +443,36 @@ export default function StudentMarketplacePage() {
                 courseCode={offer.course_code}
                 publicId={offer.public_id}
                 curriculumVersion={offer.curriculum_version}
-                priceLabel={owned ? 'Owned' : validPrice ? offer.price_paise === 0 ? 'Free' : money(offer.price_paise) : 'Unavailable'}
+                language={english ? 'en' : 'hi'}
+                priceLabel={owned ? tx('Owned', 'पहले से उपलब्ध') : validPrice ? offer.price_paise === 0 ? tx('Free', 'निःशुल्क') : money(offer.price_paise) : tx('Unavailable', 'उपलब्ध नहीं')}
                 description={offer.description}
                 subjects={offer.subjects}
                 status={offer.parent_request_status === 'PENDING' ? (
                   <p className={styles.requestStatus} role="status">
-                    Parent purchase request pending{offer.parent_request_requested_at
-                      ? ' · sent ' + formatUserTimestamp(offer.parent_request_requested_at) : ''}
+                    {tx('Parent purchase request pending', 'Parent से खरीद का अनुरोध लंबित है')}{offer.parent_request_requested_at
+                      ? ' · ' + tx('sent', 'भेजा गया') + ' ' + formatUserTimestamp(offer.parent_request_requested_at) : ''}
                   </p>
                 ) : null}
               >
                 <div className={styles.cardFooter}>
                   {owned ? (
-                    <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
+                    <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>{tx('Open course', 'कोर्स खोलें')}</Link>
                   ) : !validPrice ? (
-                    <button className={styles.disabledButton} type="button" disabled>Not available for purchase</button>
+                    <button className={styles.disabledButton} type="button" disabled>{tx('Not available for purchase', 'खरीद के लिए उपलब्ध नहीं')}</button>
                   ) : offer.parent_managed && offer.price_paise > 0 ? (
                     <button className={offer.parent_request_status === 'PENDING' ? styles.disabledButton : styles.primaryButton} type="button"
                       disabled={busyCourseId !== null || offer.parent_request_status === 'PENDING'}
                       onClick={() => void askParentToBuy(offer.course_id)}>
-                      {busyCourseId === offer.course_id ? 'Sending request…' : offer.parent_request_status === 'PENDING'
-                        ? 'Parent request pending' : 'Ask parent to buy'}
+                      {busyCourseId === offer.course_id ? tx('Sending request…', 'अनुरोध भेजा जा रहा है…') : offer.parent_request_status === 'PENDING'
+                        ? tx('Parent request pending', 'Parent का अनुरोध लंबित है') : tx('Ask parent to buy', 'Parent से खरीदने को कहें')}
                     </button>
                   ) : offer.price_paise === 0 ? (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null} onClick={() => void joinFreeCourse(offer.course_id)}>
-                      {busyCourseId === offer.course_id ? 'Adding…' : 'Add free course'}
+                      {busyCourseId === offer.course_id ? tx('Adding…', 'जोड़ा जा रहा है…') : tx('Add free course', 'निःशुल्क कोर्स जोड़ें')}
                     </button>
                   ) : (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => void buyCourse(offer.course_id)}>
-                      {pendingVerify ? 'Verify previous payment first' : busyCourseId === offer.course_id ? 'Opening checkout…' : 'Buy with Razorpay'}
+                      {pendingVerify ? tx('Verify previous payment first', 'पहले पिछले भुगतान की पुष्टि करें') : busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy with Razorpay', 'Razorpay से खरीदें')}
                     </button>
                   )}
                 </div>
