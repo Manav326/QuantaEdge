@@ -925,6 +925,8 @@ assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
   'The initial diagnostic baseline must be exposed separately and used in course-specific recommendations; marketplace labels must follow the selected language.');
 assert.ok(studentMarketplacePage.includes('lang={language}') &&
   parentMarketplacePage.includes('lang={language}') &&
+  marketplaceCourseCard.includes('lang={language}') &&
+  parentMarketplacePage.includes('formatUserTimestamp(request.requested_at, language)') &&
   studentMarketplacePage.includes("new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN'") &&
   parentMarketplacePage.includes("new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN'") &&
   marketplaceTimestamp.includes("language === 'hi' ? 'hi-IN' : 'en-IN'") &&
