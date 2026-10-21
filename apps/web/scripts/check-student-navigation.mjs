@@ -199,7 +199,7 @@ assert.ok(dashboardPage.includes("'&lessonId='+encodeURIComponent(String(rec.les
   'The recommended Quick Action must open the exact recommended lesson, while the Learning action retains the course lesson/topic list.');
 assert.ok(practiceClient.indexOf('const searchParams=useSearchParams();') < practiceClient.indexOf('useState(()=>searchParams.get'),
   'Practice must initialize URL-dependent state only after declaring the searchParams hook.');
-assert.ok((certificateApi.match(/@RequestParam\\("courseId"\\) String suppliedCourseId/g)||[]).length >= 4,
+assert.ok((certificateApi.match(/@RequestParam\("courseId"\) String suppliedCourseId/g)||[]).length >= 4,
   'Certificate GET routes must bind the public courseId query parameter consistently.');
 assert.ok(guardianCourseProgramsApi.includes('@RequestParam(defaultValue="true") boolean includeSubjects') &&
   guardianCourseProgramsApi.includes('if(includeSubjects)') && parentPage.includes('/programs?includeSubjects=false'),
