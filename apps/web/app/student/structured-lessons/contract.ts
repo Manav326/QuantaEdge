@@ -5,6 +5,15 @@ export type LocalizedText = {
   hi: string;
 };
 
+/**
+ * Database-backed lessons must use the legacy Learn screen.
+ * Packaged lesson artifacts keep their own structured-detail route.
+ */
+export function databaseLessonIdFromArtifactId(artifactId: string): string | null {
+  const match = /^db-lesson-([1-9][0-9]{0,17})$/.exec(artifactId);
+  return match?.[1] ?? null;
+}
+
 export type StructuredQuestionType =
   | 'multiple_choice'
   | 'multiple_select'

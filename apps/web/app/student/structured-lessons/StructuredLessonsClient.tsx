@@ -10,6 +10,7 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
 import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import StudentEmptyState from '../components/StudentEmptyState';
+import { databaseLessonIdFromArtifactId } from './contract';
 
 type LessonItem = {
   artifactId: string; subjectCode: string; chapterNumber: number;
@@ -99,11 +100,47 @@ export default function StructuredLessonsClient() {
         retryLabel={<UiText message="legacy.web.refresh.e9337860" />}
         retryDisabled={busy}
       /> :
-      <div className="task-list">{items.map(item => <article className="task-card" key={item.artifactId}>
-        <div><span className="qe-course-subject-context">{activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')} · {(activeCourse?.subjects || []).find(subject => String(subject.subject_code || subject.code || '') === item.subjectCode)?.subject_name || item.subjectCode}</span>
-          <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
-          {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>}</div>
-        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
-      </article>)}</div>}
+      <div className="task-list">
+        {items.map(item => {
+          const databaseLessonId = databaseLessonIdFromArtifactId(item.artifactId);
+          const query = new URLSearchParams({
+            courseId: String(activeCourse?.public_id || courseId || ''),
+            subjectCode: item.subjectCode,
+          });
+
+          // Relational lessons use the canonical page that preserves the legacy learning UI.
+          let href = '/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?' + query.toString();
+          if (databaseLessonId !== null) {
+            query.set('lessonId', databaseLessonId);
+            href = '/student/learn?' + query.toString();
+          }
+
+          return (
+            <article className="task-card" key={item.artifactId}>
+              <div>
+                <span className="qe-course-subject-context">
+                  {activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')}
+                  {' · '}
+                  {(activeCourse?.subjects || []).find(subject =>
+                    String(subject.subject_code || subject.code || '') === item.subjectCode
+                  )?.subject_name || item.subjectCode}
+                </span>
+                <h2>{item.title}</h2>
+                <p>
+                  {translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle}
+                  {' · '}
+                  {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}
+                </p>
+                {item.estimatedMinutes > 0 && (
+                  <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>
+                )}
+              </div>
+              <Link href={href} className="button button-dark">
+                {translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}
+              </Link>
+            </article>
+          );
+        })}
+      </div>}
   </section></div></main>;
 }

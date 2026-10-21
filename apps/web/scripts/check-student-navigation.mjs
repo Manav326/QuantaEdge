@@ -21,6 +21,7 @@ const learningController = read('../../../services/api/src/main/java/com/quantae
 const relationalStructuredLessonService = read('../../../services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java');
 const learningStateServiceTest = read('../../../services/api/src/test/java/com/quantaedge/api/LearningStateServiceTest.java');
 const structuredLessonExperience = read('../app/student/structured-lessons/StructuredLessonExperience.tsx');
+const structuredLessonContract = read('../app/student/structured-lessons/contract.ts');
 const structuredQuestionRenderer = read('../app/student/structured-lessons/StructuredQuestionRenderer.tsx');
 const tutorMigration = read('../../../services/api/src/main/resources/db/migration/V160__structured_artifact_ai_tutor_sessions.sql');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
@@ -39,6 +40,7 @@ const studentEmptyState = read('../app/student/components/StudentEmptyState.tsx'
 const englishUiCatalog = read('../app/i18n/catalogs/english.json');
 const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidRouteCompatibilityTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
 const androidLessonContentBlock = read('../../android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt');
 const androidStructuredRenderer = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt');
 const androidResponseCompatibility = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningResponseCompatibility.kt');
@@ -378,6 +380,16 @@ assert.ok(learnClient.includes("import StructuredLessonExperience from '../struc
   learningStateServiceTest.includes('values(?,?,?,?,?,?,?,now(),?,?)'),
   'Structured lesson data, saved answers, question types and course-scoped writes must all have regression coverage.');
 
+assert.ok(
+  structuredLessonContract.includes('export function databaseLessonIdFromArtifactId') &&
+  structuredLessonContract.includes('/^db-lesson-([1-9][0-9]{0,17})$/') &&
+  structuredLessonsClient.includes('databaseLessonIdFromArtifactId(item.artifactId)') &&
+  structuredLessonsClient.includes("href = '/student/learn?' + query.toString()") &&
+  structuredLessonDetailClient.includes('databaseLessonIdFromArtifactId(artifactId)') &&
+  structuredLessonDetailClient.includes("router.replace('/student/learn?' + params.toString())"),
+  'Relational lessons from the structured catalogue, including direct links, must render through the original Learn screen.'
+);
+
 assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
   courseScope.includes('This course is not enrolled in your current institution account.') &&
   courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
@@ -425,6 +437,16 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('onRefreshLegacy = { openSubject(currentSubject, currentCourseId) }') &&
   androidApp.includes('onOpenLegacyLesson = ::openLesson'),
   'Android course subjects must open the original course-scoped lesson list and lesson screen by default.');
+
+assert.ok(
+  androidNavigationContract.includes('databaseLessonIdFromArtifactId(artifactId: String): Long?') &&
+  androidApp.includes('databaseLessonIdFromArtifactId(item.optString("artifactId"))') &&
+  androidApp.includes('openLesson(JSONObject().put("id", databaseLessonId))') &&
+  androidApp.includes('val lessonSubjectCode = loadedLesson.textAny("subject_code", "subjectCode")') &&
+  androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("db-lesson-42")') &&
+  androidRouteCompatibilityTests.includes('databaseLessonIdFromArtifactId("artifact-v1")'),
+  'Android relational lessons must use the legacy screen and matching course-scoped topic list; packaged artifacts keep structured routing.'
+);
 
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
   parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),

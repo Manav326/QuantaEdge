@@ -1819,6 +1819,20 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (id <= 0L) throw IOException("यह पाठ पहचान में नहीं आया।")
             ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start?courseId=" + currentCourseId)
             val loadedLesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
+
+            val lessonSubjectCode = loadedLesson.textAny("subject_code", "subjectCode")
+            val lessonIsInCurrentList = currentSubject == lessonSubjectCode &&
+                lessons.any { it.longAny("id", "lesson_id") == id }
+            if (lessonSubjectCode.isNotBlank() && !lessonIsInCurrentList) {
+                // Refresh only when the active list cannot navigate within this lesson's subject.
+                currentSubject = lessonSubjectCode
+                val path = "/api/v1/learning/lessons?subjectCode=" +
+                    ApiClient.encodeQuery(lessonSubjectCode) +
+                    "&language=" + ApiClient.encodeQuery(learningContentLanguage) +
+                    "&courseId=" + currentCourseId
+                lessons = ApiClient.getArray(path).objectItems()
+            }
+
             lesson = loadedLesson
             answers.clear()
             feedbacks.clear()
@@ -4408,7 +4422,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpenMarketplace = ::openMarketplace,
                         onRefreshStructured = { openStructuredLessons(structuredSubjectFilter) },
                         onSelectStructuredSubject = { code -> openStructuredLessons(code) },
-                        onOpenStructuredLesson = ::openStructuredLesson,
+                        onOpenStructuredLesson = { item ->
+                            val databaseLessonId = databaseLessonIdFromArtifactId(item.optString("artifactId"))
+                            if (databaseLessonId != null) {
+                                // Keep relational lessons on the familiar lesson screen.
+                                currentSubject = item.optString("subjectCode").ifBlank { currentSubject }
+                                openLesson(JSONObject().put("id", databaseLessonId))
+                            } else {
+                                openStructuredLesson(item)
+                            }
+                        },
                         onRefreshLegacy = { openSubject(currentSubject, currentCourseId) },
                         onOpenLegacyLesson = ::openLesson,
                         onOpenStructuredLessons = ::openStructuredLessons

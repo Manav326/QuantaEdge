@@ -11,6 +11,16 @@ internal fun hasConfirmedNoEnrolledCourses(
     hasCourseAccess: Boolean
 ): Boolean = courseListLoaded && !courseListLoadFailed && !hasCourseAccess
 
+/**
+ * Relational lesson IDs use the legacy lesson endpoint and screen.
+ * Only packaged artifact IDs should open the standalone structured screen.
+ */
+internal fun databaseLessonIdFromArtifactId(artifactId: String): Long? {
+    val match = Regex("db-lesson-([1-9][0-9]{0,17})").matchEntire(artifactId)
+        ?: return null
+    return match.groupValues[1].toLongOrNull()
+}
+
 internal enum class AppRoute {
     WELCOME, LOGIN, PARENT_SIGNUP, PARENT_RESET, ACCOUNT_SIGNUP, STUDENT_HOME, ALL_COURSES, MARKETPLACE, PARENT_HOME, PARENT_COURSES, PARENT_REPORT, PARENT_PROFILE, ACCOUNT_IDENTITY,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, PARENT_CHILD_ARCHIVED, ACCOUNT_LIFECYCLE, SUBJECT_LESSONS, LESSON, PRACTICE,

@@ -14,6 +14,7 @@ import StructuredLessonExperience from './StructuredLessonExperience';
 import AssignedLearningResources from './AssignedLearningResources';
 import TutorDock from '../learn/TutorDock';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
+import { databaseLessonIdFromArtifactId } from './contract';
 import type { StructuredLesson, StructuredQuestion } from './contract';
 
 type SavedQuestion = { response: QuestionResponse; status: QuestionResult['status']; score?: number; maxScore?: number; feedback?: string; feedbackByLocale?: Partial<Record<'hi' | 'en', string>> };
@@ -24,7 +25,8 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   const courseText = searchParams.get('courseId') || '';
   const requestedCourseId = courseText || null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
-  const subjectCode = searchParams.get('subjectCode') || ''; 
+  const subjectCode = searchParams.get('subjectCode') || '';
+  const databaseLessonId = databaseLessonIdFromArtifactId(artifactId);
   const { locale, learningLanguage } = useLocale();
   const [lesson, setLesson] = useState<StructuredLesson | null>(null);
   const [saved, setSaved] = useState<SavedResponses>({});
@@ -32,9 +34,29 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   const [error, setError] = useState('');
   const [tutorOpen, setTutorOpen] = useState(false);
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+
+  // Old direct links still work, but database lessons belong on the canonical Learn screen.
+  useEffect(() => {
+    if (databaseLessonId === null || loadingCourses || courseId === null) return;
+
+    const params = new URLSearchParams({
+      courseId: String(activeCourse?.public_id || courseId),
+      lessonId: databaseLessonId,
+    });
+    if (subjectCode) params.set('subjectCode', subjectCode);
+    router.replace('/student/learn?' + params.toString());
+  }, [databaseLessonId, loadingCourses, courseId, activeCourse?.public_id, subjectCode, router]);
+
   useEffect(() => {
     let active = true;
     setBusy(true); setError('');
+    if (databaseLessonId !== null && courseId !== null) {
+      // The redirect effect above owns database-backed lessons.
+      setLesson(null);
+      setSaved({});
+      setBusy(false);
+      return () => { active = false; };
+    }
     if (courseId === null) {
       setLesson(null);
       setBusy(false);
@@ -60,7 +82,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       } finally { if (active) setBusy(false); }
     })();
     return () => { active = false; };
-  }, [artifactId, learningLanguage, locale, router, courseId, activeCourse?.public_id, loadingCourses, courseError]);
+  }, [artifactId, databaseLessonId, learningLanguage, locale, router, courseId, activeCourse?.public_id, loadingCourses, courseError]);
   async function submitQuestion(question: StructuredQuestion, response: QuestionResponse): Promise<QuestionResult> {
     const http = await apiFetch('/api/v1/learning/structured-lessons/' + encodeURIComponent(artifactId) +
       '/questions/' + encodeURIComponent(question.id) + '/responses?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId || '')) + '&language=' + learningLanguage, {

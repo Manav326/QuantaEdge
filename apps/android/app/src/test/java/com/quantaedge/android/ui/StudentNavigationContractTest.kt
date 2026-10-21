@@ -7,6 +7,24 @@ import org.junit.Test
 
 class StudentNavigationContractTest {
     @Test
+    fun relationalStructuredLessonsAreRoutedByTheirExactDatabaseId() {
+        assertEquals(42L, databaseLessonIdFromArtifactId("db-lesson-42"))
+        assertEquals(1L, databaseLessonIdFromArtifactId("db-lesson-1"))
+
+        listOf(
+            "",
+            "db-lesson-0",
+            "db-lesson-01",
+            "db-lesson-x",
+            "db-q-42",
+            "artifact-v1",
+            "db-lesson-999999999999999999999999"
+        ).forEach { artifactId ->
+            assertEquals(null, databaseLessonIdFromArtifactId(artifactId))
+        }
+    }
+
+    @Test
     fun canonicalGroupsMatchTheWebOrder() {
         assertEquals(listOf("today", "courses", "learn", "practice", "progress", "library"), StudentNavigationContract.studentGroupIds)
         assertEquals(listOf("family", "children", "profile"), StudentNavigationContract.parentGroupIds)
