@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2123,
+    "assets_selected": 2126,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2121,
-    "assets_remaining": 5367,
-    "assets_completion_percent": 28.3,
+    "assets_analyzed": 2124,
+    "assets_remaining": 5364,
+    "assets_completion_percent": 28.4,
     "assets_failed": 102,
-    "assets_skipped_from_checkpoint": 2118,
+    "assets_skipped_from_checkpoint": 2121,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:48:54Z"
+      "checkpointed_at": "2026-10-21T20:52:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:49:17Z"
+      "checkpointed_at": "2026-10-21T20:52:36Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -81004,6 +81004,131 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T20:51:22Z"
+    },
+    {
+      "asset_id": "fdd51b450b24c59209106528",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:52:43Z"
+    },
+    {
+      "asset_id": "4bbf126613cb497a013901d7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:52:50Z"
+    },
+    {
+      "asset_id": "b74c131a6bccf6674151f4de",
+      "asset_sha256": "025fc11ad9aaf0dd8f8a4405411f47178feffb4bca9f5f02113b4690eb1046b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 69,
+      "asset_path": "page-0069.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9999245de2d9ed622cab7f03a2d8ed421561ca105931772f00259087814836c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving iron nails and glass bottles.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Caution—Be careful while handling iron nails.",
+          "Take a few shining iron nails. If you are using old iron",
+          "nails, make sure to remove brown deposits from their",
+          "surface by scrubbing them with the help of a small",
+          "piece of sandpaper.",
+          "Take three clean, dry glass bottles or test tubes with",
+          "tight-fitting caps or stoppers. Label them A, B, and C.",
+          "Take three iron nails and tie each iron nail with a thread.",
+          "Place one iron nail and some silica gel in the glass bottle",
+          "'A', and tighten the cap or stopper (Fig. 4.4a). Silica gel",
+          "makes the air dry. It is the substance that is used in",
+          "small pouches in some medicine bottles, water bottles,",
+          "shoe boxes, etc., to keep them dry.",
+          "Place one iron nail in the glass bottle 'B'. Pour freshly",
+          "boiled and cooled water (to remove dissolved gases)",
+          "into it until the iron nail is completely dipped in it. Now,",
+          "pour some oil to form a layer over the surface of the",
+          "water (Fig. 4.4b). The layer of oil on the surface of the",
+          "water prevents the air from dissolving in the water. Cap",
+          "the glass bottle tightly.",
+          "Place one iron nail in the glass bottle 'C', and pour some",
+          "water so that the iron nail is partially dipped. Keep this",
+          "glass bottle unstoppered. This allows the iron nail to",
+          "come into contact with both water and air, as shown in",
+          "Fig. 4.4c.",
+          "Place all the glass bottles undisturbed at room",
+          "temperature and observe the changes for 8–10 days.",
+          "Record your observations in Table 4.3.",
+          "Table 4.3: Formation of brown deposit on iron nails",
+          "Glass"
+        ],
+        "concepts": [
+          "Iron nails",
+          "Silica gel",
+          "Glass bottles",
+          "Water",
+          "Oil",
+          "Air",
+          "Experiment",
+          "Observations",
+          "Table"
+        ],
+        "context_relation": "instructions for an experiment",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:54:58Z"
     }
   ]
 }
