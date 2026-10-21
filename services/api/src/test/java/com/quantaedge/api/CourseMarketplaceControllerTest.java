@@ -57,7 +57,7 @@ class CourseMarketplaceControllerTest {
     incomplete.put("tax_profile_id", null);
     incomplete.put("revenue_share_policy_id", 7L);
     incomplete.put("tax_calculation_snapshot_json", "{}");
-    incomplete.put("revenue_share_policy_snapshot_json", "{\\"policyId\\":7,\\"recipients\\":[]}");
+    incomplete.put("revenue_share_policy_snapshot_json", "{}");
 
     var exception = org.junit.jupiter.api.Assertions.assertThrows(
         org.springframework.web.server.ResponseStatusException.class,
