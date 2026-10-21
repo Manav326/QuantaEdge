@@ -70,6 +70,9 @@ class LearningStateServiceTest {
 
   @Test
   void courseScopedAnswerInsertBindsTenantAndCourseWithMatchingPlaceholderCount() {
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
+
     service.recordAttempt(7L, 42L, 9L, "A", false, null, null,
         "LESSON_INLINE", 17L, 88L);
 

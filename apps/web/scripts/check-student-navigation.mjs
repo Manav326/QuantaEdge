@@ -344,8 +344,9 @@ assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
   'Course-scoped learner answer writes must bind institution/course columns and keep answered_at as the database timestamp.');
 const structuredLessonContent = read('../app/student/structured-lessons/StructuredLessonContent.tsx');
-assert.ok(learnClient.includes("import StructuredLessonContent from '../structured-lessons/StructuredLessonContent';") &&
-  learnClient.includes('lesson.structured_lesson && <details className="qe-structured-optional-insert">') &&
+assert.ok(learnClient.includes("import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';") &&
+  learnClient.includes('inlineStructuredLesson &&') &&
+  learnClient.includes('<details className="qe-structured-optional-insert">') &&
   learnClient.includes('initialActivityResponses={structuredActivityResponses}') &&
   !learnClient.includes('if(lesson.structured_lesson) return') &&
   structuredLessonContent.includes('showHeader = true') &&

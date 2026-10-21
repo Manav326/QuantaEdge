@@ -4443,40 +4443,21 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             primaryLabel = localizedUiText("Explore Marketplace"),
                             onPrimary = ::openMarketplace
                         )
-                    } else if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
-                        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-                            Button(
-                                onClick = ::openTutor,
-                                enabled = currentCourseId > 0L,
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(localizedUiText("Ask the AI tutor about this topic"))
-                            }
-                            StructuredLessonRenderer(
-                        lesson = lesson,
-                        language = learningLanguage,
-                        studentMode = true,
-                        savedResponses = structuredLessonSavedResponses,
-                        submittingQuestionIds = structuredLessonPendingQuestionIds,
-                        savingActivityIds = structuredLessonPendingActivityIds,
-                        onSubmitResponse = { questionId, responseJson ->
-                            submitStructuredQuestionResponse(structuredLessonArtifactId, questionId, responseJson)
-                        },
-                        onSaveActivity = { blockId, responseJson ->
-                            saveStructuredActivityResponse(structuredLessonArtifactId, blockId, responseJson)
-                        }
-                            )
-                            StructuredLessonResourcesPanel(
-                                artifactId = structuredLessonArtifactId,
-                                language = learningLanguage,
-                                courseId = currentCourseId,
-                                onOpenLearningDocument = ::openAssignedLearningDocument
-                            )
-                        }
-                        TopicNavigationBar(
+                    } else if (structuredLessonMode) {
+                        StructuredLessonRouteContent(
+                            lesson = lesson,
                             language = language,
-                            showPrevious = structuredLessons.indexOfFirst { it.optString("artifactId") == structuredLessonArtifactId } > 0,
-                            showNext = structuredLessons.indexOfFirst { it.optString("artifactId") == structuredLessonArtifactId } in 0 until (structuredLessons.lastIndex),
+                            learningLanguage = learningLanguage,
+                            artifactId = structuredLessonArtifactId,
+                            savedResponses = structuredLessonSavedResponses,
+                            pendingQuestionIds = structuredLessonPendingQuestionIds,
+                            pendingActivityIds = structuredLessonPendingActivityIds,
+                            courseId = currentCourseId,
+                            availableLessons = structuredLessons,
+                            onTutor = ::openTutor,
+                            onSubmitResponse = ::submitStructuredQuestionResponse,
+                            onSaveActivity = ::saveStructuredActivityResponse,
+                            onOpenDocument = ::openAssignedLearningDocument,
                             onPrevious = { navigateLessonByOffset(-1) },
                             onNext = { navigateLessonByOffset(1) }
                         )
@@ -6052,6 +6033,76 @@ private fun TopicNavigationBar(
 }
 
 @Composable
+/**
+ * Renders the dedicated structured-lesson route outside the main route switch.
+ *
+ * Keeping this screen separate limits Compose-generated method size while preserving
+ * the same answer-saving callbacks and lesson navigation.
+ */
+@Composable
+private fun StructuredLessonRouteContent(
+    lesson: JSONObject,
+    language: String,
+    learningLanguage: String,
+    artifactId: String,
+    savedResponses: JSONObject,
+    pendingQuestionIds: Set<String>,
+    pendingActivityIds: Set<String>,
+    courseId: Long,
+    availableLessons: List<JSONObject>,
+    onTutor: () -> Unit,
+    onSubmitResponse: (String, String, String) -> Unit,
+    onSaveActivity: (String, String, String) -> Unit,
+    onOpenDocument: (Long) -> Unit,
+    onPrevious: () -> Unit,
+    onNext: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+            Button(
+                onClick = onTutor,
+                enabled = courseId > 0L,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(localizedUiText("Ask the AI tutor about this topic"))
+            }
+
+            StructuredLessonRenderer(
+                lesson = lesson,
+                language = learningLanguage,
+                studentMode = true,
+                savedResponses = savedResponses,
+                submittingQuestionIds = pendingQuestionIds,
+                savingActivityIds = pendingActivityIds,
+                onSubmitResponse = { questionId, responseJson ->
+                    onSubmitResponse(artifactId, questionId, responseJson)
+                },
+                onSaveActivity = { blockId, responseJson ->
+                    onSaveActivity(artifactId, blockId, responseJson)
+                }
+            )
+
+            StructuredLessonResourcesPanel(
+                artifactId = artifactId,
+                language = learningLanguage,
+                courseId = courseId,
+                onOpenLearningDocument = onOpenDocument
+            )
+        }
+
+        val currentLessonIndex = availableLessons.indexOfFirst {
+            it.optString("artifactId") == artifactId
+        }
+        TopicNavigationBar(
+            language = language,
+            showPrevious = currentLessonIndex > 0,
+            showNext = currentLessonIndex >= 0 && currentLessonIndex < availableLessons.lastIndex,
+            onPrevious = onPrevious,
+            onNext = onNext
+        )
+    }
+}
+
 private fun LessonScreen(
     lesson: JSONObject,
     language: String,
