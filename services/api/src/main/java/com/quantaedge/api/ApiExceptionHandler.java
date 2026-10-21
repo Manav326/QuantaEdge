@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -11,6 +12,14 @@ public class ApiExceptionHandler {
       InstitutionTenantContextService.InvalidInstitutionContextException ex) {
     return org.springframework.http.ResponseEntity.status(ex.statusCode())
         .body(Map.of("error", ex.errorCode(), "message", ex.getMessage()));
+  }
+
+  @ExceptionHandler(ResponseStatusException.class)
+  public org.springframework.http.ResponseEntity<Map<String,String>> responseStatus(ResponseStatusException ex) {
+    String message=ex.getReason();
+    if(message==null || message.isBlank()) message=ex.getStatusCode().toString();
+    return org.springframework.http.ResponseEntity.status(ex.getStatusCode())
+        .body(Map.of("error","HTTP_"+ex.getStatusCode().value(),"message",message));
   }
 
   @ExceptionHandler(LessonNotFoundException.class)
