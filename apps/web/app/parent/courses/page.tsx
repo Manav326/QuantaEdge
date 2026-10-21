@@ -113,7 +113,7 @@ export default function ParentCoursesPage() {
       setRequests(Array.isArray(results[2]) ? results[2] : []);
       setEntitlements(Array.isArray(results[3]) ? results[3] : []);
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'Family courses could not be loaded.' : 'परिवार के कोर्स लोड नहीं हो सके。');
+      setError(localizeMarketplaceError(e, language, 'Family courses could not be loaded.', 'परिवार के कोर्स लोड नहीं हो सके।'));
     } finally {
       setLoading(false);
     }
@@ -174,7 +174,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'Payment verification could not be completed. Retry verification before paying again.' : 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।');
+      setError(localizeMarketplaceError(e, language, 'Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
     } finally { setBusy(''); }
   }
 
@@ -204,11 +204,11 @@ export default function ParentCoursesPage() {
         setPendingVerify(null);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       }
-      setError(String(result.message || (english ? 'Payment status is still being reconciled. Do not pay again while verification is pending.' : 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।')));
+      setError(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await load();
     } catch (e) {
       setPendingVerify(draft);
-      setError(e instanceof Error ? e.message : english ? 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.' : 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।');
+      setError(localizeMarketplaceError(e, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setBusy('');
     }
@@ -236,7 +236,7 @@ export default function ParentCoursesPage() {
       }));
       if (!body.orderId || !Number.isSafeInteger(Number(body.localOrderId)) || Number(body.localOrderId) <= 0
           || !body.keyId || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0 || body.currency !== 'INR') {
-        throw new Error('The course order could not be prepared. Please retry.');
+        throw new Error(english ? 'The course order could not be prepared. Please retry.' : 'कोर्स का order तैयार नहीं हो सका। फिर प्रयास करें।');
       }
       if (Number(body.discountPaise || 0) > 0) {
         const saved = new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(Number(body.discountPaise)/100);
@@ -256,7 +256,7 @@ export default function ParentCoursesPage() {
       catch { /* Keep in-memory recovery when session storage is blocked. */ }
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
-      if (!RazorpayCtor) throw new Error('Payment checkout is not available. Please retry.');
+      if (!RazorpayCtor) throw new Error(english ? 'Payment checkout is not available. Please retry.' : 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।');
       const checkout = new RazorpayCtor({
         key: body.keyId,
         amount: Number(body.amount),
@@ -287,7 +287,7 @@ export default function ParentCoursesPage() {
       });
       checkout.open();
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'Checkout could not be started.' : 'Checkout शुरू नहीं हो सका।');
+      setError(localizeMarketplaceError(e, language, 'Checkout could not be started.', 'Checkout शुरू नहीं हो सका।'));
       setBusy('');
     }
   }
@@ -308,7 +308,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Free course added to the selected learning account.' : 'निःशुल्क कोर्स चुने गए learning खाते में जोड़ दिया गया।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'The free course could not be added.' : 'निःशुल्क कोर्स नहीं जोड़ा जा सका।');
+      setError(localizeMarketplaceError(e, language, 'The free course could not be added.', 'निःशुल्क कोर्स नहीं जोड़ा जा सका।'));
     } finally { setBusy(''); }
   }
 
@@ -321,7 +321,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Purchase request dismissed.' : 'कोर्स खरीद अनुरोध हटाया गया।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'The request could not be dismissed.' : 'अनुरोध खारिज नहीं हो सका।');
+      setError(localizeMarketplaceError(e, language, 'The request could not be dismissed.', 'अनुरोध खारिज नहीं हो सका।'));
     } finally { setBusy(''); }
   }
 
@@ -346,7 +346,7 @@ export default function ParentCoursesPage() {
       setNotice(english ? 'Course transferred permanently. The parent no longer owns this entitlement.' : 'कोर्स स्थायी रूप से ट्रांसफर हो गया। अब यह entitlement माता-पिता के पास नहीं है।');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'The course transfer could not be completed.' : 'कोर्स ट्रांसफर पूरा नहीं हो सका।');
+      setError(localizeMarketplaceError(e, language, 'The course transfer could not be completed.', 'कोर्स ट्रांसफर पूरा नहीं हो सका।'));
     } finally { setBusy(''); }
   }
 
@@ -357,11 +357,11 @@ export default function ParentCoursesPage() {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       if (body.role !== 'STUDENT' || body.workspace !== 'STUDENT' || Number(body.studentId) <= 0) {
-        throw new Error('Your personal learning session could not be confirmed.');
+        throw new Error(english ? 'Your personal learning session could not be confirmed.' : 'आपका personal learning session सत्यापित नहीं हो सका।');
       }
       window.location.assign('/parent/learning');
     } catch (e) {
-      setError(e instanceof Error ? e.message : english ? 'Could not open personal learning.' : 'व्यक्तिगत पढ़ाई नहीं खुल सकी।');
+      setError(localizeMarketplaceError(e, language, 'Could not open personal learning.', 'व्यक्तिगत पढ़ाई नहीं खुल सकी।'));
       setBusy('');
     }
   }
