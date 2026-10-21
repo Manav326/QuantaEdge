@@ -54,7 +54,7 @@ function StudentCertificatesContent() {
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
   const { brand } = useTenantBranding();
   const courseText = searchParams.get('courseId') || '';
-  const requestedCourseId = /^\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
+  const requestedCourseId = courseText || null;
   const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [profile, setProfile] = useState<any>(null);
@@ -76,6 +76,9 @@ function StudentCertificatesContent() {
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewError, setPreviewError] = useState('');
   const [downloadBusy, setDownloadBusy] = useState(false);
+  const publicCourseRef = String(activeCourse?.public_id || (courseId !== null ? courseId : ''));
+  const certificateCourseQuery = '?courseId=' + encodeURIComponent(publicCourseRef);
+  const internalCourseQuery = '?courseId=' + encodeURIComponent(String(courseId ?? ''));
   const refresh = useCallback(async () => {
     setError('');
     if (loadingCourses) return;
@@ -84,7 +87,8 @@ function StudentCertificatesContent() {
       setError(courseError || (locale === 'english' ? 'Choose an enrolled course to view its certificates.' : 'प्रमाणपत्र देखने के लिए नामांकित कोर्स चुनें।'));
       return;
     }
-    const courseQuery = '?courseId=' + encodeURIComponent(String(courseId));
+    const certificateCourseQuery = '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId));
+    const internalCourseQuery = '?courseId=' + encodeURIComponent(String(courseId));
     const requestJson = async (path: string) => {
       const response = await apiFetch(path, {
         cache: 'no-store',
@@ -101,10 +105,10 @@ function StudentCertificatesContent() {
       return body;
     };
     const results = await Promise.allSettled([
-      requestJson('/api/v1/students/me' + courseQuery),
-      requestJson('/api/v1/students/me/certificates' + courseQuery),
-      requestJson('/api/v1/students/me/certificates/eligible-assessments' + courseQuery),
-      requestJson('/api/v1/students/me/certificates/subject-tracks' + courseQuery),
+      requestJson('/api/v1/students/me' + internalCourseQuery),
+      requestJson('/api/v1/students/me/certificates' + certificateCourseQuery),
+      requestJson('/api/v1/students/me/certificates/eligible-assessments' + certificateCourseQuery),
+      requestJson('/api/v1/students/me/certificates/subject-tracks' + certificateCourseQuery),
     ]);
     if (results.some(result => result.status === 'rejected' && (result.reason as any)?.auth)) {
       router.replace('/login/student');
@@ -132,7 +136,7 @@ function StudentCertificatesContent() {
       : eligibleResult.status === 'rejected' ? eligibleResult.reason
       : progressResult.status === 'rejected' ? progressResult.reason : null;
     setError(failure?.message || '');
-  }, [router, locale, courseId, loadingCourses, courseError]);
+  }, [router, locale, courseId, activeCourse?.public_id, loadingCourses, courseError]);
 
   useEffect(() => {
     void refresh();
@@ -179,7 +183,7 @@ function StudentCertificatesContent() {
     setCertificateLookupLoading(true);
     const loadRecord = async () => {
       try {
-        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '?courseId=' + encodeURIComponent(String(courseId || '')), {
+        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '?courseId=' + encodeURIComponent(publicCourseRef), {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -199,7 +203,7 @@ function StudentCertificatesContent() {
     };
     void loadRecord();
     return () => { active = false; };
-  }, [requestedCertificateId, router, courseId]);
+  }, [requestedCertificateId, router, courseId, publicCourseRef]);
 
   useEffect(() => {
     if (!requestedCertificateId) {
@@ -226,7 +230,7 @@ function StudentCertificatesContent() {
     setPreviewLoading(true);
     const loadPreview = async () => {
       try {
-        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
+        const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?courseId=' + encodeURIComponent(publicCourseRef) + '&format=' + previewFormat, {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -256,14 +260,14 @@ function StudentCertificatesContent() {
       active = false;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [requestedCertificateId, requestedCertificate, previewFormat, router, locale]);
+  }, [requestedCertificateId, requestedCertificate, previewFormat, router, locale, publicCourseRef]);
 
   async function downloadSelectedCertificate() {
     if (!requestedCertificate || requestedCertificate.status !== 'ISSUED' || downloadBusy) return;
     setDownloadBusy(true);
     setPreviewError('');
     try {
-      const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?courseId=' + encodeURIComponent(String(courseId || '')) + '&format=' + previewFormat, {
+      const response = await apiFetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?courseId=' + encodeURIComponent(publicCourseRef) + '&format=' + previewFormat, {
         cache: 'no-store',
         credentials: 'same-origin',
         headers: { 'X-QE-Workspace': 'STUDENT' },
@@ -305,10 +309,9 @@ function StudentCertificatesContent() {
           assessmentAttemptId: Number(attemptId),
           templateId: 'CLASSIC',
           language,
-          courseId,
+          courseId: publicCourseRef,
         };
         if (brand?.institutionCode) body.institutionCode = brand.institutionCode;
-        if (Number(selectedAssessment.course_id) > 0) body.courseId = Number(selectedAssessment.course_id);
         const response = await apiFetch('/api/v1/students/me/certificates/issue', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
@@ -321,7 +324,7 @@ function StudentCertificatesContent() {
         const id = Number(record.id);
         if (!Number.isSafeInteger(id) || id < 1) throw new Error(translateUi(locale, 'legacy.web.invalid.certificate.id.d95a8103'));
         setNotice(translateUi(locale, 'legacy.web.opening.your.existing.certificate.ab3b11f2'));
-        router.push('/student/certificates?courseId=' + encodeURIComponent(String(courseId)) + '&certificateId=' + id);
+        router.push('/student/certificates?courseId=' + encodeURIComponent(publicCourseRef) + '&certificateId=' + id);
       } catch (e: any) {
         setError(e?.message || translateUi(locale, 'legacy.web.existing.certificate.could.not.be.reso.0323badc'));
       } finally {
@@ -339,7 +342,7 @@ function StudentCertificatesContent() {
     setNotice('');
     try {
       if (courseId === null) throw new Error('Select an enrolled course before issuing a certificate.');
-      const body: Record<string, unknown> = { achievementType, templateId: 'CLASSIC', language, courseId };
+      const body: Record<string, unknown> = { achievementType, templateId: 'CLASSIC', language, courseId: publicCourseRef };
       if (brand?.institutionCode) body.institutionCode = brand.institutionCode;
       if (achievementType === 'SUBJECT_COMPLETION') {
         if (!selectedTrack) throw new Error(translateUi(locale, 'legacy.web.choose.an.active.subject.track.65a5b52d'));
@@ -392,7 +395,7 @@ function StudentCertificatesContent() {
             <h1>{translateUi(locale, 'admin.navigation.certificates')}</h1>
             <p>{translateUi(locale, 'legacy.web.earn.verified.certificates.and.downloa.61103457')}</p>
           </div>
-          <Link href={'/student/progress' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="button button-light">← {translateUi(locale, 'legacy.web.learning.progress.cd800468')}</Link>
+          <Link href={'/student/progress' + (courseId !== null ? '?courseId=' + encodeURIComponent(publicCourseRef) : '')} className="button button-light">← {translateUi(locale, 'legacy.web.learning.progress.cd800468')}</Link>
         </header>
 
         {error && <div className={styles.error} role="alert">{error}</div>}
@@ -402,11 +405,11 @@ function StudentCertificatesContent() {
           onCourseChange={async value => {
             await selectCourse(value);
             setSubjectFilter('ALL'); setSelectedTrackKey(''); setAttemptId('');
-            window.history.replaceState(null, '', '/student/certificates?courseId=' + encodeURIComponent(value));
+            window.history.replaceState(null, '', '/student/certificates?courseId=' + encodeURIComponent(courses.find(course => String(course.id) === String(value))?.public_id || value));
           }}
           subjectCode={subjectFilter} onSubjectChange={value => {
             setSubjectFilter(value);
-            const params = new URLSearchParams(); if (courseId !== null) params.set('courseId', String(courseId));
+            const params = new URLSearchParams(); if (courseId !== null) params.set('courseId', publicCourseRef);
             if (value !== 'ALL') params.set('subjectCode', value);
             window.history.replaceState(null, '', '/student/certificates' + (params.size ? '?' + params.toString() : ''));
           }}
@@ -553,7 +556,7 @@ function StudentCertificatesContent() {
               icon="certificates"
               title={translateUi(locale, 'legacy.web.no.certificates.yet.46af6a77')}
               message={translateUi(locale, 'legacy.web.complete.all.published.lessons.or.pass.6578ce33')}
-              primaryActionHref={'/student/tests' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')}
+              primaryActionHref={'/student/tests' + (courseId !== null ? '?courseId=' + encodeURIComponent(publicCourseRef) : '')}
               primaryActionLabel={<UiText message="web.navigation.student.testsResults" />}
             />
           ) : (
@@ -570,7 +573,7 @@ function StudentCertificatesContent() {
                   <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? translateUi(locale, 'legacy.web.issued.454de9e4') : translateUi(locale, 'legacy.web.revoked.e75eac7b')}</span>
                   <div className={styles.downloads}>
                     {certificate.status === 'ISSUED' ? <>
-                      <Link href={'/student/certificates?courseId=' + encodeURIComponent(String(courseId || '')) + '&certificateId=' + certificate.id}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
+                      <Link href={'/student/certificates?courseId=' + encodeURIComponent(publicCourseRef) + '&certificateId=' + certificate.id}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
                     </> : <small>{translateUi(locale, 'legacy.web.revoked.contact.support.if.you.believe.61cb6a1f')}</small>}
                     <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">{translateUi(locale, 'legacy.web.verify.status.8146b8bf')}</Link>
                   </div>
