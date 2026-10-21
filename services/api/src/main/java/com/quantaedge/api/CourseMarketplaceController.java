@@ -916,6 +916,15 @@ public class CourseMarketplaceController {
     return value != null && value.matches("[A-Za-z0-9_-]{16,64}");
   }
 
+  /** Refuse payment capture/finalization when the original fiscal policy snapshot is incomplete. */
+  static void requireLockedFinancialSnapshotsForVerification(Map<String,Object> order) {
+    if (!hasLockedFinancialSnapshots(order)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing order is missing its locked tax/revenue-share snapshot. Do not pay again; the same order requires explicit financial reconciliation.");
+    }
+  }
+
   static boolean hasLockedFinancialSnapshots(Map<String,Object> order) {
     if(order==null||order.get("tax_profile_id")==null||order.get("revenue_share_policy_id")==null) return false;
     String tax=String.valueOf(order.get("tax_calculation_snapshot_json"));
@@ -1117,7 +1126,10 @@ public class CourseMarketplaceController {
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
-          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status
+          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
+          tax_profile_id,revenue_share_policy_id,
+          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where id=? and institution_id=? and (student_id=? or purchaser_user_id=?)
         for update
@@ -1134,6 +1146,7 @@ public class CourseMarketplaceController {
     if (!List.of("PENDING", "EXPIRED").contains(state)) {
       throw new IllegalArgumentException("This payment order is no longer payable.");
     }
+    requireLockedFinancialSnapshotsForVerification(order);
     Boolean offerStillPublished = jdbc.queryForObject("""
         select exists(
           select 1 from institution_marketplace_offer offer
