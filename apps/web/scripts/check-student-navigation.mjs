@@ -319,7 +319,7 @@ const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
 assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
-  coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open structured course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+  coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
 const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
 assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
@@ -343,7 +343,7 @@ assert.ok(courseScope.includes("String(course.public_id || '').toUpperCase() ===
   'Web structured learning must route by 8-character public course IDs and resolve them server-side to the internal row ID.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
-  androidApp.includes('AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject, currentCourseId)') &&
+  androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
   androidApp.includes('val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode)') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (studentHasNoCourses())') &&
   androidApp.includes('onRefresh = { openSubject(currentSubject, currentCourseId) }') &&

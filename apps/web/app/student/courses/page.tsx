@@ -198,7 +198,7 @@ export default function StudentCoursesPage() {
                 </div>
                 <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
                   onClick={() => void activateCourse(id)}>
-                  {busyCourseId === id ? 'Opening course…' : active ? 'Open structured course' : 'Focus and open course'}
+                  {busyCourseId === id ? 'Opening course…' : active ? 'Open course' : 'Focus and open course'}
                 </button>
               </article>
             );

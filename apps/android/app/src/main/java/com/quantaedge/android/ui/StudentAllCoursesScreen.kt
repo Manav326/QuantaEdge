@@ -140,8 +140,8 @@ fun StudentAllCoursesScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(when {
-                                active && hi -> "Structured course खोलें"
-                                active -> "Open structured course"
+                                active && hi -> "Course खोलें"
+                                active -> "Open course"
                                 hi -> "Focus करके course खोलें"
                                 else -> "Focus and open course"
                             })
