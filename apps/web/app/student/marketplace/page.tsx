@@ -112,7 +112,7 @@ export default function StudentMarketplacePage() {
       setOffers(Array.isArray(body) ? body : []);
     } catch (error: any) {
       setOffers([]);
-      setLoadError(error?.message || tx('Marketplace could not be loaded.', 'Marketplace लोड नहीं हो पाया।'));
+      setLoadError(localizeMarketplaceError(error?.message, language, 'Marketplace could not be loaded.', 'Marketplace लोड नहीं हो पाया।'));
     } finally {
       setLoading(false);
     }
@@ -189,7 +189,7 @@ export default function StudentMarketplacePage() {
       router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
     } catch (error: any) {
       setPendingVerify(draft);
-      setStatus(error?.message || tx('Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
+      setStatus(localizeMarketplaceError(error?.message, language, 'Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
@@ -222,11 +222,11 @@ export default function StudentMarketplacePage() {
         setPendingVerify(null);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       }
-      setStatus(String(result.message || tx('Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।')));
+      setStatus(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await loadOffers();
     } catch (error: any) {
       setPendingVerify(draft);
-      setStatus(error?.message || tx('Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
+      setStatus(localizeMarketplaceError(error?.message, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
