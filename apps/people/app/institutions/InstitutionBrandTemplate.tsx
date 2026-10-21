@@ -461,13 +461,13 @@ export default function InstitutionBrandTemplate({
         ]),
         { path: 'brand-assets/android/res/drawable-nodpi/institution_brand_icon_foreground.png', blob: androidForeground },
         { path: 'brand-assets/android/res/values/institution_brand_colors.xml', blob: new Blob([
-          '<?xml version="1.0" encoding="utf-8"?>\\n<resources>\\n  <color name="institution_brand_icon_background">' + themePrimary + '</color>\\n</resources>\\n',
+          '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n  <color name="institution_brand_icon_background">' + themePrimary + '</color>\n</resources>\n',
         ], { type: 'application/xml;charset=utf-8' }) },
         { path: 'brand-assets/android/res/mipmap-anydpi-v26/ic_launcher.xml', blob: new Blob([
-          '<?xml version="1.0" encoding="utf-8"?>\\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\\n  <background android:drawable="@color/institution_brand_icon_background"/>\\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\\n</adaptive-icon>\\n',
+          '<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n  <background android:drawable="@color/institution_brand_icon_background"/>\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\n</adaptive-icon>\n',
         ], { type: 'application/xml;charset=utf-8' }) },
         { path: 'brand-assets/android/res/mipmap-anydpi-v26/ic_launcher_round.xml', blob: new Blob([
-          '<?xml version="1.0" encoding="utf-8"?>\\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\\n  <background android:drawable="@color/institution_brand_icon_background"/>\\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\\n</adaptive-icon>\\n',
+          '<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n  <background android:drawable="@color/institution_brand_icon_background"/>\n  <foreground android:drawable="@drawable/institution_brand_icon_foreground"/>\n</adaptive-icon>\n',
         ], { type: 'application/xml;charset=utf-8' }) },
         { path: 'brand-assets/apple-touch-icon.png', blob: apple180 },
         { path: 'brand-assets/maskable-icon-512.png', blob: maskable512 },
