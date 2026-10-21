@@ -452,7 +452,7 @@ export default function LearnClient() {
           setChooseTrack(false);
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
-          setTrackBrowse({classCode:String(trackLessons[0]?.class_code||student.class_code),subjectCode:selectedSubject,subjectName:String(trackLessons[0]?.subject_name||subjectName),lessons:trackLessons,courseId:selectedCourseId,courseKey:selectedCourseKey,courseName:String(activeCourse?.display_name || student.programName || ''),programCode:selectedProgram});
+          setTrackBrowse({classCode:String(trackLessons[0]?.class_code||student.class_code),subjectCode:selectedSubject,subjectName:selectedSubject==='ALL'?subjectName:String(trackLessons[0]?.subject_name||subjectName),lessons:trackLessons,courseId:selectedCourseId,courseKey:selectedCourseKey,courseName:String(activeCourse?.display_name || student.programName || ''),programCode:selectedProgram});
           return;
         }
         setChooseTrack(false);
