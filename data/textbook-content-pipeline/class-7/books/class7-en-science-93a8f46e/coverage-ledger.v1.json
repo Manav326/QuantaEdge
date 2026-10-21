@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2114,
-    "successful_visual_analyses": 2013,
-    "missing_visual_analyses": 5374,
+    "raw_analysis_result_rows": 2117,
+    "successful_visual_analyses": 2016,
+    "missing_visual_analyses": 5371,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5475,
+    "unresolved_count": 5472,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -86955,9 +86955,26 @@
       "asset_path": "assets/8b1cb6106c9fc7445d5726e65687eeb463f3ffa6218878d3cee3eab8184eb959.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between metals and non-metals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Non-metals",
+          "Metal (iron)",
+          "Carbon"
+        ],
+        "concepts": [
+          "Metals",
+          "Non-metals",
+          "Steel"
+        ],
+        "context_relation": "The image explains the difference between metals and non-metals, specifically highlighting steel as a mixture of metal and non-metal.",
+        "limitations": [
+          "The image does not provide specific details about the properties of steel or the composition of steel."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -86973,9 +86990,31 @@
       "asset_path": "assets/14e655d39b2aa4ad455022914b4e244f52cc927044d7c5a8e372aa4e466c892f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the composition of steel ropes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel ropes",
+          "Ropes made of steel",
+          "A mixture of metal (iron) and non-metal (carbon)",
+          "Steel wires",
+          "Support heavy loads",
+          "Used in suspension bridges and cranes",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Steel wires",
+          "Applications of steel",
+          "Non-metals"
+        ],
+        "context_relation": "The image explains the composition and applications of steel ropes.",
+        "limitations": [
+          "The image does not provide specific details about the properties of steel ropes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -86991,9 +87030,36 @@
       "asset_path": "assets/a2924d97071ef4639b3fa1d04e88a16cd69da2f6f73bf6cb18f6af2b0b284adc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a wire made of coal or sulfur, emphasizing its non-ductility.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "iron",
+          "carbon",
+          "ductility",
+          "suspension bridges",
+          "cranes",
+          "heavy loads"
+        ],
+        "context_relation": "The image illustrates the non-ductility of coal and sulfur compared to steel, which is used in construction and heavy lifting.",
+        "limitations": [
+          "The image does not provide a clear view of the wire's composition or structure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
