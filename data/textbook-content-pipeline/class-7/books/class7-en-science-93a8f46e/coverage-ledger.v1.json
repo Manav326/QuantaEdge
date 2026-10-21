@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2171,
-    "successful_visual_analyses": 2070,
-    "missing_visual_analyses": 5317,
+    "raw_analysis_result_rows": 2174,
+    "successful_visual_analyses": 2073,
+    "missing_visual_analyses": 5314,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5418,
+    "unresolved_count": 5415,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89120,9 +89120,25 @@
       "asset_path": "assets/078fa62de1ba64e17adadfc5f7c4cfbc57245abd79ba5d815b96cbd69da2acc8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow object, possibly a coin or a small metal item, against a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Now,N",
+          "I understand!"
+        ],
+        "concepts": [
+          "ringing sound",
+          "sonority",
+          "metal"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "limitations": [
+          "The image is blurry and the object is not clearly identifiable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89138,9 +89154,26 @@
       "asset_path": "assets/597adf6cc697e56f2f084a765772567ac002205136b331b6bc4889fa9a62cd9a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals, specifically their ability to produce a ringing sound.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin produce a ringing sound. Coal and wood, on the other hand, produce dull sounds.",
+          "This property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "sonorous",
+          "ringing sound",
+          "dull sound"
+        ],
+        "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concept."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89156,9 +89189,31 @@
       "asset_path": "assets/3c4c9cdd42ee70bde7444c382213ac233826497abfafa6d1469631bd3199e6f3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white image of a metal spoon and a metal coin, with a coal and wood in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "You would observe that the metal spoon and the metal coin\nproduce a ringing sound. Coal and wood, on the other hand,\nproduce dull sounds.",
+          "This property of metals that enables them to produce a ringing\nsound is called sonority, and metals are said to be sonorous in nature."
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "dull sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The image illustrates the difference in sound produced by different materials.",
+        "limitations": [
+          "The image does not provide a diagram or chart.",
+          "The image does not show a comparison between the materials."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
