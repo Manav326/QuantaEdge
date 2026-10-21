@@ -17,7 +17,7 @@ type Props = {
   onApplied: () => Promise<void> | void;
 };
 type PackFile = { path: string; blob: Blob };
-type GeneratedPack = { zip: Blob; logo: Blob; icon: Blob; lockup: Blob; name: string; tagline: string; files: string[] };
+type GeneratedPack = { zip: Blob; logo: Blob; applyLogo: Blob; icon: Blob; lockup: Blob; name: string; tagline: string; files: string[] };
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 const MAX_DIMENSION = 4096;
@@ -244,7 +244,7 @@ function lockupLayout(name: string, tagline: string) {
 async function blobBase64(blob: Blob): Promise<string> {
   const bytes = new Uint8Array(await blob.arrayBuffer());
   let binary = '';
-  const chunkSize = 0x8000;
+  const chunkSize = 0x4000;
   for (let offset = 0; offset < bytes.length; offset += chunkSize) {
     binary += String.fromCharCode(...bytes.subarray(offset, Math.min(bytes.length, offset + chunkSize)));
   }
@@ -450,7 +450,7 @@ export default function InstitutionBrandTemplate({
         { path: 'brand-assets/source/icon-original.' + (iconSource.type === 'image/jpeg' ? 'jpg' : 'png'), blob: iconSource },
       ];
       const zip = await createZip(files);
-      setPack({ zip, logo, icon: icon512, lockup: brandLockup.png, name, tagline: cleanTagline, files: files.map(file => file.path) });
+      setPack({ zip, logo, applyLogo: logoForApply, icon: icon512, lockup: brandLockup.png, name, tagline: cleanTagline, files: files.map(file => file.path) });
       setNotice('Asset pack generated with ' + files.length + ' files. Review the previews, then download or apply this pack.');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Brand assets could not be generated.');
@@ -472,7 +472,7 @@ export default function InstitutionBrandTemplate({
     setNotice('');
     try {
       const form = new FormData();
-      form.set('logo', new File([pack.logo], 'institution-logo.png', { type: 'image/png' }));
+      form.set('logo', new File([pack.applyLogo], 'institution-logo.png', { type: 'image/png' }));
       form.set('appIcon', new File([pack.icon], 'institution-icon.png', { type: 'image/png' }));
       form.set('displayName', pack.name);
       form.set('tagline', pack.tagline);
