@@ -6032,7 +6032,6 @@ private fun TopicNavigationBar(
     }
 }
 
-@Composable
 /**
  * Renders the dedicated structured-lesson route outside the main route switch.
  *
@@ -6103,6 +6102,7 @@ private fun StructuredLessonRouteContent(
     }
 }
 
+@Composable
 private fun LessonScreen(
     lesson: JSONObject,
     language: String,
