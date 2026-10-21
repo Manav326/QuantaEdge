@@ -37,6 +37,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('textbook-extraction-pilot.yml/runs', coordinator)
         self.assertIn("active source extraction or Layer 4–5 work", coordinator)
 
+    def test_class8_rebuild_uses_fresh_verified_source_and_keeps_publication_disabled(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        marker = "[analyze-all-visual-layers-4-5-class-8]"
+        self.assertIn(marker, workflow)
+        self.assertIn(
+            "contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]') && '[\"8\"]'",
+            workflow,
+        )
+        self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
+        self.assertIn("source PDF SHA-256 differs from the selected whole-book PDF", workflow)
+        self.assertIn('"publication_allowed": False', workflow)
+
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         self.assertIn("workflow_dispatch:", workflow)
