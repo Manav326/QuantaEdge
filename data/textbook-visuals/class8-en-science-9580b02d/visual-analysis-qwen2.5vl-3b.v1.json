@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T16:08:33Z"
+      "checkpointed_at": "2026-10-21T16:23:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T16:09:20Z"
+      "checkpointed_at": "2026-10-21T16:23:55Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T16:09:59Z"
+      "checkpointed_at": "2026-10-21T16:24:33Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -28559,7 +28559,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574878522",
+      "run_id": "39574881477",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -29994,7 +29994,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39574878522",
+      "run_id": "39574881477",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
