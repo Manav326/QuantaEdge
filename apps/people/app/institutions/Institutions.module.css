@@ -203,3 +203,7 @@
 .brandTemplateLogoStageDark{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:100px;padding:12px;border:1px solid #263449;border-radius:9px;background:#111827}
 .brandTemplateLogoStageDark img{display:block;width:auto;height:auto;max-width:100%;max-height:78px;object-fit:contain;object-position:left center}
 .brandTemplateLogoStageDark>span{font-size:10px;color:#cbd5e1}
+
+.brandTemplateAssetField{display:grid;align-content:start;gap:7px;min-width:0}
+.brandTemplateAssetField>button{justify-self:start}
+@media(max-width:650px){.brandTemplateAssetField>button{min-height:38px}}

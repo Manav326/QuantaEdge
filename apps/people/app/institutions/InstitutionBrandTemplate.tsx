@@ -575,16 +575,20 @@ export default function InstitutionBrandTemplate({
         <input maxLength={240} value={tagline} onChange={event => { onTaglineChange(event.target.value); setPack(null); }} placeholder="A short phrase for your institution" />
         <small>Shown as theme-aware text where space allows.</small>
       </label>
-      <label>Full logo (PNG/JPEG) *
-        <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setLogoFile(file); setPack(null); setError(''); }} />
-        <small>{logoFile ? logoFile.name : logoUrl ? 'Current saved logo will be reused unless replaced.' : 'Choose a full-logo asset.'}</small>
+      <div className={styles.brandTemplateAssetField}>
+        <label>Full logo (PNG/JPEG) *
+          <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setLogoFile(file); setPack(null); setError(''); }} />
+          <small>{logoFile ? logoFile.name : logoUrl ? 'Current saved logo will be reused unless replaced.' : 'Choose a full-logo asset.'}</small>
+        </label>
         {logoUrl ? <button type="button" className={styles.quiet} onClick={() => void removeAsset('logo')} disabled={busy || applying || generating}>Remove saved full logo</button> : null}
-      </label>
-      <label>Square icon (PNG/JPEG) *
-        <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setIconFile(file); setPack(null); setError(''); }} />
-        <small>{iconFile ? iconFile.name : appIconUrl ? 'Current saved icon will be reused unless replaced.' : 'Choose a square symbol or icon.'}</small>
+      </div>
+      <div className={styles.brandTemplateAssetField}>
+        <label>Square icon (PNG/JPEG) *
+          <input type="file" accept="image/png,image/jpeg" onChange={event => { const file = event.currentTarget.files?.[0] || null; event.currentTarget.value = ''; setIconFile(file); setPack(null); setError(''); }} />
+          <small>{iconFile ? iconFile.name : appIconUrl ? 'Current saved icon will be reused unless replaced.' : 'Choose a square symbol or icon.'}</small>
+        </label>
         {appIconUrl ? <button type="button" className={styles.quiet} onClick={() => void removeAsset('app-icon')} disabled={busy || applying || generating}>Remove saved square icon</button> : null}
-      </label>
+      </div>
     </div>
     <div className={styles.brandTemplatePreviewGrid}>
       <div className={styles.brandTemplatePreviewCard}>
