@@ -502,7 +502,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           <div className="qe-enrollment-issue-copy">
             <strong>{brand?.displayName
               ? (locale === 'english' ? 'Enrollment with ' + brand.displayName + ' is not confirmed' : locale === 'hinglish' ? brand.displayName + ' ke saath enrollment confirm nahi hua' : brand.displayName + ' में नामांकन की पुष्टि नहीं हुई')
-              : (locale === 'english' ? 'School enrollment is not confirmed' : locale === 'hinglish' ? 'School enrollment confirm nahi hua' : 'विद्यालय में नामांकन की पुष्टि नहीं हुई')}</strong>
+              : (locale === 'english' ? 'Institution enrollment is not confirmed' : locale === 'hinglish' ? 'Institution mein enrollment confirm nahi hua' : 'आपके संस्थान में नामांकन की पुष्टि नहीं हुई')}</strong>
             <p>{enrollmentIssueText}</p>
           </div>
           <div className="qe-enrollment-issue-actions">
