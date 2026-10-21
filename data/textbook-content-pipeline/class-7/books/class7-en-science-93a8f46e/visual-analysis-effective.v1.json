@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a1aef53139f8d6b04c5efea200d0b00a6220f8819dc1de8888ce3b77f260503c",
+  "raw_analysis_sha256": "c4a25cc7827d0d5fba6319e7ace6ebf6fe17c413000df0e7ac12a55d57cd3ba7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:26:44Z",
+      "checkpointed_at": "2026-10-21T19:30:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:27:06Z",
+      "checkpointed_at": "2026-10-21T19:30:30Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -122302,6 +122302,216 @@
         "context_relation": "The image explains the composition of steel ropes, which are made of a mixture of metal and non-metal.",
         "limitations": [
           "The image does not provide specific details about the properties or uses of steel ropes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac24f227e626a6a747acf251",
+      "asset_sha256": "7d047a4a6232a09e49ac91382b827a5ecad528b7dbcbc45f9354f643914c3052",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/7d047a4a6232a09e49ac91382b827a5ecad528b7dbcbc45f9354f643914c3052.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between metals and non-metals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "Metals",
+          "Non-metals",
+          "Ductility",
+          "Steel",
+          "Suspension bridges",
+          "Cranes"
+        ],
+        "context_relation": "The text discusses the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:31:17Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between metals and non-metals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "Metals",
+          "Non-metals",
+          "Ductility",
+          "Steel",
+          "Suspension bridges",
+          "Cranes"
+        ],
+        "context_relation": "The text discusses the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1d27da854d08ce4b7e72ce7f",
+      "asset_sha256": "e8240f74abc67eb36d4fc991c1af6871d69cbcc43b613f718ed314b776057b6a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/e8240f74abc67eb36d4fc991c1af6871d69cbcc43b613f718ed314b776057b6a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a yellow shirt and a blue hat, with a blue arrow pointing to the right.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The text discusses the properties of coal and sulfur compared to steel, highlighting their non-ductility and the applications of steel in construction.",
+        "limitations": [
+          "The image does not provide any equations or formulas.",
+          "The image does not show any specific examples or diagrams.",
+          "The image does not include any numerical data or measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:32:05Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a yellow shirt and a blue hat, with a blue arrow pointing to the right.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The text discusses the properties of coal and sulfur compared to steel, highlighting their non-ductility and the applications of steel in construction.",
+        "limitations": [
+          "The image does not provide any equations or formulas.",
+          "The image does not show any specific examples or diagrams.",
+          "The image does not include any numerical data or measurements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "57c0909f96c16bf04a6cd4a6",
+      "asset_sha256": "54fa2b509a16de19f978df247b5bb8cf7d27223f21f67c0862b6a1b4c62eeb5b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/54fa2b509a16de19f978df247b5bb8cf7d27223f21f67c0862b6a1b4c62eeb5b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of materials"
+        ],
+        "context_relation": "The text compares the ductility of coal and sulfur to that of steel, highlighting the difference in their properties.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the ductility of coal and sulfur."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:32:53Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of materials"
+        ],
+        "context_relation": "The text compares the ductility of coal and sulfur to that of steel, highlighting the difference in their properties.",
+        "limitations": [
+          "The text does not provide specific examples or measurements of the ductility of coal and sulfur."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
