@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2010,
+    "assets_selected": 2013,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2008,
-    "assets_remaining": 5480,
-    "assets_completion_percent": 26.8,
+    "assets_analyzed": 2011,
+    "assets_remaining": 5477,
+    "assets_completion_percent": 26.9,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2005,
+    "assets_skipped_from_checkpoint": 2008,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T18:50:09Z"
+      "checkpointed_at": "2026-10-21T18:53:48Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T18:50:32Z"
+      "checkpointed_at": "2026-10-21T18:54:11Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -76852,6 +76852,132 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T18:53:00Z"
+    },
+    {
+      "asset_id": "8c191ea8515d2349371274f8",
+      "asset_sha256": "24540dbf5ebdb2d87f8ca32ee86ca0d83f43ef1c0ec43d12a7db3e78e536a4aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/24540dbf5ebdb2d87f8ca32ee86ca0d83f43ef1c0ec43d12a7db3e78e536a4aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "iron",
+          "carbon",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The page discusses the properties of coal and sulfur compared to steel, highlighting the difference in ductility and the applications of steel in construction.",
+        "limitations": [
+          "The page does not provide specific examples or measurements.",
+          "The page does not include any diagrams or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T18:54:58Z"
+    },
+    {
+      "asset_id": "b002f1e9c02026e78790f0fc",
+      "asset_sha256": "0d077068c8aca41247431544a6708ab7f3341a88476f0aeb8bd1633790160807",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/0d077068c8aca41247431544a6708ab7f3341a88476f0aeb8bd1633790160807.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a diver wearing a helmet, flippers, and a tank, swimming underwater.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "DIVE",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Diving",
+          "Underwater",
+          "Diver",
+          "Helmet",
+          "Flippers",
+          "Tank",
+          "Swimming",
+          "Water"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of metals and non-metals, specifically mentioning the ductility of coal and sulfur compared to steel.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur compared to steel."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T18:55:39Z"
+    },
+    {
+      "asset_id": "dc80669f8d85f69f4651d54e",
+      "asset_sha256": "ae010642aea970e640b5ae76bd67ae375f7e009a7a8b54fe2390d63d8a509bef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/ae010642aea970e640b5ae76bd67ae375f7e009a7a8b54fe2390d63d8a509bef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person blowing bubbles.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "45",
+          "Have you ever seen wires made of coal or sulfur? Obviously",
+          "not! We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture",
+          "of metal (iron) and non-metal (carbon)] wires can",
+          "support heavy loads? Therefore, they are used in",
+          "suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "steel",
+          "suspension bridges",
+          "cranes",
+          "non-metals"
+        ],
+        "context_relation": "The image is related to the text about the properties of materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of coal and sulfur."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T18:56:23Z"
     }
   ]
 }
