@@ -504,9 +504,11 @@ export default function ParentCoursesPage() {
                   <button className="button button-light button-small" type="button"
                     disabled={busy !== '' || (!isFree && pendingVerify !== null) || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
-                    {selectedChildAlreadyOwns
-                      ? (english ? 'Already has access' : 'पहले से पहुँच है')
-                      : <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />}
+                    {busy === 'checkout-' + course.course_id + '-CHILD-' + selectedChild || busy === 'free-' + course.course_id + '-CHILD-' + selectedChild
+                      ? (english ? 'Working…' : 'प्रक्रिया जारी…')
+                      : selectedChildAlreadyOwns
+                        ? (english ? 'Already has access' : 'पहले से पहुँच है')
+                        : <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />}
                   </button>
                 </div>
               </MarketplaceCourseCard>;
