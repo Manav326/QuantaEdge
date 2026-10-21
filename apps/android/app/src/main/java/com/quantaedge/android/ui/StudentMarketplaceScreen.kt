@@ -169,7 +169,7 @@ fun StudentMarketplaceScreen(
                             onClick = { onBuy(id, discountCode.trim()) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "Checkout खुल रहा है…" else "Opening checkout…" }
-                                else if (hi) "Razorpay से खरीदें" else "Buy with Razorpay")
+                                else if (hi) "कोर्स खरीदें" else "Buy course")
                         }
                         pricePaise == 0L -> OutlinedButton(
                             onClick = { onJoinFree(id) }, enabled = !busy && id > 0L, modifier = Modifier.fillMaxWidth()
