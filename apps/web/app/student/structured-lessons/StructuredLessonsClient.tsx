@@ -2,145 +2,122 @@
 
 import { apiFetch } from '../../components/apiClient';
 import { UiText } from '../../i18n/useUiTranslation';
-import { translateUi } from '../../i18n/catalog';
+import { useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { useStudentCourseScope } from '../CourseScope';
-import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
-import StudentEmptyState from '../components/StudentEmptyState';
-import { databaseLessonIdFromArtifactId } from './contract';
 
-type LessonItem = {
-  artifactId: string; subjectCode: string; chapterNumber: number;
-  chapterTitle: string; topicId: string; topicNumber: number; title: string; estimatedMinutes: number;
-};
+/**
+ * The legacy navigation label now means Resume Lesson.
+ * Resume uses the same database lesson screen and ordered lesson_block records as Learn → Lessons and Topics.
+ * This page deliberately does not load/render the separate structured-artifact catalogue.
+ */
 export default function StructuredLessonsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const requestedCourseText = searchParams.get('courseId') || '';
-  const requestedCourseId = requestedCourseText || null;
-  const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
-  const requestedSubjectCode = searchParams.get('subjectCode') || 'ALL';
-  const [subjectCode, setSubjectCode] = useState(requestedSubjectCode);
+  const requestedCourseId = searchParams.get('courseId') || null;
+  const requestedSubject = searchParams.get('subjectCode') || '';
+  const { courses, activeCourse, courseId, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
   const { locale, learningLanguage } = useLocale();
-  const [items, setItems] = useState<LessonItem[]>([]);
-  const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
-  const loadCatalogue = useCallback(async () => {
-    setBusy(true); setError('');
+
+  useEffect(() => {
+    if (loadingCourses) return;
     if (courseId === null) {
-      setItems([]);
-      setBusy(false);
-      if (!loadingCourses) setError(courseError || (locale === 'english' ? 'Select an enrolled course to view its approved lessons.' : 'स्वीकृत पाठ देखने के लिए नामांकित कोर्स चुनें।'));
+      setError(courseError || (locale === 'english'
+        ? 'Choose an enrolled course before resuming a lesson.'
+        : 'पाठ फिर से शुरू करने के लिए नामांकित कोर्स चुनें।'));
       return;
     }
-    try {
-      const query = new URLSearchParams({ language: learningLanguage, courseId: String(activeCourse?.public_id || courseId) });
-      if (subjectCode !== 'ALL') query.set('subjectCode', subjectCode);
-      const response = await apiFetch('/api/v1/learning/structured-lessons?' + query.toString(),
-        { credentials: 'same-origin', cache: 'no-store' });
-      if (response.status === 401 || response.status === 403) { router.replace('/login/student'); return; }
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
-      setItems(Array.isArray(body) ? body : []);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
-    } finally { setBusy(false); }
-  }, [learningLanguage, locale, router, courseId, activeCourse?.public_id, subjectCode, loadingCourses, courseError]);
-  useEffect(() => { void loadCatalogue(); }, [loadCatalogue]);
-  useEffect(() => {
-    if (subjectCode === 'ALL') return;
-    const available = (activeCourse?.subjects || []).some(subject => String(subject.subject_code || subject.code || '') === subjectCode);
-    if (!available) setSubjectCode('ALL');
-  }, [courseId, activeCourse, subjectCode]);
-  async function changeCourse(value: string) {
-    await selectCourse(value);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('courseId', courses.find(course => Number(course.id) === Number(value))?.public_id || value);
-    params.delete('subjectCode');
-    window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
-    setSubjectCode('ALL');
+
+    let cancelled = false;
+    async function resume() {
+      setError('');
+      const publicCourseId = String(activeCourse?.public_id || courseId);
+      let lessonId = 0;
+
+      // Record written by the canonical Learn screen after a lesson is opened.
+      try {
+        const saved = JSON.parse(localStorage.getItem(
+          'qe:student:last-opened-lesson:course-' + publicCourseId
+        ) || '{}');
+        if (String(saved.courseId || '') === publicCourseId) {
+          const savedLessonId = Number(saved.lessonId);
+          if (Number.isSafeInteger(savedLessonId) && savedLessonId > 0) lessonId = savedLessonId;
+        }
+      } catch {
+        // An invalid local bookmark must never prevent a learner from opening the catalogue.
+      }
+
+      if (!lessonId) {
+        // Backward compatibility: older builds stored one lesson per subject but did not
+        // record which subject was opened most recently. Prefer the requested subject when
+        // supplied; otherwise choose the first published lesson in this course.
+        const query = new URLSearchParams({
+          language: learningLanguage,
+          courseId: String(courseId),
+        });
+        if (requestedSubject && requestedSubject !== 'ALL') query.set('subjectCode', requestedSubject);
+        const response = await apiFetch('/api/v1/learning/lessons?' + query.toString(), {
+          cache: 'no-store',
+          credentials: 'same-origin',
+        });
+        if (response.status === 401 || response.status === 403) {
+          router.replace('/login/student');
+          return;
+        }
+        const body = await response.json().catch(() => []);
+        if (!response.ok) throw new Error(body?.message || body?.detail || 'Could not find a lesson to resume.');
+        const rows = Array.isArray(body) ? body : [];
+        const first = rows[0];
+        lessonId = Number(first?.id || 0);
+      }
+
+      if (!Number.isSafeInteger(lessonId) || lessonId <= 0) {
+        throw new Error(locale === 'english'
+          ? 'There are no published lessons available in this course yet.'
+          : 'इस कोर्स में अभी कोई प्रकाशित पाठ उपलब्ध नहीं है।');
+      }
+
+      if (cancelled) return;
+      // Keep subjectCode=ALL in the return URL so Back opens Lessons and Topics in its
+      // course-wide mode. Learn itself resolves the lesson's actual subject for prev/next.
+      const target = new URLSearchParams({
+        courseId: publicCourseId,
+        subjectCode: 'ALL',
+        lessonId: String(lessonId),
+      });
+      router.replace('/student/learn?' + target.toString());
+    }
+
+    void resume().catch((cause: unknown) => {
+      if (!cancelled) setError(cause instanceof Error ? cause.message : 'Could not resume the last lesson.');
+    });
+    return () => { cancelled = true; };
+  }, [activeCourse?.public_id, courseId, courseError, learningLanguage, loadingCourses, locale, requestedSubject, router]);
+
+  if (error) {
+    return <main className="lesson-page"><section className="lesson-wrap">
+      <div className="auth-card" role="alert">
+        <h1>{locale === 'english' ? 'Resume lesson' : 'पाठ फिर से शुरू करें'}</h1>
+        <p>{error}</p>
+        <Link href={'/student/learn' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')}
+          className="button button-dark">
+          {locale === 'english' ? 'Open Lessons and Topics' : 'पाठ और विषय खोलें'}
+        </Link>
+        <Link href="/student/courses" className="text-link">
+          <UiText message="web.navigation.student.allCourses" />
+        </Link>
+      </div>
+    </section></main>;
   }
-  function changeSubject(value: string) {
-    setSubjectCode(value);
-    const params = new URLSearchParams(searchParams.toString());
-    if (courseId !== null) params.set('courseId', String(activeCourse?.public_id || courseId));
-    if (value === 'ALL') params.delete('subjectCode'); else params.set('subjectCode', value);
-    window.history.replaceState(null, '', '/student/structured-lessons?' + params.toString());
-  }
-  const noEnrolledCourses = !loadingCourses && courses.length === 0 &&
-    (!courseError || courseError === 'This course is not enrolled in your current institution account.');
-  if (noEnrolledCourses) return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><h1><UiText message="web.navigation.student.structuredLessons" /></h1></header>
-    <StudentEmptyState icon="learn" title={<UiText message="student.empty.learn.title" />}
-      message={<UiText message="student.empty.learn.message" />}
-      primaryActionHref="/student/marketplace" primaryActionLabel={<UiText message="student.empty.dashboard.action" />} />
-  </section></div></main>;
 
-  return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading qe-lesson-list-header"><div>
-      <span className="eyebrow"><UiText message="legacy.web.bilingual.lesson.format.349a3c45" /></span>
-      <h1><UiText message="web.navigation.student.structuredLessons" /></h1>
-      <p><UiText message="legacy.web.explain.visuals.activities.and.one.que.c789dbec" /></p>
-    </div>
-    <div className="qe-course-page-actions"><InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId} onCourseChange={value => void changeCourse(value)} subjectCode={subjectCode} onSubjectChange={changeSubject} loading={loadingCourses} language={locale} courseLabel={locale === 'english' ? 'Course' : 'कोर्स'} subjectLabel={locale === 'english' ? 'Subject' : 'विषय'} allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} /><button type="button" className="qe-icon-action" onClick={() => void loadCatalogue()} disabled={busy} aria-label={locale === 'english' ? 'Reload lessons' : 'पाठ फिर से लोड करें'} title={locale === 'english' ? 'Reload lessons' : 'पाठ फिर से लोड करें'}><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 17.2 6L20 12M4 12l2.8 6A7 7 0 0 0 18.4 15"/></svg></button></div></header>
-    {courseError && !loadingCourses && <p role="alert" className="error-message">{courseError}</p>}{error && <p role="alert" className="error-message">{error}</p>}
-    {busy ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
-      (error || courseError) ? null :
-      items.length === 0 ? <StudentEmptyState
-        icon="learn"
-        title={<UiText message="legacy.web.no.approved.structured.lessons.are.ava.a3717bf5" />}
-        message={<UiText message="legacy.web.lessons.appear.here.only.after.content.88a83834" />}
-        primaryActionHref={'/student/courses' + (courseId !== null ? '?focus=' + encodeURIComponent(String(courseId)) : '')}
-        primaryActionLabel={<UiText message="web.navigation.student.allCourses" />}
-        onRetry={() => void loadCatalogue()}
-        retryLabel={<UiText message="legacy.web.refresh.e9337860" />}
-        retryDisabled={busy}
-      /> :
-      <div className="task-list">
-        {items.map(item => {
-          const databaseLessonId = databaseLessonIdFromArtifactId(item.artifactId);
-          const query = new URLSearchParams({
-            courseId: String(activeCourse?.public_id || courseId || ''),
-            subjectCode: item.subjectCode,
-          });
-
-          // Relational lessons use the canonical page that preserves the legacy learning UI.
-          let href = '/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?' + query.toString();
-          if (databaseLessonId !== null) {
-            query.set('lessonId', databaseLessonId);
-            href = '/student/learn?' + query.toString();
-          }
-
-          return (
-            <article className="task-card" key={item.artifactId}>
-              <div>
-                <span className="qe-course-subject-context">
-                  {activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')}
-                  {' · '}
-                  {(activeCourse?.subjects || []).find(subject =>
-                    String(subject.subject_code || subject.code || '') === item.subjectCode
-                  )?.subject_name || item.subjectCode}
-                </span>
-                <h2>{item.title}</h2>
-                <p>
-                  {translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle}
-                  {' · '}
-                  {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}
-                </p>
-                {item.estimatedMinutes > 0 && (
-                  <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>
-                )}
-              </div>
-              <Link href={href} className="button button-dark">
-                {translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}
-              </Link>
-            </article>
-          );
-        })}
-      </div>}
-  </section></div></main>;
+  return <main className="lesson-page"><section className="lesson-wrap">
+    <div className="eyebrow">{locale === 'english' ? 'Resume lesson' : 'पाठ फिर से शुरू करें'}</div>
+    <h1>{locale === 'english' ? 'Opening your last lesson…' : 'आपका पिछला पाठ खोला जा रहा है…'}</h1>
+    <p className="lesson-intro">{locale === 'english'
+      ? 'Your saved lesson opens in the same lesson view used by Lessons and Topics.'
+      : 'आपका सुरक्षित पाठ उसी दृश्य में खुलेगा जो पाठ और विषय में उपयोग होता है।'}</p>
+  </section></main>;
 }
