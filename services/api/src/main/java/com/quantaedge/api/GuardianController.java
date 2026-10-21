@@ -523,7 +523,7 @@ public class GuardianController {
   @GetMapping("/children/{studentId}/programs")
   @Transactional(readOnly = true)
   public List<Map<String,Object>> childPrograms(@PathVariable long studentId,
-      @RequestParam(name="includeSubjects",defaultValue="true") boolean includeSubjects,
+      @RequestParam(name="includeSubjects",defaultValue="false") boolean includeSubjects,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
