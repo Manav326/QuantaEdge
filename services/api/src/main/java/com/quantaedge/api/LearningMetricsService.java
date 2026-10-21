@@ -232,13 +232,13 @@ public class LearningMetricsService {
       select
         count(distinct da.id) filter (where da.status='SUBMITTED') as completed_attempts,
         count(distinct da.id) filter (where da.status='IN_PROGRESS') as in_progress_attempts,
-        count(daq.id) filter (where da.status='SUBMITTED') as questions,
-        count(daq.id) filter (where da.status='SUBMITTED' and daq.answered_at is not null) as answered_questions,
-        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=true) as correct_answers,
-        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=false) as incorrect_answers,
-        count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct is not null) as graded_answers,
-        coalesce(round(100.0*count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct=true)/
-          nullif(count(daq.id) filter (where da.status='SUBMITTED' and daq.is_correct is not null),0),1),0) as accuracy_percent,
+        count(daq.question_id) filter (where da.status='SUBMITTED') as questions,
+        count(daq.question_id) filter (where da.status='SUBMITTED' and daq.answered_at is not null) as answered_questions,
+        count(daq.question_id) filter (where da.status='SUBMITTED' and daq.is_correct=true) as correct_answers,
+        count(daq.question_id) filter (where da.status='SUBMITTED' and daq.is_correct=false) as incorrect_answers,
+        count(daq.question_id) filter (where da.status='SUBMITTED' and daq.is_correct is not null) as graded_answers,
+        coalesce(round(100.0*count(daq.question_id) filter (where da.status='SUBMITTED' and daq.is_correct=true)/
+          nullif(count(daq.question_id) filter (where da.status='SUBMITTED' and daq.is_correct is not null),0),1),0) as accuracy_percent,
         max(da.submitted_at) filter (where da.status='SUBMITTED') as completed_at
       from student_diagnostic_attempt da
       left join student_diagnostic_attempt_question daq on daq.diagnostic_attempt_id=da.id
@@ -250,12 +250,12 @@ public class LearningMetricsService {
     String diagnosticSubjectScope = selectedSubjectCode == null ? "true" : "lower(s.code)=lower(?)";
     String diagnosticSubjectsSql = """
       select s.code as subject_code,s.display_name as subject_name,
-        count(daq.id) as questions,
-        count(daq.id) filter (where daq.answered_at is not null) as answered_questions,
-        count(daq.id) filter (where daq.is_correct=true) as correct_answers,
-        count(daq.id) filter (where daq.is_correct is not null) as graded_answers,
-        coalesce(round(100.0*count(daq.id) filter (where daq.is_correct=true)/
-          nullif(count(daq.id) filter (where daq.is_correct is not null),0),1),0) as accuracy_percent
+        count(daq.question_id) as questions,
+        count(daq.question_id) filter (where daq.answered_at is not null) as answered_questions,
+        count(daq.question_id) filter (where daq.is_correct=true) as correct_answers,
+        count(daq.question_id) filter (where daq.is_correct is not null) as graded_answers,
+        coalesce(round(100.0*count(daq.question_id) filter (where daq.is_correct=true)/
+          nullif(count(daq.question_id) filter (where daq.is_correct is not null),0),1),0) as accuracy_percent
       from student_diagnostic_attempt da
       join student_diagnostic_attempt_question daq on daq.diagnostic_attempt_id=da.id
       join lesson l on l.id=daq.lesson_id
