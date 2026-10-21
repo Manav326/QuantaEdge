@@ -24732,30 +24732,9 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
-          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
-          "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer"
-        ],
-        "concepts": [
-          "Eclipse",
-          "Earth's rotation",
-          "Moon's orbit",
-          "Day and night",
-          "Science experiments",
-          "Questioning answers"
-        ],
-        "context_relation": "Introduction to scientific concepts and experiments",
-        "limitations": [
-          "No specific limitations mentioned"
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47955,9 +47934,51 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Question about litmus paper and solution reactions.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let Us Enhance Our Learning",
+          "1. A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A, B, and C, but you do not know which of these are acidic, basic, or neutral. Upon adding a few drops of red litmus solution to solution A, it turns blue. When a few drops of turmeric solution are added to solution B, it turns red. Finally, ",
+          "Based on the observations, which of the following is the correct sequence for the nature of solutions A, B, and C?",
+          "(i) Acidic, acidic, and acidic",
+          "(ii) Neutral, basic, and basic",
+          "(iii) Basic, basic, and acidic",
+          "(iv) Basic, basic, and basic",
+          "3. Observe and analyse Figs. 2.13, 2.14, and 2.15, in which red rose extract paper strips are used. Label the nature of solutions present in each of the containers.",
+          "Fig. 2.13",
+          "Fig. 2.14",
+          "Fig. 2.15",
+          "4. A liquid sample from the laboratory was tested using various indicators:",
+          "Indicator | Red litmus | Blue litmus | Turmeric",
+          "Change | No change | Turned red | No change in colour",
+          "Based on the tests, identify the acidic or basic nature of the liquid and justify your answer."
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution reactions",
+          "acidic",
+          "basic",
+          "neutral",
+          "red litmus",
+          "blue litmus",
+          "turmeric",
+          "red rose extract",
+          "indicator"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
