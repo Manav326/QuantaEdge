@@ -13,7 +13,7 @@ import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
-  course_id: number; title: string; course_name: string; course_code: string;
+  course_id: number; public_id?: string; title: string; course_name: string; course_code: string;
   curriculum_version?: string; description?: string | null; price_paise: number; currency: string;
   owned_by_parent?: boolean; owned_by_child?: boolean; owned_child_ids?: string | null;
   transferable_by_parent?: boolean;
@@ -451,7 +451,9 @@ export default function ParentCoursesPage() {
                 key={course.course_id}
                 title={course.title || course.course_name}
                 courseCode={course.course_code}
+                publicId={course.public_id}
                 curriculumVersion={course.curriculum_version}
+                language={english ? 'en' : 'hi'}
                 priceLabel={ownedByParent && !isFree
                   ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')
                   : course.owned_by_child === true
