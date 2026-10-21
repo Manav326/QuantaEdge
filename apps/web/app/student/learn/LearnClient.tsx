@@ -257,6 +257,7 @@ function QuestionCard({q,index,onResult,onTutorOpen,courseId}:{q:Question;index:
   });
   const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
+  const useLegacyFreeText = ['MATCH','ORDER'].includes(q.question_type.toUpperCase());
   const submitted=result?.correct===true;
   const questionLabel=q.question_type==='MCQ'?translateUi(locale, 'legacy.web.multiple.choice.649280af'):q.question_type==='TRUE_FALSE'?translateUi(locale, 'legacy.web.true.or.false.43e5661e'):q.question_type==='NUMERICAL'?translateUi(locale, 'legacy.web.numerical.question.3993dcf1'):q.question_type.replaceAll('_',' ');
 
@@ -289,7 +290,7 @@ function QuestionCard({q,index,onResult,onTutorOpen,courseId}:{q:Question;index:
     </div>
     <div className="qe-question-card__prompt"><MathText text={q.prompt}/></div>
 
-    {options.length>0 ? <div className="qe-answer-options" role="group" aria-label={translateUi(locale, 'legacy.web.answer.choices.436a84eb')}>
+    {options.length>0 && !useLegacyFreeText ? <div className="qe-answer-options" role="group" aria-label={translateUi(locale, 'legacy.web.answer.choices.436a84eb')}>
       {options.map((o,i)=>{
         const chosen=value===o.key;
         const stateClass=chosen&&result?.correct===false?'is-incorrect':chosen&&result?.correct===true?'is-correct':chosen?'is-selected':'';

@@ -21,6 +21,7 @@ const learningController = read('../../../services/api/src/main/java/com/quantae
 const relationalStructuredLessonService = read('../../../services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java');
 const learningStateServiceTest = read('../../../services/api/src/test/java/com/quantaedge/api/LearningStateServiceTest.java');
 const structuredLessonExperience = read('../app/student/structured-lessons/StructuredLessonExperience.tsx');
+const structuredQuestionRenderer = read('../app/student/structured-lessons/StructuredQuestionRenderer.tsx');
 const tutorMigration = read('../../../services/api/src/main/resources/db/migration/V160__structured_artifact_ai_tutor_sessions.sql');
 const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
@@ -356,7 +357,12 @@ assert.ok(learnClient.includes("import StructuredLessonContent from '../structur
   learningController.includes('result.put("structured_lesson", structuredPayload)') &&
   learningController.includes('coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer') &&
   learningController.includes('latest_attempt.correct as saved_correct') &&
+  learningController.includes("when q.question_type='ORDER' then") &&
+  learningController.includes("when q.question_type='MATCH' then") &&
   relationalStructuredLessonService.includes('question.put("legacy_question_type", rawType)') &&
+  relationalStructuredLessonService.includes('question.put("legacy_interaction_type", legacyInteraction)') &&
+  relationalStructuredLessonService.includes('question.set("left_items", leftItems)') &&
+  structuredQuestionRenderer.includes("question.legacy_interaction_type === 'ORDER'") &&
   !relationalStructuredLessonService.includes('if (options.size() < 2) continue;') &&
   structuredLessonExperience.includes('showExplanation = true') &&
   structuredLessonExperience.includes('{showExplanation && <StructuredLessonContent') &&
