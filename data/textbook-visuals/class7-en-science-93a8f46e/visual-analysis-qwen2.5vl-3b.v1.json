@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2019,
+    "assets_selected": 2022,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2017,
-    "assets_remaining": 5471,
-    "assets_completion_percent": 26.9,
+    "assets_analyzed": 2020,
+    "assets_remaining": 5468,
+    "assets_completion_percent": 27.0,
     "assets_failed": 101,
-    "assets_skipped_from_checkpoint": 2014,
+    "assets_skipped_from_checkpoint": 2017,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:00:25Z"
+      "checkpointed_at": "2026-10-21T19:03:20Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T19:00:47Z"
+      "checkpointed_at": "2026-10-21T19:03:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -77237,6 +77237,129 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T19:02:35Z"
+    },
+    {
+      "asset_id": "89c15f51a952a91d0ba696b5",
+      "asset_sha256": "aabe539cca27da3668ae7a80a0c1cd24d734d59bedd596159d2ddf3d2e1e41bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/aabe539cca27da3668ae7a80a0c1cd24d734d59bedd596159d2ddf3d2e1e41bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the composition of steel ropes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel ropes",
+          "Ropes made of steel",
+          "Mixture of metal (iron) and non-metal (carbon)",
+          "Support heavy loads",
+          "Used in suspension bridges and cranes",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel",
+          "Differences between metals and non-metals"
+        ],
+        "context_relation": "The image illustrates the composition and properties of steel ropes, emphasizing their use in heavy-duty applications.",
+        "limitations": [
+          "The image does not provide specific details about the exact composition of the steel ropes.",
+          "The image does not show the exact process of making steel ropes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:04:25Z"
+    },
+    {
+      "asset_id": "65e41a00bc9254ef9f737838",
+      "asset_sha256": "5a9d6697951fb7a466bb9e845a8de893728bb4ecf9ad9153c3b3b6a168a418e6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/5a9d6697951fb7a466bb9e845a8de893728bb4ecf9ad9153c3b3b6a168a418e6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the composition of steel ropes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel ropes",
+          "Ropes made of steel",
+          "Steel (iron)",
+          "Non-metal (carbon)",
+          "Support heavy loads",
+          "Used in suspension bridges and cranes",
+          "Non-metals"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel in construction"
+        ],
+        "context_relation": "The image explains the composition and properties of steel ropes, emphasizing their use in construction.",
+        "limitations": [
+          "The image does not provide specific details about the composition of steel ropes.",
+          "The image does not show the actual composition of steel ropes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:05:05Z"
+    },
+    {
+      "asset_id": "1c002f3329aca4e00e19b419",
+      "asset_sha256": "7c3070f53335dd1c79a8e560a76630b5cbc6a6410f33c6149df0d799e928e2b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 65,
+      "asset_path": "assets/7c3070f53335dd1c79a8e560a76630b5cbc6a6410f33c6149df0d799e928e2b7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of metals and non-metals, specifically focusing on the ductility of coal and sulfur compared to steel.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Have you ever seen wires made of coal or sulfur? Obviously not!",
+          "We can say that coal and sulfur are not ductile.",
+          "Do you know that ropes made of steel [a mixture of metal (iron) and non-metal (carbon)] wires can support heavy loads?",
+          "Therefore, they are used in suspension bridges and in cranes to lift heavy objects."
+        ],
+        "concepts": [
+          "ductility",
+          "coal",
+          "sulfur",
+          "steel",
+          "metal",
+          "non-metal",
+          "ductility of materials"
+        ],
+        "context_relation": "The page discusses the properties of different materials, comparing coal and sulfur to steel.",
+        "limitations": [
+          "The page does not provide specific examples or measurements of the materials' properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T19:05:49Z"
     }
   ]
 }
