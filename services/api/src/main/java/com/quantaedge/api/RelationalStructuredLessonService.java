@@ -689,8 +689,10 @@ public class RelationalStructuredLessonService {
              coalesce(qth.prompt,q.prompt) as prompt_hi,
              coalesce(qte.explanation,q.explanation,'') as explanation_en,
              coalesce(qth.explanation,q.explanation,'') as explanation_hi,
-             coalesce(qte.options::text,base.options_json::text,'[]') as options_en,
-             coalesce(qth.options::text,base.options_json::text,'[]') as options_hi
+             case when qte.options is not null and qte.options<>'[]'::jsonb then qte.options::text
+                  else base.options_json::text end as options_en,
+             case when qth.options is not null and qth.options<>'[]'::jsonb then qth.options::text
+                  else base.options_json::text end as options_hi
       from question q
       left join lateral (
         select tr.prompt,tr.explanation,tr.options from question_translation tr
