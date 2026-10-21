@@ -305,7 +305,7 @@ export default function StudentMarketplacePage() {
       checkout.open();
     } catch (error: any) {
       setBusyCourseId(null);
-      setStatus(error?.message || tx('Checkout could not be started. Please retry.', 'Checkout शुरू नहीं हो सका। फिर प्रयास करें।'));
+      setStatus(localizeMarketplaceError(error?.message, language, 'Checkout could not be started. Please retry.', 'Checkout शुरू नहीं हो सका। फिर प्रयास करें।'));
     }
   }
 
@@ -326,7 +326,7 @@ export default function StudentMarketplacePage() {
         : offer));
       setStatus(tx('Purchase request sent at {time}. Your parent can review it from the family account.', '{time} पर खरीदने का अनुरोध भेजा गया। आपके parent इसे family account में देख सकते हैं।', {time:formatUserTimestamp(requestedAt)}));
     } catch (error: any) {
-      setStatus(error?.message || tx('The purchase request could not be sent. Please retry.', 'खरीदने का अनुरोध नहीं भेजा जा सका। फिर प्रयास करें।'));
+      setStatus(localizeMarketplaceError(error?.message, language, 'The purchase request could not be sent. Please retry.', 'खरीदने का अनुरोध नहीं भेजा जा सका। फिर प्रयास करें।'));
     } finally {
       setBusyCourseId(null);
     }
@@ -343,18 +343,18 @@ export default function StudentMarketplacePage() {
       setStatus(tx('Free course added to All Courses.', 'निःशुल्क कोर्स All Courses में जोड़ दिया गया।'));
       router.push('/student/courses?focus=' + encodeURIComponent(String(courseId)));
     } catch (error: any) {
-      setStatus(error?.message || tx('The course could not be added. Please retry.', 'कोर्स नहीं जोड़ा जा सका। फिर प्रयास करें।'));
+      setStatus(localizeMarketplaceError(error?.message, language, 'The course could not be added. Please retry.', 'कोर्स नहीं जोड़ा जा सका। फिर प्रयास करें।'));
     } finally {
       setBusyCourseId(null);
     }
   }
 
-  const money = (paise: number) => new Intl.NumberFormat('en-IN', {
+  const money = (paise: number) => new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN', {
     style: 'currency', currency: 'INR', maximumFractionDigits: 2,
   }).format(paise / 100);
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} lang={language}>
       <header className={styles.hero}>
         <div className={styles.eyebrow}>{tx('LEARN SOMETHING NEW', 'कुछ नया सीखें')}</div>
         <h1>{tx('Course Marketplace', 'कोर्स मार्केटप्लेस')}</h1>
@@ -392,11 +392,11 @@ export default function StudentMarketplacePage() {
                 : status === 'PURCHASED' ? tx('Course purchased', 'कोर्स खरीदा गया')
                 : status === 'DISMISSED' ? tx('Request dismissed', 'अनुरोध खारिज किया गया') : status.replaceAll('_', ' ').toLowerCase();
               return <article className={styles.requestHistoryRow} key={request.request_id}>
-                <div><strong>{request.course_name || 'Course'}</strong>
-                  <span>{tx('Request #{id} · Submitted {time}', 'अनुरोध #{id} · भेजने का समय {time}', {id:request.request_id,time:formatUserTimestamp(request.requested_at)})}</span></div>
+                <div><strong>{request.course_name || tx('Course', 'कोर्स')}</strong>
+                  <span>{tx('Request #{id} · Submitted {time}', 'अनुरोध #{id} · भेजने का समय {time}', {id:request.request_id,time:formatUserTimestamp(request.requested_at, language)})}</span></div>
                 <div className={styles.requestHistoryState}>
                   <span className={status === 'PENDING' ? styles.requestPending : status === 'PURCHASED' ? styles.requestComplete : styles.requestOther}>{label}</span>
-                  {request.resolved_at && <small>{tx('Updated {time}', '{time} पर अपडेट हुआ', {time:formatUserTimestamp(request.resolved_at)})}</small>}
+                  {request.resolved_at && <small>{tx('Updated {time}', '{time} पर अपडेट हुआ', {time:formatUserTimestamp(request.resolved_at, language)})}</small>}
                 </div>
               </article>;
             })}
@@ -445,14 +445,14 @@ export default function StudentMarketplacePage() {
                 courseCode={offer.course_code}
                 publicId={offer.public_id}
                 curriculumVersion={offer.curriculum_version}
-                language={english ? 'en' : 'hi'}
+                language={language}
                 priceLabel={owned ? tx('Owned', 'पहले से उपलब्ध') : validPrice ? offer.price_paise === 0 ? tx('Free', 'निःशुल्क') : money(offer.price_paise) : tx('Unavailable', 'उपलब्ध नहीं')}
                 description={offer.description}
                 subjects={offer.subjects}
                 status={offer.parent_request_status === 'PENDING' ? (
                   <p className={styles.requestStatus} role="status">
                     {tx('Parent purchase request pending', 'Parent से खरीद का अनुरोध लंबित है')}{offer.parent_request_requested_at
-                      ? ' · ' + tx('sent', 'भेजा गया') + ' ' + formatUserTimestamp(offer.parent_request_requested_at) : ''}
+                      ? ' · ' + tx('sent', 'भेजा गया') + ' ' + formatUserTimestamp(offer.parent_request_requested_at, language) : ''}
                   </p>
                 ) : null}
               >
