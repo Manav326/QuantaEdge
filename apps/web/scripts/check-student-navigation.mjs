@@ -320,6 +320,14 @@ const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/a
 const parentPage = read('../app/parent/page.tsx');
 assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
   coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+const certificateCourseBackfill = read('../../../services/api/src/main/resources/db/migration/V161__backfill_legacy_certificate_course_identity.sql');
+assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
+  certificateCourseBackfill.includes("program.code = 'CLASS_' || source_class.code") &&
+  certificateCourseBackfill.includes('HAVING COUNT(DISTINCT program.id) = 1') &&
+  certificateCourseBackfill.includes('SET program_id = match.course_id') &&
+  certificateCourseBackfill.includes('do not regenerate or rewrite PDF/PNG files'),
+  'Legacy certificate rows must be assigned to a course only when the existing class/subject mapping is unambiguous, preserving issued artifacts.');
+
 const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
 assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
