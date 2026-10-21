@@ -12,7 +12,9 @@ export type MarketplaceCourseSubject = {
 type MarketplaceCourseCardProps = {
   title: string;
   courseCode?: string;
+  publicId?: string;
   curriculumVersion?: string;
+  language?: 'en' | 'hi';
   priceLabel: ReactNode;
   description?: string | null;
   subjects?: MarketplaceCourseSubject[];
@@ -27,7 +29,9 @@ type MarketplaceCourseCardProps = {
 export default function MarketplaceCourseCard({
   title,
   courseCode,
+  publicId,
   curriculumVersion,
+  language = 'en',
   priceLabel,
   description,
   subjects = [],
@@ -50,14 +54,16 @@ export default function MarketplaceCourseCard({
 
       <h2 className={styles.title}>{title}</h2>
 
-      {(courseCode || curriculumVersion || subjects.length > 0) && (
+      {(courseCode || publicId || curriculumVersion || subjects.length > 0) && (
         <div className={styles.metadata}>
           {courseCode && <span className={styles.courseCode}>{courseCode}</span>}
+          {publicId && <span className={styles.publicId}>{language === 'hi' ? 'कोर्स ID' : 'Course ID'}: {publicId}</span>}
           {curriculumVersion && <span className={styles.version}>{curriculumVersion}</span>}
           {subjects.length > 0 && (
             <span className={styles.coverage}>
-              {subjects.length} subject{subjects.length === 1 ? '' : 's'}
-              {hasCoverageCounts ? ` · ${chapterCount} chapters · ${lessonCount} lessons` : ''}
+              {language === 'hi'
+                ? `${subjects.length} विषय${hasCoverageCounts ? ` · ${chapterCount} अध्याय · ${lessonCount} पाठ` : ''}`
+                : `${subjects.length} subject${subjects.length === 1 ? '' : 's'}${hasCoverageCounts ? ` · ${chapterCount} chapters · ${lessonCount} lessons` : ''}`}
             </span>
           )}
         </div>
@@ -66,10 +72,10 @@ export default function MarketplaceCourseCard({
       {description && <p className={styles.description}>{description}</p>}
 
       {!!subjects.length && (
-        <div className={styles.subjects} aria-label="Course subjects">
+        <div className={styles.subjects} aria-label={language === 'hi' ? 'कोर्स के विषय' : 'Course subjects'}>
           {subjects.map((subject, index) => (
             <span key={subject.subject_code || subject.subject_name || index}>
-              {subject.subject_name || subject.subject_code || 'Subject'}
+              {subject.subject_name || subject.subject_code || (language === 'hi' ? 'विषय' : 'Subject')}
             </span>
           ))}
         </div>
