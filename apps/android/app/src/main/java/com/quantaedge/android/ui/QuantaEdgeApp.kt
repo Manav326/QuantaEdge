@@ -4343,35 +4343,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
-                    AppRoute.SUBJECT_LESSONS -> if (studentHasNoCourses()) {
-                        StudentEnrollmentEmptyState(
-                            icon = "▤",
-                            title = localizedUiText("Your learning space starts with a course"),
-                            message = localizedUiText("Your lessons will appear here once you enroll in a course."),
-                            primaryLabel = localizedUiText("Explore Marketplace"),
-                            onPrimary = ::openMarketplace
-                        )
-                    } else if (structuredLessonMode) StructuredLessonCatalogueScreen(
-                        noEnrolledCourses = false,
-                        items = structuredLessons,
-                        courseName = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optString("display_name").orEmpty(),
-                        subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { arr ->
-                            (0 until arr.length()).mapNotNull { index -> arr.optJSONObject(index) }
-                        }.orEmpty(),
-                        selectedSubjectCode = structuredSubjectFilter,
-                        language = language,
-                        busy = busy,
-                        onRefresh = { openStructuredLessons(structuredSubjectFilter) },
-                        onSelectSubject = { code -> openStructuredLessons(code) },
-                        onOpenLesson = ::openStructuredLesson,
-                        onMarketplace = ::openMarketplace
-                    ) else LessonListScreen(
-                        subject = currentSubject,
+                    AppRoute.SUBJECT_LESSONS -> StudentCourseLearningScreen(
+                        noEnrolledCourses = studentHasNoCourses(),
+                        structuredLessonMode = structuredLessonMode,
+                        structuredLessons = structuredLessons,
+                        studentPrograms = studentPrograms,
+                        currentCourseId = currentCourseId,
+                        structuredSubjectFilter = structuredSubjectFilter,
+                        currentSubject = currentSubject,
                         lessons = lessons,
                         language = language,
                         busy = busy,
-                        onRefresh = { openSubject(currentSubject, currentCourseId) },
-                        onOpenLesson = ::openLesson,
+                        onOpenMarketplace = ::openMarketplace,
+                        onRefreshStructured = { openStructuredLessons(structuredSubjectFilter) },
+                        onSelectStructuredSubject = { code -> openStructuredLessons(code) },
+                        onOpenStructuredLesson = ::openStructuredLesson,
+                        onRefreshLegacy = { openSubject(currentSubject, currentCourseId) },
+                        onOpenLegacyLesson = ::openLesson,
                         onOpenStructuredLessons = ::openStructuredLessons
                     )
                     AppRoute.LESSON -> if (studentHasNoCourses()) {
@@ -5708,6 +5696,67 @@ private fun SubjectCard(title: String, subtitle: String, modifier: Modifier, onC
             Text(localizedUiText(subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             Text(localizedUiText("पाठ और अभ्यास देखें →"), style = MaterialTheme.typography.bodySmall)
         }
+    }
+}
+
+@Composable
+private fun StudentCourseLearningScreen(
+    noEnrolledCourses: Boolean,
+    structuredLessonMode: Boolean,
+    structuredLessons: List<JSONObject>,
+    studentPrograms: List<JSONObject>,
+    currentCourseId: Long,
+    structuredSubjectFilter: String,
+    currentSubject: String,
+    lessons: List<JSONObject>,
+    language: String,
+    busy: Boolean,
+    onOpenMarketplace: () -> Unit,
+    onRefreshStructured: () -> Unit,
+    onSelectStructuredSubject: (String) -> Unit,
+    onOpenStructuredLesson: (JSONObject) -> Unit,
+    onRefreshLegacy: () -> Unit,
+    onOpenLegacyLesson: (JSONObject) -> Unit,
+    onOpenStructuredLessons: () -> Unit
+) {
+    if (noEnrolledCourses) {
+        StudentEnrollmentEmptyState(
+            icon = "▤",
+            title = localizedUiText("Your learning space starts with a course"),
+            message = localizedUiText("Your lessons will appear here once you enroll in a course."),
+            primaryLabel = localizedUiText("Explore Marketplace"),
+            onPrimary = onOpenMarketplace
+        )
+    } else if (structuredLessonMode) {
+        val selectedCourse = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == currentCourseId
+        }
+        val subjects = selectedCourse?.optJSONArray("subjects")?.let { array ->
+            (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
+        }.orEmpty()
+        StructuredLessonCatalogueScreen(
+            noEnrolledCourses = false,
+            items = structuredLessons,
+            courseName = selectedCourse?.optString("display_name").orEmpty(),
+            subjects = subjects,
+            selectedSubjectCode = structuredSubjectFilter,
+            language = language,
+            busy = busy,
+            onRefresh = onRefreshStructured,
+            onSelectSubject = onSelectStructuredSubject,
+            onOpenLesson = onOpenStructuredLesson,
+            onMarketplace = onOpenMarketplace
+        )
+    } else {
+        LessonListScreen(
+            subject = currentSubject,
+            lessons = lessons,
+            language = language,
+            busy = busy,
+            onRefresh = onRefreshLegacy,
+            onOpenLesson = onOpenLegacyLesson,
+            onOpenStructuredLessons = onOpenStructuredLessons
+        )
     }
 }
 

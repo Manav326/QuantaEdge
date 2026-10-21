@@ -353,7 +353,8 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
   androidApp.includes('val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode)') &&
-  androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (studentHasNoCourses())') &&
+  androidApp.includes('AppRoute.SUBJECT_LESSONS -> StudentCourseLearningScreen(') &&
+  androidApp.includes('if (noEnrolledCourses)') &&
   androidApp.includes('onRefresh = { openSubject(currentSubject, currentCourseId) }') &&
   androidApp.includes('onOpenLesson = ::openLesson'),
   'Android course subjects must open the original course-scoped lesson list and lesson screen by default.');
