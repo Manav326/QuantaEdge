@@ -55,6 +55,8 @@ fun StudentProgressScreen(
     val questions = data.optJSONObject("questionStats") ?: JSONObject()
     val mastery = data.optJSONObject("mastery") ?: JSONObject()
     val assessments = data.optJSONObject("assessmentStats") ?: JSONObject()
+    val diagnosticStats = data.optJSONObject("diagnosticStats") ?: JSONObject()
+    val diagnosticSubjects = data.optJSONArray("diagnosticSubjects")?.objectItems() ?: emptyList()
     val sessions = data.optJSONObject("sessionStats") ?: JSONObject()
     val curriculum = data.optJSONArray("curriculum")?.objectItems() ?: emptyList()
     val concepts = data.optJSONArray("masteryDetails")?.objectItems() ?: emptyList()
@@ -130,6 +132,45 @@ fun StudentProgressScreen(
                 MetricCard(t("Last 30 days", "पिछले 30 दिन"),
                     sessions.optString("sessions_30d", "0") + " " + t("learning sessions", "सीखने के सत्र"),
                     sessions.optString("minutes_30d", "0") + " " + t("minutes tracked", "ट्रैक किए गए मिनट"), Modifier.fillMaxWidth())
+            }
+            item { Text(t("Initial diagnostic baseline", "प्रारंभिक डायग्नोस्टिक baseline"), style = MaterialTheme.typography.titleLarge) }
+            if (diagnosticStats.optInt("completed_attempts", 0) <= 0) item {
+                Text(
+                    if (diagnosticStats.optInt("in_progress_attempts", 0) > 0)
+                        t("Your initial diagnostic is in progress.", "आपका प्रारंभिक डायग्नोस्टिक जारी है।")
+                    else
+                        t("Your initial diagnostic result will appear here after you complete it.", "प्रारंभिक डायग्नोस्टिक पूरा करने पर उसका परिणाम यहाँ दिखेगा।"),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            if (diagnosticStats.optInt("completed_attempts", 0) > 0) {
+                item {
+                    MetricCard(
+                        t("Initial diagnostic accuracy", "प्रारंभिक डायग्नोस्टिक सटीकता"),
+                        diagnosticStats.optString("accuracy_percent", "0") + "%",
+                        diagnosticStats.optString("correct_answers", "0") + " / " +
+                            diagnosticStats.optString("graded_answers", "0") + " " +
+                            t("correct answers", "सही उत्तर"),
+                        Modifier.fillMaxWidth()
+                    )
+                }
+                items(diagnosticSubjects) { row ->
+                    val percent = row.optDouble("accuracy_percent", 0.0).toFloat().coerceIn(0f, 100f)
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(row.textAny("subject_name", "subject_code"), style = MaterialTheme.typography.titleSmall)
+                            Text(
+                                row.optString("correct_answers", "0") + " / " + row.optString("graded_answers", "0") + " " +
+                                    t("correct answers", "सही उत्तर"),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            LinearProgressIndicator(progress = { percent / 100f }, modifier = Modifier.fillMaxWidth())
+                            Text(percent.toInt().toString() + "%", style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+                }
             }
             item { Text(t("Subject progress", "विषयवार प्रगति"), style = MaterialTheme.typography.titleLarge) }
             if (curriculum.isEmpty() && !busy) item {
