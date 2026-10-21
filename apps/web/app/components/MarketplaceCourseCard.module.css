@@ -112,3 +112,38 @@
   .card { padding: 15px; border-radius: 16px; }
   .title { font-size: 18px; }
 }
+
+
+/* Shared course cards follow the institution theme and the user's active appearance. */
+html[data-qe-appearance="light"] .card {
+  background: var(--qe-color-surface, #fff);
+  border-color: var(--qe-color-border-subtle, #e6e8ed);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #172033));
+}
+html[data-qe-appearance="dark"] .card {
+  background: var(--qe-color-surface, #20242c);
+  border-color: var(--qe-color-border-subtle, #424751);
+  color: var(--qe-color-on-surface, var(--qe-color-text, #f2f4f7));
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(0 0 0 / 20%));
+}
+html[data-qe-appearance="dark"] .title {
+  color: var(--qe-color-on-surface, var(--qe-color-text, #f2f4f7));
+}
+html[data-qe-appearance="dark"] .description,
+html[data-qe-appearance="dark"] .metadata {
+  color: var(--qe-color-text-muted, #c4c9d2);
+}
+html[data-qe-appearance="dark"] .courseCode,
+html[data-qe-appearance="dark"] .publicId,
+html[data-qe-appearance="dark"] .version,
+html[data-qe-appearance="dark"] .coverage,
+html[data-qe-appearance="dark"] .subjects span {
+  background: var(--qe-color-surface-elevated, #292e37);
+  border-color: var(--qe-color-border-subtle, #424751);
+  color: var(--qe-color-text-muted, #c4c9d2);
+}
+html[data-qe-appearance="dark"] .mark {
+  background: var(--qe-color-primary-container, #342820);
+  border-color: var(--qe-color-focus, #8e633e);
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary, #ffad70));
+}
