@@ -62,6 +62,8 @@ function recapBlocks(lesson:LessonDetail|null){
 }
 
 export default function PracticePage(){
+  const router=useRouter();
+  const searchParams=useSearchParams();
   const [questions,setQuestions]=useState<Question[]>([]);
   const [catalogueLessons,setCatalogueLessons]=useState<PracticeCatalogueLesson[]>([]);
   const [practiceSubjectFilter,setPracticeSubjectFilter]=useState(()=>searchParams.get('subjectCode')||'ALL');
@@ -80,8 +82,6 @@ export default function PracticePage(){
   const [noPractice,setNoPractice]=useState(false);
   const [answerError,setAnswerError]=useState('');
   const [attemptReset,setAttemptReset]=useState(0);
-  const router=useRouter();
-  const searchParams=useSearchParams();
   const {locale, learningLanguage}=useLocale();
   const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;
   const lessonIdRaw=searchParams.get('lessonId')||'';
