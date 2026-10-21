@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2177,
-    "successful_visual_analyses": 2076,
-    "missing_visual_analyses": 5311,
+    "raw_analysis_result_rows": 2180,
+    "successful_visual_analyses": 2079,
+    "missing_visual_analyses": 5308,
     "failed_visual_analyses": 101,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5412,
+    "unresolved_count": 5409,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -89336,9 +89336,16 @@
       "asset_path": "assets/2a4a9cff84ddf3cf71dbe6992dca8a43a28a6ba76b332a3458a68983b124d903.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a faint blue shadow or reflection in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89354,9 +89361,28 @@
       "asset_path": "assets/856eaa195669267e76374df8bcef7621c4d25a6f6d074e0b701e8652860ba9bd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a small white square in the bottom right corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now,N     I understand!                       Oh! The ringing sound"
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on metals and their ability to produce a ringing sound.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or their sounds, only text descriptions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -89372,9 +89398,26 @@
       "asset_path": "assets/f38ecd0acd492b5570f5540271943f33a7a100fa37e7692f94a48efffb491875.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a scroll of paper or a scroll of metal, with a blank white surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "context_relation": "The scroll is likely used to represent a blank page or a scroll of paper.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

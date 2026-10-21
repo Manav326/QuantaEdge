@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8033bb301fe7bc192437531d8225ed9cee22396851fbc01d72b1acc1babd2bb4",
+  "raw_analysis_sha256": "46c9db20a1c4950274e350659dbdb52c7bf17651065f8cd10feefa447d4a0fbd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:03:03Z",
+      "checkpointed_at": "2026-10-21T20:06:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
-      "checkpointed_at": "2026-10-21T20:03:26Z",
+      "checkpointed_at": "2026-10-21T20:06:52Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -124180,6 +124180,158 @@
         "context_relation": "The text explains the difference between the sounds produced by different materials, emphasizing the unique property of metals to produce a ringing sound.",
         "limitations": [
           "The text does not provide specific examples or diagrams to illustrate the concept."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9c3879367e681f8b15c15b12",
+      "asset_sha256": "2a4a9cff84ddf3cf71dbe6992dca8a43a28a6ba76b332a3458a68983b124d903",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/2a4a9cff84ddf3cf71dbe6992dca8a43a28a6ba76b332a3458a68983b124d903.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a faint blue shadow or reflection in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:07:29Z",
+      "effective_analysis": {
+        "visual_summary": "A white page with a faint blue shadow or reflection in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7f4a7bf16d5fdbe72ead231",
+      "asset_sha256": "856eaa195669267e76374df8bcef7621c4d25a6f6d074e0b701e8652860ba9bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/856eaa195669267e76374df8bcef7621c4d25a6f6d074e0b701e8652860ba9bd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a small white square in the bottom right corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now,N     I understand!                       Oh! The ringing sound"
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on metals and their ability to produce a ringing sound.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or their sounds, only text descriptions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:08:12Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with a small white square in the bottom right corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now,N     I understand!                       Oh! The ringing sound"
+        ],
+        "concepts": [
+          "sonority",
+          "ringing sound",
+          "metal",
+          "metal spoon",
+          "metal coin",
+          "coal",
+          "wood"
+        ],
+        "context_relation": "The text discusses the properties of different materials, specifically focusing on metals and their ability to produce a ringing sound.",
+        "limitations": [
+          "The image does not provide any visual representation of the materials or their sounds, only text descriptions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "18bf6bbc951fcef9cf5a60ff",
+      "asset_sha256": "f38ecd0acd492b5570f5540271943f33a7a100fa37e7692f94a48efffb491875",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 66,
+      "asset_path": "assets/f38ecd0acd492b5570f5540271943f33a7a100fa37e7692f94a48efffb491875.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3e16f7a42ad3560e5fac084cc20cf55d646e6786385a8c3ab254508843cb1ab",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a scroll of paper or a scroll of metal, with a blank white surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "context_relation": "The scroll is likely used to represent a blank page or a scroll of paper.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39623490257",
+      "checkpointed_at": "2026-10-21T20:08:54Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a scroll of paper or a scroll of metal, with a blank white surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle",
+          "blank white surface"
+        ],
+        "context_relation": "The scroll is likely used to represent a blank page or a scroll of paper.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
