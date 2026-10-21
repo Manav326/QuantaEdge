@@ -668,10 +668,13 @@ assert.ok(tutorDock.includes('artifactId?: string') && tutorDock.includes('struc
   'The shared Web tutor dock must support both canonical database lessons and structured artifact contexts.');
 assert.ok(tutorDock.lastIndexOf('useEffect(()') < tutorDock.indexOf('if (!open) return null;'),
   'All Web tutor hooks must be declared before conditional returns.');
-assert.ok(learnClient.includes('if(lesson.structured_lesson)') &&
+assert.ok(learnClient.includes('lesson.structured_lesson && <StructuredLessonContent') &&
   learnClient.includes('<TutorDock lessonId={lesson.id}') &&
+  learnClient.includes('learningBlocks.map(block=><Block') &&
+  learnClient.includes('<section className="concept-card practice-launch-card">') &&
+  !learnClient.includes('if(lesson.structured_lesson) return') &&
   learnClient.includes('setTutorQuestionId(undefined);setTutorOpen(true)'),
-  'The embedded structured lesson reader must expose the existing tutor dock, without replacing its lesson renderer.');
+  'Optional structured blocks must stay inside the original lesson, MCQ and practice screen and share its tutor dock.');
 assert.ok(structuredLessonDetailClient.includes('<TutorDock artifactId={artifactId}') &&
   structuredLessonDetailClient.includes('Ask the AI tutor about this topic'),
   'The standalone structured lesson detail must launch the shared tutor with its stable artifact ID.');
