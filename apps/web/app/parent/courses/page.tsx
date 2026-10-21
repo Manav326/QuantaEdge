@@ -10,6 +10,7 @@ import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBr
 import BillingProfileEditor from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
+import { localizeMarketplaceError } from '../../components/marketplaceI18n';
 
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
@@ -70,6 +71,7 @@ export default function ParentCoursesPage() {
   const { brand } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
+  const language = english ? 'en' : 'hi';
   const [courses, setCourses] = useState<Course[]>([]);
   const [discountCode, setDiscountCode] = useState('');
   const [personalLearningAvailable, setPersonalLearningAvailable] = useState(false);
@@ -147,7 +149,7 @@ export default function ParentCoursesPage() {
     }
   }, []);
 
-  const money = (paise: number) => new Intl.NumberFormat('en-IN', {
+  const money = (paise: number) => new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN', {
     style: 'currency', currency: 'INR', maximumFractionDigits: 2,
   }).format(paise / 100);
 
@@ -365,7 +367,7 @@ export default function ParentCoursesPage() {
   }
 
   return (
-    <main className="parent-app parent-courses-page">
+    <main className="parent-app parent-courses-page" lang={language}>
       <div className="parent-courses-page__wrap">
         <div className="parent-courses-page__heading">
           <div>
@@ -384,7 +386,7 @@ export default function ParentCoursesPage() {
         </div>
         {error && <div className="parent-courses-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="parent-courses-page__alert" role="status">{notice}</div>}
-        <section className="parent-courses-page__discount" aria-label="Course offer code">
+        <section className="parent-courses-page__discount" aria-label={english ? "Course offer code" : "कोर्स ऑफर कोड"}>
           <label htmlFor="qe-parent-discount-code"><LocaleText hinglish="Offer code (वैकल्पिक)" english="Offer code (optional)" /></label>
           <input id="qe-parent-discount-code" autoComplete="off" maxLength={40}
             value={discountCode} onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
