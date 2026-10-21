@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d8765e6f536d114aff3a61c7f1bfc26a01a5bc3d69a3541c239d47f61fccd164",
+  "raw_analysis_sha256": "4c77a06114a12b12974012370360d6350edef096c08f8ef8dfffdd84a0b2d9f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T19:28:48Z",
+      "checkpointed_at": "2026-10-21T19:33:05Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T19:29:36Z",
+      "checkpointed_at": "2026-10-21T19:33:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T19:30:14Z",
+      "checkpointed_at": "2026-10-21T19:34:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -51509,7 +51509,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T19:31:12Z",
+      "checkpointed_at": "2026-10-21T19:35:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
         "visual_type": "page_with_multiple_visuals",
@@ -57172,7 +57172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39574881477",
-      "checkpointed_at": "2026-10-21T19:31:54Z",
+      "checkpointed_at": "2026-10-21T19:36:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
