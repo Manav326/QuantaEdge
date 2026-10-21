@@ -191,7 +191,7 @@ class ApplicationStartupSmokeTest {
       """, parentUserId, studentId, AuthService.GUARDIAN_CONSENT_VERSION, parentUserId);
 
     AuthContext parent = new AuthContext(
-        null, parentUserId, null, "PARENT", "Guardian catalogue SQL regression", "PARENT");
+        parentUserId, null, null, "PARENT", "Guardian catalogue SQL regression", "PARENT");
     List<Map<String,Object>> courses = guardianController.childPrograms(
         studentId, false, parent,
         new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));
