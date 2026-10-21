@@ -30,6 +30,7 @@ const studentNavGroups: StudentNavGroup[] = [
  ] },
  { id: 'learn', message: 'web.navigation.student.learn', mobileMessage: 'web.navigation.student.mobileLearn', icon: '▤', children: [
   { href: '/student/learn', message: 'web.navigation.student.learnTopics', icon: '▤' },
+  { href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons', icon: '✧' },
   { href: '/student/classes', message: 'web.navigation.student.liveClasses', icon: '◷' },
  ] },
  { id: 'practice', message: 'web.navigation.student.practiceTests', mobileMessage: 'web.navigation.student.mobilePractice', icon: '✦', children: [

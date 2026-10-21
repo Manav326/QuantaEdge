@@ -315,6 +315,7 @@ assert.ok(practiceClient.includes('useStudentCourseScope') && practiceClient.inc
 assert.ok(learnClient.includes('useStudentCourseScope') && learnClient.includes('InstitutionCourseSubjectScope') && learnClient.includes('/api/v1/learning/lessons?subjectCode=') && learnClient.includes('qe-student-topic-row') && learnClient.includes('TutorDock') && learnClient.includes('courseKey') && learnClient.includes('canStartTopicPractice') && learnClient.includes('courseId={selectedCourseId!}') && learnClient.includes("encodeURIComponent(selectedCourseKey)") && learnClient.includes('mcq_answered_count') && learnClient.includes('practice_completed_attempts') && !learnClient.includes('classCode='), 'Learning must preserve chapter/topic navigation, inline MCQ marking, practice gate, tutor and progress history while using tenant/course-scoped APIs and public course IDs in generated links.');
 
 const coursesPage = read('../app/student/courses/page.tsx');
+const workspaceLayout = read('../app/components/WorkspaceLayout.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
@@ -328,6 +329,9 @@ assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   certificateCourseBackfill.includes('do not regenerate or rewrite PDF/PNG files'),
   'Legacy certificate rows must be assigned to a course only when the existing class/subject mapping is unambiguous, preserving issued artifacts.');
 
+assert.ok(workspaceLayout.includes("{ href: '/student/learn', message: 'web.navigation.student.learnTopics'") &&
+  workspaceLayout.includes("{ href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons'"),
+  'The original Learn navigation remains primary while structured lessons remain an optional separate entry.');
 const learningStateService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningStateService.java');
 assert.ok(learningStateService.includes("values(?,?,?,?,?,?,?,now(),?,?)") &&
   !learningStateService.includes("values(?,?,?,?,?,?,?,?,now(),?,?)"),
