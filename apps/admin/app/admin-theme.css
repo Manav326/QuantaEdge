@@ -592,3 +592,36 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
 ) {
   color: var(--qe-color-success);
 }
+
+
+/* Shared three-step elevation scale matches Learner Web's calm, layered surfaces. */
+html[data-qe-appearance="light"] {
+  --qe-elevation-1: 0 1px 2px rgb(20 32 54 / .04), 0 4px 14px rgb(20 32 54 / .045);
+  --qe-elevation-2: 0 10px 28px rgb(20 32 54 / .10), 0 2px 6px rgb(20 32 54 / .04);
+  --qe-elevation-3: 0 22px 54px rgb(20 32 54 / .16), 0 4px 12px rgb(20 32 54 / .06);
+}
+html[data-qe-appearance="dark"] {
+  --qe-elevation-1: 0 1px 2px rgb(0 0 0 / .16), 0 4px 14px rgb(0 0 0 / .12);
+  --qe-elevation-2: 0 10px 28px rgb(0 0 0 / .22), 0 2px 6px rgb(0 0 0 / .12);
+  --qe-elevation-3: 0 22px 54px rgb(0 0 0 / .30), 0 4px 12px rgb(0 0 0 / .16);
+}
+
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="panel"]:not([class*="error"]):not([class*="success"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Panel"]:not([class*="error"]):not([class*="success"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+  box-shadow: var(--qe-elevation-1);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+  box-shadow: var(--qe-elevation-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="card"],
+  html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"],
+  html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="panel"],
+  html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Panel"] {
+    transition: none;
+  }
+}
