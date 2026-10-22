@@ -339,7 +339,7 @@ public class RichNotificationService {
           from student st
           join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
           join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-          where st.active=true and (st.id,m.institution_id) in ("""+tuples+") order by lower(t.display_name),lower(st.display_name),st.id";
+          where st.active=true and (st.id,m.institution_id) in ("""+tuples+") order by institution_name,recipient_name,recipient_id";
         case "USER_ACCOUNT" -> """
           select distinct u.id as recipient_id,'USER_ACCOUNT' as recipient_kind,u.display_name as recipient_name,
             null::varchar as class_code,um.institution_id,t.display_name as institution_name,t.tenant_code as institution_code
@@ -350,7 +350,7 @@ public class RichNotificationService {
           join student st on st.id=gs.student_id and st.active=true
           join institution_membership m on m.student_id=st.id and m.institution_id=um.institution_id and m.status='ACTIVE'
           join institution_tenant t on t.id=um.institution_id and t.status='ACTIVE'
-          where u.active=true and (u.id,um.institution_id) in ("""+tuples+") order by lower(t.display_name),lower(u.display_name),u.id";
+          where u.active=true and (u.id,um.institution_id) in ("""+tuples+") order by institution_name,recipient_name,recipient_id";
         case "INSTITUTION_ADMIN" -> """
           select ia.id as recipient_id,'INSTITUTION_ADMIN' as recipient_kind,ia.display_name as recipient_name,
             null::varchar as class_code,ia.institution_id,t.display_name as institution_name,t.tenant_code as institution_code
