@@ -5,15 +5,12 @@ import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
 
 export type QaCredentials = {
-  institutionAdminA: { institutionCode: string; username: string; password: string };
-  institutionAdminB: { institutionCode: string; username: string; password: string };
-  institutionAdminC: { institutionCode: string; username: string; password: string };
-  quantaEdgeCourseOwnerAdmin: { institutionCode: string; username: string; password: string };
   parentA: { institutionCode: string; mobile: string; username: string; password: string };
   parentB: { institutionCode: string; mobile: string; username: string; password: string };
   childA: { institutionCode: string; parentMobile: string; username: string; password: string };
   childB: { institutionCode: string; parentMobile: string; username: string; password: string };
   independentLearner: { institutionCode: string; mobile: string; username: string; password: string };
+  hrmsCourseReviewer?: { role: string; scope: string; notLoginEnabled: boolean; institutionCode: string };
 };
 
 export type QaFixture = {
