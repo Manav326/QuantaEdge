@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "43e7271e723d7c9d4ed25c0000599e7b56078726fa6a90d635c7c11f02946c19",
+  "raw_analysis_sha256": "8a869478b8b98bf0a746e28ef3f6439d8febd11def88262e853e54091433fcc6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:33:32Z",
+      "checkpointed_at": "2026-10-22T09:37:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:34:31Z",
+      "checkpointed_at": "2026-10-22T09:38:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:35:34Z",
+      "checkpointed_at": "2026-10-22T09:39:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66850,7 +66850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:36:19Z",
+      "checkpointed_at": "2026-10-22T09:40:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
@@ -67254,6 +67254,90 @@
         "context_relation": "The page is a continuation of the text about materials and their properties.",
         "limitations": [
           "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0b255949db2b98710f08fa31",
+      "asset_sha256": "169a2e42749a28f75dfdbff4a6d085666c0ed00b0a87818a4f148f0a53c7cff7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 136,
+      "asset_path": "page-0136.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "02621ef4e2bce627cb660730ae04f0f02c8f04591ad5d5f6a13169a066d975dc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Summary of materials and their properties, including classification and properties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary",
+          "Objects are made from a large variety of materials. An object can be made up of a single material or a combination of different materials.",
+          "We can use different materials to make objects with similar functions.",
+          "The method of arranging objects into groups is called classification.",
+          "Materials possess different properties which determine their use.",
+          "Materials are grouped or classified based on their similarities or differences in their properties.",
+          "Materials can be grouped based on appearance, such as lustrous or non-lustrous and based on the feel, such as hard or soft.",
+          "Materials are grouped as transparent, translucent or opaque depending on how much we can see through them.",
+          "Some materials are soluble in water, while others remain insoluble.",
+          "Anything that occupies space and has mass is called matter. The space occupied by matter is its volume. Mass quantifies the amount of matter present in an object.",
+          "Let us play",
+          "1. Find the companion.",
+          "Link the following words by putting arrows between words that have a connection."
+        ],
+        "concepts": [
+          "Materials",
+          "Classification",
+          "Properties",
+          "Matter",
+          "Volume",
+          "Mass"
+        ],
+        "context_relation": "Introduction to materials and their properties",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T09:44:52Z",
+      "effective_analysis": {
+        "visual_summary": "Summary of materials and their properties, including classification and properties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary",
+          "Objects are made from a large variety of materials. An object can be made up of a single material or a combination of different materials.",
+          "We can use different materials to make objects with similar functions.",
+          "The method of arranging objects into groups is called classification.",
+          "Materials possess different properties which determine their use.",
+          "Materials are grouped or classified based on their similarities or differences in their properties.",
+          "Materials can be grouped based on appearance, such as lustrous or non-lustrous and based on the feel, such as hard or soft.",
+          "Materials are grouped as transparent, translucent or opaque depending on how much we can see through them.",
+          "Some materials are soluble in water, while others remain insoluble.",
+          "Anything that occupies space and has mass is called matter. The space occupied by matter is its volume. Mass quantifies the amount of matter present in an object.",
+          "Let us play",
+          "1. Find the companion.",
+          "Link the following words by putting arrows between words that have a connection."
+        ],
+        "concepts": [
+          "Materials",
+          "Classification",
+          "Properties",
+          "Matter",
+          "Volume",
+          "Mass"
+        ],
+        "context_relation": "Introduction to materials and their properties",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

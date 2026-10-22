@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1331,
+    "assets_selected": 1332,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1327,
-    "assets_remaining": 751,
+    "assets_analyzed": 1328,
+    "assets_remaining": 750,
     "assets_completion_percent": 63.9,
     "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 1326,
+    "assets_skipped_from_checkpoint": 1327,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:33:32Z"
+      "checkpointed_at": "2026-10-22T09:37:53Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:34:31Z"
+      "checkpointed_at": "2026-10-22T09:38:53Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:35:34Z"
+      "checkpointed_at": "2026-10-22T09:39:56Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:36:19Z"
+      "checkpointed_at": "2026-10-22T09:40:41Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44488,6 +44488,56 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T09:36:36Z"
+    },
+    {
+      "asset_id": "0b255949db2b98710f08fa31",
+      "asset_sha256": "169a2e42749a28f75dfdbff4a6d085666c0ed00b0a87818a4f148f0a53c7cff7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 136,
+      "asset_path": "page-0136.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "02621ef4e2bce627cb660730ae04f0f02c8f04591ad5d5f6a13169a066d975dc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Summary of materials and their properties, including classification and properties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary",
+          "Objects are made from a large variety of materials. An object can be made up of a single material or a combination of different materials.",
+          "We can use different materials to make objects with similar functions.",
+          "The method of arranging objects into groups is called classification.",
+          "Materials possess different properties which determine their use.",
+          "Materials are grouped or classified based on their similarities or differences in their properties.",
+          "Materials can be grouped based on appearance, such as lustrous or non-lustrous and based on the feel, such as hard or soft.",
+          "Materials are grouped as transparent, translucent or opaque depending on how much we can see through them.",
+          "Some materials are soluble in water, while others remain insoluble.",
+          "Anything that occupies space and has mass is called matter. The space occupied by matter is its volume. Mass quantifies the amount of matter present in an object.",
+          "Let us play",
+          "1. Find the companion.",
+          "Link the following words by putting arrows between words that have a connection."
+        ],
+        "concepts": [
+          "Materials",
+          "Classification",
+          "Properties",
+          "Matter",
+          "Volume",
+          "Mass"
+        ],
+        "context_relation": "Introduction to materials and their properties",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T09:44:52Z"
     }
   ]
 }
