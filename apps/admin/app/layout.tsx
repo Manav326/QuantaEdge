@@ -13,7 +13,7 @@ export const metadata = {
       { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/branding/quantaedge-icon.png', type: 'image/png' },
     ],
-    shortcut: '/branding/quantaedge-icon.png',
+    shortcut: '/favicon.svg',
     apple: '/branding/quantaedge-icon.png',
   },
 };
