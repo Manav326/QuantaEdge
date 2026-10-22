@@ -217,6 +217,9 @@ public class CourseMarketplaceLaunchReadinessService {
       if(!financial.hasValidTaxQuote()) {
         add(checks,"SHARE_POOL_VALIDATION","Revenue shares fit the approved after-tax pool",false,
             "HRMS must finish tax readiness before the course can pass the final allocation-pool check.");
+      } else if(!financial.discountPoolCompatible()) {
+        add(checks,"SHARE_POOL_VALIDATION","Revenue shares fit the approved after-tax pool",false,
+            "One or more approved discounts make the distributable pool invalid or below the configured flat-share commitments.");
       } else {
         add(checks,"SHARE_POOL_VALIDATION","Revenue shares fit the approved after-tax pool",
             shares.ready(),shares.message());
@@ -295,7 +298,9 @@ public class CourseMarketplaceLaunchReadinessService {
           "An effective approved tax profile must be linked to its active seller; taxable treatment also requires a verified GST registration.");
       add(checks,"PUBLISHED_INVOICE_TEMPLATE","An invoice template is published",hasPublishedTemplate(null),
           "Publish an approved platform or seller invoice template in HRMS Invoice Design Studio.");
-      return new FinancialState(false,0L);
+      add(checks,"DISCOUNT_POOL_COMPATIBILITY","Approved discounts fit the verified tax/share model",false,
+          "HRMS must complete seller/tax readiness before approved coupon amounts can be checked against the distributable pool.");
+      return new FinancialState(false,0L,false);
     }
 
     Map<String,Object> profile=profiles.getFirst();
@@ -361,8 +366,67 @@ public class CourseMarketplaceLaunchReadinessService {
         templateReady ? "A published platform or seller template is available for newly issued sale documents."
             : "Publish an approved platform-wide or seller-specific invoice template in HRMS Invoice Design Studio.");
 
-    if(quote==null||!taxOk||!invoiceModeSupported) return new FinancialState(false,0L);
-    return new FinancialState(true,quote.customerPayablePaise()-quote.outputTaxPaise());
+    if(quote==null||!taxOk||!invoiceModeSupported) {
+      add(checks,"DISCOUNT_POOL_COMPATIBILITY","Approved discounts fit the verified tax/share model",false,
+          "HRMS must correct the tax quote before active approved discounts can be checked against the revenue-share pool.");
+      return new FinancialState(false,0L,false);
+    }
+    DiscountPoolReadiness discountReadiness=inspectDiscountPoolCompatibility(
+        offerId,currency,pricePaise,treatment,gstRate,cessRate,includesTax);
+    add(checks,"DISCOUNT_POOL_COMPATIBILITY","Approved discounts fit the verified tax/share model",
+        discountReadiness.compatible(),discountReadiness.message());
+    return new FinancialState(true,discountReadiness.minimumAfterTaxPoolPaise(),discountReadiness.compatible());
+  }
+
+  private DiscountPoolReadiness inspectDiscountPoolCompatibility(
+      long offerId,String currency,long listedPricePaise,CourseTaxCalculator.Treatment treatment,
+      int gstRate,int cessRate,boolean priceIncludesTax) {
+    CourseTaxCalculator.Result standardQuote=CourseTaxCalculator.quote(
+        listedPricePaise,0L,treatment,gstRate,cessRate,priceIncludesTax);
+    long minimumPool=standardQuote.customerPayablePaise()-standardQuote.outputTaxPaise();
+    List<Map<String,Object>> discounts=jdbc.queryForList("""
+        select d.id,d.code,d.version,d.discount_type,d.percentage_basis_points,
+          d.flat_amount_paise,d.max_discount_paise,d.min_listed_price_paise,d.max_redemptions,
+          (select count(*) from course_discount_redemption red
+            where red.discount_offer_id=d.id and red.status in ('RESERVED','REDEEMED')) as redemption_count
+        from course_discount_offer d
+        where d.institution_offer_id=? and d.currency=? and d.status='APPROVED'
+          and d.effective_from<=now() and (d.effective_until is null or d.effective_until>now())
+        order by upper(d.code),d.version desc,d.id desc
+        """,offerId,currency.toUpperCase(Locale.ROOT));
+    for(Map<String,Object> discount:discounts) {
+      long minimum=number(discount.get("min_listed_price_paise"));
+      if(listedPricePaise<minimum) continue;
+      Object maxRaw=discount.get("max_redemptions");
+      if(maxRaw instanceof Number max
+          && number(discount.get("redemption_count"))>=max.longValue()) continue;
+      long amount;
+      try {
+        amount=CourseDiscountCalculator.calculate(
+            listedPricePaise,text(discount.get("discount_type")),
+            discount.get("percentage_basis_points") instanceof Number b?(int)b.longValue():null,
+            discount.get("flat_amount_paise") instanceof Number flat?flat.longValue():null,
+            discount.get("max_discount_paise") instanceof Number cap?cap.longValue():null);
+      } catch(RuntimeException invalidDiscount) {
+        return new DiscountPoolReadiness(false,minimumPool,
+            "Approved discount "+text(discount.get("code"))+" has invalid terms: "+clean(invalidDiscount.getMessage()));
+      }
+      if(amount<=0||amount>=listedPricePaise) {
+        return new DiscountPoolReadiness(false,minimumPool,
+            "Approved discount "+text(discount.get("code"))+" leaves no positive payable balance. Correct or retire that discount in HRMS.");
+      }
+      CourseTaxCalculator.Result discountedQuote=CourseTaxCalculator.quote(
+          listedPricePaise,amount,treatment,gstRate,cessRate,priceIncludesTax);
+      long pool=discountedQuote.customerPayablePaise()-discountedQuote.outputTaxPaise();
+      minimumPool=Math.min(minimumPool,pool);
+    }
+    ShareReadiness shareReadiness=inspectSharePolicy(offerId,currency,minimumPool);
+    if(!shareReadiness.ready()) {
+      return new DiscountPoolReadiness(false,minimumPool,
+          "The smallest active approved-discount pool is not compatible with current revenue shares: "+shareReadiness.message());
+    }
+    return new DiscountPoolReadiness(true,minimumPool,
+        "The list-price pool and every currently usable approved-discount pool preserve the configured after-tax revenue-share commitments.");
   }
 
   private ShareReadiness inspectSharePolicy(long offerId,String currency,long poolPaise) {
@@ -503,6 +567,7 @@ public class CourseMarketplaceLaunchReadinessService {
   private static String text(Object raw){return raw==null?"":String.valueOf(raw);}
   private static String clean(String raw){return raw==null?"":raw.trim();}
 
-  private record FinancialState(boolean hasValidTaxQuote,long afterTaxPoolPaise) {}
+  private record FinancialState(boolean hasValidTaxQuote,long afterTaxPoolPaise,boolean discountPoolCompatible) {}
+  private record DiscountPoolReadiness(boolean compatible,long minimumAfterTaxPoolPaise,String message) {}
   private record ShareReadiness(boolean ready,String message) {}
 }
