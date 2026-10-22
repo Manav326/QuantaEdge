@@ -147,3 +147,13 @@ html[data-qe-appearance="dark"] .mark {
   border-color: var(--qe-color-focus, #8e633e);
   color: var(--qe-color-on-primary-container, var(--qe-color-primary, #ffad70));
 }
+
+
+/* The course icon sits on primaryContainer; price text sits on a neutral surface. */
+html[data-qe-appearance] .mark {
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary-text));
+}
+
+html[data-qe-appearance] .price {
+  color: var(--qe-color-primary-text, var(--qe-color-primary));
+}

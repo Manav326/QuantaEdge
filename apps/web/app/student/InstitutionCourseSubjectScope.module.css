@@ -56,7 +56,7 @@
 .field select:focus-visible,
 .scope :global(.qe-primary-course-scope select:focus-visible) {
   border-color: var(--qe-brand-primary, #f97316);
-  box-shadow: 0 0 0 3px rgb(249 115 22 / 16%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--qe-color-focus, var(--qe-brand-orange, #f97316)) 16%, transparent);
 }
 .scope :global(.qe-primary-course-scope) {
   display: flex;
@@ -102,5 +102,5 @@
 .field select[data-selected="true"] {
   border-color: var(--qe-color-focus, var(--qe-brand-primary, #f97316));
   background: var(--qe-color-primary-container, var(--qe-control-surface, #fff));
-  color: var(--qe-color-primary-text, var(--qe-text, #202939));
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary-text, var(--qe-text, #202939)));
 }

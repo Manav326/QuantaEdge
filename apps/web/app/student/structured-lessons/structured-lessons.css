@@ -88,3 +88,55 @@
 .qe-structured-image-lightbox__caption{margin:0;color:var(--qe-color-text-muted);font-size:.9rem;line-height:1.5}
 @media(max-width:600px){.qe-structured-image-lightbox__dialog{width:100%;max-height:96dvh}.qe-structured-image-lightbox__full-image{max-height:calc(88dvh - 5rem)}}
 @media(prefers-reduced-motion:reduce){.qe-structured-image-lightbox__backdrop{backdrop-filter:none}}
+
+
+/* Selected and evaluated states use the matching generated foreground for each semantic container. */
+.qe-structured-callout,
+.qe-structured-keypoint,
+.qe-structured-safety,
+.qe-structured-scenario {
+  color: var(--qe-color-on-primary-container);
+}
+
+.qe-structured-choice:has(input:checked) {
+  border-color: var(--qe-color-primary);
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+.qe-structured-feedback--correct {
+  border-color: var(--qe-color-success);
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+
+.qe-structured-feedback--incorrect {
+  border-color: var(--qe-color-error);
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+}
+
+.qe-structured-feedback--partially_correct {
+  border-color: var(--qe-color-warning);
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+}
+
+.qe-structured-feedback--pending_review {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+}
+
+.qe-structured-feedback--correct strong,
+.qe-structured-feedback--incorrect strong,
+.qe-structured-feedback--partially_correct strong,
+.qe-structured-feedback--pending_review strong {
+  color: inherit;
+}
+
+.qe-structured-feedback :where(p, strong, span),
+.qe-structured-choice :where(span, label) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}

@@ -678,3 +678,340 @@ html[data-qe-appearance="dark"] .leaderboardStudentCell>b,
 html[data-qe-appearance="dark"] .leaderboardRankNumber { color: var(--qe-color-text); }
 html[data-qe-appearance="dark"] .leaderboardTable tbody tr:last-child td { border-color: var(--qe-color-border-subtle); }
 html[data-qe-appearance="dark"] .leaderboardEyebrow { color: var(--qe-color-primary-text); }
+
+
+/* Keep submitted-result and leaderboard surfaces legible in tenant dark palettes. */
+html[data-qe-appearance="dark"] .railLegend {
+  border-top-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .railLegend span {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .legendCurrent {
+  background: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .legendAnswered {
+  background: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .releasedResult {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(0 0 0 / 18%));
+}
+html[data-qe-appearance="dark"] .resultHeroIcon {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+html[data-qe-appearance="dark"] :where(.leaderboardFirst, .leaderboardSecond, .leaderboardThird) {
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .leaderboardFirst {
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--qe-color-warning-container) 42%, var(--qe-color-surface)),
+    var(--qe-color-surface)
+  );
+  border-color: var(--qe-color-warning);
+}
+html[data-qe-appearance="dark"] .leaderboardSecond {
+  background: linear-gradient(155deg, var(--qe-color-surface-elevated), var(--qe-color-surface));
+}
+html[data-qe-appearance="dark"] .leaderboardThird {
+  background: linear-gradient(155deg, var(--qe-color-surface-elevated), var(--qe-color-surface));
+}
+
+
+/* Assessment catalogue, quiz controls, released results, and leaderboard follow tenant tokens
+   in both modes. Hero art and rank medals remain intentional illustrations; answer outcomes stay semantic. */
+html[data-qe-appearance] .shell {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.header, .tabs, .testCard, .resultCard, .resultAttemptButton, .questionRail, .questionPanel, .pendingResult, .releasedResult, .resultDetails, .resultQuestionNav, .languageNotice, .leaderboardMetrics > div, .leaderboardTableWrap, .leaderboardTable, .certificateResultPanel) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.brand, .brand small, .header nav a, .tabs button, .toolbar > label, .toolbar p, .muted, .subjectChip, .cardMeta span, .attemptTrack, .attemptTrack b, .testCard > p, .resultSummary p, .resultCard p, .resultCard small, .score > b small, .attemptTitle p, .timerBox small, .timerBox > span, .leaderboardPodiumScore small, .leaderboardTime, .leaderboardMetrics > div > span, .leaderboardFooter, .leaderboardLoading, .certificateEligibilityHint) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.toolbar h2, .testCard h3, .resultSummary h3, .resultCard h3, .score > b, .attemptTitle h1, .questionPanel h2, .questionPanel h3, .optionText, .optionOutcome, .resultHero h2, .resultDetailsHeading h3, .resultQuestionInfo strong, .leaderboardHeading h2, .leaderboardStudentName, .leaderboardMetrics > div > b, .leaderboardStudentCell > b, .leaderboardRankNumber, .leaderboardMyStanding > strong, .certificateResultPanel h3) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .tabs .activeTab,
+html[data-qe-appearance] .tabs .activeTab span,
+html[data-qe-appearance] .testSymbol,
+html[data-qe-appearance] .resultIcon,
+html[data-qe-appearance] .currentNumber,
+html[data-qe-appearance] .optionSelected .optionKey {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .subjectChip,
+html[data-qe-appearance] .cardMeta span,
+html[data-qe-appearance] .attemptState,
+html[data-qe-appearance] .resultQuestionNumber,
+html[data-qe-appearance] .optionKey {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.primaryButton, .resultActions .primaryButton, .certificateIssueButton) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] :where(.secondaryButton, .resultOpen, .backButton, .resultLink, .resultQuestionNav button, .leaderboardButton, .leaderboardClose, .certificateActionLinks a) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.toolbar select, .answerField input, .answerField textarea, .answer input, .answer textarea) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+  
+}
+
+html[data-qe-appearance] :where(.toolbar select, .answerField input, .answerField textarea, .answer input, .answer textarea):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] :where(.error, .leaderboardInlineError) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .notice {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+
+/* A best-score percentage is a metric, not a pass/fail outcome. */
+html[data-qe-appearance] .score > span {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .attemptState {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+
+html[data-qe-appearance] .timerBox {
+  background: var(--qe-color-warning-container);
+  border-color: var(--qe-color-warning);
+  color: var(--qe-color-on-warning-container);
+}
+
+html[data-qe-appearance] .timerBox > b {
+  color: var(--qe-color-on-warning-container);
+}
+
+html[data-qe-appearance] .timerBox > b.timeWarning {
+  color: var(--qe-color-on-warning-container);
+}
+
+html[data-qe-appearance] :where(.questionRail > div:first-child, .questionFooter, .resultHero, .leaderboardFooter, .leaderboardTable td, .leaderboardTable th) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .questionProgress,
+html[data-qe-appearance] .attemptBar,
+html[data-qe-appearance] .resultScoreProgress {
+  background: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.questionProgress i, .attemptBar i, .resultScoreProgress > span) {
+  background: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] .questionNumbers button {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .questionNumbers button.currentNumber {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--qe-color-focus) 18%, transparent);
+}
+
+html[data-qe-appearance] .questionNumbers button.answeredNumber:not(.currentNumber) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] .option {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .option:hover:not(:disabled) {
+  border-color: var(--qe-color-focus);
+  background: color-mix(in srgb, var(--qe-color-primary-container) 36%, var(--qe-color-surface));
+}
+
+html[data-qe-appearance] .optionSelected {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] :where(.optionCorrect, .correctAnswerBox, .answerFieldCorrect input, .optionHintCorrect, .reviewCorrect, .resultQuestionRowCorrect) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] :where(.optionIncorrect, .answerFieldIncorrect input, .optionHintIncorrect, .reviewIncorrect, .resultQuestionRowIncorrect) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] :where(.optionNeutral, .answerFieldNeutral input, .optionHintNeutral, .reviewNeutral, .resultQuestionRowNeutral) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.optionCorrect, .optionIncorrect, .optionNeutral) {
+  border-width: 1px;
+  border-style: solid;
+}
+
+html[data-qe-appearance] .optionOutcome {
+  color: inherit;
+}
+
+html[data-qe-appearance] .optionCorrect .optionOutcome {
+  background: var(--qe-color-success);
+  color: var(--qe-color-on-success);
+}
+
+html[data-qe-appearance] .optionIncorrect .optionOutcome {
+  background: var(--qe-color-error);
+  color: var(--qe-color-on-error);
+}
+
+html[data-qe-appearance] .optionNeutral .optionOutcome {
+  background: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.confirmModal, .leaderboardModal) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3, 0 20px 60px rgb(0 0 0 / 28%));
+}
+
+html[data-qe-appearance] :where(.confirmModal h2, .leaderboardHeading h2, .leaderboardPodiumCard h3) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.confirmModal p, .leaderboardHeading p, .leaderboardPodiumScore, .leaderboardFooter, .leaderboardEmpty p) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] .leaderboardFirst {
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--qe-color-warning-container) 32%, transparent), transparent 43%),
+    var(--qe-color-surface);
+  border-color: var(--qe-color-warning);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.leaderboardSecond, .leaderboardThird) {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.leaderboardMetrics > div, .leaderboardTableWrap, .leaderboardTable, .leaderboardEmpty, .leaderboardLoading) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .leaderboardTable th {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.leaderboardTable tbody tr:hover, .leaderboardTableMine, .leaderboardMine) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .leaderboardSpinner {
+  border-color: var(--qe-color-border-subtle);
+  border-top-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] .certificateResultPanel {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--qe-color-primary-container) 38%, var(--qe-color-surface)), var(--qe-color-surface));
+}
+
+html[data-qe-appearance] .certificateEligibilityHint {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.testGrid, .resultList, .resultCard, .resultAttemptPicker, .examLayout, .questionPanel, .resultScoreGrid, .resultQuestionList, .resultReviewList, .leaderboardPodium, .leaderboardMetrics, .certificateResultPanel) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] :where(.testCard h3, .testCard > p, .resultSummary h3, .resultCard h3, .resultCard p, .attemptTitle h1, .attemptTitle p, .optionText, .optionOutcome, .resultQuestionInfo, .leaderboardStudentName, .certificateResultPanel p) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[data-qe-appearance] :where(.toolbar, .tabs, .cardActions, .resultQuestionNav, .resultActions, .leaderboardHeader, .leaderboardHeading, .certificateActionLinks) {
+  flex-wrap: wrap;
+}
+
+html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .resultLink, .resultOpen, .backButton, .resultQuestionNav button, .leaderboardButton, .leaderboardClose, .certificateIssueButton, .certificateActionLinks a) {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .resultLink, .resultOpen, .backButton, .resultQuestionNav button, .leaderboardButton, .leaderboardClose, .certificateIssueButton, .certificateActionLinks a):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+
+
+/* A numerical score is neutral information, not a pass/fail status. */
+html[data-qe-appearance] .resultScorePrimary {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .resultScorePrimary > strong {
+  color: var(--qe-color-primary-text);
+}

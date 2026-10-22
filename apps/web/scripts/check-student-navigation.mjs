@@ -811,6 +811,258 @@ for (const relative of ['english.json', 'hinglish.json']) {
   ]) assert.ok(typeof catalog[key] === 'string' && catalog[key].trim().length > 0,
     'Missing localized student empty-state copy: ' + key + ' in ' + relative);
 }
+
+const visualAuditGlobals = read('../app/globals.css');
+const visualAuditTestsCss = read('../app/student/tests/Tests.module.css');
+const visualAuditTextbooksCss = read('../app/student/textbooks/textbooks.css');
+const visualAuditBillingCss = read('../app/components/BillingProfileEditor.module.css');
+const visualAuditInboxCss = read('../app/components/NotificationInbox.module.css');
+const visualAuditScopeCss = read('../app/student/InstitutionCourseSubjectScope.module.css');
+
+assert.ok(
+  visualAuditGlobals.includes('html[data-qe-appearance] .parent-courses-page__heading') &&
+  visualAuditGlobals.includes('var(--qe-color-on-success-container)') &&
+  visualAuditGlobals.includes('var(--qe-color-on-error-container)') &&
+  visualAuditGlobals.includes('html[data-qe-appearance] .auth-method-switch'),
+  'Family and authentication screens must use tenant-aware surfaces, foregrounds, and responsive shared-heading alignment.'
+);
+assert.ok(
+  visualAuditTestsCss.includes('html[data-qe-appearance="dark"] .releasedResult') &&
+  visualAuditTestsCss.includes('html[data-qe-appearance="dark"] .leaderboardFirst') &&
+  visualAuditTestsCss.includes('var(--qe-color-on-success-container)'),
+  'Released test results, exam navigation legend, and leaderboard surfaces must remain readable in dark mode.'
+);
+assert.ok(
+  visualAuditTextbooksCss.includes('html[data-qe-appearance] .qe-chapter-copy h4') &&
+  visualAuditTextbooksCss.includes('var(--qe-color-on-accent-container)') &&
+  visualAuditTextbooksCss.includes('var(--qe-color-on-warning-container)'),
+  'Textbook chapter copy and metadata chips must use semantic theme tokens in light and dark mode.'
+);
+assert.ok(
+  visualAuditBillingCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditBillingCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditBillingCss.includes('var(--qe-color-on-primary)'),
+  'Billing forms must use generated contrast foregrounds for primary actions and feedback messages.'
+);
+assert.ok(
+  visualAuditInboxCss.includes('var(--qe-color-on-accent)') &&
+  visualAuditScopeCss.includes('color-mix(in srgb, var(--qe-color-focus'),
+  'Notification badges and subject-scope focus indicators must respect tenant theme tokens; the rich renderer remains on its enforced shared stylesheet contract.'
+);
+
+
+const visualAuditPracticeAndMenuCss = read('../app/globals.css');
+assert.ok(
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] .qe-practice-header') &&
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] .qe-practice-notice') &&
+  visualAuditPracticeAndMenuCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] :where(.student-account-menu, .parent-account__menu)') &&
+  visualAuditPracticeAndMenuCss.includes('var(--qe-color-on-error-container)'),
+  'Practice question surfaces, notices, and both account menus must use institution-aware surface and contrast tokens in light and dark appearance.'
+);
+
+
+const visualAuditCertificateCss = read('../app/student/certificates/Certificates.module.css');
+assert.ok(
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.panel, .templateCard)') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.selected, .formatButtonActive)') &&
+  visualAuditCertificateCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditCertificateCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.templateName, .templateDescription, .certificateInfo strong') &&
+  visualAuditCertificateCss.includes('overflow-wrap: anywhere'),
+  'Certificate app surfaces, selected controls, status messages, and long certificate titles must follow the tenant palette and wrap within their layout; document previews remain white.'
+);
+
+
+const visualAuditCoursesCss = read('../app/student/courses/courses.module.css');
+assert.ok(
+  visualAuditCoursesCss.includes('html[data-qe-appearance] .hero') &&
+  visualAuditCoursesCss.includes('html[data-qe-appearance] :where(.courseCard, .empty)') &&
+  visualAuditCoursesCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditCoursesCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditCoursesCss.includes('html[data-qe-appearance] .actions > *') &&
+  visualAuditCoursesCss.includes('overflow-wrap: anywhere'),
+  'Owned-course page surfaces, status controls, error messages, text wrapping, and action alignment must honour institution appearance in both modes.'
+);
+
+
+const visualAuditClassesCss = read('../app/student/classes/Classes.module.css');
+assert.ok(
+  visualAuditClassesCss.includes('html[data-qe-appearance] .shell') &&
+  visualAuditClassesCss.includes('html[data-qe-appearance] :where(.statusLIVE, .notice, .joinedBanner)') &&
+  visualAuditClassesCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditClassesCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditClassesCss.includes('html[data-qe-appearance] :where(.sessionGrid, .recordingGrid, .sessionCard') &&
+  visualAuditClassesCss.includes('overflow-wrap: anywhere'),
+  'Live-class lists, recording cards, player/chat controls, semantic status states, and long content must use the institution palette and safe wrapping in both appearances.'
+);
+
+
+const visualAuditTestsUniversalCss = read('../app/student/tests/Tests.module.css');
+assert.ok(
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .shell') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .optionSelected') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] :where(.optionCorrect, .correctAnswerBox') &&
+  visualAuditTestsUniversalCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .leaderboardFirst') &&
+  visualAuditTestsUniversalCss.includes('overflow-wrap: anywhere'),
+  'Assessment catalogue, quiz selection/correctness states, released results, leaderboard and action layouts must use semantic theme tokens and safe text wrapping in both appearances.'
+);
+
+
+const visualAuditVerifyCss = read('../app/certificate/verify/Verify.module.css');
+assert.ok(
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .card') &&
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .form input') &&
+  visualAuditVerifyCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditVerifyCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .scanControls > *') &&
+  visualAuditVerifyCss.includes('overflow-wrap: anywhere'),
+  'Public certificate verification surfaces, form focus, result statuses, and scanner controls must follow the active appearance and wrap safely.'
+);
+
+
+
+assert.ok(
+  css.includes('.institution-portal [class*="sendButton"]') &&
+  css.includes('var(--qe-color-on-accent, #fff)') &&
+  css.includes('[class*="NotificationStudio_error"]') &&
+  css.includes('var(--qe-color-on-error-container)'),
+  'User Web institution notification and logo editors must retain contrast-aware accent foregrounds and theme-aware error states without diverging from shared editor styles.'
+);
+
+
+assert.ok(
+  css.includes('a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]') &&
+  css.includes('var(--qe-color-on-accent, var(--qe-color-on-primary, #fff))') &&
+  css.includes('outline: 3px solid var(--qe-color-focus)'),
+  'Rich notification action contrast and focus must be corrected in the User Web host without forking shared renderer sources.'
+);
+
+
+assert.ok(
+  !visualAuditTestsUniversalCss.includes('color-scheme: light dark') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .resultScorePrimary') &&
+  visualAuditTestsUniversalCss.includes('A numerical score is neutral information, not a pass/fail status.'),
+  'Assessment controls must inherit the explicitly selected light/dark scheme, and raw scores must not receive an unconditional success state.'
+);
+
+
+const visualAuditInboxContrastCss = read('../app/components/NotificationInbox.module.css');
+const visualAuditBillingContrastCss = read('../app/components/BillingProfileEditor.module.css');
+const visualAuditEmptyStateContrastCss = read('../app/student/components/StudentEmptyState.module.css');
+assert.ok(
+  visualAuditInboxContrastCss.includes('var(--qe-color-accent-text,var(--qe-color-accent') &&
+  visualAuditInboxContrastCss.includes('.error button') &&
+  visualAuditBillingContrastCss.includes('var(--qe-color-on-primary-container,var(--qe-color-primary-text') &&
+  visualAuditEmptyStateContrastCss.includes('var(--qe-color-primary-text, var(--qe-color-primary') &&
+  css.includes('[class*="pushMedia"]'),
+  'Notification inbox actions must use contrast-aware accent text, while billing disclosure icons, empty-state icons, and shared institution editor labels use semantic foreground tokens.'
+);
+
+
+const visualAuditStructuredLessonThemeCss = read('../app/student/structured-lessons/structured-lessons.css');
+const visualAuditAssignedResourcesCss = read('../app/student/structured-lessons/AssignedLearningResources.module.css');
+assert.ok(
+  visualAuditStructuredLessonThemeCss.includes('color: var(--qe-color-on-primary-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-warning-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('.qe-structured-choice:has(input:checked)'),
+  'Structured lesson selected choices, callouts and correctness/review feedback must use contrast-matched tenant container tokens.'
+);
+assert.ok(
+  visualAuditAssignedResourcesCss.includes('color: var(--qe-color-on-primary-container') &&
+  visualAuditAssignedResourcesCss.includes('flex-wrap: wrap') &&
+  visualAuditAssignedResourcesCss.includes('overflow-wrap: anywhere'),
+  'Assigned learning-resource headings, kind badges and actions must wrap without width collisions and use semantic foregrounds.'
+);
+assert.ok(
+  css.includes('color-mix(in srgb, var(--qe-color-focus) 12%, transparent)') &&
+  css.includes('color-mix(in srgb, var(--qe-color-focus) 16%, transparent)'),
+  'Profile and course-focus rings must derive from the selected institution focus colour rather than a hard-coded orange.'
+);
+
+
+assert.ok(
+  css.includes('color: var(--qe-color-on-primary-container);') &&
+  css.includes('.qe-workspace-link.is-active') &&
+  css.includes('.tutor-equation') &&
+  css.includes('.parent-courses-page__count') &&
+  css.includes('html[data-qe-appearance] .qe-language-switcher > span:first-child') &&
+  css.includes('var(--qe-color-primary-text)'),
+  'Active navigation, tinted badges, selected answer/tutor controls and language affordances must use the correct semantic foreground for their themed surface.'
+);
+
+
+assert.ok(
+  css.includes('.topic-line > :first-child') &&
+  css.includes('grid-template-columns: minmax(0, min(100px, 35%)) minmax(0, 1fr) minmax(36px, 45px)') &&
+  css.includes('.parent-certificate-actions a') &&
+  css.includes('white-space: normal') &&
+  css.includes('overflow-wrap: anywhere'),
+  'Student progress and parent report rows must wrap long localized topic names/counts, and certificate action links must fit narrow screens.'
+);
+
+
+const visualAuditScoreSemanticsCss = read('../app/student/tests/Tests.module.css');
+assert.ok(
+  visualAuditScoreSemanticsCss.includes('html[data-qe-appearance] .score > span') &&
+  visualAuditScoreSemanticsCss.includes('A best-score percentage is a metric, not a pass/fail outcome.') &&
+  !visualAuditScoreSemanticsCss.includes('html[data-qe-appearance] :where(.notice, .score > span)'),
+  'Best-score percentages must stay neutral and theme-aware; only actual success notices use the success container.'
+);
+
+
+const visualAuditMarketplaceCardCss = read('../app/components/MarketplaceCourseCard.module.css');
+const visualAuditBillingFocusCss = read('../app/components/BillingProfileEditor.module.css');
+assert.ok(
+  visualAuditMarketplaceCardCss.includes('color: var(--qe-color-on-primary-container, var(--qe-color-primary-text))') &&
+  visualAuditMarketplaceCardCss.includes('color: var(--qe-color-primary-text, var(--qe-color-primary))'),
+  'Marketplace course icon and price foregrounds must use the right semantic contrast tokens.'
+);
+assert.ok(
+  visualAuditBillingFocusCss.includes('var(--qe-color-on-primary-container, var(--qe-color-primary-text') &&
+  visualAuditBillingFocusCss.includes('color-mix(in srgb, var(--qe-color-focus) 14%, transparent)') &&
+  css.includes('.qe-student-chapter > .qe-chapter-pdf-row:hover') &&
+  css.includes('.institution-portal [class*="fieldGrid"]'),
+  'Billing indicators, profile identity settings, course/resource hover surfaces and institution-portal editor focus rings must use generated theme contrast/focus colours.'
+);
+
+
+assert.ok(
+  css.includes('[class*="RichNotificationRenderer_eyebrow"]') &&
+  css.includes('[class*="RichNotificationRenderer_cardKicker"]') &&
+  css.includes('var(--qe-color-accent-text, var(--qe-color-primary-text)) !important') &&
+  css.includes('a[class*="cta"]'),
+  'Rich notification CTA and accent labels must use institution contrast tokens in the User Web host while shared renderers remain byte-identical.'
+);
+
+
+const visualAuditScopeSelectedCss = read('../app/student/InstitutionCourseSubjectScope.module.css');
+assert.ok(
+  visualAuditScopeSelectedCss.includes('var(--qe-color-on-primary-container, var(--qe-color-primary-text') &&
+  css.includes('[class*="RichNotificationRenderer_editorBlock"]:focus-visible') &&
+  css.includes('outline: 3px solid var(--qe-color-focus)'),
+  'Selected institution/course/subject controls and keyboard-focused rich-notification editor blocks must use tenant contrast and focus tokens.'
+);
+
+
+assert.ok(
+  css.includes('html[data-qe-appearance] .tutor-modes button[aria-pressed="true"]:hover') &&
+  css.includes('background: var(--qe-color-primary);') &&
+  css.includes('color: var(--qe-color-on-primary);'),
+  'A selected tutor mode must retain its solid-primary background and on-primary foreground during hover.'
+);
+
+
+assert.ok(
+  css.includes('html[data-qe-appearance] .parent-certificate-actions a:hover') &&
+  css.includes('background: var(--qe-color-primary);') &&
+  css.includes('color: var(--qe-color-on-primary);'),
+  'Hovered certificate links must retain the correct foreground when their surface changes from primaryContainer to primary.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

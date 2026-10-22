@@ -99,3 +99,124 @@ html[data-qe-appearance="dark"] .certificateImagePreview { background: #FFFFFF; 
   html[data-qe-appearance="dark"] .panel,
   html[data-qe-appearance="dark"] .templateCard { transition: none; }
 }
+
+
+/* The learner's institution palette applies to certificate controls and app surfaces.
+   Certificate/PDF/PNG artwork itself remains white as a document. */
+html[data-qe-appearance] .page {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.panel, .templateCard) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(20 25 40 / 5%));
+}
+
+html[data-qe-appearance] :where(.kicker, .eyebrow, .previewLink a, .downloads a) {
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance] :where(
+  .header p,
+  .meta,
+  .templateDescription,
+  .help,
+  .empty,
+  .certificateInfo span,
+  .certificateInfo small,
+  .viewerLoading,
+  .groupTitle
+) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.selected, .formatButtonActive) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(20 25 40 / 5%));
+}
+
+html[data-qe-appearance] .field select {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+
+html[data-qe-appearance] .field select:focus-visible {
+  outline-color: var(--qe-color-focus);
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .field select:disabled {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+
+html[data-qe-appearance] .rule {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.rule strong, .empty strong, .certificateInfo strong) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .error {
+  color: var(--qe-color-on-error-container);
+  background: var(--qe-color-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] :where(.notice, .valid) {
+  color: var(--qe-color-on-success-container);
+  background: var(--qe-color-success-container);
+  border-color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] .revoked {
+  color: var(--qe-color-on-error-container);
+  background: var(--qe-color-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .downloads small {
+  color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .certificateRow {
+  border-top-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .certificateIcon {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .formatChoices {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .formatButton {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.certificatePdfPreview, .certificateImageStage) {
+  background: var(--qe-color-background);
+  border-color: var(--qe-color-border-subtle);
+}
+
+/* Long titles and certificate identifiers should wrap inside their grid track, not push siblings out. */
+html[data-qe-appearance] :where(.sectionHead > div:first-child, .templateCardWrap, .templateCard, .certificateInfo, .downloads) {
+  min-width: 0;
+}
+
+html[data-qe-appearance] :where(.templateName, .templateDescription, .certificateInfo strong, .certificateInfo span, .certificateInfo small, .rule) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}

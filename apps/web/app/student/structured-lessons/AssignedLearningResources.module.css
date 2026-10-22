@@ -21,3 +21,48 @@
 .error{padding:.75rem;border:1px solid var(--qe-color-error);border-radius:.6rem;background:var(--qe-color-error-container);color:var(--qe-color-on-error-container);font-size:.9rem}
 .completed{font-size:.8rem;font-weight:750;color:var(--qe-color-success)}
 @media(max-width:560px){.heading{flex-direction:column}.refresh{align-self:flex-start}.grid{grid-template-columns:1fr}.media{max-height:18rem}}
+
+
+/* Assigned resources: long labels must not fight the kind badge or force cards wider. */
+.heading,
+.heading > *,
+.card,
+.cardHeading,
+.cardHeading > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.heading p,
+.card h3,
+.card p,
+.description,
+.muted {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.cardHeading {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.kind {
+  color: var(--qe-color-on-primary-container, var(--qe-orange, #b64b13));
+}
+
+.downloadLink {
+  color: var(--qe-color-primary-text, var(--qe-orange, #b64b13));
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.refresh,
+.openLink {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+}

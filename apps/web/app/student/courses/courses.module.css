@@ -90,3 +90,105 @@ html[data-qe-appearance="dark"] .error {
 
 /* Keep course titles and metadata readable on narrow cards. */
 .courseCard h2,.courseCard p,.subjectLink strong,.subjectLink small{overflow-wrap:break-word;word-break:normal;hyphens:none}
+
+
+/* Course catalogue follows the tenant palette in both modes; artwork is limited to the small icon. */
+html[data-qe-appearance] .page {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .hero {
+  background:
+    radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--qe-color-primary) 9%, transparent), transparent 36%),
+    var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-2, 0 12px 34px rgb(20 25 40 / 6%));
+}
+
+html[data-qe-appearance] :where(.hero h1, .courseCard h2, .subjectHeading, .subjectLink) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.eyebrow, .progressLabels strong, .subjectLink:hover strong) {
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance] :where(.hero p, .meta, .progressLabels, .subjectLink small, .empty p) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.courseCard, .empty) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(20 25 40 / 5%));
+}
+
+html[data-qe-appearance] .primaryLink {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] :where(.secondaryLink, .secondaryButton) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .mark {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .activeBadge {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .enrolledBadge {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+
+html[data-qe-appearance] .progressTrack {
+  background: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .progressTrack span {
+  background: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] :where(.subjectList, .subjectLink) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .error {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .primaryLink:focus-visible,
+html[data-qe-appearance] :where(.secondaryLink, .secondaryButton):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+
+html[data-qe-appearance] :where(.courseCard, .courseCard > *, .subjectLink, .actions) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] :where(.courseCard h2, .courseCard p, .subjectLink strong, .subjectLink small, .empty h2, .empty p) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[data-qe-appearance] .actions > * {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+}
