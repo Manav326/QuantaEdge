@@ -69,6 +69,11 @@ assert.ok(institutions.includes('const adminDraftIssue=') && institutions.includ
 assert.ok(institutions.includes("notifyUser('Tenant branding settings saved.','success')") &&
   institutions.includes("notifyUser('Billing contract saved."),
   'Institution settings writes must use central success notifications.');
+assert.ok(institutions.includes('!profileChanged') && institutions.includes('!brandChanged') &&
+  institutions.includes('!billingChanged') && institutions.includes('!hasCourseChanges'),
+  'Institution profile, branding, billing and course authorisation must disable unchanged saves.');
+assert.ok(institutions.includes("Number(billing.unitPriceRupees)!==(Number(detail?.unit_price_paise||0)/100)"),
+  'Equivalent rupee values must not be treated as a changed billing contract.');
 assert.ok(institutions.includes('Course authorisation may have been partially saved.'),
   'Partial course authorisation failure must remain visible and reload server state rather than implying atomic success.');
 
