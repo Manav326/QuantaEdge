@@ -415,10 +415,10 @@ export default function InstitutionsAdminPage() {
               {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}
               <button type="button" className={styles.quiet} disabled={saving} onClick={()=>cancelCardEdit('status')}>Done</button>
             </>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>setEditingCard('status')}>Edit status</button>}</div>
-          {editingCard==='profile'?<form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
+          {editingCard==='profile'?<><form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
             <label>Institution display name *<input required minLength={2} maxLength={180} value={profile.displayName} onChange={e=>setProfile(v=>({...v,displayName:e.target.value}))}/><small>The institution name is used as the white-label default unless a separate branded display name has been configured.</small></label>
             <label>Legal name<input maxLength={220} value={profile.legalName} onChange={e=>setProfile(v=>({...v,legalName:e.target.value}))}/><small>Optional; shown in institution operations and legal records.</small></label>
-          </form>{profileDraftIssue()?<p className={styles.disclaimer} role="status">{profileDraftIssue()}</p>:!profileChanged?<p className={styles.disclaimer} role="status">No changes to save.</p>:null}:null}
+          </form>{profileDraftIssue()?<p className={styles.disclaimer} role="status">{profileDraftIssue()}</p>:!profileChanged?<p className={styles.disclaimer} role="status">No changes to save.</p>:null}</>:null}
           <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
