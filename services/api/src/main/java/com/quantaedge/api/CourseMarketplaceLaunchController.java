@@ -89,6 +89,7 @@ public class CourseMarketplaceLaunchController {
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         left join curriculum_program_subject ps on ps.program_id=p.id
         left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or s.program_id is null)
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
