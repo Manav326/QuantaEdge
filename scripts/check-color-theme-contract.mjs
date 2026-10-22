@@ -229,6 +229,22 @@ console.log('Admin/HRMS colour audit coverage: ' + adminRouteFiles.length + ' Ad
   peopleRouteFiles.length + ' HRMS routes, ' + adminModuleStyles.length + ' Admin CSS modules, and ' +
   peopleModuleStyles.length + ' HRMS CSS modules.');
 
+
+
+// Learner Web notification inbox is audited alongside Admin and HRMS, because
+// its row accordion, filter tabs and actions must not fall back to light-only
+// focus/hover surfaces under an institution's dark palette.
+const webNotificationCss = read('apps/web/app/components/NotificationInbox.module.css');
+assert(webNotificationCss.includes('Notification inbox dark-state coverage') &&
+  webNotificationCss.includes('.itemHeader:is(:hover, :focus-visible)') &&
+  webNotificationCss.includes('background-color: var(--qe-color-surface-subtle)') &&
+  webNotificationCss.includes('var(--qe-color-on-error-container)') &&
+  webNotificationCss.includes('.itemActions button:focus-visible'),
+  'Learner Web notification rows, filters, error feedback and actions must retain readable dark-mode interaction states.');
+assert(webNotificationCss.includes('html[data-qe-appearance="dark"] .segmented button.selected') &&
+  webNotificationCss.includes('html[data-qe-appearance="dark"] .item:focus-within'),
+  'Learner Web notification selected/focused states must use tenant surfaces and visible focus without white overlays.');
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);

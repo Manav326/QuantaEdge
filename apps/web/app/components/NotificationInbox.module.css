@@ -58,3 +58,66 @@
 html[data-qe-appearance] .bellCount {
   color: var(--qe-color-on-accent);
 }
+
+
+/*
+ * Notification inbox dark-state coverage
+ * ---------------------------------------
+ * Notification rows and their action controls must remain on tenant surfaces
+ * when hovered, focused, selected or expanded. Do not rely only on the
+ * light-mode defaults inherited from buttons and browser form controls.
+ */
+html[data-qe-appearance="dark"] .page {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .bell,
+html[data-qe-appearance="dark"] .unreadPill,
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .item,
+html[data-qe-appearance="dark"] .empty,
+html[data-qe-appearance="dark"] .categoryLabel select {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .itemHeader:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .secondaryButton:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .bell:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .segmented button:not(.selected):is(:hover, :focus-visible) {
+  background-color: var(--qe-color-surface-subtle);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .item:focus-within {
+  border-color: var(--qe-color-focus);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--qe-color-focus) 40%, transparent);
+}
+html[data-qe-appearance="dark"] .segmented {
+  background-color: var(--qe-color-background);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .segmented button {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .segmented button.selected {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  box-shadow: inset 0 0 0 1px var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .error {
+  background-color: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .error button {
+  color: var(--qe-color-on-error-container);
+}
+html[data-qe-appearance="dark"] .itemHeader:focus-visible,
+html[data-qe-appearance="dark"] .secondaryButton:focus-visible,
+html[data-qe-appearance="dark"] .bell:focus-visible,
+html[data-qe-appearance="dark"] .segmented button:focus-visible,
+html[data-qe-appearance="dark"] .categoryLabel select:focus-visible,
+html[data-qe-appearance="dark"] .itemActions button:focus-visible {
+  outline: 2px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
