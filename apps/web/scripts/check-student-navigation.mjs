@@ -924,18 +924,18 @@ assert.ok(
 
 
 assert.ok(
-  globals.includes('.institution-portal [class*="sendButton"]') &&
-  globals.includes('var(--qe-color-on-accent, #fff)') &&
-  globals.includes('[class*="NotificationStudio_error"]') &&
-  globals.includes('var(--qe-color-on-error-container)'),
+  css.includes('.institution-portal [class*="sendButton"]') &&
+  css.includes('var(--qe-color-on-accent, #fff)') &&
+  css.includes('[class*="NotificationStudio_error"]') &&
+  css.includes('var(--qe-color-on-error-container)'),
   'User Web institution notification and logo editors must retain contrast-aware accent foregrounds and theme-aware error states without diverging from shared editor styles.'
 );
 
 
 assert.ok(
-  globals.includes('a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]') &&
-  globals.includes('var(--qe-color-on-accent, var(--qe-color-on-primary, #fff))') &&
-  globals.includes('outline: 3px solid var(--qe-color-focus)'),
+  css.includes('a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]') &&
+  css.includes('var(--qe-color-on-accent, var(--qe-color-on-primary, #fff))') &&
+  css.includes('outline: 3px solid var(--qe-color-focus)'),
   'Rich notification action contrast and focus must be corrected in the User Web host without forking shared renderer sources.'
 );
 
@@ -956,7 +956,7 @@ assert.ok(
   visualAuditInboxContrastCss.includes('var(--qe-color-on-error-container)') &&
   visualAuditBillingContrastCss.includes('var(--qe-color-on-primary-container,var(--qe-color-primary-text') &&
   visualAuditEmptyStateContrastCss.includes('var(--qe-color-primary-text, var(--qe-color-primary') &&
-  globals.includes('[class*="pushMedia"]'),
+  css.includes('[class*="pushMedia"]'),
   'Notification inbox labels, billing disclosure icons, empty-state icons, and shared institution editor labels must use contrast-aware semantic foreground tokens.'
 );
 
