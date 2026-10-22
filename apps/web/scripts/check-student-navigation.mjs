@@ -864,11 +864,11 @@ assert.ok(
 
 const visualAuditCertificateCss = read('../app/student/certificates/Certificates.module.css');
 assert.ok(
-  visualAuditCertificateCss.includes('html[data-qe-appearance] .panel') &&
-  visualAuditCertificateCss.includes('html[data-qe-appearance] .selected') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.panel, .templateCard)') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.selected, .formatButtonActive)') &&
   visualAuditCertificateCss.includes('var(--qe-color-on-error-container)') &&
   visualAuditCertificateCss.includes('var(--qe-color-on-success-container)') &&
-  visualAuditCertificateCss.includes('html[data-qe-appearance] .certificateInfo strong') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] :where(.templateName, .templateDescription, .certificateInfo strong') &&
   visualAuditCertificateCss.includes('overflow-wrap: anywhere'),
   'Certificate app surfaces, selected controls, status messages, and long certificate titles must follow the tenant palette and wrap within their layout; document previews remain white.'
 );
