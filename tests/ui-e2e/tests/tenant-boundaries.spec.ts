@@ -7,16 +7,25 @@ const WEB = appBaseUrl('web', 'http://127.0.0.1:3000');
 const HRMS = appBaseUrl('people', 'http://127.0.0.1:3002');
 type ApiResult = { status: number; body: any };
 
-async function api(page: Page, path: string, workspace?: string): Promise<ApiResult> {
-  return page.evaluate(async ({ path, workspace }) => {
+async function api(
+  page: Page,
+  path: string,
+  workspace?: string,
+  institutionCode?: string
+): Promise<ApiResult> {
+  return page.evaluate(async ({ path, workspace, institutionCode }) => {
     const headers: Record<string, string> = { Accept: 'application/json' };
     if (workspace) headers['X-QE-Workspace'] = workspace;
+    // These tests deliberately use raw fetch to probe authorization. Supply the selected
+    // tenant explicitly so the request reaches the resource/permission guard rather than
+    // failing earlier at the required-institution-context guard.
+    if (institutionCode) headers['X-QE-Institution-Code'] = institutionCode;
     const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', headers });
     const raw = await response.text();
     let body: any = {};
     try { body = raw ? JSON.parse(raw) : {}; } catch { body = { unreadable: true }; }
     return { status: response.status, body };
-  }, { path, workspace });
+  }, { path, workspace, institutionCode });
 }
 
 async function contextPage(browser: Browser, storageState: string, url: string) {
@@ -34,9 +43,9 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
 
   try {
     const [sessionA, sessionB, sessionChild] = await Promise.all([
-      api(parentA.page, '/api/v1/auth/me'),
-      api(parentB.page, '/api/v1/auth/me'),
-      api(childA.page, '/api/v1/auth/me')
+      api(parentA.page, '/api/v1/auth/me', undefined, fixture.credentials.parentA.institutionCode),
+      api(parentB.page, '/api/v1/auth/me', undefined, fixture.credentials.parentB.institutionCode),
+      api(childA.page, '/api/v1/auth/me', undefined, fixture.credentials.childA.institutionCode)
     ]);
     expect(sessionA.status).toBe(200);
     expect(sessionB.status).toBe(200);
@@ -50,8 +59,8 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
     expect(Number(sessionA.body.userId)).not.toBe(Number(sessionB.body.userId));
 
     const [childrenA, childrenB] = await Promise.all([
-      api(parentA.page, '/api/v1/guardians/children'),
-      api(parentB.page, '/api/v1/guardians/children')
+      api(parentA.page, '/api/v1/guardians/children', undefined, fixture.credentials.parentA.institutionCode),
+      api(parentB.page, '/api/v1/guardians/children', undefined, fixture.credentials.parentB.institutionCode)
     ]);
     expect(childrenA.status).toBe(200);
     expect(childrenB.status).toBe(200);
@@ -68,15 +77,15 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
     // A cannot access B's child through an ID substitution; 404 is acceptable to
     // avoid confirming the existence of another institution's private record.
     const crossTenant = await api(parentA.page,
-      '/api/v1/guardians/children/' + encodeURIComponent(String(childBId)) + '/programs?includeSubjects=false');
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childBId)) + '/programs?includeSubjects=false', undefined, fixture.credentials.parentA.institutionCode);
     expect([401, 403, 404]).toContain(crossTenant.status);
     const crossGuardian = await api(parentB.page,
-      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) + '/programs?includeSubjects=false');
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) + '/programs?includeSubjects=false', undefined, fixture.credentials.parentB.institutionCode);
     expect([401, 403, 404]).toContain(crossGuardian.status);
 
-    const parentCannotUseStudentProfile = await api(parentA.page, '/api/v1/students/me/profile');
+    const parentCannotUseStudentProfile = await api(parentA.page, '/api/v1/students/me/profile', undefined, fixture.credentials.parentA.institutionCode);
     expect([401, 403, 404]).toContain(parentCannotUseStudentProfile.status);
-    const childCannotReadGuardianChildren = await api(childA.page, '/api/v1/guardians/children');
+    const childCannotReadGuardianChildren = await api(childA.page, '/api/v1/guardians/children', undefined, fixture.credentials.childA.institutionCode);
     expect([401, 403, 404]).toContain(childCannotReadGuardianChildren.status);
 
     expect(fixture.credentials.parentA.institutionCode).not.toBe(fixture.credentials.parentB.institutionCode);
