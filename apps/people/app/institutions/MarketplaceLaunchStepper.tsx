@@ -542,7 +542,8 @@ export default function MarketplaceLaunchStepper({
                           )}
                           {group.key === 'seller' && shouldShowFinanceLink(item) && <a className={styles.actionLink} href="/finance">Open HRMS Finance & Billing <span aria-hidden="true">↗</span></a>}
                           {group.key === 'invoice' && shouldShowFinanceLink(item) && <a className={styles.actionLink} href="/finance">Review invoice template and revenue-share policy <span aria-hidden="true">↗</span></a>}
-                          {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
+                          {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
+                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && <p className={styles.stepHint}>After HRMS quality approval, the source institution admin must approve the release in the separate Institution portal. HRMS can assign it to this institution only after it becomes SHAREABLE.</p>}
                         </div>
                       </section>
                     );
