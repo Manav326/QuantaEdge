@@ -185,6 +185,129 @@
   background: var(--qe-color-surface, #fff);
 }
 
+.qualityPanel {
+  overflow: hidden;
+  border: 1px solid #ead4b0;
+  border-radius: 16px;
+  background: var(--qe-color-surface, #fff);
+}
+
+.qualityCount {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: #8c520b;
+  background: #fff0d9;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.qualityList {
+  display: flex;
+  flex-direction: column;
+}
+
+.qualityRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 18px;
+}
+
+.qualityRow + .qualityRow {
+  border-top: 1px solid var(--qe-color-border-subtle, #edf0f4);
+}
+
+.qualityCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.qualityCopy > strong {
+  display: block;
+  color: var(--qe-color-text, #192538);
+  font-size: 12px;
+}
+
+.qualityCopy > strong span {
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 10px;
+}
+
+.qualityCopy > small {
+  display: block;
+  margin-top: 4px;
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 10px;
+}
+
+.qualityMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.qualityMetrics span {
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: var(--qe-color-surface-elevated, #f2f5f8);
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 10px;
+}
+
+.qualityCopy .availableWarning {
+  margin: 8px 0;
+  color: #89500d;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.reviewNote {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 11px;
+  color: var(--qe-color-text, #273347);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.reviewNote textarea {
+  width: 100%;
+  min-height: 54px;
+  box-sizing: border-box;
+  border: 1px solid var(--qe-color-border, #d3dbe6);
+  border-radius: 8px;
+  padding: 9px 10px;
+  color: var(--qe-color-text, #192538);
+  background: var(--qe-color-surface, #fff);
+  font: inherit;
+  font-weight: 500;
+}
+
+.reviewNote textarea:focus {
+  outline: 2px solid var(--qe-color-primary, #e96d22);
+  border-color: transparent;
+}
+
+.qualityActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.qualityFootnote {
+  margin: 0;
+  padding: 11px 18px;
+  border-top: 1px solid #f0e1c9;
+  color: #80521a;
+  background: #fffaf2;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
 .availableHeader {
   display: flex;
   align-items: flex-start;
@@ -893,6 +1016,15 @@
   }
 
   .availableHeader {
+    flex-direction: column;
+  }
+
+  .qualityRow {
+    padding: 12px;
+  }
+
+  .qualityActions {
+    align-items: stretch;
     flex-direction: column;
   }
 
