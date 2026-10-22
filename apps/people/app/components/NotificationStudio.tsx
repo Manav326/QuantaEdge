@@ -392,7 +392,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }
 
   async function saveTemplate() {
-    if (!templateDirty) return;
+    if (surface === 'hrms' && !templateDirty) return;
     const issue = validateContent();
     if (issue) { setError(issue); return; }
     setSaving(true); setError(''); setNotice('');
@@ -406,7 +406,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       });
       const data = await response.json().catch(() => ({})) as Template & { message?: string };
       if (!response.ok) throw new Error(data.message || 'Template could not be saved.');
-      setNotice('');notifyUser('Template saved as a new immutable version.','success');
+      if (surface === 'hrms') { setNotice(''); notifyUser('Template saved as a new immutable version.','success'); } else { setNotice('Template saved as a new immutable version.'); }
       await loadBase();
       if (data.id) {
         setTemplateId(String(data.id));
@@ -449,7 +449,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     finally { setSending(false); }
   }
 
-  if (loading) return <main className={styles.page}><p>Loading notification creator…</p></main>;
+  if (loading) return <main className={styles.page} data-surface={surface}><p>Loading notification creator…</p></main>;
 
   return <main className={styles.page}>
     <header className={styles.header}>
@@ -652,7 +652,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
           </div>
           {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} eligible recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>kind+': '+count).join(' · ')}</span></div>:null}
           <div className={styles.sendActions}>
-            <button type="button" className={styles.ghostButton} onClick={()=>void saveTemplate()} disabled={saving||sending||!templateDirty}>{saving?'Saving…':'Save template version'}</button>
+            <button type="button" className={styles.ghostButton} onClick={()=>void saveTemplate()} disabled={saving||sending||(surface==='hrms'&&!templateDirty)}>{saving?'Saving…':'Save template version'}</button>
             <button type="button" className={styles.previewButton} onClick={()=>void preview()} disabled={saving||sending}>{saving?'Validating…':'Preview & validate audience'}</button>
             <button type="button" className={styles.sendButton} onClick={()=>void send()} disabled={saving||sending||!previewed}>{sending?'Sending…':scheduledAt?'Schedule notification':'Send notification'}</button>
           </div>
@@ -662,6 +662,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
       <aside className={styles.side} aria-label="Notification workspace summary">
         <div className={styles.sticky}>
+          {surface === 'hrms' ? <>
           <section className={styles.sideCard}>
             <div className={styles.sideCardHeading}><h3>Current draft</h3><span className={templateId?styles.sideStatusSaved:styles.sideStatusDraft}>{templateId?('Version '+(templateVersion??1)):'Not saved'}</span></div>
             <strong className={styles.sideDraftName}>{templateName.trim()||'Untitled notification'}</strong>
@@ -689,6 +690,11 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             <p className={styles.muted}>Sending requires successful validation and confirmation. The server checks the audience again before delivery.</p>
           </section>
           <section className={styles.sideCard}><div className={styles.sideCardHeading}><h3>Saved templates</h3><span className={styles.sideCount}>{templates.length}</span></div>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{t.content_version ?? t.contentVersion ?? 1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</section>
+          </> : <>
+            <div className={styles.sideCard}><h3>Rich content blocks</h3><p>Combine hero layouts, formatted copy, image/video/animation assets, course and event cards, highlights and action buttons.</p><ul><li>Reorder blocks</li><li>Preview the actual renderer</li><li>Save immutable versions</li><li>Safe links and accessible media</li></ul></div>
+            <div className={styles.sideCard}><h3>Delivery behavior</h3><p>The persistent inbox is the source of truth. Push is a compact heads-up where configured; opening it reveals the complete content.</p><p className={styles.muted}>No send occurs until audience validation and confirmation succeed.</p></div>
+            <div className={styles.sideCard}><h3>Template library</h3>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{t.content_version ?? t.contentVersion ?? 1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</div>
+          </>}
         </div>
       </aside>
     </div>
