@@ -604,6 +604,20 @@ export default function FinancePage(){
     ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],
     ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
   ];
+  // Render the same selected design on two workspace surfaces. The design and PDF
+  // are independent of HRMS appearance and retain their explicitly authored colours.
+  const invoiceSample = (
+<article data-qe-invoice-document="true" className={[styles.paper,design.surfaceStyle==='CLEAN_WHITE'?styles.paperWhite:design.surfaceStyle==='SOFT_SLATE'?styles.paperSlate:styles.paperWarm].join(' ')} style={{'--invoice-primary':design.primaryColor,'--invoice-accent':design.accentColor} as CSSProperties}>
+            <div className={styles.paperTopRule}/>
+            <header className={styles.paperBrand}><div className={styles.mark} style={{background:design.primaryColor}}>{design.showLogo?'QE':'IN'}</div><div><strong>LEGAL SUPPLIER NAME</strong><span>Registered address · State and PIN</span><span>GSTIN: configured approved registration</span></div><div className={styles.documentTitle}><span>TAX INVOICE</span><b>QE-PREVIEW-0001</b><small>Preview date · sample only</small></div></header>
+            <div className={styles.paperRule}/>
+            <div className={styles.paperMeta}><div><small>BILL TO</small><b>Customer billing name</b><span>Billing address and state</span><span>GSTIN if applicable</span></div><div><small>COURSE / ORDER</small><b>Class 6 Mathematics</b><span>Course order reference · preview</span><span>Beneficiary: learner example</span></div></div>
+            <table className={styles.paperTable}><thead><tr><th>DESCRIPTION</th><th>QTY</th><th>VALUE</th></tr></thead><tbody><tr><td><b>Course access</b><small>Illustrative line item · SAC configured by finance</small></td><td>1</td><td>₹1,000.00</td></tr><tr><td>Offer discount</td><td>—</td><td>− ₹100.00</td></tr></tbody></table>
+            <div className={styles.paperBottom}><div className={styles.sampleTax}><span>Tax breakdown</span><p>Tax components and rates appear from the approved transaction snapshot—not from this sample.</p><span>Order / payment reference: preview only</span></div><div className={styles.paperTotals}><div><span>Discounted value</span><b>₹900.00</b></div><div><span>Applicable tax</span><b>Calculated per approved profile</b></div><div className={styles.grandTotal}><span>TOTAL</span><b>Calculated for actual transaction</b></div></div></div>
+            <footer className={styles.paperFooter}><div><b>{design.footerText}</b><span>Supplier particulars, required declarations and authentication are rendered from the approved invoice snapshot.</span></div><div className={styles.previewSeal}>PREVIEW<br/>NOT A TAX INVOICE</div></footer>
+          </article>
+  );
+
   return <main className={styles.page}>
     <header className={styles.header}>
       <div><span className={styles.eyebrow}>HRMS · FINANCE & BILLING</span><h1>Financial control centre</h1>
@@ -781,16 +795,17 @@ export default function FinancePage(){
           <p className={styles.note}>Published template versions are immutable for the purpose of historical invoices. Actual statutory documents also snapshot seller, recipient, tax, line items and totals separately.</p>
         </section>
         <section className={styles.previewPanel}><div className={styles.previewHeader}><div><span className={styles.eyebrow}>LIVE PREVIEW</span><h2>Invoice document</h2></div><div className={styles.previewActions}><span className={styles.samplePill}>SAMPLE · NOT ISSUED</span><button type="button" className={styles.secondarySmall} disabled={previewPdfLoading} onClick={()=>void generatePdfPreview()}>{previewPdfLoading?'Rendering PDF…':'Open PDF preview'}</button></div></div>
-          <div className={styles.paperWrap}><article className={[styles.paper,design.surfaceStyle==='CLEAN_WHITE'?styles.paperWhite:design.surfaceStyle==='SOFT_SLATE'?styles.paperSlate:styles.paperWarm].join(' ')} style={{'--invoice-primary':design.primaryColor,'--invoice-accent':design.accentColor} as CSSProperties}>
-            <div className={styles.paperTopRule}/>
-            <header className={styles.paperBrand}><div className={styles.mark} style={{background:design.primaryColor}}>{design.showLogo?'QE':'IN'}</div><div><strong>LEGAL SUPPLIER NAME</strong><span>Registered address · State and PIN</span><span>GSTIN: configured approved registration</span></div><div className={styles.documentTitle}><span>TAX INVOICE</span><b>QE-PREVIEW-0001</b><small>Preview date · sample only</small></div></header>
-            <div className={styles.paperRule}/>
-            <div className={styles.paperMeta}><div><small>BILL TO</small><b>Customer billing name</b><span>Billing address and state</span><span>GSTIN if applicable</span></div><div><small>COURSE / ORDER</small><b>Class 6 Mathematics</b><span>Course order reference · preview</span><span>Beneficiary: learner example</span></div></div>
-            <table className={styles.paperTable}><thead><tr><th>DESCRIPTION</th><th>QTY</th><th>VALUE</th></tr></thead><tbody><tr><td><b>Course access</b><small>Illustrative line item · SAC configured by finance</small></td><td>1</td><td>₹1,000.00</td></tr><tr><td>Offer discount</td><td>—</td><td>− ₹100.00</td></tr></tbody></table>
-            <div className={styles.paperBottom}><div className={styles.sampleTax}><span>Tax breakdown</span><p>Tax components and rates appear from the approved transaction snapshot—not from this sample.</p><span>Order / payment reference: preview only</span></div><div className={styles.paperTotals}><div><span>Discounted value</span><b>₹900.00</b></div><div><span>Applicable tax</span><b>Calculated per approved profile</b></div><div className={styles.grandTotal}><span>TOTAL</span><b>Calculated for actual transaction</b></div></div></div>
-            <footer className={styles.paperFooter}><div><b>{design.footerText}</b><span>Supplier particulars, required declarations and authentication are rendered from the approved invoice snapshot.</span></div><div className={styles.previewSeal}>PREVIEW<br/>NOT A TAX INVOICE</div></footer>
-          </article></div>
-          <div className={styles.previewNote}><span>◎</span><p>This live design preview uses sample placeholders. It deliberately does not fabricate a GSTIN, legal invoice number, tax rate or real customer data.</p></div>
+          <div className={styles.invoicePreviewGrid} aria-label="Same selected invoice design in light and dark workspace themes">
+            <section className={styles.invoiceThemeFrame} data-preview-theme="light">
+              <div className={styles.invoiceThemeLabel}>Light workspace</div>
+              <div className={styles.paperWrap}>{invoiceSample}</div>
+            </section>
+            <section className={styles.invoiceThemeFrame} data-preview-theme="dark">
+              <div className={styles.invoiceThemeLabel}>Dark workspace</div>
+              <div className={styles.paperWrap}>{invoiceSample}</div>
+            </section>
+          </div>
+          <div className={styles.previewNote}><span>◎</span><p>Both workspace previews show the same explicitly selected invoice design. Light/dark HRMS appearance never recolours the document; the generated PDF follows this design. This sample does not fabricate a GSTIN, legal invoice number, tax rate or real customer data.</p></div>
           {previewPdfUrl&&<section className={styles.pdfPreviewPanel}><div className={styles.pdfPreviewToolbar}><b>PDF output preview · sample only</b><div><a href={previewPdfUrl} download="quantaedge-invoice-preview.pdf">Download preview PDF</a><button type="button" className={styles.secondarySmall} onClick={()=>setPreviewPdfUrl(null)}>Close</button></div></div><iframe title="Invoice design PDF preview" src={previewPdfUrl}/></section>}
         </section>
       </section>}

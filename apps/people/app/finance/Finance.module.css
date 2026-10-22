@@ -1,4 +1,4 @@
-.page{--ink:#152038;--muted:#68738a;--line:#e5e8ee;--paper:#f8f7f4;--brand:#f97316;--brand-deep:#c2410c;max-width:1600px;margin:0 auto;padding:clamp(18px,3vw,34px);color:var(--ink);display:grid;gap:20px}
+.page{--ink:var(--qe-people-ink,#152038);--muted:var(--qe-people-muted,#68738a);--line:var(--qe-people-line,#e5e8ee);--paper:var(--qe-people-paper,#f8f7f4);--brand:var(--qe-people-brand,#f97316);--brand-deep:var(--qe-people-brand-strong,#c2410c);max-width:1600px;margin:0 auto;padding:clamp(18px,3vw,34px);color:var(--ink);display:grid;gap:20px}
 .page button,.page input,.page select,.page textarea{font:inherit}.page button{cursor:pointer}.page button:disabled{opacity:.55;cursor:not-allowed}
 .header{display:flex;justify-content:space-between;align-items:flex-start;gap:22px}.header h1{font-size:clamp(28px,3vw,40px);letter-spacing:-1.6px;line-height:1.05;margin:8px 0}.header p{max-width:820px;font-size:13px;line-height:1.7;color:var(--muted);margin:0}
 .eyebrow{font-size:10px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:var(--brand-deep)}
@@ -59,3 +59,79 @@
 
 .providerMessage{font-size:12px;line-height:1.5;color:#475467;margin:0;min-width:210px;max-width:440px}
 .paymentEventList summary{cursor:pointer}
+
+
+/* Finance workspace chrome follows HRMS appearance tokens. Invoice stationery remains authored. */
+.page {
+  --finance-surface: var(--qe-people-card, #ffffff);
+  --finance-subtle: var(--qe-people-surface-subtle, #f8fafc);
+  --finance-hover: var(--qe-people-surface-hover, #fff7f0);
+  --finance-field: var(--qe-people-field, #ffffff);
+  --finance-ink: var(--qe-people-ink, #182337);
+  --finance-muted: var(--qe-people-muted, #66758b);
+  --finance-line: var(--qe-people-line, #e2e7ef);
+  --finance-on-brand: var(--qe-people-on-brand, #ffffff);
+  color: var(--finance-ink);
+}
+.page .header h1, .page .panel h2, .page .panel h3,
+.page .metrics strong, .page .steps b, .page .entityRow b,
+.page .policyRow b, .page .emptyLarge b { color: var(--finance-ink); }
+.page .header p, .page .panel > p, .page .panelHead p, .page .steps span,
+.page .metrics span, .page .metrics small, .page .entityRow span,
+.page .entityRow small, .page .policyRow span, .page .policyRow small,
+.page .paymentResultsMeta, .page .paymentPagination,
+.page .paymentEventList article p, .page .paymentEventList article small { color: var(--finance-muted); }
+.page .eyebrow { color: var(--qe-people-brand-strong, #c2410c); }
+.page :is(.panel, .metrics article, .entityRow, .policyRow, .recipientEditor, .versionBanner, .paymentEventList article) {
+  background: var(--finance-surface); color: var(--finance-ink); border-color: var(--finance-line);
+}
+.page :is(.previewPanel, .pdfPreviewPanel) {
+  background: var(--finance-subtle); color: var(--finance-ink); border-color: var(--finance-line);
+}
+.page .approvalBox {
+  background: var(--qe-people-info-soft, #f5f9ff); color: var(--finance-ink);
+  border-color: color-mix(in srgb, var(--qe-people-info, #175cd3) 30%, var(--finance-line));
+}
+.page .approvalBox p { color: var(--finance-ink); }
+.page :is(.tab, .tabActive) { color: var(--finance-muted); }
+.page .tab:not(.tabActive):is(:hover, :focus-visible) {
+  background: var(--finance-hover); color: var(--finance-ink); border-color: var(--finance-line);
+}
+.page .tabActive { background: var(--qe-people-brand-soft, #fff0e5); border-color: var(--qe-people-brand, #f97316); color: var(--qe-people-brand-strong, #c2410c); }
+.page :is(.primary, .primarySmall) {
+  background: var(--qe-people-brand-strong, #c2410c); border-color: var(--qe-people-brand-strong, #c2410c); color: var(--finance-on-brand);
+}
+.page :is(.primary, .primarySmall):is(:hover, :focus-visible) {
+  background: var(--qe-people-brand-hover, #9a3412); border-color: var(--qe-people-focus, #c2410c); color: var(--finance-on-brand);
+}
+.page :is(.secondary, .secondarySmall) { background: var(--finance-surface); border-color: var(--finance-line); color: var(--finance-ink); }
+.page :is(.secondary, .secondarySmall):is(:hover, :focus-visible) {
+  background: var(--finance-hover); border-color: var(--qe-people-focus, #c2410c); color: var(--finance-ink);
+}
+.page :is(button, input, select, textarea):focus-visible { outline: 2px solid var(--qe-people-focus, #c2410c); outline-offset: 2px; }
+.page :is(.form label, .panel > label, .wideLabel, .designControls label, .recipientEditor label, .einvoiceReview label, .refundForm label, .paymentFilters label) { color: var(--finance-ink); }
+.page :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea) {
+  background: var(--finance-field); border-color: var(--finance-line); color: var(--finance-ink); caret-color: var(--finance-ink);
+}
+.page :is(input, textarea)::placeholder { color: var(--finance-muted); opacity: 1; }
+.page .table:not(.paperTable) th { background: var(--qe-people-table-head, #f8fafc); color: var(--finance-muted); border-color: var(--qe-people-table-line, #edf0f5); }
+.page .table:not(.paperTable) td { color: var(--finance-ink); border-color: var(--qe-people-table-line, #edf0f5); }
+.page .table:not(.paperTable) tbody tr:is(:hover, :focus-within) > td { background: var(--finance-hover); color: var(--finance-ink); }
+.page .table:not(.paperTable) td :is(b, small, a, span) { color: inherit; }
+.page .note:not(.refundNote) {
+  background: var(--qe-people-warning-soft, #fffaeb); color: var(--qe-people-warning, #85521b);
+  border-color: color-mix(in srgb, var(--qe-people-warning, #b54708) 28%, var(--finance-line));
+}
+.page .alertError { background: var(--qe-people-danger-soft, #fff1f0); color: var(--qe-people-danger, #991b1b); border-color: color-mix(in srgb, var(--qe-people-danger, #b42318) 30%, var(--finance-line)); }
+.page .alertSuccess { background: var(--qe-people-success-soft, #ecfdf3); color: var(--qe-people-success, #166534); border-color: color-mix(in srgb, var(--qe-people-success, #067647) 30%, var(--finance-line)); }
+.page .status { background: var(--qe-people-info-soft, #eef2ff); color: var(--qe-people-info, #4338ca); border-color: color-mix(in srgb, var(--qe-people-info, #4338ca) 25%, var(--finance-line)); }
+.page .policyTableWrap { border-color: var(--finance-line); }
+.page .paperWrap { background: var(--finance-subtle); }
+.page .invoicePreviewGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.page .invoiceThemeFrame { min-width: 0; padding: 12px; border: 1px solid; border-radius: 14px; }
+.page .invoiceThemeFrame[data-preview-theme="light"] { background: #f5f7fb; color: #182337; border-color: #e2e7ef; color-scheme: light; }
+.page .invoiceThemeFrame[data-preview-theme="dark"] { background: #0c1422; color: #eef2f8; border-color: #334155; color-scheme: dark; }
+.page .invoiceThemeLabel { margin: 0 0 9px; font-size: 11px; line-height: 1.4; font-weight: 800; letter-spacing: .03em; }
+.page .invoiceThemeFrame .paperWrap { padding: 0; background: transparent; border-radius: 0; }
+.page .invoiceThemeFrame .paper { margin: 0; }
+@media (max-width: 1050px) { .page .invoicePreviewGrid { grid-template-columns: minmax(0, 1fr); } }
