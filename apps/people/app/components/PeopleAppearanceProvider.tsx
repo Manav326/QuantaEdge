@@ -78,7 +78,10 @@ export function PeopleAppearanceProvider({ children }: { children: ReactNode }) 
 
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const onSystemThemeChange = () => {
-      if (storedMode() === 'system') applyMode('system');
+      // Follow OS changes only while System is selected. Use React state rather
+      // than localStorage so the current-tab preference still works if storage
+      // is blocked by browser privacy settings.
+      if (mode === 'system') applyMode('system');
     };
 
     window.addEventListener('storage', onStorage);
@@ -87,7 +90,7 @@ export function PeopleAppearanceProvider({ children }: { children: ReactNode }) 
       window.removeEventListener('storage', onStorage);
       media.removeEventListener?.('change', onSystemThemeChange);
     };
-  }, []);
+  }, [mode]);
 
   const value = useMemo(() => ({ mode, setMode, cycleMode }), [mode, setMode, cycleMode]);
   return <PeopleAppearanceContext.Provider value={value}>{children}</PeopleAppearanceContext.Provider>;
