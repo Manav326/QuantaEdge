@@ -113,17 +113,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     let alive = true;
     if (publicRoute) {
       setInstitutions([]);
-      // Branding is public presentation only. Resolve an explicitly requested tenant first;
-      // otherwise reuse the last selected workspace so login/session screens match that tenant.
-      const query = new URLSearchParams(window.location.search);
-      const tenantKeys = ['institution', 'institutionCode', 'institution_code', 'tenant'];
-      const hasExplicitTenant = tenantKeys.some(key => query.has(key));
+      // Reuse the last selected workspace so sign-in/session screens match the
+      // same tenant context used by the existing education-admin API requests.
       let rememberedTenant = '';
       try { rememberedTenant = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
-      const requestedTenant = hasExplicitTenant
-        ? (query.get('institution') || query.get('institutionCode') || query.get('institution_code') || query.get('tenant') || '')
-        : rememberedTenant;
-      const safeTenant = requestedTenant.trim().toUpperCase();
+      const safeTenant = rememberedTenant.trim().toUpperCase();
       setInstitutionCode(/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(safeTenant) ? safeTenant : '');
       setInstitutionError('');
       setInstitutionLoading(false);
