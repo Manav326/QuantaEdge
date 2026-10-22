@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c5e356ace190dd3317372b342753d853c87351d79dd813854acc49d435a9e792",
+  "raw_analysis_sha256": "ca5af884846e962d515fdf4719e3e857931200cbafd1bcaa6422e266981b9818",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:02:16Z",
+      "checkpointed_at": "2026-10-22T23:13:16Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29444,7 +29444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:04:00Z",
+      "checkpointed_at": "2026-10-22T23:14:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35892,9 +35892,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -37792,21 +37792,77 @@
     {
       "asset_id": "b2465068177193067cfb122d",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 44,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Camels store food in their humps to survive in deserts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In deserts, food is not available easily. Camels store food",
+          "in their humps. Camels found in the hot desert have one hump each",
+          "that helps them to survive during the scarcity of food. Camels found",
+          "in the cold desert have two humps each. These two humps shrink in",
+          "late winters because there is not much food available in the cold",
+          "desert and they have to use food stored in their humps during that",
+          "time. Moreover, they grow long hair from head to neck, which help",
+          "them survive."
+        ],
+        "concepts": [
+          "Camels",
+          "Humps",
+          "Deserts",
+          "Food storage",
+          "Cold desert",
+          "Hot desert",
+          "Winter",
+          "Long hair"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the adaptation of camels to survive in different desert environments.",
+        "limitations": [
+          "The image does not show any visual representation of the humps or the desert environment."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-22T23:20:13Z",
+      "effective_analysis": {
+        "visual_summary": "Camels store food in their humps to survive in deserts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In deserts, food is not available easily. Camels store food",
+          "in their humps. Camels found in the hot desert have one hump each",
+          "that helps them to survive during the scarcity of food. Camels found",
+          "in the cold desert have two humps each. These two humps shrink in",
+          "late winters because there is not much food available in the cold",
+          "desert and they have to use food stored in their humps during that",
+          "time. Moreover, they grow long hair from head to neck, which help",
+          "them survive."
+        ],
+        "concepts": [
+          "Camels",
+          "Humps",
+          "Deserts",
+          "Food storage",
+          "Cold desert",
+          "Hot desert",
+          "Winter",
+          "Long hair"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the adaptation of camels to survive in different desert environments.",
+        "limitations": [
+          "The image does not show any visual representation of the humps or the desert environment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -46494,7 +46550,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
