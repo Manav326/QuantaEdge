@@ -11,7 +11,7 @@ async function waitForApi(page: Page, method: string, pathPart: string) {
   );
 }
 
-test('preview and uninstall only this run, then prove owned rows are cleaned', async ({ browser }) => {
+test('[QA-004] preview and uninstall only this run, then prove owned rows are cleaned', async ({ browser }) => {
   let fixture: Partial<QaFixture> | undefined;
   let intent: { packKey: string; packVersion: number; idempotencyKey: string; installStarted: boolean } | undefined;
   try { fixture = await readPrivateJson<QaFixture>('qa-fixture.json'); } catch (error) {
