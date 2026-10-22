@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,6 +66,345 @@ public class BillingCustomerProfileController {
     return profile(context.userId());
   }
 
+  @GetMapping("/billing-addresses")
+  public List<Map<String,Object>> studentAddresses(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    return addresses(studentAccountId(context));
+  }
+
+  @PostMapping("/billing-addresses")
+  @Transactional
+  public List<Map<String,Object>> createStudentAddress(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    long userId=studentAccountId(context);
+    saveAddress(userId,userId,null,body);
+    return addresses(userId);
+  }
+
+  @PutMapping("/billing-addresses/{addressId}")
+  @Transactional
+  public List<Map<String,Object>> updateStudentAddress(@PathVariable long addressId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    long userId=studentAccountId(context);
+    saveAddress(userId,userId,addressId,body);
+    return addresses(userId);
+  }
+
+  @PutMapping("/billing-addresses/{addressId}/default")
+  @Transactional
+  public List<Map<String,Object>> defaultStudentAddress(@PathVariable long addressId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    long userId=studentAccountId(context);
+    setDefaultAddress(userId,userId,addressId);
+    return addresses(userId);
+  }
+
+  @DeleteMapping("/billing-addresses/{addressId}")
+  @Transactional
+  public List<Map<String,Object>> deleteStudentAddress(@PathVariable long addressId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    long userId=studentAccountId(context);
+    deleteAddress(userId,userId,addressId);
+    return addresses(userId);
+  }
+
+  @GetMapping("/family/billing-addresses")
+  public List<Map<String,Object>> parentAddresses(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    return addresses(context.userId());
+  }
+
+  @PostMapping("/family/billing-addresses")
+  @Transactional
+  public List<Map<String,Object>> createParentAddress(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    saveAddress(context.userId(),context.userId(),null,body);
+    return addresses(context.userId());
+  }
+
+  @PutMapping("/family/billing-addresses/{addressId}")
+  @Transactional
+  public List<Map<String,Object>> updateParentAddress(@PathVariable long addressId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    saveAddress(context.userId(),context.userId(),addressId,body);
+    return addresses(context.userId());
+  }
+
+  @PutMapping("/family/billing-addresses/{addressId}/default")
+  @Transactional
+  public List<Map<String,Object>> defaultParentAddress(@PathVariable long addressId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    setDefaultAddress(context.userId(),context.userId(),addressId);
+    return addresses(context.userId());
+  }
+
+  @DeleteMapping("/family/billing-addresses/{addressId}")
+  @Transactional
+  public List<Map<String,Object>> deleteParentAddress(@PathVariable long addressId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    deleteAddress(context.userId(),context.userId(),addressId);
+    return addresses(context.userId());
+  }
+
+  private long studentAccountId(AuthContext context) {
+    Long userId=jdbc.queryForObject(
+        "select user_account_id from student where id=? and active=true",Long.class,context.studentId());
+    if(userId==null) throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+        "A linked purchaser identity is required for billing details.");
+    return userId;
+  }
+
+  private List<Map<String,Object>> addresses(long userId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,label,billing_type,legal_name,gstin,gst_state_code,
+        billing_address::text as billing_address_json,contact_email,contact_phone,
+        is_default,version,created_at,updated_at
+      from billing_customer_address where user_account_id=? and active=true
+      order by is_default desc,lower(label),id
+      """,userId);
+    List<Map<String,Object>> result=new ArrayList<>(rows.size());
+    for(Map<String,Object> row:rows) {
+      Map<String,Object> item=new LinkedHashMap<>(row);
+      item.put("is_default",Boolean.TRUE.equals(item.get("is_default")));
+      Object raw=item.remove("billing_address_json");
+      item.put("billingAddress",parseAddress(raw));
+      result.add(item);
+    }
+    return List.copyOf(result);
+  }
+
+  private void saveAddress(long userId,long actorUserId,Long addressId,Map<String,Object> body) {
+    ProfileDraft draft=validateSavedAddress(body);
+    String label=text(body==null?null:body.get("label"),"Billing address");
+    if(label.length()>80) throw bad("Address label cannot exceed 80 characters.");
+    if(!exists("select exists(select 1 from user_account where id=? and active=true)",userId)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active purchaser account is required.");
+    }
+    Integer countValue=jdbc.queryForObject(
+        "select count(*) from billing_customer_address where user_account_id=? and active=true",
+        Integer.class,userId);
+    int count=countValue==null?0:countValue;
+    boolean wasDefault=false;
+    if(addressId!=null) {
+      List<Boolean> defaults=jdbc.queryForList("""
+        select is_default from billing_customer_address
+        where id=? and user_account_id=? and active=true
+        """,Boolean.class,addressId,userId);
+      if(defaults.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Billing address was not found.");
+      wasDefault=Boolean.TRUE.equals(defaults.getFirst());
+    } else if(count>=20) {
+      throw bad("You can save up to 20 billing addresses.");
+    }
+    Object requestedDefault=body==null?null:body.get("isDefault");
+    boolean makeDefault=requestedDefault instanceof Boolean b?b:(count==0||wasDefault);
+    if(count>0 && addressId==null && requestedDefault==null) makeDefault=false;
+    String addressJson=json(draft.billingAddress());
+    long savedId;
+    if(addressId==null) {
+      savedId=jdbc.queryForObject("""
+        insert into billing_customer_address(
+          user_account_id,label,billing_type,legal_name,gstin,gst_state_code,billing_address,
+          contact_email,contact_phone,is_default,active,version,created_at,updated_at
+        ) values(?,?,?,?,?,?,?::jsonb,?,?,?,true,1,now(),now())
+        returning id
+        """,Long.class,userId,label,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),
+          addressJson,draft.contactEmail(),draft.contactPhone(),makeDefault);
+    } else {
+      if(makeDefault) jdbc.update("""
+        update billing_customer_address set is_default=false,version=version+1,updated_at=now()
+        where user_account_id=? and active=true and is_default=true and id<>?
+        """,userId,addressId);
+      int changed=jdbc.update("""
+        update billing_customer_address set label=?,billing_type=?,legal_name=?,gstin=?,gst_state_code=?,
+          billing_address=?::jsonb,contact_email=?,contact_phone=?,is_default=?,version=version+1,updated_at=now()
+        where id=? and user_account_id=? and active=true
+        """,label,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),
+          addressJson,draft.contactEmail(),draft.contactPhone(),makeDefault,addressId,userId);
+      if(changed!=1) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Billing address was not found.");
+      savedId=addressId;
+    }
+    if(makeDefault) {
+      jdbc.update("""
+        update billing_customer_address set is_default=false,version=version+1,updated_at=now()
+        where user_account_id=? and active=true and is_default=true and id<>?
+        """,userId,savedId);
+      save(userId,actorUserId,profileBody(draft),false);
+    }
+    Long version=jdbc.queryForObject(
+        "select version from billing_customer_address where id=? and user_account_id=?",
+        Long.class,savedId,userId);
+    jdbc.update("""
+      insert into billing_customer_address_event(
+        address_id,user_account_id,event_type,address_version,actor_user_account_id,changed_fields
+      ) values(?,?,?,?,?,?::jsonb)
+      """,savedId,userId,addressId==null?"CREATED":makeDefault&&!wasDefault?"DEFAULT_CHANGED":"UPDATED",
+        version,actorUserId,json(List.of("label","billingType","legalName","gstin","gstStateCode",
+          "billingAddress","contactEmail","contactPhone")));
+  }
+
+  private ProfileDraft validateSavedAddress(Map<String,Object> body) {
+    ProfileDraft draft=validateProfile(body);
+    for(String key:List.of("line1","city","state","postalCode")) {
+      if(optionalText(draft.billingAddress().get(key))==null) {
+        throw bad("Billing address requires "+key+".");
+      }
+    }
+    Map<String,Object> address=new LinkedHashMap<>(draft.billingAddress());
+    address.putIfAbsent("country","India");
+    return new ProfileDraft(draft.billingType(),draft.legalName(),draft.gstin(),
+        draft.gstStateCode(),address,draft.contactEmail(),draft.contactPhone());
+  }
+
+  private Map<String,Object> profileBody(ProfileDraft draft) {
+    Map<String,Object> body=new LinkedHashMap<>();
+    body.put("billingType",draft.billingType());body.put("legalName",draft.legalName());
+    body.put("gstin",draft.gstin());body.put("gstStateCode",draft.gstStateCode());
+    body.put("billingAddress",draft.billingAddress());body.put("contactEmail",draft.contactEmail());
+    body.put("contactPhone",draft.contactPhone());
+    return body;
+  }
+
+  private Map<String,Object> profileBodyForAddress(long userId,long addressId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select billing_type,legal_name,gstin,gst_state_code,billing_address::text as billing_address_json,
+        contact_email,contact_phone
+      from billing_customer_address
+      where id=? and user_account_id=? and active=true
+      """,addressId,userId);
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Billing address was not found.");
+    Map<String,Object> row=rows.getFirst();
+    Map<String,Object> body=new LinkedHashMap<>();
+    body.put("billingType",row.get("billing_type"));body.put("legalName",row.get("legal_name"));
+    body.put("gstin",row.get("gstin"));body.put("gstStateCode",row.get("gst_state_code"));
+    body.put("billingAddress",parseAddress(row.get("billing_address_json")));
+    body.put("contactEmail",row.get("contact_email"));body.put("contactPhone",row.get("contact_phone"));
+    return body;
+  }
+
+  private void setDefaultAddress(long userId,long actorUserId,long addressId) {
+    if(!exists("select exists(select 1 from billing_customer_address where id=? and user_account_id=? and active=true)",
+        addressId,userId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Billing address was not found.");
+    jdbc.update("""
+      update billing_customer_address set is_default=false,version=version+1,updated_at=now()
+      where user_account_id=? and active=true and is_default=true and id<>?
+      """,userId,addressId);
+    jdbc.update("""
+      update billing_customer_address set is_default=true,version=version+1,updated_at=now()
+      where id=? and user_account_id=? and active=true
+      """,addressId,userId);
+    save(userId,actorUserId,profileBodyFromDefaultAddress(userId,addressId),false);
+    Long version=jdbc.queryForObject(
+        "select version from billing_customer_address where id=? and user_account_id=?",
+        Long.class,addressId,userId);
+    jdbc.update("""
+      insert into billing_customer_address_event(
+        address_id,user_account_id,event_type,address_version,actor_user_account_id,changed_fields
+      ) values(?,?, 'DEFAULT_CHANGED', ?, ?, '["isDefault"]'::jsonb)
+      """,addressId,userId,version,actorUserId);
+  }
+
+  private Map<String,Object> profileBodyFromDefaultAddress(long userId,long addressId) {
+    return profileBodyForAddress(userId,addressId);
+  }
+
+  private void deleteAddress(long userId,long actorUserId,long addressId) {
+    List<Boolean> defaults=jdbc.queryForList("""
+      select is_default from billing_customer_address
+      where id=? and user_account_id=? and active=true
+      """,Boolean.class,addressId,userId);
+    if(defaults.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Billing address was not found.");
+    boolean wasDefault=Boolean.TRUE.equals(defaults.getFirst());
+    jdbc.update("""
+      update billing_customer_address set active=false,is_default=false,version=version+1,
+        deleted_at=now(),updated_at=now()
+      where id=? and user_account_id=? and active=true
+      """,addressId,userId);
+    Long version=jdbc.queryForObject(
+        "select version from billing_customer_address where id=? and user_account_id=?",
+        Long.class,addressId,userId);
+    jdbc.update("""
+      insert into billing_customer_address_event(
+        address_id,user_account_id,event_type,address_version,actor_user_account_id,changed_fields
+      ) values(?,?, 'DEACTIVATED', ?, ?, '["active","isDefault"]'::jsonb)
+      """,addressId,userId,version,actorUserId);
+    if(wasDefault) {
+      List<Long> remaining=jdbc.queryForList("""
+        select id from billing_customer_address where user_account_id=? and active=true
+        order by updated_at desc,id desc limit 1
+        """,Long.class,userId);
+      if(!remaining.isEmpty()) setDefaultAddress(userId,actorUserId,remaining.getFirst());
+      else clearLegacyAddress(userId,actorUserId);
+    }
+  }
+
+  private void syncDefaultAddressFromLegacyProfile(long userId,long actorUserId,ProfileDraft draft) {
+    if(optionalText(draft.billingAddress().get("line1"))==null
+        || optionalText(draft.billingAddress().get("city"))==null
+        || optionalText(draft.billingAddress().get("state"))==null
+        || optionalText(draft.billingAddress().get("postalCode"))==null) return;
+    List<Long> defaults=jdbc.queryForList("""
+      select id from billing_customer_address where user_account_id=? and active=true and is_default=true limit 1
+      """,Long.class,userId);
+    long addressId;
+    String addressJson=json(draft.billingAddress());
+    if(defaults.isEmpty()) {
+      jdbc.update("""
+        update billing_customer_address set is_default=false,version=version+1,updated_at=now()
+        where user_account_id=? and active=true
+        """,userId);
+      addressId=jdbc.queryForObject("""
+        insert into billing_customer_address(
+          user_account_id,label,billing_type,legal_name,gstin,gst_state_code,billing_address,
+          contact_email,contact_phone,is_default,active,version,created_at,updated_at
+        ) values(?,?,?,?,?,?,?::jsonb,?,?,true,true,1,now(),now()) returning id
+        """,Long.class,userId,"Billing address",draft.billingType(),draft.legalName(),draft.gstin(),
+          draft.gstStateCode(),addressJson,draft.contactEmail(),draft.contactPhone());
+    } else {
+      addressId=defaults.getFirst();
+      jdbc.update("""
+        update billing_customer_address set billing_type=?,legal_name=?,gstin=?,gst_state_code=?,
+          billing_address=?::jsonb,contact_email=?,contact_phone=?,version=version+1,updated_at=now()
+        where id=? and user_account_id=? and active=true
+        """,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),addressJson,
+          draft.contactEmail(),draft.contactPhone(),addressId,userId);
+    }
+    Long version=jdbc.queryForObject(
+        "select version from billing_customer_address where id=? and user_account_id=?",
+        Long.class,addressId,userId);
+    jdbc.update("""
+      insert into billing_customer_address_event(
+        address_id,user_account_id,event_type,address_version,actor_user_account_id,changed_fields
+      ) values(?,?, 'UPDATED', ?, ?, '["billingType","legalName","gstin","gstStateCode","billingAddress","contactEmail","contactPhone"]'::jsonb)
+      """,addressId,userId,version,actorUserId);
+  }
+
+  private void clearLegacyAddress(long userId,long actorUserId) {
+    int changed=jdbc.update("""
+      update billing_customer_profile set billing_address='{}'::jsonb,version=version+1,updated_at=now()
+      where user_account_id=?
+      """,userId);
+    if(changed==1) {
+      Long version=jdbc.queryForObject(
+          "select version from billing_customer_profile where user_account_id=?",Long.class,userId);
+      jdbc.update("""
+        insert into billing_customer_profile_event(user_account_id,event_type,profile_version,actor_user_account_id,changed_fields)
+        values(?,'UPDATED',?,?,'["billingAddress"]'::jsonb)
+        """,userId,version,actorUserId);
+    }
+  }
+
   private void save(long userId,long actorUserId,Map<String,Object> body) {
     ProfileDraft draft=validateProfile(body);
     if(!exists("select exists(select 1 from user_account where id=? and active=true)",userId)) {
@@ -90,6 +430,36 @@ public class BillingCustomerProfileController {
         user_account_id,event_type,profile_version,actor_user_account_id,changed_fields
       ) values(?,?,?,?,?::jsonb)
       """,userId,created?"CREATED":"UPDATED",version,actorUserId,json(fields));
+    if(syncAddressBook) syncDefaultAddressFromLegacyProfile(userId,actorUserId,draft);
+  }
+
+  private void save(long userId,long actorUserId,Map<String,Object> body,boolean syncAddressBook) {
+    // The fourth argument is used by address-book operations to update only the legacy current-profile mirror.
+    ProfileDraft draft=validateProfile(body);
+    if(!exists("select exists(select 1 from user_account where id=? and active=true)",userId)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active purchaser account is required.");
+    }
+    boolean created=!exists("select exists(select 1 from billing_customer_profile where user_account_id=?)",userId);
+    jdbc.update("""
+      insert into billing_customer_profile(
+        user_account_id,billing_type,legal_name,gstin,gst_state_code,billing_address,
+        contact_email,contact_phone,version,created_at,updated_at
+      ) values(?,?,?,?,?,?::jsonb,?,?,1,now(),now())
+      on conflict(user_account_id) do update set
+        billing_type=excluded.billing_type,legal_name=excluded.legal_name,gstin=excluded.gstin,
+        gst_state_code=excluded.gst_state_code,billing_address=excluded.billing_address,
+        contact_email=excluded.contact_email,contact_phone=excluded.contact_phone,
+        version=billing_customer_profile.version+1,updated_at=now()
+      """,userId,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),
+        json(draft.billingAddress()),draft.contactEmail(),draft.contactPhone());
+    Long version=jdbc.queryForObject("select version from billing_customer_profile where user_account_id=?",Long.class,userId);
+    List<String> fields=List.of("billingType","legalName","gstin","gstStateCode","billingAddress","contactEmail","contactPhone");
+    jdbc.update("""
+      insert into billing_customer_profile_event(
+        user_account_id,event_type,profile_version,actor_user_account_id,changed_fields
+      ) values(?,?,?,?,?::jsonb)
+      """,userId,created?"CREATED":"UPDATED",version,actorUserId,json(fields));
+    if(syncAddressBook) syncDefaultAddressFromLegacyProfile(userId,actorUserId,draft);
   }
 
   private Map<String,Object> profile(long userId) {
