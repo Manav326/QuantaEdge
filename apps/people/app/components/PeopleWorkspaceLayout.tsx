@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { PeopleAppearanceButton } from './PeopleThemeProvider';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type StaffSession = {
@@ -230,7 +231,12 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
     }
   }
 
-  if (publicRoute) return <>{children}</>;
+  if (publicRoute) return (
+    <>
+      <div className="qe-people-public-appearance"><PeopleAppearanceButton /></div>
+      {children}
+    </>
+  );
 
   function renderNavigation(mobile = false) {
     return (
@@ -323,6 +329,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             </div>
           </div>
           <div className="qe-people-header-actions">
+            <PeopleAppearanceButton />
             <label className="qe-people-language-select">
               <span>{t('common.language.label')}</span>
               <select value={locale} onChange={event => setLocale(event.target.value as typeof locale)} aria-label={t('common.language.label')}>

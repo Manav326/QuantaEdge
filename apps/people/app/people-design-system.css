@@ -1545,3 +1545,281 @@ button:disabled,
 .qe-people-login-brand-lockup .qe-brand__logo{max-width:300px;max-height:68px}
 .qe-people-mobile-brand-lockup .qe-brand__logo{max-width:180px;max-height:42px}
 @media(max-width:620px){.qe-people-login-brand-lockup .qe-brand__logo{max-width:230px;max-height:50px}}
+
+
+/* HRMS-owned appearance system. These tokens are intentionally independent of tenant branding. */
+:root {
+  color-scheme: light;
+  --paper: #f6f7fa;
+  --card: #ffffff;
+  --ink: #152038;
+  --muted: #737d91;
+  --line: #e5e8ee;
+  --brand: #f97316;
+  --brand2: #c2410c;
+  --brand-soft: #fff0e5;
+  --danger: #b42318;
+  --danger-soft: #fff1f0;
+  --success: #067647;
+  --success-soft: #ecfdf3;
+  --warning: #9a3412;
+  --warning-soft: #fff7ed;
+  --info: #175cd3;
+  --info-soft: #eff8ff;
+  --focus: #c2410c;
+  --surface-subtle: #f8fafc;
+  --surface-hover: #fffaf6;
+  --table-line: #edf0f4;
+  --qe-shadow-card: 0 3px 12px rgba(21, 32, 56, .035);
+  --qe-shadow-dialog: 0 22px 70px rgba(11, 26, 51, .18);
+}
+
+html[data-qe-hrms-appearance="dark"] {
+  color-scheme: dark;
+  --paper: #111827;
+  --card: #1f2937;
+  --ink: #f3f4f6;
+  --muted: #a7b0c0;
+  --line: #374151;
+  --brand: #fb923c;
+  --brand2: #c2410c;
+  --brand-soft: rgba(194, 65, 12, .2);
+  --danger: #fda29b;
+  --danger-soft: #4c2025;
+  --success: #6ce9a6;
+  --success-soft: #12392d;
+  --warning: #fedf89;
+  --warning-soft: #422d14;
+  --info: #84caff;
+  --info-soft: #162f4a;
+  --focus: #fdba74;
+  --surface-subtle: #263244;
+  --surface-hover: #273449;
+  --table-line: #374151;
+  --qe-shadow-card: 0 3px 12px rgba(0, 0, 0, .18);
+  --qe-shadow-dialog: 0 24px 80px rgba(0, 0, 0, .48);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-workspace,
+html[data-qe-hrms-appearance="dark"] .qe-people-content,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-global-header {
+  background: rgba(17, 24, 39, .94);
+  border-color: var(--line);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-workspace-pill,
+html[data-qe-hrms-appearance="dark"] .qe-people-menu-trigger,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .secondary,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot button.secondary,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-button--secondary,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-button--neutral {
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .card,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .panel,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .table-wrap,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot table {
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--qe-shadow-card);
+}
+
+/* Route-level CSS modules follow the same surface tokens as shared pages. */
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot :is(
+  [class*="Card"], [class*="card"], [class*="Panel"], [class*="panel"],
+  [class*="Surface"], [class*="surface"], [class*="Table"], [class*="table"],
+  [class*="Dialog"], [class*="dialog"], [class*="Modal"], [class*="modal"]
+) {
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot input:not([type="checkbox"]):not([type="radio"]),
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot select,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot textarea,
+html[data-qe-hrms-appearance="dark"] .login-card input,
+html[data-qe-hrms-appearance="dark"] .login-card select,
+html[data-qe-hrms-appearance="dark"] .login-card textarea {
+  border-color: var(--line);
+  background: #111827;
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot th {
+  border-color: var(--line);
+  background: var(--surface-subtle);
+  color: #d1d5db;
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot td {
+  border-color: var(--table-line);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot tbody tr:hover td {
+  background: var(--surface-hover);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot :is(.label, .small, .sub, .qe-people-empty-state p, [class*="muted"], [class*="Muted"]) {
+  color: var(--muted);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot :is(h1, h2, h3, h4, p, label, td, th, li) {
+  color: inherit;
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .eyebrow,
+html[data-qe-hrms-appearance="dark"] .qe-people-header-context span,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .tabs button.active {
+  color: var(--brand);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .pill:not(.inactive) {
+  border-color: rgba(251, 146, 60, .3);
+  background: var(--brand-soft);
+  color: #fdba74;
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .pill.inactive {
+  border-color: var(--line);
+  background: var(--surface-subtle);
+  color: var(--muted);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .error,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-feedback--danger {
+  border-color: #7f1d1d;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .notice,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-feedback--success {
+  border-color: #14532d;
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-status--warning {
+  border-color: #854d0e;
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-status--info {
+  border-color: #164e63;
+  background: var(--info-soft);
+  color: var(--info);
+}
+
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .qe-people-modal,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot .modal,
+html[data-qe-hrms-appearance="dark"] .qe-people-page-slot [role="dialog"] {
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--qe-shadow-dialog);
+}
+
+html[data-qe-hrms-appearance="dark"] .login-wrap {
+  background: var(--paper);
+}
+
+html[data-qe-hrms-appearance="dark"] .login-panel {
+  background: var(--card);
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .login-card h2,
+html[data-qe-hrms-appearance="dark"] .login-card label {
+  color: var(--ink);
+}
+
+html[data-qe-hrms-appearance="dark"] .login-card p {
+  color: var(--muted);
+}
+
+html[data-qe-hrms-appearance="dark"] .login-card .primary:hover,
+html[data-qe-hrms-appearance="dark"] .login-card button.primary:hover {
+  background: #9a3412;
+}
+
+/* The toggle is shared by signed-in pages and the public login/password screens. */
+.qe-people-appearance-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.qe-people-appearance-toggle:hover {
+  border-color: var(--brand);
+  background: var(--surface-hover);
+}
+
+.qe-people-appearance-toggle:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.qe-people-appearance-icon {
+  min-width: 15px;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.qe-people-public-appearance {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 120;
+}
+
+@media (max-width: 760px) {
+  .qe-people-appearance-toggle {
+    min-width: 40px;
+    padding-inline: 8px;
+  }
+
+  .qe-people-public-appearance .qe-people-appearance-label {
+    display: inline;
+  }
+
+  .qe-people-header-actions .qe-people-appearance-label {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .qe-people-public-appearance {
+    top: 8px;
+    right: 8px;
+  }
+}

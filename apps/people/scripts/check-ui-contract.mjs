@@ -17,6 +17,7 @@ function read(path) {
 }
 
 const rootLayout = read('apps/people/app/layout.tsx');
+const themeProvider = read('apps/people/app/components/PeopleThemeProvider.tsx');
 const workspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const sessionBoundary = read('apps/people/app/components/PeopleSessionBoundary.tsx');
 const components = read('apps/people/app/components/PeopleUI.tsx');
@@ -27,6 +28,18 @@ const webStyles = read('apps/web/app/globals.css');
 const alignmentPlan = read('docs/ui/hrms-educational-admin-alignment-plan.md');
 
 assert(rootLayout.includes("import './people-design-system.css'"), 'Root layout must load the People design system.');
+assert(rootLayout.includes('PeopleThemeProvider'), 'Root layout must mount the HRMS-owned theme provider.');
+assert(themeProvider.includes("qe-hrms-appearance-mode.v1"), 'HRMS appearance preference must have its own independent storage key.');
+assert(themeProvider.includes("data-qe-hrms-appearance"), 'HRMS theme must set its own root appearance attribute.');
+assert(themeProvider.includes("prefers-color-scheme: dark"), 'System appearance must track the operating-system preference.');
+assert(themeProvider.includes("export function PeopleAppearanceButton"), 'Shared theme toggle must be available for workspace and public screens.');
+assert(!/logoUrl|appIconUrl|themeTokens|institution\/public\/branding/i.test(themeProvider), 'HRMS theme must not depend on tenant branding APIs or logo URLs.');
+assert(workspace.includes('<PeopleAppearanceButton />'), 'Authenticated HRMS workspace must expose the appearance toggle.');
+assert(workspace.includes('qe-people-public-appearance'), 'Public login and password-change screens must expose the appearance toggle.');
+assert(styles.includes('html[data-qe-hrms-appearance="dark"]'), 'HRMS design system must define dark appearance surfaces.');
+assert(styles.includes('--paper: #111827;') && styles.includes('--card: #1f2937;'), 'Dark mode must use layered calm surfaces instead of a black/red palette.');
+assert(styles.includes('--brand: #fb923c;') && styles.includes('--brand2: #c2410c;'), 'Dark mode must retain the QuantaEdge orange-led brand with readable action contrast.');
+
 assert(rootLayout.includes('PeopleSessionBoundary'), 'Root layout must preserve the HRMS session boundary.');
 assert(rootLayout.includes('PeopleWorkspaceLayout'), 'Root layout must use the common People workspace shell.');
 assert(workspace.includes("X-QE-Workspace': 'HRMS'"), 'Workspace session requests must retain the HRMS workspace header.');

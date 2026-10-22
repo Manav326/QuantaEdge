@@ -2,6 +2,7 @@ import './globals.css';
 import GlobalNotificationHost from './components/GlobalNotificationHost';
 import './people-design-system.css';
 import PeopleWorkspaceLayout from './components/PeopleWorkspaceLayout';
+import PeopleThemeProvider from './components/PeopleThemeProvider';
 import PeopleSessionBoundary from './components/PeopleSessionBoundary';
 import { UiLocaleProvider } from './i18n/UiLocaleProvider';
 
@@ -21,9 +22,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="hi">
       <body>
         <GlobalNotificationHost />
-        <UiLocaleProvider>
-          <PeopleSessionBoundary><PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout></PeopleSessionBoundary>
-        </UiLocaleProvider>
+        <PeopleThemeProvider>
+          <UiLocaleProvider>
+            <PeopleSessionBoundary><PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout></PeopleSessionBoundary>
+          </UiLocaleProvider>
+        </PeopleThemeProvider>
       </body>
     </html>
   );
