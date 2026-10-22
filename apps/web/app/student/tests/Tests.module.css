@@ -796,10 +796,17 @@ html[data-qe-appearance] :where(.error, .leaderboardInlineError) {
   border-color: var(--qe-color-error);
 }
 
-html[data-qe-appearance] :where(.notice, .score > span) {
+html[data-qe-appearance] .notice {
   background: var(--qe-color-success-container);
   color: var(--qe-color-on-success-container);
   border-color: var(--qe-color-success);
+}
+
+/* A best-score percentage is a metric, not a pass/fail outcome. */
+html[data-qe-appearance] .score > span {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-border-subtle);
 }
 
 html[data-qe-appearance] .attemptState {

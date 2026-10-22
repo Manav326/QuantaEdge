@@ -1004,6 +1004,15 @@ assert.ok(
   'Student progress and parent report rows must wrap long localized topic names/counts, and certificate action links must fit narrow screens.'
 );
 
+
+const visualAuditScoreSemanticsCss = read('../app/student/tests/Tests.module.css');
+assert.ok(
+  visualAuditScoreSemanticsCss.includes('html[data-qe-appearance] .score > span') &&
+  visualAuditScoreSemanticsCss.includes('A best-score percentage is a metric, not a pass/fail outcome.') &&
+  !visualAuditScoreSemanticsCss.includes('html[data-qe-appearance] :where(.notice, .score > span)'),
+  'Best-score percentages must stay neutral and theme-aware; only actual success notices use the success container.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
