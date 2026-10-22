@@ -68,7 +68,7 @@ class CourseMarketplaceControllerTest {
     legacy.put("discount_snapshot_json", "{}");
     assertTrue(CourseMarketplaceController.hasNoDiscountFacts(legacy));
 
-    legacy.put("discount_snapshot_json", "{\"snapshotVersion\":1,\"discountType\":\"NONE\",\"discountPaise\":0}");
+    legacy.put("discount_snapshot_json", "{\"snapshotVersion\": 1, \"discountType\": \"NONE\", \"discountPaise\": 0}");
     assertTrue(CourseMarketplaceController.hasNoDiscountFacts(legacy));
 
     legacy.put("discount_reference", "SAVE10");
