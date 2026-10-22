@@ -451,7 +451,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
   if (loading) return <main className={styles.page} data-surface={surface}><p>Loading notification creator…</p></main>;
 
-  return <main className={styles.page}>
+  return <main className={styles.page} data-surface={surface}>
     <header className={styles.header}>
       <div><p className={styles.eyebrow}>RICH NOTIFICATION STUDIO</p>
         <h1>Create a modern notification</h1>
