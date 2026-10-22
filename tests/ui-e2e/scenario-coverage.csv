@@ -1,10 +1,10 @@
 scenario_id,coverage_status,test_file,tested_commit_sha,evidence_url,notes
-AUTH-001,PARTIAL,tests/setup.spec.ts,Only existing-account UI sign-in paths are exercised; signup, provider identity,, invalid OTP and full lifecycle remain uncovered.
-AUTH-006,PARTIAL,tests/setup.spec.ts;tests/tenant-boundaries.spec.ts,,Workspace-specific successful login and selected role denials are covered; full cross-workspace session lifecycle is not.
-AUTH-007,PARTIAL,tests/setup.spec.ts,Login sessions are created through UI; expiry,, revocation and refresh lifecycle are not exercised.
-FAM-003,PARTIAL,tests/tenant-boundaries.spec.ts,,Parent-to-parent child-ID substitution is tested; the complete guardian access matrix is not yet covered.
-TEN-002,PARTIAL,tests/tenant-boundaries.spec.ts;tests/persisted-boundaries.spec.ts,,Selected tenant boundary and persisted assignments are checked; all tenant-scoped resources and selection states are not.
-HR-002,PARTIAL,tests/tenant-boundaries.spec.ts,,HRMS platform-owner authorization is checked against Education Admin and parent sessions; complete HRMS role matrix is not.
-QA-001,PARTIAL,tests/setup.spec.ts;tests/persisted-boundaries.spec.ts,Pack install and core relations are verified; rollback, replay,, concurrency and complete manifest reconciliation are not.
-QA-004,PARTIAL,tests/cleanup.spec.ts,UI preview/confirmation and core row cleanup are checked; interruption,, all resource adapters and independent protected-baseline comparison need further tests.
-QA-007,PARTIAL,tests/setup.spec.ts,,Approved disposable database status is asserted; negative configuration matrix and zero-write rejection tests are not covered.
+AUTH-001,PARTIAL,tests/setup.spec.ts,,,"Only existing-account UI sign-in paths are exercised; signup, provider identity, invalid OTP and full lifecycle remain uncovered."
+AUTH-006,PARTIAL,tests/setup.spec.ts;tests/tenant-boundaries.spec.ts,,,"Workspace-specific successful login and selected role denials are covered; full cross-workspace session lifecycle is not."
+AUTH-007,PARTIAL,tests/setup.spec.ts,,,"Login sessions are created through UI; expiry, revocation and refresh lifecycle are not exercised."
+FAM-003,PARTIAL,tests/tenant-boundaries.spec.ts,,,"Parent-to-parent child-ID substitution is tested; the complete guardian access matrix is not yet covered."
+TEN-002,PARTIAL,tests/tenant-boundaries.spec.ts;tests/persisted-boundaries.spec.ts,,,"Selected tenant boundary and persisted assignments are checked; all tenant-scoped resources and selection states are not."
+HR-002,PARTIAL,tests/tenant-boundaries.spec.ts,,,"HRMS platform-owner authorization is checked against Education Admin and parent sessions; complete HRMS role matrix is not."
+QA-001,PARTIAL,tests/setup.spec.ts;tests/persisted-boundaries.spec.ts,,,"Pack install and core relations are verified; rollback, replay, concurrency and complete manifest reconciliation are not."
+QA-004,PARTIAL,tests/cleanup.spec.ts,,,"UI preview/confirmation and core row cleanup are checked; interruption, all resource adapters and independent protected-baseline comparison need further tests."
+QA-007,PARTIAL,tests/setup.spec.ts,,,"Approved disposable database status is asserted; negative configuration matrix and zero-write rejection tests are not covered."
