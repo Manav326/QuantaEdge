@@ -24,7 +24,7 @@ import {
   type AdminSection,
 } from './admin-navigation';
 
-type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[]; institutionCode?: string; tenantCode?: string; tenant_code?: string };
+type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[]; institutionCode?: string; institution_code?: string; tenantCode?: string; tenant_code?: string };
 type AdminInstitution = { institution_id: number; tenant_code: string; display_name: string; is_default?: boolean };
 
 function activeSection(pathname: string): AdminSection {
@@ -273,7 +273,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     if (!quickItems.some(candidate => candidate.key === item.key)) quickItems.push(item);
   }
 
-  return <AdminThemeProvider institutionCode={institutionCode || session?.institutionCode || session?.tenantCode || session?.tenant_code || ''}>
+  return <AdminThemeProvider institutionCode={institutionCode || session?.institutionCode || session?.institution_code || session?.tenantCode || session?.tenant_code || ''}>
   <AdminWorkspaceContext.Provider value={value}>
     <div className="qe-admin-workspace-layout">
       <AdminSidebar active={active} variant={variant} displayName={session?.displayName || undefined} persistent />
