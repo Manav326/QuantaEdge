@@ -51,6 +51,15 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void legacyIncompleteOrderMayOnlyBeRetiredWhenProviderConfirmsRetryIsSafe() {
+    assertTrue(CourseMarketplaceController.providerConfirmsRetryIsSafe("RETRYABLE"));
+    assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("PAID"));
+    assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("IN_FLIGHT"));
+    assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("UNKNOWN"));
+    assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe(null));
+  }
+
+  @Test
   void verificationRejectsMissingFinancialSnapshotsBeforeProviderCapture() {
     Map<String,Object> incomplete = new LinkedHashMap<>();
     incomplete.put("status", "PENDING");
