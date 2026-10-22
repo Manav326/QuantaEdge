@@ -111,6 +111,7 @@ export default function FinancePage(){
   const [providerEventStatusFilter,setProviderEventStatusFilter]=useState('');
   const [providerEventOffset,setProviderEventOffset]=useState(0);
   const [providerEventLoading,setProviderEventLoading]=useState(false);
+  const [providerEventWarning,setProviderEventWarning]=useState('');
   const [selectedProviderEvents,setSelectedProviderEvents]=useState<ProviderEventRecord[]>([]);
   const [selectedProviderEventsLoading,setSelectedProviderEventsLoading]=useState(false);
   const [selectedProviderEventsWarning,setSelectedProviderEventsWarning]=useState('');
@@ -348,6 +349,7 @@ export default function FinancePage(){
   const loadProviderEvents=async(offsetOverride?:number)=>{
     const offset=offsetOverride??providerEventOffset;
     setProviderEventLoading(true);
+    setProviderEventWarning('');
     try{
       const query=new URLSearchParams({limit:'50',offset:String(offset)});
       if(providerEventStatusFilter)query.set('status',providerEventStatusFilter);
@@ -355,9 +357,14 @@ export default function FinancePage(){
       const response=await api<{items:ProviderEventRecord[];total:number;limit:number;offset:number;schemaReady?:boolean;warning?:string}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
       setProviderEvents(Array.isArray(response.items)?response.items:[]);
       setProviderEventTotal(Number(response.total||0));
-      if(response.schemaReady===false)setError(response.warning||'Razorpay provider-event storage is unavailable. Check the local API database migration.');
+      setProviderEventWarning(response.schemaReady===false
+        ?(response.warning||'Razorpay provider-event storage is unavailable. Check the local API database migration.')
+        :'');
       setProviderEventOffset(Number(response.offset||0));
-    }catch(e){setError(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');}
+    }catch(e){
+      setProviderEventWarning(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');
+      setError(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');
+    }
     finally{setProviderEventLoading(false);}
   };
   const loadSelectedProviderEvents=async(orderId:number)=>{
@@ -852,6 +859,7 @@ export default function FinancePage(){
           <div className={styles.panelHead}><div><h2>Razorpay provider-event inbox</h2>
             <p>Signature-verified webhook events are deduplicated by provider event ID. Unmatched or unresolved events need explicit finance investigation.</p></div>
             <button type="button" className={styles.secondary} onClick={()=>void loadProviderEvents()} disabled={providerEventLoading}>↻ Refresh inbox</button></div>
+          {providerEventWarning&&<div className={styles.alertError} role="alert">{providerEventWarning}</div>}
           <div className={styles.paymentFilters}>
             <label>Event outcome<select value={providerEventStatusFilter} onChange={e=>{setProviderEventStatusFilter(e.target.value);setProviderEventOffset(0);}}>
               <option value="">All outcomes</option><option value="RECONCILIATION_REQUIRED">Reconciliation required</option>
@@ -873,7 +881,7 @@ export default function FinancePage(){
               <td><p className={styles.providerMessage}>{event.status_message}</p>{event.details_json&&event.details_json!=='{}'&&<details><summary>Safe event details</summary><pre>{event.details_json}</pre></details>}</td>
               <td>{event.local_order_id?<button type="button" className={styles.secondarySmall} onClick={()=>inspectPaymentOrderId(Number(event.local_order_id))}>Inspect order #{event.local_order_id}</button>:<small>Unmatched: investigate provider reference</small>}</td>
             </tr>)}</tbody></table></div>
-          :<div className={styles.emptyLarge}><span>↻</span><b>No provider events found</b><p>Configure the Razorpay webhook URL and signing secret to receive events. Events are not generated from browser callbacks.</p></div>}
+          :<div className={styles.emptyLarge}><span>↻</span><b>{providerEventWarning?'Provider-event inbox unavailable':'No provider events found'}</b><p>{providerEventWarning?'The event list could not be confirmed. Do not infer that this order has no provider events.':'Configure the Razorpay webhook URL and signing secret to receive events. Events are not generated from browser callbacks.'}</p></div>}
           <div className={styles.paymentPagination}>
             <button type="button" className={styles.secondarySmall} disabled={providerEventLoading||providerEventOffset===0}
               onClick={()=>void loadProviderEvents(Math.max(0,providerEventOffset-50))}>Previous</button>
