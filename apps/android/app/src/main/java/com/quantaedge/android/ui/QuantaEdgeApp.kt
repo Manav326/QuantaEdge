@@ -1568,7 +1568,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L, discountCode: String = "") {
+    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L, discountCode: String = "", billingAddressId: Long) {
         if (pendingParentPaymentVerification != null) {
             error = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1587,7 +1587,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         parentMarketplaceBusyCourseId = courseId
         runTask {
             try {
-                val body = JSONObject().put("recipientType", recipientType)
+                val body = JSONObject().put("recipientType", recipientType).put("billingAddressId", billingAddressId)
                 if (recipientType == "CHILD") body.put("studentId", studentId)
                 if (discountCode.isNotBlank()) body.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
@@ -1682,7 +1682,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseMarketplaceCourse(courseId: Long, discountCode: String = "") {
+    fun purchaseMarketplaceCourse(courseId: Long, discountCode: String = "", billingAddressId: Long) {
         if (pendingStudentPaymentVerification != null) {
             status = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1697,7 +1697,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         marketplaceBusyCourseId = courseId
         runTask {
             try {
-                val checkoutBody = JSONObject()
+                val checkoutBody = JSONObject().put("billingAddressId", billingAddressId)
                 if (discountCode.isNotBlank()) checkoutBody.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
                     "/api/v1/marketplace/courses/" + courseId + "/orders",
@@ -4447,7 +4447,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         language = language,
                         busyCourseId = marketplaceBusyCourseId.takeIf { it > 0L },
                         busy = busy || marketplaceBusyCourseId > 0L,
-                        onBuy = { courseId, code -> purchaseMarketplaceCourse(courseId, code) },
+                        billingAddresses = studentBillingAddresses,
+                        billingAddressesLoading = studentBillingAddressesLoading,
+                        billingError = studentBillingAddressesError,
+                        billingStatus = studentBillingAddressesStatus,
+                        onSaveBillingAddress = { addressId, body, complete -> saveBillingAddress("STUDENT", addressId, body, complete) },
+                        onMakeDefaultBillingAddress = { addressId -> makeDefaultBillingAddress("STUDENT", addressId) },
+                        onDeleteBillingAddress = { addressId -> deleteBillingAddress("STUDENT", addressId) },
+                        onOpenProfile = ::openStudentProfile,
+                        onBuy = { courseId, code, billingAddressId -> purchaseMarketplaceCourse(courseId, code, billingAddressId) },
                         onJoinFree = ::joinFreeMarketplaceCourse,
                         onAskParent = ::requestParentCoursePurchase,
                         onRefresh = ::refreshMarketplace,
@@ -4501,8 +4509,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         busyCourseId = parentMarketplaceBusyCourseId,
                         error = error,
                         status = status,
+                        billingAddresses = parentBillingAddresses,
+                        billingAddressesLoading = parentBillingAddressesLoading,
+                        billingError = parentBillingAddressesError,
+                        billingStatus = parentBillingAddressesStatus,
+                        onSaveBillingAddress = { addressId, body, complete -> saveBillingAddress("PARENT", addressId, body, complete) },
+                        onMakeDefaultBillingAddress = { addressId -> makeDefaultBillingAddress("PARENT", addressId) },
+                        onDeleteBillingAddress = { addressId -> deleteBillingAddress("PARENT", addressId) },
+                        onOpenProfile = ::openParentProfile,
                         onRefresh = ::refreshParentMarketplace,
-                        onBuy = { courseId, recipientType, studentId, code -> purchaseFamilyMarketplaceCourse(courseId, recipientType, studentId, code) },
+                        onBuy = { courseId, recipientType, studentId, code, billingAddressId ->
+                            purchaseFamilyMarketplaceCourse(courseId, recipientType, studentId, code, billingAddressId)
+                        },
                         onAddFree = ::addFreeFamilyCourse,
                         onDismissRequest = ::dismissParentCourseRequest,
                         onTransfer = ::transferParentCourse,
@@ -4538,7 +4556,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onSave = ::saveParentProfile,
                         onUploadPhoto = ::saveParentPhoto,
                         onRemovePhoto = ::removeParentPhoto,
-                        onLogout = ::logout
+                        onLogout = ::logout,
+                        billingAddresses = parentBillingAddresses,
+                        billingAddressesLoading = parentBillingAddressesLoading,
+                        billingError = parentBillingAddressesError,
+                        billingStatus = parentBillingAddressesStatus,
+                        onSaveBillingAddress = { addressId, body, complete -> saveBillingAddress("PARENT", addressId, body, complete) },
+                        onMakeDefaultBillingAddress = { addressId -> makeDefaultBillingAddress("PARENT", addressId) },
+                        onDeleteBillingAddress = { addressId -> deleteBillingAddress("PARENT", addressId) }
                     )
                     AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
                         busy = busy,
@@ -4803,7 +4828,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onUploadPhoto = ::saveStudentPhoto,
                         onRemovePhoto = ::removeStudentPhoto,
                         onAccountLifecycle = ::openAccountLifecycle,
-                        onLogout = ::logout
+                        onLogout = ::logout,
+                        billingAddresses = studentBillingAddresses,
+                        billingAddressesLoading = studentBillingAddressesLoading,
+                        billingError = studentBillingAddressesError,
+                        billingStatus = studentBillingAddressesStatus,
+                        onSaveBillingAddress = { addressId, body, complete -> saveBillingAddress("STUDENT", addressId, body, complete) },
+                        onMakeDefaultBillingAddress = { addressId -> makeDefaultBillingAddress("STUDENT", addressId) },
+                        onDeleteBillingAddress = { addressId -> deleteBillingAddress("STUDENT", addressId) }
                     )
                     AppRoute.ACCOUNT_LIFECYCLE -> AccountLifecycleScreen(
                         data = accountLifecycle,
