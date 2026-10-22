@@ -88,9 +88,20 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_ACTIVE","Course is active",
         "ACTIVE".equals(text(row.get("course_status")))&&!"GENERAL".equalsIgnoreCase(text(row.get("course_code"))),
         "The course must be an active, independently selectable course product.");
-    add(checks,"ASSIGNMENT_AND_RELEASE","Course release is approved for sharing",
-        "ASSIGNED".equals(text(row.get("assignment_status")))&&"SHAREABLE".equals(text(row.get("release_state"))),
-        "The institution needs an active assignment to a platform-reviewed SHAREABLE course release.");
+    String releaseState=text(row.get("release_state"));
+    boolean qualityApproved=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
+    add(checks,"CONTENT_QUALITY_REVIEW","HRMS content-quality review is complete",qualityApproved,
+        "IN_QUALITY_REVIEW".equals(releaseState)
+            ? "HRMS must record the content-quality decision in this institution's Marketplace launch checklist."
+            : "The source institution must submit the course release and pass HRMS content-quality review before it can be shared.");
+    boolean originApproved="SHAREABLE".equals(releaseState);
+    add(checks,"ORIGIN_RELEASE_APPROVAL","Origin institution approved this release for sharing",originApproved,
+        "QUALITY_APPROVED".equals(releaseState)
+            ? "Quality review passed. The originating institution admin must approve the release in its Institution portal before HRMS can publish it."
+            : "The course is not yet a shareable release. Complete HRMS content-quality review, then obtain origin-institution approval.");
+    add(checks,"ASSIGNMENT_AND_RELEASE","Active assignment to a shareable course release exists",
+        "ASSIGNED".equals(text(row.get("assignment_status")))&&originApproved,
+        "The institution needs an active assignment to a platform-reviewed, origin-approved SHAREABLE course release.");
     long courseId=number(row.get("course_id"));
     String savedFingerprint=text(row.get("content_fingerprint"));
     boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
@@ -176,10 +187,20 @@ public class CourseMarketplaceLaunchReadinessService {
         "ACTIVE".equals(text(offer.get("course_status")))
             && !"GENERAL".equalsIgnoreCase(text(offer.get("course_code"))),
         "The course must be an active, independently selectable course product.");
-    add(checks,"ASSIGNMENT_AND_RELEASE","Course release is approved for sharing",
-        "ASSIGNED".equals(text(offer.get("assignment_status")))
-            && "SHAREABLE".equals(text(offer.get("release_state"))),
-        "The institution needs an active assignment to a platform-reviewed SHAREABLE course release.");
+    String releaseState=text(offer.get("release_state"));
+    boolean qualityApproved=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
+    add(checks,"CONTENT_QUALITY_REVIEW","HRMS content-quality review is complete",qualityApproved,
+        "IN_QUALITY_REVIEW".equals(releaseState)
+            ? "HRMS must record the content-quality decision in this institution's Marketplace launch checklist."
+            : "The source institution must submit the course release and pass HRMS content-quality review before it can be shared.");
+    boolean originApproved="SHAREABLE".equals(releaseState);
+    add(checks,"ORIGIN_RELEASE_APPROVAL","Origin institution approved this release for sharing",originApproved,
+        "QUALITY_APPROVED".equals(releaseState)
+            ? "Quality review passed. The originating institution admin must approve the release in its Institution portal before HRMS can publish it."
+            : "The course is not yet a shareable release. Complete HRMS content-quality review, then obtain origin-institution approval.");
+    add(checks,"ASSIGNMENT_AND_RELEASE","Active assignment to a shareable course release exists",
+        "ASSIGNED".equals(text(offer.get("assignment_status")))&&originApproved,
+        "The institution needs an active assignment to a platform-reviewed, origin-approved SHAREABLE course release.");
     long courseId = number(offer.get("course_id"));
     String savedFingerprint = text(offer.get("content_fingerprint"));
     boolean contentUnchanged = !savedFingerprint.isBlank()
