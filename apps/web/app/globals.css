@@ -1940,3 +1940,32 @@ html[data-qe-appearance] :where(.student-account-menu__logout:hover, .parent-acc
   background: var(--qe-color-error-container);
   color: var(--qe-color-on-error-container);
 }
+
+
+/* User Web institution portal: shared studio files stay byte-identical across workspaces.
+   Apply User-Web-only foreground and feedback fixes at the institution shell boundary. */
+html[data-qe-appearance] .institution-portal [class*="sendButton"],
+html[data-qe-appearance] .institution-portal [class*="generateButton"],
+html[data-qe-appearance] .institution-portal [class*="selectedTag"],
+html[data-qe-appearance] .institution-portal [class*="pushAppIcon"] {
+  color: var(--qe-color-on-accent, #fff);
+}
+
+html[data-qe-appearance] .institution-portal [class*="previewButton"],
+html[data-qe-appearance] .institution-portal [class*="activeBlock"] > span,
+html[data-qe-appearance] .institution-portal [class*="elementButton"] span {
+  color: var(--qe-color-accent-text, var(--qe-color-accent));
+}
+
+html[data-qe-appearance] .institution-portal [class*="NotificationStudio_error"],
+html[data-qe-appearance] .institution-portal [class*="LogoGraphicsLab_error"] {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .institution-portal [class*="LogoGraphicsLab_success"] {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}

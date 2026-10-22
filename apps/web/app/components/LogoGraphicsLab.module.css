@@ -1,7 +1,7 @@
 .lab{display:grid;gap:18px;color:var(--qe-color-text,var(--ink,#172637))}
 .labHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:clamp(16px,2.4vw,24px);border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:18px;background:var(--qe-color-surface,var(--card,#fff))}
 .labHeader h2{font-size:clamp(20px,3vw,28px);letter-spacing:-.03em;margin:0 0 7px}.labHeader p:not(.eyebrow){max-width:750px;color:var(--qe-color-text-muted,var(--muted,#657184));font-size:12px;line-height:1.6;margin:0}
-.eyebrow{font-size:9px;font-weight:850;letter-spacing:.15em;color:var(--qe-color-accent-text,var(--qe-color-accent,var(--brand,#c45c16)));margin:0 0 9px}
+.eyebrow{font-size:9px;font-weight:850;letter-spacing:.15em;color:var(--qe-color-accent,var(--brand,#c45c16));margin:0 0 9px}
 .labLayout{display:grid;grid-template-columns:minmax(250px,310px) minmax(0,1fr);gap:15px;align-items:start}
 .controls{display:grid;gap:12px;padding:17px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:16px;background:var(--qe-color-surface,var(--card,#fff))}
 .controls h3,.conceptsHeading h3{font-size:14px;margin:0;letter-spacing:-.015em}
@@ -11,7 +11,7 @@
 .paletteLabel{font-size:11px;font-weight:730;margin-top:2px}
 .paletteGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .palette,.paletteActive{min-width:0;display:grid;gap:6px;padding:9px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:10px;background:var(--qe-color-surface,var(--card,#fff));color:var(--qe-color-text,var(--ink,#172637));text-align:left;cursor:pointer}
-.paletteActive{border-color:var(--qe-color-accent-text,var(--qe-color-accent,var(--brand,#c45c16)));box-shadow:0 0 0 2px color-mix(in srgb,var(--qe-color-accent,var(--brand,#c45c16)) 15%,transparent)}
+.paletteActive{border-color:var(--qe-color-accent,var(--brand,#c45c16));box-shadow:0 0 0 2px color-mix(in srgb,var(--qe-color-accent,var(--brand,#c45c16)) 15%,transparent)}
 .palette span{display:flex;gap:4px}.palette i,.paletteActive i{display:block;width:19px;height:19px;border:1px solid rgba(0,0,0,.07);border-radius:6px}
 .palette strong,.paletteActive strong{font-size:9px;line-height:1.3}
 .note{margin:2px 0 0;padding:10px;border-radius:9px;background:var(--qe-color-surface-subtle,var(--surface,#f5f7fa));color:var(--qe-color-text-muted,var(--muted,#657184));font-size:10px;line-height:1.55}
@@ -19,14 +19,14 @@
 .conceptsHeading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}.conceptsHeading>span{font-size:10px;color:var(--qe-color-text-muted,var(--muted,#657184))}
 .conceptGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .concept,.conceptSelected{min-width:0;overflow:hidden;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:13px;background:var(--qe-color-surface,var(--card,#fff))}
-.conceptSelected{border-color:var(--qe-color-accent-text,var(--qe-color-accent,var(--brand,#c45c16)));box-shadow:0 0 0 2px color-mix(in srgb,var(--qe-color-accent,var(--brand,#c45c16)) 12%,transparent)}
+.conceptSelected{border-color:var(--qe-color-accent,var(--brand,#c45c16));box-shadow:0 0 0 2px color-mix(in srgb,var(--qe-color-accent,var(--brand,#c45c16)) 12%,transparent)}
 .conceptPick{position:relative;display:grid;gap:8px;width:100%;padding:10px;border:0;background:repeating-conic-gradient(var(--qe-color-surface-subtle,var(--surface,#f4f7fa)) 0% 25%,transparent 0% 50%) 50% / 16px 16px;text-align:left;cursor:pointer;color:inherit}
 .conceptNumber{font-size:8px;letter-spacing:.12em;font-weight:850;color:var(--qe-color-text-muted,var(--muted,#657184))}
 .logoCanvas{display:block;width:100%;height:auto;aspect-ratio:12/7;object-fit:contain}
-.selectedTag{position:absolute;top:8px;right:8px;padding:4px 7px;border-radius:999px;background:var(--qe-color-accent,var(--brand,#c45c16));color:var(--qe-color-on-accent,#fff);font-size:8px;font-weight:800}
+.selectedTag{position:absolute;top:8px;right:8px;padding:4px 7px;border-radius:999px;background:var(--qe-color-accent,var(--brand,#c45c16));color:#fff;font-size:8px;font-weight:800}
 .conceptActions{display:flex;gap:6px;padding:9px;border-top:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8))}
 .conceptActions button{flex:1;min-width:0;padding:7px 5px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:8px;background:var(--qe-color-surface,var(--card,#fff));color:var(--qe-color-text,var(--ink,#172637));font-size:9px;font-weight:730;cursor:pointer}
-.conceptActions button:hover{border-color:var(--qe-color-accent-text,var(--qe-color-accent,var(--brand,#c45c16)))}
+.conceptActions button:hover{border-color:var(--qe-color-accent,var(--brand,#c45c16))}
 .useRow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:12px;background:var(--qe-color-surface-subtle,var(--surface,#f5f7fa))}
 .useRow>div{display:grid;gap:4px;min-width:0}.useRow strong{font-size:12px}.useRow span{font-size:10px;color:var(--qe-color-text-muted,var(--muted,#657184));overflow-wrap:anywhere}
 .generateButton{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:39px;padding:9px 13px;border:1px solid var(--qe-color-accent,var(--brand,#c45c16));border-radius:10px;background:var(--qe-color-accent,var(--brand,#c45c16));color:#fff;font-size:11px;font-weight:800;cursor:pointer;box-shadow:0 5px 13px rgba(21,35,52,.08)}
@@ -34,46 +34,3 @@
 .error,.success{padding:11px 12px;border-radius:10px;font-size:11px;line-height:1.5}.error{border:1px solid var(--qe-color-error,#c7372f)}.success{border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));background:var(--qe-color-surface-subtle,var(--surface,#f5f7fa))}
 @media(max-width:900px){.labLayout{grid-template-columns:minmax(0,1fr)}.controls{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.controls h3,.paletteLabel,.paletteGrid,.note{grid-column:1/-1}}
 @media(max-width:560px){.labHeader{flex-direction:column}.controls{grid-template-columns:minmax(0,1fr)}.controls h3,.paletteLabel,.paletteGrid,.note{grid-column:auto}.conceptGrid{grid-template-columns:minmax(0,1fr)}.conceptActions button{font-size:10px}}
-
-
-/* Palette selection and generation controls use the institution's generated contrast foregrounds. */
-.selectedTag,
-.generateButton {
-  color: var(--qe-color-on-accent, #fff);
-}
-
-.error {
-  background: var(--qe-color-error-container);
-  color: var(--qe-color-on-error-container);
-  border-color: var(--qe-color-error);
-}
-
-.success {
-  background: var(--qe-color-success-container);
-  color: var(--qe-color-on-success-container);
-  border-color: var(--qe-color-success);
-}
-
-.lab,
-.labHeader,
-.labLayout,
-.controls,
-.concepts,
-.concept,
-.conceptSelected,
-.useRow {
-  min-width: 0;
-  max-width: 100%;
-}
-
-.labHeader h2,
-.labHeader p,
-.conceptsHeading h2,
-.concept h3,
-.concept p,
-.useRow strong,
-.useRow span {
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-

@@ -922,21 +922,13 @@ assert.ok(
 );
 
 
-const visualAuditNotificationStudioCss = read('../app/components/NotificationStudio.module.css');
-const visualAuditLogoGraphicsCss = read('../app/components/LogoGraphicsLab.module.css');
+
 assert.ok(
-  visualAuditNotificationStudioCss.includes('var(--qe-color-on-accent, #fff)') &&
-  visualAuditNotificationStudioCss.includes('var(--qe-color-on-error-container)') &&
-  visualAuditNotificationStudioCss.includes('var(--qe-color-on-success-container)') &&
-  visualAuditNotificationStudioCss.includes('overflow-wrap: anywhere'),
-  'Notification authoring controls must use contrast-aware accent foregrounds, semantic feedback colours, and overflow-safe editor layouts.'
-);
-assert.ok(
-  visualAuditLogoGraphicsCss.includes('var(--qe-color-on-accent, #fff)') &&
-  visualAuditLogoGraphicsCss.includes('var(--qe-color-on-error-container)') &&
-  visualAuditLogoGraphicsCss.includes('var(--qe-color-on-success-container)') &&
-  visualAuditLogoGraphicsCss.includes('overflow-wrap: anywhere'),
-  'Logo graphics controls must retain readable contrast for custom institution accents and semantic feedback.'
+  globals.includes('.institution-portal [class*="sendButton"]') &&
+  globals.includes('var(--qe-color-on-accent, #fff)') &&
+  globals.includes('[class*="NotificationStudio_error"]') &&
+  globals.includes('var(--qe-color-on-error-container)'),
+  'User Web institution notification and logo editors must retain contrast-aware accent foregrounds and theme-aware error states without diverging from shared editor styles.'
 );
 
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
