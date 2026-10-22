@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1345,
+    "assets_selected": 1346,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1341,
-    "assets_remaining": 737,
-    "assets_completion_percent": 64.5,
+    "assets_analyzed": 1342,
+    "assets_remaining": 736,
+    "assets_completion_percent": 64.6,
     "assets_failed": 29,
-    "assets_skipped_from_checkpoint": 1340,
+    "assets_skipped_from_checkpoint": 1341,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:58:01Z"
+      "checkpointed_at": "2026-10-22T11:05:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:59:00Z"
+      "checkpointed_at": "2026-10-22T11:06:44Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:00:01Z"
+      "checkpointed_at": "2026-10-22T11:07:46Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:00:45Z"
+      "checkpointed_at": "2026-10-22T11:08:30Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -45012,6 +45012,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T11:04:27Z"
+    },
+    {
+      "asset_id": "3dcf90035f45833423c3fb91",
+      "asset_sha256": "882e9f2652e7d75595a63412ba928b22fbf58ae89209b389285cc655b0315885",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/882e9f2652e7d75595a63412ba928b22fbf58ae89209b389285cc655b0315885.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a torn red paper or fabric, with a jagged edge.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Wrong measurements are worse than\nno measurements at all.\n— Anna Mani",
+          "Lambok and his elder sister\nPhiban live in Shillong. One day\nthey came home from school.\nTheir parents were away at\nwork and Lambok complained\nthat he was feeling feverish.\nPhiban touched his forehead\nand felt that he might be having\nfeverish."
+        ],
+        "concepts": [
+          "Temperature",
+          "Measurement",
+          "Anna Mani",
+          "Lambok",
+          "Phiban",
+          "Shillong",
+          "Feverish",
+          "Feeling feverish"
+        ],
+        "context_relation": "The image is a close-up of a torn red paper or fabric, which is unrelated to the text about temperature and measurement.",
+        "limitations": [
+          "The image does not provide any visual information about temperature or measurement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T11:10:18Z"
     }
   ]
 }

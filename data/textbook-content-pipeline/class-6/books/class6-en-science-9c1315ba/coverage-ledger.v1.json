@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1374,
-    "successful_visual_analyses": 1345,
-    "missing_visual_analyses": 704,
+    "raw_analysis_result_rows": 1375,
+    "successful_visual_analyses": 1346,
+    "missing_visual_analyses": 703,
     "failed_visual_analyses": 29,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 733,
+    "unresolved_count": 732,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51519,9 +51519,30 @@
       "asset_path": "assets/882e9f2652e7d75595a63412ba928b22fbf58ae89209b389285cc655b0315885.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a torn red paper or fabric, with a jagged edge.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Wrong measurements are worse than\nno measurements at all.\n— Anna Mani",
+          "Lambok and his elder sister\nPhiban live in Shillong. One day\nthey came home from school.\nTheir parents were away at\nwork and Lambok complained\nthat he was feeling feverish.\nPhiban touched his forehead\nand felt that he might be having\nfeverish."
+        ],
+        "concepts": [
+          "Temperature",
+          "Measurement",
+          "Anna Mani",
+          "Lambok",
+          "Phiban",
+          "Shillong",
+          "Feverish",
+          "Feeling feverish"
+        ],
+        "context_relation": "The image is a close-up of a torn red paper or fabric, which is unrelated to the text about temperature and measurement.",
+        "limitations": [
+          "The image does not provide any visual information about temperature or measurement."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
