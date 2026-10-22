@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1344,
+    "assets_selected": 1345,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1340,
-    "assets_remaining": 738,
+    "assets_analyzed": 1341,
+    "assets_remaining": 737,
     "assets_completion_percent": 64.5,
     "assets_failed": 29,
-    "assets_skipped_from_checkpoint": 1339,
+    "assets_skipped_from_checkpoint": 1340,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:53:52Z"
+      "checkpointed_at": "2026-10-22T10:58:01Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:54:51Z"
+      "checkpointed_at": "2026-10-22T10:59:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:55:52Z"
+      "checkpointed_at": "2026-10-22T11:00:01Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:56:35Z"
+      "checkpointed_at": "2026-10-22T11:00:45Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44982,6 +44982,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T10:56:46Z"
+    },
+    {
+      "asset_id": "31c67b0532b811ed78388f64",
+      "asset_sha256": "a9f720a2d071d16ab72dad6e1e111fb969e17bf749ccb300761656d6b36c1cb5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 140,
+      "asset_path": "page-0140.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with the word 'Notes' at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes"
+        ],
+        "concepts": [],
+        "context_relation": "The page is likely a blank space for notes or annotations.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T11:04:27Z"
     }
   ]
 }

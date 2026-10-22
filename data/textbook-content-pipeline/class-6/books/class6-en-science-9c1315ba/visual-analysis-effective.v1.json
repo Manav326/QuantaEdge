@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a6f417d636a8dc01efc2dda67801cbf340f957388f5bef1f544e02762c592895",
+  "raw_analysis_sha256": "641b760280009fd22fb2c2851adfc261bdad24f30bc234b535c528c07d1c270b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:53:52Z",
+      "checkpointed_at": "2026-10-22T10:58:01Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:54:51Z",
+      "checkpointed_at": "2026-10-22T10:59:00Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:55:52Z",
+      "checkpointed_at": "2026-10-22T11:00:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66850,7 +66850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:56:35Z",
+      "checkpointed_at": "2026-10-22T11:00:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
@@ -68020,6 +68020,50 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "31c67b0532b811ed78388f64",
+      "asset_sha256": "a9f720a2d071d16ab72dad6e1e111fb969e17bf749ccb300761656d6b36c1cb5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 140,
+      "asset_path": "page-0140.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with the word 'Notes' at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes"
+        ],
+        "concepts": [],
+        "context_relation": "The page is likely a blank space for notes or annotations.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T11:04:27Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with the word 'Notes' at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes"
+        ],
+        "concepts": [],
+        "context_relation": "The page is likely a blank space for notes or annotations.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
