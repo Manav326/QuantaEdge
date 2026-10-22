@@ -1131,3 +1131,51 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 ) {
   color: var(--qe-people-muted);
 }
+
+
+/* HRMS tabs, counters, tables and notification editor share one stable dark/light surface contract. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button {
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:is(.active,[aria-selected="true"],[aria-pressed="true"]) {
+  background: var(--qe-people-sidebar-active);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-brand);
+  box-shadow: inset 0 -2px 0 var(--qe-people-brand);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong) {
+  color: inherit;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:not(.active):not([aria-selected="true"]):not([aria-pressed="true"]) {
+  background: var(--qe-people-surface);
+  color: var(--qe-people-muted);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong) {
+  background-color: var(--qe-people-surface-subtle);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody tr,
+html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody td,
+html[data-qe-people-appearance] .qe-people-page-slot [role="row"],
+html[data-qe-people-appearance] .qe-people-page-slot [role="cell"] {
+  transition-property: color, border-color !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td,
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td :is(span,strong,b,small,em,a),
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] :is(span,strong,b,small,em,a) {
+  color: inherit !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row,[class*="auditRow"],[class*="directoryRow"]) {
+  background: var(--qe-people-surface);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row) :is(strong,span,small,b) {
+  overflow-wrap: anywhere;
+}
