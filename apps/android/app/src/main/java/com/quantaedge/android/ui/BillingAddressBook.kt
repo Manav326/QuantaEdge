@@ -167,7 +167,7 @@ fun BillingAddressBook(
                         }
                         linesForAddress(selected).forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
                         addressValue(selected, "gstin").takeIf { it.isNotBlank() }?.let {
-                            Text("GSTIN: $it", style = MaterialTheme.typography.bodySmall)
+                            Text(localizedUiText("GSTIN: $it"), style = MaterialTheme.typography.bodySmall)
                         }
                         addressValue(selected, "contact_email").takeIf { it.isNotBlank() }?.let {
                             Text(it, style = MaterialTheme.typography.bodySmall)
@@ -204,7 +204,7 @@ fun BillingAddressBook(
                             TextButton(onClick = { editAddress(address) }, enabled = !busy) { Text("✎ " + t("Edit", "Edit")) }
                         }
                         linesForAddress(address).forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
-                        addressValue(address, "gstin").takeIf { it.isNotBlank() }?.let { Text("GSTIN: $it", style = MaterialTheme.typography.bodySmall) }
+                        addressValue(address, "gstin").takeIf { it.isNotBlank() }?.let { Text(localizedUiText("GSTIN: $it"), style = MaterialTheme.typography.bodySmall) }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             if (!address.optBoolean("is_default")) TextButton(onClick = { onMakeDefault(billingAddressId(address)) }, enabled = !busy) {
                                 Text(t("Make default", "Default बनाएं"))
