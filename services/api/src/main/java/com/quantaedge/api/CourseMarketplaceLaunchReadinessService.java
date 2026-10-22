@@ -109,6 +109,8 @@ public class CourseMarketplaceLaunchReadinessService {
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("assignmentId",assignmentId);
     result.put("offerId",null);
+    result.put("releaseId",number(row.get("release_id")));
+    result.put("releaseState",text(row.get("release_state")));
     result.put("institutionId",institutionScope);
     result.put("institutionName",text(row.get("institution_name")));
     result.put("courseId",courseId);
@@ -224,7 +226,10 @@ public class CourseMarketplaceLaunchReadinessService {
     List<String> blockers = checks.stream().filter(check -> !Boolean.TRUE.equals(check.get("passed")))
         .map(check -> text(check.get("label"))+": "+text(check.get("message"))).toList();
     Map<String,Object> result = new LinkedHashMap<>();
+    result.put("assignmentId",number(offer.get("assignment_id")));
     result.put("offerId",offerId);
+    result.put("releaseId",number(offer.get("course_release_id")));
+    result.put("releaseState",text(offer.get("release_state")));
     result.put("institutionId",institutionId);
     result.put("institutionName",text(offer.get("institution_name")));
     result.put("courseId",courseId);
