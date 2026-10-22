@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5a06119b9760178d60f81c868204a8c0960f46d42457688f174ed81930cf1494",
+  "raw_analysis_sha256": "cf5ff3a2b295994dcf05af5b4bb3686e0b98748c4e051b51e16c875c6f1939a3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:05:44Z",
+      "checkpointed_at": "2026-10-22T11:11:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:06:44Z",
+      "checkpointed_at": "2026-10-22T11:12:35Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:07:46Z",
+      "checkpointed_at": "2026-10-22T11:13:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66850,7 +66850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T11:08:30Z",
+      "checkpointed_at": "2026-10-22T11:14:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
@@ -68128,6 +68128,86 @@
         "context_relation": "The image is a close-up of a torn red paper or fabric, which is unrelated to the text about temperature and measurement.",
         "limitations": [
           "The image does not provide any visual information about temperature or measurement."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9f9d43b69638f38114bace45",
+      "asset_sha256": "6d625690124097b946517b326c3cc4b0c2219cfb426c47e812f7d61d683ea3a2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/6d625690124097b946517b326c3cc4b0c2219cfb426c47e812f7d61d683ea3a2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two children in school uniforms, one sitting and one standing, with a framed picture of a beach scene on the wall.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Lambok and his elder sister",
+          "Phiban live in Shillong. One day",
+          "they came home from school.",
+          "Their parents were away at",
+          "work and Lambok complained",
+          "that he was feeling feverish.",
+          "Phiban touched his forehead",
+          "and felt that he might be having",
+          "a fever.",
+          "Wrong measurements are worse than",
+          "no measurements at all.",
+          "— Anna Mani"
+        ],
+        "concepts": [
+          "school uniforms",
+          "fever",
+          "temperature",
+          "measurement",
+          "Anna Mani's quote"
+        ],
+        "context_relation": "The image is related to the text about temperature and its measurement, with a focus on the children's experience of feeling feverish.",
+        "limitations": [
+          "The image does not show the children's actual temperature measurement.",
+          "The image does not show the beach scene in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T11:16:09Z",
+      "effective_analysis": {
+        "visual_summary": "Two children in school uniforms, one sitting and one standing, with a framed picture of a beach scene on the wall.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Lambok and his elder sister",
+          "Phiban live in Shillong. One day",
+          "they came home from school.",
+          "Their parents were away at",
+          "work and Lambok complained",
+          "that he was feeling feverish.",
+          "Phiban touched his forehead",
+          "and felt that he might be having",
+          "a fever.",
+          "Wrong measurements are worse than",
+          "no measurements at all.",
+          "— Anna Mani"
+        ],
+        "concepts": [
+          "school uniforms",
+          "fever",
+          "temperature",
+          "measurement",
+          "Anna Mani's quote"
+        ],
+        "context_relation": "The image is related to the text about temperature and its measurement, with a focus on the children's experience of feeling feverish.",
+        "limitations": [
+          "The image does not show the children's actual temperature measurement.",
+          "The image does not show the beach scene in detail."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
