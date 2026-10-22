@@ -286,7 +286,7 @@ html[data-qe-appearance] body {
 /* These high-contrast editorial/preview surfaces remain intentional in both modes. */
 .qe-admin-workspace-page-slot :is(
   .admin-welcome, .qe-studio-hero, .qe-content-sidebar,
-  [class*="__hero__"], [class*="__hero "], [class*="__hero\"]
+  [class*="hero"], [class*="Hero"]
 ) {
   color: #ffffff;
 }
@@ -410,7 +410,7 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
 }
 
 html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
-  .admin-welcome, .qe-studio-hero, .qe-content-sidebar, [class*="__hero__"], [class*="__hero "]
+  [class*="hero"], [class*="Hero"]
 ) {
   color: #ffffff;
 }
