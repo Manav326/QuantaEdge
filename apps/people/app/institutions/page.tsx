@@ -2,6 +2,7 @@
 
 
 import { apiFetch } from '../components/apiClient';
+import { notifyUser } from '../components/GlobalNotificationHost';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
@@ -160,11 +161,26 @@ export default function InstitutionsAdminPage() {
 
   const filtered=useMemo(()=>{const q=query.trim().toLowerCase();return institutions.filter(i=>!q||[i.tenant_code,i.display_name,i.legal_name,i.status].some(v=>String(v||'').toLowerCase().includes(q)));},[institutions,query]);
   const setCreateField=(key:keyof typeof create,value:string)=>setCreate(old=>({...old,[key]:value}));
+  const createDraftIssue=()=>{
+    if(!/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(create.tenantCode.trim().toUpperCase()))return 'Use a 3–32 character institution code with letters, numbers, hyphens or underscores.';
+    if(create.displayName.trim().length<2||create.displayName.trim().length>180)return 'Enter an institution display name between 2 and 180 characters.';
+    if(create.legalName.trim().length>220)return 'The legal name must be 220 characters or fewer.';
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(create.adminUsername.trim()))return 'Enter an administrator username between 3 and 64 characters.';
+    if(create.adminDisplayName.trim().length<2||create.adminDisplayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
+    if(create.initialPassword.length<12||create.initialPassword.length>72)return 'The temporary password must contain 12–72 characters.';
+    return '';
+  };
+  const adminDraftIssue=()=>{
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(admin.username.trim()))return 'Enter a username between 3 and 64 characters.';
+    if(admin.displayName.trim().length<2||admin.displayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
+    if(admin.initialPassword.length<12||admin.initialPassword.length>72)return 'The temporary password must contain 12–72 characters.';
+    return '';
+  };
   const doCreate=async(event:FormEvent)=>{
-    event.preventDefault();setSaving(true);setError('');setNotice('');setJoinCode('');
+    event.preventDefault();const issue=createDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');setJoinCode('');
     try{
-      const result=await api<{institutionId:number;displayName:string;nextStep:string}>('/api/v1/hrms/platform/institutions',{method:'POST',body:JSON.stringify(create)});
-      setJoinCode('');setNotice('Institution '+result.displayName+' created. HRMS manages provider credentials centrally; configure the institution billing contract, verify platform integration readiness, then issue its learner join link.');
+      const result=await api<{institutionId:number;displayName:string;nextStep:string}>('/api/v1/hrms/platform/institutions',{method:'POST',body:JSON.stringify({...create,tenantCode:create.tenantCode.trim().toUpperCase(),displayName:create.displayName.trim(),legalName:create.legalName.trim(),adminUsername:create.adminUsername.trim().toLowerCase(),adminDisplayName:create.adminDisplayName.trim()})});
+      setJoinCode('');setNotice('');notifyUser('Institution '+result.displayName+' created. HRMS manages provider credentials centrally; configure the institution billing contract, verify platform integration readiness, then issue its learner join link.','success');
       setCreate({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
       setShowCreate(false);await loadBase();await loadDetail(result.institutionId);
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
@@ -173,7 +189,7 @@ export default function InstitutionsAdminPage() {
     event.preventDefault();if(!detail)return;setSaving(true);setError('');setNotice('');
     try{
       await api('/api/v1/hrms/platform/institutions/'+detail.id+'/profile',{method:'PUT',body:JSON.stringify(profile)});
-      setNotice('Institution profile saved. The separately customised white-label name, if any, remains unchanged.');
+      setNotice('');notifyUser('Institution profile saved. The separately customised white-label name, if any, remains unchanged.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){setError(e instanceof Error?e.message:'Institution profile could not be saved.');}
     finally{setSaving(false);}
@@ -181,7 +197,7 @@ export default function InstitutionsAdminPage() {
   async function changeStatus(status:'ACTIVE'|'SUSPENDED'|'CLOSED'){
     if(!detail)return;const reason=window.prompt('Reason for changing '+detail.tenant_code+' to '+status+':','');if(reason===null)return;
     setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/status',{method:'PUT',body:JSON.stringify({status,reason})});setNotice('Institution status saved.');await loadBase();await loadDetail(detail.id);}
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/status',{method:'PUT',body:JSON.stringify({status,reason})});setNotice('');notifyUser('Institution status saved.','success');await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Status change failed.');}finally{setSaving(false);}
   }
   async function saveCourseAuthorisation(){
@@ -190,11 +206,11 @@ export default function InstitutionsAdminPage() {
       const enabled=detail.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
       return Boolean(courseDraft[course.id])!==enabled;
     });
-    if(!changes.length){setNotice('No course authorisation changes to save.');setEditingCard(null);return;}
+    if(!changes.length){setNotice('');notifyUser('There are no course authorisation changes to save.','info');setEditingCard(null);return;}
     setSaving(true);setError('');setNotice('');
     try{
       for(const course of changes){await api('/api/v1/hrms/platform/institutions/'+detail.id+'/courses/'+course.id,{method:'PUT',body:JSON.stringify({enabled:Boolean(courseDraft[course.id])})});}
-      setNotice('Saved '+changes.length+' course authorisation change'+(changes.length===1?'':'s')+'.');
+      setNotice('');notifyUser('Saved '+changes.length+' course authorisation change'+(changes.length===1?'':'s')+'.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){
       const message=e instanceof Error?e.message:'Course authorisation could not be saved.';
@@ -226,7 +242,7 @@ export default function InstitutionsAdminPage() {
       await loadBase();
       await loadDetail(detail.id);
       setEditingCard('branding');
-      setNotice('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.');
+      setNotice('');notifyUser('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.','success');
       return true;
     }finally{setSaving(false);}
   }
@@ -236,17 +252,17 @@ export default function InstitutionsAdminPage() {
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
       displayName:brand.displayName,tagline:brand.tagline,storeListingUrl:brand.storeListingUrl,
       themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
-    })});setNotice('Tenant branding settings saved.');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
+    })});setNotice('');notifyUser('Tenant branding settings saved.','success');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
   }
   async function saveBilling(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('Billing contract saved. New billable activations will be logged in the ledger.');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('');notifyUser('Billing contract saved. New billable activations will be logged in the ledger.','success');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Billing contract could not be saved.');}finally{setSaving(false);}
   }
   async function rotateCode(){
     if(!detail||!window.confirm('Rotate the join code? The old code stops working immediately.'))return;setSaving(true);setError('');
-    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setJoinCodeInstitutionId(detail.id);setCodeExpiry(result.expiresAt);setNotice('Join code rotated; the old code was revoked.');}
+    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setJoinCodeInstitutionId(detail.id);setCodeExpiry(result.expiresAt);setNotice('');notifyUser('Join code rotated; the old code was revoked.','success');}
     catch(e){setError(e instanceof Error?e.message:'Join code could not be rotated.');}finally{setSaving(false);}
   }
   async function reconcileBilling(){
@@ -255,7 +271,7 @@ export default function InstitutionsAdminPage() {
     try{
       const result=await api<{insertedEvents:number;totalChargeEvents:number;periodStart:string;periodEnd:string}>(
         '/api/v1/hrms/platform/institutions/'+detail.id+'/billing/reconcile',{method:'POST',body:JSON.stringify({})});
-      setNotice('Ledger reconciled for '+result.periodStart+' through '+result.periodEnd+'. New charge events: '+result.insertedEvents+'; total events: '+result.totalChargeEvents+'.');
+      setNotice('');notifyUser('Ledger reconciled for '+result.periodStart+' through '+result.periodEnd+'. New charge events: '+result.insertedEvents+'; total events: '+result.totalChargeEvents+'.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){setError(e instanceof Error?e.message:'Billing ledger could not be reconciled.');}
     finally{setSaving(false);}
@@ -280,23 +296,23 @@ export default function InstitutionsAdminPage() {
   }
   async function copyCode(){
     if(!joinCode||!detail||joinCodeInstitutionId!==detail.id)return;
-    try{await navigator.clipboard.writeText(joinCode);setNotice('Join code copied.');}
-    catch{setNotice('Copy the join code manually: '+joinCode);}
+    try{await navigator.clipboard.writeText(joinCode);setNotice('');notifyUser('Join code copied.','info');}
+    catch{setNotice('');notifyUser('Copy the join code manually: '+joinCode,'info');}
   }
   async function copySchoolLink(){
     const link=schoolLearningLink();
     if(!link)return;
-    try{await navigator.clipboard.writeText(link);setNotice('School-branded learner link copied. Share it only with this school’s learners.');}
-    catch{setNotice('Copy the school learner link manually: '+link);}
+    try{await navigator.clipboard.writeText(link);setNotice('');notifyUser('School-branded learner link copied. Share it only with this school’s learners.','info');}
+    catch{setNotice('');notifyUser('Copy the school learner link manually: '+link,'info');}
   }
   async function createAdmin(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
-    try{const result=await api<{username:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/admins',{method:'POST',body:JSON.stringify(admin)});setAdmin({username:'',displayName:'',initialPassword:''});setShowAdmin(false);setNotice('Administrator '+result.username+' was created. They must change the temporary password at first sign-in.');await loadDetail(detail.id);}
+    event.preventDefault();if(!detail)return;const issue=adminDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');
+    try{const result=await api<{username:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/admins',{method:'POST',body:JSON.stringify({...admin,username:admin.username.trim().toLowerCase(),displayName:admin.displayName.trim()})});setAdmin({username:'',displayName:'',initialPassword:''});setShowAdmin(false);setNotice('');notifyUser('Administrator '+result.username+' was created. They must change the temporary password at first sign-in.','success');await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Administrator could not be created.');}finally{setSaving(false);}
   }
   async function toggleAdmin(account:Admin){
     if(!detail||!window.confirm((account.active?'Suspend ':'Activate ')+account.username+'?'))return;setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/admins/'+account.id+'/status',{method:'PUT',body:JSON.stringify({active:!account.active})});setNotice('Administrator status saved.');await loadDetail(detail.id);}
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/admins/'+account.id+'/status',{method:'PUT',body:JSON.stringify({active:!account.active})});setNotice('');notifyUser('Administrator status saved.','success');await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Could not update admin status.');}finally{setSaving(false);}
   }
 
@@ -340,7 +356,7 @@ export default function InstitutionsAdminPage() {
       <label>Admin username *<input required minLength={3} maxLength={64} value={create.adminUsername} onChange={e=>setCreateField('adminUsername',e.target.value)}/></label>
       <label>Administrator full name *<input required minLength={2} maxLength={120} value={create.adminDisplayName} onChange={e=>setCreateField('adminDisplayName',e.target.value)}/></label>
       <label>Temporary password *<PasswordField required minLength={12} maxLength={72} autoComplete="new-password" value={create.initialPassword} onChange={e=>setCreateField('initialPassword',e.target.value)}/><small>12+ characters; the admin must change this after first sign-in.</small></label>
-      <div className={styles.formActions}><button className={styles.primary} disabled={saving}>{saving?'Creating…':'Create institution'}</button></div>
+      {createDraftIssue()&&<p className={styles.disclaimer} role="status">{createDraftIssue()}</p>}<div className={styles.formActions}><button className={styles.primary} disabled={saving||Boolean(createDraftIssue())}>{saving?'Creating…':'Create institution'}</button></div>
     </form></section>:null}
     <div className={styles.columns}>
       <section className={styles.panel}><div className={styles.panelHeading}><div><h2>Customer institutions</h2><p>Tenant boundary, course scope and billing scope are separate.</p></div><b>{institutions.length}</b></div>
@@ -376,7 +392,7 @@ export default function InstitutionsAdminPage() {
             <div className={styles.panelHeading}><div><h3>Institution administrators</h3><p>Only platform owner can create or suspend client admins.</p></div>
               {editingCard==='admins'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('admins')} disabled={saving}>Done</button><button type="button" className={styles.primary} onClick={()=>setShowAdmin(v=>!v)} disabled={saving}>{showAdmin?'Cancel add':'＋ Add admin'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>setEditingCard('admins')} disabled={saving||editingCard!==null}>Edit</button>}
             </div>
-            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<PasswordField required minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Provision admin</button></div></form>:null}
+            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<PasswordField required minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label>{adminDraftIssue()&&<p className={styles.disclaimer} role="status">{adminDraftIssue()}</p>}<div className={styles.formActions}><button className={styles.primary} disabled={saving||Boolean(adminDraftIssue())}>Provision admin</button></div></form>:null}
             <div className={styles.list}>{(detail.admins||[]).map(a=><div className={styles.listItem} key={a.id}><span className={styles.avatar}>{a.display_name.slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{a.display_name}</strong><small>@{a.username} · {a.must_change_password?'initial password not changed':'password set'}</small><small>Last sign-in: {fmt(a.last_login_at)}</small></span>{editingCard==='admins'?<button className={styles.secondary} disabled={saving} onClick={()=>void toggleAdmin(a)}>{a.active?'Suspend':'Activate'}</button>:<span className={styles.status+(a.active?' '+styles.active:' '+styles.suspended)}>{a.active?'ACTIVE':'SUSPENDED'}</span>}</div>)}
             {!(detail.admins||[]).length?<p className={styles.emptyText}>No institution administrators configured.</p>:null}</div>
             {editingCard==='admins'?<p className={styles.disclaimer}>Admin provisioning and activation changes are applied immediately and recorded in the audit history.</p>:null}
