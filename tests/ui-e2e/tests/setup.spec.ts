@@ -4,9 +4,9 @@ import { join } from 'node:path';
 import { appBaseUrl, loadUiManifest } from '../support/manifest';
 import { newIdempotencyKey, openQaDatabase, preparePrivateDir, writePrivateJson, type QaFixture } from '../support/fixtures';
 
-const WEB = appBaseUrl('web', 'http://127.0.0.1:3000');
-const ADMIN = appBaseUrl('admin', 'http://127.0.0.1:3001');
-const HRMS = appBaseUrl('people', 'http://127.0.0.1:3002');
+const WEB = appBaseUrl('web');
+const ADMIN = appBaseUrl('admin');
+const HRMS = appBaseUrl('people');
 const ADMIN_MOBILE = process.env.QE_E2E_ADMIN_BOOTSTRAP_MOBILE || '7070107483';
 const DEMO_OTP = process.env.QE_E2E_DEMO_OTP || '123456';
 const INITIAL_HRMS_PASSWORD = process.env.QE_E2E_INITIAL_HRMS_PASSWORD || 'QE-E2E-Initial-HRMS-2026!';
