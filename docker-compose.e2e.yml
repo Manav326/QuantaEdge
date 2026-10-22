@@ -1,0 +1,16 @@
+# Disposable-only overlay for the browser E2E workflow.
+# Never use this file for a production deployment.
+services:
+  api:
+    environment:
+      APP_ENVIRONMENT: qa
+      APP_DEMO_SEED: "false"
+      APP_QA_ENABLED: "true"
+      APP_QA_ENVIRONMENT_APPROVED: "true"
+      APP_QA_ENVIRONMENT_LABEL: github-actions-disposable
+      APP_QA_TARGET_DATABASE: quantaedge_qa
+      APP_QA_FIXTURE_PASSWORD: ${APP_QA_FIXTURE_PASSWORD:?Set a synthetic test-only fixture password}
+      APP_AUTH_SECURE_COOKIES: "false"
+      APP_AUTH_ADMIN_MOBILES: ${APP_AUTH_ADMIN_MOBILES:-7070107483}
+      APP_AUTH_ALLOW_REPEATED_DEMO_OTP: "true"
+      APP_HRMS_BOOTSTRAP_PASSWORD: ${APP_HRMS_BOOTSTRAP_PASSWORD:-}
