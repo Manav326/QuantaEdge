@@ -115,19 +115,23 @@ fun StudentMarketplaceScreen(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        BillingAddressBook(
-            addresses = billingAddresses,
-            loading = billingAddressesLoading,
-            busy = busy,
-            language = language,
-            compactOnly = true,
-            errorMessage = billingError,
-            statusMessage = billingStatus,
-            onSave = onSaveBillingAddress,
-            onMakeDefault = onMakeDefaultBillingAddress,
-            onDelete = onDeleteBillingAddress,
-            onOpenProfile = onOpenProfile
-        )
+        if (offers.any { it.optLong("price_paise", -1L) > 0L &&
+                it.optString("currency", "INR") == "INR" && !it.optBoolean("parent_managed") &&
+                !it.optBoolean("has_access") && !it.optBoolean("purchased") }) {
+            BillingAddressBook(
+                addresses = billingAddresses,
+                loading = billingAddressesLoading,
+                busy = busy,
+                language = language,
+                compactOnly = true,
+                errorMessage = billingError,
+                statusMessage = billingStatus,
+                onSave = onSaveBillingAddress,
+                onMakeDefault = onMakeDefaultBillingAddress,
+                onDelete = onDeleteBillingAddress,
+                onOpenProfile = onOpenProfile
+            )
+        }
         if (billingCheckoutMessage.isNotBlank()) {
             Text(billingCheckoutMessage, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         }
