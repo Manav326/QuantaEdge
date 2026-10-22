@@ -1372,6 +1372,7 @@ public class CourseMarketplaceController {
     // PostgreSQL jsonb::text may include whitespace around separators.
     String compactSnapshot=snapshot.replaceAll("\\s+", "");
     return compactSnapshot.contains("\"discountType\":\"NONE\"")
+        && compactSnapshot.contains("\"discountPaise\":0")
         && !compactSnapshot.contains("\"discountOfferId\"")
         && !compactSnapshot.contains("\"code\"");
   }
