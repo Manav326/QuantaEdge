@@ -188,9 +188,9 @@ html[data-qe-people-appearance="dark"] {
 
 .qe-people-workspace,
 .qe-people-content,
-.qe-people-page-slot,
-.qe-people-page-slot .shell,
-.qe-people-page-slot .main {
+.qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+.qe-people-page-slot .shell:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+.qe-people-page-slot .main:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-paper);
   color: var(--qe-people-ink);
 }
@@ -970,9 +970,9 @@ html[data-qe-people-appearance] [class*="Institutions_page__"] .primary:hover {
 
 /* Preserve paper-white document output even when the surrounding workspace is dark. */
 @media print {
-  body.printing-payslip .qe-people-page-slot,
-  body.printing-payslip .qe-people-page-slot .main,
-  body.printing-payslip .qe-people-page-slot .shell {
+  body.printing-payslip .qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+  body.printing-payslip .qe-people-page-slot .main:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+  body.printing-payslip .qe-people-page-slot .shell:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
     background: #ffffff !important;
     color: #111827 !important;
   }
@@ -997,10 +997,10 @@ html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand_
 html[data-qe-people-appearance] body,
 html[data-qe-people-appearance] .qe-people-workspace,
 html[data-qe-people-appearance] .qe-people-content,
-html[data-qe-people-appearance] .qe-people-page-slot {
+html[data-qe-people-appearance] .qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
-html[data-qe-people-appearance] .qe-people-page-slot {
+html[data-qe-people-appearance] .qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   min-width: 0;
   animation: qe-people-route-enter 170ms cubic-bezier(.2, .75, .25, 1) both;
 }
@@ -1012,7 +1012,7 @@ html[data-qe-people-appearance] .qe-people-page-slot {
   html[data-qe-people-appearance] body,
   html[data-qe-people-appearance] .qe-people-workspace,
   html[data-qe-people-appearance] .qe-people-content,
-  html[data-qe-people-appearance] .qe-people-page-slot {
+  html[data-qe-people-appearance] .qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
     transition: none;
     animation: none;
   }
@@ -1036,14 +1036,14 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
   [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
   [class*="count"], [class*="Count"]
-):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) {
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
   [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
   [class*="count"], [class*="Count"]
-):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label) {
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: inherit;
 }
 
@@ -1058,7 +1058,7 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
   select, textarea, [contenteditable="true"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
@@ -1067,7 +1067,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
   select, textarea, [contenteditable="true"]
-):is(:focus, :focus-visible) {
+):is(:focus, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-focus) !important;
@@ -1077,16 +1077,16 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 }
 
 /* Older page CSS used near-white table row fills on both hover and focus-within. */
-html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover, :focus-within) > td,
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover, :focus-within) [role="cell"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover, :focus-within) > td:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover, :focus-within) [role="cell"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.table-wrap, table, [class*="tableScroll"], [class*="TableScroll"]) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.table-wrap, table, [class*="tableScroll"], [class*="TableScroll"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot th {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot th:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-table-head) !important;
   color: var(--qe-people-muted) !important;
   border-color: var(--qe-people-table-line) !important;
@@ -1098,7 +1098,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [role="dialog"], [class*="Card"], [class*="Panel"],
   [class*="Modal"], [class*="Dialog"], [class*="surface"], [class*="Surface"],
   [class*="box"], [class*="Box"]
-):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="logoCanvas"]):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="logoCanvas"]):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-card) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
@@ -1108,16 +1108,16 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   .secondary, .qe-people-button--secondary, .qe-people-button--neutral,
   [class*="secondary"], [class*="Secondary"], [class*="neutral"], [class*="Neutral"]
-):is(:hover, :focus-visible) {
+):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-focus) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot .tabs button:not(.active):not([aria-selected="true"]):is(:hover, :focus-visible) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot .tabs button:not(.active):not([aria-selected="true"]):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   color: var(--qe-people-ink) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   outline: 2px solid var(--qe-people-focus) !important;
   outline-offset: 2px;
 }
@@ -1126,7 +1126,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(button, a, [role
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   .primary, .qe-people-button--primary, [class*="sendButton"],
   [class*="generateButton"], [class*="cta"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-strong) !important;
   color: #182337 !important;
@@ -1134,7 +1134,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   .primary, .qe-people-button--primary, [class*="sendButton"],
   [class*="generateButton"], [class*="cta"]
-):is(:hover, :focus-visible) {
+):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-focus) !important;
   color: #182337 !important;
@@ -1157,62 +1157,62 @@ html[data-qe-people-appearance="dark"] body :is([role="option"], [role="menuitem
 }
 
 /* All route roots and nested surfaces retain the same readable text roles. */
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > :is(main, [class*="page"], [class*="Page"]) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > :is(main, [class*="page"], [class*="Page"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="hint"], [class*="Hint"], [class*="muted"], [class*="Muted"],
   [class*="description"], [class*="Description"], [class*="meta"], [class*="Meta"],
   [class*="caption"], [class*="Caption"], [class*="helpText"], [class*="HelpText"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-muted);
 }
 
 
 /* HRMS tabs, counters, tables and notification editor share one stable dark/light surface contract. */
-html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button {
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:is(.active,[aria-selected="true"],[aria-pressed="true"]) {
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:is(.active,[aria-selected="true"],[aria-pressed="true"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-sidebar-active);
   color: var(--qe-people-ink);
   border-color: var(--qe-people-brand);
   box-shadow: inset 0 -2px 0 var(--qe-people-brand);
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong) {
+html[data-qe-people-appearance] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: inherit;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:not(.active):not([aria-selected="true"]):not([aria-pressed="true"]) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button:not(.active):not([aria-selected="true"]):not([aria-pressed="true"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-surface);
   color: var(--qe-people-muted);
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button :is(span,b,strong):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle);
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody tr,
-html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody td,
-html[data-qe-people-appearance] .qe-people-page-slot [role="row"],
-html[data-qe-people-appearance] .qe-people-page-slot [role="cell"] {
+html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody tr:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot :is(table, [role="grid"], [role="table"]) tbody td:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot [role="row"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot [role="cell"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   transition-property: color, border-color !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td,
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   color: var(--qe-people-ink) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td :is(span,strong,b,small,em,a),
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] :is(span,strong,b,small,em,a) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover,:focus-within) > td :is(span,strong,b,small,em,a):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] :is(span,strong,b,small,em,a):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: inherit !important;
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row,[class*="auditRow"],[class*="directoryRow"]) {
+html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row,[class*="auditRow"],[class*="directoryRow"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-surface);
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row) :is(strong,span,small,b) {
+html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row) :is(strong,span,small,b):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   overflow-wrap: anywhere;
 }
 
@@ -1228,8 +1228,8 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff
 html[data-qe-people-appearance="light"] { color-scheme: light; }
 html[data-qe-people-appearance="dark"] { color-scheme: dark; }
 
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"],
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="Page"] {
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="Page"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   --ink: var(--qe-people-ink);
   --muted: var(--qe-people-muted);
   --line: var(--qe-people-line);
@@ -1286,7 +1286,7 @@ html[data-qe-people-appearance="dark"] .qe-people-auth-panel .primary {
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
   select, textarea, [contenteditable="true"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field);
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
@@ -1295,7 +1295,7 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
   select, textarea, [contenteditable="true"]
-):is(:focus, :focus-visible) {
+):is(:focus, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-focus) !important;
@@ -1303,12 +1303,12 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   outline-offset: 1px;
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--qe-people-focus) 18%, transparent) !important;
 }
-html[data-qe-people-appearance] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+html[data-qe-people-appearance] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   outline: 2px solid var(--qe-people-focus);
   outline-offset: 2px;
 }
-html[data-qe-people-appearance] .qe-people-page-slot input::placeholder,
-html[data-qe-people-appearance] .qe-people-page-slot textarea::placeholder {
+html[data-qe-people-appearance] .qe-people-page-slot input:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *)::placeholder,
+html[data-qe-people-appearance] .qe-people-page-slot textarea:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *)::placeholder {
   color: var(--qe-people-muted);
   opacity: 1;
 }
@@ -1322,7 +1322,7 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="paymentEventList"] > article, [class*="readOnlyItem"],
   [class*="readOnlyMetric"], [class*="assetEditorRow"], [class*="invitationLinkPreview"],
   [class*="courseItem"], [class*="listItem"], [class*="emptyPanel"]
-):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="status"]):not([class*="Status"]):not([class*="danger"]):not([class*="Danger"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="error"]):not([class*="Error"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="status"]):not([class*="Status"]):not([class*="danger"]):not([class*="Danger"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="error"]):not([class*="Error"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-card) !important;
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
@@ -1332,19 +1332,19 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="form"] textarea, [class*="Filters"] input, [class*="Filters"] select,
   [class*="Controls"] input, [class*="Controls"] select, [class*="Controls"] textarea,
   [class*="themeSettingsGrid"] select
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="tab"], [class*="Tab"], [role="tab"]
-):not([class*="themePreview"]):not([aria-selected="true"]):not([class*="tabActive"]):not([class*="TabActive"]) {
+):not([class*="themePreview"]):not([aria-selected="true"]):not([class*="tabActive"]):not([class*="TabActive"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-muted);
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="tabActive"], [class*="TabActive"], [role="tab"][aria-selected="true"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-soft);
   border-color: var(--qe-people-brand);
   color: var(--qe-people-brand-strong);
@@ -1352,13 +1352,13 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
   [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
   [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
-) th {
+) th:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-table-head);
   color: var(--qe-people-muted);
   border-color: var(--qe-people-table-line);
@@ -1366,14 +1366,14 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
   [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
-) td {
+) td:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink);
   border-color: var(--qe-people-table-line);
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="emptyPanel"], [class*="json"], [class*="Json"], [class*="manifestRow"],
   [class*="ManifestRow"], [class*="readOnlyItem"], [class*="valueChip"]
-):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink);
   border-color: var(--qe-people-line);
 }
@@ -1382,18 +1382,18 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   button, [role="button"], [role="tab"], .secondary,
   [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
-):not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) {
+):not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-focus);
 }
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
-):not(:disabled):is(:hover, :focus-visible) {
+):not(:disabled):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover);
   color: var(--qe-people-ink);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
-):not(:disabled):is(:hover, :focus-visible) {
+):not(:disabled):is(:hover, :focus-visible):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   color: var(--qe-people-ink) !important;
 }
@@ -1402,7 +1402,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
   [class*="generateButton"], [class*="sendButton"], [class*="cta"]
-):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-strong) !important;
   color: #fff !important;
@@ -1410,15 +1410,15 @@ html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
   [class*="generateButton"], [class*="sendButton"], [class*="cta"]
-):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-strong) !important;
   color: #182337 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-qe-people-appearance] .qe-people-page-slot,
-  html[data-qe-people-appearance] .qe-people-page-slot * {
+  html[data-qe-people-appearance] .qe-people-page-slot:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+  html[data-qe-people-appearance] .qe-people-page-slot *:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
     scroll-behavior: auto;
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
@@ -1429,28 +1429,28 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 /* Semantic feedback states remain tinted, never washed out by neutral surface rules. */
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 28%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-success-soft) !important;
   color: var(--qe-people-success) !important;
   border-color: color-mix(in srgb, var(--qe-people-success) 28%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-success-soft) !important;
   color: var(--qe-people-success) !important;
   border-color: color-mix(in srgb, var(--qe-people-success) 40%, var(--qe-people-line)) !important;
@@ -1458,7 +1458,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
   [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: #fff8ec;
   color: #784b16;
   border-color: #f1dfc0;
@@ -1466,29 +1466,29 @@ html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
   [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-warning-soft) !important;
   color: var(--qe-people-warning) !important;
   border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="status"].active, [class*="status"].suspended, [class*="Status"].active, [class*="Status"].suspended
-) { border-color: var(--qe-people-line); }
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) { border-color: var(--qe-people-line); }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="status"].active, [class*="Status"].active, [class*="status"][class*="active"], [class*="Status"][class*="active"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-success-soft) !important;
   color: var(--qe-people-success) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="status"].suspended, [class*="Status"].suspended, [class*="status"][class*="suspended"], [class*="Status"][class*="suspended"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="dangerButton"], [class*="DangerButton"], [class*="danger"].primary
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: #b42318 !important;
   border-color: #b42318 !important;
   color: #fff !important;
@@ -1501,14 +1501,14 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="themePreview"], [class*="brandTemplatePreview"],
   [class*="brandTemplateLogoStage"], [class*="brandTemplateCompactStage"],
   [class*="brandTemplateIconPlaceholder"]
-) { forced-color-adjust: auto; }
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) { forced-color-adjust: auto; }
 
 
 /* Nested copy and labels inside the older module layouts must follow the same text roles. */
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   label, dt, .label, [class*="form"] label, [class*="Filters"] label,
   [class*="Controls"] label, [class*="themeSettingsGrid"] label
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
@@ -1524,7 +1524,7 @@ html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="billingBox"] span, [class*="billingBox"] small,
   [class*="paymentEventList"] article p, [class*="paymentEventList"] article small,
   [class*="listItem"] small, [class*="courseItem"] small
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-muted) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
@@ -1532,7 +1532,7 @@ html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="listCopy"] strong, [class*="readOnlyItem"] > strong,
   [class*="metrics"] strong, [class*="emptyPanel"] b,
   [class*="packHeading"] h3, [class*="sectionHeading"] h2
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
 }
 
@@ -1540,26 +1540,26 @@ html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="confirmPanel"], [class*="credentials"], [class*="json"],
   [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
-):not([class*="themePreview"]) {
+):not([class*="themePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="confirmPanel"], [class*="credentials"], [class*="json"],
   [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
-):not([class*="themePreview"]) {
+):not([class*="themePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-card) !important;
 }
-html[data-qe-people-appearance] .qe-people-page-slot [class*="dangerButton"] {
+html[data-qe-people-appearance] .qe-people-page-slot [class*="dangerButton"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: #b42318 !important;
   border-color: #b42318 !important;
   color: #fff !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-info-soft) !important;
   border-color: color-mix(in srgb, var(--qe-people-info) 36%, var(--qe-people-line)) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] p {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] p:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
 }
 
@@ -1569,14 +1569,14 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="listItem"][class*="selected"], [class*="listItem"][class*="Selected"],
   [class*="courseItem"][class*="selected"], [class*="courseItem"][class*="Selected"],
   [class*="cropRatioButtonActive"], [class*="CropRatioButtonActive"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-soft) !important;
   border-color: var(--qe-people-brand) !important;
   color: var(--qe-people-brand-strong) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="warning"]:not(button), [class*="Warning"]:not(button)
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-warning-soft) !important;
   color: var(--qe-people-warning) !important;
   border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
@@ -1584,73 +1584,73 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="danger"]:not(button):not([class*="dangerButton"]),
   [class*="Danger"]:not(button):not([class*="DangerButton"])
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 38%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle) !important;
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="cropModalHeader"] p, [class*="cropHelp"], [class*="cropZoomLabel"],
   [class*="einvoiceHelp"], [class*="providerMessage"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-muted);
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="cropStage"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="cropStage"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
   background-color: var(--qe-people-surface-subtle);
 }
 
 
 /* Remaining named component families found in the Finance/Institutions/QA module audit. */
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="eyebrow"] {
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="eyebrow"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-brand-strong) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"],
   [class*="codeNotice"], [class*="cropError"], [class*="cropHelp"], [class*="themePreviewNotice"]
-):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"]
-):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-soft) !important;
   color: var(--qe-people-brand-strong) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="codeNotice"], [class*="approvalBox"], [class*="billingBox"], [class*="readOnlyMetric"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="codeNotice"], [class*="approvalBox"]
-) :is(span, small, p, strong) {
+) :is(span, small, p, strong):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="status"], [class*="Status"]
-):not([class*="qe-people-status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="active"]):not([class*="suspended"]) {
+):not([class*="qe-people-status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="active"]):not([class*="suspended"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-info-soft) !important;
   color: var(--qe-people-info) !important;
   border-color: color-mix(in srgb, var(--qe-people-info) 35%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="warning"], [class*="Warning"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-warning-soft) !important;
   color: var(--qe-people-warning) !important;
   border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
@@ -1660,62 +1660,62 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :i
 /* Deep component sweep: compact Finance controls and Institutions brand-template authoring. */
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="removeRow"], [class*="RemoveRow"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 34%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="pdfPreviewToolbar"], [class*="PdfPreviewToolbar"]
-) a {
+) a:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-brand-strong) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="courseList"], [class*="CourseList"], [class*="brandSwatches"] i,
   [class*="brandTemplateOptional"], [class*="BrandTemplateOptional"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="brandTemplate"], [class*="BrandTemplate"]
-):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="brandTemplate"], [class*="BrandTemplate"]
-):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-card) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="brandTemplateFields"] input:not([type="file"]),
   [class*="brandTemplateFields"] input[type="file"],
   [class*="colorGrid"] input[type="color"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-field) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
 }
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateFields"] small,
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateActions"] > span,
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="auditList"] :is(small,p),
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandSwatches"] > span,
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="seriesInline"] {
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateFields"] small:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateActions"] > span:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="auditList"] :is(small,p):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandSwatches"] > span:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="seriesInline"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-muted) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateOptional"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateOptional"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle) !important;
   color: var(--qe-people-muted) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-success-soft) !important;
   border-color: color-mix(in srgb, var(--qe-people-success) 38%, var(--qe-people-line)) !important;
   color: var(--qe-people-success) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] :is(strong,span,small) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] :is(strong,span,small):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-success) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="colorGrid"] label {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="colorGrid"] label:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink) !important;
 }
 
@@ -1723,20 +1723,20 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [c
 /* Text-only accent controls use the contrast-safe brand shade; the orange brand stays unchanged. */
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   [class*="selectedTag"], [class*="SelectedTag"], [class*="previewButton"], [class*="PreviewButton"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-strong);
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="selectedTag"], [class*="SelectedTag"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-strong);
   color: var(--qe-people-on-brand) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="previewButton"], [class*="PreviewButton"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand);
 }
@@ -1748,34 +1748,34 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   button[class*="Secondary"], a[class*="Secondary"],
   [class*="secondarySmall"], [class*="SecondarySmall"],
   [class*="ghostButton"], [class*="GhostButton"]
-):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="themePreview"]) {
+):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="themePreview"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle) !important;
   border-color: var(--qe-people-line) !important;
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   button[class*="tab"], button[class*="Tab"]
-):is(:hover, :focus-visible):not([class*="tabActive"]):not([class*="TabActive"]):not([aria-selected="true"]) {
+):is(:hover, :focus-visible):not([class*="tabActive"]):not([class*="TabActive"]):not([aria-selected="true"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="listItem"], [class*="courseItem"], [class*="entityRow"], [class*="policyRow"]
-):is(:hover, :focus-visible):not([class*="selected"]):not([class*="Selected"]) {
+):is(:hover, :focus-visible):not([class*="selected"]):not([class*="Selected"]):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-hover) !important;
   border-color: var(--qe-people-line) !important;
   color: var(--qe-people-ink) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="previewNote"], [class*="PreviewNote"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-warning-soft) !important;
   border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
   color: var(--qe-people-warning) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="themePreviewNotice"], [class*="ThemePreviewNotice"]
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background-color: var(--qe-people-surface-subtle) !important;
   border-color: var(--qe-people-line) !important;
   color: var(--qe-people-muted) !important;
@@ -1785,29 +1785,29 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :i
 /* Nested card regions and embedded data editors identified by the module stylesheet sweep. */
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="metrics"], [class*="Metrics"]
-) > article {
+) > article:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-card) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
   [class*="paymentEventList"], [class*="PaymentEventList"]
-) pre {
+) pre:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-surface-subtle) !important;
   border-color: var(--qe-people-line) !important;
   color: var(--qe-people-ink) !important;
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="paperWrap"] {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="paperWrap"]:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-surface-subtle) !important;
   border-color: var(--qe-people-line) !important;
 }
-html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="panelHeading"] > b {
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="panelHeading"] > b:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   background: var(--qe-people-brand-soft) !important;
   color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand-soft) !important;
 }
 html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
   [class*="metrics"] article, [class*="Metrics"] article
-) {
+):not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
   color: var(--qe-people-ink);
 }
