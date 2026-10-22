@@ -121,3 +121,8 @@ html[data-qe-appearance="dark"] .itemActions button:focus-visible {
   outline: 2px solid var(--qe-color-focus);
   outline-offset: 2px;
 }
+
+
+.institutionPage{--qe-color-text:var(--institution-text,var(--qe-color-text,#152038));--qe-color-text-muted:var(--qe-color-text-muted,#536176);--qe-color-surface:var(--institution-surface,var(--qe-color-surface,#fff));--qe-color-surface-elevated:var(--institution-surface,var(--qe-color-surface-elevated,#fff));--qe-color-surface-subtle:var(--qe-color-background,var(--qe-color-surface-subtle,#f7f8fc));--qe-color-background:var(--institution-background,var(--qe-color-background,#f7f8fc));--qe-color-accent:var(--institution-primary,var(--qe-color-accent,#f97316));--qe-color-accent-text:var(--institution-accent,var(--qe-color-accent-text,#c2410c));background:var(--institution-background,var(--qe-color-background,#f7f8fc));color:var(--institution-text,var(--qe-color-text,#152038));min-height:calc(100vh - 90px);border-radius:18px}
+.institutionPage .item,.institutionPage .empty,.institutionPage .secondaryButton,.institutionPage .unreadPill{background:var(--institution-surface,var(--qe-color-surface,#fff));color:var(--institution-text,var(--qe-color-text,#152038))}
+.institutionPage .itemHeader:hover,.institutionPage .secondaryButton:hover:not(:disabled){background:var(--institution-background,var(--qe-color-surface-subtle,#f7f8fc))}

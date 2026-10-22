@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { PeopleAppearanceToggle } from './PeopleAppearanceProvider';
+import { StaffNotificationBell } from './StaffNotificationInbox';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type StaffSession = {
@@ -323,6 +324,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             </div>
           </div>
           <div className="qe-people-header-actions">
+            <StaffNotificationBell workspace="hrms" />
             <PeopleAppearanceToggle />
             <label className="qe-people-language-select">
               <span>{t('common.language.label')}</span>

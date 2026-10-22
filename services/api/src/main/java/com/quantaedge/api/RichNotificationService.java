@@ -913,6 +913,104 @@ public class RichNotificationService {
     return rows;
   }
 
+  /**
+   * Education Admin inbox: staff identity is exact and delivery is constrained to the
+   * authenticated Education Admin tenant. Institution-less HRMS rows are never exposed here.
+   */
+  public List<Map<String,Object>> inboxForEducationStaff(
+      long staffId,long institutionId,int requestedLimit,Long beforeId,boolean unreadOnly) {
+    int limit=Math.max(1,Math.min(requestedLimit,100));
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,
+        case when c.sender_workspace='HRMS' then 'HRMS Platform'
+             when c.sender_workspace='INSTITUTION_ADMIN' then coalesce(sender_admin.display_name,tenant.display_name,'Institution Admin')
+             else coalesce(sender_staff.display_name,tenant.display_name,'QuantaEdge Admin') end as sender_label,
+        c.content_document::text as content_document,c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+      from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      left join institution_tenant tenant on tenant.id=c.institution_id
+      left join staff_account sender_staff on sender_staff.id=c.sender_staff_id
+      left join institution_admin_account sender_admin on sender_admin.id=c.sender_institution_admin_id
+      where r.recipient_kind='STAFF_ACCOUNT' and r.staff_account_id=? and r.institution_id=?
+        and c.status='SENT' and (c.expires_at is null or c.expires_at>now())
+        and (?=0 or r.id<?) and (?=false or r.state NOT IN ('READ','DISMISSED'))
+      order by r.created_at desc,r.id desc limit ?
+      """,staffId,institutionId,beforeId==null?0L:beforeId,beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit);
+    return normalizeInboxRows(rows);
+  }
+
+  /** HRMS inbox rows are tied to this staff account and HRMS-originated campaigns only. */
+  public List<Map<String,Object>> inboxForHrmsStaff(
+      long staffId,int requestedLimit,Long beforeId,boolean unreadOnly) {
+    int limit=Math.max(1,Math.min(requestedLimit,100));
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,
+        'HRMS Platform' as sender_label,
+        c.content_document::text as content_document,c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+      from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      where r.recipient_kind='STAFF_ACCOUNT' and r.staff_account_id=?
+        and c.sender_workspace='HRMS' and c.status='SENT'
+        and (c.expires_at is null or c.expires_at>now())
+        and (?=0 or r.id<?) and (?=false or r.state NOT IN ('READ','DISMISSED'))
+      order by r.created_at desc,r.id desc limit ?
+      """,staffId,beforeId==null?0L:beforeId,beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit);
+    return normalizeInboxRows(rows);
+  }
+
+  private List<Map<String,Object>> normalizeInboxRows(List<Map<String,Object>> rows) {
+    for(Map<String,Object> row:rows) {
+      row.put("contentDocument",parseContentDocument(String.valueOf(row.remove("content_document"))));
+      row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
+    }
+    return rows;
+  }
+
+  public boolean markReadForStaff(long staffId,Long institutionId,Long recipientId,boolean all) {
+    return updateStaffInboxState(staffId,institutionId,recipientId,all,"READ");
+  }
+
+  public boolean markUnreadForStaff(long staffId,Long institutionId,long recipientId) {
+    return updateStaffInboxState(staffId,institutionId,recipientId,false,"CREATED");
+  }
+
+  public boolean dismissForStaff(long staffId,Long institutionId,long recipientId) {
+    return updateStaffInboxState(staffId,institutionId,recipientId,false,"DISMISSED");
+  }
+
+  private boolean updateStaffInboxState(
+      long staffId,Long institutionId,Long recipientId,boolean all,String nextState) {
+    if(!Set.of("READ","CREATED","DISMISSED").contains(nextState)) {
+      throw new IllegalArgumentException("Unsupported staff notification state change.");
+    }
+    boolean hrmsInbox=institutionId==null;
+    String scopePredicate=hrmsInbox?"c.sender_workspace='HRMS'":"r.institution_id=?";
+    if(all) {
+      String sql="""
+        update notification_recipient r set state='READ',read_at=coalesce(read_at,now()),dismissed_at=null
+        where r.recipient_kind='STAFF_ACCOUNT' and r.staff_account_id=?
+          and r.state in ('CREATED','QUEUED')
+          and exists(select 1 from notification_campaign c
+            where c.id=r.campaign_id and c.status='SENT'
+              and (c.expires_at is null or c.expires_at>now()) and """+scopePredicate+")";
+      if(hrmsInbox)return jdbc.update(sql,staffId)>0;
+      return jdbc.update(sql,staffId,institutionId)>0;
+    }
+    String sql="""
+      update notification_recipient r set
+        state=?,read_at=case when ?='DISMISSED' then coalesce(read_at,now()) else null end,
+        dismissed_at=case when ?='DISMISSED' then now() else null end
+      where r.id=? and r.recipient_kind='STAFF_ACCOUNT' and r.staff_account_id=?
+        and r.state in ('CREATED','QUEUED','READ','DISMISSED')
+        and exists(select 1 from notification_campaign c
+          where c.id=r.campaign_id and c.status='SENT'
+            and (c.expires_at is null or c.expires_at>now()) and """+scopePredicate+")";
+    if(hrmsInbox) {
+      return jdbc.update(sql,nextState,nextState,nextState,recipientId,staffId)==1;
+    }
+    return jdbc.update(sql,nextState,nextState,nextState,recipientId,staffId,institutionId)==1;
+  }
+
   public List<Map<String,Object>> inboxForInstitutionAdmin(
       long adminId,long institutionId,int requestedLimit,Long beforeId,boolean unreadOnly) {
     int limit=Math.max(1,Math.min(requestedLimit,100));

@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import PasswordField from '../components/PasswordField';
 import NotificationStudio from '../components/NotificationStudio';
+import NotificationInboxClient, { NotificationBell } from '../components/NotificationInboxClient';
 
 type Brand = {
   institutionCode?: string;
@@ -97,13 +98,31 @@ export default function InstitutionPortalPage() {
   const [learners, setLearners] = useState<Learner[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState('');
-  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications'>('overview');
+  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications' | 'notificationInbox'>('overview');
   const [currentPassword, setCurrentPassword] = useState('');
   const [nextPassword, setNextPassword] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginMode, setLoginMode] = useState(true);
+
+  useEffect(() => {
+    const syncNotificationRoute = () => {
+      const queryTarget = new URLSearchParams(window.location.search).get('notifications');
+      const hashTarget = window.location.hash === '#notifications-inbox' ? 'inbox'
+        : window.location.hash === '#notifications-studio' ? 'studio' : null;
+      const target = queryTarget || hashTarget;
+      if (target === 'inbox') setActiveView('notificationInbox');
+      else if (target === 'studio') setActiveView('notifications');
+    };
+    syncNotificationRoute();
+    window.addEventListener('hashchange', syncNotificationRoute);
+    window.addEventListener('popstate', syncNotificationRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncNotificationRoute);
+      window.removeEventListener('popstate', syncNotificationRoute);
+    };
+  }, []);
 
   const applyBrand = useCallback((value: Brand | null) => {
     setBrand(value);
@@ -305,6 +324,7 @@ export default function InstitutionPortalPage() {
         {principal ? (
           <div className="institution-account">
             <span>{principal.adminDisplayName || principal.adminUsername}</span>
+            <NotificationBell role="institution" />
             <button type="button" className="institution-quiet-button" onClick={() => void logout()}>Sign out</button>
           </div>
         ) : (
@@ -387,8 +407,16 @@ export default function InstitutionPortalPage() {
             </div>
           </div>
           <nav className="institution-tabs" aria-label="Institution report sections">
-            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notifications','Notifications']] as const).map(([id,label]) =>
-              <button type="button" key={id} className={activeView===id?'is-active':''} onClick={()=>setActiveView(id)}>{label}</button>
+            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notificationInbox','Inbox'],['notifications','Notification studio']] as const).map(([id,label]) =>
+              <button type="button" key={id} className={activeView===id?'is-active':''} onClick={() => {
+                setActiveView(id);
+                const params = new URLSearchParams(window.location.search);
+                params.delete('notifications');
+                const query = params.toString();
+                const hash = id === 'notificationInbox' ? '#notifications-inbox'
+                  : id === 'notifications' ? '#notifications-studio' : '';
+                window.history.replaceState(null, '', (query ? '/institution?' + query : '/institution') + hash);
+              }}>{label}</button>
             )}
             <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
           </nav>
@@ -427,6 +455,8 @@ export default function InstitutionPortalPage() {
               </div>
               <p className="institution-small-note">This profile contains city/state only, not an exact home address. Contact details and any additional sensitive fields are intentionally not exposed in the institution roster.</p>
             </div>
+          ) : activeView === 'notificationInbox' ? (
+            <div className="institution-notifications"><NotificationInboxClient role="institution" /></div>
           ) : activeView === 'notifications' ? (
             <div className="institution-notifications"><NotificationStudio surface="institution" /></div>
           ) : (
