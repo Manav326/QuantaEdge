@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "700bb21fc85741817e1b0bacbed74b753586807fd990b1e6feb781400a8db0cc",
+  "raw_analysis_sha256": "d2c71f6fd473c7015c0bc31eb5df361bf8966be244b68efe4eb52bfd8a21122a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T15:40:09Z",
+      "checkpointed_at": "2026-10-22T15:46:26Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T15:40:46Z",
+      "checkpointed_at": "2026-10-22T15:47:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29375,7 +29375,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T15:41:10Z",
+      "checkpointed_at": "2026-10-22T15:47:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -37720,67 +37720,21 @@
     {
       "asset_id": "8564a7c12965a5eb7e99e750",
       "asset_sha256": "387fe7e804cd63561e6dae74ee398d9343cf4eff1395b3c34513d8845d07aeb2",
+      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 39,
       "asset_path": "page-0039.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A cartoon illustration of a child and a child working in a compost bin, with text explaining the process of making manure from plant waste.",
-        "visual_type": "illustration",
-        "visible_text": [
-          "Fig. 2.10: Recycling of nutrients by making manure",
-          "After 2–3 weeks, observe the changes that have taken place.",
-          "Do you observe any difference in the contents of the container?",
-          "You may find that peels of fruits and vegetables have turned into a dark-coloured material. This is manure, which is rich in nutrients and helps increase the fertility of the soil. But how did the peels of fruits and vegetables turn into manure?",
-          "In Activity 2.6, you saw that soil contains various kinds of microorganisms. Some of these microorganisms, like fungi and bacteria, act on the plant waste and slowly break it down into simpler, nutrient-rich manure. You may have seen gardeners in your school or in a field near your house collecting "
-        ],
-        "concepts": [
-          "microorganisms",
-          "plant waste",
-          "nutrients",
-          "fertility",
-          "manure",
-          "decomposition"
-        ],
-        "context_relation": "The text explains the process of making manure from plant waste, which is a part of the larger topic of microorganisms and their role in the environment.",
-        "limitations": [
-          "The text does not provide specific details about the types of microorganisms involved in the decomposition process."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T15:45:35Z",
-      "effective_analysis": {
-        "visual_summary": "A cartoon illustration of a child and a child working in a compost bin, with text explaining the process of making manure from plant waste.",
-        "visual_type": "illustration",
-        "visible_text": [
-          "Fig. 2.10: Recycling of nutrients by making manure",
-          "After 2–3 weeks, observe the changes that have taken place.",
-          "Do you observe any difference in the contents of the container?",
-          "You may find that peels of fruits and vegetables have turned into a dark-coloured material. This is manure, which is rich in nutrients and helps increase the fertility of the soil. But how did the peels of fruits and vegetables turn into manure?",
-          "In Activity 2.6, you saw that soil contains various kinds of microorganisms. Some of these microorganisms, like fungi and bacteria, act on the plant waste and slowly break it down into simpler, nutrient-rich manure. You may have seen gardeners in your school or in a field near your house collecting "
-        ],
-        "concepts": [
-          "microorganisms",
-          "plant waste",
-          "nutrients",
-          "fertility",
-          "manure",
-          "decomposition"
-        ],
-        "context_relation": "The text explains the process of making manure from plant waste, which is a part of the larger topic of microorganisms and their role in the environment.",
-        "limitations": [
-          "The text does not provide specific details about the types of microorganisms involved in the decomposition process."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -38140,7 +38094,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726991844",
+      "run_id": "39803159272",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
