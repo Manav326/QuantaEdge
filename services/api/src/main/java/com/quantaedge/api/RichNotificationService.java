@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -737,7 +738,7 @@ public class RichNotificationService {
       """,recipientId,kind,kind,identityId,kind,identityId,institutionId,institutionId);
     if(rows.isEmpty())return null;
     Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
-    row.put("contentDocument",parseJson(String.valueOf(row.remove("content_document"))));
+    row.put("contentDocument",parseContentDocument(String.valueOf(row.remove("content_document"))));
     row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
     return row;
   }
@@ -774,7 +775,7 @@ public class RichNotificationService {
     List<Map<String,Object>> rows=jdbc.queryForList(sql,kind,kind,id,kind,id,kind,id,institutionId,institutionId,
         beforeId==null?0L:beforeId,beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit);
     for(Map<String,Object> row:rows) {
-      row.put("contentDocument",parseJson(String.valueOf(row.remove("content_document"))));
+      row.put("contentDocument",parseContentDocument(String.valueOf(row.remove("content_document"))));
       row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
     }
     return rows;
@@ -994,7 +995,7 @@ public class RichNotificationService {
   private Map<String,Object> templateView(Map<String,Object> row) {
     Map<String,Object> view=new LinkedHashMap<>(row);
     Object raw=view.remove("content_document");
-    view.put("contentDocument",parseJson(String.valueOf(raw)));
+    view.put("contentDocument",parseContentDocument(String.valueOf(raw)));
     return view;
   }
 
@@ -1049,6 +1050,43 @@ public class RichNotificationService {
     JsonNode node=parseJson(raw);
     if(!node.isObject())return Map.of();
     return mapper.convertValue(node,mapper.getTypeFactory().constructMapType(LinkedHashMap.class,String.class,Object.class));
+  }
+
+  /**
+   * Normalize rich notification documents read from JSONB. Legacy rows can contain
+   * a JSON document encoded as a JSON string (or wrapped by an API envelope); return
+   * an object document so every client receives the same versioned shape.
+   */
+  private JsonNode parseContentDocument(String value) {
+    JsonNode node = parseJson(value);
+    for (int attempt = 0; attempt < 4; attempt++) {
+      if (node.isTextual()) {
+        node = parseJson(node.asText());
+        continue;
+      }
+      if (!node.isObject()) return node;
+      JsonNode blocks = node.get("blocks");
+      if (blocks != null && blocks.isTextual()) {
+        JsonNode decodedBlocks = parseJson(blocks.asText());
+        if (decodedBlocks.isArray()) {
+          ((ObjectNode) node).set("blocks", decodedBlocks);
+          blocks = decodedBlocks;
+        }
+      }
+      if (blocks != null && blocks.isArray()) {
+        ObjectNode document = (ObjectNode) node;
+        JsonNode version = document.get("version");
+        if (version == null || version.isNull()) document.put("version", 1);
+        else if (version.isTextual() && "1".equals(version.asText().trim())) document.put("version", 1);
+        return document;
+      }
+      JsonNode wrapped = node.get("contentDocument");
+      if (wrapped == null) wrapped = node.get("content_document");
+      if (wrapped == null) wrapped = node.get("document");
+      if (wrapped == null || wrapped.isNull()) return node;
+      node = wrapped;
+    }
+    return node;
   }
 
   private JsonNode parseJson(String value) {
