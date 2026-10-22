@@ -45,6 +45,7 @@ jobs:
       QE_E2E_ARTIFACTS: ${{ runner.temp }}/quantaedge-ui-e2e-artifacts
       QE_E2E_HTML_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-report
       QE_E2E_JSON_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-json/results.json
+      QE_E2E_COVERAGE_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-coverage/coverage.json
       QE_E2E_PRODUCTION_GATE: "true"
       QE_E2E_EXTERNAL_PROVIDER_MODE: "fake"
     steps:
@@ -58,7 +59,8 @@ jobs:
         working-directory: tests/ui-e2e
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Install Chromium and OS dependencies
-        run: npx --prefix tests/ui-e2e playwright install --with-deps chromium
+        working-directory: tests/ui-e2e
+        run: npx playwright install --with-deps chromium
       - name: Start QuantaEdge on a disposable database
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up --build -d postgres redis api web admin people
       - name: Wait for the API and three web apps
@@ -85,7 +87,7 @@ jobs:
           wait_url http://127.0.0.1:3002/login "HRMS login"
       - name: Run browser tests with direct PostgreSQL assertions and cleanup
         working-directory: tests/ui-e2e
-        run: npm test
+        run: npm run test:production-gate
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -95,6 +97,7 @@ jobs:
             ${{ runner.temp }}/quantaedge-ui-e2e-artifacts
             ${{ runner.temp }}/quantaedge-ui-e2e-report
             ${{ runner.temp }}/quantaedge-ui-e2e-json
+            ${{ runner.temp }}/quantaedge-ui-e2e-coverage
           if-no-files-found: warn
           retention-days: 14
       - name: Stop the disposable stack
