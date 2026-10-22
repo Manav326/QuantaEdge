@@ -1364,7 +1364,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 
 /* Filled primary actions use sufficient contrast; brand orange remains the accent. */
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
-  button.primary, a.primary, [class*="primarySmall"], [class*="PrimarySmall"],
+  button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
   [class*="generateButton"], [class*="sendButton"], [class*="cta"]
 ):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
   background-color: var(--qe-people-brand-strong) !important;
@@ -1372,7 +1372,7 @@ html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   color: #fff !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
-  button.primary, a.primary, [class*="primarySmall"], [class*="PrimarySmall"],
+  button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
   [class*="generateButton"], [class*="sendButton"], [class*="cta"]
 ):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
   background-color: var(--qe-people-brand-strong) !important;
