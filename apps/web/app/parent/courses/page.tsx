@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
-import { BillingAddressSelection, BillingProfileEditor, type BillingAddressRecord } from '../../components/BillingProfileEditor';
+import BillingProfileEditor, { BillingAddressSelection, type BillingAddressRecord } from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 import { localizeMarketplaceError } from '../../components/marketplaceI18n';
