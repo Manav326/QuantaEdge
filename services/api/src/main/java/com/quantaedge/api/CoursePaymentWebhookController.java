@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -209,6 +210,21 @@ public class CoursePaymentWebhookController {
       if(refund.get("credit_note_number")!=null)eventDetails.put("creditNoteNumber",refund.get("credit_note_number"));
       if("RECONCILIATION_REQUIRED".equals(refundState))
         return new Outcome("RECONCILIATION_REQUIRED","Refund event was signature-verified, but its provider IDs/amount/status did not safely settle the saved refund. Refresh the refund in HRMS; no speculative credit note was issued.",eventDetails);
+      String terminalDisposition=refundTerminalEventDisposition(refundState,providerStatus);
+      if("RECONCILIATION_REQUIRED".equals(terminalDisposition))
+        return new Outcome("RECONCILIATION_REQUIRED",
+            "The signed provider refund event conflicts with the saved terminal refund result. The original refund record is immutable; verify the current refund in Razorpay and resolve the accounting discrepancy before issuing any manual adjustment.",
+            Map.of("resolutionCode","TERMINAL_REFUND_STATUS_CONFLICT","savedRefundState",refundState,
+                "incomingProviderStatus",safe(providerStatus,24),"refundId",refundId));
+      if("IGNORED".equals(terminalDisposition))
+        return new Outcome("IGNORED",
+            "A delayed non-terminal refund event arrived after the refund was already terminal. The saved refund result was preserved and no financial state was changed.",
+            Map.of("resolutionCode","STALE_NONTERMINAL_REFUND_EVENT","savedRefundState",refundState,
+                "incomingProviderStatus",safe(providerStatus,24),"refundId",refundId));
+      if("PROCESSED".equals(refundState))
+        return new Outcome("PROCESSED","Signed refund event matches the saved processed refund. Its credit note and allocation reversals were already recorded idempotently.",eventDetails);
+      if("FAILED".equals(refundState))
+        return new Outcome("PROCESSED","Signed refund failure event matches the saved failed refund. No credit note or allocation reversal was issued.",eventDetails);
       return new Outcome("PROCESSED","Signed refund event was applied against the saved refund request. A credit note and allocation reversal exist only when the refund ledger confirmed provider status processed.",eventDetails);
     }
     return new Outcome("IGNORED","The signature is valid, but this event type is not part of the QuantaEdge course-payment lifecycle. No order or fiscal state was changed.",
@@ -328,6 +344,21 @@ public class CoursePaymentWebhookController {
     if(entity.has("error_reason"))detail.put("errorReason",safe(entity.path("error_reason").asText(""),120));
     if(entity.has("error_description"))detail.put("errorDescription",safe(entity.path("error_description").asText(""),240));
     return detail;
+  }
+
+  /**
+   * Compare a newly delivered refund event with an already-terminal immutable refund ledger row.
+   * APPLY means normal ledger settlement should be trusted; IGNORED means stale pending/created
+   * delivery; a terminal-state disagreement must remain visible for human reconciliation.
+   */
+  static String refundTerminalEventDisposition(String savedState,String incomingProviderStatus) {
+    String saved=savedState==null?"":savedState.trim().toUpperCase(Locale.ROOT);
+    String incoming=incomingProviderStatus==null?"":incomingProviderStatus.trim().toLowerCase(Locale.ROOT);
+    if(!Set.of("PROCESSED","FAILED").contains(saved))return "APPLY";
+    if(Set.of("created","pending").contains(incoming))return "IGNORED";
+    if("PROCESSED".equals(saved)&&"processed".equals(incoming))return "PROCESSED";
+    if("FAILED".equals(saved)&&Set.of("failed","rejected").contains(incoming))return "PROCESSED";
+    return "RECONCILIATION_REQUIRED";
   }
 
   private static Map<String,Object> safePaymentFailure(JsonNode entity) {

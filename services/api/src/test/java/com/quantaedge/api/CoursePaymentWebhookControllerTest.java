@@ -38,6 +38,23 @@ class CoursePaymentWebhookControllerTest {
     assertEquals(1_048_577,bounded.length);
   }
 
+  @Test
+  void delayedRefundEventsCannotDowngradeTerminalLedgerState() {
+    assertEquals("IGNORED",CoursePaymentWebhookController.refundTerminalEventDisposition("PROCESSED","created"));
+    assertEquals("IGNORED",CoursePaymentWebhookController.refundTerminalEventDisposition("FAILED","pending"));
+    assertEquals("PROCESSED",CoursePaymentWebhookController.refundTerminalEventDisposition("PROCESSED","processed"));
+    assertEquals("PROCESSED",CoursePaymentWebhookController.refundTerminalEventDisposition("FAILED","failed"));
+  }
+
+  @Test
+  void contradictoryTerminalRefundEventRequiresReconciliation() {
+    assertEquals("RECONCILIATION_REQUIRED",
+        CoursePaymentWebhookController.refundTerminalEventDisposition("FAILED","processed"));
+    assertEquals("RECONCILIATION_REQUIRED",
+        CoursePaymentWebhookController.refundTerminalEventDisposition("PROCESSED","failed"));
+    assertEquals("APPLY",CoursePaymentWebhookController.refundTerminalEventDisposition("PENDING","processed"));
+  }
+
   private static String sign(byte[] body,String secret) throws Exception {
     Mac mac=Mac.getInstance("HmacSHA256");
     mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),"HmacSHA256"));
