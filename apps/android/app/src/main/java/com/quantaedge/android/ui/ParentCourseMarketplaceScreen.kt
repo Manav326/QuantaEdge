@@ -68,14 +68,7 @@ fun ParentCourseMarketplaceScreen(
     busyCourseId: Long,
     error: String,
     status: String,
-    billingAddresses: List<JSONObject>,
-    billingAddressesLoading: Boolean,
-    billingError: String = "",
-    billingStatus: String = "",
-    onSaveBillingAddress: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
-    onMakeDefaultBillingAddress: (Long) -> Unit,
-    onDeleteBillingAddress: (Long) -> Unit,
-    onOpenProfile: () -> Unit,
+    billing: BillingAddressBookBindings,
     onRefresh: () -> Unit,
     onBuy: (Long, String, Long, String, Long) -> Unit,
     onAddFree: (Long, String, Long) -> Unit,
@@ -98,18 +91,18 @@ fun ParentCourseMarketplaceScreen(
 
     fun requestPaidPurchase(courseId: Long, recipientType: String, studentId: Long, code: String) {
         billingCheckoutMessage = ""
-        if (billingAddressesLoading) {
+        if (billing.loading) {
             billingCheckoutMessage = t("Saved billing addresses are still loading. Please retry in a moment.",
                 "Saved billing addresses अभी load हो रहे हैं। थोड़ी देर बाद फिर कोशिश करें।")
             return
         }
-        if (billingAddresses.isEmpty()) {
+        if (billing.addresses.isEmpty()) {
             billingCheckoutMessage = t("Save your billing address above before checkout.",
                 "Checkout से पहले ऊपर billing address save करें।")
             return
         }
-        val preferred = billingAddresses.firstOrNull { it.optBoolean("is_default") } ?: billingAddresses.first()
-        if (billingAddresses.size == 1) {
+        val preferred = billing.addresses.firstOrNull { it.optBoolean("is_default") } ?: billing.addresses.first()
+        if (billing.addresses.size == 1) {
             if (!billingAddressIsComplete(preferred)) {
                 billingCheckoutMessage = t("Complete your billing address before checkout.",
                     "Checkout से पहले billing address पूरा करें।")
@@ -168,17 +161,17 @@ fun ParentCourseMarketplaceScreen(
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
         BillingAddressBook(
-            addresses = billingAddresses,
-            loading = billingAddressesLoading,
+            addresses = billing.addresses,
+            loading = billing.loading,
             busy = busy,
             language = language,
             compactOnly = true,
-            errorMessage = billingError,
-            statusMessage = billingStatus,
-            onSave = onSaveBillingAddress,
-            onMakeDefault = onMakeDefaultBillingAddress,
-            onDelete = onDeleteBillingAddress,
-            onOpenProfile = onOpenProfile
+            errorMessage = billing.error,
+            statusMessage = billing.status,
+            onSave = billing.onSave,
+            onMakeDefault = billing.onMakeDefault,
+            onDelete = billing.onDelete,
+            billing.onOpenProfile = billing.onOpenProfile
         )
         if (billingCheckoutMessage.isNotBlank()) Text(billingCheckoutMessage, color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodySmall)
@@ -349,7 +342,7 @@ fun ParentCourseMarketplaceScreen(
 
     if (checkoutCourseId > 0L) {
         BillingAddressPickerDialog(
-            addresses = billingAddresses,
+            addresses = billing.addresses,
             selectedAddressId = selectedBillingAddressId,
             language = language,
             onSelect = { selectedBillingAddressId = it },
