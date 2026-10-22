@@ -117,7 +117,7 @@ export function routeApp(sourcePath: string): 'web' | 'admin' | 'people' {
 
 export function appBaseUrl(app: 'web' | 'admin' | 'people'): string {
   const key = app === 'web' ? 'QE_E2E_WEB_URL' : app === 'admin' ? 'QE_E2E_ADMIN_URL' : 'QE_E2E_HRMS_URL';
-  const fallback = app === 'web' ? 'http://127.0.0.1:3000' :
-    app === 'admin' ? 'http://127.0.0.1:3001' : 'http://127.0.0.1:3002';
+  const fallback = app === 'web' ? 'http://localhost:3000' :
+    app === 'admin' ? 'http://localhost:3001' : 'http://localhost:3002';
   return (process.env[key] || fallback).replace(/\/$/, '');
 }
