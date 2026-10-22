@@ -3713,6 +3713,6 @@
   "billing.checkoutTitle": "Billing address चुनें",
   "billing.checkoutPrompt": "इस purchase के लिए address चुनें। चुनी गई details order के साथ save होंगी।",
   "billing.continueCheckout": "Checkout जारी रखें",
-  "billing.manageCheckoutAddresses": "दूसरा address चाहिए? यहाँ add या manage करें:"
-
+  "billing.manageCheckoutAddresses": "दूसरा address चाहिए? यहाँ add या manage करें:",
+  "billing.refreshAddresses": "Addresses refresh करें"
 }
