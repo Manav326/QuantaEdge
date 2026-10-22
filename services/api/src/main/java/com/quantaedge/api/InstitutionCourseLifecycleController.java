@@ -33,12 +33,15 @@ public class InstitutionCourseLifecycleController {
   private final JdbcTemplate jdbc;
   private final InstitutionAuthService institutionAuth;
   private final ObjectMapper objectMapper;
+  private final CourseMarketplaceLaunchReadinessService launchReadiness;
 
   public InstitutionCourseLifecycleController(
-      JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper) {
+      JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper,
+      CourseMarketplaceLaunchReadinessService launchReadiness) {
     this.jdbc = jdbc;
     this.institutionAuth = institutionAuth;
     this.objectMapper = objectMapper;
+    this.launchReadiness = launchReadiness;
   }
 
   @GetMapping("/courses")
@@ -454,6 +457,7 @@ public class InstitutionCourseLifecycleController {
       case "PUBLISH" -> {
         if(!"APPROVED".equals(state)) throw conflict("An offer must be approved before publication.");
         ensureOfferAssignmentReady(row);
+        launchReadiness.requireReady(offerId,principal.institutionId());
         next="PUBLISHED";
         jdbc.update("""
             update institution_marketplace_offer set status='PUBLISHED',published_by_admin_id=?,
