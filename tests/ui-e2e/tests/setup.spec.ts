@@ -21,7 +21,7 @@ async function seedOnlyDisposableHrmsBootstrap(): Promise<void> {
     const result = await pool.query(
       `update staff_account
          set password_hash=$1, must_change_password=true, password_changed_at=null,
-             last_login_at=null, updated_at=now()
+             updated_at=now()
        where lower(username)='hrms_admin' and active=true`,
       [hash]
     );
