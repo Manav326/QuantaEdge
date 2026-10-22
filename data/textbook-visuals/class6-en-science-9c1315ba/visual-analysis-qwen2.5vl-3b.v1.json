@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T06:49:29Z"
+      "checkpointed_at": "2026-10-22T07:06:27Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37474,18 +37474,19 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Length of the table"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The text does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39683375813",
-      "checkpointed_at": "2026-10-22T04:00:26Z"
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T07:11:05Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37538,7 +37539,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39683375813",
+      "run_id": "39726988483",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -37749,7 +37750,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39683375813",
+      "run_id": "39726988483",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38151,7 +38152,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39683375813",
+      "run_id": "39726988483",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
