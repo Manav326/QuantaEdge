@@ -3,6 +3,7 @@
 
 import { apiFetch } from '../../components/apiClient';
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
+import BillingProfileEditor from '../../components/BillingProfileEditor';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -382,6 +383,7 @@ export default function ParentProfilePage() {
             </section>
           </form>
         )}
+        <BillingProfileEditor workspace="PARENT" placement="profile" />
         <AccountIdentitySettings />
       </div>
     </main>
