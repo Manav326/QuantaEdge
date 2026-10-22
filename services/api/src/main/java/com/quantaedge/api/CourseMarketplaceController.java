@@ -1270,7 +1270,9 @@ public class CourseMarketplaceController {
       Map<String,Object> localOrder,long institutionId,long institutionOfferId,
       long listedPricePaise,String currency,String title,Map<String,Object> buyerSnapshot,
       String requestedDiscountCode) {
-    if (!discountCodeMatchesForRetry(text(localOrder.get("discount_reference")),requestedDiscountCode)
+    String storedDiscountCode=localOrder.get("discount_reference")==null
+        ?null:String.valueOf(localOrder.get("discount_reference"));
+    if (!discountCodeMatchesForRetry(storedDiscountCode,requestedDiscountCode)
         || !hasNoDiscountFacts(localOrder)) {
       throw new org.springframework.web.server.ResponseStatusException(
           org.springframework.http.HttpStatus.CONFLICT,
