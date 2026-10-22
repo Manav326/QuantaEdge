@@ -87,12 +87,12 @@ for (const app of senderApps) {
     app + ' notification sender is missing grouped recipient-review styles');
 }
 
-const notificationService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
+const receiverInboxService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
 for (const required of [
   'inboxForEducationStaff(', 'inboxForHrmsStaff(', 'markReadForStaff(',
   "r.staff_account_id=? and r.institution_id=?", "c.sender_workspace='HRMS'"
 ]) {
-  assert.ok(notificationService.includes(required), 'Cross-workspace inbox service is missing ' + required);
+  assert.ok(receiverInboxService.includes(required), 'Cross-workspace inbox service is missing ' + required);
 }
 const receiverController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
 for (const required of [
