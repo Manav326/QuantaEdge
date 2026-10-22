@@ -1578,8 +1578,8 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot {
   animation: qe-admin-route-enter 170ms cubic-bezier(.2, .75, .25, 1) both;
 }
 @keyframes qe-admin-route-enter {
-  from { opacity: .72; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: .72; }
+  to { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   html[data-qe-appearance] body,
@@ -1604,4 +1604,116 @@ html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-nav-group-items > 
 html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-overview-shortcuts > a.active .qe-nav-icon {
   color: inherit !important;
   background: transparent !important;
+}
+
+
+/*
+ * Final dark-mode interaction contract
+ * ------------------------------------
+ * The Admin has legacy route styles with higher-specificity light hover/focus
+ * fills. These state rules are deliberately last so every route inherits the
+ * institution's semantic surfaces instead of flashing to white while focused.
+ */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  select, textarea, [contenteditable="true"]
+) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+  caret-color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  select, textarea, [contenteditable="true"]
+):is(:focus, :focus-visible) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-focus) !important;
+  outline: 2px solid var(--qe-color-focus) !important;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--qe-color-focus) 22%, transparent) !important;
+}
+
+/* Secondary interactions use a subtle raised surface, never a light-mode fill. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  button, a, [role="button"], [role="tab"]
+):not([class*="primary"]):not([class*="Primary"])
+ :is(:hover, :focus-visible) {
+  background-color: var(--qe-color-surface-subtle) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-navigation > .qe-nav-link:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-nav-group-items > .qe-nav-link:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-overview-shortcuts > a:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-mobile-nav :is(a, button):is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-mobile-menu-items a:is(:hover, :focus-visible) {
+  background-color: var(--qe-color-nav-active-background) !important;
+  color: var(--qe-color-nav-active-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+  outline: 2px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-nav-group-toggle:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-sidebar-toggle:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-sidebar-logout:is(:hover, :focus-visible),
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-mobile-menu-footer button:is(:hover, :focus-visible) {
+  background-color: var(--qe-color-surface-subtle) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .admin-panel, .admin-kpi, .admin-review-summary, .admin-review-item,
+  .qe-edit-card, .qe-library-panel, .qe-admin-filter-panel, .qe-admin-table-panel,
+  [class*="card"], [class*="Card"], [class*="panel"], [class*="Panel"],
+  [class*="surface"], [class*="Surface"], [class*="tile"], [class*="Tile"]
+):not([class*="hero"]):not([class*="Hero"]):not([class*="status"]):not([class*="Status"])
+ :is(:hover, :focus-within) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot tbody tr:is(:hover, :focus-within) > td,
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [role="row"]:is(:hover, :focus-within) [role="cell"] {
+  background-color: var(--qe-color-surface-subtle) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [role="option"], [role="menuitem"]
+):is(:hover, :focus-visible, [aria-selected="true"], [data-highlighted]) {
+  background-color: var(--qe-color-selected-background) !important;
+  color: var(--qe-color-selected-text) !important;
+  outline-color: var(--qe-color-focus);
+}
+
+/* Accent-filled notification actions must use the institution's accent foreground. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  button[class*="sendButton"], button[class*="cta"], a[class*="cta"]
+) {
+  background-color: var(--qe-color-accent) !important;
+  border-color: var(--qe-color-accent) !important;
+  color: var(--qe-color-on-accent, #ffffff) !important;
+}
+
+/* Portalled dialogs and menus use the same elevation and foregrounds as in-page content. */
+html[data-qe-appearance="dark"] body :is(
+  dialog, [role="dialog"], [role="alertdialog"], [role="listbox"], [role="menu"],
+  [data-radix-popper-content-wrapper] > *, [data-state="open"][data-side]
+) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance="dark"] body :is([role="option"], [role="menuitem"]):is(:hover, :focus-visible, [aria-selected="true"], [data-highlighted]) {
+  background-color: var(--qe-color-selected-background) !important;
+  color: var(--qe-color-selected-text) !important;
+}
+
+/* Keyboard focus must remain visible without changing a control into a white block. */
+html[data-qe-appearance="dark"] body :is(
+  a, button, input, select, textarea, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline-color: var(--qe-color-focus);
+  outline-offset: 2px;
 }

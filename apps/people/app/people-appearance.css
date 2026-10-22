@@ -969,8 +969,8 @@ html[data-qe-people-appearance] .qe-people-page-slot {
   animation: qe-people-route-enter 170ms cubic-bezier(.2, .75, .25, 1) both;
 }
 @keyframes qe-people-route-enter {
-  from { opacity: .72; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: .72; }
+  to { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   html[data-qe-people-appearance] body,
@@ -1009,4 +1009,128 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="count"], [class*="Count"]
 ):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label) {
   color: inherit;
+}
+
+
+/*
+ * Final route-wide dark interaction contract
+ * ------------------------------------------
+ * All HRMS routes share this cascade. It deliberately outranks older CSS-module
+ * light fills on fields, cards, dialogs and table interaction states. Status
+ * colours and the QuantaEdge orange brand are kept semantic.
+ */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+  caret-color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+):is(:focus, :focus-visible) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-focus) !important;
+  outline: 2px solid var(--qe-people-focus) !important;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--qe-people-focus) 22%, transparent) !important;
+}
+
+/* Older page CSS used near-white table row fills on both hover and focus-within. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot tbody tr:is(:hover, :focus-within) > td,
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [role="row"]:is(:hover, :focus-within) [role="cell"] {
+  background-color: var(--qe-people-surface-hover) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.table-wrap, table, [class*="tableScroll"], [class*="TableScroll"]) {
+  background-color: var(--qe-people-surface) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot th {
+  background-color: var(--qe-people-table-head) !important;
+  color: var(--qe-people-muted) !important;
+  border-color: var(--qe-people-table-line) !important;
+}
+
+/* Surfaces from page-level CSS modules inherit the HRMS palette, not fixed light fills. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  .card, .panel, .modal, .login-panel, .login-card, .qe-people-dialog,
+  [role="dialog"], [class*="Card"], [class*="Panel"],
+  [class*="Modal"], [class*="Dialog"], [class*="surface"], [class*="Surface"],
+  [class*="box"], [class*="Box"]
+):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"])
+ :not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"])
+ :not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"])
+ :not([class*="warning"]):not([class*="Warning"]) {
+  background-color: var(--qe-people-card) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+
+/* Neutral button/focus states should feel like a quiet surface lift, not a white flash. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  .secondary, .qe-people-button--secondary, .qe-people-button--neutral,
+  [class*="secondary"], [class*="Secondary"], [class*="neutral"], [class*="Neutral"]
+):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-focus) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot .tabs button:not(.active):not([aria-selected="true"]):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--qe-people-focus) !important;
+  outline-offset: 2px;
+}
+
+/* Filled actions use deep/light orange with a deliberately contrast-safe foreground. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  .primary, .qe-people-button--primary, [class*="sendButton"],
+  [class*="generateButton"], [class*="cta"]
+) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong) !important;
+  color: #182337 !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  .primary, .qe-people-button--primary, [class*="sendButton"],
+  [class*="generateButton"], [class*="cta"]
+):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-focus) !important;
+  color: #182337 !important;
+}
+
+/* Popovers and dialogs can be rendered outside the page subtree by UI components. */
+html[data-qe-people-appearance="dark"] body :is(
+  dialog, [role="dialog"], [role="alertdialog"], [role="listbox"], [role="menu"],
+  [class*="modal"], [class*="Modal"], [class*="dialog"], [class*="Dialog"],
+  [data-radix-popper-content-wrapper] > *
+):not([class*="backdrop"]):not([class*="Backdrop"]):not([class*="overlay"]):not([class*="Overlay"]) {
+  background-color: var(--qe-people-card) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+  box-shadow: 0 22px 54px rgb(0 0 0 / .30);
+}
+html[data-qe-people-appearance="dark"] body :is([role="option"], [role="menuitem"]):is(:hover, :focus-visible, [aria-selected="true"], [data-highlighted]) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+
+/* All route roots and nested surfaces retain the same readable text roles. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > :is(main, [class*="page"], [class*="Page"]) {
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="hint"], [class*="Hint"], [class*="muted"], [class*="Muted"],
+  [class*="description"], [class*="Description"], [class*="meta"], [class*="Meta"],
+  [class*="caption"], [class*="Caption"], [class*="helpText"], [class*="HelpText"]
+) {
+  color: var(--qe-people-muted);
 }
