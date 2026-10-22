@@ -76,6 +76,26 @@ public class CourseMarketplaceLaunchController {
       release.put("contentCurrent",readiness.contentFingerprintMatches(
           number(release.get("course_id")),text(release.get("content_fingerprint"))));
     }
+    List<Map<String,Object>> qualityReviewItems=jdbc.queryForList("""
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
+          r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          t.id as source_institution_id,t.tenant_code as source_institution_code,
+          t.display_name as source_institution_name,
+          count(distinct ps.subject_id) as active_subject_count,
+          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
+        left join curriculum_program_subject ps on ps.program_id=p.id
+        left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
+          p.code,p.display_name,t.id,t.tenant_code,t.display_name
+        order by r.submitted_at,r.id
+        """,institutionId);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("institutionId",institutionId);
     result.put("institutionName",institutionName(institutionId));
@@ -85,6 +105,8 @@ public class CourseMarketplaceLaunchController {
     result.put("blockedCount",items.size()-readyCount);
     result.put("availableReleases",availableReleases);
     result.put("availableCount",availableReleases.size());
+    result.put("qualityReviewItems",qualityReviewItems);
+    result.put("qualityReviewCount",qualityReviewItems.size());
     return result;
   }
 
