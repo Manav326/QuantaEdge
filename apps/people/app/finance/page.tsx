@@ -1,6 +1,7 @@
 'use client';
 
 import { apiFetch } from '../components/apiClient';
+import { notifyUser } from '../components/GlobalNotificationHost';
 import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
 
@@ -75,6 +76,7 @@ export default function FinancePage(){
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [gstEntityId,setGstEntityId]=useState('');
+  const [editingEntityId,setEditingEntityId]=useState<number|null>(null);
   const [gstForm,setGstForm]=useState({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
   const [taxForm,setTaxForm]=useState<TaxForm>({offerId:'',legalEntityId:'',serviceClassificationCode:'',taxTreatment:'TAXABLE',gstPercent:'',cessPercent:'',priceIncludesTax:true,placeOfSupplyRule:'RECIPIENT_LOCATION',effectiveFrom:new Date(Date.now()-60000).toISOString().slice(0,16)});
   const [taxProfiles,setTaxProfiles]=useState<Record<string,any[]>>({});
@@ -116,10 +118,10 @@ export default function FinancePage(){
   useEffect(()=>{void loadAll();},[loadAll]);
   useEffect(()=>()=>{if(previewPdfUrl)URL.revokeObjectURL(previewPdfUrl);},[previewPdfUrl]);
 
-  const action=async(work:()=>Promise<unknown>,success:string)=>{
+  const action=async(work:()=>Promise<unknown>,success:string):Promise<boolean>=>{
     setBusy(true);setError('');setNotice('');
-    try{await work();setNotice(success);await loadAll();}
-    catch(e){setError(e instanceof Error?e.message:'The finance action failed.');}
+    try{await work();setNotice('');notifyUser(success,'success');await loadAll();return true;}
+    catch(e){setError(e instanceof Error?e.message:'The finance action failed.');return false;}
     finally{setBusy(false);}
   };
   const loadPolicy=async(id:string)=>{
@@ -138,15 +140,17 @@ export default function FinancePage(){
   };
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
+  const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
 
-  const createEntity=(event:FormEvent)=>{
+  const createEntity=async(event:FormEvent)=>{
     event.preventDefault();
-    void action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
+    const saved=await action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
       entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null,
       legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,
       invoiceSeriesCode:entityForm.invoiceSeriesCode,
       registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}
     })}), 'Legal entity saved as draft.');
+    if(saved)setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   };
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
@@ -271,39 +275,61 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Refund retry could not be confirmed.');}
     finally{setRefundBusy(false);}
   };
-  const createRegistration=(event:FormEvent)=>{
+  const createRegistration=async(event:FormEvent)=>{
     event.preventDefault();
     if(!gstEntityId){setError('Choose the legal entity that owns this GST registration.');return;}
-    void action(async()=>api(BASE+'/legal-entities/'+gstEntityId+'/gst-registrations',{method:'POST',body:JSON.stringify({
+    const saved=await action(async()=>api(BASE+'/legal-entities/'+gstEntityId+'/gst-registrations',{method:'POST',body:JSON.stringify({
       gstin:gstForm.gstin,legalName:gstForm.legalName,stateCode:gstForm.stateCode,effectiveFrom:gstForm.effectiveFrom,
       registeredAddress:{line1:gstForm.addressLine,city:gstForm.city,state:gstForm.state,postalCode:gstForm.postalCode,country:'India'}
     })}), 'GST registration saved pending verification.');
+    if(saved)setGstForm({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
   };
-  const createTaxProfile=(event:FormEvent)=>{
+  const createTaxProfile=async(event:FormEvent)=>{
     event.preventDefault();
     if(!taxForm.offerId||!taxForm.legalEntityId){setError('Choose both the course offer and legal seller.');return;}
+    const offerId=taxForm.offerId;
     const treatment=taxForm.taxTreatment;
     const gstBps=treatment==='TAXABLE'?Math.round(Number(taxForm.gstPercent)*100):0;
     const cessBps=treatment==='TAXABLE'?Math.round(Number(taxForm.cessPercent||0)*100):0;
-    void action(async()=>{
-      const result=await api<{id:number}>(BASE+'/offers/'+taxForm.offerId+'/tax-profiles',{method:'POST',body:JSON.stringify({
-        legalEntityId:Number(taxForm.legalEntityId),serviceClassificationCode:taxForm.serviceClassificationCode||null,
+    setBusy(true);setError('');setNotice('');
+    try{
+      const created=await api<{id:number}>(BASE+'/offers/'+offerId+'/tax-profiles',{method:'POST',body:JSON.stringify({
+        legalEntityId:Number(taxForm.legalEntityId),serviceClassificationCode:taxForm.serviceClassificationCode.trim()||null,
         taxTreatment:treatment,gstRateBasisPoints:gstBps,cessRateBasisPoints:cessBps,
         priceIncludesTax:taxForm.priceIncludesTax,placeOfSupplyRule:taxForm.placeOfSupplyRule,
         effectiveFrom:asIso(taxForm.effectiveFrom),taxComponents:{}
       })});
-      await api(BASE+'/tax-profiles/'+result.id+'/submit',{method:'POST'});
-      setTaxProfiles(v=>({...v,[taxForm.offerId]:[...(v[taxForm.offerId]||[]),{id:result.id,status:'PENDING_APPROVAL'}]}));
-    },'Tax profile submitted for HRMS approval.');
+      // The draft now exists even if the separate submit step later fails.
+      setTaxForm(v=>({...v,serviceClassificationCode:'',gstPercent:'',cessPercent:''}));
+      await loadTaxProfiles(offerId);
+      let submitFailure:unknown=null;
+      try{await api(BASE+'/tax-profiles/'+created.id+'/submit',{method:'POST'});}
+      catch(cause){submitFailure=cause;}
+      const refreshed=await loadTaxProfiles(offerId);
+      const savedStatus=refreshed.find(row=>Number(row.id)===created.id)?.status;
+      if(!submitFailure||savedStatus==='PENDING_APPROVAL'){
+        setError('');notifyUser('Tax profile submitted for HRMS approval.','success');
+      }else{
+        const detail=submitFailure instanceof Error?submitFailure.message:'Submission could not be confirmed.';
+        const message='Tax profile draft #'+created.id+' was saved, but submission could not be confirmed. Refresh Saved tax profiles and use Submit if it is still a draft. Do not create it again. '+detail;
+        setError(message);notifyUser(message,'warning');
+      }
+    }catch(cause){
+      setError(cause instanceof Error?cause.message:'Tax profile draft could not be created.');
+    }finally{setBusy(false);}
   };
-  const loadTaxProfiles=async(offerId:string)=>{
-    if(!offerId)return;
-    try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));}
-    catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');}
+  const loadTaxProfiles=async(offerId:string):Promise<any[]>=>{
+    if(!offerId)return [];
+    try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));return rows;}
+    catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');return [];}
+  };
+  const submitTaxProfile=async(id:number,offerId:string)=>{
+    const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/submit',{method:'POST'}),'Tax profile submitted for HRMS approval.');
+    if(ok)await loadTaxProfiles(offerId);
   };
   useEffect(()=>{if(taxForm.offerId)void loadTaxProfiles(taxForm.offerId);},[taxForm.offerId]);
 
-  const createDiscount=()=>{
+  const createDiscount=async()=>{
     if(!discountForm.offerId){setError('Select a course offer for this discount code.');return;}
     if(!/^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$/.test(discountForm.code.trim())){setError('Offer codes must be 3–40 letters, digits, hyphens or underscores.');return;}
     if(discountForm.discountType==='PERCENTAGE'&&(!(Number(discountForm.percentage)>0)||Number(discountForm.percentage)>100)){setError('Discount percentage must be greater than 0 and no more than 100.');return;}
@@ -313,7 +339,7 @@ export default function FinancePage(){
     if(discountForm.maxRedemptions!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptions))||Number(discountForm.maxRedemptions)<=0)){setError('Maximum redemptions must be a positive whole number.');return;}
     if(discountForm.maxRedemptionsPerPurchaser!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptionsPerPurchaser))||Number(discountForm.maxRedemptionsPerPurchaser)<=0)){setError('Per-purchaser limit must be a positive whole number.');return;}
     if(discountForm.effectiveUntil&&new Date(discountForm.effectiveUntil)<=new Date(discountForm.effectiveFrom)){setError('Offer end must be after its start.');return;}
-    void action(async()=>{
+    const submitted=await action(async()=>{
       const created=await api<{id:number;code:string;version:number}>(BASE+'/discounts',{method:'POST',body:JSON.stringify({
         institutionOfferId:Number(discountForm.offerId),code:discountForm.code.trim().toUpperCase(),
         currency:'INR',discountType:discountForm.discountType,
@@ -326,8 +352,21 @@ export default function FinancePage(){
         effectiveFrom:asIso(discountForm.effectiveFrom),
         effectiveUntil:discountForm.effectiveUntil?asIso(discountForm.effectiveUntil):null
       })});
-      await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});
+      // Clear the creation draft only after the server has created its durable record.
+      setDiscountForm(v=>({...v,code:'',percentage:'10',flatAmountRupees:'100',maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''}));
+      try{await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});}
+      catch(cause){
+        // A draft already exists; never make the user create it a second time to retry submission.
+        const latest=await api<DiscountOffer[]>(BASE+'/discounts').catch(()=>[]);
+        if(latest.length)setDiscounts(latest);
+        const saved=latest.find(row=>row.id===created.id);
+        if(saved?.status!=='PENDING_APPROVAL'){
+          const detail=cause instanceof Error?cause.message:'Submission could not be confirmed.';
+          throw new Error('Discount draft '+created.code+' was created, but submission could not be confirmed. Use its Submit action in the discount list; do not create it again. '+detail);
+        }
+      }
     },'Discount created and submitted for independent HRMS approval. It cannot be used until approved.');
+    if(submitted)setDiscountForm(v=>({...v,code:'',percentage:'10',flatAmountRupees:'100',maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''}));
   };
   const submitDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/submit',{method:'POST'}),'Discount submitted for HRMS approval.');
   const approveDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/approve',{method:'POST'}),'Discount approved. The server will validate eligibility and enforce usage limits.');
@@ -350,8 +389,22 @@ export default function FinancePage(){
       ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
       :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
   };
-  const saveRecipients=()=>{
-    void action(async()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+  const recipientSnapshot=(rows:any[])=>JSON.stringify(rows.map(row=>({
+    institutionId:Number(row.institutionId??row.institution_id),
+    calculationType:String(row.calculationType??row.calculation_type),
+    percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
+    flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
+  })).sort((a,b)=>a.institutionId-b.institutionId));
+  const recipientsUnchanged=(()=>{
+    if(!policyDetail||!selectedPolicyId)return false;
+    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[]);}
+    catch{return false;}
+  })();
+  const saveRecipients=async()=>{
+    if(!selectedPolicyId||recipientsUnchanged)return;
+    const policyId=selectedPolicyId;
+    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+    if(saved)await loadPolicy(policyId);
   };
   const createTemplate=()=>{
     void action(async()=>{
@@ -371,6 +424,7 @@ export default function FinancePage(){
   };
   const saveTemplate=()=>{
     if(!selectedTemplateId||!selectedVersionNo){setError('Create a template or start a draft version first.');return;}
+    if(designUnchanged)return;
     void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo,{method:'PUT',body:JSON.stringify({designDefinition:design})}),
       'Invoice template draft saved. The preview reflects the saved design.');
   };
@@ -462,14 +516,24 @@ export default function FinancePage(){
             <button className={styles.primary} disabled={busy}>Save legal entity draft</button>
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
-            <div className={styles.entitySummary}><b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span><small>{e.active_gst_registrations||0} verified registration(s)</small>
-              <label className={styles.seriesInline}>Invoice series prefix<input maxLength={3} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
-              <small>e-Invoice applicability: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
+            <div className={styles.entitySummary}>
+              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span>
+              <small>{e.active_gst_registrations||0} verified registration(s)</small>
+              <small>Invoice series: <b>{e.invoice_series_code||'QE'}</b></small>
+              <small>e-Invoice: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
             </div>
-            <div className={styles.entityActions}><button className={styles.secondarySmall} disabled={busy} onClick={()=>saveInvoiceSeries(e)}>Save series</button>
-              {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+            <div className={styles.entityActions}>
+              {editingEntityId===e.id ? <>
+                <button className={styles.secondarySmall} disabled={busy||(seriesDrafts[String(e.id)]??e.invoice_series_code??'QE').trim().toUpperCase()===(e.invoice_series_code||'QE')} onClick={()=>void saveInvoiceSeries(e)}>Save series</button>
+                <button className={styles.secondarySmall} disabled={busy||((einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED')===(e.einvoice_applicability??'UNREVIEWED')&&(einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??'').trim()===(e.einvoice_applicability_review_note??'').trim())} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
+                <button className={styles.secondarySmall} disabled={busy} onClick={()=>setEditingEntityId(null)}>Done</button>
+              </> : <>
+                <button className={styles.secondarySmall} disabled={busy} onClick={()=>{setEditingEntityId(e.id);setSeriesDrafts(v=>({...v,[String(e.id)]:e.invoice_series_code||'QE'}));setEinvoiceDrafts(v=>({...v,[String(e.id)]:e.einvoice_applicability||'UNREVIEWED'}));setEinvoiceNotes(v=>({...v,[String(e.id)]:e.einvoice_applicability_review_note||''}));}}>Edit settings</button>
+                {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+              </>}
             </div>
-            <div className={styles.einvoiceReview}>
+            {editingEntityId===e.id && <div className={styles.einvoiceReview}>
+              <label>Invoice series prefix<input maxLength={3} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
               <label>Reviewed applicability
                 <select value={einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED'} onChange={event=>setEinvoiceDrafts(old=>({...old,[String(e.id)]:event.target.value}))}>
                   <option value="UNREVIEWED" disabled>Not reviewed</option>
@@ -480,9 +544,8 @@ export default function FinancePage(){
               <label>Review rationale / tax-adviser reference
                 <input maxLength={1000} value={einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??''} placeholder="Reference and reason for the seller's applicability decision" onChange={event=>setEinvoiceNotes(old=>({...old,[String(e.id)]:event.target.value}))}/>
               </label>
-              <button className={styles.secondarySmall} disabled={busy} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
               <small className={styles.einvoiceHelp}>Human review only; this does not validate against the GST portal. REQUIRED keeps checkout blocked until IRP/IRN and signed-QR verification are integrated.</small>
-            </div>
+            </div>}
           </article>)}</div>
         </div>
         <div className={styles.panel}><h2>GST registrations</h2><p>Enter registration details, then independently review and mark them verified. This action records an HRMS review; it does not claim an automated GST-portal validation.</p>
@@ -516,7 +579,7 @@ export default function FinancePage(){
           </form>
         </div>
         <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
-          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
+          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
           {!taxProfiles[taxForm.offerId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
           <p className={styles.note}>Approval requires an active legal seller. Taxable treatment also requires an active, HRMS-verified GST registration for the effective date.</p>
         </div>
@@ -526,7 +589,7 @@ export default function FinancePage(){
           <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} ({o.offer_status})</option>)}</select></label>
           {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
-        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={saveRecipients} disabled={busy}>Save recipients</button>}</div>
+        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
           {policyDetail.status==='DRAFT'?<><p>Each institution receives either a percentage of the net distributable pool or a fixed amount per eligible paid sale. Duplicate institutions are not permitted.</p>
             <div className={styles.recipientList}>{recipients.map((r,i)=><div className={styles.recipientEditor} key={i}>
               <label>Institution<select value={r.institutionId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,institutionId:e.target.value}:x))}><option value="">Select institution</option>{catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)}</select></label>
@@ -577,8 +640,8 @@ export default function FinancePage(){
           <label className={styles.checkLabel}><input type="checkbox" disabled={!activeDraft} checked={design.showLogo} onChange={e=>setDesign(v=>({...v,showLogo:e.target.checked}))}/> Show approved supplier logo where configured</label>
           <label>Footer copy<textarea disabled={!activeDraft} rows={3} maxLength={500} value={design.footerText} onChange={e=>setDesign(v=>({...v,footerText:e.target.value}))}/></label>
           <div className={styles.buttonStack}>
-            {!selectedTemplate?<button className={styles.primary} disabled={busy} onClick={createTemplate}>Create draft template</button>:<>
-              {selectedTemplate.version_status==='DRAFT'&&<><button className={styles.secondary} disabled={busy} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy} onClick={submitTemplate}>Submit for approval</button></>}
+            {!selectedTemplate?<button className={styles.primary} disabled={busy||!templateName.trim()||(templateScope==='SELLER'&&!templateEntityId)} onClick={createTemplate}>Create draft template</button>:<>
+              {selectedTemplate.version_status==='DRAFT'&&<><button className={styles.secondary} disabled={busy||designUnchanged} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy} onClick={submitTemplate}>Submit for approval</button></>}
               {selectedTemplate.version_status==='PENDING_APPROVAL'&&<button className={styles.primary} disabled={busy} onClick={approveTemplate}>Approve version</button>}
               {selectedTemplate.version_status==='APPROVED'&&<button className={styles.primary} disabled={busy} onClick={publishTemplate}>Publish approved version</button>}
             </>}

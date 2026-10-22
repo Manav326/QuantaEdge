@@ -2,6 +2,7 @@
 
 
 import { apiFetch } from '../components/apiClient';
+import { notifyUser } from '../components/GlobalNotificationHost';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
@@ -160,20 +161,76 @@ export default function InstitutionsAdminPage() {
 
   const filtered=useMemo(()=>{const q=query.trim().toLowerCase();return institutions.filter(i=>!q||[i.tenant_code,i.display_name,i.legal_name,i.status].some(v=>String(v||'').toLowerCase().includes(q)));},[institutions,query]);
   const setCreateField=(key:keyof typeof create,value:string)=>setCreate(old=>({...old,[key]:value}));
+  const createDraftIssue=()=>{
+    if(!/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(create.tenantCode.trim().toUpperCase()))return 'Use a 3–32 character institution code with letters, numbers, hyphens or underscores.';
+    if(create.displayName.trim().length<2||create.displayName.trim().length>180)return 'Enter an institution display name between 2 and 180 characters.';
+    if(create.legalName.trim().length>220)return 'The legal name must be 220 characters or fewer.';
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(create.adminUsername.trim()))return 'Enter an administrator username between 3 and 64 characters.';
+    if(create.adminDisplayName.trim().length<2||create.adminDisplayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
+    if(!create.initialPassword.trim()||create.initialPassword.length<12||create.initialPassword.length>72)return 'The temporary password must contain 12–72 non-blank characters.';
+    return '';
+  };
+  const adminDraftIssue=()=>{
+    if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(admin.username.trim()))return 'Enter a username between 3 and 64 characters.';
+    if(admin.displayName.trim().length<2||admin.displayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
+    if(!admin.initialPassword.trim()||admin.initialPassword.length<12||admin.initialPassword.length>72)return 'The temporary password must contain 12–72 non-blank characters.';
+    return '';
+  };
+  const profileDraftIssue=()=>{
+    if(profile.displayName.trim().length<2||profile.displayName.trim().length>180)return 'Enter an institution display name between 2 and 180 characters.';
+    if(profile.legalName.trim().length>220)return 'The legal name must be 220 characters or fewer.';
+    return '';
+  };
+  const profileChanged=Boolean(detail)&&(
+    profile.displayName.trim()!==String(detail?.display_name??'').trim()||
+    profile.legalName.trim()!==String(detail?.legal_name??'').trim()
+  );
+  const brandDraftIssue=()=>{
+    if(brand.displayName.trim().length<2||brand.displayName.trim().length>180)return 'Enter a branded display name between 2 and 180 characters.';
+    return '';
+  };
+  const brandChanged=Boolean(detail)&&(
+    brand.displayName.trim()!==String(detail?.brand_display_name||detail?.display_name||'').trim()||
+    brand.tagline.trim()!==String(detail?.tagline??'').trim()||
+    brand.storeListingUrl.trim()!==String(detail?.store_listing_url??'').trim()||
+    brand.presetId!==String(detail?.themeTokens?.presetId||'quantaedge-orange')||
+    brand.appearance!==String(detail?.themeTokens?.appearance||'system')||
+    brand.primary!==String(detail?.themeTokens?.brandPrimary||detail?.themeTokens?.primary||'#F97316')||
+    brand.accent!==String(detail?.themeTokens?.brandAccent||detail?.themeTokens?.accent||'#0F766E')
+  );
+  const billingDraftIssue=()=>{
+    if(!/^\d+(?:\.\d{1,2})?$/.test(billing.unitPriceRupees.trim()))return 'Enter a non-negative price with at most two decimal places.';
+    if(Number(billing.unitPriceRupees)<0)return 'Price cannot be negative.';
+    if(!billing.effectiveFrom)return 'Choose an effective-from date.';
+    if(billing.effectiveUntil&&billing.effectiveUntil<billing.effectiveFrom)return 'End date must be on or after the effective-from date.';
+    if(!['MONTHLY','ANNUAL'].includes(billing.billingCadence))return 'Choose a supported billing cadence.';
+    return '';
+  };
+  const billingChanged=Boolean(detail)&&(
+    billing.currency!==String(detail?.currency||'INR')||
+    Number(billing.unitPriceRupees)!==(Number(detail?.unit_price_paise||0)/100)||
+    billing.billingCadence!==String(detail?.billing_cadence||'MONTHLY')||
+    billing.effectiveFrom!==(detail?.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10))||
+    billing.effectiveUntil!==(detail?.effective_until?.slice(0,10)||'')
+  );
+  const hasCourseChanges=catalog.some(course=>{
+    const enabled=detail?.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
+    return Boolean(courseDraft[course.id])!==enabled;
+  });
   const doCreate=async(event:FormEvent)=>{
-    event.preventDefault();setSaving(true);setError('');setNotice('');setJoinCode('');
+    event.preventDefault();const issue=createDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');setJoinCode('');
     try{
-      const result=await api<{institutionId:number;displayName:string;nextStep:string}>('/api/v1/hrms/platform/institutions',{method:'POST',body:JSON.stringify(create)});
-      setJoinCode('');setNotice('Institution '+result.displayName+' created. HRMS manages provider credentials centrally; configure the institution billing contract, verify platform integration readiness, then issue its learner join link.');
+      const result=await api<{institutionId:number;displayName:string;nextStep:string}>('/api/v1/hrms/platform/institutions',{method:'POST',body:JSON.stringify({...create,tenantCode:create.tenantCode.trim().toUpperCase(),displayName:create.displayName.trim(),legalName:create.legalName.trim(),adminUsername:create.adminUsername.trim().toLowerCase(),adminDisplayName:create.adminDisplayName.trim()})});
+      setJoinCode('');setNotice('');notifyUser('Institution '+result.displayName+' created. HRMS manages provider credentials centrally; configure the institution billing contract, verify platform integration readiness, then issue its learner join link.','success');
       setCreate({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
       setShowCreate(false);await loadBase();await loadDetail(result.institutionId);
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
   };
   async function saveInstitutionProfile(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');setNotice('');
+    event.preventDefault();if(!detail)return;const issue=profileDraftIssue();if(issue){setError(issue);return;}if(!profileChanged){setNotice('');notifyUser('No institution profile changes to save.','info');return;}setSaving(true);setError('');setNotice('');
     try{
       await api('/api/v1/hrms/platform/institutions/'+detail.id+'/profile',{method:'PUT',body:JSON.stringify(profile)});
-      setNotice('Institution profile saved. The separately customised white-label name, if any, remains unchanged.');
+      setNotice('');notifyUser('Institution profile saved. The separately customised white-label name, if any, remains unchanged.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){setError(e instanceof Error?e.message:'Institution profile could not be saved.');}
     finally{setSaving(false);}
@@ -181,7 +238,7 @@ export default function InstitutionsAdminPage() {
   async function changeStatus(status:'ACTIVE'|'SUSPENDED'|'CLOSED'){
     if(!detail)return;const reason=window.prompt('Reason for changing '+detail.tenant_code+' to '+status+':','');if(reason===null)return;
     setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/status',{method:'PUT',body:JSON.stringify({status,reason})});setNotice('Institution status saved.');await loadBase();await loadDetail(detail.id);}
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/status',{method:'PUT',body:JSON.stringify({status,reason})});setNotice('');notifyUser('Institution status saved.','success');await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Status change failed.');}finally{setSaving(false);}
   }
   async function saveCourseAuthorisation(){
@@ -190,11 +247,11 @@ export default function InstitutionsAdminPage() {
       const enabled=detail.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
       return Boolean(courseDraft[course.id])!==enabled;
     });
-    if(!changes.length){setNotice('No course authorisation changes to save.');setEditingCard(null);return;}
+    if(!changes.length){setNotice('');notifyUser('There are no course authorisation changes to save.','info');setEditingCard(null);return;}
     setSaving(true);setError('');setNotice('');
     try{
       for(const course of changes){await api('/api/v1/hrms/platform/institutions/'+detail.id+'/courses/'+course.id,{method:'PUT',body:JSON.stringify({enabled:Boolean(courseDraft[course.id])})});}
-      setNotice('Saved '+changes.length+' course authorisation change'+(changes.length===1?'':'s')+'.');
+      setNotice('');notifyUser('Saved '+changes.length+' course authorisation change'+(changes.length===1?'':'s')+'.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){
       const message=e instanceof Error?e.message:'Course authorisation could not be saved.';
@@ -226,27 +283,27 @@ export default function InstitutionsAdminPage() {
       await loadBase();
       await loadDetail(detail.id);
       setEditingCard('branding');
-      setNotice('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.');
+      setNotice('');notifyUser('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.','success');
       return true;
     }finally{setSaving(false);}
   }
 
   async function saveBranding(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
+    event.preventDefault();if(!detail)return;const issue=brandDraftIssue();if(issue){setError(issue);return;}if(!brandChanged){setNotice('');notifyUser('No branding changes to save.','info');return;}setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
       displayName:brand.displayName,tagline:brand.tagline,storeListingUrl:brand.storeListingUrl,
       themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
-    })});setNotice('Tenant branding settings saved.');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
+    })});setNotice('');notifyUser('Tenant branding settings saved.','success');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
   }
   async function saveBilling(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('Billing contract saved. New billable activations will be logged in the ledger.');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
+    event.preventDefault();if(!detail)return;const issue=billingDraftIssue();if(issue){setError(issue);return;}if(!billingChanged){setNotice('');notifyUser('No billing contract changes to save.','info');return;}setSaving(true);setError('');
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('');notifyUser('Billing contract saved. New billable activations will be logged in the ledger.','success');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Billing contract could not be saved.');}finally{setSaving(false);}
   }
   async function rotateCode(){
     if(!detail||!window.confirm('Rotate the join code? The old code stops working immediately.'))return;setSaving(true);setError('');
-    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setJoinCodeInstitutionId(detail.id);setCodeExpiry(result.expiresAt);setNotice('Join code rotated; the old code was revoked.');}
+    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setJoinCodeInstitutionId(detail.id);setCodeExpiry(result.expiresAt);setNotice('');notifyUser('Join code rotated; the old code was revoked.','success');}
     catch(e){setError(e instanceof Error?e.message:'Join code could not be rotated.');}finally{setSaving(false);}
   }
   async function reconcileBilling(){
@@ -255,7 +312,7 @@ export default function InstitutionsAdminPage() {
     try{
       const result=await api<{insertedEvents:number;totalChargeEvents:number;periodStart:string;periodEnd:string}>(
         '/api/v1/hrms/platform/institutions/'+detail.id+'/billing/reconcile',{method:'POST',body:JSON.stringify({})});
-      setNotice('Ledger reconciled for '+result.periodStart+' through '+result.periodEnd+'. New charge events: '+result.insertedEvents+'; total events: '+result.totalChargeEvents+'.');
+      setNotice('');notifyUser('Ledger reconciled for '+result.periodStart+' through '+result.periodEnd+'. New charge events: '+result.insertedEvents+'; total events: '+result.totalChargeEvents+'.','success');
       await loadBase();await loadDetail(detail.id);
     }catch(e){setError(e instanceof Error?e.message:'Billing ledger could not be reconciled.');}
     finally{setSaving(false);}
@@ -280,23 +337,23 @@ export default function InstitutionsAdminPage() {
   }
   async function copyCode(){
     if(!joinCode||!detail||joinCodeInstitutionId!==detail.id)return;
-    try{await navigator.clipboard.writeText(joinCode);setNotice('Join code copied.');}
-    catch{setNotice('Copy the join code manually: '+joinCode);}
+    try{await navigator.clipboard.writeText(joinCode);setNotice('');notifyUser('Join code copied.','info');}
+    catch{setNotice('');notifyUser('Copy the join code manually: '+joinCode,'info');}
   }
   async function copySchoolLink(){
     const link=schoolLearningLink();
     if(!link)return;
-    try{await navigator.clipboard.writeText(link);setNotice('School-branded learner link copied. Share it only with this school’s learners.');}
-    catch{setNotice('Copy the school learner link manually: '+link);}
+    try{await navigator.clipboard.writeText(link);setNotice('');notifyUser('School-branded learner link copied. Share it only with this school’s learners.','info');}
+    catch{setNotice('');notifyUser('Copy the school learner link manually: '+link,'info');}
   }
   async function createAdmin(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
-    try{const result=await api<{username:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/admins',{method:'POST',body:JSON.stringify(admin)});setAdmin({username:'',displayName:'',initialPassword:''});setShowAdmin(false);setNotice('Administrator '+result.username+' was created. They must change the temporary password at first sign-in.');await loadDetail(detail.id);}
+    event.preventDefault();if(!detail)return;const issue=adminDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');
+    try{const result=await api<{username:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/admins',{method:'POST',body:JSON.stringify({...admin,username:admin.username.trim().toLowerCase(),displayName:admin.displayName.trim()})});setAdmin({username:'',displayName:'',initialPassword:''});setShowAdmin(false);setNotice('');notifyUser('Administrator '+result.username+' was created. They must change the temporary password at first sign-in.','success');await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Administrator could not be created.');}finally{setSaving(false);}
   }
   async function toggleAdmin(account:Admin){
     if(!detail||!window.confirm((account.active?'Suspend ':'Activate ')+account.username+'?'))return;setSaving(true);setError('');
-    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/admins/'+account.id+'/status',{method:'PUT',body:JSON.stringify({active:!account.active})});setNotice('Administrator status saved.');await loadDetail(detail.id);}
+    try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/admins/'+account.id+'/status',{method:'PUT',body:JSON.stringify({active:!account.active})});setNotice('');notifyUser('Administrator status saved.','success');await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Could not update admin status.');}finally{setSaving(false);}
   }
 
@@ -340,7 +397,7 @@ export default function InstitutionsAdminPage() {
       <label>Admin username *<input required minLength={3} maxLength={64} value={create.adminUsername} onChange={e=>setCreateField('adminUsername',e.target.value)}/></label>
       <label>Administrator full name *<input required minLength={2} maxLength={120} value={create.adminDisplayName} onChange={e=>setCreateField('adminDisplayName',e.target.value)}/></label>
       <label>Temporary password *<PasswordField required minLength={12} maxLength={72} autoComplete="new-password" value={create.initialPassword} onChange={e=>setCreateField('initialPassword',e.target.value)}/><small>12+ characters; the admin must change this after first sign-in.</small></label>
-      <div className={styles.formActions}><button className={styles.primary} disabled={saving}>{saving?'Creating…':'Create institution'}</button></div>
+      {createDraftIssue()&&<p className={styles.disclaimer} role="status">{createDraftIssue()}</p>}<div className={styles.formActions}><button className={styles.primary} disabled={saving||Boolean(createDraftIssue())}>{saving?'Creating…':'Create institution'}</button></div>
     </form></section>:null}
     <div className={styles.columns}>
       <section className={styles.panel}><div className={styles.panelHeading}><div><h2>Customer institutions</h2><p>Tenant boundary, course scope and billing scope are separate.</p></div><b>{institutions.length}</b></div>
@@ -351,24 +408,24 @@ export default function InstitutionsAdminPage() {
       </section>
       <section className={styles.detailColumn}>{!detail?<div className={styles.emptyPanel}><div className={styles.emptyIcon}>▤</div><h2>Select an institution</h2><p>Its settings and reports will appear here. All changes are audited and institution admins remain read-only.</p></div>:<>
         <section className={styles.panel}><div className={styles.detailHeader}><div><span className={styles.eyebrow}>{detail.tenant_code}</span><h2>{detail.display_name}</h2><p>{detail.legal_name||'Legal name not supplied'}</p></div><span className={styles.status+(detail.status==='ACTIVE'?' '+styles.active:detail.status==='SUSPENDED'?' '+styles.suspended:'')}>{detail.status}</span></div>
-          <div className={styles.actions}><button className={styles.secondary} onClick={()=>{void navigator.clipboard?.writeText(detail.tenant_code).then(()=>setNotice('Tenant code copied.')).catch(()=>setNotice('Institution code: '+detail.tenant_code));}}>Copy tenant code</button>
-            {editingCard==='profile'?<><button type="button" className={styles.secondary} disabled={saving} onClick={()=>cancelCardEdit('profile')}>Cancel</button><button type="submit" form="institution-profile-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save profile'}</button></>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>{setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});setEditingCard('profile');}}>Edit profile</button>}
+          <div className={styles.actions}><button className={styles.secondary} onClick={()=>{void navigator.clipboard?.writeText(detail.tenant_code).then(()=>{setNotice('');notifyUser('Tenant code copied.','info');}).catch(()=>{setNotice('');notifyUser('Institution code: '+detail.tenant_code,'info');});}}>Copy tenant code</button>
+            {editingCard==='profile'?<><button type="button" className={styles.secondary} disabled={saving} onClick={()=>cancelCardEdit('profile')}>Cancel</button><button type="submit" form="institution-profile-form" className={styles.primary} disabled={saving||Boolean(profileDraftIssue())||!profileChanged}>{saving?'Saving…':'Save profile'}</button></>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>{setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});setEditingCard('profile');}}>Edit profile</button>}
             {editingCard==='status'?<>
               {detail.status==='ACTIVE'?<button className={styles.warning} disabled={saving} onClick={()=>void changeStatus('SUSPENDED')}>Suspend</button>:detail.status==='SUSPENDED'?<button className={styles.primary} disabled={saving} onClick={()=>void changeStatus('ACTIVE')}>Reactivate</button>:null}
               {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}
               <button type="button" className={styles.quiet} disabled={saving} onClick={()=>cancelCardEdit('status')}>Done</button>
             </>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>setEditingCard('status')}>Edit status</button>}</div>
-          {editingCard==='profile'?<form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
+          {editingCard==='profile'?<><form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
             <label>Institution display name *<input required minLength={2} maxLength={180} value={profile.displayName} onChange={e=>setProfile(v=>({...v,displayName:e.target.value}))}/><small>The institution name is used as the white-label default unless a separate branded display name has been configured.</small></label>
             <label>Legal name<input maxLength={220} value={profile.legalName} onChange={e=>setProfile(v=>({...v,legalName:e.target.value}))}/><small>Optional; shown in institution operations and legal records.</small></label>
-          </form>:null}
+          </form>{profileDraftIssue()?<p className={styles.disclaimer} role="status">{profileDraftIssue()}</p>:!profileChanged?<p className={styles.disclaimer} role="status">No changes to save.</p>:null}</>:null}
           <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
           <section className={styles.panel}>
             <div className={styles.panelHeading}>
               <div><h3>Course authorisation</h3><p>Only active course products are available. Course content itself remains centrally managed.</p></div>
-              {editingCard==='courses'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('courses')} disabled={saving}>Cancel</button><button type="button" className={styles.primary} onClick={()=>void saveCourseAuthorisation()} disabled={saving}>{saving?'Saving…':'Save changes'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>{setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));setEditingCard('courses');}} disabled={saving||editingCard!==null}>Edit</button>}
+              {editingCard==='courses'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('courses')} disabled={saving}>Cancel</button><button type="button" className={styles.primary} onClick={()=>void saveCourseAuthorisation()} disabled={saving||!hasCourseChanges}>{saving?'Saving…':'Save changes'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>{setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));setEditingCard('courses');}} disabled={saving||editingCard!==null}>Edit</button>}
             </div>
             {editingCard==='courses'?<div className={styles.courseList}>{catalog.map(course=><label key={course.id} className={styles.courseItem}><span><strong>{course.display_name}</strong><small>{course.code}{course.class_code?' · Class '+course.class_code:''}</small></span><input type="checkbox" checked={Boolean(courseDraft[course.id])} disabled={saving||detail.status==='CLOSED'} onChange={e=>setCourseDraft(current=>({...current,[course.id]:e.target.checked}))} aria-label={'Authorise '+course.display_name}/></label>)}{!catalog.length?<p className={styles.emptyText}>No active courses in the catalogue.</p>:null}</div>:<div className={styles.readOnlySummary}><div className={styles.readOnlyMetric}><strong>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').length}</strong><span>Authorised course(s)</span></div><div className={styles.readOnlyValues}>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').map(course=><span key={course.program_id} className={styles.valueChip}>{course.display_name}</span>)}{!(detail.courses||[]).some(x=>x.entitlement_status==='ACTIVE')?<span className={styles.emptyValue}>No courses authorised yet.</span>:null}</div></div>}
           </section>
@@ -376,14 +433,14 @@ export default function InstitutionsAdminPage() {
             <div className={styles.panelHeading}><div><h3>Institution administrators</h3><p>Only platform owner can create or suspend client admins.</p></div>
               {editingCard==='admins'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('admins')} disabled={saving}>Done</button><button type="button" className={styles.primary} onClick={()=>setShowAdmin(v=>!v)} disabled={saving}>{showAdmin?'Cancel add':'＋ Add admin'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>setEditingCard('admins')} disabled={saving||editingCard!==null}>Edit</button>}
             </div>
-            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<PasswordField required minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Provision admin</button></div></form>:null}
+            {editingCard==='admins'&&showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<PasswordField required minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label>{adminDraftIssue()&&<p className={styles.disclaimer} role="status">{adminDraftIssue()}</p>}<div className={styles.formActions}><button className={styles.primary} disabled={saving||Boolean(adminDraftIssue())}>Provision admin</button></div></form>:null}
             <div className={styles.list}>{(detail.admins||[]).map(a=><div className={styles.listItem} key={a.id}><span className={styles.avatar}>{a.display_name.slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{a.display_name}</strong><small>@{a.username} · {a.must_change_password?'initial password not changed':'password set'}</small><small>Last sign-in: {fmt(a.last_login_at)}</small></span>{editingCard==='admins'?<button className={styles.secondary} disabled={saving} onClick={()=>void toggleAdmin(a)}>{a.active?'Suspend':'Activate'}</button>:<span className={styles.status+(a.active?' '+styles.active:' '+styles.suspended)}>{a.active?'ACTIVE':'SUSPENDED'}</span>}</div>)}
             {!(detail.admins||[]).length?<p className={styles.emptyText}>No institution administrators configured.</p>:null}</div>
             {editingCard==='admins'?<p className={styles.disclaimer}>Admin provisioning and activation changes are applied immediately and recorded in the audit history.</p>:null}
           </section>
           <section className={styles.panel}>
             {editingCard==='branding'?<>
-              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Generate a complete asset pack or apply the validated logo and icon renditions to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save branding'}</button></div></div>
+              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Generate a complete asset pack or apply the validated logo and icon renditions to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving||Boolean(brandDraftIssue())||!brandChanged}>{saving?'Saving…':'Save branding'}</button></div></div>
               <form id="institution-branding-form" className={styles.form} onSubmit={saveBranding}>
                 <p className={styles.disclaimer}>After you confirm a crop, that asset is uploaded immediately. The display name, Play listing URL and theme settings are saved together with Save branding.</p>
                 <InstitutionBrandTemplate
@@ -401,6 +458,7 @@ export default function InstitutionsAdminPage() {
                   onApplied={async()=>{await loadBase();await loadDetail(detail.id);setEditingCard('branding');}}
                 />
                 <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
+                {brandDraftIssue()?<p className={styles.disclaimer} role="status">{brandDraftIssue()}</p>:!brandChanged?<p className={styles.disclaimer} role="status">No branding changes to save.</p>:null}
                 <div className={styles.themeSettingsGrid}>
                   <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
                     {themePresets.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
@@ -432,7 +490,7 @@ export default function InstitutionsAdminPage() {
           </section>
           <section className={styles.panel}>
             {editingCard==='billing'?<>
-              <div className={styles.panelHeading}><div><h3>Enrollment billing contract</h3><p>Changes are owner-controlled; review the rate and effective dates before saving.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('billing')} disabled={saving}>Cancel</button><button type="submit" form="institution-billing-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save contract'}</button></div></div>
+              <div className={styles.panelHeading}><div><h3>Enrollment billing contract</h3><p>Changes are owner-controlled; review the rate and effective dates before saving.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('billing')} disabled={saving}>Cancel</button><button type="submit" form="institution-billing-form" className={styles.primary} disabled={saving||Boolean(billingDraftIssue())||!billingChanged}>{saving?'Saving…':'Save contract'}</button></div></div>
               <div className={styles.billingBox}><span>Recorded charge total this period</span><strong>{rupees(institutions.find(i=>i.id===detail.id)?.current_period_amount_paise,detail.contract_currency)}</strong><small>{institutions.find(i=>i.id===detail.id)?.current_period_billable_events||0} membership charge event(s) in the list snapshot</small></div>
               <form id="institution-billing-form" className={styles.form} onSubmit={saveBilling}>
                 <label>Billing currency<input required value="INR" readOnly aria-readonly="true"/><small>Currently supported: INR, stored in paise.</small></label>
@@ -440,7 +498,7 @@ export default function InstitutionsAdminPage() {
                 <label>Cadence<select value={billing.billingCadence} onChange={e=>setBilling(v=>({...v,billingCadence:e.target.value}))}><option value="MONTHLY">Monthly</option><option value="ANNUAL">Annual</option></select></label>
                 <label>Effective from *<input required type="date" value={billing.effectiveFrom} onChange={e=>setBilling(v=>({...v,effectiveFrom:e.target.value}))}/></label>
                 <label>End date<input type="date" value={billing.effectiveUntil} onChange={e=>setBilling(v=>({...v,effectiveUntil:e.target.value}))}/></label>
-                <div className={styles.formActions}><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void rotateCode()}>Issue / rotate join code</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void reconcileBilling()}>Reconcile current period</button></div>
+                {billingDraftIssue()?<p className={styles.disclaimer} role="status">{billingDraftIssue()}</p>:!billingChanged?<p className={styles.disclaimer} role="status">No contract changes to save.</p>:null}<div className={styles.formActions}><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void rotateCode()}>Issue / rotate join code</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void reconcileBilling()}>Reconcile current period</button></div>
               </form>
               <p className={styles.disclaimer}>Invoice issuance, tax/credits, payment collection, contract versioning and ledger reconciliation are not yet release-ready.</p>
             </>:<>

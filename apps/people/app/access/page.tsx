@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge, PeopleButton } from '../components/PeopleUI';
 import PasswordField from '../components/PasswordField';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
+import { notifyUser } from '../components/GlobalNotificationHost';
 
 type Session = { staffId?: number; role?: string; displayName?: string; permissions?: string[]; workspace?: string };
 type AccessUser = {
@@ -59,6 +60,7 @@ export default function HrmsAccessPage() {
   const [initialPassword, setInitialPassword] = useState('');
   const [roles, setRoles] = useState<string[]>(['EMPLOYEE']);
   const [showCredentials, setShowCredentials] = useState(false);
+  const [editingRoles, setEditingRoles] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -99,6 +101,10 @@ export default function HrmsAccessPage() {
   const selected = rows.find((row) => row.employee_id === selectedId) || null;
   const isSelf = Boolean(selected?.staff_id && session?.staffId === selected.staff_id);
   const isReserved = Boolean(selected && reserved(selected));
+  const hasRoleChanges = Boolean(selected) && (
+    JSON.stringify([...roles].sort()) !== JSON.stringify([...(selected?.roles || [])].sort()) ||
+    JSON.stringify([...assignedPermissions].sort()) !== JSON.stringify([...(selected?.assigned_permissions || [])].sort())
+  );
 
   function selectEmployee(row: AccessUser) {
     setSelectedId(row.employee_id);
@@ -107,6 +113,7 @@ export default function HrmsAccessPage() {
     setRoles(Array.isArray(row.roles) && row.roles.length ? [...row.roles] : ['EMPLOYEE']);
     setAssignedPermissions(Array.isArray(row.assigned_permissions) ? [...row.assigned_permissions] : []);
     setShowCredentials(!row.username || !row.hrms_access_enabled);
+    setEditingRoles(!row.staff_id);
     setError('');
     setNotice('');
   }
@@ -131,8 +138,8 @@ export default function HrmsAccessPage() {
         method: 'POST',
         body: JSON.stringify({ username: username.trim(), initialPassword, roles, permissions: assignedPermissions }),
       });
-      setNotice(t('people.access.credentialsSaved'));
-      setInitialPassword('');
+      setNotice('');notifyUser(t('people.access.credentialsSaved'),'success');
+      setInitialPassword('');setShowCredentials(false);setEditingRoles(false);
       await load();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('people.access.credentialsSaveFailed'));
@@ -146,8 +153,8 @@ export default function HrmsAccessPage() {
       await api('/api/v1/hrms/access-users/' + selected.employee_id + '/roles', {
         method: 'PUT', body: JSON.stringify({ roles, permissions: assignedPermissions }),
       });
-      setNotice(t('people.access.rolesSaved'));
-      await load();
+      setNotice('');notifyUser(t('people.access.rolesSaved'),'success');
+      setEditingRoles(false);await load();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('people.access.rolesSaveFailed'));
     } finally { setSaving(false); }
@@ -162,7 +169,7 @@ export default function HrmsAccessPage() {
       await api('/api/v1/hrms/access-users/' + row.employee_id + '/status', {
         method: 'PUT', body: JSON.stringify({ enabled }),
       });
-      setNotice(enabled ? t('people.access.enabledNotice') : t('people.access.disabledNotice'));
+      setNotice('');notifyUser(enabled ? t('people.access.enabledNotice') : t('people.access.disabledNotice'),'success');
       await load();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('people.access.statusUpdateFailed'));
@@ -226,36 +233,38 @@ export default function HrmsAccessPage() {
               <PeopleButton variant="secondary" type="button" onClick={() => { setSelectedId(null); setShowCredentials(false); }} disabled={saving}>Close</PeopleButton>
             </div>
 
-            <div className="cards">
-              {ROLE_OPTIONS.map((role) => (
-                <label className="card" key={role.value} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
-                  <input type="checkbox" checked={roles.includes(role.value)} onChange={(event) => toggleRole(role.value, event.target.checked)} disabled={saving || isReserved || isSelf} />
-                  <span><strong>{t(role.labelKey)}</strong><div className="small">{t(role.descriptionKey)}</div></span>
-                </label>
-              ))}
-            </div>
-            <p className="small">Roles combine by union. Additional permissions below are HRMS-scoped and cannot grant education content access. The API checks every permission server-side.</p>
-            <div className="cards">
-              {permissionOptions.map((permission) => (
-                <label className="card" key={permission.permission_key} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
-                  <input
-                    type="checkbox"
-                    checked={assignedPermissions.includes(permission.permission_key)}
-                    onChange={(event) => setAssignedPermissions((current) => event.target.checked
-                      ? [...new Set([...current, permission.permission_key])]
-                      : current.filter((key) => key !== permission.permission_key))}
-                    disabled={saving || isReserved || isSelf}
-                  />
-                  <span><strong>{permission.display_name}</strong><div className="small">{permission.description}</div><div className="small">{permission.permission_key}</div></span>
-                </label>
-              ))}
-            </div>
+            {editingRoles ? <>
+              <div className="cards">
+                {ROLE_OPTIONS.map((role) => (
+                  <label className="card" key={role.value} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
+                    <input type="checkbox" checked={roles.includes(role.value)} onChange={(event) => toggleRole(role.value, event.target.checked)} disabled={saving || isReserved || isSelf || Boolean(selected.staff_id && !selected.hrms_access_enabled)} />
+                    <span><strong>{t(role.labelKey)}</strong><div className="small">{t(role.descriptionKey)}</div></span>
+                  </label>
+                ))}
+              </div>
+              <p className="small">Roles combine by union. Additional permissions are HRMS-scoped and cannot grant education content access. The API checks every permission server-side.</p>
+              <div className="cards">
+                {permissionOptions.map((permission) => (
+                  <label className="card" key={permission.permission_key} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
+                    <input type="checkbox" checked={assignedPermissions.includes(permission.permission_key)} onChange={(event) => setAssignedPermissions((current) => event.target.checked ? [...new Set([...current, permission.permission_key])] : current.filter((key) => key !== permission.permission_key))} disabled={saving || isReserved || isSelf || Boolean(selected.staff_id && !selected.hrms_access_enabled)} />
+                    <span><strong>{permission.display_name}</strong><div className="small">{permission.description}</div><div className="small">{permission.permission_key}</div></span>
+                  </label>
+                ))}
+              </div>
+            </> : <section className="panel" aria-label="Read-only access summary">
+              <h3>Assigned roles</h3>
+              <div className="small">{(selected.roles || []).map(value => { const role = ROLE_OPTIONS.find(option => option.value === value); return role ? t(role.labelKey) : pretty(value); }).join(' · ') || 'No explicit HRMS roles assigned'}</div>
+              <details style={{marginTop:12}}>
+                <summary>Additional HRMS permissions ({(selected.assigned_permissions || []).length})</summary>
+                {(selected.assigned_permissions || []).length ? <div style={{display:'grid',gap:8,marginTop:10}}>{permissionOptions.filter(permission => (selected.assigned_permissions || []).includes(permission.permission_key)).map(permission => <div key={permission.permission_key}><strong>{permission.display_name}</strong><div className="small">{permission.description}</div><div className="small">{permission.permission_key}</div></div>)}</div> : <p className="small">No additional permissions assigned. Permissions inherited from roles still apply.</p>}
+              </details>
+            </section>}
 
-            {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && (
-              <PeopleButton variant="primary" type="button" onClick={() => void saveRoles()} disabled={saving}>
-                {saving ? t('people.access.saving') : t('people.access.saveRoles')}
-              </PeopleButton>
-            )}
+            {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && !editingRoles && <PeopleButton variant="secondary" type="button" onClick={() => setEditingRoles(true)} disabled={saving}>{t('people.access.manageAccess')}</PeopleButton>}
+            {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && editingRoles && <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+              <PeopleButton variant="primary" type="button" onClick={() => void saveRoles()} disabled={saving || !hasRoleChanges}>{saving ? t('people.access.saving') : t('people.access.saveRoles')}</PeopleButton>
+              <PeopleButton variant="secondary" type="button" onClick={() => { setRoles(Array.isArray(selected.roles) && selected.roles.length ? [...selected.roles] : ['EMPLOYEE']); setAssignedPermissions(Array.isArray(selected.assigned_permissions) ? [...selected.assigned_permissions] : []); setEditingRoles(false); }} disabled={saving}>{t('people.access.cancel')}</PeopleButton>
+            </div>}
 
             {!isReserved && !isSelf && (
               <div style={{ marginTop: 18 }}>

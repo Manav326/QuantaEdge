@@ -45,9 +45,10 @@ function selectedLocale() {
   }
 }
 
-export default function GlobalNotificationHost() {
+export default function GlobalNotificationHost({ workspace = 'default' }: { workspace?: 'default' | 'people' }) {
   const [notices, setNotices] = useState<Active[]>([]);
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const isPeopleWorkspace = workspace === 'people';
   const serial = useRef(0);
   const visibleRef = useRef<Active[]>([]);
   const queuedRef = useRef<Active[]>([]);
@@ -143,9 +144,12 @@ export default function GlobalNotificationHost() {
   if (!notices.length || typeof document === 'undefined') return null;
   return createPortal(
     <div aria-label={translateUi(selectedLocale(), 'common.notifications.label')} style={{
-      position: 'fixed', top: 'max(12px, env(safe-area-inset-top))',
-      right: 'max(12px, env(safe-area-inset-right))',
-      width: 'min(440px, calc(100vw - 24px))', maxHeight: 'calc(100dvh - 24px)',
+      position: 'fixed',
+      top: isPeopleWorkspace ? 'max(76px, calc(env(safe-area-inset-top) + 76px))' : 'max(12px, env(safe-area-inset-top))',
+      left: isPeopleWorkspace ? '50%' : 'auto',
+      right: isPeopleWorkspace ? 'auto' : 'max(12px, env(safe-area-inset-right))',
+      transform: isPeopleWorkspace ? 'translateX(-50%)' : 'none',
+      width: 'min(440px, calc(100vw - 24px))', maxHeight: isPeopleWorkspace ? 'calc(100dvh - 100px)' : 'calc(100dvh - 24px)',
       overflowY: 'auto', display: 'grid', alignContent: 'start', gap: 10,
       zIndex: 2147483647, pointerEvents: 'none'
     }}>
