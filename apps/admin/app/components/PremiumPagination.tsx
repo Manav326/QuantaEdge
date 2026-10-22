@@ -15,11 +15,11 @@ export type PremiumPaginationProps = {
 };
 
 const palette = {
-  ink: '#24334b',
-  muted: '#778398',
-  border: '#e1e7f0',
-  soft: '#f7f9fc',
-  active: '#24334b',
+  ink: 'var(--qe-color-text, #24334b)',
+  muted: 'var(--qe-color-text-muted, #778398)',
+  border: 'var(--qe-color-border-subtle, #e1e7f0)',
+  soft: 'var(--qe-color-surface-subtle, #f7f9fc)',
+  active: 'var(--qe-color-primary, #24334b)',
 };
 
 const buttonBase: CSSProperties = {
@@ -79,8 +79,8 @@ export default function PremiumPagination({
     padding: '14px 16px',
     border: '1px solid ' + palette.border,
     borderRadius: 16,
-    background: 'linear-gradient(135deg,#fff 0%,#fbfcfe 100%)',
-    boxShadow: '0 5px 18px rgba(28,42,65,.035)',
+    background: 'var(--qe-color-surface, #ffffff)',
+    boxShadow: 'var(--qe-elevation-1, 0 5px 18px rgba(28,42,65,.035))',
     color: palette.ink,
     boxSizing: 'border-box',
   };
@@ -92,7 +92,7 @@ export default function PremiumPagination({
     border: '1px solid ' + palette.border,
     borderRadius: 10,
     padding: '0 28px 0 10px',
-    background: '#fff',
+    background: 'var(--qe-color-surface-elevated, #fff)',
     color: palette.ink,
     font: 'inherit',
     fontSize: 12,
@@ -104,8 +104,8 @@ export default function PremiumPagination({
     minWidth: square ? 36 : undefined,
     padding: square ? '0 8px' : buttonBase.padding,
     borderColor: active ? palette.active : palette.border,
-    background: active ? palette.active : '#fff',
-    color: active ? '#fff' : palette.ink,
+    background: active ? palette.active : 'var(--qe-color-surface-elevated, #fff)',
+    color: active ? 'var(--qe-color-on-primary, #fff)' : palette.ink,
     boxShadow: active ? '0 4px 10px rgba(36,51,75,.16)' : 'none',
   });
   const disabledButton: CSSProperties = { ...buttonBase, color: '#aab2c0', background: palette.soft, cursor: 'not-allowed' };
