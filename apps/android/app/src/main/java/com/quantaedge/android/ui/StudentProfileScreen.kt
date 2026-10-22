@@ -56,7 +56,14 @@ fun StudentProfileScreen(
     onUploadPhoto: (String) -> Unit,
     onRemovePhoto: () -> Unit,
     onAccountLifecycle: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    billingAddresses: List<JSONObject>,
+    billingAddressesLoading: Boolean,
+    billingError: String = "",
+    billingStatus: String = "",
+    onSaveBillingAddress: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
+    onMakeDefaultBillingAddress: (Long) -> Unit,
+    onDeleteBillingAddress: (Long) -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     val clipboardManager = LocalClipboardManager.current
@@ -107,6 +114,18 @@ fun StudentProfileScreen(
             }
         }
         ColorThemeSettingsCard(language = language)
+                BillingAddressBook(
+            addresses = billingAddresses,
+            loading = billingAddressesLoading,
+            busy = busy,
+            language = language,
+            compactOnly = false,
+            errorMessage = billingError,
+            statusMessage = billingStatus,
+            onSave = onSaveBillingAddress,
+            onMakeDefault = onMakeDefaultBillingAddress,
+            onDelete = onDeleteBillingAddress
+        )
         androidx.compose.material3.Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
