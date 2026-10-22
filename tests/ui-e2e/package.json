@@ -5,7 +5,7 @@
   "description": "Evidence-led browser E2E tests for QuantaEdge user web, Education Admin and HRMS.",
   "scripts": {
     "test": "playwright test",
-    "test:production-gate": "QE_E2E_PRODUCTION_GATE=true playwright test",
+    "test:production-gate": "node ./scripts/production-gate.mjs",
     "report": "playwright show-report playwright-report"
   },
   "devDependencies": {
