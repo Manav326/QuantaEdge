@@ -254,6 +254,7 @@ const adminPagination = read('apps/admin/app/components/PremiumPagination.tsx');
 const adminMarketplace = read('apps/admin/app/marketplace/page.tsx');
 const adminMarketplaceCss = read('apps/admin/app/marketplace/Marketplace.module.css');
 const adminResourcesCss = read('apps/admin/app/resources/Resources.module.css');
+const adminQuestionsPage = read('apps/admin/app/questions/page.tsx');
 const adminCertificatesCss = read('apps/admin/app/certificates/Certificates.module.css');
 const adminAssessmentsCss = read('apps/admin/app/assessments/Assessments.module.css');
 const adminClassesCss = read('apps/admin/app/classes/Classes.module.css');
@@ -281,8 +282,12 @@ assert(adminMarketplace.includes('filteredRows') && adminMarketplace.includes('s
   adminMarketplaceCss.includes('.filters') && adminMarketplaceCss.includes('.offerSummary'),
   'Course Marketplace must provide compact summaries, search/status filters and expandable per-institution editing.');
 assert(adminResourcesCss.includes('overflow-wrap:anywhere') &&
-  adminResourcesCss.includes('word-break:break-word'),
-  'Textbook PDF provenance and checksum metadata must wrap rather than distort the page.');
+  adminResourcesCss.includes('word-break:break-word') &&
+  adminResourcesCss.includes('.previewReaderToolbar') &&
+  adminResourcesCss.includes('.previewPageViewport') &&
+  adminResourcesCss.includes('.filterMenu') &&
+  adminResourcesCss.includes('.workflowStep'),
+  'Textbook PDF provenance must wrap and the picker, filters, review workflow and PDF chrome must remain theme-aware.');
 assert(adminCertificatesCss.includes('transition-property:color,border-color !important') &&
   adminThemeCss.includes('tbody tr:is(:hover,:focus-within) > td'),
   'Admin certificate/table row hover must not animate into a white flash in dark mode.');
@@ -296,6 +301,11 @@ assert(adminThemeCss.includes('.qe-workspace-fullscreen') &&
   adminThemeCss.includes('[class*="reviewQuestion"]') &&
   adminThemeCss.includes('[class*="tableWrap"]'),
   'Content, question-review, grading and student-table controls need the shared Admin theme contract.');
+assert(adminQuestionsPage.includes('qe-question-review-card') &&
+  adminQuestionsPage.includes('qe-question-review-note') &&
+  adminThemeCss.includes('.qe-question-review-notice') &&
+  adminThemeCss.includes('.qe-question-review-warning'),
+  'Question review cards, explanations, review notes, notices and warning states must use semantic theme surfaces.');
 assert(adminClassesCss.includes('.tabs button') &&
   adminThemeCss.includes('button :is(span,b,strong)'),
   'Live and recorded class tab counters must receive theme-aware selected/unselected styling.');
