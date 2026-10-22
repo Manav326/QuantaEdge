@@ -100,15 +100,14 @@ export async function loadUiManifest(): Promise<UiManifest> {
 
 export function expandRoute(route: string): string {
   return route
-    .replace(/\\[\\[\\.\\.\\.[^\\]]+\\]\\]/g, 'qe-e2e-missing-path')
-    .replace(/\\[\\.\\.\\.[^\\]]+\\]/g, 'qe-e2e-missing-path')
-    .replace(/\\[([^\\]]+)\\]/g, (_match, parameter: string) =>
+    .replace(/\[\[\.{3}([^\]]+)\]\]/g, 'qe-e2e-missing-path')
+    .replace(/\[\.{3}([^\]]+)\]/g, 'qe-e2e-missing-path')
+    .replace(/\[([^\]]+)\]/g, (_match, parameter: string) =>
       parameter === 'institutionCode' ? 'QAT-UNKNOWN' :
       parameter === 'artifactId' ? 'qe-e2e-missing-artifact' :
       'qe-e2e-missing-' + parameter.replace(/[^a-z0-9-]/gi, '-')
     );
 }
-
 export function routeApp(sourcePath: string): 'web' | 'admin' | 'people' {
   if (sourcePath.startsWith('apps/web/')) return 'web';
   if (sourcePath.startsWith('apps/admin/')) return 'admin';
