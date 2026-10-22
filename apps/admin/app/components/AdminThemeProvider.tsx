@@ -287,6 +287,35 @@ export function AdminThemeProvider({
     return () => media.removeEventListener?.('change', apply);
   }, [brand, mode]);
 
+  // The HRMS-owned square app icon is the browser icon too; never substitute a wide logo.
+  // fetchInstitutionBrand validates the URL against the selected institution and asset role.
+  useEffect(() => {
+    const faviconUrl = brand?.appIconUrl || '/favicon.svg';
+    const appleIconUrl = brand?.appIconUrl || '/branding/quantaedge-icon.png';
+    let iconLinks = Array.from(document.head.querySelectorAll<HTMLLinkElement>('link[rel~="icon"], link[rel="shortcut icon"]'));
+
+    if (iconLinks.length === 0) {
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+      iconLinks = [link];
+    }
+
+    for (const link of iconLinks) {
+      link.href = faviconUrl;
+      link.type = brand?.appIconUrl ? 'image/png' : 'image/svg+xml';
+    }
+
+    let appleLinks = Array.from(document.head.querySelectorAll<HTMLLinkElement>('link[rel="apple-touch-icon"]'));
+    if (appleLinks.length === 0) {
+      const link = document.createElement('link');
+      link.rel = 'apple-touch-icon';
+      document.head.appendChild(link);
+      appleLinks = [link];
+    }
+    for (const link of appleLinks) link.href = appleIconUrl;
+  }, [brand, institutionCode]);
+
   const setMode = useCallback((next: AdminAppearanceMode) => {
     setSavedMode(next);
     try { window.localStorage.setItem(APPEARANCE_KEY, next); } catch { /* Appearance preference is optional. */ }
