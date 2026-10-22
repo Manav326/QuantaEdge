@@ -245,6 +245,79 @@ assert(webNotificationCss.includes('html[data-qe-appearance="dark"] .segmented b
   webNotificationCss.includes('html[data-qe-appearance="dark"] .item:focus-within'),
   'Learner Web notification selected/focused states must use tenant surfaces and visible focus without white overlays.');
 
+
+/* Admin/HRMS regression coverage for the Oct 2026 theme and content-authoring audit. */
+const adminContentStudio = read('apps/admin/app/content/page.tsx');
+const adminContentEnglish = read('apps/admin/app/i18n/catalogs/english.json');
+const adminContentHinglish = read('apps/admin/app/i18n/catalogs/hinglish.json');
+const adminPagination = read('apps/admin/app/components/PremiumPagination.tsx');
+const adminMarketplace = read('apps/admin/app/marketplace/page.tsx');
+const adminMarketplaceCss = read('apps/admin/app/marketplace/Marketplace.module.css');
+const adminResourcesCss = read('apps/admin/app/resources/Resources.module.css');
+const adminQuestionsPage = read('apps/admin/app/questions/page.tsx');
+const adminCertificatesCss = read('apps/admin/app/certificates/Certificates.module.css');
+const adminAssessmentsCss = read('apps/admin/app/assessments/Assessments.module.css');
+const adminClassesCss = read('apps/admin/app/classes/Classes.module.css');
+const adminEmployees = read('apps/admin/app/employees/page.tsx');
+const adminNotificationStudio = read('apps/admin/app/components/NotificationStudio.tsx');
+const adminNotificationCss = read('apps/admin/app/components/NotificationStudio.module.css');
+const peopleNotificationStudio = read('apps/people/app/components/NotificationStudio.tsx');
+const peopleNotificationCss = read('apps/people/app/components/NotificationStudio.module.css');
+
+assert(adminContentStudio.includes('PremiumPagination') && adminContentStudio.includes('pagedGroups.map') &&
+  adminContentStudio.includes('expandedChapters') && adminContentStudio.includes('role="dialog" aria-modal="true"') &&
+  adminContentStudio.includes('editorReturnFocusRef') && adminContentStudio.includes('backToLibraryRef.current?.()'),
+  'Content Studio must paginate chapters, expand/collapse child micro-topics and preserve a focused accessible editor flow.');
+assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
+  adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
+  adminContentHinglish.includes('"admin.contentStudio.showMicroTopics"') &&
+  adminContentHinglish.includes('"admin.contentStudio.hideMicroTopics"'),
+  'Content Studio database metrics and chapter disclosure controls must have clear localized labels.');
+assert(adminPagination.includes('var(--qe-color-surface') &&
+  adminPagination.includes('var(--qe-color-primary') &&
+  adminPagination.includes('var(--qe-color-text-muted'),
+  'The shared pagination controls must use semantic institution theme tokens instead of fixed light surfaces.');
+assert(adminMarketplace.includes('filteredRows') && adminMarketplace.includes('statusFilter') &&
+  adminMarketplace.includes('expandedCourseId') && adminMarketplace.includes('Edit for your institute') &&
+  adminMarketplaceCss.includes('.filters') && adminMarketplaceCss.includes('.offerSummary'),
+  'Course Marketplace must provide compact summaries, search/status filters and expandable per-institution editing.');
+assert(adminResourcesCss.includes('overflow-wrap:anywhere') &&
+  adminResourcesCss.includes('word-break:break-word') &&
+  adminResourcesCss.includes('.previewReaderToolbar') &&
+  adminResourcesCss.includes('.previewPageViewport') &&
+  adminResourcesCss.includes('.filterMenu') &&
+  adminResourcesCss.includes('.workflowStep'),
+  'Textbook PDF provenance must wrap and the picker, filters, review workflow and PDF chrome must remain theme-aware.');
+assert(adminCertificatesCss.includes('transition-property:color,border-color !important') &&
+  adminThemeCss.includes('tbody tr:is(:hover,:focus-within) > td'),
+  'Admin certificate/table row hover must not animate into a white flash in dark mode.');
+assert(adminThemeCss.includes('.qe-staff-tabs button b') &&
+  adminThemeCss.includes('.qe-audit-event') &&
+  adminThemeCss.includes('[class*="panelHeading"]'),
+  'Staff, audit trail and teacher review queue counters/activity must use readable themed surfaces.');
+assert(adminThemeCss.includes('.qe-workspace-fullscreen') &&
+  adminThemeCss.includes('.qe-chapter-title strong') &&
+  adminThemeCss.includes('[class*="testCard"]') &&
+  adminThemeCss.includes('[class*="reviewQuestion"]') &&
+  adminThemeCss.includes('[class*="tableWrap"]'),
+  'Content, question-review, grading and student-table controls need the shared Admin theme contract.');
+assert(adminQuestionsPage.includes('qe-question-review-card') &&
+  adminQuestionsPage.includes('qe-question-review-note') &&
+  adminThemeCss.includes('.qe-question-review-notice') &&
+  adminThemeCss.includes('.qe-question-review-warning'),
+  'Question review cards, explanations, review notes, notices and warning states must use semantic theme surfaces.');
+assert(adminClassesCss.includes('.tabs button') &&
+  adminThemeCss.includes('button :is(span,b,strong)'),
+  'Live and recorded class tab counters must receive theme-aware selected/unselected styling.');
+assert(adminEmployees.includes("className={tab==='audit'?'active':''}") &&
+  peopleAppearanceCss.includes('.qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button'),
+  'Staff/audit navigation styling must remain covered in Admin and HRMS.');
+assert(adminNotificationStudio.includes('data-surface={surface}') &&
+  peopleNotificationStudio.includes('data-surface={surface}') &&
+  adminNotificationCss.includes('.page .side') && adminNotificationCss.includes('.page .editor') &&
+  peopleNotificationCss.includes('.page .side') && peopleNotificationCss.includes('.page .editor'),
+  'Admin and HRMS notification editors must put summary cards under tabs and give the editor the available width.');
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);

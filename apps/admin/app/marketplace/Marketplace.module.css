@@ -33,3 +33,36 @@
 .save{border:1px solid #e87524;border-radius:10px;padding:10px 15px;background:#e87524;color:#fff;font:inherit;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
 .save:disabled{opacity:.6;cursor:wait}
 @media(max-width:760px){.workspace{display:block}.main{padding:14px 12px 32px}.hero{align-items:flex-start;padding:18px;border-radius:16px}.mark{flex-basis:44px;width:44px;height:44px;border-radius:13px}.panel{padding:14px}.formGrid{grid-template-columns:minmax(0,1fr)}.wide{grid-column:auto}.offerFooter{align-items:stretch;flex-direction:column}.save{width:100%}}
+
+
+/* Compact catalog cards; all surfaces inherit the selected institution appearance. */
+.filters{display:grid;grid-template-columns:minmax(220px,1fr) minmax(170px,230px) auto;align-items:end;gap:12px;margin:0 0 16px}
+.filterField{display:flex;flex-direction:column;gap:6px;min-width:0;color:var(--qe-color-text,var(--ink,#192337));font-size:11px;font-weight:750}
+.filterField input,.filterField select{width:100%;min-width:0;min-height:39px;padding:9px 11px;border:1px solid var(--qe-color-border-subtle,#dce1e8);border-radius:10px;background:var(--qe-color-surface-elevated,#fff);color:var(--qe-color-text,var(--ink,#20283a));font:inherit;font-weight:500}
+.filterField input::placeholder{color:var(--qe-color-text-muted,#7a8290);opacity:1}
+.resultCount{padding:10px 0;color:var(--qe-color-text-muted,#717b8c);font-size:11px;white-space:nowrap}
+.offerList{grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));align-items:start}
+.offer{padding:14px;background:var(--qe-color-surface,var(--card,#fff));border-color:var(--qe-color-border-subtle,#e3e7ee);min-width:0}
+.offerHead{margin-bottom:10px;gap:10px}
+.offerIdentity{flex:1 1 auto;min-width:0}
+.offerIdentity h3{line-height:1.3;overflow-wrap:anywhere;color:var(--qe-color-text,var(--ink,#202a3e))}
+.offerIdentity p{overflow-wrap:anywhere;color:var(--qe-color-text-muted,var(--muted,#788192))}
+.offerSummary{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:11px;border-top:1px solid var(--qe-color-border-subtle,#edf0f4)}
+.offerSummary>div{display:grid;gap:4px;min-width:0}
+.offerSummary small{font-size:9px;color:var(--qe-color-text-muted,#717b8c)}
+.offerSummary strong{font-size:11px;line-height:1.35;overflow-wrap:anywhere;color:var(--qe-color-text,var(--ink,#20283a))}
+.editOffer{margin-left:auto;min-height:34px;padding:8px 11px;border:1px solid var(--qe-color-border-subtle,#e1e5ed);border-radius:9px;background:var(--qe-color-surface-subtle,#f7f8fb);color:var(--qe-color-text,var(--ink,#59667d));font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.editOffer:hover,.editOffer:focus-visible{border-color:var(--qe-color-accent,var(--brand,#e87524));background:var(--qe-color-surface-hover,var(--qe-color-surface-subtle,#f7f8fb));outline-offset:2px}
+.expanded{grid-column:1/-1}
+.expanded .formGrid{margin-top:14px;padding-top:14px;border-top:1px solid var(--qe-color-border-subtle,#edf0f4)}
+.offerFooter{border-color:var(--qe-color-border-subtle,#edf0f4)}
+.offerFooter span{color:var(--qe-color-text-muted,#717b8c);overflow-wrap:anywhere}
+@media(max-width:850px){.filters{grid-template-columns:minmax(0,1fr) minmax(150px,.75fr)}.resultCount{grid-column:1/-1;padding:0}}
+@media(max-width:560px){.filters{grid-template-columns:minmax(0,1fr)}.resultCount{grid-column:auto}.offerHead{align-items:flex-start;flex-wrap:wrap}.offerSummary{align-items:flex-start}.editOffer{margin-left:0;width:100%}}
+html[data-qe-appearance="dark"] .workspace{background:var(--qe-color-background,var(--admin-background,#0f1724));color:var(--qe-color-text,var(--admin-text,#e6edf6))}
+html[data-qe-appearance="dark"] .workspace .hero{background:linear-gradient(125deg,color-mix(in srgb,var(--qe-color-accent,#f97316) 11%,var(--qe-color-surface,#162233)),var(--qe-color-surface,#162233));border-color:var(--qe-color-border-subtle,#334155)}
+html[data-qe-appearance="dark"] .workspace :is(.hero h1,.hero p,.sectionHead h2,.sectionHead p,.offerIdentity h3,.offerIdentity p,.field,.field small,.offerFooter span,.empty){color:var(--qe-color-text,var(--admin-text,#e6edf6))}
+html[data-qe-appearance="dark"] .workspace :is(.panel,.offer,.filterField input,.filterField select,.field input,.field textarea,.field select,.refresh,.empty){background:var(--qe-color-surface-elevated,var(--admin-surface,#162233));color:var(--qe-color-text,var(--admin-text,#e6edf6));border-color:var(--qe-color-border-subtle,var(--admin-border,#334155))}
+html[data-qe-appearance="dark"] .workspace .offerSummary,
+html[data-qe-appearance="dark"] .workspace .offerFooter{border-color:var(--qe-color-border-subtle,var(--admin-border,#334155))}
+html[data-qe-appearance="dark"] .workspace .editOffer{background:var(--qe-color-surface-subtle,var(--admin-surface,#1b293c));color:var(--qe-color-text,var(--admin-text,#e6edf6));border-color:var(--qe-color-border-subtle,var(--admin-border,#334155))}
