@@ -44,6 +44,10 @@ function draftFromAddress(a:BillingAddressRecord):Draft{
     postalCode:address.postalCode||'',country:address.country||'India',
     contactEmail:a.contact_email||'',contactPhone:a.contact_phone||''};
 }
+function isCompleteBillingAddress(a:BillingAddressRecord|null|undefined){
+  const address=a?.billingAddress||{};
+  return Boolean(address.line1?.trim()&&address.city?.trim()&&address.state?.trim()&&address.postalCode?.trim());
+}
 function addressLines(a:BillingAddressRecord){
   const address=a.billingAddress||{};
   return [
@@ -284,7 +288,7 @@ export function BillingAddressSelection({
       </div>
       <div className={styles.pickerList}>
         {addresses.map(address=><label className={styles.pickerOption} key={address.id}>
-          <input type="radio" name="qe-checkout-billing-address" checked={selectedAddressId===address.id} onChange={()=>onSelect(address.id)}/>
+          <input type="radio" name="qe-checkout-billing-address" checked={selectedAddressId===address.id} disabled={!isCompleteBillingAddress(address)} onChange={()=>onSelect(address.id)}/>
           <span className={styles.pickerOptionContent}><span className={styles.pickerOptionTop}><strong>{address.legal_name}</strong>
             {address.is_default&&<span className={styles.defaultTag}>{text('billing.default')}</span>}</span>
             <small>{address.label}</small>
@@ -294,7 +298,7 @@ export function BillingAddressSelection({
         </label>)}
       </div>
       <div className={styles.pickerFooter}><button type="button" className={styles.cancelButton} onClick={onCancel}>{text('billing.cancel')}</button>
-        <button type="button" className={styles.addAddressButton} onClick={onConfirm} disabled={!addresses.some(a=>a.id===selectedAddressId)}>{text('billing.continueCheckout')}</button></div>
+        <button type="button" className={styles.addAddressButton} onClick={onConfirm} disabled={!addresses.some(a=>a.id===selectedAddressId&&isCompleteBillingAddress(a))}>{text('billing.continueCheckout')}</button></div>
       <p className={styles.pickerNote}>{text('billing.manageCheckoutAddresses')} <Link href={profileHref}>{text('billing.profileLink')}</Link></p>
     </section>
   </div>;
