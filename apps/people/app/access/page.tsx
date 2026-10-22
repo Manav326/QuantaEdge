@@ -113,7 +113,7 @@ export default function HrmsAccessPage() {
     setRoles(Array.isArray(row.roles) && row.roles.length ? [...row.roles] : ['EMPLOYEE']);
     setAssignedPermissions(Array.isArray(row.assigned_permissions) ? [...row.assigned_permissions] : []);
     setShowCredentials(!row.username || !row.hrms_access_enabled);
-    setEditingRoles(!row.staff_id || !row.hrms_access_enabled);
+    setEditingRoles(!row.staff_id);
     setError('');
     setNotice('');
   }
