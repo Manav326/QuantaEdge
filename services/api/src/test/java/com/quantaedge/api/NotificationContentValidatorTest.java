@@ -1,7 +1,9 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -29,6 +31,15 @@ class NotificationContentValidatorTest {
             Map.of("type","footer","text","Sent by your institution")
         ));
     assertDoesNotThrow(() -> validator.validate(document));
+  }
+
+  @Test
+  void canonicalizesTextualVersionToNumericOneForRendererCompatibility() {
+    var normalized = validator.validate(Map.of(
+        "version", "1",
+        "blocks", List.of(Map.of("type", "richText", "text", "A readable notification message"))));
+    assertTrue(normalized.path("version").isIntegralNumber());
+    assertEquals(1, normalized.path("version").intValue());
   }
 
   @Test
