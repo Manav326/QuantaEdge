@@ -11,10 +11,10 @@
     "assets_selected": 1306,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1301,
-    "assets_remaining": 777,
-    "assets_completion_percent": 62.6,
-    "assets_failed": 25,
+    "assets_analyzed": 1302,
+    "assets_remaining": 776,
+    "assets_completion_percent": 62.7,
+    "assets_failed": 26,
     "assets_skipped_from_checkpoint": 1301,
     "batch_limit": 5,
     "publication_allowed": false
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:20:50Z"
+      "checkpointed_at": "2026-10-22T07:37:27Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:21:52Z"
+      "checkpointed_at": "2026-10-22T07:38:30Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43532,24 +43532,29 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "Diarrhoea",
-          "Dehydration",
-          "Primary health centres",
-          "Home preparation of ORS",
-          "Sugars",
-          "Common salt",
-          "Boiled and cooled water",
-          "Liquids",
-          "Dissolution",
-          "Gases",
-          "Water",
-          "Survival of animals and plants",
-          "Density",
-          "Activity 6.8: Let us measure"
+          "diarrhoea",
+          "dehydration",
+          "primary health centres",
+          "market",
+          "sugar",
+          "salt",
+          "boiled and cooled water",
+          "liquids",
+          "oil",
+          "vinegar",
+          "honey",
+          "gas",
+          "water",
+          "oxygen gas",
+          "survival",
+          "animals",
+          "plants",
+          "paper cups",
+          "bowl"
         ],
-        "context_relation": "The page explains the use of Oral Rehydration Solution (ORS) and provides a related activity to measure the density of different materials.",
+        "context_relation": "The page explains the use of Oral Rehydration Solution (ORS) and provides an activity to measure the density of different materials.",
         "limitations": [
-          "The page does not provide specific instructions for the activity.",
+          "The page does not provide specific instructions for the activity, only a general description.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -43557,7 +43562,66 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:36:06Z"
+      "checkpointed_at": "2026-10-22T07:39:35Z"
+    },
+    {
+      "asset_id": "c50388574878f296351f80de",
+      "asset_sha256": "05e2f3bd3b0e24a8098b65e07ca1c737c324b4fa14edc4f928bb6f1a158f9333",
+      "page_text_context_sha256": "6e5e8f63575da620e239866dea804e7a04f6fa2302c3431240069479bec1406c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 131,
+      "asset_path": "assets/05e2f3bd3b0e24a8098b65e07ca1c737c324b4fa14edc4f928bb6f1a158f9333.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d039a566367f5ab57d5c1b4a",
+      "asset_sha256": "b7ddb8bb6c8310f972930dc8d516786c1cb23e0328239f724b25f451176e0925",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 131,
+      "asset_path": "assets/b7ddb8bb6c8310f972930dc8d516786c1cb23e0328239f724b25f451176e0925.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6e5e8f63575da620e239866dea804e7a04f6fa2302c3431240069479bec1406c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two glasses filled with water, one slightly more filled than the other.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Weigh each cup using a balance (Fig. 6.7)",
+          "and record the readings in your notebook.",
+          "Compare the data and infer which is",
+          "heavier or lighter.",
+          "From Activity 6.8, we can say that any object",
+          "which is heavier or lighter can be measured in terms of a property called mass.",
+          "The one which is heavier has more mass and the one which is lighter has less mass.",
+          "Fig. 6.7: Weighing a paper cup containing water"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "comparison",
+          "measurement"
+        ],
+        "context_relation": "The image is related to the activity and concept of mass measurement.",
+        "limitations": [
+          "The image does not show the actual weighing process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T07:44:42Z"
     }
   ]
 }
