@@ -1415,7 +1415,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun refreshMarketplace() {
         marketplaceLoading = true
         marketplaceLoadFailed = false
+        studentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("STUDENT")
             try {
                 marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
                 marketplaceLoadFailed = false
@@ -1424,6 +1426,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 marketplaceLoadFailed = true
             } finally {
                 marketplaceLoading = false
+            }
+            try {
+                setBillingAddresses("STUDENT", fetchBillingAddresses("STUDENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("STUDENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                studentBillingAddressesLoading = false
             }
         }
     }
@@ -1445,7 +1455,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun refreshParentMarketplace() {
         parentMarketplaceLoading = true
         parentMarketplaceLoadFailed = false
+        parentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("PARENT")
             try {
                 loadParentMarketplaceData()
             } catch (exception: Exception) {
@@ -1453,6 +1465,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 throw exception
             } finally {
                 parentMarketplaceLoading = false
+            }
+            try {
+                setBillingAddresses("PARENT", fetchBillingAddresses("PARENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("PARENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                parentBillingAddressesLoading = false
             }
         }
     }
@@ -3229,13 +3249,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openStudentProfile() {
         route = AppRoute.PROFILE
+        studentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("STUDENT")
             studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }?.let { savedLanguage ->
                     learningLanguage = savedLanguage
                     preferences.edit().putString("contentLanguage", savedLanguage).apply()
                 }
+            try {
+                setBillingAddresses("STUDENT", fetchBillingAddresses("STUDENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("STUDENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                studentBillingAddressesLoading = false
+            }
             route = AppRoute.PROFILE
         }
     }
@@ -3376,8 +3406,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
         fun openParentProfile() {
         route = AppRoute.PARENT_PROFILE
+        parentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("PARENT")
             parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
+            try {
+                setBillingAddresses("PARENT", fetchBillingAddresses("PARENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("PARENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                parentBillingAddressesLoading = false
+            }
             route = AppRoute.PARENT_PROFILE
         }
     }
