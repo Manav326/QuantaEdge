@@ -59,6 +59,23 @@ public class CourseMarketplaceLaunchController {
       items.add(item);
       if(Boolean.TRUE.equals(item.get("ready"))) readyCount++;
     }
+    List<Map<String,Object>> availableReleases=jdbc.queryForList("""
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.content_fingerprint,
+          p.code as course_code,p.display_name as course_name,
+          source.id as source_institution_id,source.tenant_code as source_institution_code,
+          source.display_name as source_institution_name
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
+        where r.release_state='SHAREABLE' and r.source_institution_id<>?
+          and not exists(select 1 from institution_course_assignment a
+            where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
+        order by p.display_name,source.display_name,r.release_version desc,r.id desc
+        """,institutionId,institutionId);
+    for(Map<String,Object> release:availableReleases) {
+      release.put("contentCurrent",readiness.contentFingerprintMatches(
+          number(release.get("course_id")),text(release.get("content_fingerprint"))));
+    }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("institutionId",institutionId);
     result.put("institutionName",institutionName(institutionId));
@@ -66,6 +83,8 @@ public class CourseMarketplaceLaunchController {
     result.put("total",items.size());
     result.put("readyCount",readyCount);
     result.put("blockedCount",items.size()-readyCount);
+    result.put("availableReleases",availableReleases);
+    result.put("availableCount",availableReleases.size());
     return result;
   }
 
