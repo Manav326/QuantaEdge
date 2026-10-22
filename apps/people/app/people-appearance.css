@@ -702,6 +702,200 @@ html[data-qe-people-appearance="dark"] .login-story {
   color: var(--qe-people-muted);
 }
 
+
+/* Module routes have a few intentionally bespoke controls; keep their normal states semantic too. */
+[class*="Finance_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+[class*="Finance_page__"] select,
+[class*="Finance_page__"] textarea,
+[class*="Institutions_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+[class*="Institutions_page__"] select,
+[class*="Institutions_page__"] textarea {
+  background: var(--qe-people-field);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+[class*="Finance_page__"] .alertError,
+[class*="Institutions_page__"] .error,
+[class*="Institutions_page__"] .cropError {
+  background: var(--qe-people-danger-soft);
+  border-color: color-mix(in srgb, var(--qe-people-danger) 35%, var(--qe-people-line));
+  color: var(--qe-people-danger);
+}
+
+[class*="Finance_page__"] .alertSuccess,
+[class*="Institutions_page__"] .notice {
+  background: var(--qe-people-success-soft);
+  border-color: color-mix(in srgb, var(--qe-people-success) 35%, var(--qe-people-line));
+  color: var(--qe-people-success);
+}
+
+[class*="Finance_status__"] {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+[class*="Finance_status__"][class*="success"],
+[class*="Finance_status__"][class*="paid"] {
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+[class*="Finance_status__"][class*="warning"],
+[class*="Finance_status__"][class*="pending"] {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+[class*="Finance_status__"][class*="danger"],
+[class*="Finance_status__"][class*="failed"] {
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+[class*="Finance_emptyLarge__"],
+[class*="Finance_entityRow__"] span,
+[class*="Finance_policyRow__"] span,
+[class*="Finance_entityRow__"] small,
+[class*="Finance_policyRow__"] small,
+[class*="Finance_policyFooter__"] > span,
+[class*="Finance_approvalBox__"] p {
+  color: var(--qe-people-muted);
+}
+
+[class*="Finance_table__"] td,
+[class*="Finance_table__"] th,
+[class*="Institutions_tableScroll__"] td,
+[class*="Institutions_tableScroll__"] th,
+[class*="QaCenter_manifestRow__"],
+[class*="QaCenter_checkRow__"] {
+  border-color: var(--qe-people-table-line);
+}
+
+[class*="Finance_recipientEditor__"],
+[class*="Finance_approvalBox__"],
+[class*="Finance_pdfPreviewPanel__"],
+[class*="Finance_versionBanner__"],
+[class*="Institutions_billingBox__"],
+[class*="Institutions_codeNotice__"],
+[class*="Institutions_readOnlyItem__"],
+[class*="Institutions_readOnlySummary__"],
+[class*="Institutions_valueChip__"],
+[class*="Institutions_brandAssetPreview__"],
+[class*="Institutions_cropModal__"],
+[class*="Institutions_cropControls__"],
+[class*="Institutions_cropModalHeader__"],
+[class*="Institutions_cropModalFooter__"],
+[class*="Institutions_brandTemplate__"],
+[class*="Institutions_brandTemplateHeader__"],
+[class*="Institutions_brandTemplateGenerated__"],
+[class*="QaCenter_confirmPanel__"],
+[class*="QaCenter_credentials__"] {
+  border-color: var(--qe-people-line);
+}
+
+[class*="Institutions_warning__"] {
+  background: var(--qe-people-warning-soft);
+  border-color: color-mix(in srgb, var(--qe-people-warning) 35%, var(--qe-people-line));
+  color: var(--qe-people-warning);
+}
+
+[class*="Institutions_danger__"],
+[class*="QaCenter_dangerButton__"] {
+  background: var(--qe-people-danger-soft);
+  border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line));
+  color: var(--qe-people-danger);
+}
+
+[class*="Institutions_quiet__"] {
+  color: var(--qe-people-muted);
+}
+
+[class*="Institutions_emptyPanel__"],
+[class*="Institutions_brandTemplate__"],
+[class*="Institutions_cropModal__"],
+[class*="Institutions_cropStage__"],
+[class*="Institutions_cropControls__"],
+[class*="Institutions_cropModalHeader__"],
+[class*="Institutions_cropModalFooter__"],
+[class*="QaCenter_confirmPanel__"],
+[class*="QaCenter_credentials__"],
+[class*="QaCenter_checkRow__"] {
+  background: var(--qe-people-card);
+  color: var(--qe-people-ink);
+}
+
+[class*="Institutions_listCopy__"] small,
+[class*="Institutions_courseItem__"] small,
+[class*="Institutions_auditList__"] small,
+[class*="Institutions_auditList__"] p,
+[class*="Institutions_form__"] label small,
+[class*="Institutions_themeSettingsGrid__"] label,
+[class*="Institutions_themeSettingsGrid__"] select {
+  color: var(--qe-people-muted);
+}
+
+[class*="Institutions_courseList__"],
+[class*="Institutions_courseItem__"],
+[class*="Institutions_auditList__"] article,
+[class*="Institutions_tabs__"],
+[class*="Institutions_tabs__"] button,
+[class*="Institutions_tableScroll__"],
+[class*="Institutions_readOnlySummary__"],
+[class*="Institutions_readOnlyItem__"] {
+  border-color: var(--qe-people-line);
+}
+
+[class*="Institutions_themeSettingsGrid__"] select,
+[class*="Institutions_search__"],
+[class*="Institutions_brandTemplateFields__"] input,
+[class*="Institutions_brandTemplateFields__"] select {
+  background: var(--qe-people-field);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+[class*="QaCenter_gateGrid__"] > div,
+[class*="QaCenter_json__"] {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+[class*="QaCenter_guardNote__"] {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+[class*="Finance_page__"] .tab:hover {
+  background: var(--qe-people-surface-hover);
+  color: var(--qe-people-ink);
+}
+
+[class*="Finance_page__"] .primary,
+[class*="Institutions_page__"] .primary {
+  background: var(--qe-people-brand);
+  color: #ffffff;
+}
+
+[class*="Finance_page__"] .primary:hover,
+[class*="Institutions_page__"] .primary:hover {
+  background: var(--qe-people-brand-strong);
+}
+
+.qe-people-auth-language .qe-people-appearance-toggle {
+  margin-left: auto;
+}
+
+@media print {
+  body.printing-payslip .qe-people-sidebar,
+  body.printing-payslip .qe-people-global-header,
+  body.printing-payslip .qe-people-mobile-menu,
+  body.printing-payslip .qe-people-appearance-toggle {
+    display: none !important;
+  }
+}
+
 @media (max-width: 900px) {
   .qe-people-appearance-toggle .qe-people-appearance-label {
     display: none;
