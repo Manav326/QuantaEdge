@@ -122,8 +122,8 @@ fun BillingAddressBook(
         formOpen = true
     }
 
-    LaunchedEffect(addresses, compactOnly) {
-        if (compactOnly) {
+    LaunchedEffect(addresses, compactOnly, loading) {
+        if (compactOnly && !loading) {
             val preferred = addresses.firstOrNull { it.optBoolean("is_default") } ?: addresses.firstOrNull()
             when {
                 preferred == null && !formOpen -> resetDraft()
@@ -176,8 +176,8 @@ fun BillingAddressBook(
                             Text(it, style = MaterialTheme.typography.bodySmall)
                         }
                         if (addresses.size > 1) Text(
-                            t("You have \${addresses.size} saved addresses. Checkout will ask you to choose one.",
-                                "आपके \${addresses.size} saved addresses हैं। Checkout पर एक चुनना होगा।"),
+                            t("You have " + addresses.size + " saved addresses. Checkout will ask you to choose one.",
+                                "आपके " + addresses.size + " saved addresses हैं। Checkout पर एक चुनना होगा।"),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         TextButton(onClick = onOpenProfile, enabled = !busy) { Text(t("Manage in My Profile", "My Profile में manage करें")) }
                     }
