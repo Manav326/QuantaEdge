@@ -242,6 +242,9 @@ async function loginParent(browser: Browser, name: 'parentA' | 'parentB', creden
   await page.getByRole('tab').nth(1).click();
   await page.locator('input[autocomplete="username"]').fill(credentials.username);
   await page.locator('input[autocomplete="current-password"]').fill(credentials.password);
+  const childrenDataWaiter = page.waitForResponse(response =>
+    response.request().method() === 'GET' &&
+    response.url().includes('/api/v1/guardians/children'));
   const loginResponse = page.waitForResponse(response =>
     response.request().method() === 'POST' &&
     response.url().includes('/api/v1/auth/account-login'));
@@ -250,6 +253,12 @@ async function loginParent(browser: Browser, name: 'parentA' | 'parentB', creden
   expect(response.status(), name + ' must authenticate through the live account-login endpoint.').toBe(200);
   expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   await page.waitForURL(url => url.origin === WEB && url.pathname === '/parent');
+  const childrenResponse = await childrenDataWaiter;
+  expect(childrenResponse.status(), 'The parent UI must load children from the live API.').toBe(200);
+  expect(childrenResponse.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
+  const loadedChildren = await childrenResponse.json();
+  expect(Array.isArray(loadedChildren)).toBe(true);
+  expect(loadedChildren).toHaveLength(1);
   const statePath = join(await preparePrivateDir(), name.replace(/[A-Z]/g, m => '-' + m.toLowerCase()) + '.json');
   await context.storageState({ path: statePath });
   await context.close();
@@ -264,6 +273,9 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     await page.getByRole('tab').nth(1).click();
     await page.locator('input[autocomplete="username"]').fill(credentials.username);
     await page.locator('input[autocomplete="current-password"]').fill(credentials.password);
+    const studentDataWaiter = page.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      response.url().includes('/api/v1/students/me'));
     const loginResponse = page.waitForResponse(response =>
       response.request().method() === 'POST' &&
       response.url().includes('/api/v1/auth/account-login'));
@@ -271,6 +283,9 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     const response = await loginResponse;
     expect(response.status(), 'The independent learner must authenticate through the live account-login endpoint.').toBe(200);
     expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
+    const studentDataResponse = await studentDataWaiter;
+    expect(studentDataResponse.status(), 'The independent learner UI must load its student profile from the live API.').toBe(200);
+    expect(studentDataResponse.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   } else {
     await page.goto(WEB + '/login/student?institutionCode=' + encodeURIComponent(credentials.institutionCode));
     await waitForSelectedInstitution(page, credentials.institutionCode);
@@ -278,6 +293,9 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     await identifiers.nth(0).fill(String(parentIdentifier || credentials.parentMobile));
     await identifiers.nth(1).fill(credentials.username);
     await page.locator('input[autocomplete="current-password"]').fill(credentials.password);
+    const studentDataWaiter = page.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      response.url().includes('/api/v1/students/me'));
     const loginResponse = page.waitForResponse(response =>
       response.request().method() === 'POST' &&
       response.url().includes('/api/v1/auth/student-login'));
@@ -285,6 +303,9 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     const response = await loginResponse;
     expect(response.status(), name + ' must authenticate through the live parent/child session endpoint.').toBe(200);
     expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
+    const studentDataResponse = await studentDataWaiter;
+    expect(studentDataResponse.status(), 'The child UI must load the authenticated student profile from the live API.').toBe(200);
+    expect(studentDataResponse.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   }
   await page.waitForURL(url => url.origin === WEB && url.pathname === '/student');
   const statePath = join(await preparePrivateDir(), name === 'independentLearner' ? 'adult-c.json' : name.replace(/[A-Z]/g, m => '-' + m.toLowerCase()) + '.json');
