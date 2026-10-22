@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { AdminAppearanceModeButton, AdminThemeProvider } from './AdminThemeProvider';
 import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 import {
@@ -23,7 +24,7 @@ import {
   type AdminSection,
 } from './admin-navigation';
 
-type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[] };
+type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[]; institutionCode?: string; institution_code?: string; tenantCode?: string; tenant_code?: string };
 type AdminInstitution = { institution_id: number; tenant_code: string; display_name: string; is_default?: boolean };
 
 function activeSection(pathname: string): AdminSection {
@@ -112,7 +113,12 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     let alive = true;
     if (publicRoute) {
       setInstitutions([]);
-      setInstitutionCode('');
+      // Reuse the last selected workspace so sign-in/session screens match the
+      // same tenant context used by the existing education-admin API requests.
+      let rememberedTenant = '';
+      try { rememberedTenant = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
+      const safeTenant = rememberedTenant.trim().toUpperCase();
+      setInstitutionCode(/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(safeTenant) ? safeTenant : '');
       setInstitutionError('');
       setInstitutionLoading(false);
       return () => { alive = false; };
@@ -245,7 +251,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     }
   }
 
-  if (publicRoute) return <AdminWorkspaceContext.Provider value={value}>{children}</AdminWorkspaceContext.Provider>;
+  if (publicRoute) return <AdminThemeProvider institutionCode={institutionCode} enabled={Boolean(institutionCode)}><AdminWorkspaceContext.Provider value={value}><div className="qe-admin-workspace-page-slot qe-admin-public-page">{children}</div></AdminWorkspaceContext.Provider></AdminThemeProvider>;
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
@@ -272,18 +278,19 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     if (!quickItems.some(candidate => candidate.key === item.key)) quickItems.push(item);
   }
 
-  return <AdminWorkspaceContext.Provider value={value}>
+  return <AdminThemeProvider institutionCode={institutionCode || session?.institutionCode || session?.institution_code || session?.tenantCode || session?.tenant_code || ''}>
+  <AdminWorkspaceContext.Provider value={value}>
     <div className="qe-admin-workspace-layout">
       <AdminSidebar active={active} variant={variant} displayName={session?.displayName || undefined} persistent />
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span className="qe-admin-global-context-label">{activeInstitution?.display_name || 'Education Admin'}</span>
+            <span className="qe-admin-global-context-label">{activeInstitution ? 'Institution workspace' : 'Education Admin'}</span>
             <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
             <strong>{t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
-            {canSelectInstitution ? <label style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
+            {canSelectInstitution ? <label className="qe-admin-institution-switcher" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
               <span>Institution</span>
               <select
                 value={institutionCode}
@@ -308,6 +315,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
                 {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
               </select>
             </label>
+            <AdminAppearanceModeButton />
           </div>
         </header>
 
@@ -417,5 +425,6 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
         </button>
       </nav>
     </div>
-  </AdminWorkspaceContext.Provider>;
+  </AdminWorkspaceContext.Provider>
+</AdminThemeProvider>;
 }

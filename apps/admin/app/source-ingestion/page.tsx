@@ -506,7 +506,7 @@ export default function SourceIngestionPage() {
 
   return <main className="admin-shell">
     <AdminSidebar active="sources" variant="content" />
-    <section className={'admin-main ' + styles.page}>
+    <section className={'admin-main qe-admin-source-ingestion-route ' + styles.page}>
       <header className="admin-top">
         <div>
           <span className="admin-kicker">QUANTAEDGE LEARNING / CONTENT GOVERNANCE</span>

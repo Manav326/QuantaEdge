@@ -1,4 +1,5 @@
 import './globals.css';
+import './admin-theme.css';
 import GlobalNotificationHost from './components/GlobalNotificationHost';
 import AdminSessionBoundary from './components/AdminSessionBoundary';
 import AdminWorkspaceLayout from './components/AdminWorkspaceLayout';

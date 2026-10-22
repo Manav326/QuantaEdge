@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -87,7 +87,7 @@ for (const token of ['#F97316', '#C2410C', '#FFF0E5', 'Smarter Decisions. Greate
 }
 assert(brandComponent.includes('/branding/quantaedge-icon.png'), 'Live QuantaEdge brand component must use the canonical Q-mark asset.');
 assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live QuantaEdge brand component must retain the unchanged tagline.');
-assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operations must keep the same canonical operator brand component.');
+assert(adminBrandComponent.includes("const PLATFORM_LOGO_URL = '/branding/quantaedge-logo.svg'") && peopleBrandComponent.includes("const PLATFORM_LOGO_URL = '/branding/quantaedge-logo.svg'"), 'Admin and People Operations must retain the same canonical full-logo asset contract for platform/operator context.');
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand?.displayName') && brandComponent.includes('brand.logoUrl') && brandComponent.includes('brand.appIconUrl') && brandComponent.includes('const logoUrl = brand') && brandComponent.includes('const appIconUrl = brand'), 'Learner web brand lockup must consume resolved tenant branding through distinct full-logo and square-icon roles.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
 assert(!/\.style\.setProperty\(['"]--qe-(?:brand-orange|color-)/.test(tenantBrandingProvider), 'Tenant identity resolution must not write palette variables outside the shared theme system.');
@@ -154,7 +154,7 @@ assert(institutionPlatformController.includes('/branding/template-assets') && in
 assert(institutionTenantController.includes('result.put("tagline"') && institutionPlatformController.includes('b.tagline'), 'Institution tagline must be available in public learner branding and HRMS settings.');
 assert(tenantBrandingProvider.includes("brand?.appIconUrl") && !tenantBrandingProvider.includes("brand?.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')\n      ? brand.logoUrl"), 'Browser favicons must use the square app-icon URL, never a wide logo URL.');
 assert(brandComponent.includes('PLATFORM_LOGO_URL') && brandComponent.includes('qe-brand__logo') && brandComponent.includes('qe-brand__tenant-icon') && brandComponent.includes("'app-icon'"), 'The learner brand renderer must use a full-logo slot and a distinct square icon slot for platform and tenant identity.');
-assert(adminBrandComponent.includes('quantaedge-logo.svg') && peopleBrandComponent.includes('quantaedge-logo.svg') && adminBrandComponent===peopleBrandComponent, 'QuantaEdge platform branding must use the same full-logo URL contract in Admin and HRMS.');
+assert(adminBrandComponent.includes('quantaedge-logo.svg') && peopleBrandComponent.includes('quantaedge-logo.svg'), 'QuantaEdge platform branding must keep the same full-logo URL contract in Admin and HRMS.');
 assert(hrmsInstitutionPage.includes("editingCard==='profile'") && hrmsInstitutionPage.includes("editingCard==='courses'") && hrmsInstitutionPage.includes("editingCard==='branding'") && hrmsInstitutionPage.includes("editingCard==='billing'") && hrmsInstitutionPage.includes('Save profile') && hrmsInstitutionPage.includes('Save changes') && hrmsInstitutionPage.includes('Cancel'), 'Institution profile and settings must stay read-only until their individual card Edit action.');
 assert(institutionPlatformController.includes('@PutMapping("/{institutionId}/profile")') && institutionPlatformController.includes('INSTITUTION_PROFILE_CHANGED') && institutionPlatformController.includes('defaultBrandNameSynchronized'), 'Institution profile updates must be owner-only, audited, and preserve separately customized white-label identity.');
 assert(institutionProfileTests.includes('ownerCanUpdateProfileAndKeepDefaultBrandNameInSync') && institutionProfileTests.includes('profileUpdateRejectsNonOwnerBeforeReadingInstitutionData') && institutionProfileTests.includes('profileUpdateRejectsInvalidDisplayNameBeforeDatabaseWrites') && institutionProfileTests.includes('profileUpdateDoesNotOverwriteACustomizedBrandDisplayName'), 'Institution profile API tests must cover successful audit path, owner authorization, and validation.');assert(hrmsInstitutionPage.includes('onRemoveAsset={removeBrandAsset}') && hrmsInstitutionPage.includes("{method:'DELETE'}") && hrmsInstitutionBrandTemplate.includes("removeAsset('logo')") && hrmsInstitutionBrandTemplate.includes("removeAsset('app-icon')"), 'The HRMS owner UI must retain working remove controls for both branding assets in the standardized template.');
@@ -224,6 +224,37 @@ if (logoAssets.every(asset => asset.length > 0)) {
 
 const institutionThemeTokens = read('services/api/src/main/java/com/quantaedge/api/InstitutionThemeTokens.java');
 assert(institutionPlatformController.includes('InstitutionThemeTokens.normalize(raw)') && institutionThemeTokens.includes('value.matches("^#[0-9A-Fa-f]{6}$")'), 'Tenant theme values must be restricted to valid six-digit hex colours.');
+
+const adminThemeProvider = read('apps/admin/app/components/AdminThemeProvider.tsx');
+const adminThemeStyles = read('apps/admin/app/admin-theme.css');
+assert(adminWorkspaceLayout.includes('AdminThemeProvider') && adminWorkspaceLayout.includes('AdminAppearanceModeButton'), 'The shared Admin workspace must mount tenant appearance and expose its theme control on every authenticated route.');
+assert(adminWorkspaceLayout.includes('institutionCode={institutionCode || session?.institutionCode || session?.institution_code || session?.tenantCode || session?.tenant_code || \'\'}'), 'Admin appearance must follow the resolved tenant selector or authenticated tenant context.');
+assert(adminLayout.includes("import './admin-theme.css'"), 'Admin theme overrides must load globally from the root layout, rather than only on selected routes.');
+assert(adminThemeProvider.includes('qe.appearance-mode.v1') && adminThemeProvider.includes("'institution', 'system', 'dark', 'light'"), 'Admin and learner web must share the same saved appearance preference and four-mode cycle.');
+assert(adminThemeProvider.includes('themeTokens') && adminThemeProvider.includes('applyPalette(actual, tokens)') && adminThemeProvider.includes('root.dataset.qeAppearance = actual'), 'Admin must consume the institution palette through the same semantic theme-token roles as learner web.');
+assert(adminThemeProvider.includes('/api/v1/institution/public/branding/') && adminThemeProvider.includes("approvedAssetUrl(body.logoUrl, code, 'logo')") && adminThemeProvider.includes("approvedAssetUrl(body.appIconUrl, code, 'app-icon')"), 'Tenant brand URLs in Admin must be validated and bound to the active institution code.');
+assert(adminBrandComponent.includes('brand?.logoUrl') && adminBrandComponent.includes('brand?.appIconUrl') && adminBrandComponent.includes('institutionCode'), 'Tenant Admin headers and sidebar must use the active institution full logo and square app icon, not a fixed platform logo.');
+assert(adminThemeStyles.includes('html[data-qe-appearance="dark"]') && adminThemeStyles.includes('.qe-admin-workspace-page-slot') && adminThemeStyles.includes('button[class*="primaryButton"]') && adminThemeStyles.includes(':focus-visible'), 'Shared Admin theme styles must cover dark surfaces, route content, tenant primary actions and visible keyboard focus.');
+assert(adminThemeProvider.includes("'--qe-panel': palette.surface") && adminThemeStyles.includes('.qe-admin-marketplace-route') && adminThemeStyles.includes('[class*="previewBar"]') && adminThemeStyles.includes('[class*="rowSelected"]'), 'Admin must theme the legacy source-ingestion alias, Marketplace hero exception, and bespoke preview/translation surfaces.');
+assert(read('apps/admin/app/source-ingestion/page.tsx').includes('qe-admin-source-ingestion-route') && read('apps/admin/app/translations/page.tsx').includes('qe-admin-translations-route') && adminThemeStyles.includes('.qe-structured-submit'), 'Source Ingestion, Translations, and structured-lesson preview must retain explicit theme scopes and controls.');
+
+function findAdminPageFiles(directory) {
+  const absoluteDirectory = join(root, directory);
+  if (!existsSync(absoluteDirectory)) return [];
+  return readdirSync(absoluteDirectory, { withFileTypes: true }).flatMap(entry => {
+    const childPath = directory + '/' + entry.name;
+    if (entry.isDirectory()) return findAdminPageFiles(childPath);
+    return /^page\.(?:tsx|ts|jsx|js)$/.test(entry.name) ? [childPath] : [];
+  });
+}
+
+const adminRoutePages = findAdminPageFiles('apps/admin/app').sort();
+assert(adminRoutePages.includes('apps/admin/app/page.tsx'), 'The Admin overview route must be part of the route-wide theme audit.');
+assert(adminRoutePages.includes('apps/admin/app/login/page.tsx'), 'The Admin public sign-in route must be part of the route-wide theme audit.');
+for (const path of adminRoutePages) {
+  const page = read(path);
+  assert(/export default/.test(page), 'Admin route ' + path.replace(/^apps\/admin\/app/, '') + ' must retain its route component while inheriting the shared theme shell.');
+}
 
 if (failures.length) {
   console.error('QuantaEdge cross-app UI/brand contract failed (' + failures.length + '/' + checks + ' checks):');
