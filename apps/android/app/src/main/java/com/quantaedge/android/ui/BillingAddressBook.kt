@@ -184,11 +184,7 @@ fun BillingAddressBook(
                         TextButton(onClick = onOpenProfile, enabled = !busy) { Text(t("Manage in My Profile", "My Profile में manage करें")) }
                     }
                 }
-            } else if (!formOpen) {
-                Text(t("Add your billing address before checkout.", "Checkout से पहले billing address जोड़ें।"),
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                TextButton(onClick = onOpenProfile, enabled = !busy) { Text(t("Add in My Profile", "My Profile में जोड़ें")) }
-            }
+
         } else if (addresses.isEmpty()) {
             Text(t("No billing address saved yet.", "अभी कोई billing address save नहीं है।"),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
