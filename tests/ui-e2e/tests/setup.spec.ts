@@ -273,7 +273,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
   await context.close();
 }
 
-test('bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
+test('[AUTH-001][AUTH-006][AUTH-007][QA-001][QA-007] bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
   // Route/CSV drift must stop the run before the first database or account mutation.
   const manifest = await loadUiManifest();
   expect(manifest.summary.registeredWebPages).toBe(manifest.summary.sourceWebPages);
