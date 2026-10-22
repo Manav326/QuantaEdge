@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -186,7 +187,8 @@ public class RichNotificationService {
     }
     LinkedHashMap<String,Recipient> result=new LinkedHashMap<>();
     if("HRMS_PLATFORM".equals(normalized) && Boolean.TRUE.equals(filter.get("individualTargets"))) {
-      resolvePlatformDirectRecipients(filter,result);
+      Map<String,Object> includedTargets=withoutExcludedPlatformRecipients(filter);
+      resolvePlatformDirectRecipients(includedTargets,result);
       if(result.isEmpty())throw new IllegalArgumentException("Select at least one eligible individual recipient.");
       return applyAudienceExclusions(normalized,List.copyOf(result.values()),filter);
     }
@@ -210,21 +212,27 @@ public class RichNotificationService {
         if(targetInstitutions.isEmpty()) {
           throw new IllegalArgumentException("Select one or more active institutions for the HRMS notification.");
         }
+        // Apply explicit institution exclusions before validation and recipient deduplication.
+        // An excluded tenant must not block a campaign to the remaining eligible institutions.
+        Set<Long> excludedTenants=new LinkedHashSet<>(longList(filter.get("excludedInstitutionIds")));
+        if(excludedTenants.size()>100) {
+          throw new IllegalArgumentException("A campaign may exclude at most 100 institutions.");
+        }
+        targetInstitutions=targetInstitutions.stream().filter(id->!excludedTenants.contains(id)).toList();
+        if(targetInstitutions.isEmpty()) {
+          throw new IllegalArgumentException("Select at least one eligible institution after exclusions.");
+        }
         if(targetInstitutions.size()>100) {
-          throw new IllegalArgumentException("A single HRMS campaign may select at most 100 institutions.");
+          throw new IllegalArgumentException("A single HRMS campaign may target at most 100 included institutions.");
         }
         for(Long tenantId:targetInstitutions) {
           if(!isActiveInstitution(tenantId)) {
-            throw new IllegalArgumentException("One selected institution is not active or does not exist.");
+            throw new IllegalArgumentException("One included institution is not active or does not exist.");
           }
           if(!hasActiveLearners(tenantId)) {
             throw new IllegalArgumentException("An institution with no active learners cannot be included in an HRMS notification.");
           }
         }
-        // Remove excluded tenants before deduplication, so an account linked to both
-        // excluded and included institutions can still be delivered once through an included tenant.
-        Set<Long> excludedTenants=new LinkedHashSet<>(longList(filter.get("excludedInstitutionIds")));
-        targetInstitutions=targetInstitutions.stream().filter(id->!excludedTenants.contains(id)).toList();
       } else {
         if(institutionId==null || institutionId<1) throw new IllegalArgumentException("An institution scope is required.");
         targetInstitutions=List.of(institutionId);
@@ -258,10 +266,33 @@ public class RichNotificationService {
     ).toList();
   }
 
-  private static Map<String,Object> withoutAudienceExclusions(Map<String,Object> filter) {
+  private static Map<String,Object> withoutExcludedPlatformRecipients(Map<String,Object> filter) {
     Map<String,Object> copy=new LinkedHashMap<>(filter==null?Map.of():filter);
+    Set<Long> excludedTenants=new LinkedHashSet<>(longList(copy.get("excludedInstitutionIds")));
+    if(excludedTenants.isEmpty())return copy;
+    if(excludedTenants.size()>100)throw new IllegalArgumentException("A campaign may exclude at most 100 institutions.");
+    Object raw=copy.get("recipients");
+    if(raw instanceof List<?> list) {
+      List<Object> included=new ArrayList<>();
+      for(Object item:list) {
+        if(item instanceof Map<?,?> map) {
+          long institutionId;
+          try { institutionId=Long.parseLong(String.valueOf(map.get("institutionId"))); }
+          catch(RuntimeException ex) { included.add(item); continue; }
+          if(institutionId>0&&excludedTenants.contains(institutionId))continue;
+        }
+        included.add(item);
+      }
+      copy.put("recipients",included);
+    }
+    return copy;
+  }
+
+  private static Map<String,Object> withoutIndividualAudienceExclusions(Map<String,Object> filter) {
+    Map<String,Object> copy=new LinkedHashMap<>(filter==null?Map.of():filter);
+    // Keep institution exclusions in force before audience deduplication. This is the same
+    // ordering used by send-time resolution, including accounts linked to multiple institutions.
     copy.remove("excludedRecipients");
-    copy.remove("excludedInstitutionIds");
     return copy;
   }
 
@@ -529,6 +560,7 @@ public class RichNotificationService {
     target.putIfAbsent(key,recipient);
   }
 
+  @Transactional
   public Map<String,Object> preview(
       Actor actor,String scope,Long institutionId,Long courseId,Map<String,Object> filter,
       String title,String summary,Object rawDocument) {
@@ -538,8 +570,10 @@ public class RichNotificationService {
     Map<String,Object> safeFilter=filter==null?Map.of():filter;
     assertScopeAllowed(actor,scope,institutionId,courseId,safeFilter);
     String normalizedScope=scope==null?"":scope.trim().toUpperCase(Locale.ROOT);
-    List<Recipient> candidates=resolveAudience(scope,institutionId,courseId,withoutAudienceExclusions(safeFilter));
+    List<Recipient> candidates=resolveAudience(scope,institutionId,courseId,withoutIndividualAudienceExclusions(safeFilter));
     List<Recipient> selected=applyAudienceExclusions(normalizedScope,candidates,safeFilter);
+    String previewToken=issuePreviewToken(actor,previewFingerprint(actor,normalizedScope,institutionId,courseId,
+        safeFilter,checkedTitle,checkedSummary,document));
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("valid",true);
     result.put("title",checkedTitle);
@@ -551,8 +585,10 @@ public class RichNotificationService {
     result.put("candidateRecipientCount",candidates.size());
     result.put("excludedRecipientCount",candidates.size()-selected.size());
     result.put("recipients",recipientDetails(candidates));
-    result.put("previewTokenRequired",false);
-    result.put("note","Review each recipient and institution before sending. The server re-resolves eligibility and exclusions at send time.");
+    result.put("previewToken",previewToken);
+    result.put("previewTokenRequired",true);
+    result.put("previewExpiresInSeconds",600);
+    result.put("note","Review the audience and send within 10 minutes. Eligibility is re-resolved at send time.");
     return result;
   }
 
@@ -560,7 +596,7 @@ public class RichNotificationService {
   public Map<String,Object> send(
       Actor actor,String scope,Long institutionId,Long courseId,Map<String,Object> filter,
       String title,String summary,Object rawDocument,Long templateId,Integer templateVersion,
-      String idempotencyKey,Instant scheduledAt,Instant expiresAt) {
+      String idempotencyKey,String previewToken,Instant scheduledAt,Instant expiresAt) {
     String normalizedScope=scope==null?"":scope.trim().toUpperCase(Locale.ROOT);
     String checkedTitle=requiredText(title,"Notification title",180);
     String checkedSummary=requiredText(summary,"Notification summary",400);
@@ -584,7 +620,10 @@ public class RichNotificationService {
       response.put("idempotentReplay",true);
       return response;
     }
-    String audienceJson=writeJson(filter==null?Map.of():filter);
+    Map<String,Object> safeFilter=filter==null?Map.of():filter;
+    consumePreviewToken(previewToken,actor,previewFingerprint(actor,normalizedScope,institutionId,courseId,
+        safeFilter,checkedTitle,checkedSummary,document));
+    String audienceJson=writeJson(safeFilter);
     List<Recipient> recipients=resolveAudience(normalizedScope,institutionId,courseId,filter==null?Map.of():filter);
     if(recipients.isEmpty()) throw new IllegalArgumentException("No eligible recipients match this notification audience.");
     if(scheduledAt!=null) {
@@ -998,7 +1037,7 @@ public class RichNotificationService {
     }
     String sql="""
       update notification_recipient r set
-        state=?,read_at=case when ?='DISMISSED' then coalesce(read_at,now()) else null end,
+        state=?,read_at=case when ? in ('READ','DISMISSED') then coalesce(read_at,now()) else null end,
         dismissed_at=case when ?='DISMISSED' then now() else null end
       where r.id=? and r.recipient_kind='STAFF_ACCOUNT' and r.staff_account_id=?
         and r.state in ('CREATED','QUEUED','READ','DISMISSED')
@@ -1183,6 +1222,96 @@ public class RichNotificationService {
         )
       """,recipientId,kind,kind,id,kind,id,kind,id,institutionId,institutionId);
     return changed==1;
+  }
+
+  private String issuePreviewToken(Actor actor,String fingerprint) {
+    String token=java.util.UUID.randomUUID().toString();
+    String tokenHash=sha256Hex(token);
+    // Bound table growth without making the user wait for a separate cleanup job.
+    jdbc.update("""
+      delete from notification_preview_token
+      where expires_at<=now() or (consumed_at is not null and consumed_at<now()-interval '1 day')
+      """);
+    jdbc.update("""
+      insert into notification_preview_token(
+        token_hash,sender_workspace,sender_staff_id,sender_institution_admin_id,
+        sender_institution_id,request_fingerprint,expires_at)
+      values (?,?,?,?,?,?,now()+interval '10 minutes')
+      """,tokenHash,actor.workspace(),actor.staffId(),actor.institutionAdminId(),
+        actor.institutionId(),fingerprint);
+    return token;
+  }
+
+  private void consumePreviewToken(String token,Actor actor,String fingerprint) {
+    if(token==null||token.isBlank()) {
+      throw new IllegalArgumentException("Preview and validate the notification before sending.");
+    }
+    String tokenHash=sha256Hex(token.trim());
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id from notification_preview_token
+      where token_hash=? and sender_workspace=?
+        and sender_staff_id is not distinct from ?
+        and sender_institution_admin_id is not distinct from ?
+        and sender_institution_id is not distinct from ?
+        and request_fingerprint=? and consumed_at is null and expires_at>now()
+      for update
+      """,tokenHash,actor.workspace(),actor.staffId(),actor.institutionAdminId(),
+        actor.institutionId(),fingerprint);
+    if(rows.isEmpty()) {
+      throw new IllegalArgumentException("The preview has expired or the notification changed. Review the audience and preview again.");
+    }
+    long tokenId=((Number)rows.getFirst().get("id")).longValue();
+    if(jdbc.update("update notification_preview_token set consumed_at=now() where id=? and consumed_at is null",tokenId)!=1) {
+      throw new IllegalArgumentException("This preview was already used. Review the audience and preview again before sending another campaign.");
+    }
+  }
+
+  private String previewFingerprint(Actor actor,String scope,Long institutionId,Long courseId,
+      Map<String,Object> filter,String title,String summary,JsonNode document) {
+    ObjectNode payload=mapper.createObjectNode();
+    payload.put("workspace",actor.workspace());
+    putNullableLong(payload,"staffId",actor.staffId());
+    putNullableLong(payload,"institutionAdminId",actor.institutionAdminId());
+    putNullableLong(payload,"actorInstitutionId",actor.institutionId());
+    payload.put("scope",scope);
+    putNullableLong(payload,"institutionId",institutionId);
+    putNullableLong(payload,"courseId",courseId);
+    payload.put("title",title);
+    payload.put("summary",summary);
+    payload.set("audienceFilter",canonicalize(mapper.valueToTree(filter==null?Map.of():filter)));
+    payload.set("contentDocument",canonicalize(document));
+    return sha256Hex(writeJson(payload));
+  }
+
+  private static void putNullableLong(ObjectNode target,String field,Long value) {
+    if(value==null)target.putNull(field);else target.put(field,value);
+  }
+
+  private JsonNode canonicalize(JsonNode node) {
+    if(node==null)return mapper.getNodeFactory().nullNode();
+    if(node.isObject()) {
+      ObjectNode sorted=mapper.createObjectNode();
+      List<String> names=new ArrayList<>();
+      node.fieldNames().forEachRemaining(names::add);
+      names.sort(String::compareTo);
+      for(String name:names)sorted.set(name,canonicalize(node.get(name)));
+      return sorted;
+    }
+    if(node.isArray()) {
+      ArrayNode array=mapper.createArrayNode();
+      for(JsonNode child:node)array.add(canonicalize(child));
+      return array;
+    }
+    return node.deepCopy();
+  }
+
+  private static String sha256Hex(String value) {
+    try {
+      return java.util.HexFormat.of().formatHex(
+          java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+    } catch(java.security.NoSuchAlgorithmException impossible) {
+      throw new IllegalStateException("SHA-256 is required for notification preview tokens.",impossible);
+    }
   }
 
   private void assertScopeAllowed(Actor actor,String scope,Long institutionId,Long courseId,Map<String,Object> filter) {
