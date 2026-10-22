@@ -97,6 +97,22 @@ export default function ParentCoursesPage() {
     setBillingAddressesLoading(addressLoading);
   }, []);
 
+  const refreshBillingAddressBook = useCallback(async () => {
+    setBillingAddressesLoading(true);
+    try {
+      const rows = await readJson(await apiFetch('/api/v1/marketplace/family/billing-addresses', {
+        credentials: 'same-origin', cache: 'no-store',
+        headers: { 'Accept': 'application/json', 'X-QE-Workspace': 'PARENT' },
+      }));
+      setBillingAddresses(Array.isArray(rows) ? rows as BillingAddressRecord[] : []);
+    } catch (error: any) {
+      setError(localizeMarketplaceError(error?.message, language,
+        'Billing addresses could not be refreshed.', 'Billing addresses refresh नहीं हो सके।'));
+    } finally {
+      setBillingAddressesLoading(false);
+    }
+  }, [language]);
+
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -438,6 +454,7 @@ export default function ParentCoursesPage() {
             selectedAddressId={selectedBillingAddressId}
             onSelect={setSelectedBillingAddressId}
             profileHref="/parent/profile"
+            onRefreshAddresses={() => { void refreshBillingAddressBook(); }}
             onCancel={() => setCheckoutIntent(null)}
             onConfirm={() => {
               const intent = checkoutIntent;
