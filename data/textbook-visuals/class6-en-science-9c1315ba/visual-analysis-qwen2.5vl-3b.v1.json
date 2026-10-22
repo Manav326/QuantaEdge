@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1337,
+    "assets_selected": 1338,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1333,
-    "assets_remaining": 745,
-    "assets_completion_percent": 64.1,
+    "assets_analyzed": 1334,
+    "assets_remaining": 744,
+    "assets_completion_percent": 64.2,
     "assets_failed": 29,
-    "assets_skipped_from_checkpoint": 1332,
+    "assets_skipped_from_checkpoint": 1333,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:13:47Z"
+      "checkpointed_at": "2026-10-22T10:18:01Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:14:47Z"
+      "checkpointed_at": "2026-10-22T10:19:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:15:48Z"
+      "checkpointed_at": "2026-10-22T10:20:02Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:16:31Z"
+      "checkpointed_at": "2026-10-22T10:20:46Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44715,6 +44715,74 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T10:16:44Z"
+    },
+    {
+      "asset_id": "863d3e28b90792031e36e752",
+      "asset_sha256": "8c0e184a88a466477cec84c35ccf2654fe5cd945ac98565b19e917ade00f2fb9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 138,
+      "asset_path": "page-0138.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "625a2526f2d862235ca70e74f3509b19b1a765774e95bee46649267b4298b334",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about containers and materials in a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3. The containers which are used to store materials in shops and\nat home are usually transparent. Give your reasons for this.",
+          "4. State whether the statements given below are True [T] or\nFalse [F]. Correct the False statement(s).",
+          "(i) Wood is translucent while glass is opaque. [ ]",
+          "(ii) Aluminium foil has lustre while an eraser\ndoes not. [ ]",
+          "(iii) Sugar dissolves in water whereas sawdust\ndoes not. [ ]",
+          "(iv) An apple is a matter because it occupies no\nspace and has mass. [ ]",
+          "5. We see chairs made up of various materials, such as wood,\niron, plastic, bamboo, cement and stones. Following are\nsome desirable properties of materials which can be used\nto make chairs. Which materials used to make chairs fulfil\nthese properties the most?",
+          "(i) Hardness (does not bend or shake on sitting even after\nlong use).",
+          "(ii) Lightweight (easy to lift or to take from one place to\nanother).",
+          "(iii) Does not feel very cold when sitting during winters.",
+          "(iv) Can be cleaned regularly and made to look new even\nafter long use.",
+          "6. You need to have containers for collection of: (i) food waste,\n(ii) broken glass and (iii) wastepaper. Which materials will\nyou choose for containers of these types of waste? What\nproperties of materials do you need to think of?",
+          "7. Air is all around us but does not hinder us from seeing each\nother. Whereas, if a wooden door comes in between, we\ncannot see each other. It is because air is\nand the wooden door is . Choose the most\nappropriate option:",
+          "(i) transparent, opaque",
+          "(ii) translucent, transparent",
+          "(iii) opaque, translucent",
+          "(iv) transparent, translucent",
+          "8. Imagine you have two mysterious materials, X and Y. When\nyou try to press material X, it feels rigid and does not change\nits shape easily. On the other hand, material Y easily changes\nits shape when you press it. Now, when you mix both\nmaterials in water, only material X dissolves completely."
+        ],
+        "concepts": [
+          "containers",
+          "transparent",
+          "opaque",
+          "translucent",
+          "aluminium foil",
+          "lustre",
+          "sawdust",
+          "apple",
+          "wood",
+          "iron",
+          "plastic",
+          "bamboo",
+          "cement",
+          "stones",
+          "hardness",
+          "lightweight",
+          "cold",
+          "cleaning",
+          "containers",
+          "food waste"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T10:25:37Z"
     }
   ]
 }
