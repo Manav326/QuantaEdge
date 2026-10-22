@@ -84,17 +84,7 @@ export default function BillingProfileEditor({
         headers:{'Accept':'application/json','X-QE-Workspace':workspace}
       }));
       if(!Array.isArray(rows)) throw new Error(text('billing.loadError'));
-      const savedRows=rows as BillingAddressRecord[];
-      setAddresses(savedRows);
-      if(placement==='marketplace') {
-        const preferred=savedRows.find(address=>address.is_default)||savedRows[0];
-        const address=preferred?.billingAddress||{};
-        if(preferred&&(!address.line1?.trim()||!address.city?.trim()||!address.state?.trim()||!address.postalCode?.trim())) {
-          setDraft(draftFromAddress(preferred));
-          setEditingId(preferred.id);
-          setFormOpen(true);
-        }
-      }
+      setAddresses(rows as BillingAddressRecord[]);
     }catch(e){
       setError(e instanceof Error?e.message:text('billing.loadError'));
     }finally{setLoading(false);}
@@ -198,8 +188,7 @@ export default function BillingProfileEditor({
             <strong>{selected.legal_name}</strong>
             {selected.is_default&&<span className={styles.defaultTag}>{text('billing.default')}</span>}
           </div>
-          <button type="button" className={styles.editAddressButton} onClick={()=>startEdit(selected)}
-            aria-label={text('billing.editAddress')} title={text('billing.editAddress')}>✎</button>
+
         </div>
         <address className={styles.postalAddress}>
           {addressLines(selected).map((line,index)=><span key={index}>{line}</span>)}
@@ -207,10 +196,13 @@ export default function BillingProfileEditor({
           {selected.contact_email&&<span>{selected.contact_email}</span>}
           {selected.contact_phone&&<span>{selected.contact_phone}</span>}
         </address>
+        {(!selected.billingAddress?.line1?.trim()||!selected.billingAddress?.city?.trim()||!selected.billingAddress?.state?.trim()||!selected.billingAddress?.postalCode?.trim())&&
+          <p className={styles.manageHint}>{text('billing.requiredForCheckout')}</p>}
         {addresses.length>1&&<p className={styles.manageHint}>{text('billing.multipleHint').replace('{count}',String(addresses.length))}</p>}
         <Link className={styles.profileLink} href={profileHref}>{text('billing.manageInProfile')}</Link>
       </article>:<div className={styles.emptyAddress}>
         <strong>{text('billing.noAddressTitle')}</strong><p>{text('billing.noAddressDescription')}</p>
+        <Link className={styles.profileLink} href={profileHref}>{text('billing.manageInProfile')}</Link>
       </div>
     ):addresses.length===0?<div className={styles.emptyAddress}>
       <strong>{text('billing.noSavedAddresses')}</strong><p>{text('billing.profileNoAddressDescription')}</p>
@@ -236,7 +228,7 @@ export default function BillingProfileEditor({
         </div>
       </article>)}
     </div>}
-    {(formOpen||placement==='marketplace'&&addresses.length===0&&!loading)&&<form className={styles.form} onSubmit={submit}>
+    {placement==='profile'&&formOpen&&<form className={styles.form} onSubmit={submit}>
       <div className={styles.formHeading}><strong>{editingId===null?text('billing.formAddHeading'):text('billing.formEditHeading')}</strong>
         {!(placement==='marketplace'&&addresses.length===0)&&<button type="button" className={styles.closeFormButton} onClick={cancelEdit} disabled={saving} aria-label={text('billing.cancel')}>×</button>}
       </div>
