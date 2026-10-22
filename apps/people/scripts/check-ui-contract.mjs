@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -16,7 +16,19 @@ function read(path) {
   return existsSync(absolute) ? readFileSync(absolute, 'utf8') : '';
 }
 
+function findPeoplePageFiles(directory) {
+  const absolute = join(root, directory);
+  if (!existsSync(absolute)) return [];
+  return readdirSync(absolute, { withFileTypes: true }).flatMap(entry => {
+    const childPath = directory + '/' + entry.name;
+    if (entry.isDirectory()) return findPeoplePageFiles(childPath);
+    return /^page\.(?:tsx|ts|jsx|js)$/.test(entry.name) ? [childPath] : [];
+  });
+}
+
 const rootLayout = read('apps/people/app/layout.tsx');
+const appearanceProvider = read('apps/people/app/components/PeopleAppearanceProvider.tsx');
+const appearanceStyles = read('apps/people/app/people-appearance.css');
 const workspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const sessionBoundary = read('apps/people/app/components/PeopleSessionBoundary.tsx');
 const components = read('apps/people/app/components/PeopleUI.tsx');
@@ -27,6 +39,16 @@ const webStyles = read('apps/web/app/globals.css');
 const alignmentPlan = read('docs/ui/hrms-educational-admin-alignment-plan.md');
 
 assert(rootLayout.includes("import './people-design-system.css'"), 'Root layout must load the People design system.');
+assert(rootLayout.includes("import './people-appearance.css'") && rootLayout.includes('PeopleAppearanceProvider'), 'Root layout must apply HRMS-owned appearance tokens globally across protected and public routes.');
+assert(rootLayout.includes("default: 'QuantaEdge'") && rootLayout.includes("applicationName: 'QuantaEdge'"), 'The HRMS platform identity must remain QuantaEdge while the HRMS product name is finalised.');
+assert(appearanceProvider.includes("qe.people.appearance-mode.v1") && appearanceProvider.includes("'system', 'light', 'dark'"), 'HRMS must keep its own persisted system/light/dark preference, separate from learner/Admin preferences.');
+assert(appearanceProvider.includes('PeopleAppearanceToggle') && appearanceProvider.includes('prefers-color-scheme'), 'HRMS appearance controls must support accessible mode selection and OS theme changes.');
+assert(!/\/api\/v1\/institution\/public\/branding|logoUrl|appIconUrl|themeTokens/i.test(appearanceProvider + appearanceStyles), 'HRMS appearance must not fetch or depend on tenant logo URLs or institution theme tokens.');
+assert(appearanceStyles.includes('--qe-people-brand: #f97316') && appearanceStyles.includes('--qe-people-brand-strong: #c2410c'), 'HRMS light theme must preserve canonical QuantaEdge orange branding.');
+assert(appearanceStyles.includes('html[data-qe-people-appearance="dark"]') && appearanceStyles.includes(':focus-visible') && appearanceStyles.includes('prefers-reduced-motion'), 'HRMS dark theme must retain semantic surfaces, visible focus, and reduced-motion support.');
+assert(appearanceStyles.includes('[class*="Finance_page__"]') && appearanceStyles.includes('[class*="Institutions_page__"]') && appearanceStyles.includes('[class*="QaCenter_page__"]'), 'Bespoke finance, institution-management, and QA routes must remap their local theme tokens.');
+assert(workspace.includes('<PeopleAppearanceToggle />'), 'Authenticated workspace header must expose the shared appearance control.');
+
 assert(rootLayout.includes('PeopleSessionBoundary'), 'Root layout must preserve the HRMS session boundary.');
 assert(rootLayout.includes('PeopleWorkspaceLayout'), 'Root layout must use the common People workspace shell.');
 assert(workspace.includes("X-QE-Workspace': 'HRMS'"), 'Workspace session requests must retain the HRMS workspace header.');
@@ -70,6 +92,19 @@ const routePages = [
   ['/my-classes', 'apps/people/app/my-classes/page.tsx'],
   ['/access', 'apps/people/app/access/page.tsx'],
 ];
+
+const peopleLoginSource = read('apps/people/app/login/page.tsx');
+const peoplePasswordSource = read('apps/people/app/change-password/page.tsx');
+assert(peopleLoginSource.includes('<PeopleAppearanceToggle compact />') && peoplePasswordSource.includes('<PeopleAppearanceToggle compact />'), 'Login and forced password-change screens must expose the same HRMS-owned theme control.');
+
+const discoveredPeoplePages = findPeoplePageFiles('apps/people/app').sort();
+assert(discoveredPeoplePages.length > routePages.length, 'Route discovery must cover routes beyond the representative workflow sample.');
+assert(discoveredPeoplePages.includes('apps/people/app/change-password/page.tsx') && discoveredPeoplePages.includes('apps/people/app/institutions/page.tsx') && discoveredPeoplePages.includes('apps/people/app/finance/page.tsx') && discoveredPeoplePages.includes('apps/people/app/qa/page.tsx'), 'Route discovery must include public account and bespoke platform-management screens.');
+assert(discoveredPeoplePages.includes('apps/people/app/page.tsx') && discoveredPeoplePages.includes('apps/people/app/login/page.tsx'), 'Route discovery must include the HRMS workspace and public login.');
+for (const routePath of discoveredPeoplePages) {
+  const pageSource = read(routePath);
+  assert(/\bexport\s+default\b/.test(pageSource), 'HRMS route ' + routePath.replace(/^apps\/people\/app/, '') + ' must retain its default route component.');
+}
 
 const attendanceSource = read('apps/people/app/attendance/page.tsx');
 assert(attendanceSource.includes('<PeopleStatusBadge status={pretty(r.requested_status)} />'), 'Attendance-correction requested status must use a semantic status badge.');

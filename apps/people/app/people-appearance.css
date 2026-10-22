@@ -1,0 +1,952 @@
+/*
+ * HRMS owns its appearance system. These tokens are intentionally independent
+ * of tenant logo URLs and tenant-specific theme tokens.
+ */
+:root {
+  --qe-people-ink: #182337;
+  --qe-people-muted: #66758b;
+  --qe-people-line: #e2e7ef;
+  --qe-people-paper: #f5f7fb;
+  --qe-people-card: #ffffff;
+  --qe-people-surface: #ffffff;
+  --qe-people-surface-subtle: #f8fafc;
+  --qe-people-surface-hover: #fff7f0;
+  --qe-people-field: #ffffff;
+  --qe-people-table-head: #f8fafc;
+  --qe-people-table-line: #edf0f5;
+  --qe-people-brand: #f97316;
+  --qe-people-brand-strong: #c2410c;
+  --qe-people-brand-hover: #c2410c;
+  --qe-people-brand-soft: #fff0e5;
+  --qe-people-focus: #c2410c;
+  --qe-people-sidebar: #ffffff;
+  --qe-people-sidebar-ink: #344054;
+  --qe-people-sidebar-muted: #667085;
+  --qe-people-sidebar-line: #e5e7eb;
+  --qe-people-sidebar-hover: #f8fafc;
+  --qe-people-sidebar-active: #fff0e5;
+  --qe-people-success: #067647;
+  --qe-people-success-soft: #ecfdf3;
+  --qe-people-warning: #b54708;
+  --qe-people-warning-soft: #fffaeb;
+  --qe-people-danger: #b42318;
+  --qe-people-danger-soft: #fff1f0;
+  --qe-people-info: #1d4ed8;
+  --qe-people-info-soft: #eff6ff;
+  --qe-people-neutral: #475467;
+  --qe-people-neutral-soft: #f2f4f7;
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --card: var(--qe-people-card);
+  --brand: var(--qe-people-brand);
+  --brand2: var(--qe-people-brand-strong);
+  --brand-soft: var(--qe-people-brand-soft);
+  --danger: var(--qe-people-danger);
+  --danger-soft: var(--qe-people-danger-soft);
+  --success: var(--qe-people-success);
+  --success-soft: var(--qe-people-success-soft);
+  --warning: var(--qe-people-warning);
+  --warning-soft: var(--qe-people-warning-soft);
+  --focus: var(--qe-people-focus);
+}
+
+html[data-qe-people-appearance="dark"] {
+  color-scheme: dark;
+  --qe-people-ink: #eef2f8;
+  --qe-people-muted: #a7b3c5;
+  --qe-people-line: #334155;
+  --qe-people-paper: #0c1422;
+  --qe-people-card: #162233;
+  --qe-people-surface: #162233;
+  --qe-people-surface-subtle: #1b293c;
+  --qe-people-surface-hover: #263448;
+  --qe-people-field: #101b2b;
+  --qe-people-table-head: #1d2a3d;
+  --qe-people-table-line: #2c3a4e;
+  --qe-people-brand-strong: #fdba74;
+  --qe-people-brand-hover: #ea580c;
+  --qe-people-brand-soft: #3a281c;
+  --qe-people-focus: #fb923c;
+  --qe-people-sidebar: #111a2b;
+  --qe-people-sidebar-ink: #d5deeb;
+  --qe-people-sidebar-muted: #a4b0c3;
+  --qe-people-sidebar-line: #2c3a4e;
+  --qe-people-sidebar-hover: #1d2a3d;
+  --qe-people-sidebar-active: #35271d;
+  --qe-people-success: #a7f3d0;
+  --qe-people-success-soft: #14372e;
+  --qe-people-warning: #fde68a;
+  --qe-people-warning-soft: #392e1c;
+  --qe-people-danger: #fecaca;
+  --qe-people-danger-soft: #3d2026;
+  --qe-people-info: #bfdbfe;
+  --qe-people-info-soft: #1b2e49;
+  --qe-people-neutral: #d4deed;
+  --qe-people-neutral-soft: #293548;
+}
+
+/* Before client preference restoration, follow the device theme without a flash. */
+@media (prefers-color-scheme: dark) {
+  html:not([data-qe-people-appearance]) {
+    color-scheme: dark;
+    --qe-people-ink: #eef2f8;
+    --qe-people-muted: #a7b3c5;
+    --qe-people-line: #334155;
+    --qe-people-paper: #0c1422;
+    --qe-people-card: #162233;
+    --qe-people-surface: #162233;
+    --qe-people-surface-subtle: #1b293c;
+    --qe-people-surface-hover: #263448;
+    --qe-people-field: #101b2b;
+    --qe-people-table-head: #1d2a3d;
+    --qe-people-table-line: #2c3a4e;
+    --qe-people-brand-strong: #fdba74;
+    --qe-people-brand-hover: #ea580c;
+    --qe-people-brand-soft: #3a281c;
+    --qe-people-focus: #fb923c;
+    --qe-people-sidebar: #111a2b;
+    --qe-people-sidebar-ink: #d5deeb;
+    --qe-people-sidebar-muted: #a4b0c3;
+    --qe-people-sidebar-line: #2c3a4e;
+    --qe-people-sidebar-hover: #1d2a3d;
+    --qe-people-sidebar-active: #35271d;
+    --qe-people-success: #a7f3d0;
+    --qe-people-success-soft: #14372e;
+    --qe-people-warning: #fde68a;
+    --qe-people-warning-soft: #392e1c;
+    --qe-people-danger: #fecaca;
+    --qe-people-danger-soft: #3d2026;
+    --qe-people-info: #bfdbfe;
+    --qe-people-info-soft: #1b2e49;
+    --qe-people-neutral: #d4deed;
+    --qe-people-neutral-soft: #293548;
+  }
+}
+
+html[data-qe-people-appearance],
+html[data-qe-people-appearance] body {
+  background: var(--qe-people-paper);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance="light"],
+html[data-qe-people-appearance="dark"] {
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --card: var(--qe-people-card);
+  --brand: var(--qe-people-brand);
+  --brand2: var(--qe-people-brand-strong);
+  --brand-soft: var(--qe-people-brand-soft);
+  --danger: var(--qe-people-danger);
+  --danger-soft: var(--qe-people-danger-soft);
+  --success: var(--qe-people-success);
+  --success-soft: var(--qe-people-success-soft);
+  --warning: var(--qe-people-warning);
+  --warning-soft: var(--qe-people-warning-soft);
+  --focus: var(--qe-people-focus);
+}
+
+.qe-people-workspace,
+.qe-people-content,
+.qe-people-page-slot,
+.qe-people-page-slot .shell,
+.qe-people-page-slot .main {
+  background: var(--qe-people-paper);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-global-header {
+  background: var(--qe-people-card);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-header-context strong,
+.qe-people-header-user {
+  color: var(--qe-people-ink);
+}
+
+.qe-people-workspace-pill {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-muted);
+}
+
+.qe-people-sidebar {
+  background: var(--qe-people-sidebar);
+  border-right: 1px solid var(--qe-people-sidebar-line);
+  color: var(--qe-people-sidebar-ink);
+}
+
+.qe-people-brand-row,
+.qe-people-account {
+  border-color: var(--qe-people-sidebar-line);
+}
+
+.qe-people-brand > span,
+.qe-people-workspace-label,
+.qe-people-navigation-heading {
+  color: var(--qe-people-sidebar-muted);
+}
+
+.qe-people-navigation-link {
+  color: var(--qe-people-sidebar-ink);
+}
+
+.qe-people-navigation-link:hover {
+  background: var(--qe-people-sidebar-hover);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-navigation-link.is-active {
+  background: var(--qe-people-sidebar-active);
+  border-color: color-mix(in srgb, var(--qe-people-brand) 30%, var(--qe-people-line));
+  color: var(--qe-people-brand-strong);
+}
+
+.qe-people-navigation-link.is-active::before {
+  background: var(--qe-people-brand);
+}
+
+.qe-people-navigation-icon {
+  border-color: var(--qe-people-sidebar-line);
+  color: var(--qe-people-sidebar-ink);
+}
+
+.qe-people-navigation-link.is-active .qe-people-navigation-icon {
+  background: var(--qe-people-brand-soft);
+  border-color: color-mix(in srgb, var(--qe-people-brand) 35%, var(--qe-people-line));
+  color: var(--qe-people-brand-strong);
+}
+
+.qe-people-collapse-button,
+.qe-people-logout {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-sidebar-line);
+  color: var(--qe-people-sidebar-ink);
+}
+
+.qe-people-collapse-button:hover,
+.qe-people-logout:hover {
+  background: var(--qe-people-sidebar-hover);
+  border-color: var(--qe-people-brand);
+}
+
+.qe-people-account-copy strong,
+.qe-people-account-copy span {
+  color: var(--qe-people-sidebar-ink);
+}
+
+.qe-people-avatar {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-sidebar-line);
+  color: var(--qe-people-brand-strong);
+}
+
+.qe-people-menu-trigger {
+  background: var(--qe-people-surface);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-language-select {
+  color: var(--qe-people-muted);
+}
+
+.qe-people-language-select select,
+.qe-people-appearance-toggle {
+  border: 1px solid var(--qe-people-line);
+  border-radius: 9px;
+  background: var(--qe-people-surface);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-language-select select {
+  min-height: 38px;
+}
+
+.qe-people-appearance-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 42px;
+  min-height: 38px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+
+.qe-people-appearance-toggle:hover {
+  background: var(--qe-people-surface-hover);
+  border-color: var(--qe-people-brand);
+}
+
+.qe-people-appearance-toggle:focus-visible {
+  outline: 3px solid var(--qe-people-focus);
+  outline-offset: 3px;
+}
+
+.qe-people-appearance-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.qe-people-appearance-label {
+  color: inherit;
+}
+
+.qe-people-auth-language {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card,
+.panel,
+.modal,
+.login-panel,
+.login-card {
+  background: var(--qe-people-card);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.table-wrap,
+table {
+  border-color: var(--qe-people-line);
+  background: var(--qe-people-surface);
+  color: var(--qe-people-ink);
+}
+
+th {
+  background: var(--qe-people-table-head);
+  border-color: var(--qe-people-table-line);
+  color: var(--qe-people-muted);
+}
+
+td {
+  border-color: var(--qe-people-table-line);
+  color: var(--qe-people-ink);
+}
+
+tr:hover td {
+  background: var(--qe-people-surface-hover);
+}
+
+.input,
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+select,
+textarea {
+  background: var(--qe-people-field);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--qe-people-muted);
+  opacity: .85;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--qe-people-brand);
+}
+
+.secondary {
+  background: var(--qe-people-surface);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.secondary:hover {
+  background: var(--qe-people-surface-hover);
+  border-color: var(--qe-people-brand);
+}
+
+.qe-people-button--secondary,
+.qe-people-button--neutral {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-button--secondary:hover,
+.qe-people-button--neutral:hover {
+  background: var(--qe-people-surface-hover);
+  border-color: var(--qe-people-brand);
+}
+
+.qe-people-button--danger {
+  border-color: color-mix(in srgb, var(--qe-people-danger) 36%, var(--qe-people-line));
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+.qe-people-button--danger:hover {
+  border-color: var(--qe-people-danger);
+  background: var(--qe-people-danger-soft);
+}
+
+.qe-people-status {
+  border-color: var(--qe-people-line);
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+.tabs {
+  border-color: var(--qe-people-line);
+}
+
+.tabs button {
+  color: var(--qe-people-muted);
+}
+
+.tabs button.active {
+  color: var(--qe-people-brand-strong);
+  border-color: var(--qe-people-brand);
+}
+
+.pill {
+  background: var(--qe-people-brand-soft);
+  color: var(--qe-people-brand-strong);
+}
+
+.pill.inactive {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+.error,
+.qe-people-feedback--danger {
+  border-color: color-mix(in srgb, var(--qe-people-danger) 35%, var(--qe-people-line));
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+.notice,
+.qe-people-feedback--success {
+  border-color: color-mix(in srgb, var(--qe-people-success) 35%, var(--qe-people-line));
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+.qe-people-feedback--warning {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+.qe-people-feedback--info {
+  background: var(--qe-people-info-soft);
+  color: var(--qe-people-info);
+}
+
+.qe-people-feedback--neutral {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+.qe-people-status--success {
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+.qe-people-status--warning {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+.qe-people-status--danger {
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+.qe-people-status--info {
+  background: var(--qe-people-info-soft);
+  color: var(--qe-people-info);
+}
+
+.qe-people-status--neutral {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+.empty,
+.qe-people-empty-state {
+  color: var(--qe-people-muted);
+}
+
+.modal-backdrop,
+.qe-people-mobile-backdrop {
+  background: color-mix(in srgb, #050b16 66%, transparent);
+}
+
+.modal {
+  box-shadow: 0 24px 80px color-mix(in srgb, #050b16 42%, transparent);
+}
+
+.login-wrap {
+  background: var(--qe-people-paper);
+}
+
+.login-story {
+  background: linear-gradient(145deg, #111a2b 0%, #1c2941 100%);
+  color: #f8fafc;
+}
+
+html[data-qe-people-appearance="dark"] .login-story {
+  background: linear-gradient(145deg, #09111f 0%, #132037 100%);
+}
+
+.login-story p,
+.login-story .small {
+  color: #d4deee;
+}
+
+.login-panel {
+  background: var(--qe-people-paper);
+}
+
+.login-card p {
+  color: var(--qe-people-muted);
+}
+
+.qe-people-mobile-menu {
+  background: var(--qe-people-card);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-mobile-menu-header,
+.qe-people-mobile-menu-footer {
+  border-color: var(--qe-people-line);
+}
+
+.qe-people-mobile-menu-header {
+  border-color: var(--qe-people-line);
+}
+
+.qe-people-mobile-menu-header small {
+  color: var(--qe-people-muted);
+}
+
+/* The CSS-module routes define local light-only values; remap their palette here. */
+html[data-qe-people-appearance] [class*="Finance_page__"],
+html[data-qe-people-appearance] [class*="Institutions_page__"],
+html[data-qe-people-appearance] [class*="QaCenter_page__"] {
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --brand: var(--qe-people-brand);
+  --brand-deep: var(--qe-people-brand-strong);
+}
+
+html[data-qe-people-appearance] [class*="Finance_panel__"],
+html[data-qe-people-appearance] [class*="Finance_policyTableWrap__"],
+html[data-qe-people-appearance] [class*="Finance_recipientEditor__"],
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"],
+html[data-qe-people-appearance] [class*="Finance_refundPanel__"],
+html[data-qe-people-appearance] [class*="Finance_pdfPreviewPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_panel__"],
+html[data-qe-people-appearance] [class*="Institutions_metrics__"] article,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_brandAssetPreview__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
+  background: var(--qe-people-card);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_tab__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button {
+  color: var(--qe-people-muted);
+}
+
+html[data-qe-people-appearance] [class*="Finance_tabActive__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button[class*="tabActive"] {
+  background: var(--qe-people-brand-soft);
+  border-color: color-mix(in srgb, var(--qe-people-brand) 35%, var(--qe-people-line));
+  color: var(--qe-people-brand-strong);
+}
+
+html[data-qe-people-appearance] [class*="Finance_secondary__"],
+html[data-qe-people-appearance] [class*="Institutions_secondary__"],
+html[data-qe-people-appearance] [class*="Institutions_fileButton__"] {
+  background: var(--qe-people-surface);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_secondary__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_secondary__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"][class*="selected"] {
+  background: var(--qe-people-surface-hover);
+  border-color: var(--qe-people-brand);
+}
+
+html[data-qe-people-appearance] [class*="Finance_table__"] th,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] th,
+html[data-qe-people-appearance] [class*="QaCenter_table__"] th {
+  background: var(--qe-people-table-head);
+  border-color: var(--qe-people-table-line);
+  color: var(--qe-people-muted);
+}
+
+html[data-qe-people-appearance] [class*="Finance_table__"] td,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] td,
+html[data-qe-people-appearance] [class*="QaCenter_table__"] td {
+  border-color: var(--qe-people-table-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_policyTableWrap__"],
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
+  border-color: var(--qe-people-line);
+}
+
+html[data-qe-people-appearance] [class*="Finance_note__"],
+html[data-qe-people-appearance] [class*="Institutions_disclaimer__"],
+html[data-qe-people-appearance] [class*="QaCenter_guardNote__"] {
+  background: var(--qe-people-warning-soft);
+  border-color: color-mix(in srgb, var(--qe-people-warning) 35%, var(--qe-people-line));
+  color: var(--qe-people-warning);
+}
+
+html[data-qe-people-appearance] [class*="Finance_previewPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_themePreviewGrid__"] {
+  border-color: var(--qe-people-line);
+}
+
+html[data-qe-people-appearance] [class*="Finance_previewPanel__"] {
+  background: var(--qe-people-surface-subtle);
+}
+
+html[data-qe-people-appearance] [class*="Finance_paperWrap__"] {
+  background: var(--qe-people-surface-subtle);
+}
+
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Institutions_codeNotice__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="QaCenter_gateGrid__"] > div,
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
+  background: var(--qe-people-surface-subtle);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_error__"] {
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_notice__"] {
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_status__"] {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_status__"].active {
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_status__"].suspended {
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_emptyIcon__"],
+html[data-qe-people-appearance] [class*="Institutions_avatar__"] {
+  background: var(--qe-people-brand-soft);
+  color: var(--qe-people-brand-strong);
+}
+
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_manifestRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_packCard__"],
+html[data-qe-people-appearance] [class*="QaCenter_runRow__"] {
+  border-color: var(--qe-people-line);
+}
+
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_empty__"],
+html[data-qe-people-appearance] [class*="Finance_emptyLarge__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyText__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyCell__"],
+html[data-qe-people-appearance] [class*="Institutions_skeleton__"],
+html[data-qe-people-appearance] [class*="QaCenter_runMeta__"],
+html[data-qe-people-appearance] [class*="QaCenter_packKey__"] {
+  color: var(--qe-people-muted);
+}
+
+
+/* Module routes have a few intentionally bespoke controls; keep their normal states semantic too. */
+html[data-qe-people-appearance] [class*="Finance_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-people-appearance] [class*="Finance_page__"] select,
+html[data-qe-people-appearance] [class*="Finance_page__"] textarea,
+html[data-qe-people-appearance] [class*="Institutions_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-people-appearance] [class*="Institutions_page__"] select,
+html[data-qe-people-appearance] [class*="Institutions_page__"] textarea {
+  background: var(--qe-people-field);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_page__"] .alertError,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .error,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .cropError {
+  background: var(--qe-people-danger-soft);
+  border-color: color-mix(in srgb, var(--qe-people-danger) 35%, var(--qe-people-line));
+  color: var(--qe-people-danger);
+}
+
+html[data-qe-people-appearance] [class*="Finance_page__"] .alertSuccess,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .notice {
+  background: var(--qe-people-success-soft);
+  border-color: color-mix(in srgb, var(--qe-people-success) 35%, var(--qe-people-line));
+  color: var(--qe-people-success);
+}
+
+html[data-qe-people-appearance] [class*="Finance_status__"] {
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="success"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="paid"] {
+  background: var(--qe-people-success-soft);
+  color: var(--qe-people-success);
+}
+
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="warning"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="pending"] {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="danger"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="failed"] {
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+html[data-qe-people-appearance] [class*="Finance_emptyLarge__"],
+html[data-qe-people-appearance] [class*="Finance_entityRow__"] span,
+html[data-qe-people-appearance] [class*="Finance_policyRow__"] span,
+html[data-qe-people-appearance] [class*="Finance_entityRow__"] small,
+html[data-qe-people-appearance] [class*="Finance_policyRow__"] small,
+html[data-qe-people-appearance] [class*="Finance_policyFooter__"] > span,
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"] p {
+  color: var(--qe-people-muted);
+}
+
+html[data-qe-people-appearance] [class*="Finance_table__"] td,
+html[data-qe-people-appearance] [class*="Finance_table__"] th,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] td,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] th,
+html[data-qe-people-appearance] [class*="QaCenter_manifestRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
+  border-color: var(--qe-people-table-line);
+}
+
+html[data-qe-people-appearance] [class*="Finance_recipientEditor__"],
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"],
+html[data-qe-people-appearance] [class*="Finance_pdfPreviewPanel__"],
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_codeNotice__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlyItem__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlySummary__"],
+html[data-qe-people-appearance] [class*="Institutions_valueChip__"],
+html[data-qe-people-appearance] [class*="Institutions_brandAssetPreview__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModal__"],
+html[data-qe-people-appearance] [class*="Institutions_cropControls__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalFooter__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplate__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateGenerated__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"] {
+  border-color: var(--qe-people-line);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_warning__"] {
+  background: var(--qe-people-warning-soft);
+  border-color: color-mix(in srgb, var(--qe-people-warning) 35%, var(--qe-people-line));
+  color: var(--qe-people-warning);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_danger__"],
+html[data-qe-people-appearance] [class*="QaCenter_dangerButton__"] {
+  background: var(--qe-people-danger-soft);
+  border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line));
+  color: var(--qe-people-danger);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_quiet__"] {
+  color: var(--qe-people-muted);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_emptyPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplate__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModal__"],
+html[data-qe-people-appearance] [class*="Institutions_cropStage__"],
+html[data-qe-people-appearance] [class*="Institutions_cropControls__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalFooter__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
+  background: var(--qe-people-card);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_listCopy__"] small,
+html[data-qe-people-appearance] [class*="Institutions_courseItem__"] small,
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] small,
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] p,
+html[data-qe-people-appearance] [class*="Institutions_form__"] label small,
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] label,
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] select {
+  color: var(--qe-people-muted);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_courseList__"],
+html[data-qe-people-appearance] [class*="Institutions_courseItem__"],
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] article,
+html[data-qe-people-appearance] [class*="Institutions_tabs__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlySummary__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlyItem__"] {
+  border-color: var(--qe-people-line);
+}
+
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] select,
+html[data-qe-people-appearance] [class*="Institutions_search__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateFields__"] input,
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateFields__"] select {
+  background: var(--qe-people-field);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="QaCenter_gateGrid__"] > div,
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="QaCenter_guardNote__"] {
+  background: var(--qe-people-warning-soft);
+  color: var(--qe-people-warning);
+}
+
+html[data-qe-people-appearance] [class*="Finance_page__"] .tab:hover {
+  background: var(--qe-people-surface-hover);
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance] [class*="Finance_page__"] .primary,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .primary {
+  background: var(--qe-people-brand);
+  color: #ffffff;
+}
+
+html[data-qe-people-appearance] [class*="Finance_page__"] .primary:hover,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .primary:hover {
+  background: var(--qe-people-brand-hover);
+}
+
+.qe-people-auth-language .qe-people-appearance-toggle {
+  margin-left: 0;
+}
+
+@media print {
+  body.printing-payslip .qe-people-sidebar,
+  body.printing-payslip .qe-people-global-header,
+  body.printing-payslip .qe-people-mobile-menu,
+  body.printing-payslip .qe-people-appearance-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .qe-people-appearance-toggle .qe-people-appearance-label {
+    display: none;
+  }
+
+  .qe-people-appearance-toggle {
+    width: 40px;
+    min-width: 40px;
+    padding-inline: 8px;
+  }
+
+  .qe-people-header-actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .qe-people-auth-language {
+    justify-content: flex-start;
+  }
+
+  html[data-qe-people-appearance] [class*="Finance_page__"],
+  html[data-qe-people-appearance] [class*="Institutions_page__"] {
+    padding-inline: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qe-people-appearance-toggle {
+    transition: none;
+  }
+}
+
+/* Preserve paper-white document output even when the surrounding workspace is dark. */
+@media print {
+  body.printing-payslip .qe-people-page-slot,
+  body.printing-payslip .qe-people-page-slot .main,
+  body.printing-payslip .qe-people-page-slot .shell {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+}
+
+/* The mobile compact lockup is transparent, so its text must contrast with the dark header. */
+html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand__name-quant {
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand__tagline {
+  color: var(--qe-people-muted);
+}
