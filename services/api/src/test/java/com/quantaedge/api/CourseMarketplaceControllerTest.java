@@ -51,7 +51,7 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
-  void legacyIncompleteOrderMayOnlyBeRetiredWhenProviderConfirmsRetryIsSafe() {
+  void legacyIncompleteOrderMayOnlyBeRepairedWhenProviderConfirmsRetryIsSafe() {
     assertTrue(CourseMarketplaceController.providerConfirmsRetryIsSafe("RETRYABLE"));
     assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("PAID"));
     assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("IN_FLIGHT"));
