@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { apiFetch } from './apiClient';
+import { notifyUser } from './GlobalNotificationHost';
 import RichNotificationRenderer from './RichNotificationRenderer';
 import LogoGraphicsLab from './LogoGraphicsLab';
 import styles from './NotificationStudio.module.css';
@@ -121,6 +122,12 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [notice, setNotice] = useState('');
 
   const activeBlock = document.blocks[selectedBlock] ?? null;
+  const selectedTemplateForSave = templateId ? templates.find(item => String(item.id) === templateId) : null;
+  const savedTemplateDocument = selectedTemplateForSave ? asDocument(field(selectedTemplateForSave, 'content_document', 'contentDocument')) : null;
+  const templateDirty = !selectedTemplateForSave ||
+    templateName !== String(field(selectedTemplateForSave, 'template_name', 'templateName') ?? '') ||
+    templateDescription !== String(selectedTemplateForSave.description ?? '') ||
+    !savedTemplateDocument || JSON.stringify(document) !== JSON.stringify(savedTemplateDocument);
   const isPlatform = surface === 'hrms';
 
   const loadBase = useCallback(async () => {
@@ -379,6 +386,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }
 
   async function saveTemplate() {
+    if (!templateDirty) return;
     const issue = validateContent();
     if (issue) { setError(issue); return; }
     setSaving(true); setError(''); setNotice('');
@@ -392,7 +400,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       });
       const data = await response.json().catch(() => ({})) as Template & { message?: string };
       if (!response.ok) throw new Error(data.message || 'Template could not be saved.');
-      setNotice('Template saved as a new immutable version.');
+      setNotice('');notifyUser('Template saved as a new immutable version.','success');
       await loadBase();
       if (data.id) {
         setTemplateId(String(data.id));
@@ -638,7 +646,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
           </div>
           {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} eligible recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>kind+': '+count).join(' · ')}</span></div>:null}
           <div className={styles.sendActions}>
-            <button type="button" className={styles.ghostButton} onClick={()=>void saveTemplate()} disabled={saving||sending}>{saving?'Saving…':'Save template version'}</button>
+            <button type="button" className={styles.ghostButton} onClick={()=>void saveTemplate()} disabled={saving||sending||!templateDirty}>{saving?'Saving…':'Save template version'}</button>
             <button type="button" className={styles.previewButton} onClick={()=>void preview()} disabled={saving||sending}>{saving?'Validating…':'Preview & validate audience'}</button>
             <button type="button" className={styles.sendButton} onClick={()=>void send()} disabled={saving||sending||!previewed}>{sending?'Sending…':scheduledAt?'Schedule notification':'Send notification'}</button>
           </div>
