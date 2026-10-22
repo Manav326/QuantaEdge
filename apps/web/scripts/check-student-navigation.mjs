@@ -817,7 +817,6 @@ const visualAuditTestsCss = read('../app/student/tests/Tests.module.css');
 const visualAuditTextbooksCss = read('../app/student/textbooks/textbooks.css');
 const visualAuditBillingCss = read('../app/components/BillingProfileEditor.module.css');
 const visualAuditInboxCss = read('../app/components/NotificationInbox.module.css');
-const visualAuditRichNotificationCss = read('../app/components/RichNotificationRenderer.module.css');
 const visualAuditScopeCss = read('../app/student/InstitutionCourseSubjectScope.module.css');
 
 assert.ok(
@@ -847,9 +846,8 @@ assert.ok(
 );
 assert.ok(
   visualAuditInboxCss.includes('var(--qe-color-on-accent)') &&
-  visualAuditRichNotificationCss.includes('var(--qe-color-on-primary)') &&
   visualAuditScopeCss.includes('color-mix(in srgb, var(--qe-color-focus'),
-  'Notification badges, rich-content actions, and subject-scope focus indicators must respect tenant theme tokens.'
+  'Notification badges and subject-scope focus indicators must respect tenant theme tokens; the rich renderer remains on its enforced shared stylesheet contract.'
 );
 
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
