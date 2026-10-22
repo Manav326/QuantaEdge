@@ -162,7 +162,7 @@ fun BillingAddressBook(
                                     style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(addressValue(selected, "legal_name"), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                             }
-
+                            TextButton(onClick = onOpenProfile, enabled = !busy) { Text("✎ " + t("Edit", "Edit")) }
                         }
                         linesForAddress(selected).forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
                         addressValue(selected, "gstin").takeIf { it.isNotBlank() }?.let {
@@ -221,7 +221,7 @@ fun BillingAddressBook(
             }
         }
 
-        if (formOpen && !compactOnly) {
+        if ((formOpen && !compactOnly) || (compactOnly && addresses.isEmpty() && !loading)) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.fillMaxWidth().padding(13.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
