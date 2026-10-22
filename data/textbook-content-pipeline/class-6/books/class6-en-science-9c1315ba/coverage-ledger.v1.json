@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1343,
-    "successful_visual_analyses": 1316,
-    "missing_visual_analyses": 735,
+    "raw_analysis_result_rows": 1345,
+    "successful_visual_analyses": 1318,
+    "missing_visual_analyses": 733,
     "failed_visual_analyses": 27,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 762,
+    "unresolved_count": 760,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50538,9 +50538,23 @@
       "asset_path": "assets/fadc7d97d18060aaa253ac7828eae7f44109e1a96185a0ca4368f32f44bcbbdc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character with braided hair and a plaid shirt, adjusting their hair.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "adjusting hair",
+          "braided hair",
+          "plaid shirt"
+        ],
+        "context_relation": "The image is a cartoon character, not a page from a textbook.",
+        "limitations": [
+          "The image does not provide any educational content related to the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50556,9 +50570,23 @@
       "asset_path": "assets/5d9a606481f7971d6adbed1eb9639d86dd781cea2d1730de6925251ab8a772ff.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a plaid shirt, with one hand on their chin, appearing to be in deep thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thoughtful character",
+          "plaid shirt",
+          "chin",
+          "deep thought"
+        ],
+        "context_relation": "The image is a visual representation of a character thinking, possibly discussing the concept of matter in a lesson about materials.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the lesson or topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

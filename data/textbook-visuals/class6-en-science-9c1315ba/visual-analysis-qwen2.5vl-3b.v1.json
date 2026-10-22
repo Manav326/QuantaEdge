@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1317,
+    "assets_selected": 1318,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1313,
-    "assets_remaining": 765,
-    "assets_completion_percent": 63.2,
+    "assets_analyzed": 1315,
+    "assets_remaining": 763,
+    "assets_completion_percent": 63.3,
     "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 1312,
+    "assets_skipped_from_checkpoint": 1313,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:18:11Z"
+      "checkpointed_at": "2026-10-22T08:26:25Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:19:10Z"
+      "checkpointed_at": "2026-10-22T08:27:27Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:20:12Z"
+      "checkpointed_at": "2026-10-22T08:28:33Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44004,6 +44004,72 @@
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "fe1a7ef47d0993d08f3138f0",
+      "asset_sha256": "fadc7d97d18060aaa253ac7828eae7f44109e1a96185a0ca4368f32f44bcbbdc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/fadc7d97d18060aaa253ac7828eae7f44109e1a96185a0ca4368f32f44bcbbdc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with braided hair and a plaid shirt, adjusting their hair.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "adjusting hair",
+          "braided hair",
+          "plaid shirt"
+        ],
+        "context_relation": "The image is a cartoon character, not a page from a textbook.",
+        "limitations": [
+          "The image does not provide any educational content related to the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:30:09Z"
+    },
+    {
+      "asset_id": "53fd76ff9fac71dc6e0f47aa",
+      "asset_sha256": "5d9a606481f7971d6adbed1eb9639d86dd781cea2d1730de6925251ab8a772ff",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/5d9a606481f7971d6adbed1eb9639d86dd781cea2d1730de6925251ab8a772ff.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a plaid shirt, with one hand on their chin, appearing to be in deep thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thoughtful character",
+          "plaid shirt",
+          "chin",
+          "deep thought"
+        ],
+        "context_relation": "The image is a visual representation of a character thinking, possibly discussing the concept of matter in a lesson about materials.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the lesson or topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:31:47Z"
     }
   ]
 }
