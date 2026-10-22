@@ -2205,3 +2205,12 @@ html[data-qe-appearance] .tutor-modes button[aria-pressed="true"]:hover {
   color: var(--qe-color-on-primary);
   border-color: var(--qe-color-primary);
 }
+
+
+/* Hovered certificate actions switch to the solid primary surface, so restore on-primary contrast explicitly. */
+html[data-qe-appearance] .parent-certificate-actions a:hover,
+html[data-qe-appearance] .student-certificate-actions a:hover {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}

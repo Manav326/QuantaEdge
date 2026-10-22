@@ -1055,6 +1055,14 @@ assert.ok(
   'A selected tutor mode must retain its solid-primary background and on-primary foreground during hover.'
 );
 
+
+assert.ok(
+  css.includes('html[data-qe-appearance] .parent-certificate-actions a:hover') &&
+  css.includes('background: var(--qe-color-primary);') &&
+  css.includes('color: var(--qe-color-on-primary);'),
+  'Hovered certificate links must retain the correct foreground when their surface changes from primaryContainer to primary.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
