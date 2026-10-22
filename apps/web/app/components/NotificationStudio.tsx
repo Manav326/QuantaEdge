@@ -737,8 +737,6 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         </section> : null}
 
         <div className={styles.panel}>
-
-        <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>03</span><div><h2>Design your content</h2><p>Build with media, cards, highlights and actions—not only text and images.</p></div></div>
           <div className={styles.canvaToolbar}>
             <div className={styles.canvasTabs} role="group" aria-label="Preview surface">
