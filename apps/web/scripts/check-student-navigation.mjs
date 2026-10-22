@@ -1029,6 +1029,15 @@ assert.ok(
   'Billing indicators, profile identity settings, course/resource hover surfaces and institution-portal editor focus rings must use generated theme contrast/focus colours.'
 );
 
+
+assert.ok(
+  css.includes('[class*="RichNotificationRenderer_eyebrow"]') &&
+  css.includes('[class*="RichNotificationRenderer_cardKicker"]') &&
+  css.includes('var(--qe-color-accent-text, var(--qe-color-primary-text)) !important') &&
+  css.includes('a[class*="cta"]'),
+  'Rich notification CTA and accent labels must use institution contrast tokens in the User Web host while shared renderers remain byte-identical.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

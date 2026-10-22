@@ -1971,18 +1971,38 @@ html[data-qe-appearance] .institution-portal [class*="LogoGraphicsLab_success"] 
 }
 
 
-/* Rich notification renderers are shared source files; keep the Web-only contrast override at the host boundary. */
-html[data-qe-appearance] .qe-workspace-content :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]),
-html[data-qe-appearance] .institution-portal :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]) {
+/* Rich notification renderers are shared source files; keep Web-only contrast fixes at the host boundary. */
+html[data-qe-appearance] .qe-workspace-content :is(
+  a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]
+),
+html[data-qe-appearance] .institution-portal :is(
+  a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]
+) {
   color: var(--qe-color-on-accent, var(--qe-color-on-primary, #fff));
 }
 
-html[data-qe-appearance] .qe-workspace-content :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]):focus-visible,
-html[data-qe-appearance] .institution-portal :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]):focus-visible {
+html[data-qe-appearance] .qe-workspace-content :is(
+  a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]
+):focus-visible,
+html[data-qe-appearance] .institution-portal :is(
+  a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]
+):focus-visible {
   outline: 3px solid var(--qe-color-focus);
   outline-offset: 2px;
 }
 
+html[data-qe-appearance] .qe-workspace-content :where(
+  [class*="RichNotificationRenderer_eyebrow"],
+  [class*="RichNotificationRenderer_cardKicker"],
+  [class*="RichNotificationRenderer_iconRow"] > span
+),
+html[data-qe-appearance] .institution-portal :where(
+  [class*="RichNotificationRenderer_eyebrow"],
+  [class*="RichNotificationRenderer_cardKicker"],
+  [class*="RichNotificationRenderer_iconRow"] > span
+) {
+  color: var(--qe-color-accent-text, var(--qe-color-primary-text)) !important;
+}
 
 /* Notification Studio and Logo Graphics Lab share styles across workspaces;
    tune their institution-portal foregrounds here rather than modifying shared files. */
