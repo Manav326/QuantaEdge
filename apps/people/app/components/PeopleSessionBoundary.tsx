@@ -124,8 +124,10 @@ export default function PeopleSessionBoundary({ children }: { children: React.Re
 
   useEffect(() => {
     let alive = true;
-    const check = async (force = false) => {
-      if (!force) setReady(false);
+    // Do not replace the HRMS workspace with a full-screen gate on client-side
+    // route changes. The gate remains closed on first load; later checks run
+    // without unmounting the navigation/header while APIs enforce authorization.
+    const check = async () => {
       try {
         const response = await withSessionTimeout(apiFetch('/api/v1/auth/me', { cache: 'no-store' }));
         if (!alive) return;
@@ -163,9 +165,9 @@ export default function PeopleSessionBoundary({ children }: { children: React.Re
 
     void check();
     const onPageShow = (event: PageTransitionEvent) => {
-      if (event.persisted) void check(true);
+      if (event.persisted) void check();
     };
-    const onPopState = () => void check(true);
+    const onPopState = () => void check();
     window.addEventListener('pageshow', onPageShow);
     window.addEventListener('popstate', onPopState);
     return () => {
