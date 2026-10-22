@@ -1392,28 +1392,28 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 
 /* Semantic feedback states remain tinted, never washed out by neutral surface rules. */
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
-  [class*="alertError"], [class*="AlertError"], [class="error"], [class*="cropError"]
+  [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
 ) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 28%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
-  [class*="alertError"], [class*="AlertError"], [class="error"], [class*="cropError"]
+  [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
 ) {
   background-color: var(--qe-people-danger-soft) !important;
   color: var(--qe-people-danger) !important;
   border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
-  [class*="alertSuccess"], [class*="AlertSuccess"], [class="notice"], [class*="success"]:not(button)
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
 ) {
   background-color: var(--qe-people-success-soft) !important;
   color: var(--qe-people-success) !important;
   border-color: color-mix(in srgb, var(--qe-people-success) 28%, var(--qe-people-line)) !important;
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
-  [class*="alertSuccess"], [class*="AlertSuccess"], [class="notice"], [class*="success"]:not(button)
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
 ) {
   background-color: var(--qe-people-success-soft) !important;
   color: var(--qe-people-success) !important;
@@ -1421,7 +1421,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
 }
 html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
   [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
-  [class="note"], [class*="refundNote"], [class*="einvoiceHelp"]
+  [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
 ) {
   background-color: #fff8ec;
   color: #784b16;
@@ -1429,7 +1429,7 @@ html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
 }
 html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
-  [class="note"], [class*="refundNote"], [class*="einvoiceHelp"]
+  [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
 ) {
   background-color: var(--qe-people-warning-soft) !important;
   color: var(--qe-people-warning) !important;
