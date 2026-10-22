@@ -89,7 +89,7 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
   }
 });
 
-test('HRMS QA Center requires the platform-owner permission, not just an authenticated session', async ({ browser }) => {
+test('[HR-002] HRMS QA Center requires the platform-owner permission, not just an authenticated session', async ({ browser }) => {
   const ownerPath = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
   const adminPath = await readPrivateJson<{ statePath: string }>('education-admin-state-path.json');
   const parentStatePath = join(privateDir(), 'parent-a.json');
