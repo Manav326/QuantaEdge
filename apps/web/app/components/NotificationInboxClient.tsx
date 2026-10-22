@@ -61,7 +61,7 @@ export function NotificationBell({ role }: { role: Role | null }) {
   }, [loadCount, role]);
 
   if (!role || !available) return null;
-  return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : role === 'parent' ? '/parent/notifications' : '/institution?notifications=inbox'}
+  return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : role === 'parent' ? '/parent/notifications' : '/institution#notifications-inbox'}
     aria-label={english ? `Notifications${count ? `, ${count} unread` : ''}` : `Notifications${count ? `, ${count} unread` : ''}`}>
     <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>
@@ -183,7 +183,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
         <p>{t('Important updates from your courses and institution, kept in one place.', 'Aapke course aur institution ke zaroori updates, ek hi jagah.')}</p>
       </div>
       <div className={styles.headerActions}>
-        {role === 'institution' ? <Link className={styles.secondaryButton} href="/institution?notifications=studio">{t('Notification studio', 'Notification studio')}</Link> : null}
+        {role === 'institution' ? <Link className={styles.secondaryButton} href="/institution#notifications-studio">{t('Notification studio', 'Notification studio')}</Link> : null}
         <span className={styles.unreadPill}>{unreadCount} {t('unread', 'unread')}</span>
         <button type="button" className={styles.secondaryButton} onClick={() => void markAllRead()} disabled={saving || unreadCount === 0}>
           {saving ? t('Saving…', 'Save ho raha hai…') : t('Mark all read', 'Sab read karein')}
