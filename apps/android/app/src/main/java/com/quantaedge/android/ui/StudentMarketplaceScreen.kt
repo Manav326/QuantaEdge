@@ -36,14 +36,7 @@ fun StudentMarketplaceScreen(
     language: String,
     busyCourseId: Long?,
     busy: Boolean,
-    billingAddresses: List<JSONObject>,
-    billingAddressesLoading: Boolean,
-    billingError: String = "",
-    billingStatus: String = "",
-    onSaveBillingAddress: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
-    onMakeDefaultBillingAddress: (Long) -> Unit,
-    onDeleteBillingAddress: (Long) -> Unit,
-    onOpenProfile: () -> Unit,
+    billing: BillingAddressBookBindings,
     onBuy: (Long, String, Long) -> Unit,
     onJoinFree: (Long) -> Unit,
     onAskParent: (Long) -> Unit,
@@ -61,18 +54,18 @@ fun StudentMarketplaceScreen(
 
     fun requestPaidPurchase(courseId: Long) {
         billingCheckoutMessage = ""
-        if (billingAddressesLoading) {
+        if (billing.loading) {
             billingCheckoutMessage = if (hi) "Saved billing address load हो रहा है। थोड़ी देर बाद फिर कोशिश करें।"
                 else "Saved billing addresses are still loading. Please retry in a moment."
             return
         }
-        if (billingAddresses.isEmpty()) {
+        if (billing.addresses.isEmpty()) {
             billingCheckoutMessage = if (hi) "Checkout से पहले ऊपर billing address save करें।"
                 else "Save a billing address above before checkout."
             return
         }
-        val preferred = billingAddresses.firstOrNull { it.optBoolean("is_default") } ?: billingAddresses.first()
-        if (billingAddresses.size == 1) {
+        val preferred = billing.addresses.firstOrNull { it.optBoolean("is_default") } ?: billing.addresses.first()
+        if (billing.addresses.size == 1) {
             if (!billingAddressIsComplete(preferred)) {
                 billingCheckoutMessage = if (hi) "Checkout से पहले billing address पूरा करें।"
                     else "Complete your billing address before checkout."
@@ -119,17 +112,17 @@ fun StudentMarketplaceScreen(
                 it.optString("currency", "INR") == "INR" && !it.optBoolean("parent_managed") &&
                 !it.optBoolean("has_access") && !it.optBoolean("purchased") }) {
             BillingAddressBook(
-                addresses = billingAddresses,
-                loading = billingAddressesLoading,
+                addresses = billing.addresses,
+                loading = billing.loading,
                 busy = busy,
                 language = language,
                 compactOnly = true,
-                errorMessage = billingError,
-                statusMessage = billingStatus,
-                onSave = onSaveBillingAddress,
-                onMakeDefault = onMakeDefaultBillingAddress,
-                onDelete = onDeleteBillingAddress,
-                onOpenProfile = onOpenProfile
+                errorMessage = billing.error,
+                statusMessage = billing.status,
+                onSave = billing.onSave,
+                onMakeDefault = billing.onMakeDefault,
+                onDelete = billing.onDelete,
+                billing.onOpenProfile = billing.onOpenProfile
             )
         }
         if (billingCheckoutMessage.isNotBlank()) {
@@ -240,7 +233,7 @@ fun StudentMarketplaceScreen(
     }
     if (checkoutCourseId > 0L) {
         BillingAddressPickerDialog(
-            addresses = billingAddresses,
+            addresses = billing.addresses,
             selectedAddressId = selectedBillingAddressId,
             language = language,
             onSelect = { selectedBillingAddressId = it },
