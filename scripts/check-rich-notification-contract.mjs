@@ -62,6 +62,7 @@ for (const path of [
   'services/api/src/main/resources/db/migration/V144__rich_notification_template_active_name.sql',
   'services/api/src/main/resources/db/migration/V145__retain_notification_templates_and_media_after_creator_deletion.sql',
   'services/api/src/main/resources/db/migration/V146__android_push_notification_devices.sql',
+  'services/api/src/main/resources/db/migration/V165__notification_preview_proof.sql',
   'docs/product/rich-notification-platform-contract.md',
 ]) {
   assert.doesNotThrow(() => read(path), `Required notification feature file is missing: ${path}`);
@@ -69,7 +70,9 @@ for (const path of [
 const audienceService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
 for (const required of [
   'applyAudienceExclusions(', 'excludedRecipientKeys(', 'recipientDetails(', 'hasActiveLearners(',
-  'candidateRecipientCount', 'excludedRecipientCount', 'as institution_name'
+  'candidateRecipientCount', 'excludedRecipientCount', 'as institution_name',
+  'withoutIndividualAudienceExclusions(', 'issuePreviewToken(', 'consumePreviewToken(',
+  'request_fingerprint', 'previewTokenRequired', "read_at=case when ? in ('READ','DISMISSED')"
 ]) {
   assert.ok(audienceService.includes(required), 'Audience review is missing ' + required);
 }
@@ -80,7 +83,7 @@ for (const required of ['active_learner_count', 'eligible_parent_count', 'active
 for (const app of senderApps) {
   const studioSource = read('apps/' + app + '/app/components/NotificationStudio.tsx');
   const styleSource = read('apps/' + app + '/app/components/NotificationStudio.module.css');
-  for (const required of ['Recipient review', 'toggleRecipientIncluded', 'excludedInstitutionIds', 'recipientReviewQuery', 'No active learners — excluded from HRMS platform notifications']) {
+  for (const required of ['Recipient review', 'toggleRecipientIncluded', 'excludedInstitutionIds', 'recipientReviewQuery', 'previewToken', 'No active learners — excluded from HRMS platform notifications']) {
     assert.ok(studioSource.includes(required), app + ' notification sender is missing ' + required);
   }
   assert.ok(styleSource.includes('.audienceReview') && styleSource.includes('.reviewRecipientList'),
@@ -201,6 +204,10 @@ for (const required of [
   'courseAudienceMustBeAssignedToTheSelectedTenantBeforeResolution',
   'parentDirectTargetRequiresAnActiveConsentedGuardianRelationshipInThatTenant',
   'staffTargetsFailClosedUntilCanonicalTenantMappingExists',
+  'previewAppliesInstitutionExclusionsBeforeDeduplicatingCrossTenantRecipients',
+  'individualHrmsTargetsAreFilteredBeforeDeduplicatingAcrossInstitutionMemberships',
+  'newCampaignSendRejectsAnUnknownOrExpiredPreviewProof',
+  'markingSingleStaffNotificationReadSetsReadTimestamp',
 ]) {
   assert.ok(audienceTests.includes(required), `P1 notification audience regression coverage is missing ${required}`);
 }

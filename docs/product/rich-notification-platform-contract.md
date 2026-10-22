@@ -197,3 +197,12 @@ Do not send real notifications to production users from fixtures or QA automatio
 Runtime configuration is server-side: set `APP_NOTIFICATIONS_FCM_PROJECT_ID` and `APP_NOTIFICATIONS_FCM_SERVICE_ACCOUNT_JSON_BASE64` on the API deployment, then provide the matching Android Firebase app values (`QUANTAEDGE_FIREBASE_PROJECT_ID`, `QUANTAEDGE_FIREBASE_APPLICATION_ID`, `QUANTAEDGE_FIREBASE_API_KEY`, `QUANTAEDGE_FIREBASE_SENDER_ID`) when building the APK/AAB. Encode the service-account JSON as one base64 line. HRMS platform owners can inspect delivery health at `GET /api/v1/hrms/notifications/push/status`; the endpoint never returns credentials or device tokens. Do not store real service-account credentials in GitHub source files.
 
 The next acceptance gate is to apply the additive migration, run API/Android tests and exact-head CI, then verify real delivery against a Firebase test project and test-owned users before enabling production credentials.
+
+## Server-enforced audience review
+
+A new notification campaign must be previewed through the authenticated workspace API before it can be created or scheduled. Preview returns a random, single-use proof token that expires after 10 minutes; the database stores only its SHA-256 hash. The proof is bound to the sender identity/workspace, scope, institution/course, audience filters and exclusions, title, summary and normalized content document. Sending consumes the proof in the same transaction as campaign creation. A changed audience or message, expired token, missing token, or token already used for a different campaign requires a new review. Idempotent retries of an already accepted campaign remain replayable without creating a duplicate.
+
+Institution exclusions are applied before cross-institution recipient deduplication. This preserves an account as a recipient through an included institution when its other institution is excluded, and keeps preview and send-time recipient semantics aligned. Eligibility and tenant membership are still re-resolved at send/dispatch time; preview is not a substitute for authorization or fresh eligibility checks.
+
+Individual staff audience delivery remains fail-closed until a canonical staff-to-institution/course assignment contract and permissions are established. The staff inbox is available for messages delivered through supported, authorized paths; the presence of the inbox UI does not enable broad staff fan-out.
+

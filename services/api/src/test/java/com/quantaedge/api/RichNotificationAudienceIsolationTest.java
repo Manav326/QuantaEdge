@@ -116,6 +116,79 @@ class RichNotificationAudienceIsolationTest {
             Map.of("recipients", List.of(Map.of("kind", "STAFF_ACCOUNT", "id", 70L)))));
   }
 
+  @Test
+  void previewAppliesInstitutionExclusionsBeforeDeduplicatingCrossTenantRecipients() {
+    stubInstitutionActive(101L, false); // excluded tenants must not block included institutions
+    stubInstitutionActive(202L, true);
+    stubActiveLearners(101L, false);
+    stubActiveLearners(202L, true);
+    when(jdbc.queryForList(
+        contains("select distinct st.id as recipient_id,m.institution_id"), eq(202L)))
+        .thenReturn(List.of(Map.of("recipient_id", 42L, "institution_id", 202L)));
+    org.mockito.Mockito.doReturn(List.of(Map.of(
+            "recipient_id", 42L, "recipient_kind", "STUDENT", "recipient_name", "Learner",
+            "class_code", "6", "institution_id", 202L, "institution_name", "Tenant B",
+            "institution_code", "TENANT-B"))).when(jdbc).queryForList(
+            contains("st.display_name as recipient_name"),
+            eq(42L), eq(202L));
+
+    Map<String, Object> audience = Map.of(
+        "institutionIds", List.of(101L, 202L),
+        "recipientTypes", List.of("STUDENT"),
+        "excludedInstitutionIds", List.of(101L));
+    Map<String, Object> preview = service.preview(
+        new RichNotificationService.Actor("HRMS", 900L, null, null),
+        "HRMS_PLATFORM", null, null, audience, "Update", "Summary",
+        Map.of("version", 1, "blocks",
+            List.of(Map.of("type", "richText", "text", "A readable update"))));
+
+    assertEquals(1, preview.get("recipientCount"));
+    List<?> recipients = (List<?>) preview.get("recipients");
+    assertEquals(1, recipients.size());
+    Map<?, ?> recipient = (Map<?, ?>) recipients.getFirst();
+    assertEquals(202L, ((Number) recipient.get("institution_id")).longValue());
+    assertTrue(preview.get("previewToken") instanceof String token && !token.isBlank());
+  }
+
+  @Test
+  void individualHrmsTargetsAreFilteredBeforeDeduplicatingAcrossInstitutionMemberships() {
+    stubInstitutionActive(202L, true);
+    stubActiveLearners(202L, true);
+    stubStudentMembership(202L, 42L, true);
+
+    Map<String, Object> audience = Map.of(
+        "individualTargets", true,
+        "recipients", List.of(
+            Map.of("kind", "STUDENT", "id", 42L, "institutionId", 101L),
+            Map.of("kind", "STUDENT", "id", 42L, "institutionId", 202L)),
+        "excludedInstitutionIds", List.of(101L));
+
+    List<RichNotificationService.Recipient> recipients =
+        service.resolveAudience("HRMS_PLATFORM", null, null, audience);
+
+    assertEquals(List.of(new RichNotificationService.Recipient("STUDENT", 42L, 202L)), recipients);
+  }
+
+  @Test
+  void newCampaignSendRejectsAnUnknownOrExpiredPreviewProof() {
+    assertThrows(IllegalArgumentException.class, () -> service.send(
+        new RichNotificationService.Actor("HRMS", 900L, null, null),
+        "HRMS_PLATFORM", null, null,
+        Map.of("institutionIds", List.of(202L), "recipientTypes", List.of("STUDENT")),
+        "Update", "Summary",
+        Map.of("version", 1, "blocks",
+            List.of(Map.of("type", "richText", "text", "A readable update"))),
+        null, null, "test-idempotency-key", "not-a-server-issued-preview-token", null, null));
+  }
+
+  @Test
+  void markingSingleStaffNotificationReadSetsReadTimestamp() {
+    when(jdbc.update(contains("read_at=case when ? in ('READ','DISMISSED')"),
+        eq("READ"), eq("READ"), eq("READ"), eq(77L), eq(900L))).thenReturn(1);
+
+    assertTrue(service.markReadForStaff(900L, null, 77L, false));
+  }
+
   private void stubStudentMembership(long institutionId, long studentId, boolean eligible) {
     when(jdbc.queryForObject(
         contains("select exists(select 1 from student st join institution_membership"),

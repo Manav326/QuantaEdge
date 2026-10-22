@@ -172,9 +172,12 @@ class RichNotificationAudienceIsolationIntegrationTest {
       Map<String, Object> document = Map.of("version", 1, "blocks", List.of(
           Map.of("type", "hero", "title", "QA notice", "subtitle", "Institution A only")));
       String idempotencyKey = "notification-send-" + UUID.randomUUID();
+      Map<String, Object> sendPreview = service.preview(sender, "USER", institutionA, null,
+          directStudent(studentA), "Tenant-scoped QA notice", "A durable inbox delivery test", document);
+      String sendPreviewToken = String.valueOf(sendPreview.get("previewToken"));
       Map<String, Object> sent = service.send(sender, "USER", institutionA, null,
           directStudent(studentA), "Tenant-scoped QA notice", "A durable inbox delivery test",
-          document, null, null, idempotencyKey, null, null);
+          document, null, null, idempotencyKey, sendPreviewToken, null, null);
       long campaignId = ((Number) sent.get("id")).longValue();
       notificationCampaignIds.add(campaignId);
       assertEquals("SENT", sent.get("status"));
@@ -182,7 +185,7 @@ class RichNotificationAudienceIsolationIntegrationTest {
 
       Map<String, Object> replay = service.send(sender, "USER", institutionA, null,
           directStudent(studentA), "Tenant-scoped QA notice", "A durable inbox delivery test",
-          document, null, null, idempotencyKey, null, null);
+          document, null, null, idempotencyKey, sendPreviewToken, null, null);
       assertEquals(campaignId, ((Number) replay.get("id")).longValue(),
           "Replaying the same sender-scoped idempotency key must not create another campaign.");
       assertEquals(Boolean.TRUE, replay.get("idempotentReplay"));
@@ -214,10 +217,13 @@ class RichNotificationAudienceIsolationIntegrationTest {
           where id=? and campaign_id=? and state='READ' and read_at is not null
           """, recipientId, campaignId));
 
+      Map<String, Object> scheduledPreview = service.preview(sender, "USER", institutionA, null,
+          directStudent(studentA), "Scheduled QA notice", "A cancellation lifecycle test", document);
+      String scheduledPreviewToken = String.valueOf(scheduledPreview.get("previewToken"));
       Map<String, Object> scheduled = service.send(sender, "USER", institutionA, null,
           directStudent(studentA), "Scheduled QA notice", "A cancellation lifecycle test",
           document, null, null, "notification-schedule-" + UUID.randomUUID(),
-          Instant.now().plusSeconds(3600), null);
+          scheduledPreviewToken, Instant.now().plusSeconds(3600), null);
       long scheduledCampaignId = ((Number) scheduled.get("id")).longValue();
       notificationCampaignIds.add(scheduledCampaignId);
       assertEquals("SCHEDULED", scheduled.get("status"));
@@ -231,7 +237,7 @@ class RichNotificationAudienceIsolationIntegrationTest {
           sender, "USER", institutionA, null, directStudent(studentA),
           "Invalid scheduled notice", "This should be rejected",
           document, null, null, "notification-schedule-past-" + UUID.randomUUID(),
-          Instant.now().minusSeconds(60), null));
+          null, Instant.now().minusSeconds(60), null));
     } finally {
       // Notification rows reference QA users and intentionally restrict their deletion. Remove
       // only the campaign IDs created by this test before uninstalling its exact QA fixture.
