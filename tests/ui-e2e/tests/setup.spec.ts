@@ -31,7 +31,7 @@ async function readDisposableOtp(mobile: string, purpose: string): Promise<strin
   }
   const body = await response.json().catch(() => ({})) as { otp?: unknown };
   const otp = String(body.otp ?? '');
-  if (!/^\\d{6}$/.test(otp)) {
+  if (!/^[0-9]{6}$/.test(otp)) {
     throw new Error('Disposable OTP mock returned an invalid code for ' + purpose + '.');
   }
   return otp;
