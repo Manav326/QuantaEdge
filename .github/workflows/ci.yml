@@ -528,9 +528,9 @@ jobs:
       - name: Install Playwright dependencies
         working-directory: tests/ui-e2e
         run: npm install --ignore-scripts --no-audit --no-fund
-      - name: Install Chromium and OS dependencies
+      - name: Install Chromium browser
         working-directory: tests/ui-e2e
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Start QuantaEdge on a disposable database
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up --build -d postgres redis api web admin people
       - name: Wait for API and web applications
