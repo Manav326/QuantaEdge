@@ -55,6 +55,14 @@ public class CourseMarketplaceLaunchReadinessService {
                on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
                and (s.program_id=ps.program_id or s.program_id is null)
             where ps.program_id=p.id) as subject_count,
+          (select count(distinct ps.subject_id)
+             from curriculum_program_subject ps
+             join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+               and s.active=true and (s.program_id=ps.program_id or s.program_id is null)
+             join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+               and ch.content_status='PUBLISHED'
+             join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+            where ps.program_id=p.id) as subjects_with_published_lessons,
           (select count(distinct ch.id)
              from curriculum_program_subject ps join curriculum_subject s
                on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -108,11 +116,12 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
     long subjectCount=number(row.get("subject_count"));
+    long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
     long lessonCount=number(row.get("published_lesson_count"));
-    add(checks,"PUBLISHED_LEARNING_CONTENT","Published subjects, chapters and lessons exist",
-        subjectCount>0&&chapterCount>0&&lessonCount>0,
-        "Publish at least one active subject, chapter and lesson before listing the course.");
+    add(checks,"PUBLISHED_LEARNING_CONTENT","Every active mapped subject has published lessons",
+        subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0,
+        "Publish reviewed lessons in every active subject mapped to this course before listing it.");
     add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
         "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
     List<String> blockers=checks.stream().filter(check->!Boolean.TRUE.equals(check.get("passed")))
@@ -150,6 +159,14 @@ public class CourseMarketplaceLaunchReadinessService {
              join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
                and s.active=true and (s.program_id=ps.program_id or s.program_id is null)
             where ps.program_id=p.id) as subject_count,
+          (select count(distinct ps.subject_id)
+             from curriculum_program_subject ps
+             join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+               and s.active=true and (s.program_id=ps.program_id or s.program_id is null)
+             join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+               and ch.content_status='PUBLISHED'
+             join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+            where ps.program_id=p.id) as subjects_with_published_lessons,
           (select count(distinct ch.id)
              from curriculum_program_subject ps
              join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
@@ -208,19 +225,21 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
     long subjectCount = number(offer.get("subject_count"));
+    long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));
     long lessonCount = number(offer.get("published_lesson_count"));
-    add(checks,"PUBLISHED_LEARNING_CONTENT","Published subjects, chapters and lessons exist",
-        subjectCount > 0 && chapterCount > 0 && lessonCount > 0,
-        "Publish at least one active subject, chapter and lesson before listing the course.");
+    add(checks,"PUBLISHED_LEARNING_CONTENT","Every active mapped subject has published lessons",
+        subjectCount > 0 && subjectsWithLessons == subjectCount && chapterCount > 0 && lessonCount > 0,
+        "Publish reviewed lessons in every active subject mapped to this course before listing it.");
 
     String courseName = text(offer.get("title_override")).isBlank()
         ? text(offer.get("course_name")) : text(offer.get("title_override"));
     long pricePaise = number(offer.get("price_paise"));
     String currency = text(offer.get("currency")).toUpperCase(Locale.ROOT);
-    add(checks,"OFFER_TERMS","Offer title, price and currency are valid",
-        !courseName.isBlank() && pricePaise >= 0 && "INR".equals(currency),
-        "Set a valid title and an explicit non-negative INR price. Use zero only for an intentionally free offer.");
+    add(checks,"OFFER_TERMS","Offer title, description, price and currency are valid",
+        !courseName.isBlank() && !text(offer.get("description")).isBlank()
+            && pricePaise >= 0 && "INR".equals(currency),
+        "Set a non-blank listing title and description, and an explicit non-negative INR price. Use zero only for an intentionally free offer.");
 
     if (pricePaise > 0) {
       boolean paymentReady = !razorpayKeyId.isBlank() && !razorpayKeySecret.isBlank();
@@ -411,6 +430,21 @@ public class CourseMarketplaceLaunchReadinessService {
     CourseTaxCalculator.Result standardQuote=CourseTaxCalculator.quote(
         listedPricePaise,0L,treatment,gstRate,cessRate,priceIncludesTax);
     long minimumPool=standardQuote.customerPayablePaise()-standardQuote.outputTaxPaise();
+    List<Map<String,Object>> ambiguousCodes=jdbc.queryForList("""
+        select upper(code) as normalized_code,count(*) as effective_versions
+        from course_discount_offer
+        where institution_offer_id=? and currency=? and status='APPROVED'
+          and effective_from<=now() and (effective_until is null or effective_until>now())
+        group by upper(code)
+        having count(*)>1
+        order by upper(code)
+        limit 1
+        """,offerId,currency.toUpperCase(Locale.ROOT));
+    if(!ambiguousCodes.isEmpty()) {
+      return new DiscountPoolReadiness(false,minimumPool,
+          "More than one approved version of discount code "+text(ambiguousCodes.getFirst().get("normalized_code"))
+              +" is effective. HRMS must resolve the overlap before launch because checkout cannot choose a unique version.");
+    }
     List<Map<String,Object>> discounts=jdbc.queryForList("""
         select d.id,d.code,d.version,d.discount_type,d.percentage_basis_points,
           d.flat_amount_paise,d.max_discount_paise,d.min_listed_price_paise,d.max_redemptions,
