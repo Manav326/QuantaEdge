@@ -84,12 +84,22 @@ export default function BillingProfileEditor({
         headers:{'Accept':'application/json','X-QE-Workspace':workspace}
       }));
       if(!Array.isArray(rows)) throw new Error(text('billing.loadError'));
-      setAddresses(rows as BillingAddressRecord[]);
+      const savedRows=rows as BillingAddressRecord[];
+      setAddresses(savedRows);
+      if(placement==='marketplace') {
+        const preferred=savedRows.find(address=>address.is_default)||savedRows[0];
+        const address=preferred?.billingAddress||{};
+        if(preferred&&(!address.line1?.trim()||!address.city?.trim()||!address.state?.trim()||!address.postalCode?.trim())) {
+          setDraft(draftFromAddress(preferred));
+          setEditingId(preferred.id);
+          setFormOpen(true);
+        }
+      }
     }catch(e){
       setError(e instanceof Error?e.message:text('billing.loadError'));
     }finally{setLoading(false);}
   // Locale is intentionally read through the stable catalogue translator.
-  },[endpoint,workspace,text]);
+  },[endpoint,workspace,text,placement]);
   useEffect(()=>{void load();},[load]);
   useEffect(()=>{onAddressesChange?.(addresses,loading);},[addresses,loading,onAddressesChange]);
 
