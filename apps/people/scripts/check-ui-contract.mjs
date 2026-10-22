@@ -98,6 +98,8 @@ const peoplePasswordSource = read('apps/people/app/change-password/page.tsx');
 assert(peopleLoginSource.includes('<PeopleAppearanceToggle compact />') && peoplePasswordSource.includes('<PeopleAppearanceToggle compact />'), 'Login and forced password-change screens must expose the same HRMS-owned theme control.');
 
 const discoveredPeoplePages = findPeoplePageFiles('apps/people/app').sort();
+assert(discoveredPeoplePages.length > routePages.length, 'Route discovery must cover routes beyond the representative workflow sample.');
+assert(discoveredPeoplePages.includes('apps/people/app/change-password/page.tsx') && discoveredPeoplePages.includes('apps/people/app/institutions/page.tsx') && discoveredPeoplePages.includes('apps/people/app/finance/page.tsx') && discoveredPeoplePages.includes('apps/people/app/qa/page.tsx'), 'Route discovery must include public account and bespoke platform-management screens.');
 assert(discoveredPeoplePages.includes('apps/people/app/page.tsx') && discoveredPeoplePages.includes('apps/people/app/login/page.tsx'), 'Route discovery must include the HRMS workspace and public login.');
 for (const routePath of discoveredPeoplePages) {
   const pageSource = read(routePath);
