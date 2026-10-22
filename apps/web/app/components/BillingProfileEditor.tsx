@@ -269,7 +269,7 @@ export default function BillingProfileEditor({
 }
 
 export function BillingAddressSelection({
-  addresses,selectedAddressId,onSelect,onConfirm,onCancel,profileHref
+  addresses,selectedAddressId,onSelect,onConfirm,onCancel,profileHref,onRefreshAddresses
 }:{
   addresses:BillingAddressRecord[];
   selectedAddressId:number|null;
@@ -277,6 +277,7 @@ export function BillingAddressSelection({
   onConfirm:()=>void;
   onCancel:()=>void;
   profileHref:string;
+  onRefreshAddresses:()=>void;
 }){
   const t=useUiTranslation();
   const text=(key:string)=>t(key);
@@ -299,7 +300,8 @@ export function BillingAddressSelection({
       </div>
       <div className={styles.pickerFooter}><button type="button" className={styles.cancelButton} onClick={onCancel}>{text('billing.cancel')}</button>
         <button type="button" className={styles.addAddressButton} onClick={onConfirm} disabled={!addresses.some(a=>a.id===selectedAddressId&&isCompleteBillingAddress(a))}>{text('billing.continueCheckout')}</button></div>
-      <p className={styles.pickerNote}>{text('billing.manageCheckoutAddresses')} <Link href={profileHref}>{text('billing.profileLink')}</Link></p>
+      <p className={styles.pickerNote}>{text('billing.manageCheckoutAddresses')} <Link href={profileHref} target="_blank" rel="noopener noreferrer">{text('billing.profileLink')}</Link></p>
+      <button type="button" className={styles.cancelButton} onClick={onRefreshAddresses}>{text('billing.refreshAddresses')}</button>
     </section>
   </div>;
 }
