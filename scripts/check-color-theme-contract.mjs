@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 const failures = [];
 let checks = 0;
@@ -163,6 +163,87 @@ assert(androidApp.includes('themeController.applyInstitutionTheme(code, identity
 assert(androidApp.includes('themeController.clearInstitutionTheme()'), 'Android must clear the palette when tenant context is absent/invalid.');
 assert(androidFloatingTutorDock.includes('color = MaterialTheme.colorScheme.primary') && androidFloatingTutorDock.includes('contentColor = MaterialTheme.colorScheme.onPrimary') && !androidFloatingTutorDock.includes('Color(0xFF172033)'), 'The single floating tutor launcher/restore bubble must use tenant theme roles rather than a fixed navy palette.');
 assert(docs.includes('Contract version') && docs.toLowerCase().includes('acceptance'), 'Contract and acceptance criteria must be documented.');
+
+
+
+// Admin and HRMS route/component colour audit. Discover routes and CSS modules from the
+// filesystem so new pages cannot silently bypass the common appearance cascade.
+const adminThemeCss = read('apps/admin/app/admin-theme.css');
+const adminGlobalCss = read('apps/admin/app/globals.css');
+const peopleAppearanceCss = read('apps/people/app/people-appearance.css');
+const peopleDesignCss = read('apps/people/app/people-design-system.css');
+const adminWorkspaceLayout = read('apps/admin/app/components/AdminWorkspaceLayout.tsx');
+const peopleWorkspaceLayout = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
+const adminRootLayout = read('apps/admin/app/layout.tsx');
+const peopleRootLayout = read('apps/people/app/layout.tsx');
+
+function discoverFiles(directory, predicate) {
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    const file = directory + '/' + entry.name;
+    if (entry.isDirectory()) return discoverFiles(file, predicate);
+    return predicate(file) ? [file] : [];
+  }).sort();
+}
+const adminRouteFiles = discoverFiles('apps/admin/app', path => /\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+const peopleRouteFiles = discoverFiles('apps/people/app', path => /\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+const adminModuleStyles = discoverFiles('apps/admin/app', path => /\.module\.css$/.test(path));
+const peopleModuleStyles = discoverFiles('apps/people/app', path => /\.module\.css$/.test(path));
+
+assert(adminRouteFiles.length >= 15, 'The Admin colour audit must discover all current routes, not a hand-picked sample.');
+assert(peopleRouteFiles.length >= 12, 'The HRMS colour audit must discover all current routes, not a hand-picked sample.');
+assert(adminModuleStyles.length >= 10, 'The Admin component audit must cover all CSS-module component/page families.');
+assert(peopleModuleStyles.length >= 5, 'The HRMS component audit must cover all CSS-module component/page families.');
+assert(adminRootLayout.includes("import './admin-theme.css'") && adminWorkspaceLayout.includes('qe-admin-workspace-page-slot'),
+  'Every Admin route must use the institution-aware shared workspace theme cascade.');
+assert(peopleRootLayout.includes("import './people-appearance.css'") && peopleWorkspaceLayout.includes('qe-people-page-slot'),
+  'Every HRMS route must use the HRMS-owned shared appearance cascade.');
+assert(adminThemeCss.includes('Final dark-mode interaction contract') &&
+  adminThemeCss.includes('input:not([type="checkbox"])') &&
+  adminThemeCss.includes('background-color: var(--qe-color-surface-elevated) !important') &&
+  adminThemeCss.includes('button[class*="sendButton"]') &&
+  adminThemeCss.includes('var(--qe-color-on-accent'),
+  'Admin must enforce readable focused fields, dark component surfaces and accent-safe action text on every route.');
+assert(peopleAppearanceCss.includes('Final route-wide dark interaction contract') &&
+  peopleAppearanceCss.includes('background-color: var(--qe-people-field) !important') &&
+  peopleAppearanceCss.includes('tbody tr:is(:hover, :focus-within) > td') &&
+  peopleAppearanceCss.includes('var(--qe-people-surface-hover)') &&
+  peopleAppearanceCss.includes('color: #182337 !important'),
+  'HRMS must enforce readable fields, table interaction states and contrast-safe filled actions across every route.');
+assert(adminGlobalCss.includes('qe-admin-overview-shortcuts>a:focus-visible') &&
+  adminThemeCss.includes('.qe-admin-overview-shortcuts > a:is(:hover, :focus-visible)'),
+  'The legacy light-only Admin keyboard-focus override must be neutralized by the final dark theme layer.');
+assert(peopleDesignCss.includes('tbody tr:focus-within') &&
+  peopleAppearanceCss.includes('tbody tr:is(:hover, :focus-within) > td'),
+  'The legacy light-only HRMS table focus/hover fill must be neutralized by the final dark theme layer.');
+assert(adminThemeCss.includes('from { opacity: .72; }') && adminThemeCss.includes('to { opacity: 1; }') &&
+  'Admin route animations must not create transformed ancestors that trap full-screen dialogs/lightboxes.');
+assert(peopleAppearanceCss.includes('from { opacity: .72; }') && peopleAppearanceCss.includes('to { opacity: 1; }') &&
+  'HRMS route animations must not create transformed ancestors that trap full-screen overlays.');
+
+for (const path of [...adminRouteFiles, ...peopleRouteFiles]) {
+  const source = read(path);
+  assert(/\bexport\s+default\b/.test(source), 'Theme-audited route is missing its default page component: ' + path);
+}
+console.log('Admin/HRMS colour audit coverage: ' + adminRouteFiles.length + ' Admin routes, ' +
+  peopleRouteFiles.length + ' HRMS routes, ' + adminModuleStyles.length + ' Admin CSS modules, and ' +
+  peopleModuleStyles.length + ' HRMS CSS modules.');
+
+
+
+// Learner Web notification inbox is audited alongside Admin and HRMS, because
+// its row accordion, filter tabs and actions must not fall back to light-only
+// focus/hover surfaces under an institution's dark palette.
+const webNotificationCss = read('apps/web/app/components/NotificationInbox.module.css');
+assert(webNotificationCss.includes('Notification inbox dark-state coverage') &&
+  webNotificationCss.includes('.itemHeader:is(:hover, :focus-visible)') &&
+  webNotificationCss.includes('background-color: var(--qe-color-surface-subtle)') &&
+  webNotificationCss.includes('var(--qe-color-on-error-container)') &&
+  webNotificationCss.includes('.itemActions button:focus-visible'),
+  'Learner Web notification rows, filters, error feedback and actions must retain readable dark-mode interaction states.');
+assert(webNotificationCss.includes('html[data-qe-appearance="dark"] .segmented button.selected') &&
+  webNotificationCss.includes('html[data-qe-appearance="dark"] .item:focus-within'),
+  'Learner Web notification selected/focused states must use tenant surfaces and visible focus without white overlays.');
 
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
