@@ -1962,8 +1962,18 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-event :is(stron
 html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-event small {
   color: var(--qe-color-text-muted, var(--admin-muted));
 }
-html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-row .qe-audit-status {
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-row .qe-audit-status:not(.success):not(.failure) {
   color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-audit-row .qe-audit-status.success {
+  background: var(--qe-color-success-container, var(--admin-surface));
+  color: var(--qe-color-on-success-container, var(--qe-color-text, var(--admin-text)));
+  border-color: var(--qe-color-success, var(--qe-color-border-subtle, var(--admin-border)));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-audit-row .qe-audit-status.failure {
+  background: var(--qe-color-error-container, var(--admin-surface));
+  color: var(--qe-color-on-error-container, var(--qe-color-text, var(--admin-text)));
+  border-color: var(--qe-color-error, var(--qe-color-border-subtle, var(--admin-border)));
 }
 html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-permission-option,
 html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-row-action,
