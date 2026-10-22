@@ -246,7 +246,6 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       // The UI still returns to login if the logout request cannot reach the server.
     } finally {
       router.replace('/login');
-      router.refresh();
       setLoggingOut(false);
     }
   }
@@ -300,7 +299,6 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
                   if (!institutions.some(item => item.tenant_code === next)) return;
                   try { window.localStorage.setItem('qe:admin:activeInstitutionCode', next); } catch {}
                   setInstitutionCode(next);
-                  window.location.reload();
                 }}
                 aria-label="Select institution"
                 style={{ minWidth: 180, maxWidth: 280, padding: '7px 9px', border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 9, background: 'var(--admin-surface,#fff)', color: 'var(--admin-text,#1b2430)' }}
@@ -319,7 +317,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           </div>
         </header>
 
-        <div className="qe-admin-workspace-page-slot">
+        <div className="qe-admin-workspace-page-slot" key={pathname + '|' + institutionCode}>
           {!publicRoute && !session ? <div role="status" style={{ padding: 28 }}>Preparing staff workspace…</div>
             : institutionLoading && canSelectInstitution ? <div role="status" style={{ padding: 28 }}>Loading institution access…</div>
             : institutionError && canSelectInstitution ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
