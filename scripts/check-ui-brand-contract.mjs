@@ -242,7 +242,7 @@ function findAdminPageFiles(directory) {
   return readdirSync(absoluteDirectory, { withFileTypes: true }).flatMap(entry => {
     const childPath = directory + '/' + entry.name;
     if (entry.isDirectory()) return findAdminPageFiles(childPath);
-    return /^page\\.(?:tsx|ts|jsx|js)$/.test(entry.name) ? [childPath] : [];
+    return /^page\.(?:tsx|ts|jsx|js)$/.test(entry.name) ? [childPath] : [];
   });
 }
 
@@ -251,7 +251,7 @@ assert(adminRoutePages.includes('apps/admin/app/page.tsx'), 'The Admin overview 
 assert(adminRoutePages.includes('apps/admin/app/login/page.tsx'), 'The Admin public sign-in route must be part of the route-wide theme audit.');
 for (const path of adminRoutePages) {
   const page = read(path);
-  assert(/export default/.test(page), 'Admin route ' + path.replace(/^apps\\/admin\\/app/, '') + ' must retain its route component while inheriting the shared theme shell.');
+  assert(/export default/.test(page), 'Admin route ' + path.replace(/^apps\/admin\/app/, '') + ' must retain its route component while inheriting the shared theme shell.');
 }
 
 if (failures.length) {
