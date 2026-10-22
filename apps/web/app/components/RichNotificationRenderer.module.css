@@ -42,3 +42,8 @@
 .editorBlock:hover .editorBlockHandle,.selectedEditorBlock .editorBlockHandle{opacity:1}
 .editorBlock .cta{pointer-events:none}
 @media(prefers-reduced-motion:reduce){.editorBlock{transition:none}}
+
+
+html[data-qe-appearance] .cta {
+  color: var(--qe-color-on-primary);
+}

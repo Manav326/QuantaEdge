@@ -811,6 +811,47 @@ for (const relative of ['english.json', 'hinglish.json']) {
   ]) assert.ok(typeof catalog[key] === 'string' && catalog[key].trim().length > 0,
     'Missing localized student empty-state copy: ' + key + ' in ' + relative);
 }
+
+const visualAuditGlobals = read('../app/globals.css');
+const visualAuditTestsCss = read('../app/student/tests/Tests.module.css');
+const visualAuditTextbooksCss = read('../app/student/textbooks/textbooks.css');
+const visualAuditBillingCss = read('../app/components/BillingProfileEditor.module.css');
+const visualAuditInboxCss = read('../app/components/NotificationInbox.module.css');
+const visualAuditRichNotificationCss = read('../app/components/RichNotificationRenderer.module.css');
+const visualAuditScopeCss = read('../app/student/InstitutionCourseSubjectScope.module.css');
+
+assert.ok(
+  visualAuditGlobals.includes('html[data-qe-appearance] .parent-courses-page__heading') &&
+  visualAuditGlobals.includes('var(--qe-color-on-success-container)') &&
+  visualAuditGlobals.includes('var(--qe-color-on-error-container)') &&
+  visualAuditGlobals.includes('html[data-qe-appearance] .auth-method-switch'),
+  'Family and authentication screens must use tenant-aware surfaces, foregrounds, and responsive shared-heading alignment.'
+);
+assert.ok(
+  visualAuditTestsCss.includes('html[data-qe-appearance="dark"] .releasedResult') &&
+  visualAuditTestsCss.includes('html[data-qe-appearance="dark"] .leaderboardFirst') &&
+  visualAuditTestsCss.includes('var(--qe-color-on-success-container)'),
+  'Released test results, exam navigation legend, and leaderboard surfaces must remain readable in dark mode.'
+);
+assert.ok(
+  visualAuditTextbooksCss.includes('html[data-qe-appearance] .qe-chapter-copy h4') &&
+  visualAuditTextbooksCss.includes('var(--qe-color-on-accent-container)') &&
+  visualAuditTextbooksCss.includes('var(--qe-color-on-warning-container)'),
+  'Textbook chapter copy and metadata chips must use semantic theme tokens in light and dark mode.'
+);
+assert.ok(
+  visualAuditBillingCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditBillingCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditBillingCss.includes('var(--qe-color-on-primary)'),
+  'Billing forms must use generated contrast foregrounds for primary actions and feedback messages.'
+);
+assert.ok(
+  visualAuditInboxCss.includes('var(--qe-color-on-accent)') &&
+  visualAuditRichNotificationCss.includes('var(--qe-color-on-primary)') &&
+  visualAuditScopeCss.includes('color-mix(in srgb, var(--qe-color-focus'),
+  'Notification badges, rich-content actions, and subject-scope focus indicators must respect tenant theme tokens.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

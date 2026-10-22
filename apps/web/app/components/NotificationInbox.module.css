@@ -53,3 +53,8 @@
 .itemActions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
 .itemActions .secondaryButton{min-height:32px;padding:6px 10px;font-size:11px}
 @media(max-width:640px){.itemActions{width:100%}.itemActions .secondaryButton{flex:1 1 auto}}
+
+
+html[data-qe-appearance] .bellCount {
+  color: var(--qe-color-on-accent);
+}

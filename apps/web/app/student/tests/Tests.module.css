@@ -678,3 +678,46 @@ html[data-qe-appearance="dark"] .leaderboardStudentCell>b,
 html[data-qe-appearance="dark"] .leaderboardRankNumber { color: var(--qe-color-text); }
 html[data-qe-appearance="dark"] .leaderboardTable tbody tr:last-child td { border-color: var(--qe-color-border-subtle); }
 html[data-qe-appearance="dark"] .leaderboardEyebrow { color: var(--qe-color-primary-text); }
+
+
+/* Keep submitted-result and leaderboard surfaces legible in tenant dark palettes. */
+html[data-qe-appearance="dark"] .railLegend {
+  border-top-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .railLegend span {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .legendCurrent {
+  background: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .legendAnswered {
+  background: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .releasedResult {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-1, 0 8px 24px rgb(0 0 0 / 18%));
+}
+html[data-qe-appearance="dark"] .resultHeroIcon {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+html[data-qe-appearance="dark"] :where(.leaderboardFirst, .leaderboardSecond, .leaderboardThird) {
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .leaderboardFirst {
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--qe-color-warning-container) 42%, var(--qe-color-surface)),
+    var(--qe-color-surface)
+  );
+  border-color: var(--qe-color-warning);
+}
+html[data-qe-appearance="dark"] .leaderboardSecond {
+  background: linear-gradient(155deg, var(--qe-color-surface-elevated), var(--qe-color-surface));
+}
+html[data-qe-appearance="dark"] .leaderboardThird {
+  background: linear-gradient(155deg, var(--qe-color-surface-elevated), var(--qe-color-surface));
+}

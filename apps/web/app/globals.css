@@ -1672,3 +1672,221 @@ html[data-qe-appearance="dark"] .parent-account__icon {
 .qe-brand--compact .qe-brand__tenant-tagline{font-size:7.2px}
 @media(max-width:850px){.qe-brand--header .qe-brand__logo{max-width:190px;max-height:48px}.qe-brand--auth .qe-brand__logo{max-width:250px;max-height:58px}}
 @media(max-width:560px){.qe-brand--header .qe-brand__logo{max-width:155px;max-height:40px}.qe-brand--footer .qe-brand__logo{max-width:190px;max-height:48px}.qe-brand--auth .qe-brand__logo{max-width:220px;max-height:52px}}
+
+
+/* Learner and family UI audit: align reusable headings, content grids and controls. */
+html[data-qe-appearance] .qe-workspace-content :where(
+  .student-profile-page__heading,
+  .parent-profile-page__heading,
+  .parent-courses-page__heading,
+  .parent-courses-page__section-heading,
+  .parent-manage-panel-head,
+  .parent-child-overview,
+  .parent-track-editor,
+  .student-profile-form__footer,
+  .parent-profile-form__footer
+) {
+  min-width: 0;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(
+  .student-profile-page__heading,
+  .parent-profile-page__heading,
+  .parent-courses-page__heading,
+  .parent-courses-page__section-heading,
+  .student-profile-page__breadcrumb,
+  .parent-profile-page__breadcrumb
+) {
+  flex-wrap: wrap;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(
+  .student-profile-page__heading,
+  .parent-profile-page__heading,
+  .parent-courses-page__heading
+) > :first-child {
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(
+  .parent-courses-page__heading-actions,
+  .student-profile-page__class-pill,
+  .parent-profile-page__account-pill
+) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(
+  .parent-child-form,
+  .student-profile-fields,
+  .qe-account-identity-settings__form
+) > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] .qe-workspace-content :where(
+  .parent-courses-page__heading p,
+  .parent-courses-page__section-heading p,
+  .student-profile-page__heading p,
+  .parent-profile-page__heading p,
+  .qe-account-identity-settings__identity-copy span,
+  .qe-account-identity-settings__header p
+) {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* These legacy family screens used fixed light-mode colours despite supporting tenant palettes. */
+html[data-qe-appearance] :where(.parent-header > span, .parent-capacity > span, .parent-capacity strong small, .parent-track-editor small, .parent-empty p, .parent-courses-page__section-heading p, .parent-courses-page__empty) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.parent-track-editor, .parent-empty) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .parent-empty {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.parent-track-options label, .parent-track-fieldset label) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .parent-notice {
+  border-color: var(--qe-color-success);
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+
+html[data-qe-appearance] .parent-archive-button {
+  border-color: var(--qe-color-error);
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+}
+
+html[data-qe-appearance] :where(.parent-report-switcher__profile:hover, .parent-report-switcher__profile.is-current) {
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .parent-report-switcher__profile.is-current {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--qe-color-primary) 22%, transparent);
+}
+
+html[data-qe-appearance] .parent-report-switcher__avatar {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .parent-report-switcher__arrow {
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance] .parent-readonly-note {
+  border-color: var(--qe-color-focus);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] :where(.student-profile-photo-editor__preview > img, .parent-profile-photo-editor__preview > img, .parent-account__avatar) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .qe-workspace-brand small {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] .qe-workspace-logout {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-workspace-logout:hover:not(:disabled) {
+  border-color: var(--qe-color-focus);
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-workspace-sidebar-footer .qe-workspace-logout:hover {
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .qe-workspace-mobile-nav-backdrop {
+  background: rgb(9 14 24 / 45%);
+}
+
+html[data-qe-appearance] .parent-courses-page__heading {
+  background: linear-gradient(
+    130deg,
+    var(--qe-color-surface),
+    color-mix(in srgb, var(--qe-color-primary-container) 22%, var(--qe-color-surface))
+  );
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .parent-courses-page__price {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .parent-courses-page__owned-note {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] .parent-courses-page__alert:not(.is-error) {
+  border-color: var(--qe-color-success);
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+
+html[data-qe-appearance] .parent-courses-page__alert.is-error {
+  color: var(--qe-color-on-error-container);
+}
+
+html[data-qe-appearance] .parent-courses-page__verify p {
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .auth-method-switch {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .auth-method-switch button.is-active {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-focus);
+  color: var(--qe-color-primary-text);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--qe-color-text) 7%, transparent);
+}
+
+html[data-qe-appearance] .qe-session-gate {
+  background:
+    radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--qe-color-primary-container) 65%, transparent) 0, transparent 35%),
+    var(--qe-color-background);
+}
+
+@media (max-width: 720px) {
+  html[data-qe-appearance] .qe-workspace-content :where(.parent-courses-page__section-heading, .parent-manage-panel-head) {
+    flex-wrap: wrap;
+  }
+
+  html[data-qe-appearance] .qe-workspace-content .parent-courses-page__heading-actions > * {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 140px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}

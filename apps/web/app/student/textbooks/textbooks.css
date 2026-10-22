@@ -919,3 +919,47 @@ html[data-qe-appearance="light"] .qe-textbook-library-hero:focus-within { outlin
   html[data-qe-appearance="light"] .qe-textbook-subject,
   html[data-qe-appearance="light"] .qe-textbook-governance { transition: none; }
 }
+
+
+/* Chapter metadata uses semantic colours; the illustrated covers intentionally retain brand artwork. */
+html[data-qe-appearance] .qe-chapter-pdf-icon {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-chapter-copy > span {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance] .qe-chapter-copy h4 {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-chapter-copy p,
+html[data-qe-appearance] .qe-textbook-chapter-index,
+html[data-qe-appearance] .qe-textbook-chapter-pages {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] .qe-book-meta-tag--source {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-book-meta-tag--class {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-book-meta-tag--subject {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance] .qe-book-meta-tag--language {
+  background: var(--qe-color-accent-container);
+  color: var(--qe-color-on-accent-container);
+  border-color: var(--qe-color-accent);
+}
+html[data-qe-appearance] .qe-book-meta-tag--type {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
