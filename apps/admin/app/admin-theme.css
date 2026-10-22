@@ -543,3 +543,52 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
   background-color: var(--qe-color-surface-subtle, var(--qe-color-background));
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/* Public routes share the appearance contract too; their illustrative story panel stays dark by design. */
+.qe-admin-public-page,
+.qe-admin-public-page .qe-login-shell {
+  background: var(--qe-color-background, var(--admin-background));
+  color: var(--qe-color-text, var(--admin-text));
+}
+.qe-admin-public-page .qe-login-panel {
+  background: var(--qe-color-background, var(--admin-background));
+  color: var(--qe-color-text, var(--admin-text));
+}
+.qe-admin-public-page .qe-login-card {
+  background: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+  box-shadow: 0 18px 55px color-mix(in srgb, var(--qe-color-text) 8%, transparent);
+}
+.qe-admin-public-page .qe-login-heading h2,
+.qe-admin-public-page .qe-login-mobile-brand,
+.qe-admin-public-page .qe-login-mobile-brand strong {
+  color: var(--qe-color-text, var(--admin-text));
+}
+.qe-admin-public-page :is(.qe-login-heading p, .qe-login-field-help, .qe-login-policy p, .qe-login-panel-footer, .qe-login-back) {
+  color: var(--qe-color-text-muted, var(--admin-muted));
+}
+.qe-admin-public-page .qe-login-input-prefix {
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+}
+.qe-admin-public-page .qe-login-error {
+  color: var(--qe-color-error);
+  background: var(--qe-color-error-container);
+  border-color: var(--qe-color-error);
+}
+
+/* Explicit light and dark status/control treatments for CSS modules across all routes. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .error, .qe-login-error, [role="alert"][class*="error"], [role="alert"][class*="Error"]
+) {
+  color: var(--qe-color-error);
+  background: var(--qe-color-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .success, [role="status"].success, [class*="success"], [class*="Success"]
+) {
+  color: var(--qe-color-success);
+}
