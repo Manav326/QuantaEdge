@@ -47,6 +47,7 @@ public class PlatformInstitutionController {
   @org.springframework.beans.factory.annotation.Value("${app.auth.google-client-id:}") private String googleClientId;
   @org.springframework.beans.factory.annotation.Value("${app.razorpay.key-id:}") private String razorpayKeyId;
   @org.springframework.beans.factory.annotation.Value("${app.razorpay.key-secret:}") private String razorpayKeySecret;
+  @org.springframework.beans.factory.annotation.Value("${app.razorpay.webhook-secret:}") private String razorpayWebhookSecret;
   @org.springframework.beans.factory.annotation.Value("${app.google-meet.client-id:}") private String googleMeetClientId;
   @org.springframework.beans.factory.annotation.Value("${app.google-meet.client-secret:}") private String googleMeetClientSecret;
 
@@ -76,6 +77,8 @@ public class PlatformInstitutionController {
     addReadinessCheck(checks,"RAZORPAY",razorpayKeyId!=null&&!razorpayKeyId.isBlank()
         &&razorpayKeySecret!=null&&!razorpayKeySecret.isBlank(),
         true,"HRMS configures the platform payment credentials; each order remains institution-scoped.");
+    addReadinessCheck(checks,"RAZORPAY_COURSE_WEBHOOK",razorpayWebhookSecret!=null&&!razorpayWebhookSecret.isBlank(),
+        true,"Configure the Razorpay course-payment webhook at the approved API origin and store its signing secret in the deployment secret store.");
     String otpUrl=System.getenv("APP_OTP_PROVIDER_URL");
     String otpToken=System.getenv("APP_OTP_PROVIDER_TOKEN");
     addReadinessCheck(checks,"OTP_DELIVERY",otpUrl!=null&&!otpUrl.isBlank()

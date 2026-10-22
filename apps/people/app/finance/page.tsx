@@ -33,6 +33,11 @@ type PaymentOperationEvent = {
   id:number; event_type:string; resolution_code:string; message:string; provider_order_id?:string|null;
   provider_status?:string|null; details_json?:string|null; actor_staff_id:number; created_at:string;
 };
+type ProviderEventRecord = {
+  id:number; provider_event_id:string; event_type:string; local_order_id?:number|null; course_payment_refund_id?:number|null;
+  provider_order_id?:string|null; provider_payment_id?:string|null; provider_refund_id?:string|null; payload_sha256:string;
+  processing_status:string; status_message:string; details_json?:string|null; received_at:string; processed_at?:string|null;
+};
 type PaymentReconciliationResult = {
   status:string; message?:string; resolutionCode?:string; resolutionMessage?:string; canRetryCheckout?:boolean;
   entitled?:boolean; invoiceNumber?:string; providerOrderId?:string; providerOrderStatus?:string;
@@ -100,6 +105,14 @@ export default function FinancePage(){
   const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
   const [paymentActionLoadingId,setPaymentActionLoadingId]=useState<number|null>(null);
   const [paymentActionResult,setPaymentActionResult]=useState<PaymentReconciliationResult|null>(null);
+  const [providerEvents,setProviderEvents]=useState<ProviderEventRecord[]>([]);
+  const [providerEventTotal,setProviderEventTotal]=useState(0);
+  const [providerEventSearch,setProviderEventSearch]=useState('');
+  const [providerEventStatusFilter,setProviderEventStatusFilter]=useState('');
+  const [providerEventOffset,setProviderEventOffset]=useState(0);
+  const [providerEventLoading,setProviderEventLoading]=useState(false);
+  const [selectedProviderEvents,setSelectedProviderEvents]=useState<ProviderEventRecord[]>([]);
+  const [selectedProviderEventsLoading,setSelectedProviderEventsLoading]=useState(false);
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -331,9 +344,36 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Payment operation history could not be loaded.');}
     finally{setPaymentEventsLoading(false);}
   };
+  const loadProviderEvents=async(offsetOverride?:number)=>{
+    const offset=offsetOverride??providerEventOffset;
+    setProviderEventLoading(true);
+    try{
+      const query=new URLSearchParams({limit:'50',offset:String(offset)});
+      if(providerEventStatusFilter)query.set('status',providerEventStatusFilter);
+      if(providerEventSearch.trim())query.set('search',providerEventSearch.trim());
+      const response=await api<{items:ProviderEventRecord[];total:number;limit:number;offset:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      setProviderEvents(Array.isArray(response.items)?response.items:[]);
+      setProviderEventTotal(Number(response.total||0));
+      setProviderEventOffset(Number(response.offset||0));
+    }catch(e){setError(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');}
+    finally{setProviderEventLoading(false);}
+  };
+  const loadSelectedProviderEvents=async(orderId:number)=>{
+    setSelectedProviderEventsLoading(true);
+    try{
+      const query=new URLSearchParams({orderId:String(orderId),limit:'100',offset:'0'});
+      const response=await api<{items:ProviderEventRecord[];total:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      setSelectedProviderEvents(Array.isArray(response.items)?response.items:[]);
+    }catch(e){setError(e instanceof Error?e.message:'Provider events for this order could not be loaded.');}
+    finally{setSelectedProviderEventsLoading(false);}
+  };
+  const inspectPaymentOrderId=(orderId:number)=>{
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);
+    void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
+  };
   const selectPaymentOrder=(order:CoursePaymentOrder)=>{
     setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);
-    void loadPaymentEvents(order.local_order_id);
+    void Promise.all([loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id)]);
   };
   const reconcilePaymentOrder=async(order:CoursePaymentOrder)=>{
     if(!['PENDING','EXPIRED','VERIFIED'].includes(String(order.status).toUpperCase()))return;
@@ -343,7 +383,7 @@ export default function FinancePage(){
       const result=await api<PaymentReconciliationResult>('/api/v1/hrms/platform/finance/course-orders/'+order.local_order_id+'/reconcile',{method:'POST'});
       setPaymentActionResult(result);
       setNotice(result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.');
-      await Promise.all([loadPaymentOrders(),loadPaymentEvents(order.local_order_id)]);
+      await Promise.all([loadPaymentOrders(),loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id),loadProviderEvents()]);
     }catch(e){
       setError(e instanceof Error?e.message:'Payment reconciliation could not be completed. Do not ask the learner to pay again until provider status is checked.');
       await loadPaymentEvents(order.local_order_id);
@@ -558,7 +598,7 @@ export default function FinancePage(){
     {notice&&<div className={styles.alertSuccess} role="status">{notice}</div>}
     <nav className={styles.tabs} aria-label="Finance workspace">
       {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}
-        onClick={()=>{setTab(key);if(key==='payments')void loadPaymentOrders();}}><span>{icon}</span>{label}</button>)}
+        onClick={()=>{setTab(key);if(key==='payments')void Promise.all([loadPaymentOrders(),loadProviderEvents()]);}}><span>{icon}</span>{label}</button>)}
     </nav>
     {loading&&!catalog?<section className={styles.panel}>Loading financial configuration…</section>:!catalog?<section className={styles.panel}>The Finance workspace is unavailable. Confirm HRMS owner access and check the API response.</section>:<>
       {tab==='overview'&&<section className={styles.stack}>
@@ -799,10 +839,44 @@ export default function FinancePage(){
               onClick={()=>void loadPaymentOrders(paymentOffset+50)}>Next</button>
           </div>
         </section>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Razorpay provider-event inbox</h2>
+            <p>Signature-verified webhook events are deduplicated by provider event ID. Unmatched or unresolved events need explicit finance investigation.</p></div>
+            <button type="button" className={styles.secondary} onClick={()=>void loadProviderEvents()} disabled={providerEventLoading}>↻ Refresh inbox</button></div>
+          <div className={styles.paymentFilters}>
+            <label>Event outcome<select value={providerEventStatusFilter} onChange={e=>{setProviderEventStatusFilter(e.target.value);setProviderEventOffset(0);}}>
+              <option value="">All outcomes</option><option value="RECONCILIATION_REQUIRED">Reconciliation required</option>
+              <option value="UNMATCHED">Unmatched</option><option value="IGNORED">Ignored / informational</option>
+              <option value="PROCESSED">Processed</option><option value="PROCESSING">Processing</option></select></label>
+            <label>Search provider events<input value={providerEventSearch} onChange={e=>{setProviderEventSearch(e.target.value);}}
+              maxLength={160} placeholder="Event ID, Razorpay order/payment/refund ID or message"/></label>
+            <button type="button" className={styles.secondary} onClick={()=>{setProviderEventOffset(0);void loadProviderEvents(0);}} disabled={providerEventLoading}>Search</button>
+          </div>
+          <div className={styles.paymentResultsMeta}><span>{providerEventTotal.toLocaleString('en-IN')} matching provider events</span>
+            <span>Showing {providerEvents.length?providerEventOffset+1:0}–{providerEventOffset+providerEvents.length}</span></div>
+          {providerEventLoading?<p className={styles.empty}>Loading signed provider events…</p>
+          :providerEvents.length?<div className={styles.policyTableWrap}><table className={styles.table}>
+            <thead><tr><th>Event / received</th><th>Outcome</th><th>Provider references</th><th>Resolution</th><th>Action</th></tr></thead>
+            <tbody>{providerEvents.map(event=><tr key={event.id}>
+              <td><b>{event.event_type}</b><small>{event.provider_event_id}</small><small>{new Date(event.received_at).toLocaleString('en-IN')}</small></td>
+              <td><span className={styles.status}>{event.processing_status}</span><small>{event.processed_at?'Processed '+new Date(event.processed_at).toLocaleTimeString('en-IN'):'Still processing'}</small></td>
+              <td><small>Order: {event.provider_order_id||'—'}</small><small>Payment: {event.provider_payment_id||'—'}</small><small>Refund: {event.provider_refund_id||'—'}</small><small>Payload SHA-256: {event.payload_sha256?.slice(0,12)||'—'}…</small></td>
+              <td><p className={styles.providerMessage}>{event.status_message}</p>{event.details_json&&event.details_json!=='{}'&&<details><summary>Safe event details</summary><pre>{event.details_json}</pre></details>}</td>
+              <td>{event.local_order_id?<button type="button" className={styles.secondarySmall} onClick={()=>inspectPaymentOrderId(Number(event.local_order_id))}>Inspect order #{event.local_order_id}</button>:<small>Unmatched: investigate provider reference</small>}</td>
+            </tr>)}</tbody></table></div>
+          :<div className={styles.emptyLarge}><span>↻</span><b>No provider events found</b><p>Configure the Razorpay webhook URL and signing secret to receive events. Events are not generated from browser callbacks.</p></div>}
+          <div className={styles.paymentPagination}>
+            <button type="button" className={styles.secondarySmall} disabled={providerEventLoading||providerEventOffset===0}
+              onClick={()=>void loadProviderEvents(Math.max(0,providerEventOffset-50))}>Previous</button>
+            <span>Page {Math.floor(providerEventOffset/50)+1} · {Math.max(1,Math.ceil(providerEventTotal/50))}</span>
+            <button type="button" className={styles.secondarySmall} disabled={providerEventLoading||providerEventOffset+providerEvents.length>=providerEventTotal||providerEvents.length===0}
+              onClick={()=>void loadProviderEvents(providerEventOffset+50)}>Next</button>
+          </div>
+        </section>
         {selectedPaymentOrderId!==null&&<section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Order #{selectedPaymentOrderId} · resolution history</h2>
             <p>Provider checks and staff actions are recorded as immutable events.</p></div>
-            <button type="button" className={styles.secondarySmall} onClick={()=>void loadPaymentEvents(selectedPaymentOrderId)} disabled={paymentEventsLoading}>Refresh history</button></div>
+            <button type="button" className={styles.secondarySmall} onClick={()=>void Promise.all([loadPaymentEvents(selectedPaymentOrderId),loadSelectedProviderEvents(selectedPaymentOrderId)])} disabled={paymentEventsLoading||selectedProviderEventsLoading}>Refresh history</button></div>
           {paymentActionResult&&<div className={paymentActionResult.status==='VERIFIED'?styles.alertSuccess:styles.note} role="status">
             <b>{paymentActionResult.resolutionCode||paymentActionResult.status}</b>
             <p>{paymentActionResult.resolutionMessage||paymentActionResult.message||'No provider message was returned.'}</p>
@@ -819,6 +893,14 @@ export default function FinancePage(){
             </table></div>}
             {paymentActionResult.canRetryCheckout===true&&<p>Safe next step: learner may return to the marketplace and restart checkout. HRMS did not create a second payment.</p>}
           </div>}
+          <div className={styles.panelHead}><div><h3>Provider webhook events for this order</h3><p>Raw payloads are never retained; the inbox stores signed-event references, hashes and safe diagnostic fields.</p></div>
+            <button type="button" className={styles.secondarySmall} onClick={()=>void loadSelectedProviderEvents(selectedPaymentOrderId)} disabled={selectedProviderEventsLoading}>Refresh provider events</button></div>
+          {selectedProviderEventsLoading?<p className={styles.empty}>Loading provider webhook events…</p>
+          :selectedProviderEvents.length?<div className={styles.paymentEventList}>{selectedProviderEvents.map(event=><article key={event.id}>
+            <div><b>{event.event_type}</b><span className={styles.status}>{event.processing_status}</span></div>
+            <p>{event.status_message}</p><small>{event.provider_event_id} · {new Date(event.received_at).toLocaleString('en-IN')}{event.processed_at?' · processed '+new Date(event.processed_at).toLocaleString('en-IN'):''}</small>
+            {event.details_json&&event.details_json!=='{}'&&<details><summary>Safe event details</summary><pre>{event.details_json}</pre></details>}
+          </article>)}</div>:<p className={styles.empty}>No Razorpay webhooks are recorded for this order. Use Check & reconcile when payment status is uncertain.</p>}
           {paymentEventsLoading?<p className={styles.empty}>Loading payment operation history…</p>
           :paymentEvents.length?<div className={styles.paymentEventList}>{paymentEvents.map(event=><article key={event.id}>
             <div><b>{event.event_type.replaceAll('_',' ')}</b><span className={styles.status}>{event.resolution_code}</span></div>

@@ -130,6 +130,47 @@ public class CoursePaymentOperationsController {
         """,orderId);
   }
 
+  /** Signature-verified provider messages, including unmatched events that need finance review. */
+  @GetMapping("/provider-events")
+  public Map<String,Object> providerEvents(
+      @RequestParam(value="status",required=false) String suppliedStatus,
+      @RequestParam(value="search",required=false) String suppliedSearch,
+      @RequestParam(value="orderId",required=false) Long orderId,
+      @RequestParam(value="limit",defaultValue="50") int requestedLimit,
+      @RequestParam(value="offset",defaultValue="0") int requestedOffset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    List<String> allowed=List.of("PROCESSING","PROCESSED","IGNORED","UNMATCHED","RECONCILIATION_REQUIRED");
+    String status=suppliedStatus==null||suppliedStatus.isBlank()?null:suppliedStatus.trim().toUpperCase(Locale.ROOT);
+    if(status!=null&&!allowed.contains(status)) throw new IllegalArgumentException("Select a valid provider-event status.");
+    String search=suppliedSearch==null?"":suppliedSearch.trim();
+    if(search.length()>160) throw new IllegalArgumentException("Provider-event search can contain at most 160 characters.");
+    int limit=Math.max(1,Math.min(requestedLimit,100));
+    int offset=Math.max(0,Math.min(requestedOffset,100000));
+    String where=" where true ";
+    List<Object> args=new ArrayList<>();
+    if(status!=null){where+=" and e.processing_status=?";args.add(status);}
+    if(orderId!=null){where+=" and e.course_payment_order_id=?";args.add(orderId);}
+    if(!search.isBlank()) {
+      where+=" and lower(concat_ws(' ',e.provider_event_id,e.event_type,e.processing_status,e.status_message,e.provider_order_id,e.provider_payment_id,e.provider_refund_id)) like ?";
+      args.add("%"+search.toLowerCase(Locale.ROOT)+"%");
+    }
+    Long total=jdbc.queryForObject("select count(*) from course_payment_provider_event e"+where,Long.class,args.toArray());
+    List<Object> pageArgs=new ArrayList<>(args);pageArgs.add(limit);pageArgs.add(offset);
+    List<Map<String,Object>> items=jdbc.queryForList("""
+        select e.id,e.provider_event_id,e.event_type,e.course_payment_order_id as local_order_id,
+          e.course_payment_refund_id,e.provider_order_id,e.provider_payment_id,e.provider_refund_id,
+          e.payload_sha256,e.processing_status,e.status_message,e.details::text as details_json,
+          e.received_at,e.processed_at
+        from course_payment_provider_event e
+        """+where+"""
+        order by e.received_at desc,e.id desc limit ? offset ?
+        """,pageArgs.toArray());
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("items",items);result.put("total",total==null?0L:total);result.put("limit",limit);result.put("offset",offset);
+    return result;
+  }
+
   @PostMapping("/{orderId}/reconcile")
   public ResponseEntity<Map<String,Object>> reconcileOrder(
       @PathVariable long orderId,

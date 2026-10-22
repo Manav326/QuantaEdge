@@ -1036,6 +1036,55 @@ public class CourseMarketplaceController {
     return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId, true);
   }
 
+  /**
+   * Signed provider-webhook entry point. Resolve the local order solely from the already-saved
+   * Razorpay order ID; the webhook payload never supplies price, buyer, institution or entitlement.
+   * Existing server-side provider lookups and captured-payment checks remain authoritative.
+   */
+  @Transactional
+  public Map<String,Object> reconcileOrderFromProviderEvent(String providerOrderId) {
+    if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+"))
+      return Map.of("status","UNMATCHED","message","The provider event has no valid saved Razorpay order reference.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,institution_id,course_id,status
+        from course_payment_order where provider_order_id=? for update
+        """,providerOrderId);
+    if(rows.isEmpty())
+      return Map.of("status","UNMATCHED","message","No QuantaEdge course order references this Razorpay order. Finance must investigate.");
+    Map<String,Object> order=rows.getFirst();
+    long localOrderId=((Number)order.get("id")).longValue();
+    long courseId=((Number)order.get("course_id")).longValue();
+    String state=String.valueOf(order.get("status"));
+    if("VERIFIED".equals(state)) {
+      Map<String,Object> existing=new LinkedHashMap<>(verifiedResult(localOrderId,courseId));
+      existing.put("message","This exact provider order is already verified; no duplicate purchase or invoice was created.");
+      return existing;
+    }
+    if(!List.of("PENDING","EXPIRED").contains(state))
+      return Map.of("status","ACTION_BLOCKED","localOrderId",localOrderId,
+          "message","The local order is in "+state+" and cannot be automatically finalized. Keep the event for HRMS review.");
+    if(order.get("institution_id")==null)
+      return Map.of("status","RECONCILIATION_REQUIRED","localOrderId",localOrderId,
+          "message","The saved order lacks institution scope. Do not grant access or collect another payment.");
+
+    long institutionId=((Number)order.get("institution_id")).longValue();
+    Long studentId=order.get("student_id")==null?null:((Number)order.get("student_id")).longValue();
+    Long purchaserUserId=order.get("purchaser_user_id")==null?null:((Number)order.get("purchaser_user_id")).longValue();
+    // Catch here, inside this proxied method, so a provider timeout can be recorded as an
+    // actionable terminal inbox outcome instead of marking the outer webhook transaction rollback-only.
+    try {
+      return reconcileOrderInternal(localOrderId,studentId,purchaserUserId,institutionId,true);
+    } catch(RuntimeException providerOrFinalizationFailure) {
+      Map<String,Object> blocked=new LinkedHashMap<>();
+      blocked.put("status","RECONCILIATION_REQUIRED");
+      blocked.put("orderId",localOrderId);
+      blocked.put("canRetryCheckout",false);
+      blocked.put("message","The signed provider event was received, but authoritative payment verification/finalization did not complete. Reconcile this saved order in HRMS; do not collect another payment.");
+      blocked.put("errorCategory",providerOrFinalizationFailure.getClass().getSimpleName());
+      return blocked;
+    }
+  }
+
   private Map<String, Object> reconcileOrderInternal(
       long localOrderId, Long callerStudentId, Long callerUserId, long institutionId,
       boolean includeProviderDiagnostics) {
