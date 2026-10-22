@@ -144,6 +144,15 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
   // The password-bearing response is consumed in memory only. Tracing is deliberately off,
   // and the rendered credentials panel is visually redacted before any failure screenshot.
   await page.addStyleTag({ content: 'pre { filter: blur(12px) !important; }' });
+  // Journal the run identity before the mutating request, so cleanup can recover a
+  // run even when a browser assertion fails after the API commits.
+  await writePrivateJson('qa-install-intent.json', {
+    sourceSha: process.env.GITHUB_SHA || process.env.QE_E2E_SOURCE_SHA || 'local-unpinned',
+    packKey: String(pack.packKey),
+    packVersion: Number(pack.version),
+    idempotencyKey,
+    installStarted: true
+  });
   const installWaiter = page.waitForResponse(response =>
     response.request().method() === 'POST' &&
     response.url().includes('/api/v1/hrms/platform/qa/runs/install'));
@@ -151,10 +160,18 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
   const installResponse = await installWaiter;
   expect(installResponse.status(), 'Installing a QA pack must use the HRMS UI and live API.').toBe(200);
   const installed = await installResponse.json();
+  const runId = String(installed.run_id || installed.runId || '');
+  // Persist the primary cleanup key and one-time credentials before any further assertions.
+  await writePrivateJson('qa-fixture.json', {
+    sourceSha: process.env.GITHUB_SHA || process.env.QE_E2E_SOURCE_SHA || 'local-unpinned',
+    runId,
+    packKey: String(pack.packKey),
+    idempotencyKey,
+    credentials: installed.oneTimeSyntheticCredentials || {}
+  });
   expect(installed.state).toBe('INSTALLED');
   expect(installed.credentialsIncluded).toBe(true);
   expect(installed.oneTimeSyntheticCredentials).toBeTruthy();
-  const runId = String(installed.run_id || installed.runId || '');
   expect(runId).toMatch(/^[0-9a-f-]{36}$/i);
 
   const runPool = await openQaDatabase();
