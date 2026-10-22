@@ -176,7 +176,7 @@ export default function QuestionReviewPage(){
     approved:countGlobal(reviewSummary,['APPROVED','PUBLISHED'],true)
   };
 
-  return <main className="admin-shell">
+  return <main className="admin-shell qe-question-review-page">
     <AdminSidebar active="questions" variant="content"/>
     <section className="admin-main">
       <header className="admin-top">
@@ -193,45 +193,45 @@ export default function QuestionReviewPage(){
       </div>
 
       <section className="admin-panel" style={{marginTop:20}}>
-        <div className="admin-section-title"><div><span className="admin-kicker">{t('admin.questions.reviewQueue')}</span><h2>{t('admin.questions.allQuestions')}</h2><p style={{fontSize:12,color:"#6f7b90",marginTop:5}}>{t('admin.questions.totalSummary',{total:totalQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),active:activeQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),inactive:inactiveQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</p></div><span className="admin-live-label">{t('admin.questions.matchingCount',{count:totalMatching.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</span></div>
+        <div className="admin-section-title"><div><span className="admin-kicker">{t('admin.questions.reviewQueue')}</span><h2>{t('admin.questions.allQuestions')}</h2><p style={{fontSize:12,marginTop:5}}>{t('admin.questions.totalSummary',{total:totalQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),active:activeQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),inactive:inactiveQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</p></div><span className="admin-live-label">{t('admin.questions.matchingCount',{count:totalMatching.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</span></div>
         <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center',margin:'16px 0'}}>
           <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
             label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.course')}
             onChange={value=>{if(selectCourse(value)){setPage(0);setHistoryFor(null);setHistory([]);setError('');setNotice('');}}} />
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600}}>{t('admin.questions.filterStatus')}
-            <select value={status} onChange={e=>{setPage(0);setStatus(e.target.value)}} style={{minWidth:180,padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff'}}>
+            <select value={status} onChange={e=>{setPage(0);setStatus(e.target.value)}} style={{minWidth:180,padding:'10px 12px',borderRadius:10,border:'1px solid var(--qe-color-border-subtle, #d8dce5)'}}>
               {statuses.map(x=><option key={x} value={x}>{statusLabel(x)}</option>)}
             </select>
           </label>
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600,flex:'1 1 260px'}}>{t('admin.questions.searchLabel')}
-            <input value={query} onChange={e=>{setPage(0);setQuery(e.target.value)}} placeholder={t('admin.questions.searchPlaceholder')} style={{padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',minWidth:220}}/>
+            <input value={query} onChange={e=>{setPage(0);setQuery(e.target.value)}} placeholder={t('admin.questions.searchPlaceholder')} style={{padding:'10px 12px',borderRadius:10,border:'1px solid var(--qe-color-border-subtle, #d8dce5)',minWidth:220}}/>
           </label>
           <button type="button" className="button button-dark" onClick={()=>void load()} disabled={loading}>{loading?t('admin.questions.loadingShort'):t('admin.questions.applyFilters')}</button>
         </div>
         <PremiumPagination page={page} total={totalMatching} pageSize={pageSize} onPageChange={setPage}
           onPageSizeChange={size=>{setPageSize(size);setPage(0);}} itemLabel={t('admin.questions.questionItemLabel')} loading={loading} />
         {error&&<div className="admin-empty-state" role="alert" style={{marginBottom:12}}><p>{error}</p></div>}
-        {notice&&<p role="status" style={{padding:'12px 14px',background:'#eef8f2',borderRadius:10,color:'#22543d'}}>{notice}</p>}
+        {notice&&<p role="status" className="qe-question-review-notice">{notice}</p>}
         {loading?<p className="admin-loading" role="status" aria-live="polite">{t('admin.questions.loadingHistoryAndStatuses')}</p>:rows.length===0?<div className="admin-empty-state"><h3>{t('admin.questions.noQuestionsMatch')}</h3><p>{t('admin.questions.noQuestionsHint')}</p></div>:
           <div style={{display:'grid',gap:14}}>
             {rows.map(row=>{
               const options=parse(row.options,[]) as {key:string;label:string;is_correct?:boolean}[];
               const rejected=row.review_status==='REJECTED';
               const canReview=['REVIEW','PUBLISHED'].includes(String(row.lesson_status||'').toUpperCase())&&canManage&&!permissionLoading;
-              return <article key={row.question_id} style={{border:'1px solid #e1e5ed',borderRadius:14,padding:16,background:'#fff'}}>
+              return <article key={row.question_id} className="qe-question-review-card">
                 <div style={{display:'flex',gap:10,justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap'}}>
                   <div><div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}><strong>{t('admin.questions.questionNumber',{questionId:row.question_id})}</strong><span className="admin-live-label">{statusLabel(row.review_status)}</span>{!row.active&&<span className="admin-live-label">{t('admin.questions.statusInactive')}</span>}</div>
-                    <p style={{margin:'7px 0 3px',fontSize:13,color:'#647084'}}>{activeCourse?.display_name || t('admin.contentStudio.course')} · {row.subject_name} · {row.chapter_name} · {row.lesson_title}</p>
-                    <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.microTopicStatus')}: <b>{statusLabel(row.lesson_status)}</b>{row.topic?' · '+t('admin.questions.topicLabel')+': '+row.topic:''}{row.subtopic?' / '+row.subtopic:''}</p>
-                    <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.questionTypeLabel')}: {row.question_type} · {t('admin.questions.difficultyLabel')}: {row.difficulty||'—'}{row.marks?' · '+t('admin.questions.marksLabel',{marks:row.marks}):''}{row.exam_format?' · '+row.exam_format:''}</p>
-                    {(row.source_title||row.source_ref||row.board||row.source_year)&&<p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.sourceLabel')}:  {[row.source_title,row.board,row.source_year,row.source_ref].filter(Boolean).join(' · ')}</p>}
+                    <p style={{margin:'7px 0 3px',fontSize:13}}>{activeCourse?.display_name || t('admin.contentStudio.course')} · {row.subject_name} · {row.chapter_name} · {row.lesson_title}</p>
+                    <p style={{margin:'4px 0',fontSize:13}}>{t('admin.questions.microTopicStatus')}: <b>{statusLabel(row.lesson_status)}</b>{row.topic?' · '+t('admin.questions.topicLabel')+': '+row.topic:''}{row.subtopic?' / '+row.subtopic:''}</p>
+                    <p style={{margin:'4px 0',fontSize:13}}>{t('admin.questions.questionTypeLabel')}: {row.question_type} · {t('admin.questions.difficultyLabel')}: {row.difficulty||'—'}{row.marks?' · '+t('admin.questions.marksLabel',{marks:row.marks}):''}{row.exam_format?' · '+row.exam_format:''}</p>
+                    {(row.source_title||row.source_ref||row.board||row.source_year)&&<p style={{margin:'4px 0',fontSize:13}}>{t('admin.questions.sourceLabel')}:  {[row.source_title,row.board,row.source_year,row.source_ref].filter(Boolean).join(' · ')}</p>}
                   </div>
                   <button type="button" className="text-link" onClick={()=>void showHistory(row.question_id)}>{historyFor===row.question_id?t('admin.questions.historySelected'):t('admin.questions.viewFullHistory')} · {row.history_count||0}</button>
                 </div>
                 <h3 style={{fontSize:17,lineHeight:1.5,margin:'12px 0'}}>{row.prompt}</h3>
-                {options.length>0&&<ol type="A" style={{paddingLeft:24,margin:'8px 0',display:'grid',gap:5}}>{options.map((o,i)=><li key={o.key||i}>{o.label}{o.is_correct&&<span style={{marginLeft:8,fontSize:12,fontWeight:700,color:'#147848'}}>{t('admin.questions.correctAnswer')}</span>}</li>)}</ol>}
-                {row.explanation&&<p style={{fontSize:14,color:'#4b5565'}}><b>{t('admin.questions.explanation')}</b> {row.explanation}</p>}
-                <div style={{marginTop:12,padding:'11px 13px',borderRadius:10,background:rejected?'#fff3ef':'#f5f7fa',color:rejected?'#893b28':'#475467'}}>
+                {options.length>0&&<ol type="A" style={{paddingLeft:24,margin:'8px 0',display:'grid',gap:5}}>{options.map((o,i)=><li key={o.key||i}>{o.label}{o.is_correct&&<span style={{marginLeft:8,fontSize:12,fontWeight:700,color:'var(--qe-color-success, #147848)'}}>{t('admin.questions.correctAnswer')}</span>}</li>)}</ol>}
+                {row.explanation&&<p style={{fontSize:14}}><b>{t('admin.questions.explanation')}</b> {row.explanation}</p>}
+                <div className="qe-question-review-note" data-rejected={rejected?'true':'false'}>
                   <b>{rejected?t('admin.questions.rejectionReason'):t('admin.questions.latestReviewerNote')}</b>
                   <p style={{margin:'5px 0 0'}}>{row.review_notes||row.latest_history_reason||(rejected?t('admin.questions.legacyRejectionNoReason'):t('admin.questions.noReviewerNote'))}</p>
                 </div>
@@ -253,10 +253,10 @@ export default function QuestionReviewPage(){
         <div className="admin-section-title"><div><span className="admin-kicker">{t('admin.questions.changeLog')}</span><h2>{t('admin.questions.fullHistoryTitle',{questionId:historyFor})}</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([]);setHistoryPage(0);setHistoryTotal(0)}}>{t('admin.questions.close')}</button></div>
         {historyLoading?<p role="status" aria-live="polite">{t('admin.questions.loadingHistory')}</p>:history.length===0?<p>{t('admin.questions.noHistoryRows')}</p>:
           <div style={{display:'grid',gap:12,marginTop:14}}>
-            {history.map(entry=><article key={entry.id} style={{border:'1px solid #e1e5ed',borderRadius:12,padding:14}}>
-              <div style={{display:'flex',gap:10,justifyContent:'space-between',flexWrap:'wrap'}}><strong>{entry.event_type.replaceAll('_',' ')}</strong><span style={{fontSize:13,color:'#647084'}}>{entry.occurred_at?new Date(entry.occurred_at).toLocaleString(locale==='english'?'en-IN':'hi-IN'):''}</span></div>
+            {history.map(entry=><article key={entry.id} className="qe-question-history-row">
+              <div style={{display:'flex',gap:10,justifyContent:'space-between',flexWrap:'wrap'}}><strong>{entry.event_type.replaceAll('_',' ')}</strong><span style={{fontSize:13}}>{entry.occurred_at?new Date(entry.occurred_at).toLocaleString(locale==='english'?'en-IN':'hi-IN'):''}</span></div>
               <p style={{margin:'8px 0',fontSize:14}}><b>{entry.previous_status||'—'}</b> → <b>{entry.new_status||'—'}</b></p>
-              <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.actor')} {entry.actor_role||t('admin.questions.systemHistoricalBaseline')}{entry.actor_staff_id?' · '+t('admin.questions.staffId',{staffId:entry.actor_staff_id}):''}</p>
+              <p style={{margin:'4px 0',fontSize:13}}>{t('admin.questions.actor')} {entry.actor_role||t('admin.questions.systemHistoricalBaseline')}{entry.actor_staff_id?' · '+t('admin.questions.staffId',{staffId:entry.actor_staff_id}):''}</p>
               <p style={{margin:'6px 0'}}>{entry.change_reason||t('admin.questions.noReasonRecorded')}</p>
               <details style={{marginTop:8}}><summary style={{cursor:'pointer',fontWeight:600}}>{t('admin.questions.snapshotTitle')}</summary>
                 <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))',gap:10,marginTop:10}}>
