@@ -725,6 +725,7 @@ public class CourseMarketplaceController {
       }
     }
 
+    requireCompleteBillingSnapshot(buyerSnapshot);
     CourseOrderFinancialService.CheckoutSnapshot financialSnapshot =
         courseOrderFinancialService.prepareCheckout(
             ((Number)offer.get("institution_offer_id")).longValue(),
@@ -856,7 +857,36 @@ public class CourseMarketplaceController {
       order by is_default desc,id
       """,userAccountId);
     if(rows.isEmpty()) {
-      throw new IllegalArgumentException("Add a billing address in My Profile before paying for a course.");
+      if(requestedBillingAddressId!=null) {
+        throw new IllegalArgumentException("Add a billing address in My Profile before paying for a course.");
+      }
+      // Older pending orders can predate the address book, including accounts that never
+      // saved a profile. Permit this legacy snapshot only for order-recovery lookup below;
+      // a new order is rejected unless it has an address-book ID and a complete postal address.
+      List<Map<String,Object>> legacyRows=jdbc.queryForList("""
+        select u.id,coalesce(nullif(p.legal_name,''),u.display_name) as legal_name,
+          coalesce(p.billing_type,'INDIVIDUAL') as billing_type,p.gstin,p.gst_state_code,
+          coalesce(p.billing_address,'{}'::jsonb)::text as billing_address_json,
+          coalesce(p.contact_email,u.contact_email,u.email) as contact_email,
+          coalesce(p.contact_phone,u.mobile_e164) as contact_phone,
+          coalesce(p.version,0) as profile_version,u.display_name
+        from user_account u left join billing_customer_profile p on p.user_account_id=u.id
+        where u.id=? and u.active=true
+        """,userAccountId);
+      if(legacyRows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
+      Map<String,Object> legacy=legacyRows.getFirst();
+      Map<String,Object> snapshot=new LinkedHashMap<>();
+      snapshot.put("billingType",legacy.get("billing_type"));
+      snapshot.put("legalName",legacy.get("legal_name"));
+      snapshot.put("gstin",legacy.get("gstin"));
+      snapshot.put("gstStateCode",legacy.get("gst_state_code"));
+      snapshot.put("billingAddress",parseAddress(String.valueOf(legacy.get("billing_address_json"))));
+      snapshot.put("contactEmail",legacy.get("contact_email"));
+      snapshot.put("contactPhone",legacy.get("contact_phone"));
+      snapshot.put("billingProfileVersion",legacy.get("profile_version"));
+      String beneficiaryName=jdbc.queryForObject("select display_name from student where id=?",String.class,beneficiaryStudentId);
+      snapshot.put("beneficiaryName",beneficiaryName);
+      return snapshot;
     }
     Map<String,Object> row=null;
     if(requestedBillingAddressId!=null) {
@@ -866,10 +896,10 @@ public class CourseMarketplaceController {
         }
       }
       if(row==null) throw new SecurityException("The selected billing address does not belong to the purchaser account.");
-    } else if(rows.size()==1) {
-      row=rows.getFirst();
     } else {
-      throw new IllegalArgumentException("Choose a billing address for this checkout.");
+      // Older mobile clients cannot supply an address ID. Keep them compatible by selecting
+      // the saved default while updated clients explicitly send the user's chosen address.
+      row=rows.getFirst();
     }
     Map<String,Object> snapshot=new LinkedHashMap<>();
     snapshot.put("billingAddressId",((Number)row.get("id")).longValue());
@@ -884,14 +914,6 @@ public class CourseMarketplaceController {
           new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){}));
     } catch(Exception ex) {
       throw new IllegalStateException("The purchaser billing address snapshot could not be read.",ex);
-    }
-    @SuppressWarnings("unchecked")
-    Map<String,Object> selectedAddress=(Map<String,Object>)snapshot.get("billingAddress");
-    for(String required:List.of("line1","city","state","postalCode")) {
-      Object value=selectedAddress.get(required);
-      if(value==null||String.valueOf(value).isBlank()) {
-        throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
-      }
     }
     List<Map<String,Object>> accountRows=jdbc.queryForList("""
       select coalesce(p.version,0) as profile_version,
@@ -912,6 +934,22 @@ public class CourseMarketplaceController {
     return snapshot;
   }
 
+  private void requireCompleteBillingSnapshot(Map<String,Object> snapshot) {
+    if(snapshot.get("billingAddressId")==null) {
+      throw new IllegalArgumentException("Add a complete billing address in My Profile before paying for a course.");
+    }
+    Object raw=snapshot.get("billingAddress");
+    if(!(raw instanceof Map<?,?> address)) {
+      throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
+    }
+    for(String required:List.of("line1","city","state","postalCode")) {
+      Object value=address.get(required);
+      if(value==null||String.valueOf(value).isBlank()) {
+        throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
+      }
+    }
+  }
+
   private void requireSameBillingAddressChoice(Map<String,Object> prior,Map<String,Object> requestedSnapshot) {
     Object raw=prior.get("buyer_snapshot_json");
     if(raw==null||String.valueOf(raw).isBlank()||"{}".equals(String.valueOf(raw).trim())) return;
@@ -921,6 +959,9 @@ public class CourseMarketplaceController {
       Object savedId=saved.get("billingAddressId");
       Object requestedId=requestedSnapshot.get("billingAddressId");
       if(savedId!=null) {
+        // A legacy client recovering an old order may have no address-book row anymore.
+        // In that case never replace the immutable order snapshot with a different address.
+        if(requestedId==null) return;
         if(!String.valueOf(savedId).equals(String.valueOf(requestedId))) {
           throw new IllegalStateException("A checkout for a different billing address is still open. Finish or reconcile that order before changing the billing address.");
         }
