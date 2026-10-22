@@ -208,9 +208,12 @@ public class BillingCustomerProfileController {
       throw bad("You can save up to 20 billing addresses.");
     }
     Object requestedDefault=body==null?null:body.get("isDefault");
-    boolean makeDefault=requestedDefault instanceof Boolean b?b:(count==0||wasDefault);
-    if(count>0 && addressId==null && requestedDefault==null) makeDefault=false;
+    boolean makeDefault=count==0 || Boolean.TRUE.equals(requestedDefault) || wasDefault;
     String addressJson=json(draft.billingAddress());
+    if(makeDefault) jdbc.update("""
+      update billing_customer_address set is_default=false,version=version+1,updated_at=now()
+      where user_account_id=? and active=true and is_default=true and (?::bigint is null or id<>?)
+      """,userId,addressId,addressId);
     long savedId;
     if(addressId==null) {
       savedId=jdbc.queryForObject("""
@@ -222,10 +225,6 @@ public class BillingCustomerProfileController {
         """,Long.class,userId,label,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),
           addressJson,draft.contactEmail(),draft.contactPhone(),makeDefault);
     } else {
-      if(makeDefault) jdbc.update("""
-        update billing_customer_address set is_default=false,version=version+1,updated_at=now()
-        where user_account_id=? and active=true and is_default=true and id<>?
-        """,userId,addressId);
       int changed=jdbc.update("""
         update billing_customer_address set label=?,billing_type=?,legal_name=?,gstin=?,gst_state_code=?,
           billing_address=?::jsonb,contact_email=?,contact_phone=?,is_default=?,version=version+1,updated_at=now()
@@ -236,10 +235,6 @@ public class BillingCustomerProfileController {
       savedId=addressId;
     }
     if(makeDefault) {
-      jdbc.update("""
-        update billing_customer_address set is_default=false,version=version+1,updated_at=now()
-        where user_account_id=? and active=true and is_default=true and id<>?
-        """,userId,savedId);
       save(userId,actorUserId,profileBody(draft),false);
     }
     Long version=jdbc.queryForObject(
@@ -406,35 +401,10 @@ public class BillingCustomerProfileController {
   }
 
   private void save(long userId,long actorUserId,Map<String,Object> body) {
-    ProfileDraft draft=validateProfile(body);
-    if(!exists("select exists(select 1 from user_account where id=? and active=true)",userId)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active purchaser account is required.");
-    }
-    boolean created=!exists("select exists(select 1 from billing_customer_profile where user_account_id=?)",userId);
-    jdbc.update("""
-      insert into billing_customer_profile(
-        user_account_id,billing_type,legal_name,gstin,gst_state_code,billing_address,
-        contact_email,contact_phone,version,created_at,updated_at
-      ) values(?,?,?,?,?,?::jsonb,?,?,1,now(),now())
-      on conflict(user_account_id) do update set
-        billing_type=excluded.billing_type,legal_name=excluded.legal_name,gstin=excluded.gstin,
-        gst_state_code=excluded.gst_state_code,billing_address=excluded.billing_address,
-        contact_email=excluded.contact_email,contact_phone=excluded.contact_phone,
-        version=billing_customer_profile.version+1,updated_at=now()
-      """,userId,draft.billingType(),draft.legalName(),draft.gstin(),draft.gstStateCode(),
-        json(draft.billingAddress()),draft.contactEmail(),draft.contactPhone());
-    Long version=jdbc.queryForObject("select version from billing_customer_profile where user_account_id=?",Long.class,userId);
-    List<String> fields=List.of("billingType","legalName","gstin","gstStateCode","billingAddress","contactEmail","contactPhone");
-    jdbc.update("""
-      insert into billing_customer_profile_event(
-        user_account_id,event_type,profile_version,actor_user_account_id,changed_fields
-      ) values(?,?,?,?,?::jsonb)
-      """,userId,created?"CREATED":"UPDATED",version,actorUserId,json(fields));
-    if(syncAddressBook) syncDefaultAddressFromLegacyProfile(userId,actorUserId,draft);
+    save(userId,actorUserId,body,true);
   }
 
   private void save(long userId,long actorUserId,Map<String,Object> body,boolean syncAddressBook) {
-    // The fourth argument is used by address-book operations to update only the legacy current-profile mirror.
     ProfileDraft draft=validateProfile(body);
     if(!exists("select exists(select 1 from user_account where id=? and active=true)",userId)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active purchaser account is required.");
