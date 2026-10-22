@@ -96,6 +96,10 @@ public class CourseMarketplaceLaunchController {
           p.code,p.display_name,t.id,t.tenant_code,t.display_name
         order by r.submitted_at,r.id
         """,institutionId);
+    for(Map<String,Object> release:qualityReviewItems) {
+      release.put("contentCurrent",readiness.contentFingerprintMatches(
+          number(release.get("course_id")),text(release.get("content_fingerprint"))));
+    }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("institutionId",institutionId);
     result.put("institutionName",institutionName(institutionId));
