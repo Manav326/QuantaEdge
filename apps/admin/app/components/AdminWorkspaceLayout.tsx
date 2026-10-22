@@ -246,7 +246,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     }
   }
 
-  if (publicRoute) return <AdminThemeProvider institutionCode="" enabled={false}><AdminWorkspaceContext.Provider value={value}>{children}</AdminWorkspaceContext.Provider></AdminThemeProvider>;
+  if (publicRoute) return <AdminThemeProvider institutionCode="" enabled={false}><AdminWorkspaceContext.Provider value={value}><div className="qe-admin-workspace-page-slot qe-admin-public-page">{children}</div></AdminWorkspaceContext.Provider></AdminThemeProvider>;
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
