@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c7f3a0376df70a5737f7989d01e8b8ce52863aa577dc137f68021513f96f168a",
+  "raw_analysis_sha256": "7d81ab0f6ff7a928fce2320c9b6efa8bb98afb70e921622b723108adb3fd97d8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:03:45Z",
+      "checkpointed_at": "2026-10-22T09:08:32Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:04:51Z",
+      "checkpointed_at": "2026-10-22T09:09:37Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:06:00Z",
+      "checkpointed_at": "2026-10-22T09:10:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66850,7 +66850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:06:49Z",
+      "checkpointed_at": "2026-10-22T09:11:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
@@ -67037,6 +67037,26 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2cea301bf9b05b3d64207203",
+      "asset_sha256": "16d9f9234f742d0a61cb048a72202770df2c3b3fa1d92be51be9c44b4b6912ff",
+      "page_text_context_sha256": "3dfd1e5f581ede50f2e624b99ea2b0af0f95df9b9fe7be3058c718a853f9c164",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 135,
+      "asset_path": "page-0135.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
