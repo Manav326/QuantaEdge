@@ -236,6 +236,11 @@ export default function ParentCoursesPage() {
       return;
     }
     if (billingAddresses.length === 1) {
+      const address = billingAddresses[0].billingAddress || {};
+      if (!address.line1?.trim() || !address.city?.trim() || !address.state?.trim() || !address.postalCode?.trim()) {
+        setError(english ? 'Complete your billing address in My Profile before checkout.' : 'Checkout से पहले My Profile में billing address पूरा करें।');
+        return;
+      }
       void startPaidCheckout(courseId, recipientType, studentId, billingAddresses[0].id);
       return;
     }
