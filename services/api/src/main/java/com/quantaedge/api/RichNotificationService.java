@@ -1061,16 +1061,25 @@ public class RichNotificationService {
     JsonNode node = parseJson(value);
     for (int attempt = 0; attempt < 4; attempt++) {
       if (node.isTextual()) {
-        node = parseJson(node.asText());
+        try {
+          node = mapper.readTree(node.asText());
+        } catch (Exception malformedLegacyDocument) {
+          return mapper.createObjectNode();
+        }
         continue;
       }
       if (!node.isObject()) return node;
       JsonNode blocks = node.get("blocks");
       if (blocks != null && blocks.isTextual()) {
-        JsonNode decodedBlocks = parseJson(blocks.asText());
-        if (decodedBlocks.isArray()) {
-          ((ObjectNode) node).set("blocks", decodedBlocks);
-          blocks = decodedBlocks;
+        try {
+          JsonNode decodedBlocks = mapper.readTree(blocks.asText());
+          if (decodedBlocks.isArray()) {
+            ((ObjectNode) node).set("blocks", decodedBlocks);
+            blocks = decodedBlocks;
+          }
+        } catch (Exception malformedLegacyBlocks) {
+          // Keep this notification readable through the renderer's safe fallback;
+          // malformed legacy rich content must not make the entire inbox fail.
         }
       }
       if (blocks != null && blocks.isArray()) {
