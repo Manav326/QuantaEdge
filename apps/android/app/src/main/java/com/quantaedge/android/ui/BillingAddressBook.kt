@@ -26,6 +26,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
+data class BillingAddressBookBindings(
+    val addresses: List<JSONObject>,
+    val loading: Boolean,
+    val error: String,
+    val status: String,
+    val onSave: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
+    val onMakeDefault: (Long) -> Unit,
+    val onDelete: (Long) -> Unit,
+    val onOpenProfile: () -> Unit = {}
+)
+
 internal fun billingAddressId(address: JSONObject): Long =
     address.optLong("id", address.optLong("addressId", 0L))
 
