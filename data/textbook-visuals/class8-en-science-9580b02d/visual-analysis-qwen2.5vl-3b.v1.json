@@ -14,7 +14,7 @@
     "assets_analyzed": 1164,
     "assets_remaining": 1127,
     "assets_completion_percent": 50.8,
-    "assets_failed": 16,
+    "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1164,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1181,7 +1181,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1195,15 +1195,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "safety precautions",
-          "ever heard of",
-          "step further",
-          "scientific principles"
+          "inclusive education",
+          "safety",
+          "peer interactions",
+          "understanding concepts",
+          "reflecting on ideas",
+          "analyzing concepts",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "fascinating facts",
+          "interesting observations",
+          "curiosity-driven questions",
+          "advanced concepts"
         ],
-        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "The text does not provide specific examples or activities from the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1211,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864352424",
-      "checkpointed_at": "2026-10-22T22:30:36Z"
+      "checkpointed_at": "2026-10-22T22:39:23Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1745,7 +1756,7 @@
           "Indian and international scientists",
           "NEP 2020",
           "Snapshots",
-          "Keywords",
+          "keywords",
           "scientific activities",
           "curiosity",
           "exercises",
@@ -1755,16 +1766,16 @@
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the content of the chapters."
+          "The page does not provide specific examples or details about the exercises or the exercises themselves."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864352424",
-      "checkpointed_at": "2026-10-22T22:32:26Z"
+      "checkpointed_at": "2026-10-22T22:39:56Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20141,7 +20152,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20150,20 +20161,15 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Editors",
+          "Support",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and editors.",
         "limitations": [
-          "The text does not provide specific details about the textbook or its content.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20171,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864352424",
-      "checkpointed_at": "2026-10-22T22:36:33Z"
+      "checkpointed_at": "2026-10-22T22:40:19Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22082,48 +22088,19 @@
     {
       "asset_id": "fc310253031bd2210d27a7e7",
       "asset_sha256": "10ac9c457e4d4bf5ad92e93e7a9661bff27f6400935c7e2ecf2022d97c1675c7",
+      "page_text_context_sha256": "fc134f1b67fe8b5d8f418d35f3497676b3f36f60e2a423391160ccbd4a8faf50",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 26,
       "asset_path": "page-0026.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "fc134f1b67fe8b5d8f418d35f3497676b3f36f60e2a423391160ccbd4a8faf50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "An educational page about scientific thinking and experiments, specifically focusing on the question of why one side of a puri is thinner than the other.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "To help you think like a scientist, let us go back to a question\nwe asked on the first page: Why is one side of a puri thinner\nthan the other?\n\nFirstly, remember that science\nis everywhere! You don’t need\na fancy laboratory to do simple\nexperiments. Even your kitchen\nat home is a wonderful place to\n",
-          "Curiosity — Textbook of Science for Grade 8",
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "scientific thinking",
-          "experiments",
-          "curiosity",
-          "observation",
-          "control",
-          "measurement",
-          "temperature",
-          "oil",
-          "dough",
-          "puri",
-          "batura",
-          "phulka"
-        ],
-        "context_relation": "educational",
-        "limitations": [
-          "The text does not provide specific instructions or methods for conducting the experiments mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864352424",
-      "checkpointed_at": "2026-10-22T22:38:36Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "3e216f2031f796a638a3557a",
@@ -22525,7 +22502,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803159272",
+      "run_id": "39864352424",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
