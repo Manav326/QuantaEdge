@@ -255,6 +255,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     await page.locator('form').locator('button[type="submit"]').click();
     const response = await loginResponse;
     expect(response.status(), 'The independent learner must authenticate through the live account-login endpoint.').toBe(200);
+    expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   } else {
     await page.goto(WEB + '/login/student?institutionCode=' + encodeURIComponent(credentials.institutionCode));
     const identifiers = page.locator('input[autocomplete="username"]');
@@ -267,6 +268,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     await page.locator('form').locator('button[type="submit"]').click();
     const response = await loginResponse;
     expect(response.status(), name + ' must authenticate through the live parent/child session endpoint.').toBe(200);
+    expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   }
   await page.waitForURL(url => url.origin === WEB && url.pathname === '/student');
   const statePath = join(await preparePrivateDir(), name === 'independentLearner' ? 'adult-c.json' : name.replace(/[A-Z]/g, m => '-' + m.toLowerCase()) + '.json');
