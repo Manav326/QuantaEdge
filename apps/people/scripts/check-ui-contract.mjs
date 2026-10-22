@@ -198,6 +198,46 @@ assert(styles.includes('.qe-people-page-slot .qe-people-pagination'), 'Paginatio
 
 assert(alignmentPlan.includes('Phase 10'), 'Persistent HRMS alignment plan must be present.');
 
+
+/* Full-route theme coverage and authored document preview boundaries. */
+function findFilesMatching(directory, predicate) {
+  const absolute = join(root, directory);
+  if (!existsSync(absolute)) return [];
+  return readdirSync(absolute, { withFileTypes: true }).flatMap(entry => {
+    const childPath = directory + '/' + entry.name;
+    if (entry.isDirectory()) return findFilesMatching(childPath, predicate);
+    return predicate(childPath) ? [childPath] : [];
+  });
+}
+const discoveredPeopleModules = findFilesMatching('apps/people/app', path => /\.module\.css$/.test(path)).sort();
+assert(discoveredPeoplePages.length >= 14, 'HRMS route inventory must cover the full set of account, workforce, finance, notification, institution and QA pages.');
+assert(discoveredPeopleModules.length >= 6, 'Theme audit must discover every route/component CSS module, including Finance and rich notifications.');
+for (const modulePath of discoveredPeopleModules) {
+  const moduleSource = read(modulePath);
+  assert(moduleSource.length > 0, 'Discovered HRMS component stylesheet cannot be empty: ' + modulePath);
+}
+assert(appearanceStyles.includes(':not([data-qe-invoice-document] *)') && appearanceStyles.includes(':not([data-qe-authored-notification] *)'), 'Global HRMS appearance sweeps must stop before invoice and authored-notification content.');
+assert(styles.includes(':not([data-qe-invoice-document] *)') && styles.includes(':not([data-qe-authored-notification] *)'), 'The shared design system must not recolour invoice or authored-notification descendants.');
+const globalsTheme = read('apps/people/app/globals.css');
+assert(globalsTheme.includes('[data-qe-invoice-document] table{background:transparent!important;min-width:0!important;}'), 'Legacy global table styling must not impose an app-surface background or minimum width on invoice paper.');
+const financePageTheme = read('apps/people/app/finance/page.tsx');
+const financeModuleTheme = read('apps/people/app/finance/Finance.module.css');
+assert(financePageTheme.includes("['overview','Overview'") && financePageTheme.includes("['documents','Issued documents'") && financePageTheme.includes("['studio','Invoice Design Studio'"), 'Finance route must retain its in-page billing, document and design subpages.');
+for (const mode of ['light', 'dark']) {
+  assert(financePageTheme.includes('data-preview-theme="' + mode + '"'), 'Finance invoice design must preview in the ' + mode + ' workspace context.');
+  assert(financeModuleTheme.includes('.invoiceThemeFrame[data-preview-theme="' + mode + '"]'), 'Invoice comparison must style the ' + mode + ' preview frame explicitly.');
+}
+assert(financePageTheme.includes('data-qe-invoice-document="true"') && financePageTheme.includes('body:JSON.stringify({designDefinition:design})'), 'Invoice stationery must stay separately authored and PDF rendering must use the selected design definition.');
+assert(financeModuleTheme.includes('--finance-field: var(--qe-people-field') && financeModuleTheme.includes('.table:not(.paperTable)'), 'Finance controls and ledgers must follow HRMS theme tokens without recolouring invoice tables.');
+const notificationPageTheme = read('apps/people/app/components/NotificationStudio.tsx');
+const notificationModuleTheme = read('apps/people/app/components/NotificationStudio.module.css');
+const rendererTheme = read('apps/people/app/components/RichNotificationRenderer.tsx');
+const rendererCssTheme = read('apps/people/app/components/RichNotificationRenderer.module.css');
+assert(notificationPageTheme.includes('See it in both appearances') && notificationPageTheme.includes('data-preview-theme="light"') && notificationPageTheme.includes('data-preview-theme="dark"'), 'Notification editor must include side-by-side recipient previews in light and dark appearances.');
+assert(notificationPageTheme.includes('<RichNotificationRenderer surface={surface} contentDocument={document} />'), 'Theme previews must render the real notification renderer in read-only mode.');
+assert(notificationModuleTheme.includes('themePreviewCard[data-preview-theme="light"]') && notificationModuleTheme.includes('themePreviewCard[data-preview-theme="dark"]'), 'Notification preview frames must use independently defined premium appearance palettes.');
+assert(rendererTheme.includes('data-qe-authored-notification="true"') && rendererTheme.includes('--qe-authored-text-color') && rendererTheme.includes('contrastForeground(accent)'), 'Notification document colours must remain authored and CTA foreground contrast must be selected against accent luminance.');
+assert(rendererCssTheme.includes('--qe-authored-background-color') && rendererCssTheme.includes('var(--qe-notification-on-accent,#fff)'), 'Notification block backgrounds and button foreground contrast must survive theme changes.');
 if (failures.length) {
   console.error(`People Operations UI contract failed (${failures.length}/${checks} checks):`);
   for (const failure of failures) console.error(`- ${failure}`);
