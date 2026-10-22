@@ -68,8 +68,9 @@ fun ParentCourseMarketplaceScreen(
     busyCourseId: Long,
     error: String,
     status: String,
+    billing: BillingAddressBookBindings,
     onRefresh: () -> Unit,
-    onBuy: (Long, String, Long, String) -> Unit,
+    onBuy: (Long, String, Long, String, Long) -> Unit,
     onAddFree: (Long, String, Long) -> Unit,
     onDismissRequest: (Long) -> Unit,
     onTransfer: (Long, Long) -> Unit,
@@ -81,6 +82,41 @@ fun ParentCourseMarketplaceScreen(
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingTransfer by remember { mutableStateOf<Pair<Long, Long>?>(null) }
     var discountCode by remember { mutableStateOf("") }
+    var checkoutCourseId by remember { mutableStateOf(0L) }
+    var checkoutRecipientType by remember { mutableStateOf("SELF") }
+    var checkoutStudentId by remember { mutableStateOf(0L) }
+    var checkoutDiscountCode by remember { mutableStateOf("") }
+    var selectedBillingAddressId by remember { mutableStateOf<Long?>(null) }
+    var billingCheckoutMessage by remember { mutableStateOf("") }
+
+    fun requestPaidPurchase(courseId: Long, recipientType: String, studentId: Long, code: String) {
+        billingCheckoutMessage = ""
+        if (billing.loading) {
+            billingCheckoutMessage = t("Saved billing addresses are still loading. Please retry in a moment.",
+                "Saved billing addresses अभी load हो रहे हैं। थोड़ी देर बाद फिर कोशिश करें।")
+            return
+        }
+        if (billing.addresses.isEmpty()) {
+            billingCheckoutMessage = t("Save your billing address above before checkout.",
+                "Checkout से पहले ऊपर billing address save करें।")
+            return
+        }
+        val preferred = billing.addresses.firstOrNull { it.optBoolean("is_default") } ?: billing.addresses.first()
+        if (billing.addresses.size == 1) {
+            if (!billingAddressIsComplete(preferred)) {
+                billingCheckoutMessage = t("Complete your billing address before checkout.",
+                    "Checkout से पहले billing address पूरा करें।")
+                return
+            }
+            onBuy(courseId, recipientType, studentId, code, billingAddressId(preferred))
+            return
+        }
+        checkoutCourseId = courseId
+        checkoutRecipientType = recipientType
+        checkoutStudentId = studentId
+        checkoutDiscountCode = code
+        selectedBillingAddressId = billingAddressId(preferred)
+    }
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
@@ -124,6 +160,21 @@ fun ParentCourseMarketplaceScreen(
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+        BillingAddressBook(
+            addresses = billing.addresses,
+            loading = billing.loading,
+            busy = busy,
+            language = language,
+            compactOnly = true,
+            errorMessage = billing.error,
+            statusMessage = billing.status,
+            onSave = billing.onSave,
+            onMakeDefault = billing.onMakeDefault,
+            onDelete = billing.onDelete,
+            onOpenProfile = billing.onOpenProfile
+        )
+        if (billingCheckoutMessage.isNotBlank()) Text(billingCheckoutMessage, color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall)
         if (pendingVerification) {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -174,7 +225,7 @@ fun ParentCourseMarketplaceScreen(
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                                 Button(onClick = {
                                     if (price == 0L) onAddFree(courseId, "CHILD", studentId)
-                                    else onBuy(courseId, "CHILD", studentId, discountCode.trim())
+                                    else requestPaidPurchase(courseId, "CHILD", studentId, discountCode.trim())
                                 }, enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && studentId > 0L, modifier = Modifier.weight(1f)) {
                                     Text(t("Buy for this child", "इस बच्चे के लिए"))
                                 }
@@ -224,7 +275,7 @@ fun ParentCourseMarketplaceScreen(
                                     "यह कोर्स पहले से आपके पास है। दोबारा भुगतान करने के बजाय नीचे से स्थायी ट्रांसफर करें।"),
                                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             } else {
-                                Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else onBuy(courseId, "SELF", 0L, discountCode.trim()) },
+                                Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else requestPaidPurchase(courseId, "SELF", 0L, discountCode.trim()) },
                                     enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L, modifier = Modifier.fillMaxWidth()) {
                                     Text(if (price == 0L) t("Add free course for me", "अपने लिए निःशुल्क कोर्स") else t("Buy for me", "अपने लिए खरीदें"))
                                 }
@@ -242,7 +293,7 @@ fun ParentCourseMarketplaceScreen(
                                                     style = MaterialTheme.typography.labelSmall, color = LocalQuantaEdgeSemanticColors.current.success)
                                             }
                                             TextButton(
-                                                onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else onBuy(courseId, "CHILD", childId, discountCode.trim()) },
+                                                onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else requestPaidPurchase(courseId, "CHILD", childId, discountCode.trim()) },
                                                 enabled = !busy && (price == 0L || !pendingVerification) && courseId > 0L && childId > 0L && !alreadyOwned && price >= 0L
                                             ) { Text(t(if (price == 0L) "Add" else "Buy", if (price == 0L) "जोड़ें" else "खरीदें")) }
                                         }
@@ -287,6 +338,25 @@ fun ParentCourseMarketplaceScreen(
                 }
             }
         }
+    }
+
+    if (checkoutCourseId > 0L) {
+        BillingAddressPickerDialog(
+            addresses = billing.addresses,
+            selectedAddressId = selectedBillingAddressId,
+            language = language,
+            onSelect = { selectedBillingAddressId = it },
+            onDismiss = { checkoutCourseId = 0L },
+            onConfirm = {
+                val courseId = checkoutCourseId
+                val recipientType = checkoutRecipientType
+                val studentId = checkoutStudentId
+                val code = checkoutDiscountCode
+                val addressId = selectedBillingAddressId
+                checkoutCourseId = 0L
+                if (addressId != null) onBuy(courseId, recipientType, studentId, code, addressId)
+            }
+        )
     }
 
     pendingTransfer?.let { transfer ->

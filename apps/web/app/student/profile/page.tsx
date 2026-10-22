@@ -3,6 +3,7 @@
 
 import { apiFetch } from '../../components/apiClient';
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
+import BillingProfileEditor from '../../components/BillingProfileEditor';
 import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import PasswordField from '../../components/PasswordField';
 import { UiText } from '../../i18n/useUiTranslation';
@@ -498,6 +499,7 @@ export default function StudentProfilePage() {
 
           </form>
         )}
+        <BillingProfileEditor workspace="STUDENT" placement="profile" />
         <AccountIdentitySettings />
       </div>
     </main>

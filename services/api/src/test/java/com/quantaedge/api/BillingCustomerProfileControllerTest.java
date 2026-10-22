@@ -43,6 +43,21 @@ class BillingCustomerProfileControllerTest {
   }
 
   @Test
+  void savedIndividualAddressRequiresCompletePostalFields() {
+    assertThrows(ResponseStatusException.class,()->BillingCustomerProfileController.validateSavedAddress(Map.of(
+        "billingType","INDIVIDUAL","legalName","Example","billingAddress",Map.of("line1","Main Road","city","Patna"))));
+  }
+
+  @Test
+  void savedIndividualAddressDefaultsCountryAndAcceptsCompletePostalFields() {
+    var draft=BillingCustomerProfileController.validateSavedAddress(Map.of(
+        "billingType","INDIVIDUAL","legalName","Example",
+        "billingAddress",Map.of("line1","Main Road","city","Patna","state","Bihar","postalCode","800001")));
+    assertEquals("India",draft.billingAddress().get("country"));
+    assertEquals("Main Road",draft.billingAddress().get("line1"));
+  }
+
+  @Test
   void rejectsInvalidGstinAndEmail() {
     assertThrows(ResponseStatusException.class,()->BillingCustomerProfileController.validateProfile(Map.of(
         "billingType","INDIVIDUAL","legalName","Example","gstin","INVALID")));

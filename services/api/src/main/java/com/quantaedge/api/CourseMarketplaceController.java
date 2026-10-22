@@ -23,6 +23,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -486,7 +488,7 @@ public class CourseMarketplaceController {
     long institutionId = requireTenant(tenant).institutionId();
     String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
     return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT", institutionId,
-        request==null?null:request.discountCode());
+        request==null?null:request.discountCode(), request==null?null:request.billingAddressId());
   }
 
   /** Parents can buy for their own learning profile or directly for a linked child. */
@@ -523,7 +525,7 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
     }
     return createOrderInternal(courseId, key, targetStudentId, context.userId(),
-        targetStudentId, orderRecipientType, institutionId,request.discountCode());
+        targetStudentId, orderRecipientType, institutionId,request.discountCode(),request.billingAddressId());
   }
 
   static String normalizeDiscountCodeForRequest(String supplied) {
@@ -604,7 +606,7 @@ public class CourseMarketplaceController {
   private Map<String, Object> createOrderInternal(
       long courseId, String idempotencyKey, long targetStudentId,
       Long purchaserUserId, Long targetStudentForOrder, String recipientType, long institutionId,
-      String requestedDiscountCode) {
+      String requestedDiscountCode, Long requestedBillingAddressId) {
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select p.id, o.id as institution_offer_id,
@@ -652,7 +654,7 @@ public class CourseMarketplaceController {
       if(linkedUserId==null) throw new IllegalStateException("The purchaser account is not linked to the learner profile.");
       purchaserAccountId=linkedUserId;
     }
-    Map<String,Object> buyerSnapshot=billingProfileSnapshot(purchaserAccountId,targetStudentId);
+    Map<String,Object> buyerSnapshot=billingProfileSnapshot(purchaserAccountId,targetStudentId,requestedBillingAddressId);
     String institutionDisplayName=jdbc.queryForObject("""
       select coalesce(nullif(b.display_name,''),t.display_name)
       from institution_tenant t left join institution_branding b on b.institution_id=t.id
@@ -666,7 +668,8 @@ public class CourseMarketplaceController {
           listed_price_paise,discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
-          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
+          buyer_snapshot::text as buyer_snapshot_json
         from course_payment_order
         where student_id=? and institution_id=? and course_id=? and client_request_key=?
           and purchaser_user_id is not distinct from ?
@@ -679,6 +682,7 @@ public class CourseMarketplaceController {
         throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
       String previousStatus = String.valueOf(previous.get("status"));
       if ("PENDING".equals(previousStatus)) {
+        requireSameBillingAddressChoice(previous,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(previous)) {
           repairLegacyPendingOrderSnapshots(previous,institutionId,
               ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
@@ -696,6 +700,7 @@ public class CourseMarketplaceController {
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
+        requireSameBillingAddressChoice(prior,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(prior)) {
           repairLegacyPendingOrderSnapshots(prior,institutionId,
               ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
@@ -722,6 +727,7 @@ public class CourseMarketplaceController {
       }
     }
 
+    requireCompleteBillingSnapshot(buyerSnapshot);
     CourseOrderFinancialService.CheckoutSnapshot financialSnapshot =
         courseOrderFinancialService.prepareCheckout(
             ((Number)offer.get("institution_offer_id")).longValue(),
@@ -764,6 +770,7 @@ public class CourseMarketplaceController {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         Map<String,Object> racedOrder = racedOrders.getFirst();
+        requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(racedOrder)) {
           repairLegacyPendingOrderSnapshots(racedOrder,institutionId,
               ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
@@ -842,20 +849,92 @@ public class CourseMarketplaceController {
     }
   }
 
-  private Map<String,Object> billingProfileSnapshot(long userAccountId,long beneficiaryStudentId) {
+  private Map<String,Object> preserveLegacyBuyerSnapshot(
+      Map<String,Object> order,Map<String,Object> currentSnapshot) {
+    Map<String,Object> merged=new LinkedHashMap<>(currentSnapshot);
+    Object raw=order==null?null:order.get("buyer_snapshot_json");
+    if(raw==null||String.valueOf(raw).isBlank()||"{}".equals(String.valueOf(raw).trim())) return merged;
+    try {
+      Map<String,Object> prior=objectMapper.readValue(String.valueOf(raw),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+      // The saved order's customer and beneficiary details take precedence. Current address
+      // book data fills only fields missing from a legacy snapshot; it never rewrites one.
+      merged.putAll(prior);
+      return merged;
+    } catch(Exception ex) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved order's billing snapshot cannot be safely reconstructed. Leave this order unchanged and ask HRMS to reconcile it.",ex);
+    }
+  }
+
+  private Map<String,Object> parseBillingAddressJson(Object raw) {
+    if(raw==null) return Map.of();
+    try {
+      return objectMapper.readValue(String.valueOf(raw),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+    } catch(Exception ex) {
+      throw new IllegalStateException("The legacy purchaser billing address snapshot could not be read safely.",ex);
+    }
+  }
+
+  private Map<String,Object> billingProfileSnapshot(long userAccountId,long beneficiaryStudentId,Long requestedBillingAddressId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select u.id,coalesce(nullif(p.legal_name,''),u.display_name) as legal_name,
-        coalesce(p.billing_type,'INDIVIDUAL') as billing_type,p.gstin,p.gst_state_code,
-        coalesce(p.billing_address,'{}'::jsonb)::text as billing_address_json,
-        coalesce(p.contact_email,u.contact_email,u.email) as contact_email,
-        coalesce(p.contact_phone,u.mobile_e164) as contact_phone,
-        coalesce(p.version,0) as profile_version,u.display_name
-      from user_account u left join billing_customer_profile p on p.user_account_id=u.id
-      where u.id=? and u.active=true
+      select id,label,billing_type,legal_name,gstin,gst_state_code,
+        billing_address::text as billing_address_json,contact_email,contact_phone,
+        version,is_default
+      from billing_customer_address
+      where user_account_id=? and active=true
+      order by is_default desc,id
       """,userAccountId);
-    if(rows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
-    Map<String,Object> row=rows.getFirst();
+    if(rows.isEmpty()) {
+      if(requestedBillingAddressId!=null) {
+        throw new IllegalArgumentException("Add a billing address in My Profile before paying for a course.");
+      }
+      // Older pending orders can predate the address book, including accounts that never
+      // saved a profile. Permit this legacy snapshot only for order-recovery lookup below;
+      // a new order is rejected unless it has an address-book ID and a complete postal address.
+      List<Map<String,Object>> legacyRows=jdbc.queryForList("""
+        select u.id,coalesce(nullif(p.legal_name,''),u.display_name) as legal_name,
+          coalesce(p.billing_type,'INDIVIDUAL') as billing_type,p.gstin,p.gst_state_code,
+          coalesce(p.billing_address,'{}'::jsonb)::text as billing_address_json,
+          coalesce(p.contact_email,u.contact_email,u.email) as contact_email,
+          coalesce(p.contact_phone,u.mobile_e164) as contact_phone,
+          coalesce(p.version,0) as profile_version,u.display_name
+        from user_account u left join billing_customer_profile p on p.user_account_id=u.id
+        where u.id=? and u.active=true
+        """,userAccountId);
+      if(legacyRows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
+      Map<String,Object> legacy=legacyRows.getFirst();
+      Map<String,Object> snapshot=new LinkedHashMap<>();
+      snapshot.put("billingType",legacy.get("billing_type"));
+      snapshot.put("legalName",legacy.get("legal_name"));
+      snapshot.put("gstin",legacy.get("gstin"));
+      snapshot.put("gstStateCode",legacy.get("gst_state_code"));
+      snapshot.put("billingAddress",parseBillingAddressJson(legacy.get("billing_address_json")));
+      snapshot.put("contactEmail",legacy.get("contact_email"));
+      snapshot.put("contactPhone",legacy.get("contact_phone"));
+      snapshot.put("billingProfileVersion",legacy.get("profile_version"));
+      String beneficiaryName=jdbc.queryForObject("select display_name from student where id=?",String.class,beneficiaryStudentId);
+      snapshot.put("beneficiaryName",beneficiaryName);
+      return snapshot;
+    }
+    Map<String,Object> row=null;
+    if(requestedBillingAddressId!=null) {
+      for(Map<String,Object> candidate:rows) {
+        if(((Number)candidate.get("id")).longValue()==requestedBillingAddressId.longValue()) {
+          row=candidate;break;
+        }
+      }
+      if(row==null) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The selected billing address does not belong to the purchaser account.");
+    } else {
+      // Older mobile clients cannot supply an address ID. Keep them compatible by selecting
+      // the saved default while updated clients explicitly send the user's chosen address.
+      row=rows.getFirst();
+    }
     Map<String,Object> snapshot=new LinkedHashMap<>();
+    snapshot.put("billingAddressId",((Number)row.get("id")).longValue());
+    snapshot.put("billingAddressLabel",row.get("label"));
     snapshot.put("billingType",row.get("billing_type"));
     snapshot.put("legalName",row.get("legal_name"));
     snapshot.put("gstin",row.get("gstin"));
@@ -867,12 +946,65 @@ public class CourseMarketplaceController {
     } catch(Exception ex) {
       throw new IllegalStateException("The purchaser billing address snapshot could not be read.",ex);
     }
-    snapshot.put("contactEmail",row.get("contact_email"));
-    snapshot.put("contactPhone",row.get("contact_phone"));
-    snapshot.put("billingProfileVersion",row.get("profile_version"));
+    List<Map<String,Object>> accountRows=jdbc.queryForList("""
+      select coalesce(p.version,0) as profile_version,
+        coalesce(a.contact_email,u.contact_email,u.email) as contact_email,
+        coalesce(a.contact_phone,u.mobile_e164) as contact_phone
+      from user_account u
+      left join billing_customer_profile p on p.user_account_id=u.id
+      left join billing_customer_address a on a.id=? and a.user_account_id=u.id
+      where u.id=? and u.active=true
+      """,row.get("id"),userAccountId);
+    if(accountRows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
+    Map<String,Object> account=accountRows.getFirst();
+    snapshot.put("contactEmail",account.get("contact_email"));
+    snapshot.put("contactPhone",account.get("contact_phone"));
+    snapshot.put("billingProfileVersion",account.get("profile_version"));
     String beneficiaryName=jdbc.queryForObject("select display_name from student where id=?",String.class,beneficiaryStudentId);
     snapshot.put("beneficiaryName",beneficiaryName);
     return snapshot;
+  }
+
+  private void requireCompleteBillingSnapshot(Map<String,Object> snapshot) {
+    if(snapshot.get("billingAddressId")==null) {
+      throw new IllegalArgumentException("Add a complete billing address in My Profile before paying for a course.");
+    }
+    Object raw=snapshot.get("billingAddress");
+    if(!(raw instanceof Map<?,?> address)) {
+      throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
+    }
+    for(String required:List.of("line1","city","state","postalCode")) {
+      Object value=address.get(required);
+      if(value==null||String.valueOf(value).isBlank()) {
+        throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
+      }
+    }
+  }
+
+  private void requireSameBillingAddressChoice(Map<String,Object> prior,Map<String,Object> requestedSnapshot) {
+    Object raw=prior.get("buyer_snapshot_json");
+    if(raw==null||String.valueOf(raw).isBlank()||"{}".equals(String.valueOf(raw).trim())) return;
+    try {
+      Map<String,Object> saved=objectMapper.readValue(String.valueOf(raw),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+      Object savedId=saved.get("billingAddressId");
+      Object requestedId=requestedSnapshot.get("billingAddressId");
+      if(savedId!=null) {
+        // A legacy client recovering an old order may have no address-book row anymore.
+        // In that case never replace the immutable order snapshot with a different address.
+        if(requestedId==null) return;
+        if(!String.valueOf(savedId).equals(String.valueOf(requestedId))) {
+          throw new IllegalStateException("A checkout for a different billing address is still open. Finish or reconcile that order before changing the billing address.");
+        }
+        return;
+      }
+      // Orders created before address IDs existed retain their original immutable snapshot.
+      // Do not block their recovery just because the live profile changed later.
+    } catch(IllegalStateException ex) {
+      throw ex;
+    } catch(Exception ex) {
+      throw new IllegalStateException("The saved order's billing address could not be checked safely. Reconcile this order before retrying.",ex);
+    }
   }
 
   private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
@@ -882,7 +1014,8 @@ public class CourseMarketplaceController {
           discount_snapshot::text as discount_snapshot_json,
           tax_profile_id,revenue_share_policy_id,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
-          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
+          buyer_snapshot::text as buyer_snapshot_json
         from course_payment_order
         where student_id=? and institution_id=? and course_id=?
           and purchaser_user_id is not distinct from ?
@@ -1301,9 +1434,10 @@ public class CourseMarketplaceController {
           "This existing checkout is missing its locked financial snapshots and Razorpay has not confirmed it is safe to continue. The saved order was left unchanged; do not pay again. Retry after provider status settles or ask HRMS to reconcile this order.");
     }
 
+    Map<String,Object> repairBuyerSnapshot = preserveLegacyBuyerSnapshot(localOrder,buyerSnapshot);
     CourseOrderFinancialService.CheckoutSnapshot snapshot =
         courseOrderFinancialService.prepareCheckout(
-            institutionOfferId,institutionId,listedPricePaise,currency,title,buyerSnapshot,null);
+            institutionOfferId,institutionId,listedPricePaise,currency,title,repairBuyerSnapshot,null);
     long savedPayable=((Number)localOrder.get("offer_price_paise")).longValue();
     String savedCurrency=String.valueOf(localOrder.get("currency"));
     Object savedListedPrice=localOrder.get("listed_price_paise");
@@ -1324,7 +1458,7 @@ public class CourseMarketplaceController {
     String shareSnapshotJson;
     String discountSnapshotJson;
     try {
-      buyerSnapshotJson=objectMapper.writeValueAsString(buyerSnapshot);
+      buyerSnapshotJson=objectMapper.writeValueAsString(repairBuyerSnapshot);
       taxSnapshotJson=objectMapper.writeValueAsString(snapshot.taxCalculationSnapshot());
       shareSnapshotJson=objectMapper.writeValueAsString(snapshot.revenueSharePolicySnapshot());
       discountSnapshotJson=objectMapper.writeValueAsString(snapshot.discountSnapshot());
@@ -1849,9 +1983,12 @@ public class CourseMarketplaceController {
   }
 
   public record VerifyCoursePaymentRequest(String paymentId, String orderId, String signature) {}
-  public record CourseOrderRequest(String discountCode) {}
-  public record FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode) {
-    public FamilyCourseOrderRequest(String recipientType, Long studentId) { this(recipientType,studentId,null); }
+  public record CourseOrderRequest(String discountCode, Long billingAddressId) {
+    public CourseOrderRequest(String discountCode) { this(discountCode,null); }
+  }
+  public record FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode, Long billingAddressId) {
+    public FamilyCourseOrderRequest(String recipientType, Long studentId) { this(recipientType,studentId,null,null); }
+    public FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode) { this(recipientType,studentId,discountCode,null); }
   }
   public record SaveCourseOfferRequest(String title, String description, long pricePaise, String currency, String status) {}
 }

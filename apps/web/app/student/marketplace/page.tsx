@@ -12,7 +12,7 @@ import { UiText } from '../../i18n/useUiTranslation';
 import { useLocale } from '../../components/LanguageProvider';
 import { localizeMarketplaceError } from '../../components/marketplaceI18n';
 import StudentEmptyState from '../components/StudentEmptyState';
-import BillingProfileEditor from '../../components/BillingProfileEditor';
+import BillingProfileEditor, { BillingAddressSelection, type BillingAddressRecord } from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 
@@ -101,6 +101,31 @@ export default function StudentMarketplacePage() {
   const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
   const [verifying, setVerifying] = useState(false);
   const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequestStatus[]>([]);
+  const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
+  const [billingAddressesLoading, setBillingAddressesLoading] = useState(true);
+  const [checkoutCourseId, setCheckoutCourseId] = useState<number | null>(null);
+  const [selectedBillingAddressId, setSelectedBillingAddressId] = useState<number | null>(null);
+  const syncBillingAddresses = useCallback((rows: BillingAddressRecord[], addressLoading: boolean) => {
+    setBillingAddresses(rows);
+    setBillingAddressesLoading(addressLoading);
+  }, []);
+
+  const refreshBillingAddressBook = useCallback(async () => {
+    setBillingAddressesLoading(true);
+    try {
+      const rows = await readJson(await apiFetch('/api/v1/marketplace/billing-addresses', {
+        credentials: 'same-origin', cache: 'no-store',
+        headers: { 'Accept': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+      }));
+      setBillingAddresses(Array.isArray(rows) ? rows as BillingAddressRecord[] : []);
+    } catch (error: any) {
+      setStatus(localizeMarketplaceError(error?.message, language,
+        'Billing addresses could not be refreshed.', 'Billing addresses refresh नहीं हो सके।'));
+    } finally {
+      setBillingAddressesLoading(false);
+    }
+  }, [language]);
+
 
   const loadOffers = useCallback(async () => {
     setLoading(true);
@@ -233,7 +258,29 @@ export default function StudentMarketplacePage() {
     }
   }, [loadOffers, loadPurchaseRequests, router, english]);
 
-  async function buyCourse(courseId: number) {
+  function requestCheckout(courseId: number) {
+    if (billingAddressesLoading) {
+      setStatus(tx('Billing addresses are still loading. Please retry in a moment.', 'Billing addresses अभी load हो रहे हैं। थोड़ी देर बाद फिर कोशिश करें।'));
+      return;
+    }
+    if (billingAddresses.length === 0) {
+      setStatus(tx('Add a complete billing address in My Profile before checkout.', 'Checkout से पहले My Profile में पूरा billing address जोड़ें।'));
+      return;
+    }
+    if (billingAddresses.length === 1) {
+      const address = billingAddresses[0].billingAddress || {};
+      if (!address.line1?.trim() || !address.city?.trim() || !address.state?.trim() || !address.postalCode?.trim()) {
+        setStatus(tx('Complete your billing address in My Profile before checkout.', 'Checkout से पहले My Profile में billing address पूरा करें।'));
+        return;
+      }
+      void buyCourse(courseId, billingAddresses[0].id);
+      return;
+    }
+    setCheckoutCourseId(courseId);
+    setSelectedBillingAddressId((billingAddresses.find(address => address.is_default) || billingAddresses[0]).id);
+  }
+
+  async function buyCourse(courseId: number, billingAddressId: number) {
     if (pendingVerify) {
       setStatus(tx('A previous payment still needs verification. Retry verification before starting another checkout.', 'पिछले भुगतान की पुष्टि बाकी है। नया checkout शुरू करने से पहले उसी order की जाँच करें।'));
       return;
@@ -253,7 +300,7 @@ export default function StudentMarketplacePage() {
           'Content-Type': 'application/json',
           'Idempotency-Key': crypto.randomUUID(),
         },
-        body: JSON.stringify({ discountCode: discountCode.trim() || null }),
+        body: JSON.stringify({ discountCode: discountCode.trim() || null, billingAddressId }),
       })) as CheckoutResponse;
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
           !order.keyId || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0 || order.currency !== 'INR') {
@@ -376,8 +423,26 @@ export default function StudentMarketplacePage() {
         </div>
         <p>{tx('Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.', 'Offer code केवल उसी course और institution पर लागू होगा जिसे HRMS ने मंज़ूरी दी है। भुगतान और tax की गणना server पर होती है।')}</p>
       </section>
-      <BillingProfileEditor workspace="STUDENT" english={english} />
+      {offers.some(offer => Number(offer.price_paise) > 0 && offer.currency === 'INR' &&
+        !offer.parent_managed && !offer.has_access && !offer.purchased) &&
+        <BillingProfileEditor workspace="STUDENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />}
       <InvoiceDownloads workspace="STUDENT" english={english} />
+      {checkoutCourseId !== null && (
+        <BillingAddressSelection
+          addresses={billingAddresses}
+          selectedAddressId={selectedBillingAddressId}
+          onSelect={setSelectedBillingAddressId}
+          profileHref="/student/profile"
+          onRefreshAddresses={() => { void refreshBillingAddressBook(); }}
+          onCancel={() => setCheckoutCourseId(null)}
+          onConfirm={() => {
+            const courseId = checkoutCourseId;
+            const addressId = selectedBillingAddressId;
+            setCheckoutCourseId(null);
+            if (addressId !== null) void buyCourse(courseId, addressId);
+          }}
+        />
+      )}
       {purchaseRequests.length > 0 && (
         <section className={styles.requestHistory} aria-labelledby="qe-purchase-request-history">
           <div className={styles.requestHistoryHeading}>
@@ -473,7 +538,7 @@ export default function StudentMarketplacePage() {
                       {busyCourseId === offer.course_id ? tx('Adding…', 'जोड़ा जा रहा है…') : tx('Add free course', 'निःशुल्क कोर्स जोड़ें')}
                     </button>
                   ) : (
-                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => void buyCourse(offer.course_id)}>
+                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => requestCheckout(offer.course_id)}>
                       {pendingVerify ? tx('Verify previous payment first', 'पहले पिछले भुगतान की पुष्टि करें') : busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy course', 'कोर्स खरीदें')}
                     </button>
                   )}

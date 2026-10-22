@@ -473,6 +473,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var marketplaceLoading by remember { mutableStateOf(false) }
     var marketplaceLoadFailed by remember { mutableStateOf(false) }
     var marketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var studentBillingAddresses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var studentBillingAddressesLoading by remember { mutableStateOf(false) }
+    var studentBillingAddressesError by remember { mutableStateOf("") }
+    var studentBillingAddressesStatus by remember { mutableStateOf("") }
     var pendingStudentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
     var pendingParentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -487,6 +491,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentMarketplaceLoading by remember { mutableStateOf(false) }
     var parentMarketplaceLoadFailed by remember { mutableStateOf(false) }
     var parentMarketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var parentBillingAddresses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentBillingAddressesLoading by remember { mutableStateOf(false) }
+    var parentBillingAddressesError by remember { mutableStateOf("") }
+    var parentBillingAddressesStatus by remember { mutableStateOf("") }
     var archivedChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -795,6 +803,120 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }
         }
     }
+
+    fun billingAddressEndpoint(workspace: String) =
+        if (workspace == "PARENT") "/api/v1/marketplace/family/billing-addresses"
+        else "/api/v1/marketplace/billing-addresses"
+
+    suspend fun fetchBillingAddresses(workspace: String): List<JSONObject> {
+        ApiClient.setWorkspace(workspace)
+        return ApiClient.getArray(billingAddressEndpoint(workspace)).objectItems()
+    }
+
+    fun setBillingAddresses(workspace: String, addresses: List<JSONObject>) {
+        if (workspace == "PARENT") {
+            parentBillingAddresses = addresses
+            parentBillingAddressesError = ""
+        } else {
+            studentBillingAddresses = addresses
+            studentBillingAddressesError = ""
+        }
+    }
+
+    fun setBillingAddressError(workspace: String, message: String) {
+        if (workspace == "PARENT") parentBillingAddressesError = message
+        else studentBillingAddressesError = message
+    }
+
+    fun setBillingAddressStatus(workspace: String, message: String) {
+        if (workspace == "PARENT") parentBillingAddressesStatus = message
+        else studentBillingAddressesStatus = message
+    }
+
+    fun setBillingAddressLoading(workspace: String, value: Boolean) {
+        if (workspace == "PARENT") parentBillingAddressesLoading = value
+        else studentBillingAddressesLoading = value
+    }
+
+    fun refreshBillingAddresses(workspace: String) {
+        setBillingAddressLoading(workspace, true)
+        runTask {
+            try {
+                setBillingAddresses(workspace, fetchBillingAddresses(workspace))
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                setBillingAddressLoading(workspace, false)
+            }
+        }
+    }
+
+    fun saveBillingAddress(workspace: String, addressId: Long?, body: JSONObject, onComplete: (Boolean) -> Unit) {
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                ApiClient.setWorkspace(workspace)
+                val endpoint = billingAddressEndpoint(workspace)
+                val response = if (addressId == null) {
+                    ApiClient.postArray(endpoint, body)
+                } else {
+                    ApiClient.putArray(endpoint + "/" + addressId, body)
+                }
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Billing address save हो गया।" else "Billing address saved.")
+                onComplete(true)
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing address save नहीं हो सका।" else "Billing address could not be saved.")
+                onComplete(false)
+            }
+        }
+    }
+
+    fun makeDefaultBillingAddress(workspace: String, addressId: Long) {
+        if (addressId <= 0L || busy) return
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                ApiClient.setWorkspace(workspace)
+                val response = ApiClient.putArray(billingAddressEndpoint(workspace) + "/" + addressId + "/default", JSONObject())
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Default billing address update हो गया।" else "Default billing address updated.")
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Default address update नहीं हो सका।" else "Default address could not be updated.")
+            }
+        }
+    }
+
+    fun deleteBillingAddress(workspace: String, addressId: Long) {
+        if (addressId <= 0L || busy) return
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                ApiClient.setWorkspace(workspace)
+                val response = ApiClient.deleteArray(billingAddressEndpoint(workspace) + "/" + addressId)
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Billing address हटा दिया गया।" else "Billing address deleted.")
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing address delete नहीं हो सका।" else "Billing address could not be deleted.")
+            }
+        }
+    }
+
+    fun saveStudentBillingAddress(addressId: Long?, body: JSONObject, onComplete: (Boolean) -> Unit) =
+        saveBillingAddress("STUDENT", addressId, body, onComplete)
+    fun saveParentBillingAddress(addressId: Long?, body: JSONObject, onComplete: (Boolean) -> Unit) =
+        saveBillingAddress("PARENT", addressId, body, onComplete)
+    fun makeDefaultStudentBillingAddress(addressId: Long) = makeDefaultBillingAddress("STUDENT", addressId)
+    fun makeDefaultParentBillingAddress(addressId: Long) = makeDefaultBillingAddress("PARENT", addressId)
+    fun deleteStudentBillingAddress(addressId: Long) = deleteBillingAddress("STUDENT", addressId)
+    fun deleteParentBillingAddress(addressId: Long) = deleteBillingAddress("PARENT", addressId)
 
     suspend fun refreshStudentPrograms() {
         val response = runCatching {
@@ -1305,7 +1427,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun refreshMarketplace() {
         marketplaceLoading = true
         marketplaceLoadFailed = false
+        studentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("STUDENT")
             try {
                 marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
                 marketplaceLoadFailed = false
@@ -1314,6 +1438,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 marketplaceLoadFailed = true
             } finally {
                 marketplaceLoading = false
+            }
+            try {
+                setBillingAddresses("STUDENT", fetchBillingAddresses("STUDENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("STUDENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                studentBillingAddressesLoading = false
             }
         }
     }
@@ -1335,7 +1467,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun refreshParentMarketplace() {
         parentMarketplaceLoading = true
         parentMarketplaceLoadFailed = false
+        parentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("PARENT")
             try {
                 loadParentMarketplaceData()
             } catch (exception: Exception) {
@@ -1343,6 +1477,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 throw exception
             } finally {
                 parentMarketplaceLoading = false
+            }
+            try {
+                setBillingAddresses("PARENT", fetchBillingAddresses("PARENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("PARENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                parentBillingAddressesLoading = false
             }
         }
     }
@@ -1438,7 +1580,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L, discountCode: String = "") {
+    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L, discountCode: String = "", billingAddressId: Long) {
         if (pendingParentPaymentVerification != null) {
             error = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1457,7 +1599,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         parentMarketplaceBusyCourseId = courseId
         runTask {
             try {
-                val body = JSONObject().put("recipientType", recipientType)
+                val body = JSONObject().put("recipientType", recipientType).put("billingAddressId", billingAddressId)
                 if (recipientType == "CHILD") body.put("studentId", studentId)
                 if (discountCode.isNotBlank()) body.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
@@ -1552,7 +1694,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun purchaseMarketplaceCourse(courseId: Long, discountCode: String = "") {
+    fun purchaseMarketplaceCourse(courseId: Long, discountCode: String = "", billingAddressId: Long) {
         if (pendingStudentPaymentVerification != null) {
             status = if (language == "hi") "पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले इसे सत्यापित करें।"
                 else "A previous payment still needs verification. Retry verification before starting another checkout."
@@ -1567,7 +1709,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         marketplaceBusyCourseId = courseId
         runTask {
             try {
-                val checkoutBody = JSONObject()
+                val checkoutBody = JSONObject().put("billingAddressId", billingAddressId)
                 if (discountCode.isNotBlank()) checkoutBody.put("discountCode", discountCode.trim().uppercase(Locale.ROOT))
                 val order = ApiClient.postObject(
                     "/api/v1/marketplace/courses/" + courseId + "/orders",
@@ -3119,13 +3261,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openStudentProfile() {
         route = AppRoute.PROFILE
+        studentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("STUDENT")
             studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }?.let { savedLanguage ->
                     learningLanguage = savedLanguage
                     preferences.edit().putString("contentLanguage", savedLanguage).apply()
                 }
+            try {
+                setBillingAddresses("STUDENT", fetchBillingAddresses("STUDENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("STUDENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                studentBillingAddressesLoading = false
+            }
             route = AppRoute.PROFILE
         }
     }
@@ -3266,8 +3418,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
         fun openParentProfile() {
         route = AppRoute.PARENT_PROFILE
+        parentBillingAddressesLoading = true
         runTask {
+            ApiClient.setWorkspace("PARENT")
             parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
+            try {
+                setBillingAddresses("PARENT", fetchBillingAddresses("PARENT"))
+            } catch (exception: Exception) {
+                setBillingAddressError("PARENT", exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                parentBillingAddressesLoading = false
+            }
             route = AppRoute.PARENT_PROFILE
         }
     }
@@ -4184,11 +4346,33 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 }
             }
 
+            val studentBillingBindings = BillingAddressBookBindings(
+                addresses = studentBillingAddresses,
+                loading = studentBillingAddressesLoading,
+                error = studentBillingAddressesError,
+                status = studentBillingAddressesStatus,
+                onSave = ::saveStudentBillingAddress,
+                onMakeDefault = ::makeDefaultStudentBillingAddress,
+                onDelete = ::deleteStudentBillingAddress,
+                onOpenProfile = ::openStudentProfile
+            )
+            val parentBillingBindings = BillingAddressBookBindings(
+                addresses = parentBillingAddresses,
+                loading = parentBillingAddressesLoading,
+                error = parentBillingAddressesError,
+                status = parentBillingAddressesStatus,
+                onSave = ::saveParentBillingAddress,
+                onMakeDefault = ::makeDefaultParentBillingAddress,
+                onDelete = ::deleteParentBillingAddress,
+                onOpenProfile = ::openParentProfile
+            )
+
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 saveableStateHolder.SaveableStateProvider("$stateOwnerKey:${route.name}") {
-                when (route) {
-                    AppRoute.WELCOME -> WelcomeScreen(
+                    @Composable
+                    fun renderWelcomeRoute() {
+                        WelcomeScreen(
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         onStudentLogin = { loginMode = "STUDENT"; error = ""; status = ""; route = AppRoute.LOGIN },
@@ -4196,7 +4380,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onPrivacy = { openPublicPage("/privacy") },
                         onTerms = { openPublicPage("/terms") }
                     )
-                    AppRoute.LOGIN -> LoginScreen(
+                    }
+                    @Composable
+                    fun renderLoginRoute() {
+                        LoginScreen(
                         language = language,
                         initialMode = loginMode,
                         onToggleLanguage = ::toggleLanguage,
@@ -4210,7 +4397,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onAccountSignup = { route = AppRoute.ACCOUNT_SIGNUP },
                         onResetPassword = { route = AppRoute.PARENT_RESET }
                     )
-                    AppRoute.ACCOUNT_SIGNUP -> AccountSignupScreen(
+                    }
+                    @Composable
+                    fun renderAccountSignupRoute() {
+                        AccountSignupScreen(
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         busy = busy,
@@ -4221,7 +4411,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onVerify = ::verifyAccountSignupOtp,
                         onBackToLogin = { route = AppRoute.LOGIN }
                     )
-                    AppRoute.PARENT_SIGNUP -> ParentOtpFlowScreen(
+                    }
+                    @Composable
+                    fun renderParentSignupRoute() {
+                        ParentOtpFlowScreen(
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         isSignup = true,
@@ -4230,7 +4423,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRequestOtp = { mobile, callback -> requestParentOtp("SIGNUP", mobile, callback) },
                         onVerify = { mobile, name, otp, password -> verifyParentOtp("SIGNUP", mobile, name, otp, password) }
                     )
-                    AppRoute.PARENT_RESET -> ParentOtpFlowScreen(
+                    }
+                    @Composable
+                    fun renderParentResetRoute() {
+                        ParentOtpFlowScreen(
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         isSignup = false,
@@ -4239,7 +4435,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRequestOtp = { mobile, callback -> requestParentOtp("PASSWORD_RESET", mobile, callback) },
                         onVerify = { mobile, name, otp, password -> verifyParentOtp("PASSWORD_RESET", mobile, name, otp, password) }
                     )
-                    AppRoute.STUDENT_HOME -> StudentHomeScreen(
+                    }
+                    @Composable
+                    fun renderStudentHomeRoute() {
+                        StudentHomeScreen(
                         userName = auth.textAny("displayName", "display_name"),
                         profile = studentProfile,
                         recommendation = recommendation,
@@ -4277,7 +4476,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
                         onClasses = ::openClasses
                     )
-                    AppRoute.ALL_COURSES -> StudentAllCoursesScreen(
+                    }
+                    @Composable
+                    fun renderAllCoursesRoute() {
+                        StudentAllCoursesScreen(
                         programs = studentPrograms,
                         programsLoaded = studentProgramsLoaded,
                         programsLoadFailed = studentProgramsLoadFailed,
@@ -4290,14 +4492,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onMarketplace = ::openMarketplace,
                         onRefresh = { runTask { refreshStudentPrograms() } }
                     )
-                    AppRoute.MARKETPLACE -> StudentMarketplaceScreen(
+                    }
+                    @Composable
+                    fun renderMarketplaceRoute() {
+                        StudentMarketplaceScreen(
                         offers = marketplaceOffers,
                         loading = marketplaceLoading,
                         loadFailed = marketplaceLoadFailed,
                         language = language,
                         busyCourseId = marketplaceBusyCourseId.takeIf { it > 0L },
                         busy = busy || marketplaceBusyCourseId > 0L,
-                        onBuy = { courseId, code -> purchaseMarketplaceCourse(courseId, code) },
+                        billing = studentBillingBindings,
+                        onBuy = { courseId, code, billingAddressId -> purchaseMarketplaceCourse(courseId, code, billingAddressId) },
                         onJoinFree = ::joinFreeMarketplaceCourse,
                         onAskParent = ::requestParentCoursePurchase,
                         onRefresh = ::refreshMarketplace,
@@ -4305,7 +4511,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         pendingVerification = pendingStudentPaymentVerification != null,
                         onRetryVerification = { retryPendingCoursePayment("STUDENT") }
                     )
-                    AppRoute.PARENT_HOME -> ParentHomeScreen(
+                    }
+                    @Composable
+                    fun renderParentHomeRoute() {
+                        ParentHomeScreen(
                         parent = parentAccount,
                         children = parentChildren,
                         section = parentSection,
@@ -4324,7 +4533,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onLogout = ::logout,
                         maxChildren = parentAccount.optInt("maxChildren", 3)
                     )
-                    AppRoute.ACCOUNT_IDENTITY -> AccountIdentitySettingsScreen(
+                    }
+                    @Composable
+                    fun renderAccountIdentityRoute() {
+                        AccountIdentitySettingsScreen(
                         profile = accountIdentityProfile,
                         profileImage = headerPhotoBitmap,
                         language = language,
@@ -4339,7 +4551,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onAccountLifecycle = ::openAccountLifecycle,
                         onBack = ::goBack
                     )
-                    AppRoute.PARENT_COURSES -> ParentCourseMarketplaceScreen(
+                    }
+                    @Composable
+                    fun renderParentCoursesRoute() {
+                        ParentCourseMarketplaceScreen(
                         offers = parentMarketplaceOffers,
                         requests = parentCourseRequests,
                         entitlements = parentCourseEntitlements,
@@ -4351,8 +4566,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         busyCourseId = parentMarketplaceBusyCourseId,
                         error = error,
                         status = status,
+                        billing = parentBillingBindings,
                         onRefresh = ::refreshParentMarketplace,
-                        onBuy = { courseId, recipientType, studentId, code -> purchaseFamilyMarketplaceCourse(courseId, recipientType, studentId, code) },
+                        onBuy = { courseId, recipientType, studentId, code, billingAddressId ->
+                            purchaseFamilyMarketplaceCourse(courseId, recipientType, studentId, code, billingAddressId)
+                        },
                         onAddFree = ::addFreeFamilyCourse,
                         onDismissRequest = ::dismissParentCourseRequest,
                         onTransfer = ::transferParentCourse,
@@ -4370,7 +4588,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         pendingVerification = pendingParentPaymentVerification != null,
                         onRetryVerification = { retryPendingCoursePayment("PARENT") }
                     )
-                    AppRoute.PARENT_REPORT -> ParentReportScreen(
+                    }
+                    @Composable
+                    fun renderParentReportRoute() {
+                        ParentReportScreen(
                         report = parentReport,
                         children = parentChildren,
                         language = language,
@@ -4381,21 +4602,31 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onViewCertificate = ::viewParentCertificate,
                         onDownloadCertificate = ::downloadParentCertificate
                     )
-                    AppRoute.PARENT_PROFILE -> ParentProfileScreen(
+                    }
+                    @Composable
+                    fun renderParentProfileRoute() {
+                        ParentProfileScreen(
                         profile = parentProfile,
                         language = language,
                         busy = busy,
                         onSave = ::saveParentProfile,
                         onUploadPhoto = ::saveParentPhoto,
                         onRemovePhoto = ::removeParentPhoto,
-                        onLogout = ::logout
+                        onLogout = ::logout,
+                        billing = parentBillingBindings
                     )
-                    AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
+                    }
+                    @Composable
+                    fun renderParentChildCreateRoute() {
+                        ParentChildCreateScreen(
                         busy = busy,
                         remainingSlots = parentAccount.optInt("remainingSlots", 1),
                         onCreate = ::createChild
                     )
-                    AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
+                    }
+                    @Composable
+                    fun renderParentChildManageRoute() {
+                        ParentChildManageScreen(
                         child = selectedChild,
                         courses = selectedChildCourses,
                         language = language,
@@ -4406,14 +4637,20 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpenMarketplace = ::openParentCourses,
                         onArchive = ::archiveSelectedChild
                     )
-                    AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
+                    }
+                    @Composable
+                    fun renderParentChildArchivedRoute() {
+                        ParentArchivedChildrenScreen(
                         children = archivedChildren,
                         busy = busy,
                         error = error,
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
-                    AppRoute.SUBJECT_LESSONS -> StudentCourseLearningScreen(
+                    }
+                    @Composable
+                    fun renderSubjectLessonsRoute() {
+                        StudentCourseLearningScreen(
                         noEnrolledCourses = studentHasNoCourses(),
                         structuredLessonMode = structuredLessonMode,
                         structuredLessons = structuredLessons,
@@ -4441,7 +4678,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onOpenLegacyLesson = ::openLesson,
                         onOpenStructuredLessons = ::openStructuredLessons
                     )
-                    AppRoute.LESSON -> if (studentHasNoCourses()) {
+                    }
+                    @Composable
+                    fun renderLessonRoute() {
+                        if (studentHasNoCourses()) {
                         StudentEnrollmentEmptyState(
                             icon = "▤",
                             title = localizedUiText("Choose a course to open this lesson"),
@@ -4493,7 +4733,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onStructuredQuestionSubmit = ::submitStructuredQuestionResponse,
                         onStructuredActivitySave = ::saveStructuredActivityResponse
                     )
-                    AppRoute.PRACTICE -> PracticeScreen(
+                    }
+                    @Composable
+                    fun renderPracticeRoute() {
+                        PracticeScreen(
                         practice = practice,
                         answers = answers,
                         feedbacks = feedbacks,
@@ -4507,7 +4750,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onComplete = { route = AppRoute.LESSON },
                         onProgress = ::openProgress
                     )
-                    AppRoute.DIAGNOSTIC -> if (studentHasNoCourses()) {
+                    }
+                    @Composable
+                    fun renderDiagnosticRoute() {
+                        if (studentHasNoCourses()) {
                         StudentEnrollmentEmptyState(
                             icon = "◎",
                             title = localizedUiText("Start with an enrolled course"),
@@ -4527,7 +4773,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onSubmit = ::submitDiagnostic,
                         onRefresh = ::openDiagnostic
                     )
-                    AppRoute.ASSESSMENTS -> AssessmentListScreen(
+                    }
+                    @Composable
+                    fun renderAssessmentsRoute() {
+                        AssessmentListScreen(
                         noEnrolledCourses = studentHasNoCourses(),
                         subject = assessmentSubjectFilter,
                         assessmentItems = assessments,
@@ -4545,7 +4794,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = { openAssessments(assessmentSubjectFilter) },
                         onMarketplace = ::openMarketplace
                     )
-                    AppRoute.ASSESSMENT_ATTEMPT -> AssessmentAttemptScreen(
+                    }
+                    @Composable
+                    fun renderAssessmentAttemptRoute() {
+                        AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
@@ -4564,7 +4816,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         }
                     )
-                    AppRoute.ASSESSMENT_RESULTS -> if (studentHasNoCourses()) {
+                    }
+                    @Composable
+                    fun renderAssessmentResultsRoute() {
+                        if (studentHasNoCourses()) {
                         StudentEnrollmentEmptyState(
                             icon = "▤",
                             title = localizedUiText("Your results will appear here"),
@@ -4587,7 +4842,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onDownloadCertificate = ::downloadResultCertificate,
                         onViewCertificate = ::viewResultCertificate
                     )
-                    AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
+                    }
+                    @Composable
+                    fun renderAssessmentReviewRoute() {
+                        AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
@@ -4606,7 +4864,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         }
                     )
-                    AppRoute.RESOURCES -> ResourcesScreen(
+                    }
+                    @Composable
+                    fun renderResourcesRoute() {
+                        ResourcesScreen(
                         noEnrolledCourses = studentHasNoCourses(),
                         documents = documents,
                         subject = resourceSubjectFilter,
@@ -4623,7 +4884,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = { openResources(resourceSubjectFilter) },
                         onMarketplace = ::openMarketplace
                     )
-                    AppRoute.DOCUMENT_READER -> DocumentReaderScreen(
+                    }
+                    @Composable
+                    fun renderDocumentReaderRoute() {
+                        DocumentReaderScreen(
                         document = selectedDocument,
                         page = documentPage,
                         image = documentImage,
@@ -4645,7 +4909,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRetry = ::retryDocumentPage,
                         onDownload = { downloadDocument(selectedDocument) }
                     )
-                    AppRoute.PROFILE -> StudentProfileScreen(
+                    }
+                    @Composable
+                    fun renderProfileRoute() {
+                        StudentProfileScreen(
                         profile = studentProfile,
                         language = language,
                         busy = busy,
@@ -4653,9 +4920,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onUploadPhoto = ::saveStudentPhoto,
                         onRemovePhoto = ::removeStudentPhoto,
                         onAccountLifecycle = ::openAccountLifecycle,
-                        onLogout = ::logout
+                        onLogout = ::logout,
+                        billing = studentBillingBindings
                     )
-                    AppRoute.ACCOUNT_LIFECYCLE -> AccountLifecycleScreen(
+                    }
+                    @Composable
+                    fun renderAccountLifecycleRoute() {
+                        AccountLifecycleScreen(
                         data = accountLifecycle,
                         language = language,
                         busy = busy,
@@ -4668,7 +4939,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRequestParentReview = ::requestParentEligibilityReview,
                         onTransitionToParent = ::transitionToParentAccount
                     )
-                    AppRoute.PROGRESS -> StudentProgressScreen(
+                    }
+                    @Composable
+                    fun renderProgressRoute() {
+                        StudentProgressScreen(
                         noEnrolledCourses = studentHasNoCourses(),
                         data = progressData,
                         language = language,
@@ -4680,7 +4954,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onViewCertificate = ::viewResultCertificate,
                         onMarketplace = ::openMarketplace
                     )
-                    AppRoute.CERTIFICATES -> StudentCertificatesScreen(
+                    }
+                    @Composable
+                    fun renderCertificatesRoute() {
+                        StudentCertificatesScreen(
                         language = language,
                         courseId = currentCourseId,
                         noEnrolledCourses = studentHasNoCourses(),
@@ -4695,7 +4972,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onAllCourses = ::openAllCourses,
                         onBack = ::openProgress
                     )
-                    AppRoute.LEADERBOARD -> if (studentHasNoCourses()) {
+                    }
+                    @Composable
+                    fun renderLeaderboardRoute() {
+                        if (studentHasNoCourses()) {
                         StudentEnrollmentEmptyState(
                             icon = "♛",
                             title = localizedUiText("Leaderboard needs an enrolled course"),
@@ -4707,7 +4987,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         language = language,
                         onBack = { route = AppRoute.STUDENT_HOME }
                     )
-                    AppRoute.TUTOR -> TutorScreen(
+                    }
+                    @Composable
+                    fun renderTutorRoute() {
+                        TutorScreen(
                         lessonTitle = lesson.textAny("title"),
                         learningLanguage = learningContentLanguage,
                         sessionId = tutorSession.longAny("sessionId", "session_id"),
@@ -4725,7 +5008,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRetry = ::retryTutorConnection,
                         onClose = { tutorOpen = false; tutorMinimized = false; tutorScopeLessonId = 0L }
                     )
-                    AppRoute.CLASSES -> if (liveBroadcastVideoId.isNotBlank()) {
+                    }
+                    @Composable
+                    fun renderClassesRoute() {
+                        if (liveBroadcastVideoId.isNotBlank()) {
                         LiveBroadcastPlayerScreen(
                             title = liveBroadcastTitle,
                             videoId = liveBroadcastVideoId,
@@ -4763,7 +5049,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         noEnrolledCourses = studentHasNoCourses(),
                         onMarketplace = ::openMarketplace
                     )
-                    AppRoute.RECORDING_PLAYER -> RecordedPlayerScreen(
+                    }
+                    @Composable
+                    fun renderRecordingPlayerRoute() {
+                        RecordedPlayerScreen(
                         recording = selectedRecording,
                         startPositionSeconds = selectedRecording.optLongAny("last_position_seconds", "lastPositionSeconds"),
                         onSaveProgress = ::saveRecordingProgress,
@@ -4771,6 +5060,43 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         offlineFile = offlineVideoStore.completedFileForRecording(
                             selectedRecording.longAny("recorded_class_id", "recordingId", "id"))
                     )
+                    }
+
+                when (route) {
+                    AppRoute.WELCOME -> renderWelcomeRoute()
+                    AppRoute.LOGIN -> renderLoginRoute()
+                    AppRoute.ACCOUNT_SIGNUP -> renderAccountSignupRoute()
+                    AppRoute.PARENT_SIGNUP -> renderParentSignupRoute()
+                    AppRoute.PARENT_RESET -> renderParentResetRoute()
+                    AppRoute.STUDENT_HOME -> renderStudentHomeRoute()
+                    AppRoute.ALL_COURSES -> renderAllCoursesRoute()
+                    AppRoute.MARKETPLACE -> renderMarketplaceRoute()
+                    AppRoute.PARENT_HOME -> renderParentHomeRoute()
+                    AppRoute.ACCOUNT_IDENTITY -> renderAccountIdentityRoute()
+                    AppRoute.PARENT_COURSES -> renderParentCoursesRoute()
+                    AppRoute.PARENT_REPORT -> renderParentReportRoute()
+                    AppRoute.PARENT_PROFILE -> renderParentProfileRoute()
+                    AppRoute.PARENT_CHILD_CREATE -> renderParentChildCreateRoute()
+                    AppRoute.PARENT_CHILD_MANAGE -> renderParentChildManageRoute()
+                    AppRoute.PARENT_CHILD_ARCHIVED -> renderParentChildArchivedRoute()
+                    AppRoute.SUBJECT_LESSONS -> renderSubjectLessonsRoute()
+                    AppRoute.LESSON -> renderLessonRoute()
+                    AppRoute.PRACTICE -> renderPracticeRoute()
+                    AppRoute.DIAGNOSTIC -> renderDiagnosticRoute()
+                    AppRoute.ASSESSMENTS -> renderAssessmentsRoute()
+                    AppRoute.ASSESSMENT_ATTEMPT -> renderAssessmentAttemptRoute()
+                    AppRoute.ASSESSMENT_RESULTS -> renderAssessmentResultsRoute()
+                    AppRoute.ASSESSMENT_REVIEW -> renderAssessmentReviewRoute()
+                    AppRoute.RESOURCES -> renderResourcesRoute()
+                    AppRoute.DOCUMENT_READER -> renderDocumentReaderRoute()
+                    AppRoute.PROFILE -> renderProfileRoute()
+                    AppRoute.ACCOUNT_LIFECYCLE -> renderAccountLifecycleRoute()
+                    AppRoute.PROGRESS -> renderProgressRoute()
+                    AppRoute.CERTIFICATES -> renderCertificatesRoute()
+                    AppRoute.LEADERBOARD -> renderLeaderboardRoute()
+                    AppRoute.TUTOR -> renderTutorRoute()
+                    AppRoute.CLASSES -> renderClassesRoute()
+                    AppRoute.RECORDING_PLAYER -> renderRecordingPlayerRoute()
                 }
                 }
                     if (route == AppRoute.LESSON &&

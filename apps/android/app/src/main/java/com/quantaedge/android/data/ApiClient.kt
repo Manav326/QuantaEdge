@@ -67,6 +67,12 @@ object ApiClient {
         JSONObject(request(path, "GET", null, additionalHeaders).toString(StandardCharsets.UTF_8))
     suspend fun getArray(path: String): JSONArray =
         JSONArray(request(path, "GET", null).toString(StandardCharsets.UTF_8))
+    suspend fun postArray(path: String, body: JSONObject): JSONArray =
+        JSONArray(request(path, "POST", body.toString()).toString(StandardCharsets.UTF_8))
+    suspend fun putArray(path: String, body: JSONObject): JSONArray =
+        JSONArray(request(path, "PUT", body.toString()).toString(StandardCharsets.UTF_8))
+    suspend fun deleteArray(path: String): JSONArray =
+        JSONArray(request(path, "DELETE", null).toString(StandardCharsets.UTF_8))
     suspend fun postObject(path: String, body: JSONObject = JSONObject()): JSONObject =
         JSONObject(request(path, "POST", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun postObject(path: String, body: JSONObject, additionalHeaders: Map<String, String>): JSONObject =
