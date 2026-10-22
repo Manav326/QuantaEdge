@@ -11,8 +11,8 @@
     "assets_selected": 1328,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1323,
-    "assets_remaining": 755,
+    "assets_analyzed": 1324,
+    "assets_remaining": 754,
     "assets_completion_percent": 63.7,
     "assets_failed": 28,
     "assets_skipped_from_checkpoint": 1323,
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:08:32Z"
+      "checkpointed_at": "2026-10-22T09:17:52Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:09:37Z"
+      "checkpointed_at": "2026-10-22T09:18:51Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:10:47Z"
+      "checkpointed_at": "2026-10-22T09:19:52Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:11:35Z"
+      "checkpointed_at": "2026-10-22T09:20:36Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44356,6 +44356,38 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "ec135070cb7293165cb33c45",
+      "asset_sha256": "62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 136,
+      "asset_path": "assets/62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02621ef4e2bce627cb660730ae04f0f02c8f04591ad5d5f6a13169a066d975dc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "classification",
+          "properties",
+          "materials"
+        ],
+        "context_relation": "The image is related to the text about materials and their properties.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T09:22:11Z"
     }
   ]
 }

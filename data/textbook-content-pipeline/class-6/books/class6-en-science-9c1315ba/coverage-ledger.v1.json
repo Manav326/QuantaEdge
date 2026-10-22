@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1355,
-    "successful_visual_analyses": 1327,
-    "missing_visual_analyses": 723,
+    "raw_analysis_result_rows": 1356,
+    "successful_visual_analyses": 1328,
+    "missing_visual_analyses": 722,
     "failed_visual_analyses": 28,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 751,
+    "unresolved_count": 750,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50880,9 +50880,22 @@
       "asset_path": "assets/62a07d9c79a95637025ecc62e7ebbb4eec5ee486db5b2835c3126b1adcf43c40.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "classification",
+          "properties",
+          "materials"
+        ],
+        "context_relation": "The image is related to the text about materials and their properties.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
