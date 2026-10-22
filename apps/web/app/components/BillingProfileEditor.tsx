@@ -54,7 +54,7 @@ function addressLines(a:BillingAddressRecord){
 }
 
 export default function BillingProfileEditor({
-  workspace,english=true,placement='marketplace',onAddressesChange
+  workspace,placement='marketplace',onAddressesChange
 }:{
   workspace:Workspace;
   english?:boolean;
@@ -160,7 +160,7 @@ export default function BillingProfileEditor({
         headers:{'X-QE-Workspace':workspace,'Accept':'application/json'}
       }));
       if(!Array.isArray(rows)) throw new Error(text('billing.deleteError'));
-      publish(rows as BillingAddressRecord[]);
+      setAddresses(rows as BillingAddressRecord[]);
       if(rows.length===0&&placement==='marketplace'){setDraft({...EMPTY});setEditingId(null);setFormOpen(true);}
       setNotice(text('billing.deleteSuccess'));
     }catch(e){setError(e instanceof Error?e.message:text('billing.deleteError'));}
@@ -263,14 +263,14 @@ export default function BillingProfileEditor({
 }
 
 export function BillingAddressSelection({
-  addresses,selectedAddressId,onSelect,onConfirm,onCancel,english=true
+  addresses,selectedAddressId,onSelect,onConfirm,onCancel,profileHref
 }:{
   addresses:BillingAddressRecord[];
   selectedAddressId:number|null;
   onSelect:(id:number)=>void;
   onConfirm:()=>void;
   onCancel:()=>void;
-  english?:boolean;
+  profileHref:string;
 }){
   const t=useUiTranslation();
   const text=(key:string)=>t(key);
