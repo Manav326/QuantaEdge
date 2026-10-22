@@ -23,7 +23,7 @@
 .divider{height:1px;width:100%;border:0;background:var(--qe-color-border-subtle,var(--line,#d9e0e8));margin:2px 0}
 .spacer{height:12px}
 .ctaRow{display:flex;flex-wrap:wrap;gap:9px}
-.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 15px;border:1px solid var(--qe-color-accent,var(--brand,#c45c16));border-radius:11px;background:var(--qe-color-accent,var(--brand,#c45c16));color:#fff;text-decoration:none;font-size:13px;font-weight:750;box-shadow:0 5px 14px rgba(25,37,54,.08);transition:transform .16s ease,box-shadow .16s ease}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 15px;border:1px solid var(--qe-color-accent,var(--brand,#c45c16));border-radius:11px;background:var(--qe-color-accent,var(--brand,#c45c16));color:var(--qe-notification-on-accent,#fff);text-decoration:none;font-size:13px;font-weight:750;box-shadow:0 5px 14px rgba(25,37,54,.08);transition:transform .16s ease,box-shadow .16s ease}
 .cta:hover{transform:translateY(-1px);box-shadow:0 8px 19px rgba(25,37,54,.13)}
 .container{display:grid;gap:12px;min-width:0}.carousel{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 0 8px;scroll-snap-type:x mandatory}.carousel>*{flex:0 0 min(84%,320px);scroll-snap-align:start}
 .footer{padding-top:9px;border-top:1px solid var(--qe-color-border-subtle,var(--line,#d9e0e8));font-size:11px;color:var(--qe-color-text-muted,var(--muted,#5b6779))}
@@ -42,3 +42,9 @@
 .editorBlock:hover .editorBlockHandle,.selectedEditorBlock .editorBlockHandle{opacity:1}
 .editorBlock .cta{pointer-events:none}
 @media(prefers-reduced-motion:reduce){.editorBlock{transition:none}}
+
+
+/* Authored block colors belong to the delivered notification, not the editor theme. */
+.document [style*="--qe-authored-background-color"]{background-color:var(--qe-authored-background-color)!important}
+.document [style*="--qe-authored-text-color"],
+.document [style*="--qe-authored-text-color"] :is(h1,h2,h3,h4,p,span,strong,small,em,li,figcaption,footer){color:var(--qe-authored-text-color)!important}

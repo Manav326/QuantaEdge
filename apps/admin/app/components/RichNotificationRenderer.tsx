@@ -120,6 +120,18 @@ function Destination({ target, label, surface, editMode = false }: { target: unk
     : <Link className={className} href={href}>{label}</Link>;
 }
 
+function contrastForeground(hex: string): string {
+  const value = hex.replace('#', '');
+  const expanded = value.length === 3 ? value.split('').map(part => part + part).join('') : value;
+  const channel = (position: number) => {
+    const raw = parseInt(expanded.slice(position, position + 2), 16) / 255;
+    return raw <= 0.04045 ? raw / 12.92 : Math.pow((raw + 0.055) / 1.055, 2.4);
+  };
+  const luminance = 0.2126 * channel(0) + 0.7152 * channel(2) + 0.0722 * channel(4);
+  const ratio = (a: number, b: number) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  return ratio(luminance, 1) >= ratio(luminance, 0.018) ? '#ffffff' : '#172637';
+}
+
 function blockPresentationStyle(block: Block): CSSProperties {
   const color = (value: unknown): string | undefined =>
     typeof value === 'string' && /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(value) ? value : undefined;
@@ -128,18 +140,16 @@ function blockPresentationStyle(block: Block): CSSProperties {
   const foreground = color(block.textColor);
   const accent = color(block.accentColor);
   const alignment = String(block.alignment || '');
-  if (background) style.backgroundColor = background;
-  if (foreground) style.color = foreground;
-  if (['left','center','right','justify'].includes(alignment)) {
-    style.textAlign = alignment as CSSProperties['textAlign'];
-  }
+  if (background) { style.backgroundColor = background; Object.assign(style, {'--qe-authored-background-color': background}); }
+  if (foreground) { style.color = foreground; Object.assign(style, {'--qe-authored-text-color': foreground}); }
+  if (['left','center','right','justify'].includes(alignment)) style.textAlign = alignment as CSSProperties['textAlign'];
   const padding = Number(block.padding);
   if (Number.isFinite(padding) && padding >= 0 && padding <= 48) style.padding = padding + 'px';
   const radius = Number(block.borderRadius);
   if (Number.isFinite(radius) && radius >= 0 && radius <= 40) style.borderRadius = radius + 'px';
   const fontSize = Number(block.fontSize);
   if (Number.isFinite(fontSize) && fontSize >= 10 && fontSize <= 32) style.fontSize = fontSize + 'px';
-  if (accent) Object.assign(style, {'--qe-color-accent': accent});
+  if (accent) Object.assign(style, {'--qe-color-accent': accent, '--qe-notification-on-accent': contrastForeground(accent)});
   return style;
 }
 
@@ -240,7 +250,7 @@ export default function RichNotificationRenderer({
   if (!document || document.version !== 1 || !Array.isArray(document.blocks)) {
     return <div className={styles.invalid}>This notification uses a format this app cannot display.</div>;
   }
-  return <div className={styles.document + (editMode ? ' ' + styles.canvasDocument : '')}>
+  return <div data-qe-authored-notification="true" className={styles.document + (editMode ? ' ' + styles.canvasDocument : '')}>
     {document.blocks.map((block, index) => {
       if (!block || typeof block !== 'object') return null;
       const presentationStyle = blockPresentationStyle(block);

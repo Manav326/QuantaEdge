@@ -843,6 +843,35 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             </aside>
           </div>        </div>
 
+        <section className={styles.themePreviewSection} aria-label="Notification previews in light and dark appearance">
+          <header className={styles.themePreviewSectionHeader}>
+            <div><span className={styles.eyebrow}>DESIGN QUALITY CHECK</span><h2>See it in both appearances</h2>
+              <p>The same notification content appears in both views. Authored text, surface and accent colours stay intact, so you can assess contrast before sending.</p></div>
+            <span className={styles.previewComparisonBadge}>LIGHT <span aria-hidden="true">↔</span> DARK</span>
+          </header>
+          <div className={styles.themePreviewGrid}>
+            <article className={styles.themePreviewCard} data-preview-theme="light">
+              <div className={styles.themePreviewLabel}><span className={styles.themePreviewIndicator} aria-hidden="true">☀</span><div><strong>Light appearance</strong><small>Recipient preview</small></div><span className={styles.themePreviewTag}>LIGHT</span></div>
+              <div className={styles.themePreviewHost}>
+                <div className={styles.themePreviewMessageHeader}><span className={styles.themePreviewAppGlyph} aria-hidden="true">Q</span><div><strong>{title || 'Notification title'}</strong><small>{surface==='hrms'?'HRMS platform':surface==='institution'?'Your institution':'QuantaEdge Admin'} · Just now</small></div><span className={styles.themePreviewBell} aria-hidden="true">♧</span></div>
+                {summary ? <p className={styles.themePreviewSummary}>{summary}</p> : null}
+                <RichNotificationRenderer surface={surface} contentDocument={document} />
+                <div className={styles.themePreviewFooter}><span aria-hidden="true">✓</span> Preview only · not sent</div>
+              </div>
+            </article>
+            <article className={styles.themePreviewCard} data-preview-theme="dark">
+              <div className={styles.themePreviewLabel}><span className={styles.themePreviewIndicator} aria-hidden="true">☾</span><div><strong>Dark appearance</strong><small>Recipient preview</small></div><span className={styles.themePreviewTag}>DARK</span></div>
+              <div className={styles.themePreviewHost}>
+                <div className={styles.themePreviewMessageHeader}><span className={styles.themePreviewAppGlyph} aria-hidden="true">Q</span><div><strong>{title || 'Notification title'}</strong><small>{surface==='hrms'?'HRMS platform':surface==='institution'?'Your institution':'QuantaEdge Admin'} · Just now</small></div><span className={styles.themePreviewBell} aria-hidden="true">♧</span></div>
+                {summary ? <p className={styles.themePreviewSummary}>{summary}</p> : null}
+                <RichNotificationRenderer surface={surface} contentDocument={document} />
+                <div className={styles.themePreviewFooter}><span aria-hidden="true">✓</span> Preview only · not sent</div>
+              </div>
+            </article>
+          </div>
+          <p className={styles.themePreviewFootnote}>These views test readability in both recipient environments. They do not change the saved colours in your notification.</p>
+        </section>
+
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>04</span><div><h2>Preview, validate and send</h2><p>Delivery begins only after a successful server-side preview and confirmation.</p></div></div>
           <div className={styles.formGrid}>
