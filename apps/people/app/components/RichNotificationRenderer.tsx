@@ -9,6 +9,44 @@ type Surface = 'user' | 'admin' | 'hrms' | 'institution';
 type Block = Record<string, unknown> & { type?: string };
 type RichDocument = { version?: number; blocks?: Block[] };
 
+/**
+ * Older records and intermediate API clients may serialize the document twice or
+ * wrap it in a contentDocument/document envelope. Normalize those shapes at the
+ * display boundary while retaining the strict version-1 block allow-list below.
+ */
+function normalizeRichDocument(input: unknown): RichDocument | null {
+  let value: unknown = input;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (typeof value === 'string') {
+      const serialized = value.trim();
+      if (!serialized) return null;
+      try { value = JSON.parse(serialized) as unknown; }
+      catch { return null; }
+      continue;
+    }
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    const candidate = value as Record<string, unknown>;
+    let blocks = candidate.blocks;
+    if (typeof blocks === 'string') {
+      try { blocks = JSON.parse(blocks) as unknown; }
+      catch { return null; }
+    }
+    if (!Array.isArray(blocks)) {
+      const wrapped = candidate.contentDocument ?? candidate.content_document ?? candidate.document;
+      if (wrapped !== undefined) { value = wrapped; continue; }
+      return null;
+    }
+    const version = candidate.version;
+    // The API validator historically accepted the textual value "1". Treat it
+    // as the same schema version instead of rejecting otherwise valid content.
+    if (version !== undefined && version !== 1 && !(typeof version === 'string' && version.trim() === '1')) {
+      return null;
+    }
+    return { ...candidate, version: 1, blocks: blocks as Block[] };
+  }
+  return null;
+}
+
 function safeTarget(value: unknown): string | null {
   if (typeof value !== 'string') return null;
   const target = value.trim();
@@ -179,7 +217,9 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
       </div>;
     }
     default:
-      return null;
+      // Preserve supported sibling blocks when an older client encounters a
+      // block introduced by a newer content schema.
+      return <div className={styles.invalid} key={index}>Part of this notification is not supported by this app version.</div>;
   }
 }
 
@@ -194,8 +234,7 @@ export default function RichNotificationRenderer({
   onSelectBlock?: (index: number) => void;
   onReorderBlocks?: (fromIndex: number, toIndex: number) => void;
 }) {
-  const document = contentDocument && typeof contentDocument === 'object'
-    ? contentDocument as RichDocument : null;
+  const document = normalizeRichDocument(contentDocument);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
   if (!document || document.version !== 1 || !Array.isArray(document.blocks)) {
