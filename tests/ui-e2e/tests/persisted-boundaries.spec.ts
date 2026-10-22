@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { openQaDatabase, readPrivateJson, type QaFixture } from '../support/fixtures';
 
-test('persisted QA rows prove institution membership and explicit course assignment', async () => {
+test('[TEN-002][QA-001] persisted QA rows prove institution membership and explicit course assignment', async () => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   expect(fixture.runId).toMatch(/^[0-9a-f-]{36}$/i);
 
