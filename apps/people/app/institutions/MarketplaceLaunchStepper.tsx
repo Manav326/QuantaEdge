@@ -158,7 +158,7 @@ export default function MarketplaceLaunchStepper({
     const items = data?.items || [];
     return {
       total: items.length,
-      ready: items.filter(item => item.ready).length,
+      ready: items.filter(item => item.ready && item.offerStatus === 'APPROVED').length,
       published: items.filter(item => item.offerStatus === 'PUBLISHED').length,
     };
   }, [data]);
