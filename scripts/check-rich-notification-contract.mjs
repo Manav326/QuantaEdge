@@ -94,12 +94,12 @@ for (const required of [
 ]) {
   assert.ok(notificationService.includes(required), 'Cross-workspace inbox service is missing ' + required);
 }
-const notificationController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
+const receiverController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
 for (const required of [
   '/admin/notifications/inbox', '/hrms/notifications/inbox',
   'requireEducationStaffInboxActor(', 'hrmsInboxStaffId('
 ]) {
-  assert.ok(notificationController.includes(required), 'Cross-workspace inbox authorization is missing ' + required);
+  assert.ok(receiverController.includes(required), 'Cross-workspace inbox authorization is missing ' + required);
 }
 const adminInbox = read('apps/admin/app/components/StaffNotificationInbox.tsx');
 const peopleInbox = read('apps/people/app/components/StaffNotificationInbox.tsx');
