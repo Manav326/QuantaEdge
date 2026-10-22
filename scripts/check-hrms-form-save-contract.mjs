@@ -58,7 +58,7 @@ assert.ok(employeeDirectory.includes('notifyUser(') && employeeDirectory.include
   'Employee create/edit forms must use the central success notification.');
 assert.ok(employeeDirectory.includes('!editChanged') && employeeDirectory.includes('!draft.displayName.trim()'),
   'Employee forms must block meaningless submissions and unchanged edits.');
-assert.ok(employeeDirectory.includes('pattern="^\\\\+[1-9][0-9]{6,14}$"'),
+assert.ok(employeeDirectory.includes('pattern="^\\+[1-9][0-9]{6,14}$"'),
   'Optional phone fields must validate the E.164 format accepted by the backend.');
 
 const selfService = people('self-service/page.tsx');
