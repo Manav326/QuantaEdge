@@ -39,10 +39,20 @@ async function seedOnlyDisposableHrmsBootstrap(): Promise<void> {
 }
 
 async function loginHrmsThroughUi(page: Page, password: string): Promise<void> {
-  await page.goto(HRMS + '/login');
+  // Each persona must begin with a clean cookie jar. Browser origins on localhost share
+  // cookies across ports, so explicitly clear any inherited session before authentication.
+  await page.context().clearCookies();
+  await page.goto(HRMS + '/login', { waitUntil: 'domcontentloaded' });
+  await expect(page).toHaveURL(url => url.origin === new URL(HRMS).origin && url.pathname === '/login');
+  await expect(page.locator('#username'), 'A fresh HRMS context must show the actual login form.').toBeVisible();
   await page.locator('#username').fill('hrms_admin');
   await page.locator('#password').fill(password);
+  const loginWaiter = page.waitForResponse(response =>
+    response.request().method() === 'POST' &&
+    response.url().includes('/api/v1/auth/hrms-login'));
   await page.locator('form button.qe-people-button').click();
+  const loginResponse = await loginWaiter;
+  expect(loginResponse.status(), 'HRMS username/password login must be accepted before the forced password-change flow.').toBe(200);
 }
 
 async function setUpHrmsOwner(browser: Browser): Promise<string> {
