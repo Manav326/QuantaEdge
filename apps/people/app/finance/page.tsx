@@ -286,25 +286,45 @@ export default function FinancePage(){
   const createTaxProfile=async(event:FormEvent)=>{
     event.preventDefault();
     if(!taxForm.offerId||!taxForm.legalEntityId){setError('Choose both the course offer and legal seller.');return;}
+    const offerId=taxForm.offerId;
     const treatment=taxForm.taxTreatment;
     const gstBps=treatment==='TAXABLE'?Math.round(Number(taxForm.gstPercent)*100):0;
     const cessBps=treatment==='TAXABLE'?Math.round(Number(taxForm.cessPercent||0)*100):0;
-    const submitted=await action(async()=>{
-      const result=await api<{id:number}>(BASE+'/offers/'+taxForm.offerId+'/tax-profiles',{method:'POST',body:JSON.stringify({
-        legalEntityId:Number(taxForm.legalEntityId),serviceClassificationCode:taxForm.serviceClassificationCode||null,
+    setBusy(true);setError('');setNotice('');
+    try{
+      const created=await api<{id:number}>(BASE+'/offers/'+offerId+'/tax-profiles',{method:'POST',body:JSON.stringify({
+        legalEntityId:Number(taxForm.legalEntityId),serviceClassificationCode:taxForm.serviceClassificationCode.trim()||null,
         taxTreatment:treatment,gstRateBasisPoints:gstBps,cessRateBasisPoints:cessBps,
         priceIncludesTax:taxForm.priceIncludesTax,placeOfSupplyRule:taxForm.placeOfSupplyRule,
         effectiveFrom:asIso(taxForm.effectiveFrom),taxComponents:{}
       })});
-      await api(BASE+'/tax-profiles/'+result.id+'/submit',{method:'POST'});
-      setTaxProfiles(v=>({...v,[taxForm.offerId]:[...(v[taxForm.offerId]||[]),{id:result.id,status:'PENDING_APPROVAL'}]}));
-    },'Tax profile submitted for HRMS approval.');
-    if(submitted)setTaxForm(v=>({...v,serviceClassificationCode:'',gstPercent:'',cessPercent:''}));
+      // The draft now exists even if the separate submit step later fails.
+      setTaxForm(v=>({...v,serviceClassificationCode:'',gstPercent:'',cessPercent:''}));
+      await loadTaxProfiles(offerId);
+      let submitFailure:unknown=null;
+      try{await api(BASE+'/tax-profiles/'+created.id+'/submit',{method:'POST'});}
+      catch(cause){submitFailure=cause;}
+      const refreshed=await loadTaxProfiles(offerId);
+      const savedStatus=refreshed.find(row=>Number(row.id)===created.id)?.status;
+      if(!submitFailure||savedStatus==='PENDING_APPROVAL'){
+        setError('');notifyUser('Tax profile submitted for HRMS approval.','success');
+      }else{
+        const detail=submitFailure instanceof Error?submitFailure.message:'Submission could not be confirmed.';
+        const message='Tax profile draft #'+created.id+' was saved, but submission could not be confirmed. Refresh Saved tax profiles and use Submit if it is still a draft. Do not create it again. '+detail;
+        setError(message);notifyUser(message,'warning');
+      }
+    }catch(cause){
+      setError(cause instanceof Error?cause.message:'Tax profile draft could not be created.');
+    }finally{setBusy(false);}
   };
-  const loadTaxProfiles=async(offerId:string)=>{
-    if(!offerId)return;
-    try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));}
-    catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');}
+  const loadTaxProfiles=async(offerId:string):Promise<any[]>=>{
+    if(!offerId)return [];
+    try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));return rows;}
+    catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');return [];}
+  };
+  const submitTaxProfile=async(id:number,offerId:string)=>{
+    const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/submit',{method:'POST'}),'Tax profile submitted for HRMS approval.');
+    if(ok)await loadTaxProfiles(offerId);
   };
   useEffect(()=>{if(taxForm.offerId)void loadTaxProfiles(taxForm.offerId);},[taxForm.offerId]);
 
@@ -331,7 +351,19 @@ export default function FinancePage(){
         effectiveFrom:asIso(discountForm.effectiveFrom),
         effectiveUntil:discountForm.effectiveUntil?asIso(discountForm.effectiveUntil):null
       })});
-      await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});
+      // Clear the creation draft only after the server has created its durable record.
+      setDiscountForm(v=>({...v,code:'',percentage:'10',flatAmountRupees:'100',maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''}));
+      try{await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});}
+      catch(cause){
+        // A draft already exists; never make the user create it a second time to retry submission.
+        const latest=await api<DiscountOffer[]>(BASE+'/discounts').catch(()=>[]);
+        if(latest.length)setDiscounts(latest);
+        const saved=latest.find(row=>row.id===created.id);
+        if(saved?.status!=='PENDING_APPROVAL'){
+          const detail=cause instanceof Error?cause.message:'Submission could not be confirmed.';
+          throw new Error('Discount draft '+created.code+' was created, but submission could not be confirmed. Use its Submit action in the discount list; do not create it again. '+detail);
+        }
+      }
     },'Discount created and submitted for independent HRMS approval. It cannot be used until approved.');
     if(submitted)setDiscountForm(v=>({...v,code:'',percentage:'10',flatAmountRupees:'100',maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''}));
   };
@@ -356,8 +388,22 @@ export default function FinancePage(){
       ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
       :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
   };
-  const saveRecipients=()=>{
-    void action(async()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+  const recipientSnapshot=(rows:any[])=>JSON.stringify(rows.map(row=>({
+    institutionId:Number(row.institutionId??row.institution_id),
+    calculationType:String(row.calculationType??row.calculation_type),
+    percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
+    flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
+  })).sort((a,b)=>a.institutionId-b.institutionId));
+  const recipientsUnchanged=(()=>{
+    if(!policyDetail||!selectedPolicyId)return false;
+    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[]);}
+    catch{return false;}
+  })();
+  const saveRecipients=async()=>{
+    if(!selectedPolicyId||recipientsUnchanged)return;
+    const policyId=selectedPolicyId;
+    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+    if(saved)await loadPolicy(policyId);
   };
   const createTemplate=()=>{
     void action(async()=>{
@@ -531,7 +577,7 @@ export default function FinancePage(){
           </form>
         </div>
         <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
-          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
+          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
           {!taxProfiles[taxForm.offerId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
           <p className={styles.note}>Approval requires an active legal seller. Taxable treatment also requires an active, HRMS-verified GST registration for the effective date.</p>
         </div>
@@ -541,7 +587,7 @@ export default function FinancePage(){
           <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} ({o.offer_status})</option>)}</select></label>
           {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
-        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={saveRecipients} disabled={busy}>Save recipients</button>}</div>
+        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
           {policyDetail.status==='DRAFT'?<><p>Each institution receives either a percentage of the net distributable pool or a fixed amount per eligible paid sale. Duplicate institutions are not permitted.</p>
             <div className={styles.recipientList}>{recipients.map((r,i)=><div className={styles.recipientEditor} key={i}>
               <label>Institution<select value={r.institutionId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,institutionId:e.target.value}:x))}><option value="">Select institution</option>{catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)}</select></label>
