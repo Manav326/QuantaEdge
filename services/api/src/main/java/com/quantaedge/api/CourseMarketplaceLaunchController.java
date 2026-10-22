@@ -102,8 +102,11 @@ public class CourseMarketplaceLaunchController {
     @SuppressWarnings("unchecked")
     List<Map<String,Object>> checks=(List<Map<String,Object>>)base.get("checks");
     List<String> contentBlockers=new ArrayList<>();
+    List<String> courseReadinessCodes=List.of(
+        "INSTITUTION_ACTIVE","COURSE_ACTIVE","ASSIGNMENT_AND_RELEASE",
+        "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT");
     for(Map<String,Object> check:checks) {
-      if(!"OFFER_TERMS".equals(text(check.get("code")))
+      if(courseReadinessCodes.contains(text(check.get("code")))
           && !Boolean.TRUE.equals(check.get("passed"))) {
         contentBlockers.add(text(check.get("label"))+": "+text(check.get("message")));
       }
