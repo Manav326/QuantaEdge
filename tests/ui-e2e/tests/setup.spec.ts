@@ -118,19 +118,25 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
   const context = await browser.newContext({ storageState: hrmsStatePath });
   const page = await context.newPage();
 
+  // Register all network waiters before navigation: the page loads status, pack metadata,
+  // and run history concurrently, so awaiting one response before observing another can race.
   const gateWaiter = page.waitForResponse(response =>
     response.url().includes('/api/v1/hrms/platform/qa/status') && response.request().method() === 'GET');
+  const packsWaiter = page.waitForResponse(response =>
+    response.url().includes('/api/v1/hrms/platform/qa/packs') && response.request().method() === 'GET');
+  const runsWaiter = page.waitForResponse(response =>
+    response.url().includes('/api/v1/hrms/platform/qa/runs') &&
+    !response.url().includes('/api/v1/hrms/platform/qa/runs/') &&
+    response.request().method() === 'GET');
   await page.goto(HRMS + '/qa');
-  const gateResponse = await gateWaiter;
+  const [gateResponse, packsResponse, runsResponse] = await Promise.all([gateWaiter, packsWaiter, runsWaiter]);
   expect(gateResponse.status(), 'The HRMS QA Center gate must come from the running API.').toBe(200);
+  expect(packsResponse.status(), 'The HRMS QA Center pack list must come from the running API.').toBe(200);
+  expect(runsResponse.status(), 'The HRMS QA Center run history must come from the running API.').toBe(200);
   const gate = await gateResponse.json();
   expect(gate.writeAllowed, 'Only the explicitly approved disposable QA database may accept fixture writes.').toBe(true);
   expect(gate.currentDatabase).toBe(process.env.QE_E2E_TARGET_DATABASE || 'quantaedge_qa');
   expect(gate.productionProfileDetected).toBe(false);
-
-  const packsResponse = await page.waitForResponse(response =>
-    response.url().includes('/api/v1/hrms/platform/qa/packs') && response.request().method() === 'GET');
-  expect(packsResponse.status()).toBe(200);
   const packsBody = await packsResponse.json();
   const pack = (packsBody.items || []).find((item: any) => item.packKey === 'TENANT_LEARNER_BOUNDARY_V1');
   expect(pack, 'The server must advertise the supported versioned tenant/learner QA pack.').toBeTruthy();
