@@ -979,12 +979,8 @@ public class CourseMarketplaceController {
         }
         return;
       }
-      Object savedAddress=saved.get("billingAddress");
-      if(savedAddress!=null&&!java.util.Objects.equals(
-          objectMapper.writeValueAsString(savedAddress),
-          objectMapper.writeValueAsString(requestedSnapshot.get("billingAddress")))) {
-        throw new IllegalStateException("A checkout with different billing details is still open. Finish or reconcile that order before changing the billing address.");
-      }
+      // Orders created before address IDs existed retain their original immutable snapshot.
+      // Do not block their recovery just because the live profile changed later.
     } catch(IllegalStateException ex) {
       throw ex;
     } catch(Exception ex) {
