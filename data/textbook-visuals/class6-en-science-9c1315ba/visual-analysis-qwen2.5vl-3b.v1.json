@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1351,
+    "assets_selected": 1352,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 1347,
     "assets_remaining": 731,
     "assets_completion_percent": 64.8,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 1346,
+    "assets_skipped_from_checkpoint": 1347,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:13:16Z"
+      "checkpointed_at": "2026-10-22T23:24:52Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20124,7 +20124,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:14:58Z"
+      "checkpointed_at": "2026-10-22T23:26:36Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -32892,7 +32892,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -33830,9 +33830,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -34471,7 +34471,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
