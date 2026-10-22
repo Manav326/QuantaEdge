@@ -23,6 +23,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -895,7 +897,7 @@ public class CourseMarketplaceController {
           row=candidate;break;
         }
       }
-      if(row==null) throw new SecurityException("The selected billing address does not belong to the purchaser account.");
+      if(row==null) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The selected billing address does not belong to the purchaser account.");
     } else {
       // Older mobile clients cannot supply an address ID. Keep them compatible by selecting
       // the saved default while updated clients explicitly send the user's chosen address.
