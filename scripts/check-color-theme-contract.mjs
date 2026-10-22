@@ -373,6 +373,21 @@ console.log('HRMS exhaustive theme coverage: ' + peopleRouteFiles.length + ' rou
   peopleSharedComponents.length + ' shared components, ' + peopleInstitutionComponents.length +
   ' institution subcomponents, and ' + peopleModuleStyles.length + ' CSS modules.');
 
+
+assert(peopleAppearanceCss.includes('--surface-subtle: var(--qe-people-surface-subtle)') &&
+  peopleAppearanceCss.includes('--surface-hover: var(--qe-people-surface-hover)') &&
+  peopleAppearanceCss.includes('--qe-color-surface-subtle: var(--qe-people-surface-subtle)') &&
+  peopleAppearanceCss.includes('--qe-color-text: var(--qe-people-ink)'),
+  'Legacy and tokenized HRMS components must resolve their surfaces and text to the active appearance rather than fixed light fallbacks.');
+assert(peopleAppearanceCss.includes('--qe-color-primary: var(--qe-people-brand-strong)') &&
+  peopleAppearanceCss.includes('--qe-color-on-primary: var(--qe-people-on-brand)') &&
+  peopleAppearanceCss.includes('--qe-people-on-brand: #182337;'),
+  'Filled HRMS accent surfaces must use a contrast-safe foreground in dark mode without changing the QuantaEdge orange brand.');
+assert(peopleAppearanceCss.includes('[class*="selectedTag"]') &&
+  peopleAppearanceCss.includes('[class*="previewButton"]') &&
+  peopleAppearanceCss.includes('[class*="brandTemplateGenerated"]'),
+  'Theme editor and notification studio component actions, selection badges and generated-state panels must remain readable.');
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);
