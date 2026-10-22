@@ -115,9 +115,10 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   useEffect(() => {
     let alive = true;
     if (isSession) { setReady(true); return; }
-    setReady(false);
+    // Keep the authenticated shell mounted during App Router navigation.
+    // The gate starts closed on first load, then stays open while this lightweight
+    // route-change check runs; APIs continue enforcing the actual staff permissions.
     const check = async () => {
-      setReady(false);
       try {
         const response = await withSessionTimeout(apiFetch('/api/v1/auth/me', { cache: 'no-store' }));
         if (!alive) return;
