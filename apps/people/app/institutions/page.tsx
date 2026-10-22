@@ -6,6 +6,7 @@ import { notifyUser } from '../components/GlobalNotificationHost';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
+import MarketplaceLaunchStepper from './MarketplaceLaunchStepper';
 import InstitutionBrandTemplate from './InstitutionBrandTemplate';
 import PasswordField from '../components/PasswordField';
 
@@ -61,7 +62,7 @@ export default function InstitutionsAdminPage() {
   const [detail,setDetail]=useState<Detail|null>(null);
   const [roster,setRoster]=useState<Learner[]>([]);
   const [auditRows,setAuditRows]=useState<AuditEvent[]>([]);
-  const [tab,setTab]=useState<'summary'|'learners'|'audit'>('summary');
+  const [tab,setTab]=useState<'summary'|'marketplace'|'learners'|'audit'>('summary');
   const [query,setQuery]=useState('');
   const [showCreate,setShowCreate]=useState(false);
   const [showAdmin,setShowAdmin]=useState(false);
@@ -419,7 +420,7 @@ export default function InstitutionsAdminPage() {
             <label>Institution display name *<input required minLength={2} maxLength={180} value={profile.displayName} onChange={e=>setProfile(v=>({...v,displayName:e.target.value}))}/><small>The institution name is used as the white-label default unless a separate branded display name has been configured.</small></label>
             <label>Legal name<input maxLength={220} value={profile.legalName} onChange={e=>setProfile(v=>({...v,legalName:e.target.value}))}/><small>Optional; shown in institution operations and legal records.</small></label>
           </form>{profileDraftIssue()?<p className={styles.disclaimer} role="status">{profileDraftIssue()}</p>:!profileChanged?<p className={styles.disclaimer} role="status">No changes to save.</p>:null}</>:null}
-          <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
+          <nav className={styles.tabs} aria-label="Institution workspace">{([['summary','Settings'],['marketplace','Marketplace launch'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
           <section className={styles.panel}>
@@ -517,7 +518,7 @@ export default function InstitutionsAdminPage() {
             </>}
           </section>
 
-        </>:tab==='learners'?<section className={styles.panel}><h3>Institution learners</h3><p>Only records associated with this tenant are returned. The current profile stores city/state, not exact home address.</p><div className={styles.tableScroll}><table><thead><tr><th>Learner</th><th>Class</th><th>City/state</th><th>Membership</th><th>Progress</th></tr></thead><tbody>{roster.map((r,i)=><tr key={r.learner_reference||i}><td>{r.display_name}<small>{r.learner_reference}</small></td><td>{r.class_code||'—'}</td><td>{[r.city,r.state].filter(Boolean).join(', ')||'Not supplied'}</td><td>{r.membership_status}<small>{fmt(r.joined_at)}</small></td><td>{r.average_lesson_progress_percent||0}%<small>{r.completed_lessons||0} completed</small></td></tr>)}{!roster.length?<tr><td colSpan={5} className={styles.emptyCell}>No institution-linked learners yet.</td></tr>:null}</tbody></table></div></section>:<section className={styles.panel}><h3>Audit history</h3><p>Recent institutional lifecycle, access, branding and report events.</p><div className={styles.auditList}>{auditRows.map(row=><article key={row.id}><strong>{row.action.replaceAll('_',' ')}</strong><small>{row.target_type}{row.target_id?' · '+row.target_id:''} · {fmt(row.created_at)}</small><p>{typeof row.details==='string'?row.details:JSON.stringify(row.details||{})}</p></article>)}{!auditRows.length?<p className={styles.emptyText}>No audited events for this tenant.</p>:null}</div></section>}
+        </>:tab==='marketplace'?<MarketplaceLaunchStepper institutionId={detail.id} institutionName={detail.display_name}/>:tab==='learners'?<section className={styles.panel}><h3>Institution learners</h3><p>Only records associated with this tenant are returned. The current profile stores city/state, not exact home address.</p><div className={styles.tableScroll}><table><thead><tr><th>Learner</th><th>Class</th><th>City/state</th><th>Membership</th><th>Progress</th></tr></thead><tbody>{roster.map((r,i)=><tr key={r.learner_reference||i}><td>{r.display_name}<small>{r.learner_reference}</small></td><td>{r.class_code||'—'}</td><td>{[r.city,r.state].filter(Boolean).join(', ')||'Not supplied'}</td><td>{r.membership_status}<small>{fmt(r.joined_at)}</small></td><td>{r.average_lesson_progress_percent||0}%<small>{r.completed_lessons||0} completed</small></td></tr>)}{!roster.length?<tr><td colSpan={5} className={styles.emptyCell}>No institution-linked learners yet.</td></tr>:null}</tbody></table></div></section>:<section className={styles.panel}><h3>Audit history</h3><p>Recent institutional lifecycle, access, branding and report events.</p><div className={styles.auditList}>{auditRows.map(row=><article key={row.id}><strong>{row.action.replaceAll('_',' ')}</strong><small>{row.target_type}{row.target_id?' · '+row.target_id:''} · {fmt(row.created_at)}</small><p>{typeof row.details==='string'?row.details:JSON.stringify(row.details||{})}</p></article>)}{!auditRows.length?<p className={styles.emptyText}>No audited events for this tenant.</p>:null}</div></section>}
       </>}</section>
     </div>
     <footer className={styles.footer}><span>QuantaEdge platform operations · HRMS owner access only</span><span>API permission checks remain authoritative.</span></footer>
