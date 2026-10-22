@@ -471,7 +471,7 @@ public class PlatformInstitutionController {
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
       Map<String,Object> contentReadiness=jdbc.queryForMap("""
           select count(distinct ps.subject_id) as subject_count,
-            count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+            count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
             count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
           from curriculum_program_subject ps
           join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -538,8 +538,8 @@ public class PlatformInstitutionController {
           r.content_fingerprint,r.submitted_at,p.public_id,p.code as course_code,p.display_name,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           coalesce(b.display_name,t.display_name) as source_institution_name,
-          count(distinct ps.subject_id) as active_subject_count,
-          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct s.id) as active_subject_count,
+          count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE'
@@ -582,7 +582,7 @@ public class PlatformInstitutionController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     Map<String,Object> readiness=jdbc.queryForMap("""
         select count(distinct ps.subject_id) as subject_count,
-          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from curriculum_program_subject ps
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
