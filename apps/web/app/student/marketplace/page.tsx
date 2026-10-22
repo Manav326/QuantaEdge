@@ -12,7 +12,7 @@ import { UiText } from '../../i18n/useUiTranslation';
 import { useLocale } from '../../components/LanguageProvider';
 import { localizeMarketplaceError } from '../../components/marketplaceI18n';
 import StudentEmptyState from '../components/StudentEmptyState';
-import { BillingAddressSelection, BillingProfileEditor, type BillingAddressRecord } from '../../components/BillingProfileEditor';
+import BillingProfileEditor, { BillingAddressSelection, type BillingAddressRecord } from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 
