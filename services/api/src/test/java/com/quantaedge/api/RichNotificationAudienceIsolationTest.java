@@ -130,7 +130,7 @@ class RichNotificationAudienceIsolationTest {
             "class_code", "6", "institution_id", 202L, "institution_name", "Tenant B",
             "institution_code", "TENANT-B"))).when(jdbc).queryForList(
             contains("st.display_name as recipient_name"),
-            org.mockito.ArgumentMatchers.<Object[]>any());
+            eq(42L), eq(202L));
 
     Map<String, Object> audience = Map.of(
         "institutionIds", List.of(101L, 202L),
