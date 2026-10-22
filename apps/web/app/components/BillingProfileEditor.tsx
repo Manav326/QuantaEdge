@@ -188,7 +188,7 @@ export default function BillingProfileEditor({
             <strong>{selected.legal_name}</strong>
             {selected.is_default&&<span className={styles.defaultTag}>{text('billing.default')}</span>}
           </div>
-
+          <Link className={styles.editAddressButton} href={profileHref} aria-label={text('billing.editAddress')} title={text('billing.editAddress')}>✎</Link>
         </div>
         <address className={styles.postalAddress}>
           {addressLines(selected).map((line,index)=><span key={index}>{line}</span>)}
@@ -228,7 +228,7 @@ export default function BillingProfileEditor({
         </div>
       </article>)}
     </div>}
-    {placement==='profile'&&formOpen&&<form className={styles.form} onSubmit={submit}>
+    {((placement==='profile'&&formOpen)||(placement==='marketplace'&&addresses.length===0&&!loading))&&<form className={styles.form} onSubmit={submit}>
       <div className={styles.formHeading}><strong>{editingId===null?text('billing.formAddHeading'):text('billing.formEditHeading')}</strong>
         {!(placement==='marketplace'&&addresses.length===0)&&<button type="button" className={styles.closeFormButton} onClick={cancelEdit} disabled={saving} aria-label={text('billing.cancel')}>×</button>}
       </div>
