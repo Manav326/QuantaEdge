@@ -947,6 +947,19 @@ assert.ok(
   'Assessment controls must inherit the explicitly selected light/dark scheme, and raw scores must not receive an unconditional success state.'
 );
 
+
+const visualAuditInboxContrastCss = read('../app/components/NotificationInbox.module.css');
+const visualAuditBillingContrastCss = read('../app/components/BillingProfileEditor.module.css');
+const visualAuditEmptyStateContrastCss = read('../app/student/components/StudentEmptyState.module.css');
+assert.ok(
+  visualAuditInboxContrastCss.includes('var(--qe-color-accent-text,var(--qe-color-accent') &&
+  visualAuditInboxContrastCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditBillingContrastCss.includes('var(--qe-color-on-primary-container,var(--qe-color-primary-text') &&
+  visualAuditEmptyStateContrastCss.includes('var(--qe-color-primary-text, var(--qe-color-primary') &&
+  globals.includes('[class*="pushMedia"]'),
+  'Notification inbox labels, billing disclosure icons, empty-state icons, and shared institution editor labels must use contrast-aware semantic foreground tokens.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

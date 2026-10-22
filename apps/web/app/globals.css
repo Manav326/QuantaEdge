@@ -1982,3 +1982,19 @@ html[data-qe-appearance] .institution-portal :is(a[class*="cta"], button[class*=
   outline: 3px solid var(--qe-color-focus);
   outline-offset: 2px;
 }
+
+
+/* Notification Studio and Logo Graphics Lab share styles across workspaces;
+   tune their institution-portal foregrounds here rather than modifying shared files. */
+html[data-qe-appearance] .institution-portal :where(
+  [class*="eyebrow"],
+  [class*="sectionHeading"] > span,
+  [class*="previewButton"],
+  [class*="activeBlock"] > span,
+  [class*="elementButton"] span,
+  [class*="brandGlyph"],
+  [class*="pushMedia"],
+  [class*="inspectorHeading"] span
+) {
+  color: var(--qe-color-accent-text, var(--qe-color-primary-text));
+}
