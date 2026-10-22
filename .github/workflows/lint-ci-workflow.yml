@@ -1,0 +1,21 @@
+name: Validate CI workflow syntax
+
+on:
+  push:
+    branches: ["feat/reliable-ui-e2e-current-main-20261022"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: Lint the main CI workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate workflow syntax and expressions
+        uses: docker://rhysd/actionlint:1.7.7
+        with:
+          args: .github/workflows/ci.yml
