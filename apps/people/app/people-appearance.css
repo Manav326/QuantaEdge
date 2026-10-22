@@ -887,7 +887,7 @@ html[data-qe-people-appearance] [class*="Institutions_page__"] .primary:hover {
 }
 
 .qe-people-auth-language .qe-people-appearance-toggle {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 @media print {
