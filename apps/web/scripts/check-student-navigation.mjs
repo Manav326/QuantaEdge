@@ -850,6 +850,17 @@ assert.ok(
   'Notification badges and subject-scope focus indicators must respect tenant theme tokens; the rich renderer remains on its enforced shared stylesheet contract.'
 );
 
+
+const visualAuditPracticeAndMenuCss = read('../app/globals.css');
+assert.ok(
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] .qe-practice-header') &&
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] .qe-practice-notice') &&
+  visualAuditPracticeAndMenuCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditPracticeAndMenuCss.includes('html[data-qe-appearance] :where(.student-account-menu, .parent-account__menu)') &&
+  visualAuditPracticeAndMenuCss.includes('var(--qe-color-on-error-container)'),
+  'Practice question surfaces, notices, and both account menus must use institution-aware surface and contrast tokens in light and dark appearance.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

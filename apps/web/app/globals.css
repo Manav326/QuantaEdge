@@ -1890,3 +1890,53 @@ html[data-qe-appearance] .qe-session-gate {
     line-height: 1.35;
   }
 }
+
+
+/* Practice routes: separate the themed page canvas from elevated cards and notices. */
+html[data-qe-appearance] .qe-practice-page {
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--qe-color-primary-container) 50%, var(--qe-color-background)),
+      var(--qe-color-background) 70%
+    );
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .qe-practice-header {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-bottom: 1px solid var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .qe-practice-progress {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .qe-practice-notice {
+  background: var(--qe-color-primary-container);
+  border-color: var(--qe-color-focus);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-practice-notice > span {
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-practice-page .qe-practice-intro > p {
+  color: var(--qe-color-text-muted);
+}
+
+/* Account popovers use the same elevated surface on both sides of the theme toggle. */
+html[data-qe-appearance] :where(.student-account-menu, .parent-account__menu) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3, 0 18px 48px rgb(0 0 0 / 18%));
+}
+
+html[data-qe-appearance] :where(.student-account-menu__logout:hover, .parent-account__logout:hover) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+}
