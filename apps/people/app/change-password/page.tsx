@@ -4,6 +4,7 @@ import { apiFetch } from '../components/apiClient';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 import PasswordField from '../components/PasswordField';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
+import { PeopleAppearanceToggle } from '../components/PeopleAppearanceProvider';
 import { useUiTranslation, PeopleLanguageSwitcher } from '../i18n/UiLocaleProvider';
 
 import { FormEvent, useState } from 'react';
@@ -63,7 +64,7 @@ export default function ChangeHrmsPassword() {
       </aside>
       <section className="login-panel">
         <div className="login-card">
-          <div className="qe-people-auth-language"><PeopleLanguageSwitcher /></div>
+          <div className="qe-people-auth-language"><PeopleAppearanceToggle compact /><PeopleLanguageSwitcher /></div>
           <div className="eyebrow">{t('people.auth.passwordChangeRequired')}</div>
           <h2>{t('people.auth.newPasswordTitle')}</h2>
           <p>{t('people.auth.newPasswordInstructions')}</p>
