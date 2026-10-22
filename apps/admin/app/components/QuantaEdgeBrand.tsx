@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { useAdminTenantTheme } from './AdminThemeProvider';
 
 type BrandVariant = 'header' | 'compact' | 'footer' | 'auth';
@@ -25,7 +26,7 @@ export default function QuantaEdgeBrand({
     ? [brand?.displayName || (isResolving ? 'Institution identity loading' : 'Institution'), brand?.tagline].filter(Boolean).join(' — ')
     : PLATFORM_BRAND_LABEL;
 
-  let lockup;
+  let lockup: ReactNode;
   if (tenantContext) {
     const displayName = brand?.displayName || (isResolving ? 'Institution' : 'Institution');
     const tagline = brand?.tagline?.trim();
