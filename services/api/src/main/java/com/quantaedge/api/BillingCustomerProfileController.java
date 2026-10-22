@@ -248,7 +248,7 @@ public class BillingCustomerProfileController {
           "billingAddress","contactEmail","contactPhone")));
   }
 
-  private ProfileDraft validateSavedAddress(Map<String,Object> body) {
+  static ProfileDraft validateSavedAddress(Map<String,Object> body) {
     ProfileDraft draft=validateProfile(body);
     for(String key:List.of("line1","city","state","postalCode")) {
       if(optionalText(draft.billingAddress().get(key))==null) {
