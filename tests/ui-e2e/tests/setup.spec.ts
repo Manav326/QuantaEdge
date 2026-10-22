@@ -226,11 +226,19 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
   return fixture;
 }
 
+async function waitForSelectedInstitution(page: Page, institutionCode: string): Promise<void> {
+  await expect.poll(
+    () => page.evaluate(() => window.sessionStorage.getItem('qe.institution.brand-code.v1')),
+    { timeout: 20_000 }
+  ).toBe(institutionCode);
+}
+
 async function loginParent(browser: Browser, name: 'parentA' | 'parentB', credentials: QaFixture['credentials'][ 'parentA' ] | QaFixture['credentials'][ 'parentB' ]): Promise<void> {
   const context = await browser.newContext();
   const page = await context.newPage();
   const destination = WEB + '/login?institutionCode=' + encodeURIComponent(credentials.institutionCode);
   await page.goto(destination);
+  await waitForSelectedInstitution(page, credentials.institutionCode);
   await page.getByRole('tab').nth(1).click();
   await page.locator('input[autocomplete="username"]').fill(credentials.username);
   await page.locator('input[autocomplete="current-password"]').fill(credentials.password);
@@ -252,6 +260,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
   const page = await context.newPage();
   if (name === 'independentLearner') {
     await page.goto(WEB + '/login?institutionCode=' + encodeURIComponent(credentials.institutionCode));
+    await waitForSelectedInstitution(page, credentials.institutionCode);
     await page.getByRole('tab').nth(1).click();
     await page.locator('input[autocomplete="username"]').fill(credentials.username);
     await page.locator('input[autocomplete="current-password"]').fill(credentials.password);
@@ -264,6 +273,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   } else {
     await page.goto(WEB + '/login/student?institutionCode=' + encodeURIComponent(credentials.institutionCode));
+    await waitForSelectedInstitution(page, credentials.institutionCode);
     const identifiers = page.locator('input[autocomplete="username"]');
     await identifiers.nth(0).fill(String(parentIdentifier || credentials.parentMobile));
     await identifiers.nth(1).fill(credentials.username);
