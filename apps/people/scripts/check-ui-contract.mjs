@@ -101,7 +101,7 @@ const discoveredPeoplePages = findPeoplePageFiles('apps/people/app').sort();
 assert(discoveredPeoplePages.includes('apps/people/app/page.tsx') && discoveredPeoplePages.includes('apps/people/app/login/page.tsx'), 'Route discovery must include the HRMS workspace and public login.');
 for (const routePath of discoveredPeoplePages) {
   const pageSource = read(routePath);
-  assert(/export\\s+default/.test(pageSource), 'HRMS route ' + routePath.replace(/^apps\\/people\\/app/, '') + ' must retain its default route component.');
+  assert(/\bexport\s+default\b/.test(pageSource), 'HRMS route ' + routePath.replace(/^apps\/people\/app/, '') + ' must retain its default route component.');
 }
 
 const attendanceSource = read('apps/people/app/attendance/page.tsx');
