@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2c52b37eca3cde959c054ba4c592e1fa05fb2935838419af6945a6018f169d13",
+  "raw_analysis_sha256": "52d73f4add03ab93c947e5b03e061cbc01b37251e2170ea5d15c89f8c5c7c8fc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:26:25Z",
+      "checkpointed_at": "2026-10-22T08:33:04Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:27:27Z",
+      "checkpointed_at": "2026-10-22T08:34:05Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:28:33Z",
+      "checkpointed_at": "2026-10-22T08:35:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66641,6 +66641,98 @@
         "limitations": [
           "The image does not contain any text or labels that provide specific information about the lesson or topic."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "867668aaddc1e47dfeeac025",
+      "asset_sha256": "621893574d3304176929f9a1b79750fba3b4fb0a93235bcf377950f29d626f78",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/621893574d3304176929f9a1b79750fba3b4fb0a93235bcf377950f29d626f78.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with braided hair and a red ribbon, wearing a plaid shirt, gesturing with both hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "braided hair",
+          "red ribbon",
+          "plaid shirt",
+          "gesturing",
+          "hands"
+        ],
+        "context_relation": "The image is a visual representation of a character from a story or educational content, possibly discussing the concept of matter.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:36:45Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character with braided hair and a red ribbon, wearing a plaid shirt, gesturing with both hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "braided hair",
+          "red ribbon",
+          "plaid shirt",
+          "gesturing",
+          "hands"
+        ],
+        "context_relation": "The image is a visual representation of a character from a story or educational content, possibly discussing the concept of matter.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a8630debb06ef102685a224d",
+      "asset_sha256": "2e2a42e9fb2436eaa9988397259564833b0fef3c4222df63e8439d62389941a0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/2e2a42e9fb2436eaa9988397259564833b0fef3c4222df63e8439d62389941a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, horizontal band of bright yellow color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:38:17Z",
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal band of bright yellow color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

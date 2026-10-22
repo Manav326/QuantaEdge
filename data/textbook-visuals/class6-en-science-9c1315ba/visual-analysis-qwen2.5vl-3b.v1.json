@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1318,
+    "assets_selected": 1320,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1315,
-    "assets_remaining": 763,
-    "assets_completion_percent": 63.3,
+    "assets_analyzed": 1317,
+    "assets_remaining": 761,
+    "assets_completion_percent": 63.4,
     "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 1313,
+    "assets_skipped_from_checkpoint": 1315,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:26:25Z"
+      "checkpointed_at": "2026-10-22T08:33:04Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:27:27Z"
+      "checkpointed_at": "2026-10-22T08:34:05Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:28:33Z"
+      "checkpointed_at": "2026-10-22T08:35:08Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44070,6 +44070,68 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T08:31:47Z"
+    },
+    {
+      "asset_id": "867668aaddc1e47dfeeac025",
+      "asset_sha256": "621893574d3304176929f9a1b79750fba3b4fb0a93235bcf377950f29d626f78",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/621893574d3304176929f9a1b79750fba3b4fb0a93235bcf377950f29d626f78.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with braided hair and a red ribbon, wearing a plaid shirt, gesturing with both hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "braided hair",
+          "red ribbon",
+          "plaid shirt",
+          "gesturing",
+          "hands"
+        ],
+        "context_relation": "The image is a visual representation of a character from a story or educational content, possibly discussing the concept of matter.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:36:45Z"
+    },
+    {
+      "asset_id": "a8630debb06ef102685a224d",
+      "asset_sha256": "2e2a42e9fb2436eaa9988397259564833b0fef3c4222df63e8439d62389941a0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "assets/2e2a42e9fb2436eaa9988397259564833b0fef3c4222df63e8439d62389941a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, horizontal band of bright yellow color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:38:17Z"
     }
   ]
 }
