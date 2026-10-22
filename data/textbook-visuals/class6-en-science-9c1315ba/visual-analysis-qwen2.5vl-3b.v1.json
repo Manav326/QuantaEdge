@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1322,
+    "assets_selected": 1324,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1319,
-    "assets_remaining": 759,
+    "assets_analyzed": 1320,
+    "assets_remaining": 758,
     "assets_completion_percent": 63.5,
     "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 1317,
+    "assets_skipped_from_checkpoint": 1319,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:39:33Z"
+      "checkpointed_at": "2026-10-22T08:43:20Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:40:33Z"
+      "checkpointed_at": "2026-10-22T08:44:20Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:41:37Z"
+      "checkpointed_at": "2026-10-22T08:45:22Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44187,6 +44187,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T08:42:03Z"
+    },
+    {
+      "asset_id": "b2acda80284007304d94e6e4",
+      "asset_sha256": "f127f5f827e44fd97c0d92c921a359d89132e185521c9c8f0239f1ff83cb6a08",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 134,
+      "asset_path": "page-0134.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c7f7c53e5241eb266ef374339db1fe89c462e3f0b5fc0df6a786c64889b0589e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Can all the materials around us be\nconsidered as different examples of\nmatter? Discuss with your friends.\nFor example, water is matter, sand and\npebbles are matter and so is the cup.\nMaterials are types of matter used in the\ncreation or making of objects.\nWe learnt that materials look different\nand ",
+          "Think it over!"
+        ],
+        "concepts": [
+          "classification of materials",
+          "properties of materials",
+          "classification of living world",
+          "classification of non-living world",
+          "invention of plastic"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is in English and does not include images or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:49:47Z"
+    },
+    {
+      "asset_id": "fd51915e0c0e231b2f1aaabf",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 135,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3dfd1e5f581ede50f2e624b99ea2b0af0f95df9b9fe7be3058c718a853f9c164",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Ayurveda and its classification system.",
+        "limitations": [
+          "The image does not provide any numerical data or specific information about the properties of Ayurveda.",
+          "The image does not show any specific examples or applications of the properties.",
+          "The image does not depict any actions or processes related to the properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:51:32Z"
     }
   ]
 }

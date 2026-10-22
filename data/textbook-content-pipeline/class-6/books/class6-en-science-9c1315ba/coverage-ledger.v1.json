@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1349,
-    "successful_visual_analyses": 1322,
-    "missing_visual_analyses": 729,
+    "raw_analysis_result_rows": 1351,
+    "successful_visual_analyses": 1324,
+    "missing_visual_analyses": 727,
     "failed_visual_analyses": 27,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 756,
+    "unresolved_count": 754,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50715,9 +50715,27 @@
       "asset_path": "page-0134.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Can all the materials around us be\nconsidered as different examples of\nmatter? Discuss with your friends.\nFor example, water is matter, sand and\npebbles are matter and so is the cup.\nMaterials are types of matter used in the\ncreation or making of objects.\nWe learnt that materials look different\nand ",
+          "Think it over!"
+        ],
+        "concepts": [
+          "classification of materials",
+          "properties of materials",
+          "classification of living world",
+          "classification of non-living world",
+          "invention of plastic"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is in English and does not include images or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50733,9 +50751,20 @@
       "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Ayurveda and its classification system.",
+        "limitations": [
+          "The image does not provide any numerical data or specific information about the properties of Ayurveda.",
+          "The image does not show any specific examples or applications of the properties.",
+          "The image does not depict any actions or processes related to the properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
