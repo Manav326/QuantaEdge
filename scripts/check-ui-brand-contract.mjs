@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -236,31 +236,22 @@ assert(adminThemeProvider.includes('/api/v1/institution/public/branding/') && ad
 assert(adminBrandComponent.includes('brand?.logoUrl') && adminBrandComponent.includes('brand?.appIconUrl') && adminBrandComponent.includes('institutionCode'), 'Tenant Admin headers and sidebar must use the active institution full logo and square app icon, not a fixed platform logo.');
 assert(adminThemeStyles.includes('html[data-qe-appearance="dark"]') && adminThemeStyles.includes('.qe-admin-workspace-page-slot') && adminThemeStyles.includes('button[class*="primaryButton"]') && adminThemeStyles.includes(':focus-visible'), 'Shared Admin theme styles must cover dark surfaces, route content, tenant primary actions and visible keyboard focus.');
 
-const adminRoutePages = [
-  ['overview', 'apps/admin/app/page.tsx'],
-  ['account-lifecycle', 'apps/admin/app/account-lifecycle/page.tsx'],
-  ['assessments', 'apps/admin/app/assessments/page.tsx'],
-  ['certificates', 'apps/admin/app/certificates/page.tsx'],
-  ['classes', 'apps/admin/app/classes/page.tsx'],
-  ['content', 'apps/admin/app/content/page.tsx'],
-  ['employees', 'apps/admin/app/employees/page.tsx'],
-  ['learning-resources', 'apps/admin/app/learning-resources/page.tsx'],
-  ['legacy-content', 'apps/admin/app/legacy-content/page.tsx'],
-  ['login', 'apps/admin/app/login/page.tsx'],
-  ['marketplace', 'apps/admin/app/marketplace/page.tsx'],
-  ['notifications', 'apps/admin/app/notifications/page.tsx'],
-  ['parents', 'apps/admin/app/parents/page.tsx'],
-  ['questions', 'apps/admin/app/questions/page.tsx'],
-  ['resources', 'apps/admin/app/resources/page.tsx'],
-  ['session', 'apps/admin/app/session/page.tsx'],
-  ['source-ingestion', 'apps/admin/app/source-ingestion/page.tsx'],
-  ['structured-lesson-preview', 'apps/admin/app/structured-lesson-preview/page.tsx'],
-  ['students', 'apps/admin/app/students/page.tsx'],
-  ['translations', 'apps/admin/app/translations/page.tsx'],
-];
-for (const [route, path] of adminRoutePages) {
+function findAdminPageFiles(directory) {
+  const absoluteDirectory = join(root, directory);
+  if (!existsSync(absoluteDirectory)) return [];
+  return readdirSync(absoluteDirectory, { withFileTypes: true }).flatMap(entry => {
+    const childPath = directory + '/' + entry.name;
+    if (entry.isDirectory()) return findAdminPageFiles(childPath);
+    return /^page\\.(?:tsx|ts|jsx|js)$/.test(entry.name) ? [childPath] : [];
+  });
+}
+
+const adminRoutePages = findAdminPageFiles('apps/admin/app').sort();
+assert(adminRoutePages.includes('apps/admin/app/page.tsx'), 'The Admin overview route must be part of the route-wide theme audit.');
+assert(adminRoutePages.includes('apps/admin/app/login/page.tsx'), 'The Admin public sign-in route must be part of the route-wide theme audit.');
+for (const path of adminRoutePages) {
   const page = read(path);
-  assert(/export default/.test(page), 'Admin route /' + route + ' must retain its route component while inheriting the shared theme shell.');
+  assert(/export default/.test(page), 'Admin route ' + path.replace(/^apps\\/admin\\/app/, '') + ' must retain its route component while inheriting the shared theme shell.');
 }
 
 if (failures.length) {
