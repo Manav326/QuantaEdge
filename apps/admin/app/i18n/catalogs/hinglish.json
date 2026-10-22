@@ -451,6 +451,7 @@
   "admin.contentStudio.connectingCurriculum": "Curriculum से जुड़ रहे हैं",
   "admin.contentStudio.contentLibraryLoadFailed": "Content library या question counts load नहीं हुए। Administrator से sign in करके दोबारा कोशिश करें।",
   "admin.contentStudio.course": "Course",
+  "admin.contentStudio.courseSubjects": "Content वाले subjects",
   "admin.contentStudio.createChapterTitle": "Create a chapter",
   "admin.contentStudio.createDraft": "{kind} का draft बनाएँ",
   "admin.contentStudio.createFailed": "Content नहीं बन सका।",
