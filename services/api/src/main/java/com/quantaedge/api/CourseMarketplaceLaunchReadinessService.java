@@ -115,6 +115,8 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("institutionName",text(row.get("institution_name")));
     result.put("courseId",courseId);
     result.put("courseName",text(row.get("course_name")));
+    result.put("listingTitle",text(row.get("course_name")));
+    result.put("description","");
     result.put("offerStatus","NOT_CONFIGURED");
     result.put("pricePaise",null);
     result.put("currency","INR");
@@ -237,6 +239,8 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("institutionName",text(offer.get("institution_name")));
     result.put("courseId",courseId);
     result.put("courseName",courseName);
+    result.put("listingTitle",courseName);
+    result.put("description",text(offer.get("description")));
     result.put("offerStatus",text(offer.get("offer_status")));
     result.put("pricePaise",pricePaise);
     result.put("currency",currency);
