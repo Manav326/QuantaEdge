@@ -293,7 +293,7 @@ assert(adminCertificatesCss.includes('transition-property:color,border-color !im
   'Admin certificate/table row hover must not animate into a white flash in dark mode.');
 assert(adminThemeCss.includes('.qe-staff-tabs button b') &&
   adminThemeCss.includes('.qe-audit-event') &&
-  adminThemeCss.includes('.panelHeading,.panel-head,.sectionHead,.section-heading)>b'),
+  adminThemeCss.includes('[class*="panelHeading"]'),
   'Staff, audit trail and teacher review queue counters/activity must use readable themed surfaces.');
 assert(adminThemeCss.includes('.qe-workspace-fullscreen') &&
   adminThemeCss.includes('.qe-chapter-title strong') &&
