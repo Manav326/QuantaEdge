@@ -26,6 +26,10 @@ assert.ok(workforce.includes("(!candidate.email.trim()&&!candidate.phoneE164.tri
   'Candidate creation must require at least one contact method.');
 assert.ok(workforce.includes("setCandidate({fullName:'',email:'',phoneE164:'',vacancyId:'',notes:''})"),
   'Create-candidate flow must clear the saved draft.');
+assert.ok(workforce.includes('async function createReview') && workforce.includes("setReview({cycleId:'',employeeId:'',reviewerEmployeeId:''})"),
+  'Successful performance-review assignment must clear the saved draft.');
+assert.ok(workforce.includes('async function assignAsset') && workforce.includes("setAssign({assetId:'',employeeId:'',condition:'GOOD',note:'',expectedReturnDate:''})"),
+  'Successful asset assignment must clear the saved draft.');
 
 const attendance = people('attendance/page.tsx');
 assert.ok(attendance.includes("entriesJson:''") && attendance.includes('holidays.length===0'),
@@ -46,8 +50,16 @@ assert.ok(payroll.includes("!payDraft.providerReference.trim()"),
 const assignments = people('assignments/page.tsx');
 assert.ok(assignments.includes('savedWeeklyLimit') && assignments.includes('weeklyLimit===savedWeeklyLimit'),
   'Unchanged workload-policy values must not be resubmitted.');
-assert.ok(assignments.includes("setDraft(v=>({...v,employeeId:'',subjectId:'',replacesAssignmentId:'',assignmentNote:'',reason:''}))"),
-  'Successful assignment submission must clear the create/edit draft.');
+assert.ok(assignments.includes("setDraft({employeeId:'',subjectId:'',academicPeriodId:'',effectiveStart:'',effectiveEnd:'',replacesAssignmentId:'',assignmentNote:'',reason:''})"),
+  'Successful assignment submission and edit cancellation must clear every draft field.');
+
+const employeeDirectory = people('page.tsx');
+assert.ok(employeeDirectory.includes('notifyUser(') && employeeDirectory.includes('employee_number'),
+  'Employee create/edit forms must use the central success notification.');
+assert.ok(employeeDirectory.includes('!editChanged') && employeeDirectory.includes('!draft.displayName.trim()'),
+  'Employee forms must block meaningless submissions and unchanged edits.');
+assert.ok(employeeDirectory.includes('pattern="^\\\\+[1-9][0-9]{6,14}$"'),
+  'Optional phone fields must validate the E.164 format accepted by the backend.');
 
 const selfService = people('self-service/page.tsx');
 assert.ok(selfService.includes("setDraft(v=>({...v,startDate:'',endDate:'',reason:''}))"),
@@ -82,7 +94,7 @@ assert.ok(studio.includes('!templateDirty') && studio.includes('Audience & previ
 assert.ok(studio.includes("recipientTypes.length === 0"),
   'Notification preview must require at least one recipient type.');
 assert.ok(studioCss.includes('align-items:stretch') && studioCss.includes('max-height:calc(100dvh - 32px)') &&
-  studioCss.includes('overflow-y:auto'),
+  studioCss.includes('overflow-y:auto') && studioCss.includes('height:calc(100dvh - 32px)'),
   'Notification studio sidebar must stretch with the editor and remain scrollable while sticky.');
 
 console.log('HRMS form lifecycle, duplicate-save prevention, view-first cards and notification layout contract passed.');
