@@ -1718,3 +1718,25 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [c
 html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="colorGrid"] label {
   color: var(--qe-people-ink) !important;
 }
+
+
+/* Text-only accent controls use the contrast-safe brand shade; the orange brand stays unchanged. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="selectedTag"], [class*="SelectedTag"], [class*="previewButton"], [class*="PreviewButton"]
+) {
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="selectedTag"], [class*="SelectedTag"]
+) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong);
+  color: var(--qe-people-on-brand) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="previewButton"], [class*="PreviewButton"]
+) {
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand);
+}
