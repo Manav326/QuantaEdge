@@ -2136,3 +2136,34 @@ html[data-qe-appearance] .qe-language-switcher > span:first-child {
   min-width: 0;
   max-width: 100%;
 }
+
+
+/* Hover/selected containers use their own readable foreground, not the base page text colour. */
+html[data-qe-appearance] :is(
+  .subject-book-link:hover,
+  .qe-student-chapter > .qe-chapter-pdf-row:hover,
+  .parent-report-switcher__profile:hover,
+  .parent-report-switcher__profile.is-current
+) {
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-account-identity-settings__form input:focus,
+html[data-qe-appearance] .qe-account-identity-settings__form select:focus {
+  border-color: var(--qe-color-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--qe-color-focus) 12%, transparent);
+}
+
+html[data-qe-appearance] .qe-account-identity-settings__form :where(input, select, textarea):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+
+/* Shared editor stylesheet stays byte-identical; focus stays tied to this institution's generated ring colour. */
+html[data-qe-appearance] .institution-portal [class*="formGrid"] :is(input, select, textarea):focus,
+html[data-qe-appearance] .institution-portal [class*="fieldGrid"] :is(input, select, textarea):focus,
+html[data-qe-appearance] .institution-portal [class*="audienceBox"] select:focus {
+  border-color: var(--qe-color-focus);
+  outline: 2px solid color-mix(in srgb, var(--qe-color-focus) 45%, transparent);
+  outline-offset: 1px;
+}

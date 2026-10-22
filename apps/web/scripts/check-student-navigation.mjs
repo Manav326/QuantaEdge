@@ -1013,6 +1013,22 @@ assert.ok(
   'Best-score percentages must stay neutral and theme-aware; only actual success notices use the success container.'
 );
 
+
+const visualAuditMarketplaceCardCss = read('../app/components/MarketplaceCourseCard.module.css');
+const visualAuditBillingFocusCss = read('../app/components/BillingProfileEditor.module.css');
+assert.ok(
+  visualAuditMarketplaceCardCss.includes('color: var(--qe-color-on-primary-container, var(--qe-color-primary-text))') &&
+  visualAuditMarketplaceCardCss.includes('color: var(--qe-color-primary-text, var(--qe-color-primary))'),
+  'Marketplace course icon and price foregrounds must use the right semantic contrast tokens.'
+);
+assert.ok(
+  visualAuditBillingFocusCss.includes('var(--qe-color-on-primary-container, var(--qe-color-primary-text') &&
+  visualAuditBillingFocusCss.includes('color-mix(in srgb, var(--qe-color-focus) 14%, transparent)') &&
+  css.includes('.qe-student-chapter > .qe-chapter-pdf-row:hover') &&
+  css.includes('.institution-portal [class*="fieldGrid"]'),
+  'Billing indicators, profile identity settings, course/resource hover surfaces and institution-portal editor focus rings must use generated theme contrast/focus colours.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

@@ -23,3 +23,17 @@ html[data-qe-appearance] .success {
   background: var(--qe-color-success-container);
   color: var(--qe-color-on-success-container);
 }
+
+
+html[data-qe-appearance] .unsaved {
+  background: var(--qe-color-primary-container, #fff0e3);
+  color: var(--qe-color-on-primary-container, var(--qe-color-primary-text, #9a3412));
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .form input:focus-visible,
+html[data-qe-appearance] .form select:focus-visible {
+  border-color: var(--qe-color-focus);
+  outline: 3px solid color-mix(in srgb, var(--qe-color-focus) 14%, transparent);
+  outline-offset: 1px;
+}
