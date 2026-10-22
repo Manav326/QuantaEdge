@@ -25,8 +25,15 @@ export type QaFixture = {
 };
 
 export function privateDir(): string {
-  const job = process.env.GITHUB_RUN_ID || process.env.GITHUB_RUN_NUMBER || String(process.pid);
-  return process.env.QE_E2E_SECRET_DIR || join(tmpdir(), 'quantaedge-ui-e2e-' + job);
+  // Playwright setup, browser tests and teardown run in separate worker processes.
+  // Never key shared fixtures by PID; require an explicitly stable directory locally.
+  if (process.env.QE_E2E_SECRET_DIR) return process.env.QE_E2E_SECRET_DIR;
+  const runId = process.env.GITHUB_RUN_ID;
+  if (!runId) {
+    throw new Error('QE_E2E_SECRET_DIR is required outside GitHub Actions so setup and cleanup share one private fixture directory.');
+  }
+  const attempt = process.env.GITHUB_RUN_ATTEMPT || '1';
+  return join(tmpdir(), 'quantaedge-ui-e2e-' + runId + '-' + attempt);
 }
 
 export async function preparePrivateDir(): Promise<string> {
