@@ -41,7 +41,14 @@ fun ParentProfileScreen(
     onSave: (JSONObject) -> Unit,
     onUploadPhoto: (String) -> Unit,
     onRemovePhoto: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    billingAddresses: List<JSONObject>,
+    billingAddressesLoading: Boolean,
+    billingError: String = "",
+    billingStatus: String = "",
+    onSaveBillingAddress: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
+    onMakeDefaultBillingAddress: (Long) -> Unit,
+    onDeleteBillingAddress: (Long) -> Unit
 ) {
     val context = LocalContext.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -72,6 +79,18 @@ fun ParentProfileScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(t("Parent profile", "अभिभावक प्रोफ़ाइल"), style = MaterialTheme.typography.headlineSmall)
         ColorThemeSettingsCard(language = language)
+                BillingAddressBook(
+            addresses = billingAddresses,
+            loading = billingAddressesLoading,
+            busy = busy,
+            language = language,
+            compactOnly = false,
+            errorMessage = billingError,
+            statusMessage = billingStatus,
+            onSave = onSaveBillingAddress,
+            onMakeDefault = onMakeDefaultBillingAddress,
+            onDelete = onDeleteBillingAddress
+        )
         ProfilePhotoPickerInput(
             profilePhotoUrl = profile.textAny("profile_image_url", "profileImageUrl"),
             busy = busy,
