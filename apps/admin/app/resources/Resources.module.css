@@ -354,14 +354,14 @@
   word-break:break-word;
   white-space:normal;
 }
-html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) {
+html[data-qe-appearance="dark"] :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) {
   background:var(--qe-color-surface,var(--admin-surface)) !important;
   color:var(--qe-color-text,var(--admin-text)) !important;
   border-color:var(--qe-color-border-subtle,var(--admin-border)) !important;
 }
-html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) :is(b,small,span,strong) {
+html[data-qe-appearance="dark"] :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) :is(b,small,span,strong) {
   color:var(--qe-color-text,var(--admin-text)) !important;
 }
-html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) small {
+html[data-qe-appearance="dark"] :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) small {
   color:var(--qe-color-text-muted,var(--admin-muted)) !important;
 }
