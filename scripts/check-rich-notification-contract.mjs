@@ -100,7 +100,26 @@ for (const route of [
 const webInbox = read('apps/web/app/components/NotificationInboxClient.tsx');
 assert.ok(webInbox.includes('ARCHIVED') && webInbox.includes('/dismiss') && webInbox.includes('/unread'),
   'Web inbox must expose archive, restore and mark-unread controls.');
+for (const app of senderApps) {
+  const renderer = read(`apps/${app}/app/components/RichNotificationRenderer.tsx`);
+  assert.ok(renderer.includes('normalizeRichDocument') &&
+    renderer.includes('JSON.parse(serialized)') &&
+    renderer.includes('content_document') &&
+    renderer.includes('version: 1'),
+    `${app} rich notification renderer must normalize stringified/wrapped version-1 documents.`);
+}
+const notificationService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
+assert.ok(notificationService.includes('parseContentDocument') &&
+  notificationService.includes('decodedBlocks') &&
+  notificationService.includes('document.put("version", 1)'),
+  'Notification API responses must normalize legacy JSONB-encoded documents before returning them.');
+const notificationValidator = read('services/api/src/main/java/com/quantaedge/api/NotificationContentValidator.java');
+assert.ok(notificationValidator.includes('((ObjectNode) document).put("version", 1)'),
+  'New notification documents must persist the canonical numeric version expected by all renderers.');
 const androidInbox = read('apps/android/app/src/main/java/com/quantaedge/android/ui/NotificationInboxScreen.kt');
+assert.ok(androidInbox.includes('normalizeNotificationDocument') && androidInbox.includes('JSONTokener'),
+  'Android inbox must handle serialized notification content the same way as web.');
+
 assert.ok(androidInbox.includes('filterArchived') && androidInbox.includes('/dismiss') && androidInbox.includes('/unread'),
   'Android inbox must expose archive, restore and mark-unread controls.');
 
