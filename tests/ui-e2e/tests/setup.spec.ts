@@ -1,7 +1,7 @@
 import { test, expect, type Browser, type Page } from '@playwright/test';
 import bcrypt from 'bcryptjs';
 import { join } from 'node:path';
-import { appBaseUrl } from '../support/manifest';
+import { appBaseUrl, loadUiManifest } from '../support/manifest';
 import { newIdempotencyKey, openQaDatabase, preparePrivateDir, writePrivateJson, type QaFixture } from '../support/fixtures';
 
 const WEB = appBaseUrl('web', 'http://127.0.0.1:3000');
@@ -274,6 +274,10 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
 }
 
 test('bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
+  // Route/CSV drift must stop the run before the first database or account mutation.
+  const manifest = await loadUiManifest();
+  expect(manifest.summary.registeredWebPages).toBe(manifest.summary.sourceWebPages);
+  expect(manifest.summary.scenarios).toBeGreaterThan(0);
   await seedOnlyDisposableHrmsBootstrap();
   const hrmsStatePath = await setUpHrmsOwner(browser);
   await writePrivateJson('hrms-owner-state-path.json', { statePath: hrmsStatePath });
