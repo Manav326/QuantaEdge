@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type BrowserContext, type Page } from '@playwright/test';
 import { appBaseUrl, expandRoute, loadUiManifest, routeApp } from '../support/manifest';
 
 test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route', async ({ browser }) => {
@@ -8,8 +8,8 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
     appOrigins.set(app, appBaseUrl(app));
   }
 
-  const contexts = new Map<string, Awaited<ReturnType<typeof browser.newContext>>>();
-  const pages = new Map<string, Awaited<ReturnType<Awaited<ReturnType<typeof browser.newContext>>['newPage']>>>();
+  const contexts = new Map<string, BrowserContext>();
+  const pages = new Map<string, Page>();
   const errors: string[] = [];
   let visited = 0;
 
@@ -29,7 +29,6 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
       const onPageError = (error: Error) => pageErrors.push(error.message);
       page.on('pageerror', onPageError);
       let status = 0;
-      let navigationError = '';
       try {
         const response = await page.goto(destination, { waitUntil: 'domcontentloaded', timeout: 30_000 });
         status = response?.status() ?? 0;
@@ -37,7 +36,7 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
         if (!response) errors.push(app + ' ' + route.route + ': navigation returned no main-document response');
         else if (status >= 500) errors.push(app + ' ' + route.route + ': HTTP ' + status);
       } catch (error) {
-        navigationError = error instanceof Error ? error.message : String(error);
+        const navigationError = error instanceof Error ? error.message : String(error);
         errors.push(app + ' ' + route.route + ': navigation failed: ' + navigationError.slice(0, 250));
       } finally {
         page.off('pageerror', onPageError);
