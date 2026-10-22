@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { AdminAppearanceModeButton, AdminThemeProvider } from './AdminThemeProvider';
 import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 import {
@@ -23,7 +24,7 @@ import {
   type AdminSection,
 } from './admin-navigation';
 
-type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[] };
+type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[]; institutionCode?: string; tenantCode?: string; tenant_code?: string };
 type AdminInstitution = { institution_id: number; tenant_code: string; display_name: string; is_default?: boolean };
 
 function activeSection(pathname: string): AdminSection {
@@ -245,7 +246,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     }
   }
 
-  if (publicRoute) return <AdminWorkspaceContext.Provider value={value}>{children}</AdminWorkspaceContext.Provider>;
+  if (publicRoute) return <AdminThemeProvider institutionCode="" enabled={false}><AdminWorkspaceContext.Provider value={value}>{children}</AdminWorkspaceContext.Provider></AdminThemeProvider>;
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
@@ -272,13 +273,14 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     if (!quickItems.some(candidate => candidate.key === item.key)) quickItems.push(item);
   }
 
-  return <AdminWorkspaceContext.Provider value={value}>
+  return <AdminThemeProvider institutionCode={institutionCode || session?.institutionCode || session?.tenantCode || session?.tenant_code || ''}>
+  <AdminWorkspaceContext.Provider value={value}>
     <div className="qe-admin-workspace-layout">
       <AdminSidebar active={active} variant={variant} displayName={session?.displayName || undefined} persistent />
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span className="qe-admin-global-context-label">{activeInstitution?.display_name || 'Education Admin'}</span>
+            <span className="qe-admin-global-context-label">{activeInstitution ? 'Institution workspace' : 'Education Admin'}</span>
             <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
             <strong>{t('admin.workspace.staff')}</strong>
           </div>
@@ -308,6 +310,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
                 {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
               </select>
             </label>
+            <AdminAppearanceModeButton />
           </div>
         </header>
 
@@ -417,5 +420,6 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
         </button>
       </nav>
     </div>
-  </AdminWorkspaceContext.Provider>;
+  </AdminWorkspaceContext.Provider>
+</AdminThemeProvider>;
 }
