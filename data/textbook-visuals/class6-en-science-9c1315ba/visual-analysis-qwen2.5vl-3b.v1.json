@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1313,
+    "assets_selected": 1315,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1310,
-    "assets_remaining": 768,
-    "assets_completion_percent": 63.0,
+    "assets_analyzed": 1312,
+    "assets_remaining": 766,
+    "assets_completion_percent": 63.1,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1308,
+    "assets_skipped_from_checkpoint": 1310,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:04:41Z"
+      "checkpointed_at": "2026-10-22T08:12:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:05:41Z"
+      "checkpointed_at": "2026-10-22T08:13:54Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:06:45Z"
+      "checkpointed_at": "2026-10-22T08:14:58Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -43906,6 +43906,61 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T08:11:31Z"
+    },
+    {
+      "asset_id": "e024731b8b4372c4da016200",
+      "asset_sha256": "9060b781f84ec0c3f77029f7c3295b16a6cd6c047c7bca953e60b12dd2c20687",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 133,
+      "asset_path": "assets/9060b781f84ec0c3f77029f7c3295b16a6cd6c047c7bca953e60b12dd2c20687.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cb8234e5c4f3e5f60e9555b1611e235c43c999220957f1cea08a0291d7b77d62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow textured square piece of paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a page from a textbook discussing properties of materials.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a static representation of a page, not a dynamic or interactive element."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:16:38Z"
+    },
+    {
+      "asset_id": "bc1f04bf8140b083b416dc69",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 133,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cb8234e5c4f3e5f60e9555b1611e235c43c999220957f1cea08a0291d7b77d62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:16:52Z"
     }
   ]
 }
