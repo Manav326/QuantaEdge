@@ -128,10 +128,10 @@ function currentPageInstitutionCode(): string | null {
         .find(part => part.startsWith(matchingCookie.name + '='));
       if (cookie) {
         try {
-          const code = normalizedInstitutionCode(decodeURIComponent(cookie.slice(matchingCookie.name.length + 1)));
-          if (code) return code;
+          return normalizedInstitutionCode(decodeURIComponent(cookie.slice(matchingCookie.name.length + 1)));
         } catch {
-          // Ignore malformed metadata; tenant branding never grants data access.
+          // Invalid scoped metadata blocks fallback to a possibly stale sessionStorage value.
+          return null;
         }
       }
     }
