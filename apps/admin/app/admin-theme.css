@@ -471,6 +471,9 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-sticky-actions
 }
 
 .qe-brand__tenant-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
 }
 .qe-brand__tenant-logo {
