@@ -897,6 +897,18 @@ assert.ok(
   'Live-class lists, recording cards, player/chat controls, semantic status states, and long content must use the institution palette and safe wrapping in both appearances.'
 );
 
+
+const visualAuditTestsUniversalCss = read('../app/student/tests/Tests.module.css');
+assert.ok(
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .shell') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .optionSelected') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] :where(.optionCorrect, .correctAnswerBox') &&
+  visualAuditTestsUniversalCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .leaderboardFirst') &&
+  visualAuditTestsUniversalCss.includes('overflow-wrap: anywhere'),
+  'Assessment catalogue, quiz selection/correctness states, released results, leaderboard and action layouts must use semantic theme tokens and safe text wrapping in both appearances.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
