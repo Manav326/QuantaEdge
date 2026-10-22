@@ -365,3 +365,95 @@ html[data-qe-appearance="dark"] :is(.selectedSummary,.assignmentQueueRow,.rangeR
 html[data-qe-appearance="dark"] :is(.selectedSummary,.assignmentQueueRow,.rangeReviewChapter) small {
   color:var(--qe-color-text-muted,var(--admin-muted)) !important;
 }
+
+
+/* Textbook Library dark appearance: theme the picker, filters, review workflow and PDF chrome.
+   Actual PDF page images intentionally stay white so textbook content keeps its source colours. */
+html[data-qe-appearance="dark"] .page :is(
+  .panel, .governancePanel, .governanceFilterArea, .workflowStep, .uploadBox,
+  .fileInput, .selectedSummary, .filterMenu, .resultSummary, .assignmentCard,
+  .rangeReview, .rangeReviewRow, .assignmentQueueRow, .rangeReviewChapter,
+  .previewDialog, .previewReaderToolbar, .previewThumbnails, .previewThumbsHeader,
+  .previewReaderWorkspace, .previewPageStage, .previewPageViewport
+) {
+  background: var(--qe-color-surface, var(--admin-surface, #162233)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(
+  .sectionHeading h2, .sectionHeading p, .uploadTitle b, .uploadTitle small,
+  .fileInput, .fileInput span, .fileInput small, .selectedSummary b,
+  .selectedSummary small, .hash, .field, .field small, .filterTrigger,
+  .filterChevron, .filterOption, .filterOption small, .filterEmpty,
+  .resultSummary>div:first-child strong, .resultSummary>div:first-child span,
+  .resultSummary>div:first-child small, .resultBreakdown span, .resultBreakdown b,
+  .assignmentTitle h3, .assignmentBody p, .assignmentBody small,
+  .empty, .empty b, .attachFooter p, .rangeReview>p, .rangeReviewChapter b,
+  .rangeReviewChapter small, .roleHint, .previewHeading h2, .previewHeading p,
+  .previewControls label, .previewPageControls>label, .previewPageControls label>span,
+  .previewZoomControls>span, .previewThumbsHeader b, .previewThumbsHeader small,
+  .previewThumbList button, .previewThumbsFooter, .previewCanvasTop,
+  .previewCanvasBottom, .previewDialogFooter, .previewTitleCopy h2
+) {
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.field select,.field input,.field textarea,.previewPageControls input) {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised, #101b2b)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.fileInput span,.filterTrigger>strong,.filterOption small,.assignmentIcon,.resetFilters,.secondaryButton,.archiveButton,.previewIconButton,.previewToolButton) {
+  background: var(--qe-color-surface-subtle, var(--admin-surface, #1b293c)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.filterMenuActions,.attachFooter,.rangeReviewRow,.previewReaderToolbar,.previewDialogFooter) {
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.filterOption:hover,.filterTrigger:hover,.resetFilters:hover,.secondaryButton:hover,.archiveButton:hover,.previewIconButton:hover,.previewToolButton:hover,.previewToolButton.isSelected,.previewThumbList button:hover,.previewThumbList button.activeThumb) {
+  background: var(--qe-color-surface-hover, var(--qe-color-selected-background, #263448)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-primary, var(--admin-primary, #fb923c)) !important;
+}
+html[data-qe-appearance="dark"] .page .governancePanel .filterTrigger>strong,
+html[data-qe-appearance="dark"] .page .governancePanel .resultSummary {
+  background: var(--qe-color-surface-subtle, var(--admin-surface, #1b293c)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+}
+html[data-qe-appearance="dark"] .page .governancePanel :is(.governanceFilterIntro>span,.sectionHeading>div>span,.coverageWarning,.publishHint) {
+  color: var(--qe-color-primary, #fb923c) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.catalogueLink,.stepIcon) {
+  background: var(--qe-color-primary-container, var(--qe-color-surface-subtle, #3a281c)) !important;
+  color: var(--qe-color-on-primary-container, var(--qe-color-text, #fed7aa)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.previewDialog .previewHeading,.previewDialogFooter,.previewReaderToolbar,.previewThumbnails,.previewThumbsHeader,.previewCanvasTop,.previewCanvasBottom,.previewPageViewport,.previewReaderWorkspace) {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised, #101b2b)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page :is(.previewDialog .previewHeading h2,.previewDialog .previewHeading p,.previewDialog .previewHeading span) {
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+}
+html[data-qe-appearance="dark"] .page .previewPageError {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised, #101b2b)) !important;
+  color: var(--qe-color-error, #fca5a5) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page .previewImageLoading {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised, #101b2b)) !important;
+  color: var(--qe-color-text, var(--admin-text, #eef2f8)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border, #334155)) !important;
+}
+html[data-qe-appearance="dark"] .page .previewCanvas {
+  background: var(--qe-color-background, var(--admin-background, #0c1422)) !important;
+}
+html[data-qe-appearance="dark"] .page .previewCanvasTop,
+html[data-qe-appearance="dark"] .page .previewCanvasBottom {
+  color: var(--qe-color-text-muted, var(--admin-muted, #a7b3c5)) !important;
+}
+html[data-qe-appearance="dark"] .page .pdfBadge {
+  background: var(--qe-color-primary-container, #3a281c);
+  color: var(--qe-color-on-primary-container, #fed7aa);
+}
