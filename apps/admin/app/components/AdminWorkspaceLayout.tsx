@@ -113,7 +113,18 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     let alive = true;
     if (publicRoute) {
       setInstitutions([]);
-      setInstitutionCode('');
+      // Branding is public presentation only. Resolve an explicitly requested tenant first;
+      // otherwise reuse the last selected workspace so login/session screens match that tenant.
+      const query = new URLSearchParams(window.location.search);
+      const tenantKeys = ['institution', 'institutionCode', 'institution_code', 'tenant'];
+      const hasExplicitTenant = tenantKeys.some(key => query.has(key));
+      let rememberedTenant = '';
+      try { rememberedTenant = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
+      const requestedTenant = hasExplicitTenant
+        ? (query.get('institution') || query.get('institutionCode') || query.get('institution_code') || query.get('tenant') || '')
+        : rememberedTenant;
+      const safeTenant = requestedTenant.trim().toUpperCase();
+      setInstitutionCode(/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(safeTenant) ? safeTenant : '');
       setInstitutionError('');
       setInstitutionLoading(false);
       return () => { alive = false; };
@@ -246,7 +257,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     }
   }
 
-  if (publicRoute) return <AdminThemeProvider institutionCode="" enabled={false}><AdminWorkspaceContext.Provider value={value}><div className="qe-admin-workspace-page-slot qe-admin-public-page">{children}</div></AdminWorkspaceContext.Provider></AdminThemeProvider>;
+  if (publicRoute) return <AdminThemeProvider institutionCode={institutionCode} enabled={Boolean(institutionCode)}><AdminWorkspaceContext.Provider value={value}><div className="qe-admin-workspace-page-slot qe-admin-public-page">{children}</div></AdminWorkspaceContext.Provider></AdminThemeProvider>;
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
