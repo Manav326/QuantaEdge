@@ -857,6 +857,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         setBillingAddressStatus(workspace, "")
         runTask {
             try {
+                ApiClient.setWorkspace(workspace)
                 val endpoint = billingAddressEndpoint(workspace)
                 val response = if (addressId == null) {
                     ApiClient.postArray(endpoint, body)
@@ -880,6 +881,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         setBillingAddressStatus(workspace, "")
         runTask {
             try {
+                ApiClient.setWorkspace(workspace)
                 val response = ApiClient.putArray(billingAddressEndpoint(workspace) + "/" + addressId + "/default", JSONObject())
                 setBillingAddresses(workspace, response.objectItems())
                 setBillingAddressStatus(workspace, if (language == "hi") "Default billing address update हो गया।" else "Default billing address updated.")
@@ -896,6 +898,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         setBillingAddressStatus(workspace, "")
         runTask {
             try {
+                ApiClient.setWorkspace(workspace)
                 val response = ApiClient.deleteArray(billingAddressEndpoint(workspace) + "/" + addressId)
                 setBillingAddresses(workspace, response.objectItems())
                 setBillingAddressStatus(workspace, if (language == "hi") "Billing address हटा दिया गया।" else "Billing address deleted.")
