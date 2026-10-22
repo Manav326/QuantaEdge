@@ -884,13 +884,21 @@ public class CourseMarketplaceController {
     } catch(Exception ex) {
       throw new IllegalStateException("The purchaser billing address snapshot could not be read.",ex);
     }
+    @SuppressWarnings("unchecked")
+    Map<String,Object> selectedAddress=(Map<String,Object>)snapshot.get("billingAddress");
+    for(String required:List.of("line1","city","state","postalCode")) {
+      Object value=selectedAddress.get(required);
+      if(value==null||String.valueOf(value).isBlank()) {
+        throw new IllegalArgumentException("Complete your saved billing address in My Profile before checking out.");
+      }
+    }
     List<Map<String,Object>> accountRows=jdbc.queryForList("""
       select coalesce(p.version,0) as profile_version,
-        coalesce(row.contact_email,u.contact_email,u.email) as contact_email,
-        coalesce(row.contact_phone,u.mobile_e164) as contact_phone
+        coalesce(a.contact_email,u.contact_email,u.email) as contact_email,
+        coalesce(a.contact_phone,u.mobile_e164) as contact_phone
       from user_account u
       left join billing_customer_profile p on p.user_account_id=u.id
-      left join billing_customer_address row on row.id=? and row.user_account_id=u.id
+      left join billing_customer_address a on a.id=? and a.user_account_id=u.id
       where u.id=? and u.active=true
       """,row.get("id"),userAccountId);
     if(accountRows.isEmpty()) throw new IllegalStateException("The purchaser billing identity could not be resolved.");
