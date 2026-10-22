@@ -1638,8 +1638,7 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
 /* Secondary interactions use a subtle raised surface, never a light-mode fill. */
 html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   button, a, [role="button"], [role="tab"]
-):not([class*="primary"]):not([class*="Primary"])
- :is(:hover, :focus-visible) {
+):not([class*="primary"]):not([class*="Primary"]):is(:hover, :focus-visible) {
   background-color: var(--qe-color-surface-subtle) !important;
   color: var(--qe-color-text) !important;
   border-color: var(--qe-color-border-subtle) !important;
@@ -1668,8 +1667,7 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   .qe-edit-card, .qe-library-panel, .qe-admin-filter-panel, .qe-admin-table-panel,
   [class*="card"], [class*="Card"], [class*="panel"], [class*="Panel"],
   [class*="surface"], [class*="Surface"], [class*="tile"], [class*="Tile"]
-):not([class*="hero"]):not([class*="Hero"]):not([class*="status"]):not([class*="Status"])
- :is(:hover, :focus-within) {
+):not([class*="hero"]):not([class*="Hero"]):not([class*="status"]):not([class*="Status"]):is(:hover, :focus-within) {
   background-color: var(--qe-color-surface-elevated) !important;
   color: var(--qe-color-text) !important;
   border-color: var(--qe-color-border-subtle) !important;

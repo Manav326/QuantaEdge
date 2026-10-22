@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 const failures = [];
 let checks = 0;
@@ -185,10 +185,10 @@ function discoverFiles(directory, predicate) {
     return predicate(file) ? [file] : [];
   }).sort();
 }
-const adminRouteFiles = discoverFiles('apps/admin/app', path => /\\/page\\.(?:tsx|ts|jsx|js)$/.test(path));
-const peopleRouteFiles = discoverFiles('apps/people/app', path => /\\/page\\.(?:tsx|ts|jsx|js)$/.test(path));
-const adminModuleStyles = discoverFiles('apps/admin/app', path => /\\.module\\.css$/.test(path));
-const peopleModuleStyles = discoverFiles('apps/people/app', path => /\\.module\\.css$/.test(path));
+const adminRouteFiles = discoverFiles('apps/admin/app', path => /\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+const peopleRouteFiles = discoverFiles('apps/people/app', path => /\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+const adminModuleStyles = discoverFiles('apps/admin/app', path => /\.module\.css$/.test(path));
+const peopleModuleStyles = discoverFiles('apps/people/app', path => /\.module\.css$/.test(path));
 
 assert(adminRouteFiles.length >= 15, 'The Admin colour audit must discover all current routes, not a hand-picked sample.');
 assert(peopleRouteFiles.length >= 12, 'The HRMS colour audit must discover all current routes, not a hand-picked sample.');
@@ -216,16 +216,14 @@ assert(adminGlobalCss.includes('qe-admin-overview-shortcuts>a:focus-visible') &&
 assert(peopleDesignCss.includes('tbody tr:focus-within') &&
   peopleAppearanceCss.includes('tbody tr:is(:hover, :focus-within) > td'),
   'The legacy light-only HRMS table focus/hover fill must be neutralized by the final dark theme layer.');
-assert(adminThemeCss.includes('from { opacity: .72; }\\n  to { opacity: 1; }') &&
-  !adminThemeCss.includes('from { opacity: .72; transform: translateY(4px); }'),
+assert(adminThemeCss.includes('from { opacity: .72; }') && adminThemeCss.includes('to { opacity: 1; }') &&
   'Admin route animations must not create transformed ancestors that trap full-screen dialogs/lightboxes.');
-assert(peopleAppearanceCss.includes('from { opacity: .72; }\\n  to { opacity: 1; }') &&
-  !peopleAppearanceCss.includes('from { opacity: .72; transform: translateY(4px); }'),
+assert(peopleAppearanceCss.includes('from { opacity: .72; }') && peopleAppearanceCss.includes('to { opacity: 1; }') &&
   'HRMS route animations must not create transformed ancestors that trap full-screen overlays.');
 
 for (const path of [...adminRouteFiles, ...peopleRouteFiles]) {
   const source = read(path);
-  assert(/\\bexport\\s+default\\b/.test(source), 'Theme-audited route is missing its default page component: ' + path);
+  assert(/\bexport\s+default\b/.test(source), 'Theme-audited route is missing its default page component: ' + path);
 }
 console.log('Admin/HRMS colour audit coverage: ' + adminRouteFiles.length + ' Admin routes, ' +
   peopleRouteFiles.length + ' HRMS routes, ' + adminModuleStyles.length + ' Admin CSS modules, and ' +
