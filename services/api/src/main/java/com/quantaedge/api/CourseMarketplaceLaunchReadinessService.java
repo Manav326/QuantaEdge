@@ -577,7 +577,7 @@ public class CourseMarketplaceLaunchReadinessService {
 
   private String contentFingerprint(long programId) {
     String value=jdbc.queryForObject("""
-        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,E'\\n'
+        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,chr(10)
             order by entity_type,entity_id),'')) as fingerprint
         from (
           select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
