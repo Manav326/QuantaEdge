@@ -122,7 +122,7 @@ fun StudentMarketplaceScreen(
                 onSave = billing.onSave,
                 onMakeDefault = billing.onMakeDefault,
                 onDelete = billing.onDelete,
-                billing.onOpenProfile = billing.onOpenProfile
+                onOpenProfile = billing.onOpenProfile
             )
         }
         if (billingCheckoutMessage.isNotBlank()) {
