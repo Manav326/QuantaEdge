@@ -697,3 +697,106 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
 .qe-admin-workspace-page-slot dialog::backdrop {
   background: rgb(8 15 29 / 58%);
 }
+
+
+/* The application shell has legacy, more-specific component selectors; rebind those states
+   explicitly so navigation, language controls and account actions match the active palette. */
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-brand-context {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-toggle,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-logout,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-logout-button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-toggle:hover,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-logout:hover,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-logout-button:hover:not(:disabled) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-nav-icon {
+  background: var(--qe-color-surface-subtle);
+  color: var(--qe-color-nav-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-user-footer .avatar {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container, var(--qe-color-text));
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-user-footer .admin-user-copy strong {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-user-footer .admin-user-copy small {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-staff-role-badge {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-global-header .qe-admin-global-context>span {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-global-header .qe-admin-global-context>strong {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-language-switcher {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-language-switcher>span:first-child {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav a,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav button {
+  background: transparent;
+  color: var(--qe-color-nav-text);
+  border-color: transparent;
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav a.is-active,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav a[aria-current="page"],
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-nav .qe-admin-mobile-more.is-active {
+  background: var(--qe-color-nav-active-background);
+  color: var(--qe-color-nav-active-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-header :is(strong, small),
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-user :is(strong, span),
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-group h2 {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-header small {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-items a,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-footer button {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-items a.is-active,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-items a[aria-current="page"] {
+  background: var(--qe-color-nav-active-background);
+  color: var(--qe-color-nav-active-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-icon {
+  background: var(--qe-color-surface-subtle);
+  color: var(--qe-color-nav-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-footer button:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
