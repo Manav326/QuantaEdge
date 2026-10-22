@@ -541,9 +541,9 @@ html[data-qe-people-appearance="dark"] .login-story {
 }
 
 /* The CSS-module routes define local light-only values; remap their palette here. */
-[class*="Finance_page__"],
-[class*="Institutions_page__"],
-[class*="QaCenter_page__"] {
+html[data-qe-people-appearance] [class*="Finance_page__"],
+html[data-qe-people-appearance] [class*="Institutions_page__"],
+html[data-qe-people-appearance] [class*="QaCenter_page__"] {
   --ink: var(--qe-people-ink);
   --muted: var(--qe-people-muted);
   --line: var(--qe-people-line);
@@ -552,337 +552,337 @@ html[data-qe-people-appearance="dark"] .login-story {
   --brand-deep: var(--qe-people-brand-strong);
 }
 
-[class*="Finance_panel__"],
-[class*="Finance_policyTableWrap__"],
-[class*="Finance_recipientEditor__"],
-[class*="Finance_versionBanner__"],
-[class*="Finance_approvalBox__"],
-[class*="Finance_refundPanel__"],
-[class*="Finance_pdfPreviewPanel__"],
-[class*="Institutions_panel__"],
-[class*="Institutions_metrics__"] article,
-[class*="Institutions_listItem__"],
-[class*="Institutions_emptyPanel__"],
-[class*="Institutions_billingBox__"],
-[class*="Institutions_brandAssetPreview__"],
-[class*="QaCenter_confirmPanel__"],
-[class*="QaCenter_credentials__"],
-[class*="QaCenter_checkRow__"] {
+html[data-qe-people-appearance] [class*="Finance_panel__"],
+html[data-qe-people-appearance] [class*="Finance_policyTableWrap__"],
+html[data-qe-people-appearance] [class*="Finance_recipientEditor__"],
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"],
+html[data-qe-people-appearance] [class*="Finance_refundPanel__"],
+html[data-qe-people-appearance] [class*="Finance_pdfPreviewPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_panel__"],
+html[data-qe-people-appearance] [class*="Institutions_metrics__"] article,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_brandAssetPreview__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
   background: var(--qe-people-card);
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_tab__"],
-[class*="Institutions_tabs__"] button {
+html[data-qe-people-appearance] [class*="Finance_tab__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button {
   color: var(--qe-people-muted);
 }
 
-[class*="Finance_tabActive__"],
-[class*="Institutions_tabs__"] button[class*="tabActive"] {
+html[data-qe-people-appearance] [class*="Finance_tabActive__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button[class*="tabActive"] {
   background: var(--qe-people-brand-soft);
   border-color: color-mix(in srgb, var(--qe-people-brand) 35%, var(--qe-people-line));
   color: var(--qe-people-brand-strong);
 }
 
-[class*="Finance_secondary__"],
-[class*="Institutions_secondary__"],
-[class*="Institutions_fileButton__"] {
+html[data-qe-people-appearance] [class*="Finance_secondary__"],
+html[data-qe-people-appearance] [class*="Institutions_secondary__"],
+html[data-qe-people-appearance] [class*="Institutions_fileButton__"] {
   background: var(--qe-people-surface);
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_secondary__"]:hover,
-[class*="Institutions_secondary__"]:hover,
-[class*="Institutions_listItem__"]:hover,
-[class*="Institutions_listItem__"][class*="selected"] {
+html[data-qe-people-appearance] [class*="Finance_secondary__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_secondary__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"]:hover,
+html[data-qe-people-appearance] [class*="Institutions_listItem__"][class*="selected"] {
   background: var(--qe-people-surface-hover);
   border-color: var(--qe-people-brand);
 }
 
-[class*="Finance_table__"] th,
-[class*="Institutions_tableScroll__"] th,
-[class*="QaCenter_table__"] th {
+html[data-qe-people-appearance] [class*="Finance_table__"] th,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] th,
+html[data-qe-people-appearance] [class*="QaCenter_table__"] th {
   background: var(--qe-people-table-head);
   border-color: var(--qe-people-table-line);
   color: var(--qe-people-muted);
 }
 
-[class*="Finance_table__"] td,
-[class*="Institutions_tableScroll__"] td,
-[class*="QaCenter_table__"] td {
+html[data-qe-people-appearance] [class*="Finance_table__"] td,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] td,
+html[data-qe-people-appearance] [class*="QaCenter_table__"] td {
   border-color: var(--qe-people-table-line);
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_policyTableWrap__"],
-[class*="Institutions_tableScroll__"],
-[class*="QaCenter_credentials__"],
-[class*="QaCenter_json__"] {
+html[data-qe-people-appearance] [class*="Finance_policyTableWrap__"],
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
   border-color: var(--qe-people-line);
 }
 
-[class*="Finance_note__"],
-[class*="Institutions_disclaimer__"],
-[class*="QaCenter_guardNote__"] {
+html[data-qe-people-appearance] [class*="Finance_note__"],
+html[data-qe-people-appearance] [class*="Institutions_disclaimer__"],
+html[data-qe-people-appearance] [class*="QaCenter_guardNote__"] {
   background: var(--qe-people-warning-soft);
   border-color: color-mix(in srgb, var(--qe-people-warning) 35%, var(--qe-people-line));
   color: var(--qe-people-warning);
 }
 
-[class*="Finance_previewPanel__"],
-[class*="Institutions_billingBox__"],
-[class*="Institutions_themePreviewGrid__"] {
+html[data-qe-people-appearance] [class*="Finance_previewPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_themePreviewGrid__"] {
   border-color: var(--qe-people-line);
 }
 
-[class*="Finance_previewPanel__"] {
+html[data-qe-people-appearance] [class*="Finance_previewPanel__"] {
   background: var(--qe-people-surface-subtle);
 }
 
-[class*="Finance_paperWrap__"] {
+html[data-qe-people-appearance] [class*="Finance_paperWrap__"] {
   background: var(--qe-people-surface-subtle);
 }
 
-[class*="Finance_versionBanner__"],
-[class*="Institutions_codeNotice__"],
-[class*="Institutions_billingBox__"],
-[class*="QaCenter_gateGrid__"] > div,
-[class*="QaCenter_json__"] {
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Institutions_codeNotice__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="QaCenter_gateGrid__"] > div,
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
   background: var(--qe-people-surface-subtle);
 }
 
-[class*="Institutions_error__"] {
+html[data-qe-people-appearance] [class*="Institutions_error__"] {
   background: var(--qe-people-danger-soft);
   color: var(--qe-people-danger);
 }
 
-[class*="Institutions_notice__"] {
+html[data-qe-people-appearance] [class*="Institutions_notice__"] {
   background: var(--qe-people-success-soft);
   color: var(--qe-people-success);
 }
 
-[class*="Institutions_status__"] {
+html[data-qe-people-appearance] [class*="Institutions_status__"] {
   background: var(--qe-people-neutral-soft);
   color: var(--qe-people-neutral);
 }
 
-[class*="Institutions_status__"].active {
+html[data-qe-people-appearance] [class*="Institutions_status__"].active {
   background: var(--qe-people-success-soft);
   color: var(--qe-people-success);
 }
 
-[class*="Institutions_status__"].suspended {
+html[data-qe-people-appearance] [class*="Institutions_status__"].suspended {
   background: var(--qe-people-danger-soft);
   color: var(--qe-people-danger);
 }
 
-[class*="Institutions_emptyIcon__"],
-[class*="Institutions_avatar__"] {
+html[data-qe-people-appearance] [class*="Institutions_emptyIcon__"],
+html[data-qe-people-appearance] [class*="Institutions_avatar__"] {
   background: var(--qe-people-brand-soft);
   color: var(--qe-people-brand-strong);
 }
 
-[class*="QaCenter_checkRow__"],
-[class*="QaCenter_manifestRow__"],
-[class*="QaCenter_packCard__"],
-[class*="QaCenter_runRow__"] {
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_manifestRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_packCard__"],
+html[data-qe-people-appearance] [class*="QaCenter_runRow__"] {
   border-color: var(--qe-people-line);
 }
 
-[class*="QaCenter_json__"] {
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_empty__"],
-[class*="Finance_emptyLarge__"],
-[class*="Institutions_emptyText__"],
-[class*="Institutions_emptyCell__"],
-[class*="Institutions_skeleton__"],
-[class*="QaCenter_runMeta__"],
-[class*="QaCenter_packKey__"] {
+html[data-qe-people-appearance] [class*="Finance_empty__"],
+html[data-qe-people-appearance] [class*="Finance_emptyLarge__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyText__"],
+html[data-qe-people-appearance] [class*="Institutions_emptyCell__"],
+html[data-qe-people-appearance] [class*="Institutions_skeleton__"],
+html[data-qe-people-appearance] [class*="QaCenter_runMeta__"],
+html[data-qe-people-appearance] [class*="QaCenter_packKey__"] {
   color: var(--qe-people-muted);
 }
 
 
 /* Module routes have a few intentionally bespoke controls; keep their normal states semantic too. */
-[class*="Finance_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
-[class*="Finance_page__"] select,
-[class*="Finance_page__"] textarea,
-[class*="Institutions_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
-[class*="Institutions_page__"] select,
-[class*="Institutions_page__"] textarea {
+html[data-qe-people-appearance] [class*="Finance_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-people-appearance] [class*="Finance_page__"] select,
+html[data-qe-people-appearance] [class*="Finance_page__"] textarea,
+html[data-qe-people-appearance] [class*="Institutions_page__"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-people-appearance] [class*="Institutions_page__"] select,
+html[data-qe-people-appearance] [class*="Institutions_page__"] textarea {
   background: var(--qe-people-field);
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_page__"] .alertError,
-[class*="Institutions_page__"] .error,
-[class*="Institutions_page__"] .cropError {
+html[data-qe-people-appearance] [class*="Finance_page__"] .alertError,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .error,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .cropError {
   background: var(--qe-people-danger-soft);
   border-color: color-mix(in srgb, var(--qe-people-danger) 35%, var(--qe-people-line));
   color: var(--qe-people-danger);
 }
 
-[class*="Finance_page__"] .alertSuccess,
-[class*="Institutions_page__"] .notice {
+html[data-qe-people-appearance] [class*="Finance_page__"] .alertSuccess,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .notice {
   background: var(--qe-people-success-soft);
   border-color: color-mix(in srgb, var(--qe-people-success) 35%, var(--qe-people-line));
   color: var(--qe-people-success);
 }
 
-[class*="Finance_status__"] {
+html[data-qe-people-appearance] [class*="Finance_status__"] {
   background: var(--qe-people-neutral-soft);
   color: var(--qe-people-neutral);
 }
 
-[class*="Finance_status__"][class*="success"],
-[class*="Finance_status__"][class*="paid"] {
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="success"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="paid"] {
   background: var(--qe-people-success-soft);
   color: var(--qe-people-success);
 }
 
-[class*="Finance_status__"][class*="warning"],
-[class*="Finance_status__"][class*="pending"] {
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="warning"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="pending"] {
   background: var(--qe-people-warning-soft);
   color: var(--qe-people-warning);
 }
 
-[class*="Finance_status__"][class*="danger"],
-[class*="Finance_status__"][class*="failed"] {
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="danger"],
+html[data-qe-people-appearance] [class*="Finance_status__"][class*="failed"] {
   background: var(--qe-people-danger-soft);
   color: var(--qe-people-danger);
 }
 
-[class*="Finance_emptyLarge__"],
-[class*="Finance_entityRow__"] span,
-[class*="Finance_policyRow__"] span,
-[class*="Finance_entityRow__"] small,
-[class*="Finance_policyRow__"] small,
-[class*="Finance_policyFooter__"] > span,
-[class*="Finance_approvalBox__"] p {
+html[data-qe-people-appearance] [class*="Finance_emptyLarge__"],
+html[data-qe-people-appearance] [class*="Finance_entityRow__"] span,
+html[data-qe-people-appearance] [class*="Finance_policyRow__"] span,
+html[data-qe-people-appearance] [class*="Finance_entityRow__"] small,
+html[data-qe-people-appearance] [class*="Finance_policyRow__"] small,
+html[data-qe-people-appearance] [class*="Finance_policyFooter__"] > span,
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"] p {
   color: var(--qe-people-muted);
 }
 
-[class*="Finance_table__"] td,
-[class*="Finance_table__"] th,
-[class*="Institutions_tableScroll__"] td,
-[class*="Institutions_tableScroll__"] th,
-[class*="QaCenter_manifestRow__"],
-[class*="QaCenter_checkRow__"] {
+html[data-qe-people-appearance] [class*="Finance_table__"] td,
+html[data-qe-people-appearance] [class*="Finance_table__"] th,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] td,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"] th,
+html[data-qe-people-appearance] [class*="QaCenter_manifestRow__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
   border-color: var(--qe-people-table-line);
 }
 
-[class*="Finance_recipientEditor__"],
-[class*="Finance_approvalBox__"],
-[class*="Finance_pdfPreviewPanel__"],
-[class*="Finance_versionBanner__"],
-[class*="Institutions_billingBox__"],
-[class*="Institutions_codeNotice__"],
-[class*="Institutions_readOnlyItem__"],
-[class*="Institutions_readOnlySummary__"],
-[class*="Institutions_valueChip__"],
-[class*="Institutions_brandAssetPreview__"],
-[class*="Institutions_cropModal__"],
-[class*="Institutions_cropControls__"],
-[class*="Institutions_cropModalHeader__"],
-[class*="Institutions_cropModalFooter__"],
-[class*="Institutions_brandTemplate__"],
-[class*="Institutions_brandTemplateHeader__"],
-[class*="Institutions_brandTemplateGenerated__"],
-[class*="QaCenter_confirmPanel__"],
-[class*="QaCenter_credentials__"] {
+html[data-qe-people-appearance] [class*="Finance_recipientEditor__"],
+html[data-qe-people-appearance] [class*="Finance_approvalBox__"],
+html[data-qe-people-appearance] [class*="Finance_pdfPreviewPanel__"],
+html[data-qe-people-appearance] [class*="Finance_versionBanner__"],
+html[data-qe-people-appearance] [class*="Institutions_billingBox__"],
+html[data-qe-people-appearance] [class*="Institutions_codeNotice__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlyItem__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlySummary__"],
+html[data-qe-people-appearance] [class*="Institutions_valueChip__"],
+html[data-qe-people-appearance] [class*="Institutions_brandAssetPreview__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModal__"],
+html[data-qe-people-appearance] [class*="Institutions_cropControls__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalFooter__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplate__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateGenerated__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"] {
   border-color: var(--qe-people-line);
 }
 
-[class*="Institutions_warning__"] {
+html[data-qe-people-appearance] [class*="Institutions_warning__"] {
   background: var(--qe-people-warning-soft);
   border-color: color-mix(in srgb, var(--qe-people-warning) 35%, var(--qe-people-line));
   color: var(--qe-people-warning);
 }
 
-[class*="Institutions_danger__"],
-[class*="QaCenter_dangerButton__"] {
+html[data-qe-people-appearance] [class*="Institutions_danger__"],
+html[data-qe-people-appearance] [class*="QaCenter_dangerButton__"] {
   background: var(--qe-people-danger-soft);
   border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line));
   color: var(--qe-people-danger);
 }
 
-[class*="Institutions_quiet__"] {
+html[data-qe-people-appearance] [class*="Institutions_quiet__"] {
   color: var(--qe-people-muted);
 }
 
-[class*="Institutions_emptyPanel__"],
-[class*="Institutions_brandTemplate__"],
-[class*="Institutions_cropModal__"],
-[class*="Institutions_cropStage__"],
-[class*="Institutions_cropControls__"],
-[class*="Institutions_cropModalHeader__"],
-[class*="Institutions_cropModalFooter__"],
-[class*="QaCenter_confirmPanel__"],
-[class*="QaCenter_credentials__"],
-[class*="QaCenter_checkRow__"] {
+html[data-qe-people-appearance] [class*="Institutions_emptyPanel__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplate__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModal__"],
+html[data-qe-people-appearance] [class*="Institutions_cropStage__"],
+html[data-qe-people-appearance] [class*="Institutions_cropControls__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalHeader__"],
+html[data-qe-people-appearance] [class*="Institutions_cropModalFooter__"],
+html[data-qe-people-appearance] [class*="QaCenter_confirmPanel__"],
+html[data-qe-people-appearance] [class*="QaCenter_credentials__"],
+html[data-qe-people-appearance] [class*="QaCenter_checkRow__"] {
   background: var(--qe-people-card);
   color: var(--qe-people-ink);
 }
 
-[class*="Institutions_listCopy__"] small,
-[class*="Institutions_courseItem__"] small,
-[class*="Institutions_auditList__"] small,
-[class*="Institutions_auditList__"] p,
-[class*="Institutions_form__"] label small,
-[class*="Institutions_themeSettingsGrid__"] label,
-[class*="Institutions_themeSettingsGrid__"] select {
+html[data-qe-people-appearance] [class*="Institutions_listCopy__"] small,
+html[data-qe-people-appearance] [class*="Institutions_courseItem__"] small,
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] small,
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] p,
+html[data-qe-people-appearance] [class*="Institutions_form__"] label small,
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] label,
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] select {
   color: var(--qe-people-muted);
 }
 
-[class*="Institutions_courseList__"],
-[class*="Institutions_courseItem__"],
-[class*="Institutions_auditList__"] article,
-[class*="Institutions_tabs__"],
-[class*="Institutions_tabs__"] button,
-[class*="Institutions_tableScroll__"],
-[class*="Institutions_readOnlySummary__"],
-[class*="Institutions_readOnlyItem__"] {
+html[data-qe-people-appearance] [class*="Institutions_courseList__"],
+html[data-qe-people-appearance] [class*="Institutions_courseItem__"],
+html[data-qe-people-appearance] [class*="Institutions_auditList__"] article,
+html[data-qe-people-appearance] [class*="Institutions_tabs__"],
+html[data-qe-people-appearance] [class*="Institutions_tabs__"] button,
+html[data-qe-people-appearance] [class*="Institutions_tableScroll__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlySummary__"],
+html[data-qe-people-appearance] [class*="Institutions_readOnlyItem__"] {
   border-color: var(--qe-people-line);
 }
 
-[class*="Institutions_themeSettingsGrid__"] select,
-[class*="Institutions_search__"],
-[class*="Institutions_brandTemplateFields__"] input,
-[class*="Institutions_brandTemplateFields__"] select {
+html[data-qe-people-appearance] [class*="Institutions_themeSettingsGrid__"] select,
+html[data-qe-people-appearance] [class*="Institutions_search__"],
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateFields__"] input,
+html[data-qe-people-appearance] [class*="Institutions_brandTemplateFields__"] select {
   background: var(--qe-people-field);
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 
-[class*="QaCenter_gateGrid__"] > div,
-[class*="QaCenter_json__"] {
+html[data-qe-people-appearance] [class*="QaCenter_gateGrid__"] > div,
+html[data-qe-people-appearance] [class*="QaCenter_json__"] {
   background: var(--qe-people-surface-subtle);
   border-color: var(--qe-people-line);
   color: var(--qe-people-ink);
 }
 
-[class*="QaCenter_guardNote__"] {
+html[data-qe-people-appearance] [class*="QaCenter_guardNote__"] {
   background: var(--qe-people-warning-soft);
   color: var(--qe-people-warning);
 }
 
-[class*="Finance_page__"] .tab:hover {
+html[data-qe-people-appearance] [class*="Finance_page__"] .tab:hover {
   background: var(--qe-people-surface-hover);
   color: var(--qe-people-ink);
 }
 
-[class*="Finance_page__"] .primary,
-[class*="Institutions_page__"] .primary {
+html[data-qe-people-appearance] [class*="Finance_page__"] .primary,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .primary {
   background: var(--qe-people-brand);
   color: #ffffff;
 }
 
-[class*="Finance_page__"] .primary:hover,
-[class*="Institutions_page__"] .primary:hover {
+html[data-qe-people-appearance] [class*="Finance_page__"] .primary:hover,
+html[data-qe-people-appearance] [class*="Institutions_page__"] .primary:hover {
   background: var(--qe-people-brand-hover);
 }
 
@@ -920,8 +920,8 @@ html[data-qe-people-appearance="dark"] .login-story {
     justify-content: flex-start;
   }
 
-  [class*="Finance_page__"],
-  [class*="Institutions_page__"] {
+  html[data-qe-people-appearance] [class*="Finance_page__"],
+  html[data-qe-people-appearance] [class*="Institutions_page__"] {
     padding-inline: 12px;
   }
 }
@@ -940,4 +940,13 @@ html[data-qe-people-appearance="dark"] .login-story {
     background: #ffffff !important;
     color: #111827 !important;
   }
+}
+
+/* The mobile compact lockup is transparent, so its text must contrast with the dark header. */
+html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand__name-quant {
+  color: var(--qe-people-ink);
+}
+
+html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand__tagline {
+  color: var(--qe-people-muted);
 }
