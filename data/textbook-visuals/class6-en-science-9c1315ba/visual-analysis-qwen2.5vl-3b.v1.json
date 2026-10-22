@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1333,
+    "assets_selected": 1334,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1329,
-    "assets_remaining": 749,
+    "assets_analyzed": 1330,
+    "assets_remaining": 748,
     "assets_completion_percent": 64.0,
     "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 1328,
+    "assets_skipped_from_checkpoint": 1329,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:46:08Z"
+      "checkpointed_at": "2026-10-22T09:51:46Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:47:09Z"
+      "checkpointed_at": "2026-10-22T09:52:47Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:48:11Z"
+      "checkpointed_at": "2026-10-22T09:53:49Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:48:54Z"
+      "checkpointed_at": "2026-10-22T09:54:34Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44566,6 +44566,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T09:50:30Z"
+    },
+    {
+      "asset_id": "e98fd517d591d8d5845e58cb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 137,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "53f43aa1584b8de5b1d749b0f82eb11380b3336194efb6a455e207fccd8ea2ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a grid for students to write nine randomly chosen words from a list.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "word selection",
+          "grid exercise",
+          "random word picking"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "no visible text",
+          "no specific content visible",
+          "no figures or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T09:54:54Z"
     }
   ]
 }
