@@ -470,11 +470,12 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
       Map<String,Object> contentReadiness=jdbc.queryForMap("""
-          select count(distinct ps.subject_id) as subject_count,
+          select count(distinct s.id) as subject_count,
             count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
             count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
           from curriculum_program_subject ps
           join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+            and (s.program_id=ps.program_id or s.program_id is null)
           left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
           left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
           where ps.program_id=?
@@ -547,6 +548,7 @@ public class PlatformInstitutionController {
         left join institution_branding b on b.institution_id=t.id
         left join curriculum_program_subject ps on ps.program_id=p.id
         left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+            and (s.program_id=ps.program_id or s.program_id is null)
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.release_state='IN_QUALITY_REVIEW'
@@ -581,11 +583,12 @@ public class PlatformInstitutionController {
     if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     Map<String,Object> readiness=jdbc.queryForMap("""
-        select count(distinct ps.subject_id) as subject_count,
+        select count(distinct s.id) as subject_count,
           count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from curriculum_program_subject ps
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+            and (s.program_id=ps.program_id or s.program_id is null)
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where ps.program_id=?
