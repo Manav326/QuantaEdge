@@ -1558,3 +1558,50 @@ html[data-qe-appearance="dark"] body .qe-admin-visual-lightbox button {
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/*
+ * Smooth in-app route transitions
+ * -------------------------------
+ * The workspace shell (sidebar + global header) remains mounted. The page slot
+ * is keyed only by path/tenant in AdminWorkspaceLayout, so only the changing
+ * route content receives this small entrance motion.
+ */
+html[data-qe-appearance] body,
+html[data-qe-appearance] .qe-admin-workspace-layout,
+html[data-qe-appearance] .qe-admin-workspace-content,
+html[data-qe-appearance] .qe-admin-workspace-page-slot {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot {
+  min-width: 0;
+  animation: qe-admin-route-enter 170ms cubic-bezier(.2, .75, .25, 1) both;
+}
+@keyframes qe-admin-route-enter {
+  from { opacity: .72; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] body,
+  html[data-qe-appearance] .qe-admin-workspace-layout,
+  html[data-qe-appearance] .qe-admin-workspace-content,
+  html[data-qe-appearance] .qe-admin-workspace-page-slot {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* The main navigation glyph is not a miniature card; let the item state carry emphasis. */
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-nav-icon,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-logout-icon,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-nav-chevron {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-navigation > .qe-nav-link.active .qe-nav-icon,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-nav-group-items > .qe-nav-link.active .qe-nav-icon,
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-overview-shortcuts > a.active .qe-nav-icon {
+  color: inherit !important;
+  background: transparent !important;
+}
