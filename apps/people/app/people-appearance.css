@@ -1466,3 +1466,63 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
   [class*="brandTemplateLogoStage"], [class*="brandTemplateCompactStage"],
   [class*="brandTemplateIconPlaceholder"]
 ) { forced-color-adjust: auto; }
+
+
+/* Nested copy and labels inside the older module layouts must follow the same text roles. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  label, dt, .label, [class*="form"] label, [class*="Filters"] label,
+  [class*="Controls"] label, [class*="themeSettingsGrid"] label
+) {
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="header"] p, [class*="panelHead"] p, [class*="panel"] > p,
+  [class*="metrics"] span, [class*="metrics"] small, [class*="steps"] span,
+  [class*="entityRow"] span, [class*="entityRow"] small,
+  [class*="policyRow"] span, [class*="policyRow"] small,
+  [class*="listCopy"] small, [class*="packKey"], [class*="runMeta"],
+  [class*="manifestRow"] span, [class*="planList"] span, [class*="footer"],
+  [class*="skeleton"], [class*="emptyText"], [class*="emptyCell"],
+  [class*="emptyValue"], [class*="readOnlyItem"] > span,
+  [class*="readOnlyItem"] > small, [class*="readOnlyMetric"] span,
+  [class*="billingBox"] span, [class*="billingBox"] small,
+  [class*="paymentEventList"] article p, [class*="paymentEventList"] article small,
+  [class*="listItem"] small, [class*="courseItem"] small
+) {
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="header"] h1, [class*="panel"] h2, [class*="panelHeading"],
+  [class*="listCopy"] strong, [class*="readOnlyItem"] > strong,
+  [class*="metrics"] strong, [class*="emptyPanel"] b,
+  [class*="packHeading"] h3, [class*="sectionHeading"] h2
+) {
+  color: var(--qe-people-ink) !important;
+}
+
+/* QA confirmation/data panels remain legible and don't inherit stale near-white text roles. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="confirmPanel"], [class*="credentials"], [class*="json"],
+  [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
+):not([class*="themePreview"]) {
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="confirmPanel"], [class*="credentials"], [class*="json"],
+  [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
+):not([class*="themePreview"]) {
+  background-color: var(--qe-people-card) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot [class*="dangerButton"] {
+  background-color: #b42318 !important;
+  border-color: #b42318 !important;
+  color: #fff !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] {
+  background-color: var(--qe-people-info-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-info) 36%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] p {
+  color: var(--qe-people-ink) !important;
+}
