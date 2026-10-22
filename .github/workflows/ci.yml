@@ -92,6 +92,9 @@ jobs:
 
       - name: Verify rich notification platform contract
         run: node scripts/check-rich-notification-contract.mjs
+      
+      - name: Verify HRMS form save and view-first UX contract
+        run: node scripts/check-hrms-form-save-contract.mjs
 
       - name: Verify white-label colour theme contract
         run: node scripts/check-color-theme-contract.mjs
