@@ -960,6 +960,29 @@ assert.ok(
   'Notification inbox labels, billing disclosure icons, empty-state icons, and shared institution editor labels must use contrast-aware semantic foreground tokens.'
 );
 
+
+const visualAuditStructuredLessonThemeCss = read('../app/student/structured-lessons/structured-lessons.css');
+const visualAuditAssignedResourcesCss = read('../app/student/structured-lessons/AssignedLearningResources.module.css');
+assert.ok(
+  visualAuditStructuredLessonThemeCss.includes('color: var(--qe-color-on-primary-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('var(--qe-color-on-warning-container)') &&
+  visualAuditStructuredLessonThemeCss.includes('.qe-structured-choice:has(input:checked)'),
+  'Structured lesson selected choices, callouts and correctness/review feedback must use contrast-matched tenant container tokens.'
+);
+assert.ok(
+  visualAuditAssignedResourcesCss.includes('color: var(--qe-color-on-primary-container') &&
+  visualAuditAssignedResourcesCss.includes('flex-wrap: wrap') &&
+  visualAuditAssignedResourcesCss.includes('overflow-wrap: anywhere'),
+  'Assigned learning-resource headings, kind badges and actions must wrap without width collisions and use semantic foregrounds.'
+);
+assert.ok(
+  css.includes('color-mix(in srgb, var(--qe-color-focus) 12%, transparent)') &&
+  css.includes('color-mix(in srgb, var(--qe-color-focus) 16%, transparent)'),
+  'Profile and course-focus rings must derive from the selected institution focus colour rather than a hard-coded orange.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
