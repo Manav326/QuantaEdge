@@ -724,6 +724,17 @@ html[data-qe-appearance] .qe-admin-workspace-layout .qe-nav-icon {
   background: var(--qe-color-surface-subtle);
   color: var(--qe-color-nav-text);
 }
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-user-footer {
+  background: var(--qe-color-nav-background);
+  color: var(--qe-color-text);
+  border-top-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .qe-sidebar-scroll {
+  scrollbar-color: var(--qe-color-border-subtle) transparent;
+}
+html[data-qe-appearance] .qe-admin-workspace-layout .sidebar-divider {
+  background: var(--qe-color-border-subtle);
+}
 html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-user-footer .avatar {
   background: var(--qe-color-primary-container);
   color: var(--qe-color-on-primary-container, var(--qe-color-text));
