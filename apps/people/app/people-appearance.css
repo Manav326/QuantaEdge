@@ -1179,3 +1179,236 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff
 html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row) :is(strong,span,small,b) {
   overflow-wrap: anywhere;
 }
+
+
+/*
+ * HRMS route-complete appearance parity
+ * -------------------------------------
+ * Route CSS modules were authored independently and several retain literal
+ * light-only fills. Keep their surfaces semantic in BOTH modes. The intentional
+ * stationery, logo canvases and institution palette previews are excluded so
+ * users can inspect the actual output colours.
+ */
+html[data-qe-people-appearance="light"] { color-scheme: light; }
+html[data-qe-people-appearance="dark"] { color-scheme: dark; }
+
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"],
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="Page"] {
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --card: var(--qe-people-card);
+  --brand: var(--qe-people-brand);
+  --brand2: var(--qe-people-brand-strong);
+  --brand-deep: var(--qe-people-brand-strong);
+  --focus: var(--qe-people-focus);
+  color: var(--qe-people-ink);
+  background-color: transparent;
+}
+
+/* Auth routes are outside the signed-in page slot, but must honour the same mode. */
+html[data-qe-people-appearance] .login-panel,
+html[data-qe-people-appearance] .login-card,
+html[data-qe-people-appearance] .login-card form,
+html[data-qe-people-appearance] .login-card label,
+html[data-qe-people-appearance] .qe-people-auth-panel {
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance] .login-panel,
+html[data-qe-people-appearance] .login-card {
+  background-color: var(--qe-people-card);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .login-card input,
+html[data-qe-people-appearance] .login-card select,
+html[data-qe-people-appearance] .login-card textarea,
+html[data-qe-people-appearance] .qe-people-auth-panel input,
+html[data-qe-people-appearance] .qe-people-auth-panel select,
+html[data-qe-people-appearance] .qe-people-auth-panel textarea {
+  background-color: var(--qe-people-field);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .login-card input::placeholder,
+html[data-qe-people-appearance] .qe-people-auth-panel input::placeholder {
+  color: var(--qe-people-muted);
+  opacity: 1;
+}
+html[data-qe-people-appearance] .login-card .primary,
+html[data-qe-people-appearance] .qe-people-auth-panel .primary {
+  background-color: var(--qe-people-brand-strong);
+  color: #fff;
+}
+html[data-qe-people-appearance="dark"] .login-card .primary,
+html[data-qe-people-appearance="dark"] .qe-people-auth-panel .primary {
+  background-color: var(--qe-people-brand-strong);
+  color: #182337;
+}
+
+/* Shared control contract: hover/focus must keep text readable and never flash white. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+) {
+  background-color: var(--qe-people-field);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+  caret-color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+):is(:focus, :focus-visible) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-focus) !important;
+  outline: 2px solid var(--qe-people-focus);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--qe-people-focus) 18%, transparent) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--qe-people-focus);
+  outline-offset: 2px;
+}
+html[data-qe-people-appearance] .qe-people-page-slot input::placeholder,
+html[data-qe-people-appearance] .qe-people-page-slot textarea::placeholder {
+  color: var(--qe-people-muted);
+  opacity: 1;
+}
+
+/* Route-module surfaces: Finance, Institutions, QA and shared editor components. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="panel"], [class*="Panel"], [class*="credentials"], [class*="Credentials"],
+  [class*="confirmPanel"], [class*="gateGrid"] > div, [class*="checkRow"],
+  [class*="entityRow"], [class*="policyRow"], [class*="recipientEditor"],
+  [class*="billingBox"], [class*="versionBanner"], [class*="approvalBox"],
+  [class*="paymentEventList"] > article, [class*="readOnlyItem"],
+  [class*="readOnlyMetric"], [class*="assetEditorRow"], [class*="invitationLinkPreview"],
+  [class*="courseItem"], [class*="listItem"], [class*="emptyPanel"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="status"]):not([class*="Status"]):not([class*="danger"]):not([class*="Danger"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="error"]):not([class*="Error"]) {
+  background-color: var(--qe-people-card) !important;
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="inputGrid"] input, [class*="form"] input, [class*="form"] select,
+  [class*="form"] textarea, [class*="Filters"] input, [class*="Filters"] select,
+  [class*="Controls"] input, [class*="Controls"] select, [class*="Controls"] textarea,
+  [class*="themeSettingsGrid"] select
+) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tab"], [class*="Tab"], [role="tab"]
+):not([class*="themePreview"]):not([aria-selected="true"]):not([class*="tabActive"]):not([class*="TabActive"]) {
+  color: var(--qe-people-muted);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tabActive"], [class*="TabActive"], [role="tab"][aria-selected="true"]
+) {
+  background-color: var(--qe-people-brand-soft);
+  border-color: var(--qe-people-brand);
+  color: var(--qe-people-brand-strong);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) th {
+  background-color: var(--qe-people-table-head);
+  color: var(--qe-people-muted);
+  border-color: var(--qe-people-table-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) td {
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-table-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="emptyPanel"], [class*="json"], [class*="Json"], [class*="manifestRow"],
+  [class*="ManifestRow"], [class*="readOnlyItem"], [class*="valueChip"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+
+/* Inputs and neutral controls use a restrained surface lift in both appearances. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  button, [role="button"], [role="tab"], .secondary,
+  [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) {
+  border-color: var(--qe-people-focus);
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+
+/* Filled primary actions use sufficient contrast; brand orange remains the accent. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  button.primary, a.primary, [class*="primarySmall"], [class*="PrimarySmall"],
+  [class*="generateButton"], [class*="sendButton"], [class*="cta"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong) !important;
+  color: #fff !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button.primary, a.primary, [class*="primarySmall"], [class*="PrimarySmall"],
+  [class*="generateButton"], [class*="sendButton"], [class*="cta"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong) !important;
+  color: #182337 !important;
+}
+
+/* Don't apply global surface styles to brand/logo/theme swatches or real document paper. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="themePreviewLight"], [class*="themePreviewDark"],
+  [class*="themePreviewCard"], [class*="themePreviewStates"],
+  [class*="brandTemplatePreviewCard"], [class*="paper"], [class*="logoCanvas"],
+  [class*="themePreviewPrimary"], [class*="themePreviewSelected"]
+) {
+  color: revert;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="themePreviewLight"], [class*="themePreviewDark"],
+  [class*="themePreviewCard"], [class*="brandTemplatePreviewCard"]
+) {
+  background-color: revert;
+  border-color: revert;
+}
+
+/* Smooth focus/selection should not create a stacking context that traps modals. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="modal"], [class*="Modal"], [class*="dialog"], [class*="Dialog"],
+  [class*="overlay"], [class*="Overlay"], [role="dialog"], [role="alertdialog"]
+) {
+  color: var(--qe-people-ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-people-appearance] .qe-people-page-slot,
+  html[data-qe-people-appearance] .qe-people-page-slot * {
+    scroll-behavior: auto;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
