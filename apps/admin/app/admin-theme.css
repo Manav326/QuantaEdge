@@ -947,3 +947,152 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   color: var(--qe-color-disabled-text);
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/* Source Ingestion has bespoke review/mapping panels; bind them to theme surfaces instead
+   of leaving fixed white cards inside the dark workspace. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-source-ingestion-route :is(
+  [class*="summary"] > div, [class*="previewBar"], [class*="mappingRow"],
+  [class*="existingMapping"], [class*="cacheMeta"], [class*="gapCard"],
+  [class*="assignmentCard"], [class*="jobButton"], [class*="chapterCard"],
+  [class*="selectedSummary"], [class*="mappingConfirm"], [class*="fileInput"],
+  [class*="resultSummary"], [class*="resultBreakdown"], [class*="outlineHeading"],
+  [class*="mappingIdentity"], [class*="mappingAsset"]
+) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-source-ingestion-route :is(
+  [class*="empty"], [class*="previewBar"], [class*="mappingRow"] input,
+  [class*="mappingRow"] select, [class*="fields"] input, [class*="fields"] select
+) {
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-source-ingestion-route :is(
+  [class*="notice"], [class*="approvedNote"], [class*="statusAPPROVED"]
+) {
+  background-color: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-source-ingestion-route :is(
+  [class*="error"], [class*="alertError"], [class*="jobError"], [class*="statusFAILED"],
+  [class*="statusREJECTED"]
+) {
+  background-color: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-source-ingestion-route :is(
+  [class*="metadataReview"], [class*="gapBadge"], [class*="statusREVIEW"],
+  [class*="statusNEEDS_REVIEW"]
+) {
+  background-color: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
+
+/* The Translations route has its own page canvas, filter grid, selected-row, and primary action. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route {
+  background-color: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route :is(
+  [class*="statGrid"] article, [class*="filters"], [class*="listPanel"],
+  [class*="editorPanel"], [class*="revisionMeta"] > span, [class*="workflowHint"],
+  [class*="qualityWarning"], [class*="editorEmpty"] > span
+) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route [class*="rowSelected"] {
+  background-color: var(--qe-color-selected-background);
+  color: var(--qe-color-selected-text);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route [class*="rowSelected"] :is(strong, span, small) {
+  color: inherit;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route [class*="actions"] button:not([class*="secondary"]) {
+  background-color: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-translations-route [class*="actions"] button[class*="secondary"] {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+/* Structured lesson preview: interactive choices, diagrams, status feedback and controls use
+   the same tenant palette while preserving their success/error/warning meaning. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .qe-structured-diagram__node, .qe-structured-inspector__count,
+  .qe-structured-inspector__note, .qe-structured-file-name,
+  .qe-structured-inspector__tag
+) {
+  background-color: var(--qe-color-surface-subtle);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-structured-diagram__step {
+  background-color: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-structured-choice:has(input:checked),
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-structured-language-switch button.active {
+  background-color: var(--qe-color-selected-background);
+  color: var(--qe-color-selected-text);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .qe-structured-actions button:not(.qe-structured-button-secondary),
+  .qe-structured-submit,
+  .qe-structured-navigation button:not(.qe-structured-button-secondary)
+) {
+  background-color: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-structured-experience progress {
+  accent-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .qe-structured-feedback--correct, .qe-structured-status-pill.is-approved
+) {
+  background-color: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .qe-structured-feedback--incorrect, .qe-structured-validation--error, .qe-structured-error
+) {
+  background-color: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-structured-feedback--partially_correct {
+  background-color: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
+
+/* Legacy primary action names still present in Source Ingestion and the structured editor. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  button[class*="primary"], button[class*="Primary"],
+  button[class*="generateButton"], button[class*="publishButton"]
+):not([class*="secondary"]) {
+  background-color: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  button[class*="secondary"], button[class*="Secondary"]
+) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
