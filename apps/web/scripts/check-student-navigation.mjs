@@ -909,6 +909,18 @@ assert.ok(
   'Assessment catalogue, quiz selection/correctness states, released results, leaderboard and action layouts must use semantic theme tokens and safe text wrapping in both appearances.'
 );
 
+
+const visualAuditVerifyCss = read('../app/certificate/verify/Verify.module.css');
+assert.ok(
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .card') &&
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .form input') &&
+  visualAuditVerifyCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditVerifyCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditVerifyCss.includes('html[data-qe-appearance] .scanControls > *') &&
+  visualAuditVerifyCss.includes('overflow-wrap: anywhere'),
+  'Public certificate verification surfaces, form focus, result statuses, and scanner controls must follow the active appearance and wrap safely.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

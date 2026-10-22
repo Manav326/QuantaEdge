@@ -44,3 +44,86 @@ html[data-qe-appearance="dark"] .statusRevoked span {
 }
 html[data-qe-appearance="dark"] .result dl div { border-color: var(--qe-color-border-subtle); }
 html[data-qe-appearance="dark"] .scannerPanel { border-color: var(--qe-color-border-subtle); }
+
+
+/* Verification UI inherits tenant appearance; the camera viewport remains intentionally dark. */
+html[data-qe-appearance] .page {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .brand {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .brand span,
+html[data-qe-appearance] :where(.card > p, .privacy, .result dt, .scannerHint) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] .card {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2, 0 14px 44px rgb(21 32 56 / 6%));
+}
+
+html[data-qe-appearance] .kicker {
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance] .form input {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+
+html[data-qe-appearance] .form input:focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] .error {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .statusValid {
+  color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] .statusValid span {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+
+html[data-qe-appearance] .statusRevoked {
+  color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .statusRevoked span {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+}
+
+html[data-qe-appearance] :where(.result, .result dl div, .scannerPanel) {
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.result, .result dl div, .result dt, .result dd) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[data-qe-appearance] .scanControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+html[data-qe-appearance] .scanControls > * {
+  max-width: 100%;
+}
