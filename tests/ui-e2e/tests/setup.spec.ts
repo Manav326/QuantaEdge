@@ -21,8 +21,8 @@ async function seedOnlyDisposableHrmsBootstrap(): Promise<void> {
     const result = await pool.query(
       `update staff_account
          set password_hash=$1, must_change_password=true, password_changed_at=null,
-             last_login_at=null, active=true, updated_at=now()
-       where lower(username)='hrms_admin'`,
+             last_login_at=null, updated_at=now()
+       where lower(username)='hrms_admin' and active=true`,
       [hash]
     );
     expect(result.rowCount, 'Fresh QA database must contain exactly one migrated hrms_admin bootstrap row.').toBe(1);
