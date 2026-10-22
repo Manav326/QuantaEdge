@@ -953,11 +953,11 @@ const visualAuditBillingContrastCss = read('../app/components/BillingProfileEdit
 const visualAuditEmptyStateContrastCss = read('../app/student/components/StudentEmptyState.module.css');
 assert.ok(
   visualAuditInboxContrastCss.includes('var(--qe-color-accent-text,var(--qe-color-accent') &&
-  visualAuditInboxContrastCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditInboxContrastCss.includes('.error button') &&
   visualAuditBillingContrastCss.includes('var(--qe-color-on-primary-container,var(--qe-color-primary-text') &&
   visualAuditEmptyStateContrastCss.includes('var(--qe-color-primary-text, var(--qe-color-primary') &&
   css.includes('[class*="pushMedia"]'),
-  'Notification inbox labels, billing disclosure icons, empty-state icons, and shared institution editor labels must use contrast-aware semantic foreground tokens.'
+  'Notification inbox actions must use contrast-aware accent text, while billing disclosure icons, empty-state icons, and shared institution editor labels use semantic foreground tokens.'
 );
 
 
