@@ -400,21 +400,25 @@ public class InstitutionCourseLifecycleController {
   }
 
   @PostMapping("/course-offers/{offerId}/submit")
+  @Transactional
   public Map<String,Object> submitOffer(@PathVariable long offerId,HttpServletRequest request) {
     return transitionOffer(offerId,"SUBMIT",null,request);
   }
 
   @PostMapping("/course-offers/{offerId}/approve")
+  @Transactional
   public Map<String,Object> approveOffer(@PathVariable long offerId,HttpServletRequest request) {
     return transitionOffer(offerId,"APPROVE",null,request);
   }
 
   @PostMapping("/course-offers/{offerId}/publish")
+  @Transactional
   public Map<String,Object> publishOffer(@PathVariable long offerId,HttpServletRequest request) {
     return transitionOffer(offerId,"PUBLISH",null,request);
   }
 
   @PostMapping("/course-offers/{offerId}/reject")
+  @Transactional
   public Map<String,Object> rejectOffer(
       @PathVariable long offerId,@RequestBody Map<String,Object> body,HttpServletRequest request) {
     return transitionOffer(offerId,"REJECT",requiredText(body,"reason",3,1000,"Rejection reason"),request);
