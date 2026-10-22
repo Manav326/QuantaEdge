@@ -445,6 +445,11 @@ public class CourseMarketplaceLaunchReadinessService {
     }
   }
 
+  public boolean contentFingerprintMatches(long programId,String savedFingerprint) {
+    return savedFingerprint!=null&&!savedFingerprint.isBlank()
+        &&savedFingerprint.trim().equals(contentFingerprint(programId));
+  }
+
   private String contentFingerprint(long programId) {
     String value=jdbc.queryForObject("""
         select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,E'\\n'
