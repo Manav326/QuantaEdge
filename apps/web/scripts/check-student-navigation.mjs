@@ -861,6 +861,18 @@ assert.ok(
   'Practice question surfaces, notices, and both account menus must use institution-aware surface and contrast tokens in light and dark appearance.'
 );
 
+
+const visualAuditCertificateCss = read('../app/student/certificates/Certificates.module.css');
+assert.ok(
+  visualAuditCertificateCss.includes('html[data-qe-appearance] .panel') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] .selected') &&
+  visualAuditCertificateCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditCertificateCss.includes('var(--qe-color-on-success-container)') &&
+  visualAuditCertificateCss.includes('html[data-qe-appearance] .certificateInfo strong') &&
+  visualAuditCertificateCss.includes('overflow-wrap: anywhere'),
+  'Certificate app surfaces, selected controls, status messages, and long certificate titles must follow the tenant palette and wrap within their layout; document previews remain white.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
