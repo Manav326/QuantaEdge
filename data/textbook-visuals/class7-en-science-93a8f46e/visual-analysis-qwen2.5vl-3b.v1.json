@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2150,
+    "assets_selected": 2151,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 2146,
-    "assets_remaining": 5342,
+    "assets_analyzed": 2147,
+    "assets_remaining": 5341,
     "assets_completion_percent": 28.7,
     "assets_failed": 100,
-    "assets_skipped_from_checkpoint": 2145,
+    "assets_skipped_from_checkpoint": 2146,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -73388,9 +73388,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39803154942",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -76685,9 +76685,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39803154942",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -76770,7 +76770,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39803154942",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -80279,9 +80279,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39623490257",
+      "run_id": "39803154942",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -81819,6 +81819,47 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39623490257",
       "checkpointed_at": "2026-10-21T21:12:37Z"
+    },
+    {
+      "asset_id": "b02bee87d351752cd9e035e7",
+      "asset_sha256": "d1bf0ea890969428214f663cdc834d0ad5167e953d4cd50e19cb68fb9d30fe0d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/d1bf0ea890969428214f663cdc834d0ad5167e953d4cd50e19cb68fb9d30fe0d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not specify the temperature or humidity of the environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39803154942",
+      "checkpointed_at": "2026-10-22T20:38:04Z"
     }
   ]
 }
