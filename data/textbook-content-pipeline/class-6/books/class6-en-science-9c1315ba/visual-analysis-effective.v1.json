@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c791db1838de0f4b30c567320a260dc281aabb8f53858bd8d330e98da82ed200",
+  "raw_analysis_sha256": "2fc1a446bfe834cb54d07903b0222a3daa0f04bd40aaf1fca98ccb2474379d8d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:46:03Z",
+      "checkpointed_at": "2026-10-22T07:49:57Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:47:06Z",
+      "checkpointed_at": "2026-10-22T07:50:59Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:48:09Z",
+      "checkpointed_at": "2026-10-22T07:52:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66039,6 +66039,142 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f63cb31446d1f8467365fc2c",
+      "asset_sha256": "e4886b88688e71b4c2c0c00249b4e70154a207d202d24ef82438f89ac2d1f81b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 131,
+      "asset_path": "page-0131.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6e5e8f63575da620e239866dea804e7a04f6fa2302c3431240069479bec1406c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of mass and weight, including a diagram of a balance and a description of an activity involving weighing objects.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Weigh each cup using a balance (Fig. 6.7)",
+          "and record the readings in your notebook.",
+          "Compare the data and infer which is",
+          "heavier or lighter.",
+          "From Activity 6.8, we can say that any object",
+          "which is heavier or lighter can be measured in",
+          "terms of a property called mass.",
+          "The one which is heavier has more mass",
+          "and the one which is lighter has less mass.",
+          "Fig. 6.7: Weighing a paper",
+          "cup containing water",
+          "Weight is sometimes used in common language for mass as it",
+          "determined by weighing. You will learn more about mass and weight",
+          "and their relation in higher classes."
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "activity",
+          "properties",
+          "properties of objects"
+        ],
+        "context_relation": "explaining",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T07:56:19Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of mass and weight, including a diagram of a balance and a description of an activity involving weighing objects.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Weigh each cup using a balance (Fig. 6.7)",
+          "and record the readings in your notebook.",
+          "Compare the data and infer which is",
+          "heavier or lighter.",
+          "From Activity 6.8, we can say that any object",
+          "which is heavier or lighter can be measured in",
+          "terms of a property called mass.",
+          "The one which is heavier has more mass",
+          "and the one which is lighter has less mass.",
+          "Fig. 6.7: Weighing a paper",
+          "cup containing water",
+          "Weight is sometimes used in common language for mass as it",
+          "determined by weighing. You will learn more about mass and weight",
+          "and their relation in higher classes."
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "activity",
+          "properties",
+          "properties of objects"
+        ],
+        "context_relation": "explaining",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "03079efc90ed2caee6241985",
+      "asset_sha256": "7ceca6cf8ab63ea56339041ffeb0efada4d8da549a47d53f4f8a39226ee0a474",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 132,
+      "asset_path": "assets/7ceca6cf8ab63ea56339041ffeb0efada4d8da549a47d53f4f8a39226ee0a474.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "56ae652537bc6cdabefd7f219d2899ed7faca261ec4dfc6ea9abb6d22deaa488",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a woman pouring water from a jug into a tumbler, with water spilling over the edge.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "volume",
+          "space occupied by water",
+          "different water levels in tumblers",
+          "same capacity of tumblers",
+          "spilling water"
+        ],
+        "context_relation": "The image illustrates the concept of volume and space occupied by water, as explained by Madam Vidya in the text.",
+        "limitations": [
+          "The image does not show the tumblers' capacity or the water levels in detail.",
+          "The image does not show the water levels in the tumblers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T07:58:02Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a woman pouring water from a jug into a tumbler, with water spilling over the edge.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "volume",
+          "space occupied by water",
+          "different water levels in tumblers",
+          "same capacity of tumblers",
+          "spilling water"
+        ],
+        "context_relation": "The image illustrates the concept of volume and space occupied by water, as explained by Madam Vidya in the text.",
+        "limitations": [
+          "The image does not show the tumblers' capacity or the water levels in detail.",
+          "The image does not show the water levels in the tumblers."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

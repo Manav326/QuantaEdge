@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1333,
-    "successful_visual_analyses": 1307,
-    "missing_visual_analyses": 745,
+    "raw_analysis_result_rows": 1335,
+    "successful_visual_analyses": 1309,
+    "missing_visual_analyses": 743,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 771,
+    "unresolved_count": 769,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50216,9 +50216,39 @@
       "asset_path": "page-0131.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of mass and weight, including a diagram of a balance and a description of an activity involving weighing objects.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Weigh each cup using a balance (Fig. 6.7)",
+          "and record the readings in your notebook.",
+          "Compare the data and infer which is",
+          "heavier or lighter.",
+          "From Activity 6.8, we can say that any object",
+          "which is heavier or lighter can be measured in",
+          "terms of a property called mass.",
+          "The one which is heavier has more mass",
+          "and the one which is lighter has less mass.",
+          "Fig. 6.7: Weighing a paper",
+          "cup containing water",
+          "Weight is sometimes used in common language for mass as it",
+          "determined by weighing. You will learn more about mass and weight",
+          "and their relation in higher classes."
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "activity",
+          "properties",
+          "properties of objects"
+        ],
+        "context_relation": "explaining",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50234,9 +50264,25 @@
       "asset_path": "assets/7ceca6cf8ab63ea56339041ffeb0efada4d8da549a47d53f4f8a39226ee0a474.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a woman pouring water from a jug into a tumbler, with water spilling over the edge.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "volume",
+          "space occupied by water",
+          "different water levels in tumblers",
+          "same capacity of tumblers",
+          "spilling water"
+        ],
+        "context_relation": "The image illustrates the concept of volume and space occupied by water, as explained by Madam Vidya in the text.",
+        "limitations": [
+          "The image does not show the tumblers' capacity or the water levels in detail.",
+          "The image does not show the water levels in the tumblers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
