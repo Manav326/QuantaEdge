@@ -4,7 +4,7 @@
 .header p:not(.eyebrow){max-width:740px;color:var(--qe-color-text-muted,var(--muted,#657184));font-size:14px;line-height:1.6;margin:0}
 .eyebrow{font-size:10px;letter-spacing:.14em;font-weight:850;color:var(--qe-color-accent,var(--brand,#c45c16));margin:0 0 10px}
 .headerTag{flex:0 0 auto;padding:7px 10px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:999px;color:var(--qe-color-text-muted,var(--muted,#657184));font-size:11px;font-weight:760;background:var(--qe-color-surface,var(--card,#fff))}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,330px);gap:20px;align-items:stretch}
 .editor{display:grid;gap:16px;min-width:0}
 .panel{min-width:0;padding:clamp(15px,2.2vw,23px);border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:19px;background:var(--qe-color-surface,var(--card,#fff));box-shadow:0 7px 26px rgba(21,35,52,.035)}
 .sectionHeading{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}
@@ -80,10 +80,32 @@
 .sendActions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 9px}
 .audienceResult{display:grid;gap:4px;padding:13px;border:1px solid color-mix(in srgb,var(--qe-color-success,#12805c) 30%,var(--qe-color-border-subtle,var(--line,#dbe1e8)));border-radius:11px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
 .audienceResult strong{font-size:14px}.audienceResult span{font-size:11px;color:var(--qe-color-text-muted,var(--muted,#657184))}
-.side{min-width:0}.sticky{position:sticky;top:16px;display:grid;gap:12px}
+.side{min-width:0;align-self:stretch}.sticky{position:sticky;top:16px;display:grid;grid-template-rows:auto auto auto minmax(180px,1fr);gap:12px;height:calc(100dvh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;align-content:stretch;overscroll-behavior:contain;padding:2px 3px 2px 0;scrollbar-gutter:stable}
 .sideCard{padding:16px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:15px;background:var(--qe-color-surface,var(--card,#fff));box-shadow:0 6px 20px rgba(21,35,52,.03)}
 .sideCard h3{margin:0 0 8px;font-size:13px}.sideCard p,.sideCard li{font-size:11px;line-height:1.55;color:var(--qe-color-text-muted,var(--muted,#657184))}
 .sideCard p{margin:6px 0}.sideCard ul{padding-left:17px;margin:9px 0}.muted{color:var(--qe-color-text-muted,var(--muted,#657184));font-size:10px;line-height:1.45}
+.sideCardHeading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.sideCardHeading h3{margin:0}
+.sideDraftName{display:block;min-width:0;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.sideMetrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}
+.sideMetrics>div{display:grid;gap:5px;min-width:0;padding:10px;border-radius:10px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
+.sideMetrics span{font-size:9px;color:var(--qe-color-text-muted,var(--muted,#657184))}
+.sideMetrics b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+.sideStatusLine{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sideStatusSaved,.sideStatusDraft,.sideStatusReady,.sideStatusWarning,.sideCount{display:inline-flex;align-items:center;max-width:100%;padding:5px 8px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:999px;font-size:9px;font-weight:750;line-height:1.2;overflow-wrap:anywhere}
+.sideStatusSaved,.sideStatusReady{color:var(--qe-color-success,#067647);background:color-mix(in srgb,var(--qe-color-success,#067647) 8%,var(--qe-color-surface,var(--card,#fff)));border-color:color-mix(in srgb,var(--qe-color-success,#067647) 25%,var(--qe-color-border-subtle,var(--line,#dbe1e8)))}
+.sideStatusDraft,.sideStatusWarning{color:var(--qe-color-warning,#b54708);background:color-mix(in srgb,var(--qe-color-warning,#b54708) 7%,var(--qe-color-surface,var(--card,#fff)));border-color:color-mix(in srgb,var(--qe-color-warning,#b54708) 24%,var(--qe-color-border-subtle,var(--line,#dbe1e8)))}
+.sideCount{padding:5px 8px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
+.sticky>.sideCard:last-child{min-height:0;display:flex;flex-direction:column}
+.sticky>.sideCard:last-child .templateList{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+
+.sideChecklist{display:grid;gap:12px;margin:12px 0}
+.sideChecklist>div{display:grid;grid-template-columns:24px minmax(0,1fr);gap:9px;align-items:start}
+.sideChecklistMark{display:grid;place-items:center;width:23px;height:23px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:8px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa));font-size:10px;font-weight:800;color:var(--qe-color-accent,var(--brand,#c45c16))}
+.sideChecklist>div>span:last-child{display:grid;gap:3px;min-width:0}
+.sideChecklist strong{font-size:11px}
+.sideChecklist small{font-size:10px;line-height:1.45;color:var(--qe-color-text-muted,var(--muted,#657184));overflow-wrap:anywhere}
+
 .templateList{display:grid;gap:5px}.templateList button{display:grid;gap:3px;padding:8px;border:1px solid var(--qe-color-border-subtle,var(--line,#dbe1e8));border-radius:9px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa));color:var(--qe-color-text,var(--ink,#172637));text-align:left;cursor:pointer}.templateList span{font-size:11px;font-weight:700}.templateList small{font-size:9px;color:var(--qe-color-text-muted,var(--muted,#657184))}
 .error,.notice{margin:12px 0;padding:12px 14px;border-radius:12px;font-size:12px;line-height:1.45}.error{border:1px solid var(--qe-color-error,#c7372f);background:var(--qe-color-surface,var(--card,#fff))}.notice{border:1px solid color-mix(in srgb,var(--qe-color-success,#12805c) 32%,var(--qe-color-border-subtle,var(--line,#dbe1e8)));background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
 @media(max-width:1200px){.layout{grid-template-columns:minmax(0,1fr)}.side{display:none}.builder{grid-template-columns:165px minmax(250px,1fr)}.canvasStage{grid-column:2;grid-row:1}.inspector{grid-column:2;grid-row:2;max-height:none}.blockList{max-height:800px}.fieldGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
