@@ -147,6 +147,16 @@ public class CoursePaymentOperationsController {
     if(search.length()>160) throw new IllegalArgumentException("Provider-event search can contain at most 160 characters.");
     int limit=Math.max(1,Math.min(requestedLimit,100));
     int offset=Math.max(0,Math.min(requestedOffset,100000));
+    if(!providerEventSchemaReady()) {
+      Map<String,Object> unavailable=new LinkedHashMap<>();
+      unavailable.put("items",List.of());
+      unavailable.put("total",0L);
+      unavailable.put("limit",limit);
+      unavailable.put("offset",offset);
+      unavailable.put("schemaReady",false);
+      unavailable.put("warning","Razorpay provider-event storage is not available in this database. Apply Flyway migration V164__course_payment_provider_webhook_events.sql to the database used by this API, then restart the API. This is not evidence that the order has no webhooks; its HRMS operation history remains available.");
+      return unavailable;
+    }
     String where=" where true ";
     List<Object> args=new ArrayList<>();
     if(status!=null){where+=" and e.processing_status=?";args.add(status);}
@@ -169,6 +179,21 @@ public class CoursePaymentOperationsController {
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("items",items);result.put("total",total==null?0L:total);result.put("limit",limit);result.put("offset",offset);
     return result;
+  }
+
+  private boolean providerEventSchemaReady() {
+    Boolean ready=jdbc.queryForObject("""
+        select to_regclass('public.course_payment_provider_event') is not null
+          and (select count(distinct column_name)=14
+            from information_schema.columns
+            where table_schema='public' and table_name='course_payment_provider_event'
+              and column_name in (
+                'id','provider_event_id','event_type','course_payment_order_id',
+                'course_payment_refund_id','provider_order_id','provider_payment_id',
+                'provider_refund_id','payload_sha256','processing_status','status_message',
+                'details','received_at','processed_at'))
+        """,Boolean.class);
+    return Boolean.TRUE.equals(ready);
   }
 
   @PostMapping("/{orderId}/reconcile")
