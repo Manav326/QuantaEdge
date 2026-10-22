@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7d1ef81d3e6c0111d5b211e79612768b70814f94114ee38e2e437c20af6b7a15",
+  "raw_analysis_sha256": "1a5266c7cef8a5ef3d53f717de23e0d1e87c096a619e42bd4ab9fd07d74a5c1d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34676,7 +34676,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:18:01Z",
+      "checkpointed_at": "2026-10-22T10:26:52Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56359,7 +56359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:19:00Z",
+      "checkpointed_at": "2026-10-22T10:27:51Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65835,7 +65835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:20:02Z",
+      "checkpointed_at": "2026-10-22T10:28:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -66850,7 +66850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:20:46Z",
+      "checkpointed_at": "2026-10-22T10:29:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
@@ -67718,6 +67718,56 @@
         "context_relation": "textbook",
         "limitations": [
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "66df91f2b0d1e0f5063e0cb9",
+      "asset_sha256": "7008311ccddc7a9f26fbb1be0d69716391e763948fd155157ce4a4abcda1fc18",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 139,
+      "asset_path": "assets/7008311ccddc7a9f26fbb1be0d69716391e763948fd155157ce4a4abcda1fc18.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e8da3520eef9fda75a8cce796d4d1fea6a39dc89de5cdd0502a5504ff125eed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials X and Y."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T10:31:12Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane flying over a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials X and Y."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

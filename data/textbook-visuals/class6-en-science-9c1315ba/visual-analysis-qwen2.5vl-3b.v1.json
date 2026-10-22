@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1338,
+    "assets_selected": 1339,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1334,
-    "assets_remaining": 744,
+    "assets_analyzed": 1335,
+    "assets_remaining": 743,
     "assets_completion_percent": 64.2,
     "assets_failed": 29,
-    "assets_skipped_from_checkpoint": 1333,
+    "assets_skipped_from_checkpoint": 1334,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:18:01Z"
+      "checkpointed_at": "2026-10-22T10:26:52Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:19:00Z"
+      "checkpointed_at": "2026-10-22T10:27:51Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:20:02Z"
+      "checkpointed_at": "2026-10-22T10:28:52Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:20:46Z"
+      "checkpointed_at": "2026-10-22T10:29:36Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44783,6 +44783,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T10:25:37Z"
+    },
+    {
+      "asset_id": "66df91f2b0d1e0f5063e0cb9",
+      "asset_sha256": "7008311ccddc7a9f26fbb1be0d69716391e763948fd155157ce4a4abcda1fc18",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 139,
+      "asset_path": "assets/7008311ccddc7a9f26fbb1be0d69716391e763948fd155157ce4a4abcda1fc18.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e8da3520eef9fda75a8cce796d4d1fea6a39dc89de5cdd0502a5504ff125eed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background"
+        ],
+        "context_relation": "The image is related to the educational content about identifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the properties of materials X and Y."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T10:31:12Z"
     }
   ]
 }
