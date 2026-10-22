@@ -1987,3 +1987,18 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   color: var(--qe-color-text-muted, var(--admin-muted)) !important;
   border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
 }
+
+
+/* Small count badges used in review queue headings must not retain their light-only fill. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(.panelHeading,.panel-head,.sectionHead,.section-heading)>b,
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(.panelHeading,.panel-head,.sectionHead,.section-heading)>.count {
+  background: var(--qe-color-surface-subtle, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  border: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.panelHeading,.panel-head,.sectionHead,.section-heading)>b,
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.panelHeading,.panel-head,.sectionHead,.section-heading)>.count {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised)) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
