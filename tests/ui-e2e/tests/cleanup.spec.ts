@@ -114,16 +114,16 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
     const uninstalled = await uninstallResponse.json();
     expect(uninstalled.state).toBe('UNINSTALLED');
 
-    const pool = await openQaDatabase();
+    const poolAfterUninstall = await openQaDatabase();
     try {
-      const run = await pool.query(
+      const run = await poolAfterUninstall.query(
         'select state, cleaned_resource_count, created_resource_count from qa_test_run where run_id=$1',
         [runId]
       );
       expect(run.rowCount).toBe(1);
       expect(run.rows[0].state).toBe('UNINSTALLED');
 
-      const ownedRows = await pool.query(
+      const ownedRows = await poolAfterUninstall.query(
         `select
           (select count(*)::int from institution_tenant where qa_test_run_id=$1) as tenants,
           (select count(*)::int from user_account where qa_test_run_id=$1) as users,
@@ -139,7 +139,7 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
       });
       expect(Number(run.rows[0].cleaned_resource_count)).toBeGreaterThan(0);
     } finally {
-      await pool.end();
+      await poolAfterUninstall.end();
     }
 
     await expect(page.getByRole('alert')).toHaveCount(0);
