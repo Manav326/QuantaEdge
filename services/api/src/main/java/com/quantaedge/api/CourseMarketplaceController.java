@@ -1355,7 +1355,7 @@ public class CourseMarketplaceController {
     }
   }
 
-  static boolean hasNoDiscountFacts(Map<String,Object> order) {
+    static boolean hasNoDiscountFacts(Map<String,Object> order) {
     if(order==null) return false;
     Object rawCode=order.get("discount_reference");
     if(rawCode!=null&&!String.valueOf(rawCode).isBlank()) return false;
