@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "05ebb8fca543d534ef8f85ec72005d3b2a1eb001e9f0408ee927cef730b2fec6",
+  "raw_analysis_sha256": "40032f373db0479edf38775bd95fda8e001c772ae76fbcfc8716630007ad1166",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T17:09:50Z",
+      "checkpointed_at": "2026-10-22T17:13:35Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T17:10:32Z",
+      "checkpointed_at": "2026-10-22T17:14:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T17:11:29Z",
+      "checkpointed_at": "2026-10-22T17:15:09Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56468,7 +56468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T17:12:04Z",
+      "checkpointed_at": "2026-10-22T17:15:42Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -65942,7 +65942,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T17:12:44Z",
+      "checkpointed_at": "2026-10-22T17:16:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "page_with_multiple_visuals",
