@@ -96,6 +96,8 @@ public class CourseRefundLedgerService {
         ||number(invoice.get("amount_paid_paise"))!=captured)
       throw new IllegalStateException("The original sale document does not reconcile to the captured amount.");
 
+    assertRefundAllowedForEntitlement(orderId);
+
     Long alreadyReserved=jdbc.queryForObject("""
       select coalesce(sum(requested_amount_paise),0)
       from course_payment_refund
@@ -122,6 +124,17 @@ public class CourseRefundLedgerService {
     event(refundId,"REQUESTED","course-refund:"+refundId+":requested",actorStaffId,
         Map.of("orderId",orderId,"amountPaise",amountPaise,"currency","INR"));
     return refundById(refundId);
+  }
+
+  /** Blocks automated refunds for purchases whose course entitlement was permanently transferred. */
+  void assertRefundAllowedForEntitlement(long orderId) {
+    Integer transferred=jdbc.queryForObject("""
+      select count(*) from course_purchase cp
+      join course_entitlement ce on ce.source_purchase_id=cp.id
+      where cp.order_id=? and ce.transfer_count=1
+      """,Integer.class,orderId);
+    if(transferred!=null&&transferred>0)
+      throw new IllegalStateException("This course entitlement has been permanently transferred. Automatic refund is blocked until HRMS reviews the refund/access policy.");
   }
 
   @Transactional

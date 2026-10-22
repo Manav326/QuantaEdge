@@ -1,6 +1,9 @@
 package com.quantaedge.api;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
@@ -47,6 +50,28 @@ class CourseRefundLedgerServiceProviderStateTest {
     verify(jdbc).update(contains("update course_payment_refund set status='RECONCILIATION_REQUIRED'"),
         any(Object[].class));
     verify(jdbc,never()).queryForObject(contains("insert into fiscal_document("),eq(Long.class),any(Object[].class));
+  }
+
+  @Test
+  void newRefundIsBlockedForPermanentlyTransferredEntitlement() {
+    JdbcTemplate jdbc=mock(JdbcTemplate.class);
+    doAnswer(invocation->1).when(jdbc).queryForObject(
+        contains("join course_entitlement ce"),eq(Integer.class),any(Object[].class));
+    CourseRefundLedgerService service=service(jdbc);
+
+    IllegalStateException failure=assertThrows(IllegalStateException.class,
+        ()->service.assertRefundAllowedForEntitlement(70L));
+    assertTrue(failure.getMessage().contains("permanently transferred"));
+  }
+
+  @Test
+  void newRefundIsAllowedByTransferGuardWhenEntitlementHasNotBeenTransferred() {
+    JdbcTemplate jdbc=mock(JdbcTemplate.class);
+    doAnswer(invocation->0).when(jdbc).queryForObject(
+        contains("join course_entitlement ce"),eq(Integer.class),any(Object[].class));
+    CourseRefundLedgerService service=service(jdbc);
+
+    assertDoesNotThrow(()->service.assertRefundAllowedForEntitlement(70L));
   }
 
   private CourseRefundLedgerService service(JdbcTemplate jdbc) {

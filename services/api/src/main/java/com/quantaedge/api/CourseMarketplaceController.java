@@ -359,6 +359,25 @@ public class CourseMarketplaceController {
       throw new SecurityException("The receiving learner is not an active member of this institution.");
     }
 
+    // Use the same lock order as refund preparation: payment order first, entitlement second.
+    // This serializes a permanent transfer against reservation/settlement of a course refund.
+    List<Map<String,Object>> sourceRows=jdbc.queryForList("""
+      select ce.source_purchase_id,cp.order_id
+      from course_entitlement ce
+      left join course_purchase cp on cp.id=ce.source_purchase_id
+      where ce.id=? and ce.institution_id=? and ce.holder_user_id=? and ce.transfer_count=0
+      """,entitlementId,institutionId,parentId);
+    if(sourceRows.isEmpty())
+      throw new IllegalArgumentException("This institution-scoped course is not owned by your account or has already been transferred.");
+    Map<String,Object> source=sourceRows.getFirst();
+    if(source.get("source_purchase_id")==null||source.get("order_id")==null)
+      throw new IllegalStateException("This entitlement has no purchase order link and cannot be transferred safely.");
+    long sourcePurchaseId=((Number)source.get("source_purchase_id")).longValue();
+    long paymentOrderId=((Number)source.get("order_id")).longValue();
+    List<Map<String,Object>> orderLock=jdbc.queryForList(
+        "select id from course_payment_order where id=? for update",paymentOrderId);
+    if(orderLock.isEmpty())throw new IllegalStateException("The source course payment order no longer exists.");
+
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select ce.id,ce.course_id,ce.source_purchase_id,ce.holder_student_id,
         ce.transfer_count,p.display_name as course_name
@@ -380,6 +399,15 @@ public class CourseMarketplaceController {
     }
     long courseId = ((Number) entitlement.get("course_id")).longValue();
     long purchaseId = ((Number) entitlement.get("source_purchase_id")).longValue();
+    if(purchaseId!=sourcePurchaseId)
+      throw new IllegalStateException("The entitlement purchase link changed while transfer was being prepared.");
+    Integer refundCount=jdbc.queryForObject("""
+      select count(*) from course_payment_refund
+      where course_payment_order_id=?
+        and status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED','PROCESSED')
+      """,Integer.class,paymentOrderId);
+    if(refundCount!=null&&refundCount>0)
+      throw new IllegalStateException("This purchase has an active or processed refund. Permanent transfer is blocked to avoid transferring refunded access.");
     Long currentStudentId = entitlement.get("holder_student_id") instanceof Number n ? n.longValue() : null;
     if (currentStudentId != null && currentStudentId == targetStudentId) {
       throw new IllegalArgumentException("This course is already assigned to that learner.");
