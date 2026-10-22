@@ -85,7 +85,7 @@ export default function EmployeeSelfServicePage(){
   },[router,range.from,range.to,attendancePageLimit,attendanceOffset,leavePageLimit,leaveOffset,payslipPageLimit,payslipOffset,profilePageLimit,profileOffset,correctionPageLimit,correctionOffset]);
   useEffect(()=>{void load()},[load]);
   async function submitLeave(event:React.FormEvent){
-    event.preventDefault();setSaving(true);setError('');setNotice('');
+    event.preventDefault();if(saving)return;if(!draft.leaveTypeCode){setError('Choose a leave type.');return;}if(!draft.startDate||!draft.endDate){setError('Choose both a leave start date and end date.');return;}if(draft.endDate<draft.startDate){setError('The leave end date must be on or after the start date.');return;}if(!draft.reason.trim()){setError('Enter a reason for the leave request.');return;}setSaving(true);setError('');setNotice('');
     try{
       const result=await api('/api/v1/hr/self-service/leave/requests',{method:'POST',body:JSON.stringify(draft)});
       setNotice('');notifyUser(ui('people.selfService.leaveSubmitted',{id:result.id}),'success');
@@ -95,7 +95,7 @@ export default function EmployeeSelfServicePage(){
     }catch(e){setError(e instanceof Error?e.message:ui('people.selfService.leaveSubmitFailed'))}finally{setSaving(false)}
   }
   async function submitAttendanceCorrection(event:React.FormEvent){
-    event.preventDefault();setSaving(true);setError('');setNotice('');
+    event.preventDefault();if(saving)return;if(!correctionDraft.workDate||!correctionDraft.status){setError('Choose the work date and requested attendance status.');return;}if(correctionDraft.checkInAt&&correctionDraft.checkOutAt&&new Date(correctionDraft.checkOutAt).getTime()<=new Date(correctionDraft.checkInAt).getTime()){setError('Check-out must be later than check-in.');return;}if(!correctionDraft.reason.trim()){setError('Explain why this attendance correction is requested.');return;}setSaving(true);setError('');setNotice('');
     try{
       const payload={...correctionDraft,checkInAt:correctionDraft.checkInAt?new Date(correctionDraft.checkInAt).toISOString():null,checkOutAt:correctionDraft.checkOutAt?new Date(correctionDraft.checkOutAt).toISOString():null};const result=await api('/api/v1/hr/self-service/attendance/correction-requests',{method:'POST',body:JSON.stringify(payload)});
       setNotice('');notifyUser(ui('people.selfService.correctionSubmitted',{id:result.id}),'success');
@@ -105,12 +105,12 @@ export default function EmployeeSelfServicePage(){
   }
   async function cancelAttendanceCorrection(id:number){
     setSaving(true);setError('');setNotice('');
-    try{await api('/api/v1/hr/self-service/attendance/correction-requests/'+id+'/cancel',{method:'PATCH'});setNotice(ui('people.selfService.correctionCancelled'));await load();setTab('attendance')}
+    try{await api('/api/v1/hr/self-service/attendance/correction-requests/'+id+'/cancel',{method:'PATCH'});setNotice('');notifyUser(ui('people.selfService.correctionCancelled'),'success');await load();setTab('attendance')}
     catch(e){setError(e instanceof Error?e.message:ui('people.selfService.correctionCancelFailed'))}finally{setSaving(false)}
   }
   async function submitProfileChange(event:React.FormEvent){
-    event.preventDefault();setSaving(true);setError('');setNotice('');
-    const body:any={reason:profileDraft.reason};
+    event.preventDefault();if(saving)return;if(!profileDraft.reason.trim()){setError('Enter a reason for the profile change.');return;}setSaving(true);setError('');setNotice('');
+    const body:any={reason:profileDraft.reason.trim()};
     if(profileDraft.email.trim())body.email=profileDraft.email.trim();
     if(profileDraft.phoneE164.trim())body.phoneE164=profileDraft.phoneE164.trim();
     if(!body.email&&!body.phoneE164){setError(ui('people.selfService.profileContactRequired'));setSaving(false);return}
@@ -123,7 +123,7 @@ export default function EmployeeSelfServicePage(){
   }
   async function cancelProfileChange(id:number){
     setSaving(true);setError('');setNotice('');
-    try{await api('/api/v1/hr/self-service/profile-change-requests/'+id+'/cancel',{method:'PATCH'});setNotice(ui('people.selfService.profileChangeCancelled'));await load();setTab('profile')}
+    try{await api('/api/v1/hr/self-service/profile-change-requests/'+id+'/cancel',{method:'PATCH'});setNotice('');notifyUser(ui('people.selfService.profileChangeCancelled'),'success');await load();setTab('profile')}
     catch(e){setError(e instanceof Error?e.message:ui('people.selfService.profileChangeCancelFailed'))}finally{setSaving(false)}
   }
   async function logout(){try{await api('/api/v1/auth/logout',{method:'POST'})}finally{router.replace('/login')}}
@@ -217,7 +217,7 @@ export default function EmployeeSelfServicePage(){
               <label className="field">{ui("people.selfService.endDate")}<input className="input" type="date" required min={draft.startDate} value={draft.endDate} onChange={e=>setDraft(v=>({...v,endDate:e.target.value}))}/></label>
               <label className="field full">Reason<textarea rows={3} required maxLength={1000} value={draft.reason} onChange={e=>setDraft(v=>({...v,reason:e.target.value}))}/></label>
             </div>
-            <div className="actions"><button className="primary" disabled={saving||loading||!types.length||!draft.employeeId||!draft.startDate||!draft.endDate||draft.endDate<draft.startDate||!draft.reason.trim()}>{saving?ui('people.selfService.submitReview'):ui('people.selfService.submitLeave')}</button></div>
+            <div className="actions"><button className="primary" disabled={saving||loading||!types.length||!draft.leaveTypeCode||!draft.startDate||!draft.endDate||draft.endDate<draft.startDate||!draft.reason.trim()}>{saving?ui('people.selfService.submitReview'):ui('people.selfService.submitLeave')}</button></div>
           </form>
           <h2>{ui("people.selfService.myRequests")}</h2>
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>{ui("people.selfService.datesDays")}</th><th>{ui("people.selfService.reason")}</th><th>{ui("people.selfService.status")}</th><th>{ui("people.selfService.reviewNote")}</th></tr></thead><tbody>
