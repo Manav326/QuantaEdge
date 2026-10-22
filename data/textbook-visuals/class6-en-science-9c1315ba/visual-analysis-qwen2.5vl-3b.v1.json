@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1311,
+    "assets_selected": 1313,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1308,
-    "assets_remaining": 770,
-    "assets_completion_percent": 62.9,
+    "assets_analyzed": 1310,
+    "assets_remaining": 768,
+    "assets_completion_percent": 63.0,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1306,
+    "assets_skipped_from_checkpoint": 1308,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T07:59:25Z"
+      "checkpointed_at": "2026-10-22T08:04:41Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:00:27Z"
+      "checkpointed_at": "2026-10-22T08:05:41Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:01:30Z"
+      "checkpointed_at": "2026-10-22T08:06:45Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -43814,6 +43814,98 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T08:03:25Z"
+    },
+    {
+      "asset_id": "24bb32e19c4c277bd2b60bc5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 132,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "56ae652537bc6cdabefd7f219d2899ed7faca261ec4dfc6ea9abb6d22deaa488",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:06:58Z"
+    },
+    {
+      "asset_id": "b2a5eb5543406fad88a2ccda",
+      "asset_sha256": "ae953f23ea422930856a29b49de74c2742c3807a84e7a882eca1318079bdf256",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 132,
+      "asset_path": "page-0132.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "56ae652537bc6cdabefd7f219d2899ed7faca261ec4dfc6ea9abb6d22deaa488",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a person pouring water from a jug into a bottle, with a speech bubble asking why they couldn't transfer the water completely.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Why is the level of water different in the two tumblers?",
+          "Madam Vidya elaborates that both tumblers have the",
+          "same capacity. The water levels differ in each case, which",
+          "indicates that the amount of water in each tumbler is",
+          "different.",
+          "The water in the first tumbler occupies less space,",
+          "indicating that the volume of water in this tumbler is less",
+          "than the water in the other tumbler. The space occupied by",
+          "water represents its volume.",
+          "Why was I not able to",
+          "transfer water from the",
+          "jug into an empty water",
+          "bottle completely?",
+          "Now I know the reason",
+          "behind it...",
+          "You may have noticed drinking water bottles of different",
+          "sizes being sold in the market. Have you noticed 1 L, 500 mL",
+          "200 mL, etc., written as net quantity on the bottles? These",
+          "indicate the volume of water in the bottles.",
+          "The bottles of drinking",
+          "water and milk are",
+          "labelled as 500 mL,",
+          "indicating the volume.",
+          "Drinking",
+          "water",
+          "500 mL",
+          "Milk",
+          "500 mL"
+        ],
+        "concepts": [
+          "volume",
+          "capacity",
+          "space",
+          "volume of water",
+          "different tumblers",
+          "water level",
+          "space occupied by water",
+          "reason for not transferring water completely"
+        ],
+        "context_relation": "The image is a visual representation of the text explaining the concept of volume and capacity in tumblers and bottles.",
+        "limitations": [
+          "The image does not show the actual tumblers or bottles, but rather a diagram and speech bubbles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:11:31Z"
     }
   ]
 }
