@@ -297,7 +297,7 @@ assert(adminThemeCss.includes('.qe-workspace-fullscreen') &&
   adminThemeCss.includes('[class*="tableWrap"]'),
   'Content, question-review, grading and student-table controls need the shared Admin theme contract.');
 assert(adminClassesCss.includes('.tabs button') &&
-  adminThemeCss.includes('[class*="tabs"] button span'),
+  adminThemeCss.includes('button :is(span,b,strong)'),
   'Live and recorded class tab counters must receive theme-aware selected/unselected styling.');
 assert(adminEmployees.includes("className={tab==='audit'?'active':''}") &&
   peopleAppearanceCss.includes('.qe-people-page-slot :is(.tabs,.qe-staff-tabs,[role="tablist"]) button'),
