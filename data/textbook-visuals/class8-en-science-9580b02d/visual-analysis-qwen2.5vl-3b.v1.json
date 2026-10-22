@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T16:15:59Z"
+      "checkpointed_at": "2026-10-22T16:22:16Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T16:16:34Z"
+      "checkpointed_at": "2026-10-22T16:22:50Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T16:16:57Z"
+      "checkpointed_at": "2026-10-22T16:23:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34413,8 +34413,8 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "(Do not hold the nichrome wire).",
-          "Safety first",
           "What difference do you feel?",
+          "Safety first",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
           "You may have observed that nichrome wire feels warm when current is passed through it.",
@@ -34434,14 +34434,15 @@
         ],
         "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
         "limitations": [
-          "The page does not provide specific instructions for the activity, only a general description of what to observe."
+          "The page does not provide specific instructions for the experiment described, only general guidelines.",
+          "The page does not include any visual aids or diagrams to support the explanation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39803159272",
-      "checkpointed_at": "2026-10-22T16:21:28Z"
+      "checkpointed_at": "2026-10-22T16:23:51Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34793,7 +34794,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726991844",
+      "run_id": "39803159272",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
