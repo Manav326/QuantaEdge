@@ -1539,3 +1539,9 @@ button:disabled,
 .qe-people-auth-language{display:flex;justify-content:flex-end;margin-bottom:16px}
 .qe-people-auth-language .qe-people-language-select{white-space:normal}
 .qe-people-auth-language .qe-people-language-select>span{display:none}
+
+/* Canonical full-logo slot; compact/collapsed navigation remains icon + live text. */
+.qe-people-brand-lockup .qe-brand__logo{max-width:230px;max-height:50px}
+.qe-people-login-brand-lockup .qe-brand__logo{max-width:300px;max-height:68px}
+.qe-people-mobile-brand-lockup .qe-brand__logo{max-width:180px;max-height:42px}
+@media(max-width:620px){.qe-people-login-brand-lockup .qe-brand__logo{max-width:230px;max-height:50px}}

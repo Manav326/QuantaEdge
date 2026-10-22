@@ -49,6 +49,17 @@ fun QuantaEdgeBrand(
     val institution = LocalInstitutionBrandIdentity.current
     val resolvingTenant = LocalInstitutionBrandResolutionPending.current && institution == null
     val markSize = if (compact) 29.dp else 42.dp
+    // A full tenant logo is shown in a wide slot; compact headers use only the square app icon.
+    if (!compact && institution?.logo != null && !resolvingTenant) {
+        Image(
+            bitmap = institution.logo.asImageBitmap(),
+            contentDescription = institution.displayName,
+            modifier = modifier.width(240.dp).height(60.dp),
+            contentScale = ContentScale.Fit
+        )
+        return
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = if (centered) Alignment.CenterHorizontally else Alignment.Start,
@@ -60,8 +71,8 @@ fun QuantaEdgeBrand(
         ) {
             when {
                 resolvingTenant -> Box(modifier = Modifier.size(markSize))
-                institution?.logo != null -> Image(
-                    bitmap = institution.logo.asImageBitmap(),
+                institution?.appIcon != null -> Image(
+                    bitmap = institution.appIcon.asImageBitmap(),
                     contentDescription = null,
                     modifier = Modifier.size(markSize).clip(RoundedCornerShape(if (compact) 7.dp else 10.dp)),
                     contentScale = ContentScale.Fit
@@ -98,6 +109,17 @@ fun QuantaEdgeBrand(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                    if (institution.tagline.isNotBlank()) {
+                        Text(
+                            text = institution.tagline,
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontSize = if (compact) 8.sp else 12.sp,
+                            lineHeight = if (compact) 10.sp else 15.sp,
+                            fontWeight = FontWeight.Medium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 } else {
                     Text(
                         text = buildAnnotatedString {

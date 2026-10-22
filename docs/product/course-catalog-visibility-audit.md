@@ -55,3 +55,15 @@ The previous Actions test failure was corrected in commit [6c86243](https://gith
 ## Status
 
 **Audit complete; first catalogue implementation slice added, with end-to-end gates still open.** No price, enrollment, paid entitlement, free access or public offer status is invented. The student Marketplace continues to list only explicitly published offers; All Courses continues to list courses the learner actually owns/enrolled in.
+
+
+## Branding template implementation update — 2026-10-21
+
+The branding-template implementation is now in the feature branch for review and automated validation:
+
+- HRMS institution settings have a single template that accepts a full logo, a square icon, institution name and tagline. Existing saved logo/icon assets may be reused when the user only changes the name/tagline.
+- The browser creates a downloadable ZIP containing proportion-preserving logo renditions, 512/192 pixel icon outputs, Apple touch icon, safe-padded maskable icon, 64/48/32/16 pixel favicon PNGs, a self-contained SVG favicon, a web manifest, a JSON asset manifest, source uploads, and optional icon + name + tagline lockups (PNG/SVG). The ZIP is downloaded as a folder archive because browsers cannot create a local directory directly.
+- The apply action sends the selected institution's primary logo and square icon together with its name, tagline and theme tokens to a single owner-only transactional endpoint. The server revalidates both raster images and updates the selected assets/version atomically with an audit event. The response returns the current versioned `logoUrl` and `appIconUrl`.
+- Learner web renders `logoUrl` into its full responsive logo slot, and only `appIconUrl` into square/favicon slots. Compact components show the icon and separately rendered institution name/tagline. QuantaEdge itself uses the shared full-logo asset contract. Android uses the equivalent separate wide-logo and square-icon roles.
+
+Release caveat: client-side rendering and ZIP creation, actual Web/Admin/HRMS/Android builds, migration-backed API tests, browser downloads and on-device visual verification must all pass before this is treated as production-verified. Native Android launcher icons remain build-time assets; dynamically applying a tenant icon inside the app does not change the installed package's launcher/store icon.

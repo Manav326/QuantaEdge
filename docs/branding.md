@@ -18,10 +18,17 @@
 No brand colour refresh is approved. Preserve the current orange-led palette and use the existing Q mark and shared QuantaEdgeBrand component. Maintain one consistent mark, name, tagline, logo colours and wordmark across languages and apps. The user approved the planned UI/UX and layout/placement implementation on 2026-10-17. This does not authorize any change to the existing brand colours, canonical assets, wordmark, tagline, or cross-language brand treatment.
 
 ## Canonical assets
-The approved square Q mark is the canonical, byte-identical asset at `apps/web/public/branding/quantaedge-icon.png`; it is the shared live mark and the API renderer mirrors that exact file. The standalone `quantaedge-logo.png` and `quantaedge-wordmark.png` are legacy/export assets. The current wordmark PNG does not have a complete PNG data stream, so do not use it for live rendering or treat it as a trustworthy input until a valid approved export replaces it. Matching branding assets are copied into the separately built admin and People Operations applications.
+The approved square Q mark is the canonical, byte-identical asset at `apps/web/public/branding/quantaedge-icon.png`; the Admin, People Operations and API bundles use matching copies. The new canonical full lockup is `branding/quantaedge-logo.svg` in the Web, Admin and People Operations public assets. It embeds the approved Q mark and pairs it with the unchanged live brand name in navy/orange and the official tagline. The three lockup SVGs are byte-identical and checked by `scripts/check-ui-brand-contract.mjs`.
+
+The standalone `quantaedge-logo.png` and `quantaedge-wordmark.png` remain legacy/export assets. The current wordmark PNG does not have a complete PNG data stream, so do not use it for live rendering. Use `quantaedge-logo.svg` for wide slots and `quantaedge-icon.png` for square slots.
 
 ## Rendering rule
-The live learner-site lockup is implemented by `apps/web/app/components/QuantaEdgeBrand.tsx`: it pairs the approved Q mark with the unchanged `QuantaEdge` wordmark in the canonical navy/orange palette and the readable HTML tagline. This remains the same in every language; never translate or transliterate the company name/tagline, and never create language-specific logo variants. All certificate languages use the same company name, mark, tagline, and brand colours.
+The shared rendering contract now has two explicit roles:
+- **Full logo URL:** wide header, landing, login and footer spaces. QuantaEdge itself uses `/branding/quantaedge-logo.svg`; a tenant uses its validated, versioned `logoUrl`.
+- **Square icon URL:** compact navigation, browser/app-icon uses and launcher icon generation. A tenant uses its validated, versioned `appIconUrl`; the full logo URL must never be used as a favicon.
+- **Institution name and tagline:** separately rendered text in compact layouts, with surrounding text and surfaces kept theme-aware. The uploaded artwork is not recoloured just because the app switches light/dark theme.
+
+The shared learner renderer uses the full-logo slot for non-compact layouts and the icon + live text lockup for compact layouts. Admin and People Operations use the same central full-logo asset for wide variants while retaining the canonical icon/text compact variant. Android follows the equivalent role contract: it displays a tenant full logo in wide in-app space and uses the square app icon in compact headers. The static QuantaEdge name/tagline and approved colours remain unchanged across languages.
 
 
 ## Placement map

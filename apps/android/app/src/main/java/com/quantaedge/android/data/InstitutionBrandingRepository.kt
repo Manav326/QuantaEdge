@@ -11,6 +11,7 @@ import java.io.IOException
 data class InstitutionBrandIdentity(
     val institutionCode: String,
     val displayName: String,
+    val tagline: String = "",
     val logo: Bitmap? = null,
     val appIcon: Bitmap? = null,
     val brandingVersion: Long = 1L,
@@ -79,11 +80,12 @@ object InstitutionBrandingRepository {
         val displayName = data.optString("displayName").trim()
         if (displayName.length !in 2..180) throw IOException("The institution display name is unavailable.")
         val version = data.optLong("brandingVersion", 1L).coerceAtLeast(1L)
+        val tagline = data.optString("tagline").trim().take(240)
         val logo = loadApprovedImage(data.optString("logoUrl"), code, "logo")
         val appIcon = loadApprovedImage(data.optString("appIconUrl"), code, "app-icon")
         val themeTokens = data.optJSONObject("themeTokens")?.toString()
             ?: throw IOException("The institution colour theme is unavailable.")
-        return InstitutionBrandIdentity(code, displayName, logo, appIcon, version, themeTokens)
+        return InstitutionBrandIdentity(code, displayName, tagline, logo, appIcon, version, themeTokens)
     }
 
     suspend fun hasActiveMembership(codeInput: String): Boolean {

@@ -168,3 +168,42 @@
 .cropModalFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #edf0f4;padding-top:13px}
 .cropModalFooter>span{font-size:10px;color:#788196;line-height:1.5}
 @media(max-width:650px){.readOnlyGrid{grid-template-columns:1fr}.assetEditorRow{align-items:stretch;flex-direction:column}.fileButton{width:100%;min-height:42px}.cropModalBackdrop{align-items:flex-start;padding:8px}.cropModal{max-height:calc(100dvh - 16px);border-radius:14px}.cropControls{grid-template-columns:1fr}.cropStage{height:290px}.cropModalFooter{align-items:stretch;flex-direction:column-reverse}.cropModalFooter button{width:100%;min-height:42px}.cropRatioControls>*{flex:1}.panelHeading{align-items:flex-start}.cardActions{justify-content:flex-start}}
+
+/* QuantaEdge Brand Studio: source artwork and generated renditions are kept distinct. */
+.brandTemplate{grid-column:1/-1;display:grid;gap:15px;padding:16px;border:1px solid #f2d5c1;border-radius:13px;background:linear-gradient(180deg,#fffaf6 0%,#fff 100%);min-width:0}
+.brandTemplateHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.brandTemplateHeader h4{margin:5px 0;font-size:16px;letter-spacing:-.2px}
+.brandTemplateHeader p{max-width:720px;margin:0;color:#68738a;font-size:11px;line-height:1.65}
+.brandTemplateOptional{flex:0 0 auto;border:1px solid #dce2eb;border-radius:999px;padding:5px 9px;background:#fff;color:#667085;font-size:9px;font-weight:800}
+.brandTemplateFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.brandTemplateFields label{display:grid;gap:7px;min-width:0;color:#344054;font-size:11px;font-weight:800}
+.brandTemplateFields input:not([type=file]){width:100%;min-width:0;min-height:41px;padding:10px 11px;border:1px solid #d9deea;border-radius:9px;background:#fff;color:#152038;font:inherit;font-size:12px;outline-color:#fdba74}
+.brandTemplateFields input[type=file]{width:100%;min-width:0;min-height:41px;padding:8px;border:1px dashed #f1b98d;border-radius:9px;background:#fff;color:#344054;font-size:10px}
+.brandTemplateFields small{font-size:9px;line-height:1.5;color:#788196;font-weight:500}
+.brandTemplatePreviewGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.brandTemplatePreviewCard{display:grid;align-content:start;gap:9px;min-width:0;border:1px solid #e6e9f0;border-radius:11px;padding:12px;background:#fff}
+.brandTemplatePreviewCard>span{color:#68738a;font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.brandTemplateLogoStage{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:100px;padding:12px;border:1px solid #eef0f4;border-radius:9px;background:#fff}
+.brandTemplateLogoStage img{display:block;width:auto;height:auto;max-width:100%;max-height:78px;object-fit:contain;object-position:left center}
+.brandTemplateLogoStage>span{font-size:10px;color:#858da0}
+.brandTemplateCompactStage{display:flex;align-items:center;gap:10px;min-width:0;min-height:100px;padding:12px;border:1px solid #eef0f4;border-radius:9px;background:#f8f9fc}
+.brandTemplateCompactStage>img,.brandTemplateIconPlaceholder{display:grid;place-items:center;flex:0 0 54px;width:54px;height:54px;border-radius:10px;object-fit:contain;background:#fff;border:1px solid #edf0f4}
+.brandTemplateIconPlaceholder{background:#fff0e5;border-color:#ffd9bd;color:#9a3412;font-size:22px;font-weight:900}
+.brandTemplateCompactStage>div{display:grid;gap:4px;min-width:0}
+.brandTemplateCompactStage strong{font-size:12px;line-height:1.35;overflow-wrap:anywhere;color:#152038}
+.brandTemplateCompactStage small{font-size:9px;line-height:1.5;overflow-wrap:anywhere;color:#667085}
+.brandTemplatePreviewCard>small{font-size:9px;line-height:1.55;color:#788196}
+.brandTemplateGenerated{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:12px;border:1px solid #dbece3;border-radius:10px;background:#f7fcf9}
+.brandTemplateGenerated>strong{font-size:11px;color:#176b4e}
+.brandTemplateGenerated>span{flex:1 1 200px;font-size:9px;color:#68738a;line-height:1.5}
+.brandTemplateActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brandTemplateActions>span{flex:1 1 220px;font-size:9px;line-height:1.6;color:#788196}
+@media(max-width:650px){.brandTemplate{padding:12px}.brandTemplateHeader{flex-direction:column}.brandTemplateFields,.brandTemplatePreviewGrid{grid-template-columns:1fr}.brandTemplateGenerated{align-items:stretch;flex-direction:column}.brandTemplateGenerated button,.brandTemplateActions button{width:100%;min-height:42px}.brandTemplateGenerated>span{flex:auto}}
+
+.brandTemplateLogoStageDark{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:100px;padding:12px;border:1px solid #263449;border-radius:9px;background:#111827}
+.brandTemplateLogoStageDark img{display:block;width:auto;height:auto;max-width:100%;max-height:78px;object-fit:contain;object-position:left center}
+.brandTemplateLogoStageDark>span{font-size:10px;color:#cbd5e1}
+
+.brandTemplateAssetField{display:grid;align-content:start;gap:7px;min-width:0}
+.brandTemplateAssetField>button{justify-self:start}
+@media(max-width:650px){.brandTemplateAssetField>button{min-height:38px}}

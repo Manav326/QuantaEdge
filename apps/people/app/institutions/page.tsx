@@ -5,7 +5,7 @@ import { apiFetch } from '../components/apiClient';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
-import InstitutionBrandAssetEditor from './InstitutionBrandAssetEditor';
+import InstitutionBrandTemplate from './InstitutionBrandTemplate';
 import PasswordField from '../components/PasswordField';
 
 type Session = { staffId?: number; displayName?: string; permissions?: string[] };
@@ -21,7 +21,7 @@ type Admin = { id: number; username: string; display_name: string; active: boole
 type ThemePalette = Record<string,string>;
 type ThemeTokens = { schemaVersion?: number; presetId?: string; appearance?: string; brandPrimary?: string; brandAccent?: string; primary?: string; accent?: string; background?: string; surface?: string; text?: string; light?: ThemePalette; dark?: ThemePalette; [key: string]: unknown };
 type Detail = Institution & {
-  brand_display_name?: string | null; logo_asset_key?: string | null; app_icon_asset_key?: string | null;
+  brand_display_name?: string | null; tagline?: string | null; logo_asset_key?: string | null; app_icon_asset_key?: string | null;
   store_listing_url?: string | null; logo_url?: string | null; app_icon_url?: string | null; themeTokens?: ThemeTokens; contract_id?: number | null; currency?: string;
   unit_price_paise?: number; billing_cadence?: string; effective_from?: string; effective_until?: string | null;
   admins?: Admin[]; courses?: Entitlement[];
@@ -66,7 +66,6 @@ export default function InstitutionsAdminPage() {
   const [showAdmin,setShowAdmin]=useState(false);
   const [editingCard,setEditingCard]=useState<EditableCard|null>(null);
   const [courseDraft,setCourseDraft]=useState<Record<string,boolean>>({});
-  const [pendingCrop,setPendingCrop]=useState<{assetType:'logo'|'app-icon';file:File}|null>(null);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
   const [error,setError]=useState('');
@@ -77,7 +76,7 @@ export default function InstitutionsAdminPage() {
   const [create,setCreate]=useState({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
   const [admin,setAdmin]=useState({username:'',displayName:'',initialPassword:''});
   const [profile,setProfile]=useState({displayName:'',legalName:''});
-  const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#0F766E'});
+  const [brand,setBrand]=useState({displayName:'',tagline:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#0F766E'});
   const [themePresets,setThemePresets]=useState<ThemePreset[]>([]);
   const [themePreview,setThemePreview]=useState<ThemeTokens|null>(null);
   const [themePreviewLoading,setThemePreviewLoading]=useState(false);
@@ -117,7 +116,7 @@ export default function InstitutionsAdminPage() {
       setDetail(d);setRoster(r.learners||[]);setAuditRows(a||[]);setTab('summary');setEditingCard(null);setShowAdmin(false);
       setProfile({displayName:d.display_name||'',legalName:d.legal_name||''});
       setBrand({
-        displayName:d.brand_display_name||d.display_name,logoAssetKey:d.logo_asset_key||'',
+        displayName:d.brand_display_name||d.display_name,tagline:d.tagline||'',logoAssetKey:d.logo_asset_key||'',
         appIconAssetKey:d.app_icon_asset_key||'',storeListingUrl:d.store_listing_url||'',
         presetId:String(d.themeTokens?.presetId||'quantaedge-orange'),
         appearance:String(d.themeTokens?.appearance||'system'),
@@ -207,7 +206,7 @@ export default function InstitutionsAdminPage() {
     if(detail){
       if(card==='profile')setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});
       if(card==='courses')setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));
-      if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')});
+      if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,tagline:detail.tagline||'',logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')});
       if(card==='billing')setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
     }
     setShowAdmin(false);setAdmin({username:'',displayName:'',initialPassword:''});setEditingCard(null);setError('');
@@ -217,55 +216,28 @@ export default function InstitutionsAdminPage() {
     setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
     setEditingCard('billing');
   }
+  async function removeBrandAsset(assetType:'logo'|'app-icon'):Promise<boolean>{
+    if(!detail)return false;
+    const label=assetType==='logo'?'institution full logo':'institution square icon';
+    if(!window.confirm('Remove the saved '+label+'? This change is recorded and will update the branding version.'))return false;
+    setSaving(true);setError('');setNotice('');
+    try{
+      await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{method:'DELETE'});
+      await loadBase();
+      await loadDetail(detail.id);
+      setEditingCard('branding');
+      setNotice('Removed the saved '+label+'. Other branding assets and theme settings are unchanged.');
+      return true;
+    }finally{setSaving(false);}
+  }
+
   async function saveBranding(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
-      displayName:brand.displayName,storeListingUrl:brand.storeListingUrl,
+      displayName:brand.displayName,tagline:brand.tagline,storeListingUrl:brand.storeListingUrl,
       themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
     })});setNotice('Tenant branding settings saved.');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
-  }
-  async function uploadBrandAsset(assetType:'logo'|'app-icon',file:File){
-    if(!detail)return;
-    if(!['image/png','image/jpeg'].includes(file.type)){setError('Choose a PNG or JPEG image. SVG and animated formats are not accepted.');return;}
-    if(file.size>2*1024*1024){setError('Branding images must be 2 MiB or smaller.');return;}
-    setSaving(true);setError('');setNotice('');
-    try{
-      const form=new FormData();form.set('file',file);
-      const headers=new Headers({'X-QE-Workspace':'HRMS','Accept':'application/json'});
-      const response=await apiFetch('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{
-        method:'POST',body:form,headers,credentials:'same-origin',cache:'no-store',
-      });
-      const raw=await response.text();
-      let data:any={};
-      try{data=raw?JSON.parse(raw):{};}catch{data={message:raw};}
-      if(!response.ok)throw new Error(String(data.message||data.detail||data.error||'Image upload failed ('+response.status+')'));
-      setNotice(assetType==='logo'?'School logo uploaded and versioned.':'School app icon uploaded and versioned.');
-      const resumeBrandEdit=editingCard==='branding';
-      const draftBrand=brand;
-      await loadDetail(detail.id);
-      if(resumeBrandEdit){setBrand(draftBrand);setEditingCard('branding');}
-    }catch(e){setError(e instanceof Error?e.message:'Branding image could not be uploaded.');}
-    finally{setSaving(false);}
-  }
-  async function removeBrandAsset(assetType:'logo'|'app-icon'){
-    if(!detail)return;
-    const label=assetType==='logo'?'school logo':'school app icon';
-    if(!window.confirm('Remove the current '+label+' from '+(detail.brand_display_name||detail.display_name)+'? It will no longer be served to learner apps.'))return;
-    setSaving(true);setError('');setNotice('');
-    try{
-      const result=await api<{removed:boolean;brandingVersion:number}>(
-        '/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,
-        {method:'DELETE'});
-      setNotice(result.removed
-        ? (assetType==='logo'?'School logo removed. Learner surfaces will use the school initial until another logo is uploaded.':'School app icon removed. Learner browser icons will use the school initial until another icon is uploaded.')
-        : 'There was no active '+label+' to remove.');
-      const resumeBrandEdit=editingCard==='branding';
-      const draftBrand=brand;
-      await loadDetail(detail.id);
-      if(resumeBrandEdit){setBrand(draftBrand);setEditingCard('branding');}
-    }catch(e){setError(e instanceof Error?e.message:'The branding asset could not be removed.');}
-    finally{setSaving(false);}
   }
   async function saveBilling(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
@@ -411,14 +383,23 @@ export default function InstitutionsAdminPage() {
           </section>
           <section className={styles.panel}>
             {editingCard==='branding'?<>
-              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Logo files open in the crop editor; image assets are versioned and scoped to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save branding'}</button></div></div>
+              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Generate a complete asset pack or apply the validated logo and icon renditions to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save branding'}</button></div></div>
               <form id="institution-branding-form" className={styles.form} onSubmit={saveBranding}>
                 <p className={styles.disclaimer}>After you confirm a crop, that asset is uploaded immediately. The display name, Play listing URL and theme settings are saved together with Save branding.</p>
-                <label>Branded display name *<input required minLength={2} maxLength={180} value={brand.displayName} onChange={e=>setBrand(v=>({...v,displayName:e.target.value}))}/></label>
-                <div className={styles.assetEditorRow}><div><strong>School logo</strong><small>Select an image to crop/reposition and normalize it for the learner logo. Transparent backgrounds are preserved where possible.</small></div><label className={styles.fileButton}><span>{detail.logo_url?'Replace and crop logo':'Upload and crop logo'}</span><input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)setPendingCrop({assetType:'logo',file});}}/></label></div>
-                {detail.logo_url?<div className={styles.brandAssetPreview}><span>Current learner logo</span><img src={detail.logo_url} alt={(detail.brand_display_name||detail.display_name)+' logo'}/><div className={styles.brandAssetActions}><button type="button" className={styles.danger} disabled={saving} onClick={()=>void removeBrandAsset('logo')}>Remove logo</button></div></div>:<p className={styles.disclaimer}>No school logo uploaded yet. A school initial is used until a logo is approved.</p>}
-                <div className={styles.assetEditorRow}><div><strong>App icon</strong><small>Separate square crop for browser/app icon use. This is not forced onto the wider school logo.</small></div><label className={styles.fileButton}><span>{detail.app_icon_url?'Replace and crop app icon':'Upload and crop app icon'}</span><input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)setPendingCrop({assetType:'app-icon',file});}}/></label></div>
-                {detail.app_icon_url?<div className={styles.brandAssetPreview}><span>Current browser/app icon</span><img src={detail.app_icon_url} alt={(detail.brand_display_name||detail.display_name)+' app icon'}/><div className={styles.brandAssetActions}><button type="button" className={styles.danger} disabled={saving} onClick={()=>void removeBrandAsset('app-icon')}>Remove app icon</button></div></div>:<p className={styles.disclaimer}>No custom app icon uploaded yet.</p>}
+                <InstitutionBrandTemplate
+                  institutionId={detail.id}
+                  displayName={brand.displayName}
+                  tagline={brand.tagline}
+                  logoUrl={detail.logo_url}
+                  appIconUrl={detail.app_icon_url}
+                  storeListingUrl={brand.storeListingUrl}
+                  themeTokens={{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent}}
+                  onDisplayNameChange={value=>setBrand(current=>({...current,displayName:value}))}
+                  onTaglineChange={value=>setBrand(current=>({...current,tagline:value}))}
+                  onRemoveAsset={removeBrandAsset}
+                  busy={saving}
+                  onApplied={async()=>{await loadBase();await loadDetail(detail.id);setEditingCard('branding');}}
+                />
                 <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
                 <div className={styles.themeSettingsGrid}>
                   <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
@@ -433,12 +414,13 @@ export default function InstitutionsAdminPage() {
                     <div className={styles.themePreviewCard} style={{background:view.palette.surface,color:view.palette.onSurface,borderColor:view.palette.borderSubtle}}><small style={{color:view.palette.textMuted}}>YOUR COURSE</small><strong>Fractions and decimals</strong><p style={{color:view.palette.textMuted}}>Continue where you left off.</p><span className={styles.themePreviewPrimary} style={{background:view.palette.primary,color:view.palette.onPrimary}}>Start lesson</span><span className={styles.themePreviewSelected} style={{background:view.palette.accentContainer,color:view.palette.onAccentContainer,borderColor:view.palette.borderSubtle}}>Secondary action</span><span className={styles.themePreviewSelected} style={{background:view.palette.selectedBackground,color:view.palette.selectedText,borderColor:view.palette.borderSubtle}}>Selected lesson</span><div className={styles.themePreviewStates}><span style={{background:view.palette.successContainer,color:view.palette.onSuccessContainer}}>Correct</span><span style={{background:view.palette.warningContainer,color:view.palette.onWarningContainer}}>Review</span><span style={{background:view.palette.errorContainer,color:view.palette.onErrorContainer}}>Incorrect</span></div><small style={{color:view.palette.primaryText}}>Primary text · accessible contrast</small><small style={{color:view.palette.accentText}}>Accent text · accessible contrast</small></div>
                   </section>):<p className={styles.themePreviewNotice} role="status">{themePreviewLoading?'Generating the exact server palette…':'Live preview is unavailable. Saving still uses the API-validated palette generator.'}</p>}
                 </div>
-                <p className={styles.disclaimer}>Colour tokens are generated by the central API palette engine. Image cropping only changes the uploaded asset; it does not alter the theme or the QuantaEdge operator brand.</p>
+                <p className={styles.disclaimer}>Colour tokens are generated by the central API palette engine. The asset template preserves source artwork and keeps theme colours separate from logo pixels.</p>
               </form>
             </>:<>
               <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>Review the saved institution identity. Click Edit to change branding settings.</p></div><button type="button" className={styles.secondary} onClick={()=>setEditingCard('branding')} disabled={saving||editingCard!==null}>Edit</button></div>
               <div className={styles.readOnlyGrid}>
                 <div className={styles.readOnlyItem}><span>Branded display name</span><strong>{detail.brand_display_name||detail.display_name}</strong></div>
+                <div className={styles.readOnlyItem}><span>Tagline</span><strong>{detail.tagline||'Not configured'}</strong></div>
                 <div className={styles.readOnlyItem}><span>Google Play listing</span><strong className={styles.wrapValue}>{detail.store_listing_url||'Not configured'}</strong></div>
                 <div className={styles.readOnlyItem}><span>School logo</span>{detail.logo_url?<img className={styles.readOnlyLogo} src={detail.logo_url} alt={(detail.brand_display_name||detail.display_name)+' logo'}/>:<small className={styles.emptyValue}>No logo uploaded</small>}</div>
                 <div className={styles.readOnlyItem}><span>App icon</span>{detail.app_icon_url?<img className={styles.readOnlyIcon} src={detail.app_icon_url} alt={(detail.brand_display_name||detail.display_name)+' app icon'}/>:<small className={styles.emptyValue}>No app icon uploaded</small>}</div>
@@ -480,7 +462,6 @@ export default function InstitutionsAdminPage() {
         </>:tab==='learners'?<section className={styles.panel}><h3>Institution learners</h3><p>Only records associated with this tenant are returned. The current profile stores city/state, not exact home address.</p><div className={styles.tableScroll}><table><thead><tr><th>Learner</th><th>Class</th><th>City/state</th><th>Membership</th><th>Progress</th></tr></thead><tbody>{roster.map((r,i)=><tr key={r.learner_reference||i}><td>{r.display_name}<small>{r.learner_reference}</small></td><td>{r.class_code||'—'}</td><td>{[r.city,r.state].filter(Boolean).join(', ')||'Not supplied'}</td><td>{r.membership_status}<small>{fmt(r.joined_at)}</small></td><td>{r.average_lesson_progress_percent||0}%<small>{r.completed_lessons||0} completed</small></td></tr>)}{!roster.length?<tr><td colSpan={5} className={styles.emptyCell}>No institution-linked learners yet.</td></tr>:null}</tbody></table></div></section>:<section className={styles.panel}><h3>Audit history</h3><p>Recent institutional lifecycle, access, branding and report events.</p><div className={styles.auditList}>{auditRows.map(row=><article key={row.id}><strong>{row.action.replaceAll('_',' ')}</strong><small>{row.target_type}{row.target_id?' · '+row.target_id:''} · {fmt(row.created_at)}</small><p>{typeof row.details==='string'?row.details:JSON.stringify(row.details||{})}</p></article>)}{!auditRows.length?<p className={styles.emptyText}>No audited events for this tenant.</p>:null}</div></section>}
       </>}</section>
     </div>
-    {pendingCrop?<InstitutionBrandAssetEditor assetType={pendingCrop.assetType} file={pendingCrop.file} onCancel={()=>setPendingCrop(null)} onConfirm={file=>{const assetType=pendingCrop?.assetType||'logo';setPendingCrop(null);void uploadBrandAsset(assetType,file);}}/>:null}
     <footer className={styles.footer}><span>QuantaEdge platform operations · HRMS owner access only</span><span>API permission checks remain authoritative.</span></footer>
   </main>;
 }

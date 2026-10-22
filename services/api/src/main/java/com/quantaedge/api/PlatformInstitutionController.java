@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -205,7 +206,7 @@ public class PlatformInstitutionController {
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select t.id,t.public_id,t.tenant_code,t.display_name,t.legal_name,t.status,t.status_reason,
           t.created_at,t.updated_at,t.activated_at,t.suspended_at,t.closed_at,
-          b.display_name as brand_display_name,b.logo_asset_key,b.app_icon_asset_key,b.store_listing_url,
+          b.display_name as brand_display_name,b.tagline,b.logo_asset_key,b.app_icon_asset_key,b.store_listing_url,
           b.theme_tokens::text as theme_tokens,b.version as branding_version,
           c.id as contract_id,c.currency,c.unit_price_paise,c.billing_cadence,c.effective_from,c.effective_until
         from institution_tenant t
@@ -622,7 +623,7 @@ public class PlatformInstitutionController {
     AuthContext owner = requirePlatformOwner(context);
     assertInstitutionExists(institutionId);
     Map<String,Object> existing = jdbc.queryForMap("""
-        select display_name,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens
+        select display_name,tagline,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens
         from institution_branding where institution_id=?
         """,institutionId);
     if (body != null && (body.containsKey("logoAssetKey") || body.containsKey("appIconAssetKey"))) {
@@ -631,6 +632,9 @@ public class PlatformInstitutionController {
     String displayName = body!=null && body.containsKey("displayName")
         ? value(body,"displayName") : String.valueOf(existing.get("display_name"));
     requireText(displayName,2,180,"Branded display name");
+    String tagline = body!=null && body.containsKey("tagline")
+        ? normalizeBrandTagline(value(body,"tagline"))
+        : normalizeBrandTagline(existing.get("tagline")==null?"":String.valueOf(existing.get("tagline")));
     // Asset references are write-protected here. Only the validated upload/remove lifecycle
     // may change these keys, mark old binaries inactive, bump versions and audit the action.
     String logo = nullableString(existing.get("logo_asset_key"));
@@ -640,20 +644,111 @@ public class PlatformInstitutionController {
     String tokens = body!=null && body.containsKey("themeTokens")
         ? validateThemeTokens(body.get("themeTokens")) : String.valueOf(existing.get("theme_tokens"));
     jdbc.update("""
-        update institution_branding set display_name=?,logo_asset_key=?,app_icon_asset_key=?,store_listing_url=?,
+        update institution_branding set display_name=?,tagline=?,logo_asset_key=?,app_icon_asset_key=?,store_listing_url=?,
           theme_tokens=?::jsonb,version=version+1,updated_by_staff_id=?,updated_at=now()
         where institution_id=?
-        """,displayName,logo,icon,storeListing,tokens,owner.staffId(),institutionId);
+        """,displayName,tagline,logo,icon,storeListing,tokens,owner.staffId(),institutionId);
     jdbc.update("""
         insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
         values (?,'BRANDING_CHANGED',?,jsonb_build_object('brandingVersionIncremented',true))
         """,institutionId,owner.staffId());
     audit(owner,institutionId,"BRANDING_CHANGED","BRANDING",String.valueOf(institutionId),
         Map.of("displayName",displayName,"hasLogo",logo!=null,"hasAppIcon",icon!=null));
-    return Map.of("institutionId",institutionId,"displayName",displayName,"logoAssetKey",logo==null?"":logo,
-        "appIconAssetKey",icon==null?"":icon,"storeListingUrl",storeListing==null?"":storeListing,
-        "themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(tokens)),"brandingVersion",jdbc.queryForObject(
-          "select version from institution_branding where institution_id=?",Long.class,institutionId));
+    Map<String,Object> saved = new LinkedHashMap<>();
+    saved.put("institutionId",institutionId);
+    saved.put("displayName",displayName);
+    saved.put("tagline",tagline);
+    saved.put("logoAssetKey",logo==null?"":logo);
+    saved.put("appIconAssetKey",icon==null?"":icon);
+    saved.put("storeListingUrl",storeListing==null?"":storeListing);
+    saved.put("themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(tokens)));
+    saved.put("brandingVersion",jdbc.queryForObject(
+        "select version from institution_branding where institution_id=?",Long.class,institutionId));
+    return saved;
+  }
+
+  /**
+   * Atomically publish a prepared branding template to one HRMS-managed institution.
+   * The browser creates platform renditions; this endpoint still revalidates both files,
+   * checks platform-owner access, stores immutable asset history and bumps one shared version.
+   */
+  @PostMapping(value="/{institutionId}/branding/template-assets", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+  @Transactional
+  public Map<String,Object> applyBrandingTemplate(
+      @PathVariable long institutionId,
+      @RequestParam("logo") MultipartFile logoFile,
+      @RequestParam("appIcon") MultipartFile appIconFile,
+      @RequestParam("displayName") String displayNameInput,
+      @RequestParam(value="tagline",required=false) String taglineInput,
+      @RequestParam(value="storeListingUrl",required=false) String storeListingInput,
+      @RequestParam(value="themeTokens",required=false) String themeTokensInput,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    String displayName=displayNameInput==null?"":displayNameInput.trim();
+    requireText(displayName,2,180,"Branded display name");
+    String tagline=normalizeBrandTagline(taglineInput);
+
+    InstitutionBrandingAssetValidator.ValidatedAsset logo=InstitutionBrandingAssetValidator.validate(logoFile);
+    InstitutionBrandingAssetValidator.ValidatedAsset appIcon=InstitutionBrandingAssetValidator.validate(appIconFile);
+    Map<String,Object> existing=jdbc.queryForMap("""
+        select display_name,tagline,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens
+        from institution_branding where institution_id=?
+        """,institutionId);
+    String storeListing=safeStoreListing(storeListingInput==null?"":storeListingInput);
+    String tokens=String.valueOf(existing.get("theme_tokens"));
+    if(themeTokensInput!=null&&!themeTokensInput.isBlank()) {
+      try {
+        tokens=validateThemeTokens(objectMapper.readValue(themeTokensInput,Map.class));
+      } catch(JsonProcessingException ex) {
+        throw new IllegalArgumentException("The branding theme settings are invalid JSON.");
+      }
+    }
+
+    String logoId=UUID.randomUUID().toString();
+    String iconId=UUID.randomUUID().toString();
+    insertBrandingAsset(institutionId,"LOGO",logoId,logo,owner.staffId());
+    insertBrandingAsset(institutionId,"APP_ICON",iconId,appIcon,owner.staffId());
+    jdbc.update("update institution_branding_asset set active=false where institution_id=? and asset_type='LOGO' and asset_id<>? and active=true",
+        institutionId,logoId);
+    jdbc.update("update institution_branding_asset set active=false where institution_id=? and asset_type='APP_ICON' and asset_id<>? and active=true",
+        institutionId,iconId);
+
+    jdbc.update("""
+        update institution_branding set display_name=?,tagline=?,logo_asset_key=?,app_icon_asset_key=?,
+          store_listing_url=?,theme_tokens=?::jsonb,version=version+1,updated_by_staff_id=?,updated_at=now()
+        where institution_id=?
+        """,displayName,tagline,logoId,iconId,storeListing,tokens,owner.staffId(),institutionId);
+    jdbc.update("""
+        insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
+        values (?,'BRANDING_CHANGED',?,jsonb_build_object(
+          'templatePackApplied',true,'logoSha256',?,'appIconSha256',?,'taglineChanged',true))
+        """,institutionId,owner.staffId(),logo.sha256(),appIcon.sha256());
+    Long version=jdbc.queryForObject("select version from institution_branding where institution_id=?",Long.class,institutionId);
+    String tenantCode=jdbc.queryForObject("select tenant_code from institution_tenant where id=?",String.class,institutionId);
+    audit(owner,institutionId,"BRANDING_TEMPLATE_APPLIED","BRANDING",String.valueOf(institutionId),
+        Map.of("displayName",displayName,"tagline",tagline,"brandingVersion",version,
+            "logoSha256",logo.sha256(),"appIconSha256",appIcon.sha256()));
+
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("institutionId",institutionId);
+    result.put("displayName",displayName);
+    result.put("tagline",tagline);
+    result.put("logoUrl",publicAssetUrl(tenantCode,"logo",version,logoId));
+    result.put("appIconUrl",publicAssetUrl(tenantCode,"app-icon",version,iconId));
+    result.put("brandingVersion",version);
+    result.put("themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(tokens)));
+    return result;
+  }
+
+  private void insertBrandingAsset(long institutionId,String type,String assetId,
+      InstitutionBrandingAssetValidator.ValidatedAsset asset,long staffId) {
+    jdbc.update("""
+        insert into institution_branding_asset(
+          asset_id,institution_id,asset_type,content_type,file_name,content_sha256,image_bytes,byte_length,created_by_staff_id)
+        values (?,?,?,?,?,?,?,?,?)
+        """,assetId,institutionId,type,asset.contentType(),asset.fileName(),asset.sha256(),
+        asset.bytes(),asset.bytes().length,staffId);
   }
 
   @PostMapping(value="/{institutionId}/branding/assets/{assetType}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -1064,6 +1159,14 @@ public class PlatformInstitutionController {
   private String value(Map<String,Object> body,String key) {
     Object raw=body==null?null:body.get(key);
     return raw==null?"":String.valueOf(raw).trim();
+  }
+
+  private String normalizeBrandTagline(String raw) {
+    String tagline=raw==null?"":raw.trim();
+    if(tagline.length()>240 || tagline.chars().anyMatch(Character::isISOControl)) {
+      throw new IllegalArgumentException("Brand tagline must be 240 characters or fewer and contain no control characters.");
+    }
+    return tagline;
   }
 
   private void requireText(String value,int min,int max,String label) {

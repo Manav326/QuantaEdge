@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 type SchoolBrandResponse = {
   institutionCode?: string;
   displayName?: string;
+  tagline?: string | null;
   logoUrl?: string | null;
   appIconUrl?: string | null;
 };
@@ -71,12 +72,10 @@ export async function generateMetadata({ params }: SchoolMetadataProps): Promise
     };
   }
 
-  const appIconUrl = approvedAssetUrl(brand.appIconUrl, code, 'app-icon');
-  const logoUrl = approvedAssetUrl(brand.logoUrl, code, 'logo');
-  const iconUrl = appIconUrl || logoUrl || '/favicon.svg';
+  const iconUrl = approvedAssetUrl(brand.appIconUrl, code, 'app-icon') || '/favicon.svg';
   return {
     title: { absolute: name },
-    description: 'Learning and progress with ' + name + '.',
+    description: brand.tagline?.trim() || 'Learning and progress with ' + name + '.',
     applicationName: name,
     icons: { icon: iconUrl, shortcut: iconUrl, apple: iconUrl },
   };

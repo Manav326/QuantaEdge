@@ -121,7 +121,7 @@ public class InstitutionTenantController {
     }
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select t.tenant_code,coalesce(b.display_name,t.display_name) as display_name,
-          b.logo_asset_key,b.app_icon_asset_key,b.store_listing_url,b.theme_tokens::text as theme_tokens,
+          coalesce(b.tagline,'') as tagline,b.logo_asset_key,b.app_icon_asset_key,b.store_listing_url,b.theme_tokens::text as theme_tokens,
           coalesce(b.version,1) as branding_version
         from institution_tenant t
         left join institution_branding b on b.institution_id=t.id
@@ -132,6 +132,7 @@ public class InstitutionTenantController {
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("institutionCode", row.get("tenant_code"));
     result.put("displayName", row.get("display_name"));
+    result.put("tagline", row.get("tagline"));
     result.put("logoAssetKey", row.get("logo_asset_key"));
     result.put("appIconAssetKey", row.get("app_icon_asset_key"));
     result.put("storeListingUrl", row.get("store_listing_url"));
@@ -439,13 +440,14 @@ public class InstitutionTenantController {
 
   private Map<String,Object> brandingFor(long institutionId) {
     List<Map<String,Object>> rows = jdbc.queryForList("""
-        select display_name,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens,version
+        select display_name,tagline,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens,version
         from institution_branding where institution_id=?
         """, institutionId);
     if (rows.isEmpty()) return Map.of();
     Map<String,Object> row = rows.getFirst();
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("displayName",row.get("display_name"));
+    result.put("tagline",row.get("tagline"));
     result.put("logoAssetKey",row.get("logo_asset_key"));
     result.put("appIconAssetKey",row.get("app_icon_asset_key"));
     result.put("storeListingUrl",row.get("store_listing_url"));

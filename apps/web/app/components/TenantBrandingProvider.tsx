@@ -16,6 +16,7 @@ const DEFAULT_DESCRIPTION = 'AI-powered learning for Hindi-medium students, star
 export type TenantBrand = {
   institutionCode: string;
   displayName: string;
+  tagline?: string | null;
   logoAssetKey?: string | null;
   appIconAssetKey?: string | null;
   logoUrl?: string | null;
@@ -92,15 +93,14 @@ function applyTenantIdentity(brand: TenantBrand | null, institutionContextReques
   const title = brand?.displayName?.trim();
   document.title = title || (institutionContextRequested ? 'Learning space' : DEFAULT_TITLE);
   const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-  if (description) description.content = title ? 'Learning and progress with ' + title + '.' : institutionContextRequested ? 'Your school learning space.' : DEFAULT_DESCRIPTION;
+  const tagline = brand?.tagline?.trim();
+  if (description) description.content = title ? (tagline || 'Learning and progress with ' + title + '.') : institutionContextRequested ? 'Your school learning space.' : DEFAULT_DESCRIPTION;
   const appName = document.querySelector<HTMLMetaElement>('meta[name="application-name"]');
   if (appName) appName.content = title || (institutionContextRequested ? 'Learning space' : 'QuantaEdge');
 
   const iconUrl = brand?.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')
     ? brand.appIconUrl
-    : brand?.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')
-      ? brand.logoUrl
-      : null;
+    : null;
   const links = document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"], link[rel="apple-touch-icon"]');
   links.forEach(link => {
     if (iconUrl) {
