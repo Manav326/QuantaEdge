@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1362,
-    "successful_visual_analyses": 1334,
-    "missing_visual_analyses": 716,
+    "raw_analysis_result_rows": 1363,
+    "successful_visual_analyses": 1335,
+    "missing_visual_analyses": 715,
     "failed_visual_analyses": 28,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 744,
+    "unresolved_count": 743,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51117,9 +51117,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a grid for students to write nine randomly chosen words from a list.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Win the 'Word-hub'",
+          "The following words from the chapter like lustrous, non-lustrous, soluble, insoluble, hard, soft, matter, mass, transparent, opaque, volume and translucent are picked up.",
+          "Grid",
+          "Students should randomly choose nine words from the given list and write them in the grid.",
+          "Then, the facilitator either reads the definition of a word or the word itself (randomly) from the given list.",
+          "The learners have to tick if the particular word is there in the grid.",
+          "Whoever finishes ticking off all nine words first will"
+        ],
+        "concepts": [
+          "Word selection",
+          "Grid",
+          "Random word picking",
+          "Definition reading",
+          "Tick marking"
+        ],
+        "context_relation": "Educational activity",
+        "limitations": [
+          "No specific image to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
