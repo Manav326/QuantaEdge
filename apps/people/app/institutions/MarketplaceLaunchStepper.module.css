@@ -178,6 +178,99 @@
   font-size: 10px;
 }
 
+.availablePanel {
+  overflow: hidden;
+  border: 1px solid var(--qe-color-border-subtle, #dfe5ed);
+  border-radius: 16px;
+  background: var(--qe-color-surface, #fff);
+}
+
+.availableHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 17px 19px 14px;
+  border-bottom: 1px solid var(--qe-color-border-subtle, #e7ebf1);
+}
+
+.availableHeader h3 {
+  margin: 4px 0 0;
+  color: var(--qe-color-text, #192538);
+  font-size: 15px;
+}
+
+.availableHeader p {
+  max-width: 620px;
+  margin: 5px 0 0;
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.availableCount {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--qe-color-primary-container, #fff0e6);
+  color: var(--qe-color-primary-text, #a23d00);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.availableList {
+  display: flex;
+  flex-direction: column;
+}
+
+.availableRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+}
+
+.availableRow + .availableRow {
+  border-top: 1px solid var(--qe-color-border-subtle, #edf0f4);
+}
+
+.availableMark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  color: var(--qe-color-accent, #087c75);
+  background: var(--qe-color-surface-elevated, #f0f5f6);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.availableCopy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.availableCopy strong {
+  color: var(--qe-color-text, #192538);
+  font-size: 12px;
+}
+
+.availableCopy span,
+.availableCopy small {
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.availableCopy .availableWarning {
+  color: #89500d;
+}
+
 .courseList {
   display: flex;
   flex-direction: column;
@@ -797,6 +890,20 @@
     flex: 1;
     min-width: 85px;
     padding-left: 9px;
+  }
+
+  .availableHeader {
+    flex-direction: column;
+  }
+
+  .availableRow {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .availableRow .secondaryButton {
+    margin-left: 48px;
   }
 
   .courseHeader {
