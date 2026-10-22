@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
-import BillingProfileEditor from '../../components/BillingProfileEditor';
+import { BillingAddressSelection, BillingProfileEditor, type BillingAddressRecord } from '../../components/BillingProfileEditor';
 import InvoiceDownloads from '../../components/InvoiceDownloads';
 import MarketplaceCourseCard from '../../components/MarketplaceCourseCard';
 import { localizeMarketplaceError } from '../../components/marketplaceI18n';
@@ -31,6 +31,7 @@ type Entitlement = {
   holder_student_id: number; transfer_count: number;
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+type PaidCheckoutIntent = { courseId: number; recipientType: 'SELF' | 'CHILD'; studentId?: number };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:parent';
 
 declare global {
@@ -87,6 +88,15 @@ export default function ParentCoursesPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
+  const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
+  const [billingAddressesLoading, setBillingAddressesLoading] = useState(true);
+  const [checkoutIntent, setCheckoutIntent] = useState<PaidCheckoutIntent | null>(null);
+  const [selectedBillingAddressId, setSelectedBillingAddressId] = useState<number | null>(null);
+  const syncBillingAddresses = useCallback((rows: BillingAddressRecord[], addressLoading: boolean) => {
+    setBillingAddresses(rows);
+    setBillingAddressesLoading(addressLoading);
+  }, []);
+
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -216,7 +226,24 @@ export default function ParentCoursesPage() {
     }
   }
 
-  async function startPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId?: number) {
+  function requestPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId?: number) {
+    if (billingAddressesLoading) {
+      setError(english ? 'Billing addresses are still loading. Please retry in a moment.' : 'Billing addresses अभी load हो रहे हैं। थोड़ी देर बाद फिर कोशिश करें।');
+      return;
+    }
+    if (billingAddresses.length === 0) {
+      setError(english ? 'Save your billing address above before starting checkout.' : 'Checkout शुरू करने से पहले ऊपर billing address save करें।');
+      return;
+    }
+    if (billingAddresses.length === 1) {
+      void startPaidCheckout(courseId, recipientType, studentId, billingAddresses[0].id);
+      return;
+    }
+    setCheckoutIntent({ courseId, recipientType, studentId });
+    setSelectedBillingAddressId((billingAddresses.find(address => address.is_default) || billingAddresses[0]).id);
+  }
+
+  async function startPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId: number | undefined, billingAddressId: number) {
     if (pendingVerify) {
       setError(english
         ? 'A previous payment still needs verification. Retry verification before starting another checkout.'
@@ -234,7 +261,7 @@ export default function ParentCoursesPage() {
       const body = await readJson(await apiFetch('/api/v1/marketplace/family/courses/' + courseId + '/orders', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID() },
-        body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined, discountCode: discountCode.trim() || null }),
+        body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined, discountCode: discountCode.trim() || null, billingAddressId }),
       }));
       if (!body.orderId || !Number.isSafeInteger(Number(body.localOrderId)) || Number(body.localOrderId) <= 0
           || !body.keyId || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0 || body.currency !== 'INR') {
@@ -397,8 +424,23 @@ export default function ParentCoursesPage() {
           <p><LocaleText hinglish="कोड केवल उसी course और institution पर लागू होगा जिसके लिए HRMS ने approval दिया है। कीमत और tax की गणना server पर होती है।"
             english="Codes apply only to the course and institution approved by HRMS. The server calculates the discount, payable amount and tax." /></p>
         </section>
-        <BillingProfileEditor workspace="PARENT" english={english} />
+        <BillingProfileEditor workspace="PARENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />
         <InvoiceDownloads workspace="PARENT" english={english} />
+        {checkoutIntent !== null && (
+          <BillingAddressSelection
+            addresses={billingAddresses}
+            selectedAddressId={selectedBillingAddressId}
+            onSelect={setSelectedBillingAddressId}
+            profileHref="/parent/profile"
+            onCancel={() => setCheckoutIntent(null)}
+            onConfirm={() => {
+              const intent = checkoutIntent;
+              const addressId = selectedBillingAddressId;
+              setCheckoutIntent(null);
+              if (addressId !== null) void startPaidCheckout(intent.courseId, intent.recipientType, intent.studentId, addressId);
+            }}
+          />
+        )}
         {pendingVerify && <section className="parent-courses-page__verify">
           <div><strong><LocaleText hinglish="भुगतान पुष्टि बाकी है" english="Payment verification is pending" /></strong>
             <p><LocaleText hinglish="दोबारा भुगतान न करें। इसी order की पुष्टि फिर से करें।" english="Do not pay again. Retry verification for this same order." /></p></div>
@@ -426,7 +468,7 @@ export default function ParentCoursesPage() {
                       const kid = children.find(child => child.id === request.student_id);
                       if (!kid) { setError(english ? 'This child is no longer linked to your account.' : 'यह बच्चा अब आपके खाते से लिंक नहीं है।'); return; }
                       if (Number(request.price_paise) === 0) void addFreeCourse(request.course_id, 'CHILD', request.student_id);
-                      else void startPaidCheckout(request.course_id, 'CHILD', request.student_id);
+                      else void requestPaidCheckout(request.course_id, 'CHILD', request.student_id);
                     }}>
                     <LocaleText hinglish="इस बच्चे के लिए खरीदें" english="Buy for this child" />
                   </button>
@@ -490,7 +532,7 @@ export default function ParentCoursesPage() {
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
                     disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent}
-                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
+                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void requestPaidCheckout(course.course_id, 'SELF')}>
                     {busy === 'checkout-' + course.course_id + '-SELF-self' || busy === 'free-' + course.course_id + '-SELF-self'
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
                       : ownedByParent
@@ -509,7 +551,7 @@ export default function ParentCoursesPage() {
                   </label>
                   <button className="button button-light button-small" type="button"
                     disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
-                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
+                    onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void requestPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {busy === 'checkout-' + course.course_id + '-CHILD-' + selectedChild || busy === 'free-' + course.course_id + '-CHILD-' + selectedChild
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
                       : selectedChildAlreadyOwns
