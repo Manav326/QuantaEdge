@@ -232,7 +232,7 @@ export default function ParentCoursesPage() {
       return;
     }
     if (billingAddresses.length === 0) {
-      setError(english ? 'Save your billing address above before starting checkout.' : 'Checkout शुरू करने से पहले ऊपर billing address save करें।');
+      setError(english ? 'Add a complete billing address in My Profile before checkout.' : 'Checkout से पहले My Profile में पूरा billing address जोड़ें।');
       return;
     }
     if (billingAddresses.length === 1) {
