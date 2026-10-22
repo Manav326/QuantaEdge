@@ -327,6 +327,7 @@ fun BillingAddressBook(
             dismissButton = { TextButton(onClick = { pendingDeleteId = null }, enabled = !busy) { Text(t("Cancel", "Cancel")) } }
         )
     }
+    }
 }
 
 @Composable
