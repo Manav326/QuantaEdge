@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PeopleEmptyState, PeopleFeedback, PeoplePageHeader, PeopleStatusBadge } from '../components/PeopleUI';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
+import { notifyUser } from '../components/GlobalNotificationHost';
 import styles from './QaCenter.module.css';
 
 type JsonMap = Record<string, unknown>;
@@ -170,7 +171,7 @@ export default function QaCenterPage() {
       setSelectedRun(result);
       if (result.state === 'INSTALLED') {
         setInstallResult(result);
-        setNotice(t('people.qa.installSuccess'));
+        setNotice('');notifyUser(t('people.qa.installSuccess'),'success');
         setIdempotencyKey(newIdempotencyKey());
       } else {
         setError(String(result.error_summary ?? result.error_code ?? t('people.qa.installBlocked')));
@@ -196,7 +197,7 @@ export default function QaCenterPage() {
       setSelectedRun(result);
       const verification = result.verification;
       if (verification?.overallStatus === 'PASS') {
-        setNotice(String(verification.passedChecks ?? 0) + ' checks passed. ' + t('people.qa.overallPass'));
+        setNotice('');notifyUser(String(verification.passedChecks ?? 0) + ' checks passed. ' + t('people.qa.overallPass'),'success');
       } else {
         setError(String(verification?.failedChecks ?? 0) + ' ' + t('people.qa.checksFailed'));
       }
@@ -246,7 +247,7 @@ export default function QaCenterPage() {
       setUninstallPlan(null);
       setConfirmRunId('');
       if (result.state === 'UNINSTALLED') {
-        setNotice(t('people.qa.baselinePassed'));
+        setNotice('');notifyUser(t('people.qa.baselinePassed'),'success');
       } else {
         setError(String(result.error_summary ?? result.error_code ?? t('people.qa.cleanupBlocked')));
       }
