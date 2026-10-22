@@ -62,6 +62,7 @@ export default function BillingProfileEditor({
   onAddressesChange?:(addresses:BillingAddressRecord[],loading:boolean)=>void;
 }){
   const t=useUiTranslation();
+  const text=useCallback((key:string)=>t(key),[t]);
   const [addresses,setAddresses]=useState<BillingAddressRecord[]>([]);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
@@ -74,8 +75,6 @@ export default function BillingProfileEditor({
     ? '/api/v1/marketplace/family/billing-addresses'
     : '/api/v1/marketplace/billing-addresses';
   const profileHref=workspace==='PARENT'?'/parent/profile':'/student/profile';
-  const text=(key:string)=>t(key);
-  const publish=(rows:BillingAddressRecord[])=>setAddresses(rows);
 
   const load=useCallback(async()=>{
     setLoading(true);setError('');
@@ -85,12 +84,12 @@ export default function BillingProfileEditor({
         headers:{'Accept':'application/json','X-QE-Workspace':workspace}
       }));
       if(!Array.isArray(rows)) throw new Error(text('billing.loadError'));
-      publish(rows as BillingAddressRecord[]);
+      setAddresses(rows as BillingAddressRecord[]);
     }catch(e){
       setError(e instanceof Error?e.message:text('billing.loadError'));
     }finally{setLoading(false);}
   // Locale is intentionally read through the stable catalogue translator.
-  },[endpoint,workspace]);
+  },[endpoint,workspace,text]);
   useEffect(()=>{void load();},[load]);
   useEffect(()=>{onAddressesChange?.(addresses,loading);},[addresses,loading,onAddressesChange]);
 
@@ -134,7 +133,7 @@ export default function BillingProfileEditor({
       });
       const rows=await readJson(response);
       if(!Array.isArray(rows)) throw new Error(text('billing.saveError'));
-      publish(rows as BillingAddressRecord[]);
+      setAddresses(rows as BillingAddressRecord[]);
       setFormOpen(false);setEditingId(null);
       setNotice(text('billing.saveSuccess'));
     }catch(e){setError(e instanceof Error?e.message:text('billing.saveError'));}
@@ -148,7 +147,7 @@ export default function BillingProfileEditor({
         headers:{'X-QE-Workspace':workspace,'Accept':'application/json'}
       }));
       if(!Array.isArray(rows)) throw new Error(text('billing.defaultError'));
-      publish(rows as BillingAddressRecord[]);
+      setAddresses(rows as BillingAddressRecord[]);
       setNotice(text('billing.defaultSuccess'));
     }catch(e){setError(e instanceof Error?e.message:text('billing.defaultError'));}
   }
@@ -294,7 +293,7 @@ export function BillingAddressSelection({
       </div>
       <div className={styles.pickerFooter}><button type="button" className={styles.cancelButton} onClick={onCancel}>{text('billing.cancel')}</button>
         <button type="button" className={styles.addAddressButton} onClick={onConfirm} disabled={!addresses.some(a=>a.id===selectedAddressId)}>{text('billing.continueCheckout')}</button></div>
-      <p className={styles.pickerNote}>{text('billing.manageCheckoutAddresses')} <Link href={addresses[0]?.id?'/student/profile':'/student/profile'}>{text('billing.profileLink')}</Link></p>
+      <p className={styles.pickerNote}>{text('billing.manageCheckoutAddresses')} <Link href={profileHref}>{text('billing.profileLink')}</Link></p>
     </section>
   </div>;
 }
