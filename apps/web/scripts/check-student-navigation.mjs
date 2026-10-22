@@ -885,6 +885,18 @@ assert.ok(
   'Owned-course page surfaces, status controls, error messages, text wrapping, and action alignment must honour institution appearance in both modes.'
 );
 
+
+const visualAuditClassesCss = read('../app/student/classes/Classes.module.css');
+assert.ok(
+  visualAuditClassesCss.includes('html[data-qe-appearance] .shell') &&
+  visualAuditClassesCss.includes('html[data-qe-appearance] :where(.statusLIVE, .notice, .joinedBanner)') &&
+  visualAuditClassesCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditClassesCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditClassesCss.includes('html[data-qe-appearance] :where(.sessionGrid, .recordingGrid, .sessionCard') &&
+  visualAuditClassesCss.includes('overflow-wrap: anywhere'),
+  'Live-class lists, recording cards, player/chat controls, semantic status states, and long content must use the institution palette and safe wrapping in both appearances.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

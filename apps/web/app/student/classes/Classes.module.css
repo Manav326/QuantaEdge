@@ -330,3 +330,150 @@ html[data-qe-appearance="dark"] .chatToggle:disabled {
   color: var(--qe-color-disabled-text);
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/* Live-class shell and interactive controls inherit the active institution palette.
+   The hero illustration, video canvas, and player backdrop remain intentional artwork/media. */
+html[data-qe-appearance] .shell {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.header, .tabs, .toolbar select, .refreshButton, .sessionCard, .recordingCard, .secondaryButton, .playerModal, .chatPanel) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .brand {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .brand small,
+html[data-qe-appearance] :where(.header nav a, .toolbar > label, .sectionHeading p, .description, .sessionMeta, .recordingMeta, .recordingBody p, .privacyNote, .chatHint, .chatMessageHead) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.sectionHeading h2, .sessionCard h3, .recordingBody h3, .sessionTime b, .chatHeader strong, .chatMessage p) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] :where(.tabs button span, .sessionTime, .sessionMeta span, .subjectTag, .recordingMeta span) {
+  background: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] :where(.tabs .activeTab, .tabs .activeTab span, .chatTabs .chatActive) {
+  background: var(--qe-color-primary-container);
+  border-color: var(--qe-color-focus);
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] :where(.liveSymbol, .sessionTime span, .recordingProgress > div b, .textButton) {
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance] :where(.primaryButton, .chatSend, .chatToggle, .joinedActions button) {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance] :where(.secondaryButton, .refreshButton, .chatAction, .leaveButton) {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .statusSCHEDULED {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-focus);
+}
+
+html[data-qe-appearance] :where(.statusLIVE, .notice, .joinedBanner) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] .joinedBanner > span {
+  color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] .joinedBanner b {
+  color: var(--qe-color-on-success-container);
+}
+
+html[data-qe-appearance] .openSecureLink {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+
+html[data-qe-appearance] :where(.statusCOMPLETED, .disabledButton) {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.statusCANCELLED, .error, .leaveButton, .chatError) {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+
+html[data-qe-appearance] .empty {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] :where(.playerModal > header, .playerModal > footer, .chatHeader, .chatCompose) {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .chatMessages {
+  background: var(--qe-color-background);
+}
+
+html[data-qe-appearance] .chatMessage {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .chatCompose textarea {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+
+html[data-qe-appearance] :where(.toolbar, .sectionHeading, .sessionTop, .joinedActions, .recordingMeta, .chatHeader, .chatCompose) {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+html[data-qe-appearance] :where(.sessionGrid, .recordingGrid, .sessionCard, .recordingCard, .playerModal, .chatPanel) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html[data-qe-appearance] :where(.sessionCard h3, .recordingBody h3, .description, .privacyNote, .chatHint, .chatMessage p) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .refreshButton, .openSecureLink, .chatAction, .chatSend, .leaveButton) {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .refreshButton, .openSecureLink, .chatAction, .chatSend, .leaveButton, .chatToggle):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
