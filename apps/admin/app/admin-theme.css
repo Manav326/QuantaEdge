@@ -2002,3 +2002,60 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(.panelHeading,
   color: var(--qe-color-text, var(--admin-text)) !important;
   border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
 }
+
+
+/* Question Review uses reusable semantic surfaces rather than inline light-only card fills. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page :is(.qe-question-review-card,.qe-question-history-row) {
+  border: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+  border-radius: 14px;
+  padding: 16px;
+  background: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-history-row {
+  border-radius: 12px;
+  padding: 14px;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-card :is(p,small) {
+  color: var(--qe-color-text-muted, var(--admin-muted));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-card :is(h3,strong,b) {
+  color: var(--qe-color-text, var(--admin-text));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-note {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+  border-radius: 10px;
+  background: var(--qe-color-surface-subtle, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-note[data-rejected="true"] {
+  border-color: color-mix(in srgb, var(--qe-color-error, #b42318) 35%, var(--qe-color-border-subtle, var(--admin-border)));
+  background: color-mix(in srgb, var(--qe-color-error, #b42318) 10%, var(--qe-color-surface, var(--admin-surface)));
+  color: var(--qe-color-on-error-container, var(--qe-color-error, #b42318));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-notice {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--qe-color-success, #067647) 32%, var(--qe-color-border-subtle, var(--admin-border)));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--qe-color-success, #067647) 10%, var(--qe-color-surface, var(--admin-surface)));
+  color: var(--qe-color-success, #067647);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-warning {
+  color: var(--qe-color-warning, var(--qe-color-primary-text, #b54708));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-card a {
+  color: var(--qe-color-primary-text, var(--qe-color-primary, var(--admin-primary)));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-question-review-page .qe-question-review-card :is(input,select,textarea) {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised)) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
