@@ -34,6 +34,21 @@
   --qe-people-info-soft: #eff6ff;
   --qe-people-neutral: #475467;
   --qe-people-neutral-soft: #f2f4f7;
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --card: var(--qe-people-card);
+  --brand: var(--qe-people-brand);
+  --brand2: var(--qe-people-brand-strong);
+  --brand-soft: var(--qe-people-brand-soft);
+  --danger: var(--qe-people-danger);
+  --danger-soft: var(--qe-people-danger-soft);
+  --success: var(--qe-people-success);
+  --success-soft: var(--qe-people-success-soft);
+  --warning: var(--qe-people-warning);
+  --warning-soft: var(--qe-people-warning-soft);
+  --focus: var(--qe-people-focus);
 }
 
 html[data-qe-people-appearance="dark"] {
@@ -357,6 +372,36 @@ input[type="radio"] {
   border-color: var(--qe-people-brand);
 }
 
+.qe-people-button--secondary,
+.qe-people-button--neutral {
+  background: var(--qe-people-surface-subtle);
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+
+.qe-people-button--secondary:hover,
+.qe-people-button--neutral:hover {
+  background: var(--qe-people-surface-hover);
+  border-color: var(--qe-people-brand);
+}
+
+.qe-people-button--danger {
+  border-color: color-mix(in srgb, var(--qe-people-danger) 36%, var(--qe-people-line));
+  background: var(--qe-people-danger-soft);
+  color: var(--qe-people-danger);
+}
+
+.qe-people-button--danger:hover {
+  border-color: var(--qe-people-danger);
+  background: var(--qe-people-danger-soft);
+}
+
+.qe-people-status {
+  border-color: var(--qe-people-line);
+  background: var(--qe-people-neutral-soft);
+  color: var(--qe-people-neutral);
+}
+
 .tabs {
   border-color: var(--qe-people-line);
 }
@@ -457,6 +502,10 @@ input[type="radio"] {
   color: #f8fafc;
 }
 
+html[data-qe-people-appearance="dark"] .login-story {
+  background: linear-gradient(145deg, #09111f 0%, #132037 100%);
+}
+
 .login-story p,
 .login-story .small {
   color: #d4deee;
@@ -475,16 +524,17 @@ input[type="radio"] {
   color: var(--qe-people-ink);
 }
 
+.qe-people-mobile-menu-header,
+.qe-people-mobile-menu-footer {
+  border-color: var(--qe-people-line);
+}
+
 .qe-people-mobile-menu-header {
   border-color: var(--qe-people-line);
 }
 
 .qe-people-mobile-menu-header small {
   color: var(--qe-people-muted);
-}
-
-.qe-people-mobile-menu-footer {
-  border-color: var(--qe-people-line);
 }
 
 /* The CSS-module routes define local light-only values; remap their palette here. */
@@ -682,5 +732,15 @@ input[type="radio"] {
 @media (prefers-reduced-motion: reduce) {
   .qe-people-appearance-toggle {
     transition: none;
+  }
+}
+
+/* Preserve paper-white document output even when the surrounding workspace is dark. */
+@media print {
+  body.printing-payslip .qe-people-page-slot,
+  body.printing-payslip .qe-people-page-slot .main,
+  body.printing-payslip .qe-people-page-slot .shell {
+    background: #ffffff !important;
+    color: #111827 !important;
   }
 }
