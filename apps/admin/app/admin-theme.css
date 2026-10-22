@@ -1096,3 +1096,322 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/*
+ * Dark-mode regression guard
+ * --------------------------
+ * Older Admin routes still contain CSS-module and legacy control styles.
+ * Keep this shared layer last so nested route components use the same semantic
+ * palette without changing their layout, interaction or publication behaviour.
+ */
+html[data-qe-appearance="dark"] {
+  color-scheme: dark;
+  --admin-background: var(--qe-color-background);
+  --admin-surface: var(--qe-color-surface);
+  --admin-surface-raised: var(--qe-color-surface-elevated);
+  --admin-text: var(--qe-color-text);
+  --admin-muted: var(--qe-color-text-muted);
+  --admin-border: var(--qe-color-border-subtle);
+  --admin-primary: var(--qe-color-primary);
+  --admin-primary-text: var(--qe-color-primary-text);
+  --admin-primary-container: var(--qe-color-primary-container);
+}
+
+/* Compact navigation glyphs inherit the link colour and never sit on extra tiles. */
+.qe-admin-workspace-layout .qe-nav-icon,
+.qe-admin-workspace-layout .qe-sidebar-logout-icon,
+.qe-admin-workspace-layout .qe-admin-nav-chevron {
+  background: transparent !important;
+  color: inherit;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.qe-admin-workspace-layout .qe-nav-icon {
+  display: inline-flex;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 0;
+}
+.qe-admin-workspace-layout .qe-admin-nav-group,
+.qe-admin-workspace-layout .qe-admin-nav-group-items,
+.qe-admin-workspace-layout .qe-admin-nav-group-toggle {
+  background: transparent;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-nav-group-toggle {
+  color: var(--qe-color-nav-text);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-layout .qe-admin-nav-group-toggle[aria-expanded="true"] {
+  color: var(--qe-color-text);
+}
+
+/* Overview chips, metrics, filters, badges and selected curriculum/topic rows. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
+  [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
+  [class*="metric"], [class*="Metric"], [class*="stat"], [class*="Stat"],
+  [class*="tile"], [class*="Tile"], [class*="counter"], [class*="Counter"],
+  [class*="summary"], [class*="Summary"], [class*="overview"], [class*="Overview"],
+  [class*="previewBar"], [class*="PreviewBar"], [class*="rowSelected"], [class*="RowSelected"]
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"])
+ :not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"])
+ :not([class*="warning"]):not([class*="Warning"]) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
+  [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
+  [class*="metric"], [class*="Metric"], [class*="stat"], [class*="Stat"],
+  [class*="tile"], [class*="Tile"], [class*="counter"], [class*="Counter"],
+  [class*="summary"], [class*="Summary"], [class*="overview"], [class*="Overview"],
+  [class*="previewBar"], [class*="PreviewBar"], [class*="rowSelected"], [class*="RowSelected"]
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"])
+ :not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"])
+ :not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label, p) {
+  color: inherit !important;
+}
+
+/* Retheme legacy near-white inline surfaces on every Admin route. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="#fff" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="#ffffff" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="white" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="255, 255, 255" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="255,255,255" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="248, 249, 255" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="248,249,255" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="#f8f9ff" i],
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [style*="#fafbfc" i] {
+  background: var(--qe-color-surface-elevated) !important;
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+}
+
+/* Readable headings, chapter/topic names, form labels and helper text in every editor. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  h1, h2, h3, h4, h5, h6, label, legend, th, td, dt, dd, figcaption,
+  [class*="title"], [class*="Title"], [class*="heading"], [class*="Heading"],
+  [class*="label"], [class*="Label"], [class*="kicker"], [class*="Kicker"],
+  [class*="eyebrow"], [class*="Eyebrow"]
+):not([class*="hero"]):not([class*="Hero"]) {
+  color: var(--qe-color-text) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  p, small, [class*="description"], [class*="Description"], [class*="hint"],
+  [class*="Hint"], [class*="helper"], [class*="Helper"], [class*="subTitle"],
+  [class*="subtitle"], [class*="Subheading"], [class*="subheading"]
+) {
+  color: var(--qe-color-text-muted);
+}
+
+/* Older overview cards have their own near-white CSS-module fills. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .admin-visual-card, .admin-floating-token, .admin-visual-glyph,
+  .admin-kpi-icon, .review-icon, .qe-admin-kpi-icon, .qe-overview-chip,
+  .qe-content-overview-chip, .qe-studio-overview-chip, .qe-metric-chip,
+  .studio-item, .studio-section, .studio-row
+) {
+  background: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle) !important;
+  box-shadow: none;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .admin-visual-card :is(p, small, span, strong),
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .admin-floating-token span,
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .admin-kpi-icon {
+  color: var(--qe-color-text) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .admin-visual-track {
+  background: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .admin-visual-track span {
+  background: var(--qe-color-primary);
+}
+
+/* Theme dropdowns/popovers and dialogs even when a library portals them to body. */
+html[data-qe-appearance="dark"] body :is(
+  dialog, [role="dialog"], [role="alertdialog"], [role="listbox"], [role="menu"],
+  [data-radix-popper-content-wrapper] > *, [data-state="open"][data-side]
+) {
+  color: var(--qe-color-text);
+  background-color: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] body :is([role="option"], [role="menuitem"], [role="tab"]) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] body :is([role="option"], [role="menuitem"]):is(:hover, [aria-selected="true"], [data-highlighted]) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+}
+
+/* Native and rich-editor controls share the raised surface and visible placeholders. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select, textarea, pre, code, [contenteditable="true"],
+  [role="textbox"], [role="combobox"], [role="searchbox"]
+) {
+  color: var(--qe-color-text);
+  background-color: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(input, select, textarea)::placeholder {
+  color: var(--qe-color-text-muted);
+  opacity: 1;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(input, select, textarea):disabled,
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot button:disabled {
+  background-color: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--qe-color-primary);
+}
+
+/* Preserve semantic status colour, using a readable dark container for each state. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .status-approved, .status-published, .statusPUBLISHED, .statusAPPROVED,
+  [class*="successBadge"], [class*="SuccessBadge"], [class*="approvedPill"], [class*="ApprovedPill"]
+) {
+  color: var(--qe-color-on-success-container) !important;
+  background-color: var(--qe-color-success-container) !important;
+  border-color: var(--qe-color-success) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .status-review, .status-draft, .statusAWAITING_REVIEW,
+  [class*="warningBadge"], [class*="WarningBadge"]
+) {
+  color: var(--qe-color-on-warning-container) !important;
+  background-color: var(--qe-color-warning-container) !important;
+  border-color: var(--qe-color-warning) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .status-error, .status-failed, .statusREJECTED,
+  [class*="errorBadge"], [class*="ErrorBadge"]
+) {
+  color: var(--qe-color-on-error-container) !important;
+  background-color: var(--qe-color-error-container) !important;
+  border-color: var(--qe-color-error) !important;
+}
+
+/* Editorial banners may retain white text only where their backing is intentionally dark. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .admin-welcome, .qe-studio-hero, [class*="hero"], [class*="Hero"]
+) :is(h1, h2, h3, h4, h5, p, small, strong, span, label) {
+  color: #FFFFFF !important;
+}
+
+/* Canonical learner-web brand rendering contract: logo and square icon have separate slots. */
+.qe-admin-brand-lockup,
+.qe-admin-global-header .qe-brand-link,
+.qe-admin-public-page .qe-brand-link {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.qe-admin-brand-lockup .qe-brand,
+.qe-admin-global-header .qe-brand,
+.qe-admin-public-page .qe-brand {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+}
+.qe-admin-brand-lockup .qe-brand__lockup,
+.qe-admin-global-header .qe-brand__lockup,
+.qe-admin-public-page .qe-brand__lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.qe-admin-brand-lockup .qe-brand__full-lockup,
+.qe-admin-global-header .qe-brand__full-lockup,
+.qe-admin-public-page .qe-brand__full-lockup {
+  justify-content: flex-start;
+}
+.qe-admin-brand-lockup .qe-brand__logo,
+.qe-admin-global-header .qe-brand__logo,
+.qe-admin-public-page .qe-brand__logo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 190px);
+  max-height: 44px;
+  object-fit: contain;
+}
+.qe-admin-brand-lockup .qe-brand__icon,
+.qe-admin-global-header .qe-brand__icon,
+.qe-admin-public-page .qe-brand__icon {
+  display: block;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+.qe-admin-brand-lockup .qe-brand__copy,
+.qe-admin-global-header .qe-brand__copy,
+.qe-admin-public-page .qe-brand__copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.qe-admin-brand-lockup .qe-brand__name,
+.qe-admin-global-header .qe-brand__name,
+.qe-admin-public-page .qe-brand__name {
+  display: block;
+  color: var(--qe-color-text);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: normal;
+}
+.qe-admin-brand-lockup .qe-brand__tagline,
+.qe-admin-global-header .qe-brand__tagline,
+.qe-admin-public-page .qe-brand__tagline {
+  display: block;
+  max-width: 220px;
+  color: var(--qe-color-text-muted);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: normal;
+}
+.qe-admin-brand-lockup .qe-brand__tenant-mark,
+.qe-admin-brand-lockup .qe-brand__tenant-fallback,
+.qe-admin-brand-lockup .qe-brand__tenant-icon-fallback {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  font-size: 18px;
+  font-weight: 850;
+}
+.qe-admin-brand-lockup--collapsed .qe-brand__copy { display: none; }
+.qe-admin-brand-lockup--collapsed .qe-brand__lockup { justify-content: center; }
+.qe-admin-global-header .qe-brand__tagline { display: none; }
+@media (max-width: 900px) {
+  .qe-admin-brand-lockup .qe-brand__logo { max-width: 155px; max-height: 38px; }
+  .qe-admin-global-header .qe-brand__logo { max-width: 130px; max-height: 34px; }
+}
