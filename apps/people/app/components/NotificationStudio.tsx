@@ -16,9 +16,15 @@ type Template = {
   description?: string; content_version?: number; contentVersion?: number;
   contentDocument?: Document; content_document?: string | Document; status?: string;
 };
-type Option = { id: number; institution_code?: string; tenant_code?: string; display_name?: string; institution_name?: string; status?: string };
+type Option = {
+  id: number; institution_code?: string; tenant_code?: string; display_name?: string; institution_name?: string; status?: string;
+  active_learner_count?: number | string; eligible_parent_count?: number | string; active_admin_count?: number | string;
+};
 type Course = { course_id: number; course_code: string; course_name: string; class_code?: string };
-type Recipient = { recipient_id: number; recipient_kind: string; recipient_name: string; class_code?: string | null };
+type Recipient = {
+  recipient_id: number; recipient_kind: string; recipient_name: string; class_code?: string | null;
+  institution_id?: number; institution_name?: string; institution_code?: string;
+};
 type Campaign = {
   id: number; public_id?: string; scope?: string; title?: string; summary?: string; status?: string;
   resolved_recipient_count?: number; scheduled_at?: string | null; dispatched_at?: string | null; created_at?: string;
@@ -67,6 +73,18 @@ const BLOCK_OPTIONS = [
 ] as const;
 
 function clone<T>(value: T): T { return JSON.parse(JSON.stringify(value)) as T; }
+function recipientKey(row: Recipient) { return row.recipient_kind + ':' + row.recipient_id; }
+function recipientKindLabel(kind: string) {
+  if (kind === 'STUDENT') return 'Students';
+  if (kind === 'USER_ACCOUNT' || kind === 'PARENT') return 'Parents / guardians';
+  if (kind === 'INSTITUTION_ADMIN' || kind === 'INSTITUTION_ADMINS') return 'Institution administrators';
+  return kind.replaceAll('_', ' ').toLowerCase();
+}
+const REVIEW_KINDS = [
+  { key: 'STUDENT', label: 'Students' },
+  { key: 'USER_ACCOUNT', label: 'Parents / guardians' },
+  { key: 'INSTITUTION_ADMIN', label: 'Institution administrators' }
+] as const;
 function field(template: Template, snake: keyof Template, camel?: keyof Template) {
   return template[snake] ?? (camel ? template[camel] : undefined);
 }
@@ -111,6 +129,12 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const idempotencyRef = useRef<{ fingerprint: string; key: string } | null>(null);
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCounts, setPreviewCounts] = useState<Record<string, number>>({});
+  const [previewRecipients, setPreviewRecipients] = useState<Recipient[]>([]);
+  const [excludedRecipients, setExcludedRecipients] = useState<Set<string>>(new Set());
+  const [excludedInstitutionIds, setExcludedInstitutionIds] = useState<Set<string>>(new Set());
+  const [expandedAudienceGroups, setExpandedAudienceGroups] = useState<Set<string>>(new Set());
+  const [audiencePages, setAudiencePages] = useState<Record<string, number>>({});
+  const [recipientReviewQuery, setRecipientReviewQuery] = useState('');
   const [previewed, setPreviewed] = useState(false);
   const [scheduledAt, setScheduledAt] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
@@ -170,6 +194,43 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   useEffect(() => {
     if (workspaceTab === 'campaigns') void loadCampaigns();
   }, [workspaceTab, loadCampaigns]);
+
+  function clearInstitutionSelectionReview() {
+    setPreviewed(false);
+    setPreviewCount(null);
+    setPreviewCounts({});
+    setPreviewRecipients([]);
+    setExcludedRecipients(new Set());
+    setExcludedInstitutionIds(new Set());
+    setExpandedAudienceGroups(new Set());
+    setAudiencePages({});
+    setRecipientReviewQuery('');
+  }
+
+  function toggleRecipientIncluded(recipient: Recipient, included: boolean) {
+    const key = recipientKey(recipient);
+    setExcludedRecipients(current => {
+      const next = new Set(current);
+      if (included) next.delete(key); else next.add(key);
+      return next;
+    });
+    setPreviewed(false);
+    setPreviewCount(null);
+    setPreviewCounts({});
+    setNotice('Recipient choices changed. Preview the audience again before sending.');
+  }
+
+  function toggleInstitutionIncluded(institutionId: string, included: boolean) {
+    setExcludedInstitutionIds(current => {
+      const next = new Set(current);
+      if (included) next.delete(institutionId); else next.add(institutionId);
+      return next;
+    });
+    setPreviewed(false);
+    setPreviewCount(null);
+    setPreviewCounts({});
+    setNotice('Institution selection changed. Preview the audience again before sending.');
+  }
 
   function useLogoInNotification(assetId: string, fileName: string) {
     const current = document.blocks[selectedBlock];
@@ -319,13 +380,26 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }
 
   function audienceFilter() {
-    if (scope === 'USER') return { recipients: directRecipients.map(r => ({ kind: r.recipient_kind, id: r.recipient_id })) };
+    const excludedRecipientRows = [...excludedRecipients].map(key => {
+      const [kind, id] = key.split(':');
+      return { kind, id: Number(id) };
+    });
+    if (scope === 'USER') return {
+      recipients: directRecipients.map(r => ({ kind: r.recipient_kind, id: r.recipient_id })),
+      excludedRecipients: excludedRecipientRows
+    };
     if (scope === 'HRMS_PLATFORM') return {
       allActiveInstitutions: allInstitutions,
       institutionIds: allInstitutions ? [] : selectedInstitutionIds.map(Number),
-      recipientTypes
+      recipientTypes,
+      excludedInstitutionIds: [...excludedInstitutionIds].map(Number),
+      excludedRecipients: excludedRecipientRows
     };
-    return { recipientTypes: [...new Set([...recipientTypes, ...(includeParents ? ['PARENT'] : [])])], includeParents };
+    return {
+      recipientTypes: [...new Set([...recipientTypes, ...(includeParents ? ['PARENT'] : [])])],
+      includeParents,
+      excludedRecipients: excludedRecipientRows
+    };
   }
 
   function requestBody(includeSchedule: boolean) {
@@ -381,12 +455,20 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       const response = await apiFetch(prefix + '/preview', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody(false))
       });
-      const data = await response.json().catch(() => ({})) as { valid?: boolean; recipientCount?: number; recipientCounts?: Record<string, number>; message?: string };
+      const data = await response.json().catch(() => ({})) as {
+        valid?: boolean; recipientCount?: number; recipientCounts?: Record<string, number>;
+        recipients?: Recipient[]; message?: string;
+      };
       if (!response.ok || !data.valid) throw new Error(data.message || 'Preview validation failed.');
+      setPreviewRecipients(Array.isArray(data.recipients) ? data.recipients : []);
       setPreviewCount(Number(data.recipientCount ?? 0));
       setPreviewCounts(data.recipientCounts ?? {});
+      setExpandedAudienceGroups(new Set());
+      setAudiencePages({});
       setPreviewed(true);
-      setNotice('Preview validated. Sending will resolve the audience again.');
+      setNotice(Number(data.recipientCount ?? 0) > 0
+        ? 'Audience review validated. Sending will re-resolve recipients and exclusions.'
+        : 'No eligible recipients remain selected. Review the institution and recipient choices before sending.');
     } catch (e) { setError(e instanceof Error ? e.message : 'Preview validation failed.'); }
     finally { setSaving(false); }
   }
@@ -451,6 +533,25 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
   if (loading) return <main className={styles.page} data-surface={surface}><p>Loading notification creator…</p></main>;
 
+  const reviewInstitutions = institutions.filter(item => {
+    const active = String(item.status ?? '').toUpperCase() === 'ACTIVE';
+    const hasLearners = Number(item.active_learner_count ?? 0) > 0;
+    if (!active || (isPlatform && !hasLearners)) return false;
+    if (!isPlatform) return true;
+    return allInstitutions || selectedInstitutionIds.includes(String(item.id));
+  });
+  const recipientsByGroup = new Map<string, Recipient[]>();
+  for (const recipient of previewRecipients) {
+    const groupKey = String(recipient.institution_id ?? 0) + ':' + recipient.recipient_kind;
+    const current = recipientsByGroup.get(groupKey) ?? [];
+    current.push(recipient);
+    recipientsByGroup.set(groupKey, current);
+  }
+  const selectedPreviewRecipients = previewRecipients.filter(recipient =>
+    !excludedRecipients.has(recipientKey(recipient))
+      && !excludedInstitutionIds.has(String(recipient.institution_id ?? '')));
+  const currentSelectedCount = selectedPreviewRecipients.length;
+
   return <main className={styles.page} data-surface={surface}>
     <header className={styles.header}>
       <div><p className={styles.eyebrow}>RICH NOTIFICATION STUDIO</p>
@@ -494,34 +595,60 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>02</span><div><h2>Choose the audience</h2><p>The server rechecks memberships and permissions when previewing and sending.</p></div></div>
           <div className={styles.formGrid}>
-            <label>Notification scope<select value={scope} onChange={event=>{setScope(event.target.value as Scope);setPreviewed(false);setPreviewCount(null);}}>
+            <label>Notification scope<select value={scope} onChange={event=>{setScope(event.target.value as Scope);clearInstitutionSelectionReview();}}>
               {isPlatform ? <option value="HRMS_PLATFORM">HRMS platform / selected institutions</option> : <>
                 <option value="COURSE">Course</option><option value="INSTITUTION">Institution</option><option value="USER">Individual user(s)</option>
               </>}
             </select></label>
-            {scope==='COURSE' ? <label>Assigned course<select value={courseId} onChange={event=>{setCourseId(event.target.value);setPreviewed(false);setPreviewCount(null);}}>
+            {scope==='COURSE' ? <label>Assigned course<select value={courseId} onChange={event=>{setCourseId(event.target.value);clearInstitutionSelectionReview();}}>
               <option value="">Choose a course…</option>{courses.map(course=><option value={course.course_id} key={course.course_id}>{course.class_code ? `Class ${course.class_code} · ` : ''}${course.course_name} ({course.course_code})</option>)}
             </select></label> : null}
           </div>
           {scope==='HRMS_PLATFORM' ? <div className={styles.audienceBox}>
-            <label className={styles.check}><input type="checkbox" checked={allInstitutions} onChange={event=>{setAllInstitutions(event.target.checked);setPreviewed(false);setPreviewCount(null);}}/> All active institutions</label>
-            {!allInstitutions ? <div className={styles.institutionPicker}>
-              <strong>Select institutions</strong>
-              <div className={styles.institutionList}>{institutions.map(item=><label key={item.id} className={styles.check}>
-                <input type="checkbox" checked={selectedInstitutionIds.includes(String(item.id))} onChange={event=>{setSelectedInstitutionIds(current=>event.target.checked?[...new Set([...current,String(item.id)])]:current.filter(id=>id!==String(item.id)));setPreviewed(false);setPreviewCount(null);}}/>
-                <span>{item.display_name} <small>{item.tenant_code ?? item.institution_code}</small></span>
-              </label>)}</div>
-              <p className={styles.helpText}>{selectedInstitutionIds.length} institutions selected.</p>
-            </div> : <p className={styles.helpText}>The audience will be resolved across every currently active institution when sent.</p>}
+            <label className={styles.check}><input type="checkbox" checked={allInstitutions} onChange={event=>{setAllInstitutions(event.target.checked);clearInstitutionSelectionReview();}}/> All active institutions</label>
+            <div className={styles.institutionPicker}>
+              <strong>{allInstitutions ? 'Review institutions included in the platform audience' : 'Select institutions'}</strong>
+              <div className={styles.institutionList}>{institutions.map(item=>{
+                const active=String(item.status ?? '').toUpperCase()==='ACTIVE';
+                const id=String(item.id);
+                const learnerCount=Number(item.active_learner_count ?? 0);
+                const eligible=active && learnerCount>0;
+                const included=eligible && (allInstitutions ? !excludedInstitutionIds.has(id) : selectedInstitutionIds.includes(id));
+                const parentCount=Number(item.eligible_parent_count ?? 0);
+                const adminCount=Number(item.active_admin_count ?? 0);
+                return <label key={item.id} className={styles.institutionChoice}>
+                  <input type="checkbox" disabled={!eligible} checked={included} onChange={event=>{
+                    if(allInstitutions) toggleInstitutionIncluded(id,event.target.checked);
+                    else {
+                      setSelectedInstitutionIds(current=>event.target.checked?[...new Set([...current,id])]:current.filter(value=>value!==id));
+                      clearInstitutionSelectionReview();
+                    }
+                  }}/>
+                  <span><strong>{item.display_name} <small>{item.tenant_code ?? item.institution_code}</small></strong>
+                    <small>{!active
+                      ? String(item.status ?? 'INACTIVE').replaceAll('_',' ') + ' — notifications blocked for this institution'
+                      : learnerCount===0
+                        ? 'No active learners — excluded from HRMS platform notifications'
+                        : learnerCount + ' active learner(s) · ' + parentCount + ' eligible parent(s) · ' + adminCount + ' active institution admin(s)'}</small>
+                    {eligible && parentCount===0
+                      ? <small className={styles.audienceReason}>No eligible consented guardians are linked to active learners.</small>
+                      : null}
+                  </span>
+                </label>;
+              })}</div>
+              <p className={styles.helpText}>{allInstitutions
+                ? (institutions.filter(item=>String(item.status ?? '').toUpperCase()==='ACTIVE' && Number(item.active_learner_count ?? 0)>0).length-excludedInstitutionIds.size) + ' eligible institution(s) included. Suspended tenants and tenants without active learners are excluded.'
+                : selectedInstitutionIds.length + ' eligible institution(s) selected.'}</p>
+            </div>
           </div> : null}
           {scope==='USER' ? <div className={styles.audienceBox}>
-            <div className={styles.formGrid}><label>Recipient type<select value={directKind} onChange={event=>{setDirectKind(event.target.value);setRecipientOptions([]);setDirectRecipients([]);setPreviewed(false);setPreviewCount(null);}}>
+            <div className={styles.formGrid}><label>Recipient type<select value={directKind} onChange={event=>{setDirectKind(event.target.value);setRecipientOptions([]);setDirectRecipients([]);clearInstitutionSelectionReview();}}>
               <option value="STUDENT">Student</option><option value="USER_ACCOUNT">Parent / guardian</option><option value="INSTITUTION_ADMIN">Institution admin</option>
             </select></label><label>Search recipients<input value={directQuery} onChange={event=>setDirectQuery(event.target.value)} placeholder="Name contains…"/></label></div>
             <button className={styles.ghostButton} type="button" onClick={()=>void searchRecipients()}>Search eligible recipients</button>
             <div className={styles.recipientResults}>{recipientOptions.map(item=>{
               const selected=directRecipients.some(row=>row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id);
-              return <label key={item.recipient_kind+':'+item.recipient_id} className={styles.recipient}><input type="checkbox" checked={selected} onChange={event=>{setDirectRecipients(current=>event.target.checked?[...current,item]:current.filter(row=>!(row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id)));setPreviewed(false);setPreviewCount(null);}}/><span><strong>{item.recipient_name}</strong><small>{item.recipient_kind} · #{item.recipient_id}{item.class_code? ` · Class ${item.class_code}`:''}</small></span></label>;
+              return <label key={item.recipient_kind+':'+item.recipient_id} className={styles.recipient}><input type="checkbox" checked={selected} onChange={event=>{setDirectRecipients(current=>event.target.checked?[...current,item]:current.filter(row=>!(row.recipient_kind===item.recipient_kind&&row.recipient_id===item.recipient_id)));clearInstitutionSelectionReview();}}/><span><strong>{item.recipient_name}</strong><small>{item.recipient_kind} · #{item.recipient_id}{item.class_code? ` · Class ${item.class_code}`:''}</small></span></label>;
             })}</div>
             <p className={styles.helpText}>{directRecipients.length} direct recipients selected.</p>
           </div> : null}
@@ -530,12 +657,86 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             <div className={styles.checkList}>
               {[
                 ['STUDENT','Students'],['PARENT','Parents / guardians'],['INSTITUTION_ADMINS','Institution administrators']
-              ].map(([value,label])=><label key={value} className={styles.check}><input type="checkbox" checked={recipientTypes.includes(value)} onChange={event=>{setRecipientTypes(current=>event.target.checked?[...current,value]:current.filter(item=>item!==value));setPreviewed(false);setPreviewCount(null);}}/>{label}</label>)}
+              ].map(([value,label])=><label key={value} className={styles.check}><input type="checkbox" checked={recipientTypes.includes(value)} onChange={event=>{setRecipientTypes(current=>event.target.checked?[...current,value]:current.filter(item=>item!==value));clearInstitutionSelectionReview();}}/>{label}</label>)}
             </div>
-            {scope==='COURSE' ? <label className={styles.check}><input type="checkbox" checked={includeParents} onChange={event=>{setIncludeParents(event.target.checked);setPreviewed(false);setPreviewCount(null);}}/> Also notify linked parents / guardians</label>:null}
+            {scope==='COURSE' ? <label className={styles.check}><input type="checkbox" checked={includeParents} onChange={event=>{setIncludeParents(event.target.checked);clearInstitutionSelectionReview();}}/> Also notify linked parents / guardians</label>:null}
             {isPlatform ? <p className={styles.helpText}>The same user is delivered at most once per campaign across selected institutions. Only eligible memberships are resolved by the server.</p>:null}
           </div>:null}
         </div>
+
+        {(previewRecipients.length>0 || previewed) ? <section className={styles.audienceReview} aria-label="Recipient review">
+          <div className={styles.audienceReviewHeader}>
+            <div><strong>Recipient review</strong><p>{previewed ? 'Audience snapshot is validated; send will still recheck every selection.' : 'Changes are pending validation. Preview again before sending.'}</p></div>
+            <div className={styles.audienceReviewTotals}><b>{currentSelectedCount} selected</b><span>{previewRecipients.length} eligible recipients found</span></div>
+          </div>
+          <label className={styles.reviewSearch}>Find a recipient<input value={recipientReviewQuery} onChange={event=>setRecipientReviewQuery(event.target.value)} placeholder="Search by name, ID, class or institution"/></label>
+          {reviewInstitutions.length===0 && previewRecipients.length===0
+            ? <p className={styles.helpText}>No eligible recipients matched the current audience. Suspended institutions and inactive memberships are not sent notifications.</p>
+            : <div className={styles.audienceGroupList}>
+              {reviewInstitutions.map(institution=>{
+                const institutionId=String(institution.id);
+                const institutionKey='tenant:'+institutionId;
+                const tenantRecipients=previewRecipients.filter(row=>String(row.institution_id ?? '')===institutionId);
+                const tenantSelected=tenantRecipients.filter(row=>!excludedRecipients.has(recipientKey(row))&&!excludedInstitutionIds.has(institutionId)).length;
+                const active=String(institution.status ?? '').toUpperCase()==='ACTIVE';
+                const learnerCount=Number(institution.active_learner_count ?? 0);
+                const parentCount=Number(institution.eligible_parent_count ?? 0);
+                const adminCount=Number(institution.active_admin_count ?? 0);
+                return <details key={institutionKey} className={styles.audienceInstitution} open={expandedAudienceGroups.has(institutionKey)}
+                  onToggle={event=>setExpandedAudienceGroups(current=>{const next=new Set(current);if(event.currentTarget.open)next.add(institutionKey);else next.delete(institutionKey);return next;})}>
+                  <summary><span><strong>{institution.display_name}</strong><small>{institution.tenant_code ?? institution.institution_code} · {active?'ACTIVE':String(institution.status ?? 'INACTIVE')}</small></span>
+                    <b>{tenantSelected} selected / {tenantRecipients.length} eligible</b></summary>
+                  <p className={styles.audienceReason}>{active
+                    ? learnerCount + ' learners · ' + parentCount + ' eligible guardians · ' + adminCount + ' institution admins. Groups with no eligible accounts will not receive a notification.'
+                    : 'Institution is ' + String(institution.status ?? 'inactive').toLowerCase() + '; delivery is blocked.'}</p>
+                  {!active ? null : REVIEW_KINDS.map(kind=>{
+                    const allGroupRows=recipientsByGroup.get(institutionId+':'+kind.key) ?? [];
+                    const query=recipientReviewQuery.trim().toLowerCase();
+                    const groupRows=query ? allGroupRows.filter(row=>
+                      [row.recipient_name,String(row.recipient_id),row.class_code ?? '',row.institution_name ?? '',row.institution_code ?? '']
+                        .some(value=>String(value).toLowerCase().includes(query))) : allGroupRows;
+                    const groupKey=institutionId+':'+kind.key;
+                    const page=audiencePages[groupKey] ?? 1;
+                    const shown=groupRows.slice(0,page*25);
+                    const selected=allGroupRows.filter(row=>!excludedRecipients.has(recipientKey(row))&&!excludedInstitutionIds.has(institutionId)).length;
+                    return <details key={groupKey} className={styles.audienceRole} open={expandedAudienceGroups.has(groupKey)}
+                      onToggle={event=>setExpandedAudienceGroups(current=>{const next=new Set(current);if(event.currentTarget.open)next.add(groupKey);else next.delete(groupKey);return next;})}>
+                      <summary><span>{kind.label}</span><b>{selected} selected / {allGroupRows.length} eligible</b></summary>
+                      {allGroupRows.length===0
+                        ? <p className={styles.helpText}>{kind.key==='STUDENT' && learnerCount===0
+                          ? 'No active learners in this institution.'
+                          : kind.key==='USER_ACCOUNT' && parentCount===0
+                            ? 'No eligible consented guardians linked to active learners.'
+                            : kind.key==='INSTITUTION_ADMIN' && adminCount===0
+                              ? 'No active institution-admin accounts.'
+                              : 'No recipients in this group match the current audience scope.'}</p>
+                        : <>
+                          {groupRows.length===0 ? <p className={styles.helpText}>No recipients match this search.</p> : <div className={styles.reviewRecipientList}>
+                            {shown.map(row=>{
+                              const key=recipientKey(row);
+                              const selectedRow=!excludedRecipients.has(key)&&!excludedInstitutionIds.has(institutionId);
+                              return <label key={key} className={styles.reviewRecipient}>
+                                <input type="checkbox" checked={selectedRow} disabled={excludedInstitutionIds.has(institutionId)} onChange={event=>toggleRecipientIncluded(row,event.target.checked)}/>
+                                <span><strong>{row.recipient_name}</strong><small>{recipientKindLabel(row.recipient_kind)} · ID {row.recipient_id}{row.class_code ? ' · Class ' + row.class_code : ''}</small></span>
+                              </label>;
+                            })}
+                          </div>}
+                          {groupRows.length>shown.length ? <button type="button" className={styles.showMoreRecipients} onClick={()=>setAudiencePages(current=>({...current,[groupKey]:page+1}))}>
+                            Show next {Math.min(25,groupRows.length-shown.length)} of {groupRows.length} matching recipients
+                          </button>:null}
+                        </>}
+                    </details>;
+                  })}
+                </details>;
+              })}
+            </div>}
+          <div className={styles.audienceReviewFooter}>
+            <span>{currentSelectedCount} recipients selected · {previewRecipients.length-currentSelectedCount} individually or institutionally excluded</span>
+            {previewCount===0 && previewed ? <strong>No recipients are selected. Sending is disabled.</strong> : null}
+          </div>
+        </section> : null}
+
+        <div className={styles.panel}>
 
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>03</span><div><h2>Design your content</h2><p>Build with media, cards, highlights and actions—not only text and images.</p></div></div>
@@ -650,11 +851,11 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             <label>Schedule send (optional)<input type="datetime-local" value={scheduledAt} onChange={event=>{setScheduledAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
             <label>Expiry (optional)<input type="datetime-local" value={expiresAt} onChange={event=>{setExpiresAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
           </div>
-          {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} eligible recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>kind+': '+count).join(' · ')}</span></div>:null}
+          {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} selected recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>recipientKindLabel(kind)+': '+count).join(' · ')}</span></div>:null}
           <div className={styles.sendActions}>
             <button type="button" className={styles.ghostButton} onClick={()=>void saveTemplate()} disabled={saving||sending||(surface==='hrms'&&!templateDirty)}>{saving?'Saving…':'Save template version'}</button>
             <button type="button" className={styles.previewButton} onClick={()=>void preview()} disabled={saving||sending}>{saving?'Validating…':'Preview & validate audience'}</button>
-            <button type="button" className={styles.sendButton} onClick={()=>void send()} disabled={saving||sending||!previewed}>{sending?'Sending…':scheduledAt?'Schedule notification':'Send notification'}</button>
+            <button type="button" className={styles.sendButton} onClick={()=>void send()} disabled={saving||sending||!previewed||previewCount===0}>{sending?'Sending…':scheduledAt?'Schedule notification':'Send notification'}</button>
           </div>
           <p className={styles.helpText}>Preview is not delivery. The backend resolves the audience again at send time; scheduled campaigns are rechecked before dispatch.</p>
         </div>
