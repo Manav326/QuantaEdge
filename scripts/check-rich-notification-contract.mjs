@@ -62,7 +62,7 @@ for (const path of [
   'services/api/src/main/resources/db/migration/V144__rich_notification_template_active_name.sql',
   'services/api/src/main/resources/db/migration/V145__retain_notification_templates_and_media_after_creator_deletion.sql',
   'services/api/src/main/resources/db/migration/V146__android_push_notification_devices.sql',
-  'services/api/src/main/resources/db/migration/V149__notification_preview_proof.sql',
+  'services/api/src/main/resources/db/migration/V150__notification_preview_proof.sql',
   'docs/product/rich-notification-platform-contract.md',
 ]) {
   assert.doesNotThrow(() => read(path), `Required notification feature file is missing: ${path}`);
