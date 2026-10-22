@@ -64,6 +64,8 @@ export function PeopleAppearanceProvider({ children }: { children: ReactNode }) 
     setMode(MODES[(index + 1) % MODES.length]);
   }, [mode, setMode]);
 
+  // Restore once on mount; do not re-read storage on every mode change.
+  // This preserves a same-tab preference even when localStorage is blocked.
   useEffect(() => {
     const initial = storedMode();
     setModeState(initial);
@@ -76,20 +78,17 @@ export function PeopleAppearanceProvider({ children }: { children: ReactNode }) 
       applyMode(next);
     };
 
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const onSystemThemeChange = () => {
-      // Follow OS changes only while System is selected. Use React state rather
-      // than localStorage so the current-tab preference still works if storage
-      // is blocked by browser privacy settings.
-      if (mode === 'system') applyMode('system');
-    };
-
     window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // Keep tracking device changes only when System mode is selected.
+  useEffect(() => {
+    if (mode !== 'system') return;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const onSystemThemeChange = () => applyMode('system');
     media.addEventListener?.('change', onSystemThemeChange);
-    return () => {
-      window.removeEventListener('storage', onStorage);
-      media.removeEventListener?.('change', onSystemThemeChange);
-    };
+    return () => media.removeEventListener?.('change', onSystemThemeChange);
   }, [mode]);
 
   const value = useMemo(() => ({ mode, setMode, cycleMode }), [mode, setMode, cycleMode]);
