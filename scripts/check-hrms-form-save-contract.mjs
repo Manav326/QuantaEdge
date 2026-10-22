@@ -61,6 +61,24 @@ assert.ok(employeeDirectory.includes('!editChanged') && employeeDirectory.includ
 assert.ok(employeeDirectory.includes('pattern="^\\+[1-9][0-9]{6,14}$"'),
   'Optional phone fields must validate the E.164 format accepted by the backend.');
 
+const institutions = people('institutions/page.tsx');
+assert.ok(institutions.includes('const createDraftIssue=') && institutions.includes('Boolean(createDraftIssue())'),
+  'Institution provisioning must block meaningless fields and explain the required correction.'); 
+assert.ok(institutions.includes('const adminDraftIssue=') && institutions.includes('Boolean(adminDraftIssue())'),
+  'Institution-admin provisioning must validate username, name and temporary password before submission.');
+assert.ok(institutions.includes("notifyUser('Tenant branding settings saved.','success')") &&
+  institutions.includes("notifyUser('Billing contract saved."),
+  'Institution settings writes must use central success notifications.');
+assert.ok(institutions.includes('Course authorisation may have been partially saved.'),
+  'Partial course authorisation failure must remain visible and reload server state rather than implying atomic success.');
+
+const qa = people('qa/page.tsx');
+assert.ok(qa.includes('idempotencyKey.trim()') && qa.includes('people.qa.installSuccess'),
+  'QA installs must keep their server-backed idempotency key and explicit install outcome.');
+assert.ok(qa.includes("notifyUser(t('people.qa.installSuccess'),'success')") &&
+  qa.includes("notifyUser(t('people.qa.baselinePassed'),'success')"),
+  'QA lifecycle success must use the central HRMS notification host.');
+
 const selfService = people('self-service/page.tsx');
 assert.ok(selfService.includes("setDraft(v=>({...v,startDate:'',endDate:'',reason:''}))"),
   'A successful self-service leave request must clear the repeatable date/reason draft.');
