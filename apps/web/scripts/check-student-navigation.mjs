@@ -931,6 +931,14 @@ assert.ok(
   'User Web institution notification and logo editors must retain contrast-aware accent foregrounds and theme-aware error states without diverging from shared editor styles.'
 );
 
+
+assert.ok(
+  globals.includes('a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]') &&
+  globals.includes('var(--qe-color-on-accent, var(--qe-color-on-primary, #fff))') &&
+  globals.includes('outline: 3px solid var(--qe-color-focus)'),
+  'Rich notification action contrast and focus must be corrected in the User Web host without forking shared renderer sources.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

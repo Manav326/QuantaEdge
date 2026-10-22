@@ -1969,3 +1969,16 @@ html[data-qe-appearance] .institution-portal [class*="LogoGraphicsLab_success"] 
   color: var(--qe-color-on-success-container);
   border-color: var(--qe-color-success);
 }
+
+
+/* Rich notification renderers are shared source files; keep the Web-only contrast override at the host boundary. */
+html[data-qe-appearance] .qe-workspace-content :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]),
+html[data-qe-appearance] .institution-portal :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]) {
+  color: var(--qe-color-on-accent, var(--qe-color-on-primary, #fff));
+}
+
+html[data-qe-appearance] .qe-workspace-content :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]):focus-visible,
+html[data-qe-appearance] .institution-portal :is(a[class*="cta"], button[class*="cta"], [role="button"][class*="cta"]):focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
