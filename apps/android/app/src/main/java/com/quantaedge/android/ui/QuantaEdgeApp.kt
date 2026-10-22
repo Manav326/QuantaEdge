@@ -4370,7 +4370,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 saveableStateHolder.SaveableStateProvider("$stateOwnerKey:${route.name}") {
-                when (route) {
                     @Composable
                     fun renderWelcomeRoute() {
                         WelcomeScreen(
@@ -5063,6 +5062,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     }
 
+                when (route) {
                     AppRoute.WELCOME -> renderWelcomeRoute()
                     AppRoute.LOGIN -> renderLoginRoute()
                     AppRoute.ACCOUNT_SIGNUP -> renderAccountSignupRoute()
