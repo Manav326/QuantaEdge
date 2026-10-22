@@ -156,17 +156,30 @@ public class NotificationController {
       @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
     RichNotificationService.Actor actor=studioReaderActor(request,context,institutionCode);
     Map<String,Object> result=new LinkedHashMap<>();
+    Long institutionFilter="HRMS".equals(actor.workspace())?null:actor.institutionId();
+    result.put("institutions",jdbc.queryForList("""
+      select t.id,t.tenant_code as institution_code,t.display_name,t.status,
+        (select count(distinct st.id) from student st
+          join institution_membership sm on sm.student_id=st.id and sm.status='ACTIVE'
+          where st.active=true and sm.institution_id=t.id) as active_learner_count,
+        (select count(distinct u.id) from user_account u
+          join institution_user_membership um on um.user_id=u.id and um.status='ACTIVE' and um.institution_id=t.id
+          join guardian_student gs on gs.guardian_user_id=u.id and gs.active=true
+            and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+          join student st on st.id=gs.student_id and st.active=true
+          join institution_membership sm on sm.student_id=st.id and sm.institution_id=t.id and sm.status='ACTIVE'
+          where u.active=true) as eligible_parent_count,
+        (select count(*) from institution_admin_account ia
+          where ia.institution_id=t.id and ia.active=true) as active_admin_count
+      from institution_tenant t
+      where (?::bigint is null or t.id=?::bigint)
+      order by case when t.status='ACTIVE' then 0 else 1 end,lower(t.display_name),t.id
+      limit 1000
+      """,institutionFilter,institutionFilter));
     if("HRMS".equals(actor.workspace())) {
-      result.put("institutions",jdbc.queryForList("""
-        select id,tenant_code as institution_code,display_name,status
-        from institution_tenant where status='ACTIVE' order by lower(display_name),id limit 1000
-        """));
       result.put("courses",List.of());
       result.put("recipientKinds",List.of("STUDENT","PARENT","INSTITUTION_ADMINS"));
     } else {
-      result.put("institutions",List.of(Map.of(
-        "id",actor.institutionId(),"institution_code","INSTITUTION","display_name",
-        "INSTITUTION_ADMIN".equals(actor.workspace())?"Current institution":"QuantaEdge","status","ACTIVE")));
       result.put("courses",jdbc.queryForList("""
         select distinct p.id as course_id,p.code as course_code,p.display_name as course_name,
           c.code as class_code

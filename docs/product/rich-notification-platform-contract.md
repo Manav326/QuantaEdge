@@ -30,6 +30,14 @@ Hard rules:
 - Record sender, workspace, institution/course scope, audience filter, resolved recipient count, timestamp and send outcome. Campaign/template mutations are auditable.
 - Support idempotency so request retries do not create duplicate campaigns or recipient deliveries.
 
+## 2A. Recipient review and individual exclusions
+
+Before send or schedule, the preview step returns the eligible recipient directory resolved by the server, grouped in the sender UI by institution and recipient role. Each row includes recipient display name, account identity, class where applicable, and institution context. Institution options show status plus active learner, eligible consented guardian, and active institution-admin counts.
+
+The sender may exclude one eligible recipient or one selected institution. Exclusions only subtract from the server-resolved audience; the client cannot add recipient identities through this mechanism. A preview must be run again after an exclusion change, and sending remains disabled when zero recipients are selected. The backend resolves eligibility and applies exclusions again at immediate send and scheduled dispatch.
+
+Suspended/inactive institutions remain visible in the selection directory with a reason but are disabled and cannot be targeted. For HRMS platform sends, an institution with zero active learners is also disabled and excluded—even if active institution-admin accounts exist. "All active institutions" resolves only to active institutions with at least one active learner; manually supplied zero-learner institution IDs are rejected by the backend. HRMS can exclude a specific eligible institution even when "all active institutions" is selected. Within eligible institutions, zero eligible guardian groups are explicitly called out, and all recipient rows still resolve through active membership and consent rules. Recipient details contain names, account IDs, class where relevant, and institution context—not contact details.
+
 ## 3. Rich notification content builder
 
 Use a versioned, provider-neutral JSON document with a strict schema and a reusable server-side validator/renderer. Do not store arbitrary executable HTML, script, iframe code, or unsanitized SVG. A template is layout/content configuration, not executable code.

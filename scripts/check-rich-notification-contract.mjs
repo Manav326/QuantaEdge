@@ -66,6 +66,27 @@ for (const path of [
 ]) {
   assert.doesNotThrow(() => read(path), `Required notification feature file is missing: ${path}`);
 }
+const audienceService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
+for (const required of [
+  'applyAudienceExclusions(', 'excludedRecipientKeys(', 'recipientDetails(', 'hasActiveLearners(',
+  'candidateRecipientCount', 'excludedRecipientCount', 'as institution_name'
+]) {
+  assert.ok(audienceService.includes(required), 'Audience review is missing ' + required);
+}
+const audienceController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
+for (const required of ['active_learner_count', 'eligible_parent_count', 'active_admin_count']) {
+  assert.ok(audienceController.includes(required), 'Institution audience options are missing ' + required);
+}
+for (const app of senderApps) {
+  const studioSource = read('apps/' + app + '/app/components/NotificationStudio.tsx');
+  const styleSource = read('apps/' + app + '/app/components/NotificationStudio.module.css');
+  for (const required of ['Recipient review', 'toggleRecipientIncluded', 'excludedInstitutionIds', 'recipientReviewQuery', 'No active learners — excluded from HRMS platform notifications']) {
+    assert.ok(studioSource.includes(required), app + ' notification sender is missing ' + required);
+  }
+  assert.ok(styleSource.includes('.audienceReview') && styleSource.includes('.reviewRecipientList'),
+    app + ' notification sender is missing grouped recipient-review styles');
+}
+
 const webLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 assert.ok(webLayout.includes('<NotificationBell role={role} />'),
   'The learner/parent workspace header must include the persistent notification bell.');

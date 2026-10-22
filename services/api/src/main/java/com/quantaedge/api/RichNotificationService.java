@@ -188,7 +188,7 @@ public class RichNotificationService {
     if("HRMS_PLATFORM".equals(normalized) && Boolean.TRUE.equals(filter.get("individualTargets"))) {
       resolvePlatformDirectRecipients(filter,result);
       if(result.isEmpty())throw new IllegalArgumentException("Select at least one eligible individual recipient.");
-      return List.copyOf(result.values());
+      return applyAudienceExclusions(normalized,List.copyOf(result.values()),filter);
     }
     if("USER".equals(normalized)) {
       resolveDirectRecipients(institutionId,filter,result);
@@ -196,9 +196,14 @@ public class RichNotificationService {
       List<Long> targetInstitutions = new ArrayList<>();
       if("HRMS_PLATFORM".equals(normalized)) {
         if(Boolean.TRUE.equals(filter.get("allActiveInstitutions"))) {
-          targetInstitutions=jdbc.queryForList(
-            "select id from institution_tenant where status='ACTIVE' order by id",
-            Long.class);
+          targetInstitutions=jdbc.queryForList("""
+            select t.id from institution_tenant t
+            where t.status='ACTIVE' and exists (
+              select 1 from student st
+              join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
+              where st.active=true and m.institution_id=t.id)
+            order by t.id
+            """,Long.class);
         } else {
           targetInstitutions=longList(filter.get("institutionIds"));
         }
@@ -212,7 +217,14 @@ public class RichNotificationService {
           if(!isActiveInstitution(tenantId)) {
             throw new IllegalArgumentException("One selected institution is not active or does not exist.");
           }
+          if(!hasActiveLearners(tenantId)) {
+            throw new IllegalArgumentException("An institution with no active learners cannot be included in an HRMS notification.");
+          }
         }
+        // Remove excluded tenants before deduplication, so an account linked to both
+        // excluded and included institutions can still be delivered once through an included tenant.
+        Set<Long> excludedTenants=new LinkedHashSet<>(longList(filter.get("excludedInstitutionIds")));
+        targetInstitutions=targetInstitutions.stream().filter(id->!excludedTenants.contains(id)).toList();
       } else {
         if(institutionId==null || institutionId<1) throw new IllegalArgumentException("An institution scope is required.");
         targetInstitutions=List.of(institutionId);
@@ -226,7 +238,102 @@ public class RichNotificationService {
     if(result.size()>MAX_RECIPIENTS) {
       throw new IllegalArgumentException("The resolved audience exceeds 10,000 recipients. Narrow the audience or split the campaign.");
     }
-    return List.copyOf(result.values());
+    return applyAudienceExclusions(normalized,List.copyOf(result.values()),filter);
+  }
+
+  private List<Recipient> applyAudienceExclusions(String scope,List<Recipient> candidates,Map<String,Object> filter) {
+    Map<String,Object> safeFilter=filter==null?Map.of():filter;
+    Set<String> excludedRecipientKeys=excludedRecipientKeys(safeFilter.get("excludedRecipients"));
+    List<Long> excludedTenantList=longList(safeFilter.get("excludedInstitutionIds"));
+    if(excludedTenantList.size()>100) {
+      throw new IllegalArgumentException("A campaign may exclude at most 100 institutions.");
+    }
+    Set<Long> excludedTenants=new LinkedHashSet<>(excludedTenantList);
+    if(!excludedTenants.isEmpty()&&!"HRMS_PLATFORM".equals(scope)) {
+      throw new SecurityException("Only HRMS platform campaigns can exclude cross-institution audiences.");
+    }
+    return candidates.stream().filter(recipient ->
+      !excludedRecipientKeys.contains(recipient.kind()+":"+recipient.identityId())
+        && (recipient.institutionId()==null||!excludedTenants.contains(recipient.institutionId()))
+    ).toList();
+  }
+
+  private static Map<String,Object> withoutAudienceExclusions(Map<String,Object> filter) {
+    Map<String,Object> copy=new LinkedHashMap<>(filter==null?Map.of():filter);
+    copy.remove("excludedRecipients");
+    copy.remove("excludedInstitutionIds");
+    return copy;
+  }
+
+  private static Set<String> excludedRecipientKeys(Object raw) {
+    if(raw==null)return Set.of();
+    if(!(raw instanceof List<?> list))throw new IllegalArgumentException("Individual recipient exclusions are invalid.");
+    if(list.size()>MAX_RECIPIENTS)throw new IllegalArgumentException("Too many individual recipient exclusions were supplied.");
+    Set<String> result=new LinkedHashSet<>();
+    for(Object item:list) {
+      if(!(item instanceof Map<?,?> map))throw new IllegalArgumentException("An individual recipient exclusion is invalid.");
+      String kind=String.valueOf(map.get("kind")).trim().toUpperCase(Locale.ROOT);
+      if(!Set.of("STUDENT","USER_ACCOUNT","INSTITUTION_ADMIN").contains(kind)) {
+        throw new IllegalArgumentException("An individual recipient exclusion uses an unsupported recipient type.");
+      }
+      long id;
+      try{id=Long.parseLong(String.valueOf(map.get("id")));}catch(RuntimeException ex) {
+        throw new IllegalArgumentException("An individual recipient exclusion has an invalid identity.");
+      }
+      if(id<1)throw new IllegalArgumentException("An individual recipient exclusion has an invalid identity.");
+      result.add(kind+":"+id);
+    }
+    return result;
+  }
+
+  private List<Map<String,Object>> recipientDetails(List<Recipient> recipients) {
+    Map<String,List<Recipient>> byKind=new LinkedHashMap<>();
+    for(Recipient recipient:recipients) {
+      if(recipient.institutionId()==null)throw new IllegalStateException("A recipient cannot be reviewed without an institution scope.");
+      byKind.computeIfAbsent(recipient.kind(),ignored->new ArrayList<>()).add(recipient);
+    }
+    List<Map<String,Object>> details=new ArrayList<>(recipients.size());
+    for(Map.Entry<String,List<Recipient>> entry:byKind.entrySet()) {
+      List<Recipient> group=entry.getValue();
+      String tuples=group.stream().map(ignored->"(?,?)").collect(java.util.stream.Collectors.joining(","));
+      List<Object> args=new ArrayList<>(group.size()*2);
+      for(Recipient recipient:group) {
+        args.add(recipient.identityId());
+        args.add(recipient.institutionId());
+      }
+      String sql=switch(entry.getKey()) {
+        case "STUDENT" -> """
+          select distinct st.id as recipient_id,'STUDENT' as recipient_kind,st.display_name as recipient_name,
+            st.class_code,m.institution_id,t.display_name as institution_name,t.tenant_code as institution_code
+          from student st
+          join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
+          join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+          where st.active=true and (st.id,m.institution_id) in ("""+tuples+") order by lower(t.display_name),lower(st.display_name),st.id";
+        case "USER_ACCOUNT" -> """
+          select distinct u.id as recipient_id,'USER_ACCOUNT' as recipient_kind,u.display_name as recipient_name,
+            null::varchar as class_code,um.institution_id,t.display_name as institution_name,t.tenant_code as institution_code
+          from user_account u
+          join institution_user_membership um on um.user_id=u.id and um.status='ACTIVE'
+          join guardian_student gs on gs.guardian_user_id=u.id and gs.active=true
+            and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+          join student st on st.id=gs.student_id and st.active=true
+          join institution_membership m on m.student_id=st.id and m.institution_id=um.institution_id and m.status='ACTIVE'
+          join institution_tenant t on t.id=um.institution_id and t.status='ACTIVE'
+          where u.active=true and (u.id,um.institution_id) in ("""+tuples+") order by lower(t.display_name),lower(u.display_name),u.id";
+        case "INSTITUTION_ADMIN" -> """
+          select ia.id as recipient_id,'INSTITUTION_ADMIN' as recipient_kind,ia.display_name as recipient_name,
+            null::varchar as class_code,ia.institution_id,t.display_name as institution_name,t.tenant_code as institution_code
+          from institution_admin_account ia
+          join institution_tenant t on t.id=ia.institution_id and t.status='ACTIVE'
+          where ia.active=true and (ia.id,ia.institution_id) in ("""+tuples+") order by lower(t.display_name),lower(ia.display_name),ia.id";
+        default -> throw new IllegalArgumentException("This recipient type cannot be shown in an audience review.");
+      };
+      details.addAll(jdbc.queryForList(sql,args.toArray()));
+    }
+    if(details.size()!=recipients.size()) {
+      throw new IllegalStateException("The eligible audience changed while preparing the review. Run preview again.");
+    }
+    return List.copyOf(details);
   }
 
   private void resolvePlatformDirectRecipients(Map<String,Object> filter,Map<String,Recipient> target) {
@@ -243,6 +350,9 @@ public class RichNotificationService {
       catch(RuntimeException ex) { throw new IllegalArgumentException("Choose the institution for each individual recipient."); }
       if(institutionId<1||!isActiveInstitution(institutionId)) {
         throw new SecurityException("An individual recipient must belong to an active institution.");
+      }
+      if(!hasActiveLearners(institutionId)) {
+        throw new SecurityException("An institution with no active learners cannot be targeted by an HRMS notification.");
       }
       tenants.add(institutionId);
       String kind=String.valueOf(map.get("kind")).trim().toUpperCase(Locale.ROOT);
@@ -382,12 +492,29 @@ public class RichNotificationService {
       "select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",Boolean.class,institutionId));
   }
 
+  private boolean hasActiveLearners(long institutionId) {
+    return Boolean.TRUE.equals(jdbc.queryForObject("""
+      select exists(select 1 from student st
+        join institution_membership m on m.student_id=st.id
+          and m.institution_id=? and m.status='ACTIVE'
+        where st.active=true)
+      """,Boolean.class,institutionId));
+  }
+
   private List<Long> targetInstitutionIds(String scope,Map<String,Object> filter,List<Recipient> recipients) {
     if ("HRMS_PLATFORM".equals(scope)) {
-      if (Boolean.TRUE.equals(filter.get("allActiveInstitutions"))) {
-        return jdbc.queryForList("select id from institution_tenant where status='ACTIVE' order by id",Long.class);
-      }
-      return longList(filter.get("institutionIds"));
+      List<Long> targets=Boolean.TRUE.equals(filter.get("allActiveInstitutions"))
+          ? jdbc.queryForList("""
+            select t.id from institution_tenant t
+            where t.status='ACTIVE' and exists (
+              select 1 from student st
+              join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
+              where st.active=true and m.institution_id=t.id)
+            order by t.id
+            """,Long.class)
+          : longList(filter.get("institutionIds"));
+      Set<Long> excluded=new LinkedHashSet<>(longList(filter.get("excludedInstitutionIds")));
+      return targets.stream().filter(id->!excluded.contains(id)).distinct().sorted().toList();
     }
     return recipients.stream().map(Recipient::institutionId).filter(java.util.Objects::nonNull)
       .distinct().sorted().toList();
@@ -408,19 +535,24 @@ public class RichNotificationService {
     String checkedTitle=requiredText(title,"Notification title",180);
     String checkedSummary=requiredText(summary,"Notification summary",400);
     JsonNode document=validator.validate(rawDocument);
-    assertScopeAllowed(actor,scope,institutionId,courseId,filter);
-    List<Recipient> recipients=resolveAudience(scope,institutionId,courseId,filter);
-    Map<String,Integer> counts=countByKind(recipients);
+    Map<String,Object> safeFilter=filter==null?Map.of():filter;
+    assertScopeAllowed(actor,scope,institutionId,courseId,safeFilter);
+    String normalizedScope=scope==null?"":scope.trim().toUpperCase(Locale.ROOT);
+    List<Recipient> candidates=resolveAudience(scope,institutionId,courseId,withoutAudienceExclusions(safeFilter));
+    List<Recipient> selected=applyAudienceExclusions(normalizedScope,candidates,safeFilter);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("valid",true);
     result.put("title",checkedTitle);
     result.put("summary",checkedSummary);
     result.put("contentDocument",document);
     result.put("scope",scope);
-    result.put("recipientCount",recipients.size());
-    result.put("recipientCounts",counts);
+    result.put("recipientCount",selected.size());
+    result.put("recipientCounts",countByKind(selected));
+    result.put("candidateRecipientCount",candidates.size());
+    result.put("excludedRecipientCount",candidates.size()-selected.size());
+    result.put("recipients",recipientDetails(candidates));
     result.put("previewTokenRequired",false);
-    result.put("note","The send operation resolves and validates the audience again.");
+    result.put("note","Review each recipient and institution before sending. The server re-resolves eligibility and exclusions at send time.");
     return result;
   }
 

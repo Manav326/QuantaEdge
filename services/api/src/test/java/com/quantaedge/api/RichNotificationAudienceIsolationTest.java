@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -53,10 +54,25 @@ class RichNotificationAudienceIsolationTest {
     stubInstitutionActive(101L, true);
     stubInstitutionActive(202L, false);
     stubInstitutionActive(303L, true);
+    stubActiveLearners(101L, true);
+    stubActiveLearners(303L, true);
 
     Map<String, Object> audience = Map.of(
         "institutionIds", List.of(101L, 202L, 303L),
         "recipientTypes", List.of("STUDENT"));
+
+    assertThrows(IllegalArgumentException.class,
+        () -> service.resolveAudience("HRMS_PLATFORM", null, null, audience));
+  }
+
+  @Test
+  void hrmsCampaignRejectsAnActiveInstitutionWithNoActiveLearners() {
+    stubInstitutionActive(101L, true);
+    stubActiveLearners(101L, false);
+
+    Map<String, Object> audience = Map.of(
+        "institutionIds", List.of(101L),
+        "recipientTypes", List.of("STUDENT", "INSTITUTION_ADMINS"));
 
     assertThrows(IllegalArgumentException.class,
         () -> service.resolveAudience("HRMS_PLATFORM", null, null, audience));
@@ -71,6 +87,15 @@ class RichNotificationAudienceIsolationTest {
     assertThrows(SecurityException.class,
         () -> service.resolveAudience("COURSE", 202L, 500L,
             Map.of("recipientTypes", List.of("STUDENT"))));
+  }
+
+  @Test
+  void explicitlyExcludedRecipientIsRemovedFromTheServerResolvedAudience() {
+    stubStudentMembership(202L, 42L, true);
+    Map<String, Object> audience = new java.util.LinkedHashMap<>(directStudent(42L));
+    audience.put("excludedRecipients", List.of(Map.of("kind", "STUDENT", "id", 42L)));
+
+    assertTrue(service.resolveAudience("USER", 202L, null, audience).isEmpty());
   }
 
   @Test
@@ -95,6 +120,12 @@ class RichNotificationAudienceIsolationTest {
     when(jdbc.queryForObject(
         contains("select exists(select 1 from student st join institution_membership"),
         eq(Boolean.class), eq(institutionId), eq(studentId))).thenReturn(eligible);
+  }
+
+  private void stubActiveLearners(long institutionId, boolean eligible) {
+    when(jdbc.queryForObject(
+        contains("where st.active=true)"),
+        eq(Boolean.class), eq(institutionId))).thenReturn(eligible);
   }
 
   private void stubInstitutionActive(long institutionId, boolean active) {
