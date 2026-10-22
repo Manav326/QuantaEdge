@@ -6,7 +6,7 @@ import { useUiTranslation } from '../i18n/UiLocaleProvider';
 import { apiFetch } from './apiClient';
 import { formatUserTimestamp } from './formatUserTimestamp';
 import RichNotificationRenderer from './RichNotificationRenderer';
-import styles from './NotificationInbox.module.css';
+import styles from './StaffNotificationInbox.module.css';
 
 type NotificationItem = {
   recipient_id: number;
