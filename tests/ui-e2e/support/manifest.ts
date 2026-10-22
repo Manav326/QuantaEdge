@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, type CsvRow } from './csv';
@@ -60,6 +61,14 @@ export async function loadUiManifest(): Promise<UiManifest> {
   );
 
   const registered = screens.filter(screen => screen.platform !== 'android');
+  const scenarioIds = new Set(scenarios.map(scenario => String(scenario.case_id || '').trim()).filter(Boolean));
+  const missingScenarioRefs = screens.flatMap(screen =>
+    screen.scenario_ids.split(';').map(id => id.trim()).filter(Boolean)
+      .filter(id => !scenarioIds.has(id)).map(id => screen.source_path + ' -> ' + id)
+  );
+  if (missingScenarioRefs.length) {
+    throw new Error('UI screen register refers to unknown workflow scenarios: ' + missingScenarioRefs.join(', '));
+  }
   const registeredSources = new Set(registered.map(screen => screen.source_path));
   const sourcePaths = new Set(routes.map(route => route.file));
   const missingSources = routes.filter(route => !registeredSources.has(route.file)).map(route => route.file);
@@ -77,7 +86,7 @@ export async function loadUiManifest(): Promise<UiManifest> {
   return {
     sourceSha: process.env.GITHUB_SHA || process.env.QE_E2E_SOURCE_SHA || 'local-unpinned',
     generatedAt: new Date().toISOString(),
-    registerSha: process.env.QE_E2E_REGISTER_SHA || 'resolved-from-checked-out-worktree',
+    registerSha: createHash('sha256').update(inventoryText).update('\n').update(await readFile(scenarioPath)).digest('hex'),
     screens,
     routes,
     summary: {
@@ -91,10 +100,13 @@ export async function loadUiManifest(): Promise<UiManifest> {
 
 export function expandRoute(route: string): string {
   return route
-    .replaceAll('[institutionCode]', 'QAT-UNKNOWN')
-    .replaceAll('[artifactId]', 'qe-e2e-missing-artifact')
-    .replaceAll('[...slug]', 'qe-e2e-missing-path')
-    .replaceAll('[[...slug]]', 'qe-e2e-missing-path');
+    .replace(/\\[\\[\\.\\.\\.[^\\]]+\\]\\]/g, 'qe-e2e-missing-path')
+    .replace(/\\[\\.\\.\\.[^\\]]+\\]/g, 'qe-e2e-missing-path')
+    .replace(/\\[([^\\]]+)\\]/g, (_match, parameter: string) =>
+      parameter === 'institutionCode' ? 'QAT-UNKNOWN' :
+      parameter === 'artifactId' ? 'qe-e2e-missing-artifact' :
+      'qe-e2e-missing-' + parameter.replace(/[^a-z0-9-]/gi, '-')
+    );
 }
 
 export function routeApp(sourcePath: string): 'web' | 'admin' | 'people' {
