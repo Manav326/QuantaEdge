@@ -32,9 +32,9 @@ The install/uninstall requirements and acceptance matrix are tracked in [Central
 | API mapped handler entries | 448 request/STOMP mapping rows across 51 source files; source extraction only |
 | Screen entries linked to scenario IDs | 102; references validated against the scenario register |
 | Workflow scenarios | 76 total: 74 `NOT_EXECUTED`, 2 `NOT_IMPLEMENTED` (QA scenario runner/report and external-provider safety) |
-| Browser/Android runtime-verified screens | 0 in this audit pass; deployed URL was inaccessible via available browser tool, so this does not establish site outage |
+| Browser/Android runtime-verified screens | 0 fully verified; first GitHub Playwright run started the app stack but stopped at test-setup failures before route walkthroughs. This does not establish site outage |
 | Per-screen state coverage | 102 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
-| Test-data ownership/uninstall implementation | QA pack/HRMS QA Center remain runtime-unverified. A separate browser E2E harness and isolated Compose overlay are under development on the feature branch; no passing run is claimed |
+| Test-data ownership/uninstall implementation | QA pack/HRMS QA Center remain not certified. The feature-branch browser E2E harness started Web, Education Admin, HRMS, API, PostgreSQL and Redis on a disposable stack; setup failures still block deeper flows and all 76 workflow scenarios remain not fully verified |
 
 Counts describe documentation inventory, not feature pass rates or functional coverage percentages.
 
