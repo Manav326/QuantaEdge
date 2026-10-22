@@ -26,6 +26,17 @@ type LaunchItem = {
   blockingIssues: string[];
   message: string;
 };
+type AvailableRelease = {
+  release_id: number;
+  course_id: number;
+  release_version: number;
+  contentCurrent: boolean;
+  course_code: string;
+  course_name: string;
+  source_institution_id: number;
+  source_institution_code: string;
+  source_institution_name: string;
+};
 type LaunchResponse = {
   institutionId: number;
   institutionName: string;
@@ -33,6 +44,8 @@ type LaunchResponse = {
   total: number;
   readyCount: number;
   blockedCount: number;
+  availableReleases?: AvailableRelease[];
+  availableCount?: number;
 };
 type Draft = { title: string; description: string; priceRupees: string };
 
@@ -124,6 +137,28 @@ export default function MarketplaceLaunchStepper({
       ...current,
       [assignmentId]: { ...(current[assignmentId] || { title: '', description: '', priceRupees: '' }), ...patch },
     }));
+  };
+
+  const assignRelease = async (release: AvailableRelease) => {
+    if (!release.contentCurrent) {
+      setError('This release no longer matches its reviewed content fingerprint. The source institution must submit a fresh release before it can be assigned.');
+      return;
+    }
+    setBusyKey('assign-' + release.release_id);
+    setError('');
+    setNotice('');
+    try {
+      await api('/api/v1/hrms/platform/institutions/' + institutionId + '/course-releases/' + release.release_id + '/assignment', {
+        method: 'PUT',
+        body: JSON.stringify({ enabled: true }),
+      });
+      setNotice(release.course_name + ' assigned to this institution. Its launch checklist is now available below.');
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'The approved course release could not be assigned.');
+    } finally {
+      setBusyKey(null);
+    }
   };
 
   const saveDraft = async (item: LaunchItem) => {
@@ -269,15 +304,49 @@ export default function MarketplaceLaunchStepper({
         </div>
       </div>
 
+      {!loading && data && (data.availableReleases || []).length > 0 && (
+        <section className={styles.availablePanel}>
+          <header className={styles.availableHeader}>
+            <div><span className={styles.summaryLabel}>HRMS release catalogue</span><h3>Available approved courses</h3>
+              <p>Assign an origin-approved, shareable course release to this institution. Assignment does not publish or sell it.</p></div>
+            <span className={styles.availableCount}>{data.availableReleases?.length || 0} available</span>
+          </header>
+          <div className={styles.availableList}>
+            {(data.availableReleases || []).map(release => (
+              <article className={styles.availableRow} key={release.release_id}>
+                <div className={styles.availableMark} aria-hidden="true">↗</div>
+                <div className={styles.availableCopy}>
+                  <strong>{release.course_name}</strong>
+                  <span>{release.course_code} · Release v{release.release_version}</span>
+                  <small>Source: {release.source_institution_name} · {release.source_institution_code}</small>
+                  {!release.contentCurrent && <small className={styles.availableWarning}>Reviewed content has changed. The source institution must resubmit this release.</small>}
+                </div>
+                <button type="button" className={styles.secondaryButton}
+                  disabled={busyKey !== null || !release.contentCurrent}
+                  onClick={() => void assignRelease(release)}>
+                  {busyKey === 'assign-' + release.release_id ? 'Assigning…' : 'Assign to institution'}
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       {loading ? (
         <div className={styles.loadingList}><div /><div /><div /></div>
       ) : !data ? (
         <div className={styles.empty}><b>Readiness checklist unavailable</b><p>Retry the request. No publication action has been performed.</p><button type="button" onClick={() => void load()}>Try again</button></div>
-      ) : !data.items.length ? (
+      ) : !data.items.length && !(data.availableReleases || []).length ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>◎</span>
           <b>No assigned course releases yet</b>
-          <p>Assign a platform-approved, shareable course release to this institution first. Once assigned, its listing readiness appears here.</p>
+          <p>There are no currently available shareable course releases to assign. The source institution must complete its release approval and HRMS content-quality review first.</p>
+        </div>
+      ) : !data.items.length ? (
+        <div className={styles.empty}>
+          <span className={styles.emptyIcon}>✓</span>
+          <b>No course assigned yet</b>
+          <p>Choose an approved course release above. It will then appear here with its own launch checklist and completion percentage.</p>
         </div>
       ) : (
         <div className={styles.courseList}>
