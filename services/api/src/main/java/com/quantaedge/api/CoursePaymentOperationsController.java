@@ -51,7 +51,7 @@ public class CoursePaymentOperationsController {
 
     String fromAndWhere = """
         from course_payment_order o
-        join institution_tenant t on t.id=o.institution_id
+        left join institution_tenant t on t.id=o.institution_id
         join curriculum_program p on p.id=o.course_id
         left join student s on s.id=o.student_id
         left join institution_marketplace_offer offer
@@ -85,7 +85,7 @@ public class CoursePaymentOperationsController {
     pageArgs.add(limit);
     pageArgs.add(offset);
     List<Map<String,Object>> items = jdbc.queryForList("""
-        select o.id as local_order_id,o.institution_id,t.display_name as institution_name,
+        select o.id as local_order_id,o.institution_id,coalesce(t.display_name,'[Institution scope missing]') as institution_name,
           o.course_id,coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
           o.student_id,s.display_name as learner_name,o.purchaser_user_id,o.target_student_id,o.recipient_type,
           o.status,o.failure_code,o.currency,o.listed_price_paise,coalesce(o.discount_amount_paise,0) as discount_amount_paise,
