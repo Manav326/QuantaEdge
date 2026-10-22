@@ -1157,9 +1157,7 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   [class*="tile"], [class*="Tile"], [class*="counter"], [class*="Counter"],
   [class*="summary"], [class*="Summary"], [class*="overview"], [class*="Overview"],
   [class*="previewBar"], [class*="PreviewBar"], [class*="rowSelected"], [class*="RowSelected"]
-):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"])
- :not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"])
- :not([class*="warning"]):not([class*="Warning"]) {
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) {
   background-color: var(--qe-color-surface-elevated) !important;
   color: var(--qe-color-text) !important;
   border-color: var(--qe-color-border-subtle) !important;
@@ -1171,9 +1169,7 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   [class*="tile"], [class*="Tile"], [class*="counter"], [class*="Counter"],
   [class*="summary"], [class*="Summary"], [class*="overview"], [class*="Overview"],
   [class*="previewBar"], [class*="PreviewBar"], [class*="rowSelected"], [class*="RowSelected"]
-):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"])
- :not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"])
- :not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label, p) {
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label, p) {
   color: inherit !important;
 }
 
