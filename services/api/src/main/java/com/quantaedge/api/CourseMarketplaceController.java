@@ -662,7 +662,7 @@ public class CourseMarketplaceController {
       throw new IllegalStateException("Institution payment branding is not configured.");
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
-        select id,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
+        select id,institution_offer_id,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
           listed_price_paise,discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
@@ -877,7 +877,7 @@ public class CourseMarketplaceController {
 
   private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
     return jdbc.queryForList("""
-        select id,offer_price_paise,currency,provider_order_id,status,listed_price_paise,
+        select id,institution_offer_id,offer_price_paise,currency,provider_order_id,status,listed_price_paise,
           discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_profile_id,revenue_share_policy_id,
@@ -1275,6 +1275,12 @@ public class CourseMarketplaceController {
       throw new org.springframework.web.server.ResponseStatusException(
           org.springframework.http.HttpStatus.CONFLICT,
           "This older checkout has incomplete financial snapshots and coupon details that cannot be safely reconstructed automatically. The saved order was left unchanged; do not pay again. HRMS must reconcile this order.");
+    }
+    Object storedOfferId=localOrder.get("institution_offer_id");
+    if(!(storedOfferId instanceof Number savedOfferId)||savedOfferId.longValue()!=institutionOfferId) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout belongs to a different course-offer version. The order was left unchanged; do not pay again. HRMS must reconcile the saved offer and its financial terms.");
     }
     String providerState;
     try {
