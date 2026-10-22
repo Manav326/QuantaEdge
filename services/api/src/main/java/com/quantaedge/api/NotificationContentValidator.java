@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Iterator;
 import java.util.Set;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,13 @@ public class NotificationContentValidator {
     if (document == null || !document.isObject()) {
       throw new IllegalArgumentException("Notification content must be a JSON object.");
     }
-    int version = document.path("version").asInt(-1);
-    if (version != 1) throw new IllegalArgumentException("Unsupported notification content version.");
+    JsonNode versionNode = document.path("version");
+    boolean supportedVersion = versionNode.isIntegralNumber() && versionNode.intValue() == 1;
+    // Older clients serialized the version as "1". Accept that compatible value,
+    // but canonicalize it before persistence so every renderer receives number 1.
+    if (versionNode.isTextual()) supportedVersion = "1".equals(versionNode.asText().trim());
+    if (!supportedVersion) throw new IllegalArgumentException("Unsupported notification content version.");
+    ((ObjectNode) document).put("version", 1);
     JsonNode blocks = document.path("blocks");
     if (!blocks.isArray() || blocks.isEmpty() || blocks.size() > 40) {
       throw new IllegalArgumentException("Add between 1 and 40 content blocks.");
