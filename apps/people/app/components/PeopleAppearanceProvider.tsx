@@ -60,10 +60,9 @@ export function PeopleAppearanceProvider({ children }: { children: ReactNode }) 
   }, []);
 
   const cycleMode = useCallback(() => {
-    const current = storedMode();
-    const index = MODES.indexOf(current);
+    const index = MODES.indexOf(mode);
     setMode(MODES[(index + 1) % MODES.length]);
-  }, [setMode]);
+  }, [mode, setMode]);
 
   useEffect(() => {
     const initial = storedMode();
