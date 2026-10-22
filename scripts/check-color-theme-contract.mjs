@@ -388,6 +388,55 @@ assert(peopleAppearanceCss.includes('[class*="selectedTag"]') &&
   peopleAppearanceCss.includes('[class*="brandTemplateGenerated"]'),
   'Theme editor and notification studio component actions, selection badges and generated-state panels must remain readable.');
 
+
+/* Contrast-check the actual HRMS light/dark semantic token pairs (WCAG AA: 4.5:1). */
+function themeBlock(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  const end = source.indexOf(endMarker, start + startMarker.length);
+  return start >= 0 && end > start ? source.slice(start, end) : '';
+}
+function themeHex(block, token) {
+  const match = block.match(new RegExp('(?:^|\\n)\\s*--' + token + ':\\s*(#[0-9a-fA-F]{6})\\s*;'));
+  return match ? match[1] : null;
+}
+function relativeLuminance(hex) {
+  if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) return null;
+  const channels = [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16) / 255)
+    .map(value => value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4));
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+function contrastRatio(foreground, background) {
+  const fg = relativeLuminance(foreground);
+  const bg = relativeLuminance(background);
+  if (fg === null || bg === null) return null;
+  return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+}
+function assertThemeContrast(block, mode, foregroundToken, backgroundToken) {
+  const foreground = themeHex(block, foregroundToken);
+  const background = themeHex(block, backgroundToken);
+  const ratio = contrastRatio(foreground, background);
+  assert(ratio !== null && ratio >= 4.5,
+    'HRMS ' + mode + ' theme fails WCAG AA contrast for --' + foregroundToken +
+    ' on --' + backgroundToken + ' (ratio=' + (ratio === null ? 'unavailable' : ratio.toFixed(2)) + ':1).');
+}
+const peopleLightTokens = themeBlock(peopleAppearanceCss, ':root {', '\n}\n\nhtml[data-qe-people-appearance="dark"]');
+const peopleDarkTokens = themeBlock(peopleAppearanceCss, 'html[data-qe-people-appearance="dark"] {', '\n}\n\n/* Before client preference restoration');
+const contrastPairs = [
+  ['qe-people-ink', 'qe-people-card'],
+  ['qe-people-muted', 'qe-people-card'],
+  ['qe-people-brand-strong', 'qe-people-card'],
+  ['qe-people-on-brand', 'qe-people-brand-strong'],
+  ['qe-people-success', 'qe-people-success-soft'],
+  ['qe-people-warning', 'qe-people-warning-soft'],
+  ['qe-people-danger', 'qe-people-danger-soft'],
+  ['qe-people-info', 'qe-people-info-soft'],
+  ['qe-people-focus', 'qe-people-card']
+];
+for (const [foreground, background] of contrastPairs) {
+  assertThemeContrast(peopleLightTokens, 'light', foreground, background);
+  assertThemeContrast(peopleDarkTokens, 'dark', foreground, background);
+}
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);
