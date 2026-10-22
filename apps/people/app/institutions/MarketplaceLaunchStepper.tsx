@@ -76,7 +76,7 @@ const GROUPS = [
   { key: 'offer', number: '02', title: 'Listing details', subtitle: 'Set the student-facing title, description, currency and explicit price.', codes: ['OFFER_TERMS'] },
   { key: 'payment', number: '03', title: 'Payment setup', subtitle: 'Paid courses require working Razorpay credentials and the signed course-payment webhook.', codes: ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'] },
   { key: 'seller', number: '04', title: 'Seller & tax', subtitle: 'Approve the seller and tax treatment, GST registration where required, and e-invoice applicability.', codes: ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION'] },
-  { key: 'invoice', number: '05', title: 'Invoice & revenue share', subtitle: 'Publish an invoice template and approve a valid revenue-share policy for the after-tax pool.', codes: ['PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY', 'DISCOUNT_POOL_COMPATIBILITY'] },
+  { key: 'invoice', number: '05', title: 'Invoice & revenue share', subtitle: 'Publish an invoice template and approve a valid revenue-share policy for the after-tax pool.', codes: ['PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY'] },
 ] as const;
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -328,6 +328,7 @@ export default function MarketplaceLaunchStepper({
       'RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK', 'APPROVED_TAX_PROFILE',
       'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION',
       'PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION',
+      'DISCOUNT_POOL_COMPATIBILITY',
     ].includes(check.code));
   }
 
