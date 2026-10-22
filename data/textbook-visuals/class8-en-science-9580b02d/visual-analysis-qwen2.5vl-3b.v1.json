@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726991844",
-      "checkpointed_at": "2026-10-22T08:23:26Z"
+      "checkpointed_at": "2026-10-22T08:27:06Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726991844",
-      "checkpointed_at": "2026-10-22T08:24:11Z"
+      "checkpointed_at": "2026-10-22T08:27:52Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726991844",
-      "checkpointed_at": "2026-10-22T08:24:41Z"
+      "checkpointed_at": "2026-10-22T08:28:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34442,7 +34442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726991844",
-      "checkpointed_at": "2026-10-22T08:25:31Z"
+      "checkpointed_at": "2026-10-22T08:29:11Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -38091,7 +38091,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726991844",
-      "checkpointed_at": "2026-10-22T08:26:06Z"
+      "checkpointed_at": "2026-10-22T08:29:49Z"
     }
   ]
 }
