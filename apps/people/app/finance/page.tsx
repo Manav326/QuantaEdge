@@ -140,6 +140,7 @@ export default function FinancePage(){
   };
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
+  const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
 
   const createEntity=async(event:FormEvent)=>{
     event.preventDefault();
@@ -423,6 +424,7 @@ export default function FinancePage(){
   };
   const saveTemplate=()=>{
     if(!selectedTemplateId||!selectedVersionNo){setError('Create a template or start a draft version first.');return;}
+    if(designUnchanged)return;
     void action(async()=>api(BASE+'/invoice-templates/'+selectedTemplateId+'/versions/'+selectedVersionNo,{method:'PUT',body:JSON.stringify({designDefinition:design})}),
       'Invoice template draft saved. The preview reflects the saved design.');
   };
@@ -638,8 +640,8 @@ export default function FinancePage(){
           <label className={styles.checkLabel}><input type="checkbox" disabled={!activeDraft} checked={design.showLogo} onChange={e=>setDesign(v=>({...v,showLogo:e.target.checked}))}/> Show approved supplier logo where configured</label>
           <label>Footer copy<textarea disabled={!activeDraft} rows={3} maxLength={500} value={design.footerText} onChange={e=>setDesign(v=>({...v,footerText:e.target.value}))}/></label>
           <div className={styles.buttonStack}>
-            {!selectedTemplate?<button className={styles.primary} disabled={busy} onClick={createTemplate}>Create draft template</button>:<>
-              {selectedTemplate.version_status==='DRAFT'&&<><button className={styles.secondary} disabled={busy} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy} onClick={submitTemplate}>Submit for approval</button></>}
+            {!selectedTemplate?<button className={styles.primary} disabled={busy||!templateName.trim()||(templateScope==='SELLER'&&!templateEntityId)} onClick={createTemplate}>Create draft template</button>:<>
+              {selectedTemplate.version_status==='DRAFT'&&<><button className={styles.secondary} disabled={busy||designUnchanged} onClick={saveTemplate}>Save draft</button><button className={styles.primary} disabled={busy} onClick={submitTemplate}>Submit for approval</button></>}
               {selectedTemplate.version_status==='PENDING_APPROVAL'&&<button className={styles.primary} disabled={busy} onClick={approveTemplate}>Approve version</button>}
               {selectedTemplate.version_status==='APPROVED'&&<button className={styles.primary} disabled={busy} onClick={publishTemplate}>Publish approved version</button>}
             </>}
