@@ -313,7 +313,7 @@ export default function TranslationsPage() {
   const pending = items.filter(row => row.translation_status === 'IN_REVIEW').length;
   const stale = items.filter(row => row.is_current_revision === false).length;
 
-  return <main className={styles.page}>
+  return <main className={'qe-admin-translations-route ' + styles.page}>
     <AdminSidebar active="translations" variant="content" displayName={identity?.displayName || t('common.account.staff')} />
     <section className={styles.main}>
       <header className={styles.header}>
