@@ -60,6 +60,28 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void onlyLegacyOrdersWithNoDiscountFactsCanBeRepairedAutomatically() {
+    Map<String,Object> legacy = new LinkedHashMap<>();
+    legacy.put("discount_reference", null);
+    legacy.put("discount_offer_id", null);
+    legacy.put("discount_amount_paise", 0L);
+    legacy.put("discount_snapshot_json", "{}");
+    assertTrue(CourseMarketplaceController.hasNoDiscountFacts(legacy));
+
+    legacy.put("discount_snapshot_json", "{\"snapshotVersion\":1,\"discountType\":\"NONE\",\"discountPaise\":0}");
+    assertTrue(CourseMarketplaceController.hasNoDiscountFacts(legacy));
+
+    legacy.put("discount_reference", "SAVE10");
+    assertFalse(CourseMarketplaceController.hasNoDiscountFacts(legacy));
+    legacy.put("discount_reference", null);
+    legacy.put("discount_offer_id", 17L);
+    assertFalse(CourseMarketplaceController.hasNoDiscountFacts(legacy));
+    legacy.put("discount_offer_id", null);
+    legacy.put("discount_amount_paise", 100L);
+    assertFalse(CourseMarketplaceController.hasNoDiscountFacts(legacy));
+  }
+
+  @Test
   void verificationRejectsMissingFinancialSnapshotsBeforeProviderCapture() {
     Map<String,Object> incomplete = new LinkedHashMap<>();
     incomplete.put("status", "PENDING");
