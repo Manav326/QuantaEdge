@@ -1,7 +1,6 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import PasswordField from '../components/PasswordField';
 import NotificationStudio from '../components/NotificationStudio';
 import NotificationInboxClient, { NotificationBell } from '../components/NotificationInboxClient';
@@ -89,9 +88,6 @@ function dateText(value?: string) {
 }
 
 export default function InstitutionPortalPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const notificationRoute = searchParams.get('notifications');
   const [tenantCode, setTenantCode] = useState('');
   const [brand, setBrand] = useState<Brand | null>(null);
   const [brandLoading, setBrandLoading] = useState(false);
@@ -111,9 +107,22 @@ export default function InstitutionPortalPage() {
   const [loginMode, setLoginMode] = useState(true);
 
   useEffect(() => {
-    if (notificationRoute === 'inbox') setActiveView('notificationInbox');
-    if (notificationRoute === 'studio') setActiveView('notifications');
-  }, [notificationRoute]);
+    const syncNotificationRoute = () => {
+      const queryTarget = new URLSearchParams(window.location.search).get('notifications');
+      const hashTarget = window.location.hash === '#notifications-inbox' ? 'inbox'
+        : window.location.hash === '#notifications-studio' ? 'studio' : null;
+      const target = queryTarget || hashTarget;
+      if (target === 'inbox') setActiveView('notificationInbox');
+      else if (target === 'studio') setActiveView('notifications');
+    };
+    syncNotificationRoute();
+    window.addEventListener('hashchange', syncNotificationRoute);
+    window.addEventListener('popstate', syncNotificationRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncNotificationRoute);
+      window.removeEventListener('popstate', syncNotificationRoute);
+    };
+  }, []);
 
   const applyBrand = useCallback((value: Brand | null) => {
     setBrand(value);
@@ -401,12 +410,12 @@ export default function InstitutionPortalPage() {
             {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notificationInbox','Inbox'],['notifications','Notification studio']] as const).map(([id,label]) =>
               <button type="button" key={id} className={activeView===id?'is-active':''} onClick={() => {
                 setActiveView(id);
-                const params = new URLSearchParams(searchParams.toString());
-                if (id === 'notificationInbox') params.set('notifications', 'inbox');
-                else if (id === 'notifications') params.set('notifications', 'studio');
-                else params.delete('notifications');
+                const params = new URLSearchParams(window.location.search);
+                params.delete('notifications');
                 const query = params.toString();
-                void router.replace(query ? '/institution?' + query : '/institution', { scroll: false });
+                const hash = id === 'notificationInbox' ? '#notifications-inbox'
+                  : id === 'notifications' ? '#notifications-studio' : '';
+                window.history.replaceState(null, '', (query ? '/institution?' + query : '/institution') + hash);
               }}>{label}</button>
             )}
             <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
