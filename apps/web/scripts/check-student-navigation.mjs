@@ -939,6 +939,14 @@ assert.ok(
   'Rich notification action contrast and focus must be corrected in the User Web host without forking shared renderer sources.'
 );
 
+
+assert.ok(
+  !visualAuditTestsUniversalCss.includes('color-scheme: light dark') &&
+  visualAuditTestsUniversalCss.includes('html[data-qe-appearance] .resultScorePrimary') &&
+  visualAuditTestsUniversalCss.includes('A numerical score is neutral information, not a pass/fail status.'),
+  'Assessment controls must inherit the explicitly selected light/dark scheme, and raw scores must not receive an unconditional success state.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

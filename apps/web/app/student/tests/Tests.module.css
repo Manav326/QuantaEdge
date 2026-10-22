@@ -781,7 +781,7 @@ html[data-qe-appearance] :where(.toolbar select, .answerField input, .answerFiel
   background: var(--qe-color-surface-elevated);
   color: var(--qe-color-text);
   border-color: var(--qe-color-border);
-  color-scheme: light dark;
+  
 }
 
 html[data-qe-appearance] :where(.toolbar select, .answerField input, .answerField textarea, .answer input, .answer textarea):focus-visible {
@@ -995,4 +995,16 @@ html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .resultLink, .
 html[data-qe-appearance] :where(.primaryButton, .secondaryButton, .resultLink, .resultOpen, .backButton, .resultQuestionNav button, .leaderboardButton, .leaderboardClose, .certificateIssueButton, .certificateActionLinks a):focus-visible {
   outline: 3px solid var(--qe-color-focus);
   outline-offset: 2px;
+}
+
+
+/* A numerical score is neutral information, not a pass/fail status. */
+html[data-qe-appearance] .resultScorePrimary {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .resultScorePrimary > strong {
+  color: var(--qe-color-primary-text);
 }
