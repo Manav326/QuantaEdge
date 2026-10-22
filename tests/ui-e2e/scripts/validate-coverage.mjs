@@ -29,15 +29,15 @@ async function fileExists(path) {
 
 function collectSpecs(suites, inheritedFile = '', output = []) {
   for (const suite of suites || []) {
-    const file = String(suite.file || inheritedFile);
+    const file = String(suite.file || inheritedFile).replace(/\\/g, '/');
     for (const spec of suite.specs || []) {
-      const specFile = String(spec.file || file);
+      const specFile = String(spec.file || file).replace(/\\/g, '/');
       const testEntries = spec.tests || [];
       const passed = testEntries.some(entry =>
         Array.isArray(entry.results) && entry.results.length > 0 &&
         entry.results[entry.results.length - 1]?.status === 'passed'
       );
-      output.push({ file: specFile.replace(/\\\\/g, '/'), title: String(spec.title || ''), passed });
+      output.push({ file: specFile, title: String(spec.title || ''), passed });
     }
     collectSpecs(suite.suites || [], file, output);
   }
@@ -57,8 +57,9 @@ async function main() {
   const knownIds = new Set(scenarios.map(row => String(row.case_id).trim()));
   const unknownMappings = mappings.filter(row => !knownIds.has(String(row.scenario_id).trim()))
     .map(row => String(row.scenario_id).trim());
-  const invalidStatuses = mappings.filter(row => !['PARTIAL', 'COMPLETE', 'MANUAL_VERIFIED', 'NOT_IMPLEMENTED'].includes(row.coverage_status))
-    .map(row => String(row.scenario_id).trim());
+  const invalidStatuses = mappings.filter(row =>
+    !['PARTIAL', 'COMPLETE', 'MANUAL_VERIFIED', 'NOT_IMPLEMENTED'].includes(row.coverage_status)
+  ).map(row => String(row.scenario_id).trim());
   const mappingById = new Map(mappings.map(row => [String(row.scenario_id).trim(), row]));
   const missing = scenarios.filter(row => {
     const mapping = mappingById.get(String(row.case_id).trim());
@@ -66,10 +67,11 @@ async function main() {
   }).map(row => String(row.case_id).trim());
 
   const malformedPaths = [];
+  const suiteRoot = resolve(ROOT, 'tests/ui-e2e');
   for (const mapping of mappings) {
     for (const file of String(mapping.test_file || '').split(';').map(value => value.trim()).filter(Boolean)) {
-      const path = resolve(ROOT, 'tests/ui-e2e', file);
-      if (!path.startsWith(resolve(ROOT, 'tests/ui-e2e') + '/') || !(await fileExists(path))) {
+      const path = resolve(suiteRoot, file);
+      if (!path.startsWith(suiteRoot + '/') || !(await fileExists(path))) {
         malformedPaths.push(String(mapping.scenario_id) + ' -> ' + file);
       }
     }
@@ -78,24 +80,32 @@ async function main() {
   const testedSha = process.env.GITHUB_SHA || process.env.QE_E2E_SOURCE_SHA || '';
   let report = null;
   let reportError = '';
-  try { report = JSON.parse(await readFile(reportPath, 'utf8')); }
-  catch (error) { reportError = (error && error.code === 'ENOENT') ? 'Playwright JSON report not found.' : 'Playwright JSON report could not be parsed.'; }
+  try {
+    report = JSON.parse(await readFile(reportPath, 'utf8'));
+  } catch (error) {
+    reportError = error && error.code === 'ENOENT'
+      ? 'Playwright JSON report not found.'
+      : 'Playwright JSON report could not be parsed.';
+  }
   const specs = report ? collectSpecs(report.suites || []) : [];
   const runtimeGaps = [];
   for (const mapping of mappings.filter(row => row.coverage_status === 'COMPLETE')) {
     const id = String(mapping.scenario_id).trim();
-    const candidates = String(mapping.test_file || '').split(';').map(value => value.trim()).filter(Boolean).map(basename);
+    const candidates = String(mapping.test_file || '').split(';')
+      .map(value => value.trim()).filter(Boolean).map(basename);
     const matching = specs.filter(spec =>
       candidates.some(file => spec.file.endsWith('/' + file) || spec.file === file) &&
       spec.title.includes('[' + id + ']')
     );
-    if (!matching.some(spec => spec.passed)) runtimeGaps.push(id + ' has no passing exact-scenario browser test in this run');
+    if (!matching.some(spec => spec.passed)) {
+      runtimeGaps.push(id + ' has no passing exact-scenario browser test in this run');
+    }
   }
 
   const manualGaps = mappings.filter(row => row.coverage_status === 'MANUAL_VERIFIED').filter(row =>
     !/^[0-9a-f]{40}$/i.test(String(row.tested_commit_sha || '')) ||
     String(row.tested_commit_sha).toLowerCase() !== testedSha.toLowerCase() ||
-    !/^https:\\/\\//i.test(String(row.evidence_url || ''))
+    !String(row.evidence_url || '').startsWith('https://')
   ).map(row => String(row.scenario_id) + ' lacks current-commit manual evidence');
 
   const reportBody = {
@@ -120,27 +130,28 @@ async function main() {
       malformedPaths.length === 0 && runtimeGaps.length === 0 && manualGaps.length === 0 && !reportError
   };
   await mkdir(dirname(reportOutputPath), { recursive: true });
-  await writeFile(reportOutputPath, JSON.stringify(reportBody, null, 2) + '\\n', { mode: 0o600 });
+  await writeFile(reportOutputPath, JSON.stringify(reportBody, null, 2) + '\n', { mode: 0o600 });
 
   process.stdout.write(
     'Scenario coverage: ' + (scenarios.length - missing.length) + '/' + scenarios.length +
     ' scenarios fully mapped; ' + reportBody.partialMappings + ' partial mappings.\n' +
     'Coverage report: ' + reportOutputPath + '\n'
   );
-  if (unknownMappings.length) process.stderr.write('Unknown coverage IDs: ' + unknownMappings.join(', ') + '\\n');
-  if (invalidStatuses.length) process.stderr.write('Invalid coverage statuses: ' + invalidStatuses.join(', ') + '\\n');
-  if (malformedPaths.length) process.stderr.write('Missing test files: ' + malformedPaths.join(', ') + '\\n');
-  if (runtimeGaps.length) process.stderr.write('Runtime coverage gaps: ' + runtimeGaps.join('; ') + '\\n');
-  if (manualGaps.length) process.stderr.write('Manual evidence gaps: ' + manualGaps.join('; ') + '\\n');
-  if (missing.length) process.stderr.write('Not fully verified: ' + missing.join(', ') + '\\n');
-  if (reportError) process.stderr.write(reportError + '\\n');
-  if ((unknownMappings.length || invalidStatuses.length || malformedPaths.length) ||
+  if (unknownMappings.length) process.stderr.write('Unknown coverage IDs: ' + unknownMappings.join(', ') + '\n');
+  if (invalidStatuses.length) process.stderr.write('Invalid coverage statuses: ' + invalidStatuses.join(', ') + '\n');
+  if (malformedPaths.length) process.stderr.write('Missing test files: ' + malformedPaths.join(', ') + '\n');
+  if (runtimeGaps.length) process.stderr.write('Runtime coverage gaps: ' + runtimeGaps.join('; ') + '\n');
+  if (manualGaps.length) process.stderr.write('Manual evidence gaps: ' + manualGaps.join('; ') + '\n');
+  if (missing.length) process.stderr.write('Not fully verified: ' + missing.join(', ') + '\n');
+  if (reportError) process.stderr.write(reportError + '\n');
+  if (unknownMappings.length || invalidStatuses.length || malformedPaths.length ||
       (STRICT && (missing.length || runtimeGaps.length || manualGaps.length || reportError))) {
     process.exitCode = 1;
   }
 }
 
 main().catch(error => {
-  process.stderr.write('Scenario coverage validation failed: ' + (error instanceof Error ? error.message : String(error)) + '\\n');
+  process.stderr.write('Scenario coverage validation failed: ' +
+    (error instanceof Error ? error.message : String(error)) + '\n');
   process.exitCode = 1;
 });
