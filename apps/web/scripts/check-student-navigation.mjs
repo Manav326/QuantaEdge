@@ -873,6 +873,18 @@ assert.ok(
   'Certificate app surfaces, selected controls, status messages, and long certificate titles must follow the tenant palette and wrap within their layout; document previews remain white.'
 );
 
+
+const visualAuditCoursesCss = read('../app/student/courses/courses.module.css');
+assert.ok(
+  visualAuditCoursesCss.includes('html[data-qe-appearance] .hero') &&
+  visualAuditCoursesCss.includes('html[data-qe-appearance] :where(.courseCard, .empty)') &&
+  visualAuditCoursesCss.includes('var(--qe-color-on-primary-container)') &&
+  visualAuditCoursesCss.includes('var(--qe-color-on-error-container)') &&
+  visualAuditCoursesCss.includes('html[data-qe-appearance] .actions > *') &&
+  visualAuditCoursesCss.includes('overflow-wrap: anywhere'),
+  'Owned-course page surfaces, status controls, error messages, text wrapping, and action alignment must honour institution appearance in both modes.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
