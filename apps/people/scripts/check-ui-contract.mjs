@@ -46,6 +46,11 @@ assert(appearanceProvider.includes('PeopleAppearanceToggle') && appearanceProvid
 assert(!/\/api\/v1\/institution\/public\/branding|logoUrl|appIconUrl|themeTokens/i.test(appearanceProvider + appearanceStyles), 'HRMS appearance must not fetch or depend on tenant logo URLs or institution theme tokens.');
 assert(appearanceStyles.includes('--qe-people-brand: #f97316') && appearanceStyles.includes('--qe-people-brand-strong: #c2410c'), 'HRMS light theme must preserve canonical QuantaEdge orange branding.');
 assert(appearanceStyles.includes('html[data-qe-people-appearance="dark"]') && appearanceStyles.includes(':focus-visible') && appearanceStyles.includes('prefers-reduced-motion'), 'HRMS dark theme must retain semantic surfaces, visible focus, and reduced-motion support.');
+assert(sessionBoundary.includes('Do not replace the HRMS workspace with a full-screen gate on client-side') && !sessionBoundary.includes('setReady(false)'), 'HRMS session checks must not unmount the whole workspace on every route change.');
+assert(workspace.includes('key={pathname}') && !workspace.includes('router.refresh()'), 'HRMS navigation and logout must keep the shared shell mounted and avoid unnecessary route refreshes.');
+assert(appearanceStyles.includes('qe-people-route-enter') && appearanceStyles.includes('prefers-reduced-motion: reduce'), 'HRMS route content transitions must be subtle and respect reduced-motion preferences.');
+assert(appearanceStyles.includes('.qe-people-navigation-icon') && appearanceStyles.includes('background: transparent !important'), 'HRMS navigation glyphs must not be surrounded by unnecessary icon tiles.');
+
 assert(appearanceStyles.includes('[class*="Finance_page__"]') && appearanceStyles.includes('[class*="Institutions_page__"]') && appearanceStyles.includes('[class*="QaCenter_page__"]'), 'Bespoke finance, institution-management, and QA routes must remap their local theme tokens.');
 assert(workspace.includes('<PeopleAppearanceToggle />'), 'Authenticated workspace header must expose the shared appearance control.');
 
