@@ -110,6 +110,22 @@ export default function StudentMarketplacePage() {
     setBillingAddressesLoading(addressLoading);
   }, []);
 
+  const refreshBillingAddressBook = useCallback(async () => {
+    setBillingAddressesLoading(true);
+    try {
+      const rows = await readJson(await apiFetch('/api/v1/marketplace/billing-addresses', {
+        credentials: 'same-origin', cache: 'no-store',
+        headers: { 'Accept': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+      }));
+      setBillingAddresses(Array.isArray(rows) ? rows as BillingAddressRecord[] : []);
+    } catch (error: any) {
+      setStatus(localizeMarketplaceError(error?.message, language,
+        'Billing addresses could not be refreshed.', 'Billing addresses refresh नहीं हो सके।'));
+    } finally {
+      setBillingAddressesLoading(false);
+    }
+  }, [language]);
+
 
   const loadOffers = useCallback(async () => {
     setLoading(true);
@@ -417,6 +433,7 @@ export default function StudentMarketplacePage() {
           selectedAddressId={selectedBillingAddressId}
           onSelect={setSelectedBillingAddressId}
           profileHref="/student/profile"
+          onRefreshAddresses={() => { void refreshBillingAddressBook(); }}
           onCancel={() => setCheckoutCourseId(null)}
           onConfirm={() => {
             const courseId = checkoutCourseId;
