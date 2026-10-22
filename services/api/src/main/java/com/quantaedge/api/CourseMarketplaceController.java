@@ -849,6 +849,16 @@ public class CourseMarketplaceController {
     }
   }
 
+  private Map<String,Object> parseBillingAddressJson(Object raw) {
+    if(raw==null) return Map.of();
+    try {
+      return objectMapper.readValue(String.valueOf(raw),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+    } catch(Exception ex) {
+      throw new IllegalStateException("The legacy purchaser billing address snapshot could not be read safely.",ex);
+    }
+  }
+
   private Map<String,Object> billingProfileSnapshot(long userAccountId,long beneficiaryStudentId,Long requestedBillingAddressId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,label,billing_type,legal_name,gstin,gst_state_code,
@@ -882,7 +892,7 @@ public class CourseMarketplaceController {
       snapshot.put("legalName",legacy.get("legal_name"));
       snapshot.put("gstin",legacy.get("gstin"));
       snapshot.put("gstStateCode",legacy.get("gst_state_code"));
-      snapshot.put("billingAddress",parseAddress(String.valueOf(legacy.get("billing_address_json"))));
+      snapshot.put("billingAddress",parseBillingAddressJson(legacy.get("billing_address_json")));
       snapshot.put("contactEmail",legacy.get("contact_email"));
       snapshot.put("contactPhone",legacy.get("contact_phone"));
       snapshot.put("billingProfileVersion",legacy.get("profile_version"));
