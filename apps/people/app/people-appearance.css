@@ -1619,3 +1619,66 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :i
   color: var(--qe-people-warning) !important;
   border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
 }
+
+
+/* Deep component sweep: compact Finance controls and Institutions brand-template authoring. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="removeRow"], [class*="RemoveRow"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 34%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="pdfPreviewToolbar"], [class*="PdfPreviewToolbar"]
+) a {
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="courseList"], [class*="CourseList"], [class*="brandSwatches"] i,
+  [class*="brandTemplateOptional"], [class*="BrandTemplateOptional"]
+) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplate"], [class*="BrandTemplate"]
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplate"], [class*="BrandTemplate"]
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+  background: var(--qe-people-card) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplateFields"] input:not([type="file"]),
+  [class*="brandTemplateFields"] input[type="file"],
+  [class*="colorGrid"] input[type="color"]
+) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateFields"] small,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateActions"] > span,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="auditList"] :is(small,p),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandSwatches"] > span,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="seriesInline"] {
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateOptional"] {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] {
+  background-color: var(--qe-people-success-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 38%, var(--qe-people-line)) !important;
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] :is(strong,span,small) {
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="colorGrid"] label {
+  color: var(--qe-people-ink) !important;
+}
