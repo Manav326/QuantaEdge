@@ -1780,3 +1780,34 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :i
   border-color: var(--qe-people-line) !important;
   color: var(--qe-people-muted) !important;
 }
+
+
+/* Nested card regions and embedded data editors identified by the module stylesheet sweep. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="metrics"], [class*="Metrics"]
+) > article {
+  background: var(--qe-people-card) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="paymentEventList"], [class*="PaymentEventList"]
+) pre {
+  background: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="paperWrap"] {
+  background: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="panelHeading"] > b {
+  background: var(--qe-people-brand-soft) !important;
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-soft) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="metrics"] article, [class*="Metrics"] article
+) {
+  color: var(--qe-people-ink);
+}
