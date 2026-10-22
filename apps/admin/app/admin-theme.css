@@ -662,3 +662,35 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:hover:not
     padding: 7px;
   }
 }
+
+
+/* Dialogs and custom dropdown surfaces must not retain route-local light-only panels. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  dialog, [role="dialog"],
+  [class*="modal"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="Modal"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="dialog"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="Dialog"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [role="menu"], [role="listbox"], [role="tooltip"],
+  [class*="dropdown"], [class*="Dropdown"], [class*="popover"], [class*="Popover"]
+) {
+  background-color: var(--qe-color-surface-elevated, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [role="menuitem"], [role="option"]
+) {
+  color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [role="menuitem"]:hover, [role="option"]:hover,
+  [role="option"][aria-selected="true"]
+) {
+  background-color: var(--qe-color-selected-background, var(--admin-primary-container));
+  color: var(--qe-color-selected-text, var(--admin-text));
+}
+.qe-admin-workspace-page-slot dialog::backdrop {
+  background: rgb(8 15 29 / 58%);
+}
