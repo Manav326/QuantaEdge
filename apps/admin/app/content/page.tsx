@@ -338,6 +338,7 @@ export default function ContentStudio(){
  const [createForm,setCreateForm]=useState<any>({classCode:'6',subjectCode:'maths',chapterId:0,code:'',displayName:'',description:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
  const [activeBlock,setActiveBlock]=useState(0),[showPreview,setShowPreview]=useState(true),[previewMode,setPreviewMode]=useState<'desktop'|'phone'>('desktop'),[previewLanguage,setPreviewLanguage]=useState<'hi'|'en'>('hi'),[showAdvancedQuestions,setShowAdvancedQuestions]=useState(false),[questionJson,setQuestionJson]=useState('[]');
  const workspaceRef=useRef<HTMLElement|null>(null);
+  const editorReturnFocusRef=useRef<HTMLElement|null>(null);
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
  useEffect(()=>{
   let mounted=true;
@@ -494,6 +495,24 @@ export default function ContentStudio(){
   if(createType){setCreateType(null);setSelected(null);setDetail(null);}
   setBaselineSnapshot('');setError('');setNotice('');
  };
+ useEffect(()=>{
+  if(!editorOpen){editorReturnFocusRef.current?.focus({preventScroll:true});editorReturnFocusRef.current=null;return;}
+  const dialog=workspaceRef.current;
+  if(!dialog)return;
+  const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(node=>!node.hasAttribute('hidden')&&node.getAttribute('aria-hidden')!=='true');
+  (focusable()[0]||dialog).focus({preventScroll:true});
+  const handleKeyDown=(event:KeyboardEvent)=>{
+   if(event.key==='Escape'){event.preventDefault();backToLibrary();return;}
+   if(event.key!=='Tab')return;
+   const nodes=focusable();
+   if(nodes.length===0){event.preventDefault();dialog.focus();return;}
+   const first=nodes[0],last=nodes[nodes.length-1];
+   if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  };
+  dialog.addEventListener('keydown',handleKeyDown);
+  return()=>dialog.removeEventListener('keydown',handleKeyDown);
+ },[editorOpen]);
  const markPreviewReviewed=async()=>{
   if(!selected||selected.type!=='lesson'||!detail||saving||hasUnsavedChanges||!canSubmit||!preparationReady)return;
   const revision=Number(detail.content_revision);
@@ -513,6 +532,7 @@ export default function ContentStudio(){
  };
  function updateContent(index:number,patch:Record<string,any>){setBlocks(old=>old.map((b,i)=>i===index?{...b,content:{...b.content,...patch}}:b))}
  async function open(item:Selection){
+  if(!editorOpen&&typeof document!=='undefined')editorReturnFocusRef.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
   setEditorOpen(true);
   if(item.type==='lesson'){
    const openedRow=rows.find(row=>row.lesson_id===item.id);
@@ -850,7 +870,7 @@ export default function ContentStudio(){
      })</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
     <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
    </section>
-   {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
+   {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} tabIndex={-1} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
     <div className="qe-fullscreen-bar">
      <div><strong>{createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')}</strong><p>{selected&&detail?t('admin.contentStudio.workspaceSelectedContext',{classCode:detail.class_code,subject:detail.subject_name,chapter:selected.type==='chapter'?detail.chapter_name:detail.chapter_name+' / '+(form.title||detail.lesson_title)}):t('admin.contentStudio.workspaceIntro')}</p></div>
      <div className="qe-fullscreen-actions"><span className={'qe-edit-state '+(hasUnsavedChanges?'dirty':'')}>{createType?(createHasInput?t('admin.contentStudio.unsavedDraftDetails'):t('admin.contentStudio.newDraft')):hasUnsavedChanges?t('admin.contentStudio.unsavedChanges'):t('admin.contentStudio.noUnsavedChanges')}</span><button type="button" className="qe-secondary-button" onClick={backToLibrary} disabled={saving}>{t('admin.contentStudio.backToLibrary')}</button></div>
