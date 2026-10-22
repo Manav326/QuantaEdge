@@ -42,7 +42,7 @@ async function loginHrmsThroughUi(page: Page, password: string): Promise<void> {
   await page.goto(HRMS + '/login');
   await page.locator('#username').fill('hrms_admin');
   await page.locator('#password').fill(password);
-  await page.locator('form').locator('button[type="submit"]').click();
+  await page.locator('form button').click();
 }
 
 async function setUpHrmsOwner(browser: Browser): Promise<string> {
@@ -55,7 +55,7 @@ async function setUpHrmsOwner(browser: Browser): Promise<string> {
   await page.locator('#current-password').fill(INITIAL_HRMS_PASSWORD);
   await page.locator('#new-password').fill(FINAL_HRMS_PASSWORD);
   await page.locator('#confirm-password').fill(FINAL_HRMS_PASSWORD);
-  await page.locator('form').locator('button[type="submit"]').click();
+  await page.locator('form button').click();
   await page.waitForURL(url => !url.pathname.endsWith('/change-password'), { timeout: 20_000 });
 
   // Password change can revoke the just-used session; authenticate again with the replacement.
@@ -248,7 +248,7 @@ async function loginParent(browser: Browser, name: 'parentA' | 'parentB', creden
   const loginResponse = page.waitForResponse(response =>
     response.request().method() === 'POST' &&
     response.url().includes('/api/v1/auth/account-login'));
-  await page.locator('form').locator('button[type="submit"]').click();
+  await page.locator('form button').click();
   const response = await loginResponse;
   expect(response.status(), name + ' must authenticate through the live account-login endpoint.').toBe(200);
   expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
@@ -279,7 +279,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     const loginResponse = page.waitForResponse(response =>
       response.request().method() === 'POST' &&
       response.url().includes('/api/v1/auth/account-login'));
-    await page.locator('form').locator('button[type="submit"]').click();
+    await page.locator('form button').click();
     const response = await loginResponse;
     expect(response.status(), 'The independent learner must authenticate through the live account-login endpoint.').toBe(200);
     expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
@@ -299,7 +299,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
     const loginResponse = page.waitForResponse(response =>
       response.request().method() === 'POST' &&
       response.url().includes('/api/v1/auth/student-login'));
-    await page.locator('form').locator('button[type="submit"]').click();
+    await page.locator('form button').click();
     const response = await loginResponse;
     expect(response.status(), name + ' must authenticate through the live parent/child session endpoint.').toBe(200);
     expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
