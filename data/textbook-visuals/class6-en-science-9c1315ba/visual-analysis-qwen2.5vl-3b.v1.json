@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1341,
+    "assets_selected": 1342,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1337,
-    "assets_remaining": 741,
-    "assets_completion_percent": 64.3,
+    "assets_analyzed": 1338,
+    "assets_remaining": 740,
+    "assets_completion_percent": 64.4,
     "assets_failed": 29,
-    "assets_skipped_from_checkpoint": 1336,
+    "assets_skipped_from_checkpoint": 1337,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:36:45Z"
+      "checkpointed_at": "2026-10-22T10:41:01Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:37:44Z"
+      "checkpointed_at": "2026-10-22T10:42:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:38:46Z"
+      "checkpointed_at": "2026-10-22T10:43:01Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T10:39:30Z"
+      "checkpointed_at": "2026-10-22T10:43:44Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44872,6 +44872,59 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T10:39:45Z"
+    },
+    {
+      "asset_id": "aa52e9a63fe0aab9ee2764df",
+      "asset_sha256": "2ede584ccb445a0ec24c5dd67dce2edd92b8d5a2bfe709b3501163941b23df96",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 139,
+      "asset_path": "page-0139.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7e8da3520eef9fda75a8cce796d4d1fea6a39dc89de5cdd0502a5504ff125eed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook containing questions and answers about identifying materials based on their properties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "while material Y remains unchanged. What can materials\nX and Y be? Can you identify whether material X is hard or\nsoft? What about material Y? Justify your answer.",
+          "9. (i) Who am I? Identify me on the basis of the given\nproperties.",
+          "(a) I have lustre.",
+          "(b) I can be easily compressed.",
+          "(c) I am hard and soluble in water.",
+          "(d) You cannot see clearly through me.",
+          "(e) I have mass and volume but you\ncannot see me.",
+          "(ii) Make your own ‘Who am I?’",
+          "10. You are provided with the following materials—vinegar,\nhoney, mustard oil, water, glucose and wheat flour.",
+          "Make any two pairs of materials where one material is\nsoluble in the other. Now, make two pairs of materials where\none material remains insoluble in the other material.",
+          "Learning further",
+          "Gather information on different materials which can be\nrecycled. You can take help from various sources, such as\nnewspapers, magazines, elders in your community, and the\ninternet.",
+          "Recyclers buy old objects based on properties of the\nmaterials and do not bother even if an object is broken.\nConduct a survey with recyclers near you and find out what\nproperties of materials do they check before buying objects\nfrom households. Which materials do they not buy and why?",
+          "Collect 20–30 objects from your household and classify\nthem based on the properties of the materials they are\nmade up of. Were you able to put them in separate groups?\nWhat relationship do you see between the properties of the\nmaterials and the use of the objects?",
+          "Create and decorate a useful object of your choice using\ndiscarded materials and bring it to the class. Discuss with your\nfriends what they have made and the materials they have\nused. Additionally, provide constructive feedback on areas for\nimprovement, considering functionality and any other points"
+        ],
+        "concepts": [
+          "properties of materials",
+          "recycling",
+          "materials",
+          "solubility",
+          "insolubility",
+          "properties of objects",
+          "discarded materials",
+          "constructive feedback"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T10:48:24Z"
     }
   ]
 }
