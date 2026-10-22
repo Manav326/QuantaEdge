@@ -8,9 +8,34 @@ const WEB = appBaseUrl('web');
 const ADMIN = appBaseUrl('admin');
 const HRMS = appBaseUrl('people');
 const ADMIN_MOBILE = process.env.QE_E2E_ADMIN_BOOTSTRAP_MOBILE || '7070107483';
-const DEMO_OTP = process.env.QE_E2E_DEMO_OTP || '123456';
 const INITIAL_HRMS_PASSWORD = process.env.QE_E2E_INITIAL_HRMS_PASSWORD || 'QE-E2E-Initial-HRMS-2026!';
 const FINAL_HRMS_PASSWORD = process.env.QE_E2E_HRMS_OPERATOR_PASSWORD || 'QE-E2E-HRMS#Operator-2026';
+
+async function readDisposableOtp(mobile: string, purpose: string): Promise<string> {
+  const baseUrl = process.env.QE_E2E_OTP_MOCK_URL;
+  const token = process.env.QE_E2E_OTP_MOCK_TOKEN;
+  if (!baseUrl || !token) {
+    throw new Error('Disposable OTP mock URL/token are required for non-demo browser authentication.');
+  }
+  const digits = mobile.replace(/[^0-9]/g, '');
+  const recipient = digits.length === 10 ? '+91' + digits : digits.startsWith('91') && digits.length === 12 ? '+' + digits : mobile;
+  const url = new URL('/latest', baseUrl);
+  url.searchParams.set('to', recipient);
+  url.searchParams.set('purpose', purpose);
+  const response = await fetch(url, {
+    headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
+    cache: 'no-store',
+  });
+  if (!response.ok) {
+    throw new Error('Disposable OTP mock lookup failed (' + response.status + ') for ' + purpose + '.');
+  }
+  const body = await response.json().catch(() => ({})) as { otp?: unknown };
+  const otp = String(body.otp ?? '');
+  if (!/^\\d{6}$/.test(otp)) {
+    throw new Error('Disposable OTP mock returned an invalid code for ' + purpose + '.');
+  }
+  return otp;
+}
 
 async function seedOnlyDisposableHrmsBootstrap(): Promise<void> {
   const pool = await openQaDatabase();
@@ -97,11 +122,11 @@ async function setUpEducationAdmin(browser: Browser): Promise<string> {
   await page.locator('#staff-mobile').fill(ADMIN_MOBILE);
   await page.locator('#staff-mobile').locator('xpath=ancestor::form').locator('button[type="submit"]').click();
   const otpResponse = await requestOtp;
-  expect(otpResponse.status(), 'Education Admin bootstrap OTP request must succeed in the disposable demo-OTP environment.').toBe(200);
+  expect(otpResponse.status(), 'Education Admin bootstrap OTP request must succeed through the local-only provider. Body: ' + (await otpResponse.clone().text()).slice(0, 250)).toBe(200);
   const otpBody = await otpResponse.json();
   expect(otpBody.firstAccess).toBe(true);
 
-  await page.locator('#staff-otp').fill(String(otpBody.devCode || DEMO_OTP));
+  await page.locator('#staff-otp').fill(String(otpBody.devCode || await readDisposableOtp(ADMIN_MOBILE, 'STAFF_LOGIN')));
   const verifyOtp = page.waitForResponse(response =>
     response.request().method() === 'POST' &&
     response.url().includes('/api/v1/auth/verify-otp'));
