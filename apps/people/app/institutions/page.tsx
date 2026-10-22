@@ -167,15 +167,56 @@ export default function InstitutionsAdminPage() {
     if(create.legalName.trim().length>220)return 'The legal name must be 220 characters or fewer.';
     if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(create.adminUsername.trim()))return 'Enter an administrator username between 3 and 64 characters.';
     if(create.adminDisplayName.trim().length<2||create.adminDisplayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
-    if(create.initialPassword.length<12||create.initialPassword.length>72)return 'The temporary password must contain 12–72 characters.';
+    if(!create.initialPassword.trim()||create.initialPassword.length<12||create.initialPassword.length>72)return 'The temporary password must contain 12–72 non-blank characters.';
     return '';
   };
   const adminDraftIssue=()=>{
     if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/.test(admin.username.trim()))return 'Enter a username between 3 and 64 characters.';
     if(admin.displayName.trim().length<2||admin.displayName.trim().length>120)return 'Enter the administrator’s full name between 2 and 120 characters.';
-    if(admin.initialPassword.length<12||admin.initialPassword.length>72)return 'The temporary password must contain 12–72 characters.';
+    if(!admin.initialPassword.trim()||admin.initialPassword.length<12||admin.initialPassword.length>72)return 'The temporary password must contain 12–72 non-blank characters.';
     return '';
   };
+  const profileDraftIssue=()=>{
+    if(profile.displayName.trim().length<2||profile.displayName.trim().length>180)return 'Enter an institution display name between 2 and 180 characters.';
+    if(profile.legalName.trim().length>220)return 'The legal name must be 220 characters or fewer.';
+    return '';
+  };
+  const profileChanged=Boolean(detail)&&(
+    profile.displayName.trim()!==String(detail?.display_name??'').trim()||
+    profile.legalName.trim()!==String(detail?.legal_name??'').trim()
+  );
+  const brandDraftIssue=()=>{
+    if(brand.displayName.trim().length<2||brand.displayName.trim().length>180)return 'Enter a branded display name between 2 and 180 characters.';
+    return '';
+  };
+  const brandChanged=Boolean(detail)&&(
+    brand.displayName.trim()!==String(detail?.brand_display_name||detail?.display_name||'').trim()||
+    brand.tagline.trim()!==String(detail?.tagline??'').trim()||
+    brand.storeListingUrl.trim()!==String(detail?.store_listing_url??'').trim()||
+    brand.presetId!==String(detail?.themeTokens?.presetId||'quantaedge-orange')||
+    brand.appearance!==String(detail?.themeTokens?.appearance||'system')||
+    brand.primary!==String(detail?.themeTokens?.brandPrimary||detail?.themeTokens?.primary||'#F97316')||
+    brand.accent!==String(detail?.themeTokens?.brandAccent||detail?.themeTokens?.accent||'#0F766E')
+  );
+  const billingDraftIssue=()=>{
+    if(!/^\d+(?:\.\d{1,2})?$/.test(billing.unitPriceRupees.trim()))return 'Enter a non-negative price with at most two decimal places.';
+    if(Number(billing.unitPriceRupees)<0)return 'Price cannot be negative.';
+    if(!billing.effectiveFrom)return 'Choose an effective-from date.';
+    if(billing.effectiveUntil&&billing.effectiveUntil<billing.effectiveFrom)return 'End date must be on or after the effective-from date.';
+    if(!['MONTHLY','ANNUAL'].includes(billing.billingCadence))return 'Choose a supported billing cadence.';
+    return '';
+  };
+  const billingChanged=Boolean(detail)&&(
+    billing.currency!==String(detail?.currency||'INR')||
+    billing.unitPriceRupees!==(detail?.unit_price_paise===undefined?'0.00':(Number(detail.unit_price_paise||0)/100).toFixed(2))||
+    billing.billingCadence!==String(detail?.billing_cadence||'MONTHLY')||
+    billing.effectiveFrom!==(detail?.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10))||
+    billing.effectiveUntil!==(detail?.effective_until?.slice(0,10)||'')
+  );
+  const hasCourseChanges=catalog.some(course=>{
+    const enabled=detail?.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
+    return Boolean(courseDraft[course.id])!==enabled;
+  });
   const doCreate=async(event:FormEvent)=>{
     event.preventDefault();const issue=createDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');setJoinCode('');
     try{
@@ -186,7 +227,7 @@ export default function InstitutionsAdminPage() {
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
   };
   async function saveInstitutionProfile(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');setNotice('');
+    event.preventDefault();if(!detail)return;const issue=profileDraftIssue();if(issue){setError(issue);return;}if(!profileChanged){setNotice('');notifyUser('No institution profile changes to save.','info');return;}setSaving(true);setError('');setNotice('');
     try{
       await api('/api/v1/hrms/platform/institutions/'+detail.id+'/profile',{method:'PUT',body:JSON.stringify(profile)});
       setNotice('');notifyUser('Institution profile saved. The separately customised white-label name, if any, remains unchanged.','success');
@@ -248,7 +289,7 @@ export default function InstitutionsAdminPage() {
   }
 
   async function saveBranding(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
+    event.preventDefault();if(!detail)return;const issue=brandDraftIssue();if(issue){setError(issue);return;}if(!brandChanged){setNotice('');notifyUser('No branding changes to save.','info');return;}setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
       displayName:brand.displayName,tagline:brand.tagline,storeListingUrl:brand.storeListingUrl,
       themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
@@ -256,7 +297,7 @@ export default function InstitutionsAdminPage() {
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
   }
   async function saveBilling(event:FormEvent){
-    event.preventDefault();if(!detail)return;setSaving(true);setError('');
+    event.preventDefault();if(!detail)return;const issue=billingDraftIssue();if(issue){setError(issue);return;}if(!billingChanged){setNotice('');notifyUser('No billing contract changes to save.','info');return;}setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('');notifyUser('Billing contract saved. New billable activations will be logged in the ledger.','success');setEditingCard(null);await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Billing contract could not be saved.');}finally{setSaving(false);}
   }
@@ -368,7 +409,7 @@ export default function InstitutionsAdminPage() {
       <section className={styles.detailColumn}>{!detail?<div className={styles.emptyPanel}><div className={styles.emptyIcon}>▤</div><h2>Select an institution</h2><p>Its settings and reports will appear here. All changes are audited and institution admins remain read-only.</p></div>:<>
         <section className={styles.panel}><div className={styles.detailHeader}><div><span className={styles.eyebrow}>{detail.tenant_code}</span><h2>{detail.display_name}</h2><p>{detail.legal_name||'Legal name not supplied'}</p></div><span className={styles.status+(detail.status==='ACTIVE'?' '+styles.active:detail.status==='SUSPENDED'?' '+styles.suspended:'')}>{detail.status}</span></div>
           <div className={styles.actions}><button className={styles.secondary} onClick={()=>{void navigator.clipboard?.writeText(detail.tenant_code).then(()=>{setNotice('');notifyUser('Tenant code copied.','info');}).catch(()=>{setNotice('');notifyUser('Institution code: '+detail.tenant_code,'info');});}}>Copy tenant code</button>
-            {editingCard==='profile'?<><button type="button" className={styles.secondary} disabled={saving} onClick={()=>cancelCardEdit('profile')}>Cancel</button><button type="submit" form="institution-profile-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save profile'}</button></>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>{setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});setEditingCard('profile');}}>Edit profile</button>}
+            {editingCard==='profile'?<><button type="button" className={styles.secondary} disabled={saving} onClick={()=>cancelCardEdit('profile')}>Cancel</button><button type="submit" form="institution-profile-form" className={styles.primary} disabled={saving||Boolean(profileDraftIssue())||!profileChanged}>{saving?'Saving…':'Save profile'}</button></>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>{setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});setEditingCard('profile');}}>Edit profile</button>}
             {editingCard==='status'?<>
               {detail.status==='ACTIVE'?<button className={styles.warning} disabled={saving} onClick={()=>void changeStatus('SUSPENDED')}>Suspend</button>:detail.status==='SUSPENDED'?<button className={styles.primary} disabled={saving} onClick={()=>void changeStatus('ACTIVE')}>Reactivate</button>:null}
               {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}
@@ -377,14 +418,14 @@ export default function InstitutionsAdminPage() {
           {editingCard==='profile'?<form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
             <label>Institution display name *<input required minLength={2} maxLength={180} value={profile.displayName} onChange={e=>setProfile(v=>({...v,displayName:e.target.value}))}/><small>The institution name is used as the white-label default unless a separate branded display name has been configured.</small></label>
             <label>Legal name<input maxLength={220} value={profile.legalName} onChange={e=>setProfile(v=>({...v,legalName:e.target.value}))}/><small>Optional; shown in institution operations and legal records.</small></label>
-          </form>:null}
+          </form>{profileDraftIssue()?<p className={styles.disclaimer} role="status">{profileDraftIssue()}</p>:!profileChanged?<p className={styles.disclaimer} role="status">No changes to save.</p>:null}:null}
           <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
           <section className={styles.panel}>
             <div className={styles.panelHeading}>
               <div><h3>Course authorisation</h3><p>Only active course products are available. Course content itself remains centrally managed.</p></div>
-              {editingCard==='courses'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('courses')} disabled={saving}>Cancel</button><button type="button" className={styles.primary} onClick={()=>void saveCourseAuthorisation()} disabled={saving}>{saving?'Saving…':'Save changes'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>{setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));setEditingCard('courses');}} disabled={saving||editingCard!==null}>Edit</button>}
+              {editingCard==='courses'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('courses')} disabled={saving}>Cancel</button><button type="button" className={styles.primary} onClick={()=>void saveCourseAuthorisation()} disabled={saving||!hasCourseChanges}>{saving?'Saving…':'Save changes'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>{setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));setEditingCard('courses');}} disabled={saving||editingCard!==null}>Edit</button>}
             </div>
             {editingCard==='courses'?<div className={styles.courseList}>{catalog.map(course=><label key={course.id} className={styles.courseItem}><span><strong>{course.display_name}</strong><small>{course.code}{course.class_code?' · Class '+course.class_code:''}</small></span><input type="checkbox" checked={Boolean(courseDraft[course.id])} disabled={saving||detail.status==='CLOSED'} onChange={e=>setCourseDraft(current=>({...current,[course.id]:e.target.checked}))} aria-label={'Authorise '+course.display_name}/></label>)}{!catalog.length?<p className={styles.emptyText}>No active courses in the catalogue.</p>:null}</div>:<div className={styles.readOnlySummary}><div className={styles.readOnlyMetric}><strong>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').length}</strong><span>Authorised course(s)</span></div><div className={styles.readOnlyValues}>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').map(course=><span key={course.program_id} className={styles.valueChip}>{course.display_name}</span>)}{!(detail.courses||[]).some(x=>x.entitlement_status==='ACTIVE')?<span className={styles.emptyValue}>No courses authorised yet.</span>:null}</div></div>}
           </section>
@@ -399,7 +440,7 @@ export default function InstitutionsAdminPage() {
           </section>
           <section className={styles.panel}>
             {editingCard==='branding'?<>
-              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Generate a complete asset pack or apply the validated logo and icon renditions to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save branding'}</button></div></div>
+              <div className={styles.panelHeading}><div><h3>White-label branding</h3><p>School identity for learner-facing web and supported in-app surfaces. Generate a complete asset pack or apply the validated logo and icon renditions to this institution.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('branding')} disabled={saving}>Cancel</button><button type="submit" form="institution-branding-form" className={styles.primary} disabled={saving||Boolean(brandDraftIssue())||!brandChanged}>{saving?'Saving…':'Save branding'}</button></div></div>
               <form id="institution-branding-form" className={styles.form} onSubmit={saveBranding}>
                 <p className={styles.disclaimer}>After you confirm a crop, that asset is uploaded immediately. The display name, Play listing URL and theme settings are saved together with Save branding.</p>
                 <InstitutionBrandTemplate
@@ -417,6 +458,7 @@ export default function InstitutionsAdminPage() {
                   onApplied={async()=>{await loadBase();await loadDetail(detail.id);setEditingCard('branding');}}
                 />
                 <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
+                {brandDraftIssue()?<p className={styles.disclaimer} role="status">{brandDraftIssue()}</p>:!brandChanged?<p className={styles.disclaimer} role="status">No branding changes to save.</p>:null}
                 <div className={styles.themeSettingsGrid}>
                   <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
                     {themePresets.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
@@ -448,7 +490,7 @@ export default function InstitutionsAdminPage() {
           </section>
           <section className={styles.panel}>
             {editingCard==='billing'?<>
-              <div className={styles.panelHeading}><div><h3>Enrollment billing contract</h3><p>Changes are owner-controlled; review the rate and effective dates before saving.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('billing')} disabled={saving}>Cancel</button><button type="submit" form="institution-billing-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save contract'}</button></div></div>
+              <div className={styles.panelHeading}><div><h3>Enrollment billing contract</h3><p>Changes are owner-controlled; review the rate and effective dates before saving.</p></div><div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('billing')} disabled={saving}>Cancel</button><button type="submit" form="institution-billing-form" className={styles.primary} disabled={saving||Boolean(billingDraftIssue())||!billingChanged}>{saving?'Saving…':'Save contract'}</button></div></div>
               <div className={styles.billingBox}><span>Recorded charge total this period</span><strong>{rupees(institutions.find(i=>i.id===detail.id)?.current_period_amount_paise,detail.contract_currency)}</strong><small>{institutions.find(i=>i.id===detail.id)?.current_period_billable_events||0} membership charge event(s) in the list snapshot</small></div>
               <form id="institution-billing-form" className={styles.form} onSubmit={saveBilling}>
                 <label>Billing currency<input required value="INR" readOnly aria-readonly="true"/><small>Currently supported: INR, stored in paise.</small></label>
@@ -456,7 +498,7 @@ export default function InstitutionsAdminPage() {
                 <label>Cadence<select value={billing.billingCadence} onChange={e=>setBilling(v=>({...v,billingCadence:e.target.value}))}><option value="MONTHLY">Monthly</option><option value="ANNUAL">Annual</option></select></label>
                 <label>Effective from *<input required type="date" value={billing.effectiveFrom} onChange={e=>setBilling(v=>({...v,effectiveFrom:e.target.value}))}/></label>
                 <label>End date<input type="date" value={billing.effectiveUntil} onChange={e=>setBilling(v=>({...v,effectiveUntil:e.target.value}))}/></label>
-                <div className={styles.formActions}><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void rotateCode()}>Issue / rotate join code</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void reconcileBilling()}>Reconcile current period</button></div>
+                {billingDraftIssue()?<p className={styles.disclaimer} role="status">{billingDraftIssue()}</p>:!billingChanged?<p className={styles.disclaimer} role="status">No contract changes to save.</p>:null}<div className={styles.formActions}><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void rotateCode()}>Issue / rotate join code</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void reconcileBilling()}>Reconcile current period</button></div>
               </form>
               <p className={styles.disclaimer}>Invoice issuance, tax/credits, payment collection, contract versioning and ledger reconciliation are not yet release-ready.</p>
             </>:<>
