@@ -36,7 +36,13 @@ export default function QuantaEdgeBrand({
           <span className="qe-brand__lockup qe-brand__full-lockup">
             {brand?.logoUrl
               ? <img className="qe-brand__logo qe-brand__tenant-logo" src={brand.logoUrl} alt="" aria-hidden="true" />
-              : <span className="qe-brand__tenant-fallback" aria-hidden="true">{mark}</span>}
+              : <span className="qe-brand__tenant-lockup">
+                  <span className="qe-brand__tenant-fallback" aria-hidden="true">{mark}</span>
+                  <span className="qe-brand__copy">
+                    <span className="qe-brand__name">{displayName}</span>
+                    {tagline ? <span className="qe-brand__tagline">{tagline}</span> : null}
+                  </span>
+                </span>}
           </span>
         </span>
       : <span className={'qe-brand qe-brand--' + variant}>
