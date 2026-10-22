@@ -130,8 +130,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     !savedTemplateDocument || JSON.stringify(document) !== JSON.stringify(savedTemplateDocument);
   const isPlatform = surface === 'hrms';
   const audienceConfigured = scope === 'HRMS_PLATFORM'
-    ? allInstitutions || selectedInstitutionIds.length > 0
-    : scope === 'COURSE' ? Boolean(courseId)
+    ? recipientTypes.length > 0 && (allInstitutions || selectedInstitutionIds.length > 0)
+    : scope === 'COURSE' ? Boolean(courseId) && recipientTypes.length > 0
     : scope === 'USER' ? directRecipients.length > 0
     : recipientTypes.length > 0;
 
@@ -364,6 +364,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     if (scope === 'COURSE' && !courseId) return 'Select an assigned course first.';
     if (scope === 'USER' && directRecipients.length === 0) return 'Select at least one individual recipient.';
     if (scope === 'HRMS_PLATFORM' && !allInstitutions && selectedInstitutionIds.length === 0) return 'Select at least one institution.';
+    if (scope !== 'USER' && recipientTypes.length === 0) return 'Select at least one recipient type.';
     if (!isPlatform && !['USER','COURSE','INSTITUTION'].includes(scope)) return 'This workspace cannot send platform notifications.';
     for (const block of document.blocks) {
       if (block.type === 'cta' && (!String(block.label ?? '').trim() || !String(block.target ?? '').trim())) return 'Every button needs a label and destination.';
