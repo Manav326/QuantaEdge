@@ -983,6 +983,17 @@ assert.ok(
   'Profile and course-focus rings must derive from the selected institution focus colour rather than a hard-coded orange.'
 );
 
+
+assert.ok(
+  css.includes('color: var(--qe-color-on-primary-container);') &&
+  css.includes('.qe-workspace-link.is-active') &&
+  css.includes('.tutor-equation') &&
+  css.includes('.parent-courses-page__count') &&
+  css.includes('html[data-qe-appearance] .qe-language-switcher > span:first-child') &&
+  css.includes('var(--qe-color-primary-text)'),
+  'Active navigation, tinted badges, selected answer/tutor controls and language affordances must use the correct semantic foreground for their themed surface.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

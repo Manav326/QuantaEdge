@@ -1998,3 +1998,74 @@ html[data-qe-appearance] .institution-portal :where(
 ) {
   color: var(--qe-color-accent-text, var(--qe-color-primary-text));
 }
+
+
+/* Use each generated container's own contrast foreground, across learner, parent and tutor states. */
+html[data-qe-appearance] :is(
+  .avatar,
+  .task.active .task-icon,
+  .subject-icon.violet,
+  .subject-icon.blue,
+  .side-nav .side-active,
+  .answer-row .selected,
+  .option-grid .selected,
+  .parent-child-avatar,
+  .track-pill,
+  .student-account-menu__identity small,
+  .student-account-menu__icon,
+  .student-profile-card__number,
+  .parent-account__icon,
+  .parent-profile-card__number,
+  .qe-account-menu__icon,
+  .auth-dev-code,
+  .qe-workspace-link.is-active,
+  .qe-question-index,
+  .qe-answer-option.is-selected .qe-answer-option__key,
+  .qe-tutor-link > span,
+  .qe-practice-hint > span,
+  .qe-workspace-logout,
+  .subject-pdf-mark,
+  .qe-student-pdf-mark,
+  .qe-library-pdf-mark,
+  .qe-student-topic-progress small.is-best,
+  .qe-workspace-sidebar-footer .qe-workspace-logout,
+  .qe-workspace-mobile-nav a.is-active,
+  .qe-workspace-mobile-nav button:hover,
+  .qe-workspace-mobile-nav button:focus-visible,
+  .parent-certificate-actions a,
+  .student-certificate-actions a,
+  .qe-workspace-mobile-subnav-links a.is-active,
+  .qe-student-mobile-nav button.is-active,
+  .qe-student-mobile-nav button.is-expanded,
+  .tutor-modes button:hover,
+  .tutor-welcome-mark,
+  .tutor-equation,
+  .tutor-send > span:first-child,
+  .tutor-minimized-mark,
+  .tutor-launch .tutor-launch-icon,
+  .tutor-resize-grip:hover,
+  .qe-account-identity-settings__avatar--empty,
+  .qe-account-identity-settings__provider-mark,
+  .qe-account-identity-settings__managed,
+  .parent-courses-page__count,
+  .parent-courses-page__course-icon,
+  .tutor-close:hover,
+  .tutor-control-btn:hover,
+  .tutor-brand-mark,
+  .tutor-ai-badge,
+  .tutor-eyebrow,
+  .tutor-inline-code,
+  .tutor-inline-math,
+  .parent-report-switcher__avatar,
+  .qe-school-entry-letter,
+  .student-profile-card__edit-button:hover:not(:disabled),
+  .qe-account-identity-settings__edit-button:hover:not(:disabled),
+  .parent-profile-card__edit-button:hover:not(:disabled),
+  .qe-practice-catalogue .qe-practice-course-subject-scope select[data-selected="true"]
+) {
+  color: var(--qe-color-on-primary-container);
+}
+
+html[data-qe-appearance] .qe-language-switcher > span:first-child {
+  color: var(--qe-color-primary-text);
+}
