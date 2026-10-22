@@ -849,6 +849,25 @@ public class CourseMarketplaceController {
     }
   }
 
+  private Map<String,Object> preserveLegacyBuyerSnapshot(
+      Map<String,Object> order,Map<String,Object> currentSnapshot) {
+    Map<String,Object> merged=new LinkedHashMap<>(currentSnapshot);
+    Object raw=order==null?null:order.get("buyer_snapshot_json");
+    if(raw==null||String.valueOf(raw).isBlank()||"{}".equals(String.valueOf(raw).trim())) return merged;
+    try {
+      Map<String,Object> prior=objectMapper.readValue(String.valueOf(raw),
+          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+      // The saved order's customer and beneficiary details take precedence. Current address
+      // book data fills only fields missing from a legacy snapshot; it never rewrites one.
+      merged.putAll(prior);
+      return merged;
+    } catch(Exception ex) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved order's billing snapshot cannot be safely reconstructed. Leave this order unchanged and ask HRMS to reconcile it.",ex);
+    }
+  }
+
   private Map<String,Object> parseBillingAddressJson(Object raw) {
     if(raw==null) return Map.of();
     try {
@@ -1415,9 +1434,10 @@ public class CourseMarketplaceController {
           "This existing checkout is missing its locked financial snapshots and Razorpay has not confirmed it is safe to continue. The saved order was left unchanged; do not pay again. Retry after provider status settles or ask HRMS to reconcile this order.");
     }
 
+    Map<String,Object> repairBuyerSnapshot = preserveLegacyBuyerSnapshot(localOrder,buyerSnapshot);
     CourseOrderFinancialService.CheckoutSnapshot snapshot =
         courseOrderFinancialService.prepareCheckout(
-            institutionOfferId,institutionId,listedPricePaise,currency,title,buyerSnapshot,null);
+            institutionOfferId,institutionId,listedPricePaise,currency,title,repairBuyerSnapshot,null);
     long savedPayable=((Number)localOrder.get("offer_price_paise")).longValue();
     String savedCurrency=String.valueOf(localOrder.get("currency"));
     Object savedListedPrice=localOrder.get("listed_price_paise");
@@ -1438,7 +1458,7 @@ public class CourseMarketplaceController {
     String shareSnapshotJson;
     String discountSnapshotJson;
     try {
-      buyerSnapshotJson=objectMapper.writeValueAsString(buyerSnapshot);
+      buyerSnapshotJson=objectMapper.writeValueAsString(repairBuyerSnapshot);
       taxSnapshotJson=objectMapper.writeValueAsString(snapshot.taxCalculationSnapshot());
       shareSnapshotJson=objectMapper.writeValueAsString(snapshot.revenueSharePolicySnapshot());
       discountSnapshotJson=objectMapper.writeValueAsString(snapshot.discountSnapshot());
