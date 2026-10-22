@@ -1062,7 +1062,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [role="dialog"], [class*="Card"], [class*="Panel"],
   [class*="Modal"], [class*="Dialog"], [class*="surface"], [class*="Surface"],
   [class*="box"], [class*="Box"]
-):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="logoCanvas"]):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]) {
   background-color: var(--qe-people-card) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
