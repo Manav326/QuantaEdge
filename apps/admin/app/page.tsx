@@ -14,7 +14,7 @@ type AnyRow=Record<string,any>;
 export default function AdminHome(){
   const router=useRouter();
   const t=useUiTranslation();
-  const {courses,courseId,activeCourse,loadingCourses,courseError,selectCourse}=useAdminCourseScope();
+  const {courses,courseId,activeCourse,loadingCourses,courseError,selectCourse,reloadCourses}=useAdminCourseScope();
   const [me,setMe]=useState<AnyRow|null>(null);
   const [overview,setOverview]=useState<AnyRow|null>(null);
   const [analytics,setAnalytics]=useState<AnyRow|null>(null);
@@ -22,6 +22,7 @@ export default function AdminHome(){
   const [error,setError]=useState('');
   const [identityLoading,setIdentityLoading]=useState(true);
   const [loading,setLoading]=useState(true);
+  const [reloadVersion,setReloadVersion]=useState(0);
 
   async function logout(){
     await apiFetch('/api/v1/auth/logout',{method:'POST'});
@@ -79,7 +80,7 @@ export default function AdminHome(){
     })().catch((e:any)=>{if(mounted){setError(e.message||'Admin course data unavailable');setOverview(null);}})
       .finally(()=>{if(mounted)setLoading(false);});
     return ()=>{mounted=false;};
-  },[identityLoading,me,courseId,loadingCourses,courseError]);
+  },[identityLoading,me,courseId,loadingCourses,courseError,reloadVersion]);
 
   const summary=overview?.summary||{};
   const reviewRows:AnyRow[]=overview?.review||[];
@@ -93,7 +94,7 @@ export default function AdminHome(){
   const activeQuestions=countQuestionStatus(['DRAFT','REVIEW','REJECTED','APPROVED','PUBLISHED']);
   const inactiveQuestions=reviewRows.filter(row=>row.active===false).reduce((n,row)=>n+Number(row.count||0),0);
 
-  if(error)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p>{courses.length>0&&<AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses} label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.course')} onChange={value=>{if(selectCourse(value)){setError('');setOverview(null);}}}/>}<button className="button button-dark" onClick={()=>window.location.reload()}>{t('admin.dashboard.tryAgain')}</button></div></section></main>;
+  if(error)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p>{courses.length>0&&<AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses} label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.course')} onChange={value=>{if(selectCourse(value)){setError('');setOverview(null);}}}/>}<button type="button" className="button button-dark" onClick={()=>{setError('');setReloadVersion(value=>value+1);void reloadCourses();}}>{t('admin.dashboard.tryAgain')}</button></div></section></main>;
   if(identityLoading||loadingCourses||loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">{t('admin.dashboard.learning')}</span><h1>{t('admin.dashboard.preparingWorkspace')}</h1><p>{t('admin.dashboard.connectingRecords')}</p></div></section></main>;
 
   const pendingReview=countQuestionStatus(['REVIEW']);
@@ -115,7 +116,7 @@ export default function AdminHome(){
     <section className="admin-main" id="top">
       <header className="admin-top">
         <div><span className="admin-kicker">{t('admin.dashboard.hero.operations')}</span><h1>{t('admin.dashboard.hero.greeting')}, {me.displayName||'Admin'} <span className="admin-title-spark">✦</span></h1><p>{t('admin.dashboard.hero.liveView')}</p></div>
-        <div className="admin-top-actions"><span className="top-status"><span className="status-dot"/> {t('admin.dashboard.hero.connected')}</span><button className="admin-refresh" onClick={()=>window.location.reload()} title={t('admin.dashboard.hero.refresh')}>↻</button></div>
+        <div className="admin-top-actions"><span className="top-status"><span className="status-dot"/> {t('admin.dashboard.hero.connected')}</span><button type="button" className="admin-refresh" onClick={()=>{setError('');setReloadVersion(value=>value+1);}} title={t('admin.dashboard.hero.refresh')} aria-label={t('admin.dashboard.hero.refresh')}>↻</button></div>
       </header>
 
       <div style={{display:'flex',alignItems:'end',gap:12,flexWrap:'wrap',margin:'18px 0 8px'}}>
