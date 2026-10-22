@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import {useEffect,useMemo,useRef,useState} from 'react';
 
@@ -326,6 +327,9 @@ export default function ContentStudio(){
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
  const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[statusFilter,setStatusFilter]=useState('ALL'),[search,setSearch]=useState('');
  const [programFilter,setProgramFilter]=useState(''),[programs,setPrograms]=useState<any[]>([]);
+  const [chapterPage,setChapterPage]=useState(0),[chapterPageSize,setChapterPageSize]=useState(8);
+  const [expandedChapters,setExpandedChapters]=useState<Set<number>>(()=>new Set());
+  const [editorOpen,setEditorOpen]=useState(false);
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
  const [blocks,setBlocks]=useState<ContentBlock[]>([]),[questions,setQuestions]=useState<any[]>([]);
  const [visualCatalog,setVisualCatalog]=useState<VisualCatalog|null>(null),[visualCatalogIndex,setVisualCatalogIndex]=useState<VisualCatalogIndex|null>(null),[visualCatalogSlug,setVisualCatalogSlug]=useState(''),[visualCatalogOptions,setVisualCatalogOptions]=useState<VisualCatalogIndex['catalogs']>([]),[visualCatalogLoading,setVisualCatalogLoading]=useState(false),[visualCatalogError,setVisualCatalogError]=useState(''),[visualSearch,setVisualSearch]=useState('');
@@ -448,7 +452,10 @@ export default function ContentStudio(){
  const subjectOptions=useMemo(()=>Array.from(new Map(rows.map(r=>[r.subject_code,r.subject_name])).entries()),[rows]);
  const filtered=useMemo(()=>rows.filter(r=>{if(subjectFilter!=='ALL'&&r.subject_code!==subjectFilter)return false;const term=search.trim().toLocaleLowerCase();return !term||[r.class_name,r.subject_name,r.chapter_name||'',r.lesson_title||'',r.chapter_code||'',r.lesson_code||''].some(v=>v.toLocaleLowerCase().includes(term))}),[rows,subjectFilter,search]);
  const groups=useMemo(()=>{const map=new Map<number,Row[]>();filtered.forEach(row=>{if(row.chapter_id===null)return;const g=map.get(row.chapter_id)||[];g.push(row);map.set(row.chapter_id,g)});return Array.from(map.entries()).map(([id,g])=>({id,rows:g,chapter:g[0],lessons:g.filter(r=>r.lesson_id!==null&&(statusFilter==='ALL'||r.lesson_status===statusFilter))})).filter(g=>statusFilter==='ALL'||g.chapter.chapter_status===statusFilter||g.lessons.length>0)},[filtered,statusFilter]);
- const uniqueChapters=new Set(rows.map(r=>r.chapter_id).filter((id):id is number=>id!==null)).size;
+ const pagedGroups=useMemo(()=>groups.slice(chapterPage*chapterPageSize,(chapterPage+1)*chapterPageSize),[groups,chapterPage,chapterPageSize]);
+  useEffect(()=>{setChapterPage(0)},[programFilter,subjectFilter,statusFilter,search]);
+  useEffect(()=>{if(!editorOpen&&selected?.type==='lesson'&&typeof document!=='undefined')document.getElementById('content-topic-'+selected.id)?.scrollIntoView({block:'nearest',behavior:'smooth'})},[editorOpen,selected]);
+  const uniqueChapters=new Set(rows.map(r=>r.chapter_id).filter((id):id is number=>id!==null)).size;
  const uniqueLessons=new Set(rows.map(r=>r.lesson_id).filter((id):id is number=>id!==null)).size;
  const publishedLessons=new Set(rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED'&&r.lesson_active&&r.chapter_status==='PUBLISHED'&&r.chapter_active===true).map(r=>r.lesson_id)).size;
  const publishedChapters=new Set(rows.filter(r=>r.chapter_id!==null&&r.chapter_status==='PUBLISHED'&&r.chapter_active===true).map(r=>r.chapter_id)).size;
@@ -471,7 +478,7 @@ export default function ContentStudio(){
  const canPublishPermission=hasPermission('CONTENT_PUBLISH');
   const visualTargetRow=selected?.type==='lesson'?rows.find(row=>row.lesson_id===selected.id):undefined;
   const visualCatalogMatchesTarget=visualCatalogMatchesLesson(visualTargetRow,visualCatalog);
- const isEditorView=Boolean(selected||createType);
+ const isEditorView=Boolean(editorOpen&&(selected||createType));
  const createHasInput=Boolean(createType&&['displayName','description','code','title','summary','curriculumSource','curriculumSourceUrl','alignmentSourceTitle','alignmentSourceUrl'].some(key=>String(createForm[key]??'').trim()));
  const draftSnapshot=useMemo(()=>{
   if(createType)return JSON.stringify({createForm});
@@ -483,7 +490,9 @@ export default function ContentStudio(){
  const previewReviewed=Boolean(!hasUnsavedChanges&&Number(detail?.content_revision)>0&&Number(detail?.preview_checked_revision)===Number(detail?.content_revision));
  const backToLibrary=()=>{
   if(hasUnsavedChanges&&!window.confirm(t('admin.contentStudio.unsavedChangesConfirm')))return;
-  setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setError('');setNotice('');
+  setEditorOpen(false);
+  if(createType){setCreateType(null);setSelected(null);setDetail(null);}
+  setBaselineSnapshot('');setError('');setNotice('');
  };
  const markPreviewReviewed=async()=>{
   if(!selected||selected.type!=='lesson'||!detail||saving||hasUnsavedChanges||!canSubmit||!preparationReady)return;
@@ -504,6 +513,11 @@ export default function ContentStudio(){
  };
  function updateContent(index:number,patch:Record<string,any>){setBlocks(old=>old.map((b,i)=>i===index?{...b,content:{...b.content,...patch}}:b))}
  async function open(item:Selection){
+  setEditorOpen(true);
+  if(item.type==='lesson'){
+   const openedRow=rows.find(row=>row.lesson_id===item.id);
+   if(openedRow?.chapter_id!==null&&openedRow?.chapter_id!==undefined)setExpandedChapters(current=>new Set([...current,openedRow.chapter_id as number]));
+  }
   setSelected(item);setDetail(null);setError('');setNotice('');setCreateType(null);setActiveBlock(0);setShowAdvancedQuestions(false);
   try{
    const data=await api('/api/v1/admin/content/'+(item.type==='chapter'?'chapters':'lessons')+'/'+item.id+'?courseId='+encodeURIComponent(programFilter));
@@ -523,7 +537,7 @@ export default function ContentStudio(){
   const subjectCode=subjectFilter!=='ALL'?subjectFilter:(chapter?.subject_code||selectedCourse?.subjects?.[0]?.subject_code||selectedCourse?.subjects?.[0]?.code||'');
   const mappedSubject=(selectedCourse?.subjects||[]).find((subject:any)=>String(subject.subject_code||subject.code||'')===subjectCode);
   const classCode=chapter?.class_code||mappedSubject?.curriculum_class_code||selectedCourse?.curriculum_class_code||'';
-  setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');
+  setSelected(null);setDetail(null);setEditorOpen(true);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');
   setCreateForm({classCode,subjectCode,courseId:programFilter||'',chapterId:selected?.type==='chapter'?selected.id:Number(chapter?.chapter_id||0),code:'',displayName:'',description:'',curriculumSource:'',curriculumSourceUrl:'',curriculumSourceEdition:'',curriculumSourcePages:'',alignmentSourceTitle:'',alignmentSourceUrl:'',alignmentSourceEdition:'',alignmentPageRange:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
  }
  async function create(){
@@ -807,10 +821,36 @@ export default function ContentStudio(){
     <div className="qe-section-head"><div><span className="admin-kicker">{t('admin.contentStudio.curriculumMap')}</span><h2>{t('admin.contentStudio.findChapterOrTopic')}</h2><p>{t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div></div>
     <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id)} key={p.id}>{p.display_name} · {p.curriculum_version}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
     <div className="qe-curriculum-map">
-     {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:groups.map(group=>{const chapter=group.chapter;const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;const publishedCount=group.rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED').length;return <article className="qe-chapter-group" key={group.id}><button type="button" className={'qe-chapter-row '+(selected?.type==='chapter'&&selected.id===group.id?'selected':'')} onClick={()=>void open({type:'chapter',id:group.id})}><span className="qe-chapter-glyph">▤</span><span className="qe-chapter-title"><small>{programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter))?.display_name||chapter.program_name||t('admin.contentStudio.course')} <i>·</i> {chapter.subject_name}</small><strong>{chapter.chapter_name||t('admin.contentStudio.untitledChapter')}</strong><em>{chapter.chapter_description||t('admin.contentStudio.chapterDescriptionMissing')}</em></span><span className="qe-chapter-count">{t('admin.contentStudio.topicCount',{count:totalLessons})} <small>{t('admin.contentStudio.publishedCount',{count:publishedCount})}</small></span><span className={'qe-status-pill '+String(chapter.chapter_status||'DRAFT').toLowerCase()}>{statusLabel(chapter.chapter_status)}</span><span className="qe-row-arrow">→</span></button>{(group.lessons.length?group.lessons:statusFilter==='ALL'?group.rows.filter(r=>r.lesson_id!==null):[]).map(lesson=><button type="button" key={lesson.lesson_id} className={'qe-topic-row '+(selected?.type==='lesson'&&selected.id===lesson.lesson_id?'selected':'')} onClick={()=>void open({type:'lesson',id:Number(lesson.lesson_id)})}><span className="qe-topic-stem">↳</span><span className="qe-topic-icon">✎</span><span className="qe-topic-title"><strong>{lesson.lesson_title||'Untitled micro-topic'}</strong><small>{lesson.estimated_minutes||10} min <i>·</i> {lesson.block_count||0} blocks <i>·</i> {lesson.question_count||0} questions</small></span><span className={'qe-status-pill '+String(lesson.lesson_status||'DRAFT').toLowerCase()}>{statusLabel(lesson.lesson_status)}</span><span className="qe-row-arrow">→</span></button>)}{!totalLessons&&<div className="qe-topic-empty">{t('admin.contentStudio.noMicroTopics')} {t('admin.contentStudio.createFirstTopic')}</div>}</article>})}
-    </div><div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
+     {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:pagedGroups.map(group=>{
+      const chapter=group.chapter;
+      const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;
+      const visibleLessons=group.lessons.length?group.lessons:statusFilter==='ALL'?group.rows.filter(r=>r.lesson_id!==null):[];
+      const publishedCount=group.rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED').length;
+      const expanded=expandedChapters.has(group.id);
+      return <article className="qe-chapter-group" key={group.id}>
+       <div className="qe-chapter-heading">
+        <button type="button" className={'qe-chapter-row '+(selected?.type==='chapter'&&selected.id===group.id?'selected':'')} aria-expanded={expanded} aria-controls={'chapter-topics-'+group.id} aria-label={expanded?t('admin.contentStudio.hideMicroTopics'):t('admin.contentStudio.showMicroTopics')} onClick={()=>setExpandedChapters(current=>{const next=new Set(current);if(next.has(group.id))next.delete(group.id);else next.add(group.id);return next;})}>
+         <span className="qe-chapter-glyph">▤</span>
+         <span className="qe-chapter-title"><small>{programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter))?.display_name||chapter.program_name||t('admin.contentStudio.course')} <i>·</i> {chapter.subject_name}</small><strong>{chapter.chapter_name||t('admin.contentStudio.untitledChapter')}</strong><em>{chapter.chapter_description||t('admin.contentStudio.chapterDescriptionMissing')}</em></span>
+         <span className="qe-chapter-count">{t('admin.contentStudio.topicCount',{count:totalLessons})} <small>{t('admin.contentStudio.publishedCount',{count:publishedCount})}</small></span>
+         <span className={'qe-status-pill '+String(chapter.chapter_status||'DRAFT').toLowerCase()}>{statusLabel(chapter.chapter_status)}</span>
+         <span className="qe-row-arrow" aria-hidden="true">{expanded?'⌄':'›'}</span>
+        </button>
+        <button type="button" className="qe-chapter-edit-button" onClick={()=>void open({type:'chapter',id:group.id})}>{t('admin.contentStudio.chapterEditor')}</button>
+       </div>
+       {expanded&&<div className="qe-chapter-topics" id={'chapter-topics-'+group.id}>
+        {visibleLessons.map(lesson=><button type="button" id={'content-topic-'+lesson.lesson_id} key={lesson.lesson_id} className={'qe-topic-row '+(selected?.type==='lesson'&&selected.id===lesson.lesson_id?'selected':'')} onClick={()=>void open({type:'lesson',id:Number(lesson.lesson_id)})}>
+         <span className="qe-topic-stem" aria-hidden="true">↳</span><span className="qe-topic-icon" aria-hidden="true">✎</span>
+         <span className="qe-topic-title"><strong>{lesson.lesson_title||'Untitled micro-topic'}</strong><small>{lesson.estimated_minutes||10} min <i>·</i> {lesson.block_count||0} blocks <i>·</i> {lesson.question_count||0} questions</small></span>
+         <span className={'qe-status-pill '+String(lesson.lesson_status||'DRAFT').toLowerCase()}>{statusLabel(lesson.lesson_status)}</span><span className="qe-row-arrow" aria-hidden="true">→</span>
+        </button>)}
+        {!totalLessons&&<div className="qe-topic-empty">{t('admin.contentStudio.noMicroTopics')} {t('admin.contentStudio.createFirstTopic')}</div>}
+       </div>}
+      </article>;
+     })</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
+    <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
    </section>
-   {(createType||selected)&&<section className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
+   {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
     <div className="qe-fullscreen-bar">
      <div><strong>{createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')}</strong><p>{selected&&detail?t('admin.contentStudio.workspaceSelectedContext',{classCode:detail.class_code,subject:detail.subject_name,chapter:selected.type==='chapter'?detail.chapter_name:detail.chapter_name+' / '+(form.title||detail.lesson_title)}):t('admin.contentStudio.workspaceIntro')}</p></div>
      <div className="qe-fullscreen-actions"><span className={'qe-edit-state '+(hasUnsavedChanges?'dirty':'')}>{createType?(createHasInput?t('admin.contentStudio.unsavedDraftDetails'):t('admin.contentStudio.newDraft')):hasUnsavedChanges?t('admin.contentStudio.unsavedChanges'):t('admin.contentStudio.noUnsavedChanges')}</span><button type="button" className="qe-secondary-button" onClick={backToLibrary} disabled={saving}>{t('admin.contentStudio.backToLibrary')}</button></div>
