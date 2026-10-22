@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { appBaseUrl } from '../support/manifest';
 import { openQaDatabase, readPrivateJson, type QaFixture } from '../support/fixtures';
 
-const HRMS = appBaseUrl('people', 'http://127.0.0.1:3002');
+const HRMS = appBaseUrl('people');
 
 async function waitForApi(page: Page, method: string, pathPart: string) {
   return page.waitForResponse(response =>
