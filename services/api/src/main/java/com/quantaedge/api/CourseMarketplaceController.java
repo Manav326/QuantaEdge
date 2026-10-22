@@ -680,11 +680,12 @@ public class CourseMarketplaceController {
         if (hasLockedFinancialSnapshots(previous)) {
           return checkoutResponse(previous, courseId, title, institutionDisplayName);
         }
-        // Never expire or replace an order with missing financial facts from a checkout request.
-        // An audited reconciliation must resolve the original order without bypassing snapshot policy.
+        // A repeated request key must not create a second provider order. We may close the
+        // legacy row only after authoritative provider inspection proves it is unpaid.
+        retireLegacyPendingOrderIfConfirmedUnpaid(previous, institutionId);
         throw new org.springframework.web.server.ResponseStatusException(
             org.springframework.http.HttpStatus.CONFLICT,
-            "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
+            "This checkout attempt was confirmed unpaid and safely closed because its locked financial snapshots were missing. Reopen the course and start a fresh checkout; do not reuse the old attempt.");
       } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       } else {
@@ -697,25 +698,28 @@ public class CourseMarketplaceController {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
         if (!hasLockedFinancialSnapshots(prior)) {
-          throw new org.springframework.web.server.ResponseStatusException(
-              org.springframework.http.HttpStatus.CONFLICT,
-              "This existing order is missing its locked tax/revenue-share snapshot. It cannot be reused or replaced automatically; do not pay again. The same order requires explicit financial reconciliation.");
+          // Legacy rows created before locked policy snapshots were introduced can no longer
+          // be reused for payment. Close one only when Razorpay confirms that it has no
+          // captured, authorised, or in-flight payment; then this request can create a new
+          // order with current server-approved snapshots below.
+          retireLegacyPendingOrderIfConfirmedUnpaid(prior, institutionId);
+        } else {
+          String providerState = inspectProviderOrderForNewAttempt(prior);
+          if ("PAID".equals(providerState)) {
+            throw new IllegalStateException(
+                "Razorpay reports that this course order is already paid. Retry payment verification for this same order; do not start another checkout.");
+          }
+          if (!"RETRYABLE".equals(providerState)) {
+            throw new IllegalStateException(
+                "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
+          }
+          String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
+          if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
+            throw new IllegalStateException(
+                "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
+          }
+          return checkoutResponse(prior,courseId,title,institutionDisplayName);
         }
-        String providerState = inspectProviderOrderForNewAttempt(prior);
-        if ("PAID".equals(providerState)) {
-          throw new IllegalStateException(
-              "Razorpay reports that this course order is already paid. Retry payment verification for this same order; do not start another checkout.");
-        }
-        if (!"RETRYABLE".equals(providerState)) {
-          throw new IllegalStateException(
-              "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
-        }
-        String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
-        if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
-          throw new IllegalStateException(
-              "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
-        }
-        return checkoutResponse(prior,courseId,title,institutionDisplayName);
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -1256,6 +1260,50 @@ public class CourseMarketplaceController {
     if (raw == null || raw.isBlank()) return "";
     String safe = raw.replaceAll("[\\p{Cntrl}&&[^\\t]]", " ").replaceAll("\\s+", " ").trim();
     return safe.length() <= maxLength ? safe : safe.substring(0, maxLength);
+  }
+
+  /**
+   * Close an incomplete legacy checkout only if Razorpay conclusively proves it is safe to retry.
+   * A paid, authorised, in-flight, mismatched, or unqueryable provider order remains untouched.
+   */
+  private void retireLegacyPendingOrderIfConfirmedUnpaid(Map<String,Object> localOrder,long institutionId) {
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(localOrder);
+    } catch(RuntimeException providerCheckFailure) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout is missing its locked financial snapshots and Razorpay status could not be confirmed. No replacement order was created; do not pay again until this saved order is reconciled.");
+    }
+    if("PAID".equals(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "Razorpay reports that this existing checkout is paid, but its locked financial snapshots are missing. Do not pay again; finance/engineering must reconcile this exact order.");
+    }
+    if(!providerConfirmsRetryIsSafe(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout is missing its locked financial snapshots and Razorpay has not confirmed it is safe to retry. No replacement order was created; do not pay again. Retry after provider status settles or ask HRMS to reconcile this order.");
+    }
+    Object rawId=localOrder.get("id");
+    if(!(rawId instanceof Number orderId)) {
+      throw new IllegalStateException("The legacy course order has no valid local ID; no replacement was created.");
+    }
+    String providerOrderId=String.valueOf(localOrder.get("provider_order_id"));
+    int expired=jdbc.update("""
+        update course_payment_order
+        set status='EXPIRED',failure_code='LEGACY_FINANCIAL_SNAPSHOT_MISSING',updated_at=now()
+        where id=? and institution_id=? and status='PENDING' and provider_order_id=?
+        """,orderId.longValue(),institutionId,providerOrderId);
+    if(expired!=1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This saved checkout changed while its provider status was being checked. No replacement order was created; reload the course and retry only after checking the saved payment status.");
+    }
+  }
+
+  static boolean providerConfirmsRetryIsSafe(String providerState) {
+    return "RETRYABLE".equals(providerState);
   }
 
   private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
