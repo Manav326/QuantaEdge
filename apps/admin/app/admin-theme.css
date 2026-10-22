@@ -670,10 +670,10 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:hover:not
 /* Dialogs and custom dropdown surfaces must not retain route-local light-only panels. */
 html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
   dialog, [role="dialog"],
-  [class*="modal"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
-  [class*="Modal"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
-  [class*="dialog"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
-  [class*="Dialog"]:not([class*="overlay"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="modal"]:not([class*="overlay"]):not([class*="Header"]):not([class*="header"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="Modal"]:not([class*="overlay"]):not([class*="Header"]):not([class*="header"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="dialog"]:not([class*="overlay"]):not([class*="Header"]):not([class*="header"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
+  [class*="Dialog"]:not([class*="overlay"]):not([class*="Header"]):not([class*="header"]):not([class*="Overlay"]):not([class*="backdrop"]):not([class*="Backdrop"]),
   [role="menu"], [role="listbox"], [role="tooltip"],
   [class*="dropdown"], [class*="Dropdown"], [class*="popover"], [class*="Popover"]
 ) {
@@ -810,4 +810,140 @@ html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-ad
 html[data-qe-appearance] .qe-admin-workspace-layout .qe-admin-mobile-menu .qe-admin-mobile-menu-footer button:hover {
   background: var(--qe-color-primary-container);
   color: var(--qe-color-primary-text);
+}
+
+
+/* Final route-level exceptions from the CSS-module audit. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot > main[class*="page"],
+html[data-qe-appearance] .qe-admin-workspace-page-slot > [class*="page"] {
+  background-color: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+
+/* Marketplace's original light-gradient hero is intentionally not the dark-banner variant
+   used on Assessments, Classes, Learning Resources and Resources. Theme it as a surface. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route {
+  background-color: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="hero"] {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="hero"] :is(
+  h1, h2, h3, h4, p, small, strong, span
+) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="eyebrow"] {
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route :is([class*="mark"], [class*="offerIcon"]) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="offer"] {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="notice"] {
+  background: var(--qe-color-surface-subtle);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="statusPill"] {
+  background: var(--qe-color-surface-subtle);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="published"] {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route :is([class*="draft"], [class*="archived"]) {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route [class*="empty"] {
+  background: var(--qe-color-surface-subtle);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-admin-marketplace-route button[class*="save"] {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+
+/* Dark-mode surfaces in the bespoke Source Ingestion and Translations work areas. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="summary"] > div, [class*="previewBar"], [class*="mappingRow"],
+  [class*="existingMapping"], [class*="cacheMeta"], [class*="metadataReview"],
+  [class*="gapCard"], [class*="assignmentCard"], [class*="resultSummary"],
+  [class*="uploadBox"], [class*="filters"], [class*="filterMenu"],
+  [class*="workflowHint"], [class*="revisionMeta"] > span, [class*="qualityWarning"],
+  [class*="teacherReference"], [class*="studentAnswer"], [class*="reviewQuestion"],
+  [class*="inspector"], [class*="resultStats"], [class*="editorEmpty"],
+  [class*="outlineList"], [class*="chapterCard"], [class*="fileInput"],
+  [class*="selectedSummary"], [class*="assignmentList"] > article,
+  [class*="filterOption"], [class*="jobButton"], [class*="mappingConfirm"],
+  [class*="existingMapping"], [class*="gapBadge"]
+) {
+  background-color: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="rowSelected"], [class*="activeBlock"], [class*="canvasTabActive"],
+  [class*="selectedSummary"], [class*="mappingRow"].selected
+) {
+  background-color: var(--qe-color-selected-background);
+  color: var(--qe-color-selected-text);
+  border-color: var(--qe-color-primary);
+}
+
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="editorEmpty"] > span, [class*="stepIcon"], [class*="pdfBadge"],
+  [class*="fileInput"] span, [class*="filterOption"] small
+) {
+  background-color: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
+
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="approve"], [class*="statusAPPROVED"], [class*="statusPUBLISHED"],
+  [class*="statusRELEASED"], [class*="approvedNote"], [class*="publishedNote"]
+) {
+  background-color: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="reject"], [class*="statusREJECTED"], [class*="statusFAILED"],
+  [class*="alertError"], [class*="chatAdminError"], [class*="error"]
+) {
+  background-color: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="statusREVIEW"], [class*="statusNEEDS_REVIEW"], [class*="statusINREVIEW"],
+  [class*="qualityFlag"], [class*="qualityWarning"], [class*="metadataReview"],
+  [class*="gapBadge"], [class*="statusAWAITING_REVIEW"]
+) {
+  background-color: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container);
+  border-color: var(--qe-color-warning);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="statusDRAFT"], [class*="statusARCHIVED"], [class*="statusSUPERSEDED"],
+  [class*="statusNOTSTARTED"], [class*="statusDefault"], [class*="draft"],
+  [class*="archived"]
+) {
+  background-color: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+  border-color: var(--qe-color-border-subtle);
 }
