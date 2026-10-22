@@ -767,6 +767,7 @@ public class CourseMarketplaceController {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         Map<String,Object> racedOrder = racedOrders.getFirst();
+        requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(racedOrder)) {
           repairLegacyPendingOrderSnapshots(racedOrder,institutionId,
               ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
