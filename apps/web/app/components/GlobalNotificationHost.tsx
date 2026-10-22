@@ -45,10 +45,10 @@ function selectedLocale() {
   }
 }
 
-export default function GlobalNotificationHost() {
+export default function GlobalNotificationHost({ workspace = 'default' }: { workspace?: 'default' | 'people' }) {
   const [notices, setNotices] = useState<Active[]>([]);
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const isPeopleWorkspace = typeof document !== 'undefined' && Boolean(document.documentElement.dataset.qePeopleAppearance);
+  const isPeopleWorkspace = workspace === 'people';
   const serial = useRef(0);
   const visibleRef = useRef<Active[]>([]);
   const queuedRef = useRef<Active[]>([]);

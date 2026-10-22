@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hi">
       <body>
-        <GlobalNotificationHost />
+        <GlobalNotificationHost workspace="people" />
         <UiLocaleProvider>
           <PeopleAppearanceProvider>
             <PeopleSessionBoundary><PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout></PeopleSessionBoundary>
