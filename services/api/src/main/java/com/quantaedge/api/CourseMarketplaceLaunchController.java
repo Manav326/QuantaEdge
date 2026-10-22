@@ -125,7 +125,7 @@ public class CourseMarketplaceLaunchController {
             institution_id,assignment_id,course_release_id,course_id,title_override,description,
             price_paise,currency,status,created_at,updated_at
           ) values(?,?,?,?,?,?,?,?,'DRAFT',now(),now()) returning id
-          """,Long.class,institutionId,assignmentId,number(assignment.get("release_id")),
+          """,Long.class,institutionId,assignmentId,number(assignment.get("course_release_id")),
           number(assignment.get("course_id")),title,description,pricePaise,currency);
     } else {
       offerId=number(existing.getFirst().get("id"));
