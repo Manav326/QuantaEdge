@@ -178,6 +178,7 @@ html[data-qe-appearance] body {
   .qe-question-author, .qe-readiness-list > div, .qe-sticky-actions,
   .qe-admin-filter-panel, .qe-admin-table-panel
 ) {
+  background-color: var(--qe-color-surface, var(--admin-surface));
   color: var(--admin-text);
   border-color: var(--admin-border);
 }
@@ -186,6 +187,8 @@ html[data-qe-appearance] body {
 .qe-admin-workspace-page-slot [class*="Panel"]:not([class*="Heading"]):not([class*="heading"]):not([class*="PanelHeading"]):not([class*="panelHeading"]),
 .qe-admin-workspace-page-slot [class*="card"]:not([class*="Icon"]):not([class*="icon"]):not([class*="Title"]):not([class*="title"]):not([class*="Action"]):not([class*="action"]):not([class*="CardTitle"]),
 .qe-admin-workspace-page-slot [class*="Card"]:not([class*="Icon"]):not([class*="icon"]):not([class*="Title"]):not([class*="title"]):not([class*="Action"]):not([class*="action"]):not([class*="CardTitle"]) {
+  background-color: var(--qe-color-surface, var(--admin-surface));
+  color: var(--admin-text);
   border-color: var(--admin-border);
 }
 
@@ -313,6 +316,33 @@ html[data-qe-appearance] body {
 }
 .qe-admin-workspace-page-slot :is(.success, [class*="success"], [class*="Success"], [class*="approved"], [class*="Approved"]) {
   border-color: var(--qe-color-success);
+}
+
+/* Theme text roles override route-local fixed grays while preserving semantic feedback/hero colours below. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  h1, h2, h3, h4, h5, h6, label, legend, td, th, dt, dd, figcaption,
+  .panelHeading h2, .cardTitle h3, .qe-block-list-copy b,
+  .qe-block-editor-head h4, .qe-question-author header strong,
+  .qe-readiness-list b, .qe-editor-section-title h3
+) {
+  color: var(--qe-color-text);
+}
+
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  p, small, .helpText, .panelHeading p, .cardBody p, .cardBody small,
+  .fieldHint, .empty-state, .admin-no-data, .qe-form-field small,
+  .qe-editor-footnote, .qe-studio-top p, .qe-section-head p
+) {
+  color: var(--qe-color-text-muted);
+}
+
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="panel"]:not([class*="Heading"]):not([class*="heading"]):not([class*="PanelHeading"]):not([class*="panelHeading"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Panel"]:not([class*="Heading"]):not([class*="heading"]):not([class*="PanelHeading"]):not([class*="panelHeading"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="card"]:not([class*="Icon"]):not([class*="icon"]):not([class*="Title"]):not([class*="title"]):not([class*="Action"]):not([class*="action"]):not([class*="CardTitle"]),
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:not([class*="Icon"]):not([class*="icon"]):not([class*="Title"]):not([class*="title"]):not([class*="Action"]):not([class*="action"]):not([class*="CardTitle"]) {
+  background-color: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
 }
 
 /* Dark mode: keep depth between the page canvas, panels, elevated controls and overlays. */
