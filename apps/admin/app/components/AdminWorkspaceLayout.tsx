@@ -285,7 +285,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             <strong>{t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
-            {canSelectInstitution ? <label style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
+            {canSelectInstitution ? <label className="qe-admin-institution-switcher" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
               <span>Institution</span>
               <select
                 value={institutionCode}
