@@ -473,6 +473,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var marketplaceLoading by remember { mutableStateOf(false) }
     var marketplaceLoadFailed by remember { mutableStateOf(false) }
     var marketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var studentBillingAddresses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var studentBillingAddressesLoading by remember { mutableStateOf(false) }
+    var studentBillingAddressesError by remember { mutableStateOf("") }
+    var studentBillingAddressesStatus by remember { mutableStateOf("") }
     var pendingStudentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
     var pendingParentPaymentVerification by remember { mutableStateOf<JSONObject?>(null) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -487,6 +491,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentMarketplaceLoading by remember { mutableStateOf(false) }
     var parentMarketplaceLoadFailed by remember { mutableStateOf(false) }
     var parentMarketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var parentBillingAddresses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentBillingAddressesLoading by remember { mutableStateOf(false) }
+    var parentBillingAddressesError by remember { mutableStateOf("") }
+    var parentBillingAddressesStatus by remember { mutableStateOf("") }
     var archivedChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -792,6 +800,108 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 reportError(exception)
             } finally {
                 routeTaskCount.value = (routeTaskCount.value - 1).coerceAtLeast(0)
+            }
+        }
+    }
+
+    fun billingAddressEndpoint(workspace: String) =
+        if (workspace == "PARENT") "/api/v1/marketplace/family/billing-addresses"
+        else "/api/v1/marketplace/billing-addresses"
+
+    suspend fun fetchBillingAddresses(workspace: String): List<JSONObject> {
+        ApiClient.setWorkspace(workspace)
+        return ApiClient.getArray(billingAddressEndpoint(workspace)).objectItems()
+    }
+
+    fun setBillingAddresses(workspace: String, addresses: List<JSONObject>) {
+        if (workspace == "PARENT") {
+            parentBillingAddresses = addresses
+            parentBillingAddressesError = ""
+        } else {
+            studentBillingAddresses = addresses
+            studentBillingAddressesError = ""
+        }
+    }
+
+    fun setBillingAddressError(workspace: String, message: String) {
+        if (workspace == "PARENT") parentBillingAddressesError = message
+        else studentBillingAddressesError = message
+    }
+
+    fun setBillingAddressStatus(workspace: String, message: String) {
+        if (workspace == "PARENT") parentBillingAddressesStatus = message
+        else studentBillingAddressesStatus = message
+    }
+
+    fun setBillingAddressLoading(workspace: String, value: Boolean) {
+        if (workspace == "PARENT") parentBillingAddressesLoading = value
+        else studentBillingAddressesLoading = value
+    }
+
+    fun refreshBillingAddresses(workspace: String) {
+        setBillingAddressLoading(workspace, true)
+        runTask {
+            try {
+                setBillingAddresses(workspace, fetchBillingAddresses(workspace))
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing addresses load नहीं हो सके।" else "Billing addresses could not be loaded.")
+            } finally {
+                setBillingAddressLoading(workspace, false)
+            }
+        }
+    }
+
+    fun saveBillingAddress(workspace: String, addressId: Long?, body: JSONObject, onComplete: (Boolean) -> Unit) {
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                val endpoint = billingAddressEndpoint(workspace)
+                val response = if (addressId == null) {
+                    ApiClient.postArray(endpoint, body)
+                } else {
+                    ApiClient.putArray(endpoint + "/" + addressId, body)
+                }
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Billing address save हो गया।" else "Billing address saved.")
+                onComplete(true)
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing address save नहीं हो सका।" else "Billing address could not be saved.")
+                onComplete(false)
+            }
+        }
+    }
+
+    fun makeDefaultBillingAddress(workspace: String, addressId: Long) {
+        if (addressId <= 0L || busy) return
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                val response = ApiClient.putArray(billingAddressEndpoint(workspace) + "/" + addressId + "/default", JSONObject())
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Default billing address update हो गया।" else "Default billing address updated.")
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Default address update नहीं हो सका।" else "Default address could not be updated.")
+            }
+        }
+    }
+
+    fun deleteBillingAddress(workspace: String, addressId: Long) {
+        if (addressId <= 0L || busy) return
+        setBillingAddressError(workspace, "")
+        setBillingAddressStatus(workspace, "")
+        runTask {
+            try {
+                val response = ApiClient.deleteArray(billingAddressEndpoint(workspace) + "/" + addressId)
+                setBillingAddresses(workspace, response.objectItems())
+                setBillingAddressStatus(workspace, if (language == "hi") "Billing address हटा दिया गया।" else "Billing address deleted.")
+            } catch (exception: Exception) {
+                setBillingAddressError(workspace, exception.message?.takeIf { it.isNotBlank() }
+                    ?: if (language == "hi") "Billing address delete नहीं हो सका।" else "Billing address could not be deleted.")
             }
         }
     }
