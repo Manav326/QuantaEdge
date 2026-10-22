@@ -23,6 +23,20 @@ function assertUnique(rows, key, label) {
   if (duplicates.length) throw new Error(label + ' has duplicate IDs: ' + [...new Set(duplicates)].join(', '));
 }
 
+function csvObjects(input, label) {
+  const table = parseCsv(input, label);
+  if (table.length < 2) throw new Error(label + ' has no data rows.');
+  const header = table[0].map(value => String(value).trim());
+  if (header.some(value => !value)) throw new Error(label + ' has a blank column name.');
+  return table.slice(1).map((values, rowIndex) => {
+    if (values.length !== header.length) {
+      throw new Error(label + ' row ' + (rowIndex + 2) + ' has ' + values.length +
+        ' fields; expected ' + header.length + '.');
+    }
+    return Object.fromEntries(header.map((key, index) => [key, String(values[index] ?? '')]));
+  });
+}
+
 async function fileExists(path) {
   try { await access(path); return true; } catch { return false; }
 }
@@ -49,8 +63,10 @@ async function main() {
     readFile(SCENARIO_PATH, 'utf8'),
     readFile(COVERAGE_PATH, 'utf8')
   ]);
-  const scenarios = parseCsv(scenarioText, SCENARIO_PATH);
-  const mappings = parseCsv(coverageText, COVERAGE_PATH);
+  // The repository-wide validator parser returns a 2D table; convert it to records
+  // before referring to columns by name. Keep one strict parser for all CSV input.
+  const scenarios = csvObjects(scenarioText, SCENARIO_PATH);
+  const mappings = csvObjects(coverageText, COVERAGE_PATH);
   assertUnique(scenarios, 'case_id', 'Workflow scenario register');
   assertUnique(mappings, 'scenario_id', 'Scenario coverage register');
 
