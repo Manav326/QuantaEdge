@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { appBaseUrl } from '../support/manifest';
 import { privateDir, readPrivateJson, type QaFixture } from '../support/fixtures';
 
-const WEB = appBaseUrl('web', 'http://127.0.0.1:3000');
-const HRMS = appBaseUrl('people', 'http://127.0.0.1:3002');
+const WEB = appBaseUrl('web');
+const HRMS = appBaseUrl('people');
 type ApiResult = { status: number; body: any };
 
 async function api(
