@@ -234,6 +234,7 @@ async function loginParent(browser: Browser, name: 'parentA' | 'parentB', creden
   await page.locator('form').locator('button[type="submit"]').click();
   const response = await loginResponse;
   expect(response.status(), name + ' must authenticate through the live account-login endpoint.').toBe(200);
+  expect(response.request().headers()['x-qe-institution-code']).toBe(credentials.institutionCode);
   await page.waitForURL(url => url.origin === WEB && url.pathname === '/parent');
   const statePath = join(await preparePrivateDir(), name.replace(/[A-Z]/g, m => '-' + m.toLowerCase()) + '.json');
   await context.storageState({ path: statePath });
