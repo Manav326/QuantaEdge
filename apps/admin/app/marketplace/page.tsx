@@ -47,6 +47,9 @@ export default function CourseMarketplaceAdminPage() {
   const [loadError, setLoadError] = useState('');
   const [savingId, setSavingId] = useState<number | null>(null);
   const [notice, setNotice] = useState('');
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | Draft['status']>('ALL');
+  const [expandedCourseId, setExpandedCourseId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -108,6 +111,13 @@ export default function CourseMarketplaceAdminPage() {
     }
   }
 
+  const filteredRows = rows.filter(row => {
+    const draft = drafts[row.course_id] || toDraft(row);
+    const term = query.trim().toLocaleLowerCase();
+    const matchesQuery = !term || [row.display_name, row.code, row.curriculum_version || '', draft.title, draft.description].some(value => String(value).toLocaleLowerCase().includes(term));
+    return matchesQuery && (statusFilter === 'ALL' || draft.status === statusFilter);
+  });
+
   return (
     <div className={"qe-admin-marketplace-route " + styles.workspace}>
       <AdminSidebar active="marketplace" />
@@ -130,13 +140,19 @@ export default function CourseMarketplaceAdminPage() {
             <button type="button" className={styles.refresh} onClick={() => void load()} disabled={loading} title="Reload offers" aria-label="Reload offers">↻</button>
           </div>
 
+          <div className={styles.filters}>
+            <label className={styles.filterField}>Find a course<input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search name, course code or description" /></label>
+            <label className={styles.filterField}>Offer status<select value={statusFilter} onChange={event => setStatusFilter(event.target.value as typeof statusFilter)}><option value="ALL">All offers</option><option value="PUBLISHED">Published</option><option value="DRAFT">Draft</option><option value="ARCHIVED">Archived</option></select></label>
+            <span className={styles.resultCount}>{filteredRows.length} of {rows.length} courses</span>
+          </div>
           {loading ? <div className={styles.empty}>Loading active courses…</div>
             : rows.length === 0 ? <div className={styles.empty}>No active courses are available to configure.</div>
+            : filteredRows.length === 0 ? <div className={styles.empty}>No courses match these filters. Adjust the search or offer status.</div>
             : <div className={styles.offerList}>
-              {rows.map(row => {
+              {filteredRows.map(row => {
                 const draft = drafts[row.course_id] || toDraft(row);
                 return (
-                  <article className={styles.offer} key={row.course_id}>
+                  <article className={styles.offer + (expandedCourseId === row.course_id ? ' ' + styles.expanded : '')} key={row.course_id}>
                     <div className={styles.offerHead}>
                       <div className={styles.offerIcon} aria-hidden="true">✦</div>
                       <div className={styles.offerIdentity}>
@@ -148,6 +164,12 @@ export default function CourseMarketplaceAdminPage() {
                       </span>
                     </div>
 
+                    <div className={styles.offerSummary}>
+                      <div><small>Institute price</small><strong>{draft.priceRupees.trim() === '' ? 'Not set' : '₹' + draft.priceRupees}</strong></div>
+                      <div><small>Student visibility</small><strong>{draft.status === 'PUBLISHED' ? 'Available in Marketplace' : draft.status === 'ARCHIVED' ? 'Unavailable' : 'Hidden until published'}</strong></div>
+                      <button type="button" className={styles.editOffer} aria-expanded={expandedCourseId === row.course_id} onClick={() => setExpandedCourseId(current => current === row.course_id ? null : row.course_id)}>{expandedCourseId === row.course_id ? 'Close editor' : 'Edit for your institute'}</button>
+                    </div>
+                    {expandedCourseId === row.course_id && <>
                     <div className={styles.formGrid}>
                       <label className={styles.field}>
                         Display title
@@ -178,6 +200,7 @@ export default function CourseMarketplaceAdminPage() {
                         {savingId === row.course_id ? 'Saving…' : draft.status === 'PUBLISHED' ? 'Save & publish' : 'Save offer'}
                       </button>
                     </div>
+                    </>}
                   </article>
                 );
               })}
