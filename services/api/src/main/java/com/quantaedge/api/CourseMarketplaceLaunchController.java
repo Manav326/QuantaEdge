@@ -81,8 +81,8 @@ public class CourseMarketplaceLaunchController {
           r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           t.display_name as source_institution_name,
-          count(distinct ps.subject_id) as active_subject_count,
-          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct s.id) as active_subject_count,
+          count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
