@@ -1740,3 +1740,43 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   color: var(--qe-people-brand-strong) !important;
   border-color: var(--qe-people-brand);
 }
+
+
+/* Default (not only focused) neutral actions and selected/hovered collection rows. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button[class*="secondary"], a[class*="secondary"],
+  button[class*="Secondary"], a[class*="Secondary"],
+  [class*="secondarySmall"], [class*="SecondarySmall"],
+  [class*="ghostButton"], [class*="GhostButton"]
+):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="themePreview"]) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button[class*="tab"], button[class*="Tab"]
+):is(:hover, :focus-visible):not([class*="tabActive"]):not([class*="TabActive"]):not([aria-selected="true"]) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="listItem"], [class*="courseItem"], [class*="entityRow"], [class*="policyRow"]
+):is(:hover, :focus-visible):not([class*="selected"]):not([class*="Selected"]) {
+  background-color: var(--qe-people-surface-hover) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="previewNote"], [class*="PreviewNote"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+  color: var(--qe-people-warning) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="themePreviewNotice"], [class*="ThemePreviewNotice"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-muted) !important;
+}
