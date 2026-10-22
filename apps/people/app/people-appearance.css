@@ -1526,3 +1526,52 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox
 html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] p {
   color: var(--qe-people-ink) !important;
 }
+
+
+/* Route-specific semantic states: selected directory rows, warnings, and upload controls. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="listItem"][class*="selected"], [class*="listItem"][class*="Selected"],
+  [class*="courseItem"][class*="selected"], [class*="courseItem"][class*="Selected"],
+  [class*="cropRatioButtonActive"], [class*="CropRatioButtonActive"]
+) {
+  background-color: var(--qe-people-brand-soft) !important;
+  border-color: var(--qe-people-brand) !important;
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="warning"]:not(button), [class*="Warning"]:not(button)
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="danger"]:not(button):not([class*="dangerButton"]),
+  [class*="Danger"]:not(button):not([class*="DangerButton"])
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
+) {
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="cropModalHeader"] p, [class*="cropHelp"], [class*="cropZoomLabel"],
+  [class*="einvoiceHelp"], [class*="providerMessage"]
+) {
+  color: var(--qe-people-muted);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="cropStage"] {
+  border-color: var(--qe-people-line);
+  background-color: var(--qe-people-surface-subtle);
+}
