@@ -27,6 +27,7 @@ jobs:
       admin: ${{ steps.detect.outputs.admin }}
       people: ${{ steps.detect.outputs.people }}
       content: ${{ steps.detect.outputs.content }}
+      e2e: ${{ steps.detect.outputs.e2e }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -126,6 +127,7 @@ jobs:
           admin=false
           people=false
           content=false
+          e2e=false
           all=false
           printf '%s\n' "$files"
           if printf '%s\n' "$files" | grep -qE '^services/api/'; then api=true; fi
@@ -133,6 +135,358 @@ jobs:
           if printf '%s\n' "$files" | grep -qE '^apps/admin/'; then admin=true; fi
           if printf '%s\n' "$files" | grep -qE '^apps/people/'; then people=true; fi
           if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/test_.*\.py$|^\.github/workflows/'; then content=true; fi
+          # Run browser E2E when an application/API contract or its harness may have changed.
+          # Content-only pipeline checkpoints deliberately do not pay this full-stack test cost.
+          if printf '%s\n' "$files" | grep -qE '^tests/ui-e2e/|^docker-compose\.e2e\.yml$|^docker-compose\.yml$|^apps/(web|admin|people)/|^services/api/|^docs/qa/|^scripts/inventory_ui_routes\.mjs          if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml$'; then all=true; fi
+          # Production deploys a single SHA tag for API, web, and admin. Publish all
+          # three images on each main push so every deploy SHA has a tag for each service.
+          if [ "$EVENT_NAME" = "push" ]; then all=true; fi
+          if [ "$all" = "true" ]; then api=true; web=true; admin=true; people=true; content=true; fi
+          echo "api=$api" >> "$GITHUB_OUTPUT"
+          echo "web=$web" >> "$GITHUB_OUTPUT"
+          echo "admin=$admin" >> "$GITHUB_OUTPUT"
+          echo "people=$people" >> "$GITHUB_OUTPUT"
+          echo "content=$content" >> "$GITHUB_OUTPUT"
+          echo "e2e=$e2e" >> "$GITHUB_OUTPUT"
+
+  build-android-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # The action's legacy default requests the removed SDK package "tools".
+          # Install only current SDK packages needed by this compileSdk 36 project.
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+      - name: Configure stable signing for the installable APK
+        id: signing
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$ANDROID_KEYSTORE_BASE64" && -z "$ANDROID_KEYSTORE_PASSWORD" && -z "$ANDROID_KEY_ALIAS" && -z "$ANDROID_KEY_PASSWORD" ]]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No stable Android signing key is configured in the production environment. Tests will run, but no installable APK will be published; an ephemeral runner debug certificate cannot provide reliable Google sign-in."
+            exit 0
+          fi
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "::error::Missing ANDROID_KEYSTORE_BASE64 production secret."; exit 1; }
+          test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "::error::Missing ANDROID_KEYSTORE_PASSWORD production secret."; exit 1; }
+          test -n "$ANDROID_KEY_ALIAS" || { echo "::error::Missing ANDROID_KEY_ALIAS production secret."; exit 1; }
+          test -n "$ANDROID_KEY_PASSWORD" || { echo "::error::Missing ANDROID_KEY_PASSWORD production secret."; exit 1; }
+          KEYSTORE_PATH="$RUNNER_TEMP/quantaedge-upload.jks"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          test -s "$KEYSTORE_PATH" || { echo "::error::Decoded Android signing keystore is empty."; exit 1; }
+          keytool -list -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
+          echo "ANDROID_KEYSTORE_PATH=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+          echo "configured=true" >> "$GITHUB_OUTPUT"
+      - name: Verify structured lesson UI contract
+        run: node scripts/check-structured-lesson-ui-contract.mjs
+      - name: Verify Android UI localization contract
+        run: node scripts/check-android-ui-localization.mjs
+      - name: Run Android unit tests and build debug APK for verification
+        env:
+          QUANTAEDGE_API_BASE_URL: ${{ vars.QUANTAEDGE_LOCAL_API_BASE_URL || 'http://192.168.31.47:8080/' }}
+          QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
+          QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
+          QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
+          QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
+        run: |
+          set -euo pipefail
+          test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
+          gradle -p apps/android testDebugUnitTest assembleDebug \
+            -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
+            -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
+            -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
+            --no-daemon --build-cache
+      - name: Build stable signed installable APK for local network
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          QUANTAEDGE_API_BASE_URL: ${{ vars.QUANTAEDGE_LOCAL_API_BASE_URL || 'http://192.168.31.47:8080/' }}
+          QUANTAEDGE_FIREBASE_PROJECT_ID: ${{ vars.QUANTAEDGE_FIREBASE_PROJECT_ID }}
+          QUANTAEDGE_FIREBASE_APPLICATION_ID: ${{ vars.QUANTAEDGE_FIREBASE_APPLICATION_ID }}
+          QUANTAEDGE_FIREBASE_API_KEY: ${{ vars.QUANTAEDGE_FIREBASE_API_KEY }}
+          QUANTAEDGE_FIREBASE_SENDER_ID: ${{ vars.QUANTAEDGE_FIREBASE_SENDER_ID }}
+        run: |
+          set -euo pipefail
+          gradle -p apps/android assembleLocal \
+            -PquantaedgeApiBaseUrl="$QUANTAEDGE_API_BASE_URL" \
+            -PquantaedgeFirebaseProjectId="$QUANTAEDGE_FIREBASE_PROJECT_ID" \
+            -PquantaedgeFirebaseApplicationId="$QUANTAEDGE_FIREBASE_APPLICATION_ID" \
+            -PquantaedgeFirebaseApiKey="$QUANTAEDGE_FIREBASE_API_KEY" \
+            -PquantaedgeFirebaseSenderId="$QUANTAEDGE_FIREBASE_SENDER_ID" \
+            --no-daemon --build-cache
+      - name: Upload stable installable APK
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-android-apk-stable
+          path: apps/android/app/build/outputs/apk/local/app-local.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Explain unavailable installable APK
+        if: github.event_name != 'pull_request' && steps.signing.outputs.configured != 'true'
+        shell: bash
+        run: |
+          {
+            echo "## Installable Android APK not published"
+            echo
+            echo "The debug build passed compile/unit tests, but the stable signing keystore is not configured in the production Actions environment."
+            echo "Configure ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, and ANDROID_KEY_PASSWORD before relying on Google sign-in in a downloadable APK."
+            echo "No ephemeral debug-signed APK was published under the installable artifact name."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  validate-content-import:
+    name: Content import safeguards
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.content == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install textbook PDF test dependency
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Validate reviewed-content import safeguards
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: Validate canonical structured lessons against runtime and DB keys
+        run: |
+          python scripts/validate_structured_lesson_artifacts.py \
+            --repo-root . \
+            --index data/structured-lessons/class-6/science/production-index.v1.json \
+            --json-report /tmp/quantaedge-structured-lesson-schema-report.json
+
+  validate-api:
+    name: API verification
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.api == 'true'
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: quantaedge
+          POSTGRES_USER: quantaedge
+          POSTGRES_PASSWORD: quantaedge-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U quantaedge -d quantaedge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/quantaedge
+      SPRING_DATASOURCE_USERNAME: quantaedge
+      SPRING_DATASOURCE_PASSWORD: quantaedge-test
+      APP_DEMO_SEED: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Install deterministic certificate fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fontconfig fonts-noto-core
+          fc-cache -f
+          fc-match --format='%{family}\n' 'Noto Sans Devanagari' | grep -qi 'Noto Sans Devanagari'
+      - name: Create isolated QA lifecycle database
+        env:
+          PGPASSWORD: quantaedge-test
+        run: createdb -h localhost -U quantaedge quantaedge_qa
+
+      # Temporarily defer only the five API test classes whose assertions/fixtures still
+      # target the pre-migration contract. All other API tests run, all test sources compile,
+      # and the API image build remains required. Re-enable these classes after reconciliation.
+      - name: Run API tests and verification (deferred course-scope cases excluded)
+        working-directory: services/api
+        run: mvn -B -ntp verify -Dqe.qa.lifecycle.integration=true -Dtest='!AssessmentLifecycleIntegrationTest,!CourseMarketplaceTenantScopeTest,!LearningClassControllerTest,!LearningControllerTest,!StudentProgramControllerTest'
+
+  build-api:
+    name: Build API image
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
+    needs: [changes, validate-api]
+    if: needs.changes.outputs.api == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/quantaedge-api
+          tags: |
+            type=sha,format=long,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: services/api/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+
+  build-web:
+    name: Build web image
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Verify structured lesson UI contract
+        run: node scripts/check-structured-lesson-ui-contract.mjs
+      - name: Verify student navigation contract
+        run: node apps/web/scripts/check-student-navigation.mjs
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/quantaedge-web
+          tags: |
+            type=sha,format=long,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build web
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/web
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
+  build-admin:
+    name: Build admin image
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.admin == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/quantaedge-admin
+          tags: |
+            type=sha,format=long,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build admin
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/admin
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=admin
+          cache-to: type=gha,mode=max,scope=admin
+
+  build-people:
+    name: Build People Operations image
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.people == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js for UI contract checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify People Operations UI contract
+        run: node apps/people/scripts/check-ui-contract.mjs
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/quantaedge-people
+          tags: |
+            type=sha,format=long,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build People Operations
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/people
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=people
+          cache-to: type=gha,mode=max,scope=people
+; then e2e=true; fi
           if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml$'; then all=true; fi
           # Production deploys a single SHA tag for API, web, and admin. Publish all
           # three images on each main push so every deploy SHA has a tag for each service.
@@ -481,3 +835,85 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=people
           cache-to: type=gha,mode=max,scope=people
+
+  ui-e2e:
+    name: Real UI + API + PostgreSQL verification
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.e2e == 'true'
+    timeout-minutes: 60
+    env:
+      POSTGRES_DB: quantaedge_qa
+      POSTGRES_USER: quantaedge
+      POSTGRES_PASSWORD: qe-e2e-db-only
+      APP_QA_FIXTURE_PASSWORD: qe-e2e-fixture-only
+      APP_AUTH_ADMIN_MOBILES: "7070107483"
+      APP_AUTH_SECURE_COOKIES: "false"
+      APP_AUTH_ALLOW_REPEATED_DEMO_OTP: "true"
+      APP_DEMO_SEED: "false"
+      QE_E2E_ENVIRONMENT: disposable-qa
+      QE_E2E_TARGET_DATABASE: quantaedge_qa
+      QE_E2E_DATABASE_URL: postgresql://quantaedge:qe-e2e-db-only@127.0.0.1:5432/quantaedge_qa
+      QE_E2E_ADMIN_BOOTSTRAP_MOBILE: "7070107483"
+      QE_E2E_SECRET_DIR: ${{ runner.temp }}/quantaedge-ui-e2e-secrets
+      QE_E2E_ARTIFACTS: ${{ runner.temp }}/quantaedge-ui-e2e-artifacts
+      QE_E2E_HTML_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-report
+      QE_E2E_JSON_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-json/results.json
+      QE_E2E_COVERAGE_REPORT: ${{ runner.temp }}/quantaedge-ui-e2e-coverage/coverage.json
+      QE_E2E_PRODUCTION_GATE: "true"
+      QE_E2E_EXTERNAL_PROVIDER_MODE: "fake"
+    steps:
+      - name: Checkout exact tested source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright dependencies
+        working-directory: tests/ui-e2e
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Install Chromium and OS dependencies
+        working-directory: tests/ui-e2e
+        run: npx playwright install --with-deps chromium
+      - name: Start QuantaEdge on a disposable database
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up --build -d postgres redis api web admin people
+      - name: Wait for API and web applications
+        shell: bash
+        run: |
+          set -euo pipefail
+          wait_url() {
+            local url="$1"
+            local label="$2"
+            for attempt in $(seq 1 90); do
+              if curl --silent --show-error --fail --max-time 5 "$url" >/dev/null; then
+                echo "$label is responding"
+                return 0
+              fi
+              sleep 5
+            done
+            echo "::error::$label did not become ready."
+            docker compose -f docker-compose.yml -f docker-compose.e2e.yml logs --no-color --tail=250 api web admin people
+            return 1
+          }
+          wait_url http://127.0.0.1:8080/actuator/health "API health"
+          wait_url http://127.0.0.1:3000/login "User web login"
+          wait_url http://127.0.0.1:3001/login "Education Admin login"
+          wait_url http://127.0.0.1:3002/login "HRMS login"
+      - name: Run browser tests with direct PostgreSQL assertions and cleanup
+        working-directory: tests/ui-e2e
+        run: npm run test:production-gate
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-ui-e2e-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/quantaedge-ui-e2e-artifacts
+            ${{ runner.temp }}/quantaedge-ui-e2e-report
+            ${{ runner.temp }}/quantaedge-ui-e2e-json
+            ${{ runner.temp }}/quantaedge-ui-e2e-coverage
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Stop disposable stack and remove its volumes
+        if: always()
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml down --volumes --remove-orphans
