@@ -113,6 +113,7 @@ export default function FinancePage(){
   const [providerEventLoading,setProviderEventLoading]=useState(false);
   const [selectedProviderEvents,setSelectedProviderEvents]=useState<ProviderEventRecord[]>([]);
   const [selectedProviderEventsLoading,setSelectedProviderEventsLoading]=useState(false);
+  const [selectedProviderEventsWarning,setSelectedProviderEventsWarning]=useState('');
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -351,9 +352,10 @@ export default function FinancePage(){
       const query=new URLSearchParams({limit:'50',offset:String(offset)});
       if(providerEventStatusFilter)query.set('status',providerEventStatusFilter);
       if(providerEventSearch.trim())query.set('search',providerEventSearch.trim());
-      const response=await api<{items:ProviderEventRecord[];total:number;limit:number;offset:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      const response=await api<{items:ProviderEventRecord[];total:number;limit:number;offset:number;schemaReady?:boolean;warning?:string}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
       setProviderEvents(Array.isArray(response.items)?response.items:[]);
       setProviderEventTotal(Number(response.total||0));
+      if(response.schemaReady===false)setError(response.warning||'Razorpay provider-event storage is unavailable. Check the local API database migration.');
       setProviderEventOffset(Number(response.offset||0));
     }catch(e){setError(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');}
     finally{setProviderEventLoading(false);}
@@ -362,9 +364,16 @@ export default function FinancePage(){
     setSelectedProviderEventsLoading(true);
     try{
       const query=new URLSearchParams({orderId:String(orderId),limit:'100',offset:'0'});
-      const response=await api<{items:ProviderEventRecord[];total:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      const response=await api<{items:ProviderEventRecord[];total:number;schemaReady?:boolean;warning?:string}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
       setSelectedProviderEvents(Array.isArray(response.items)?response.items:[]);
-    }catch(e){setError(e instanceof Error?e.message:'Provider events for this order could not be loaded.');}
+      setSelectedProviderEventsWarning(response.schemaReady===false
+        ?(response.warning||'Razorpay provider-event storage is not available in this database.')
+        :'');
+    }catch(e){
+      setSelectedProviderEvents([]);
+      setSelectedProviderEventsWarning(e instanceof Error?e.message:'Provider events for this order could not be loaded.');
+      setError(e instanceof Error?e.message:'Provider events for this order could not be loaded.');
+    }
     finally{setSelectedProviderEventsLoading(false);}
   };
   const inspectPaymentOrderId=(orderId:number)=>{
@@ -896,6 +905,7 @@ export default function FinancePage(){
           <div className={styles.panelHead}><div><h3>Provider webhook events for this order</h3><p>Raw payloads are never retained; the inbox stores signed-event references, hashes and safe diagnostic fields.</p></div>
             <button type="button" className={styles.secondarySmall} onClick={()=>void loadSelectedProviderEvents(selectedPaymentOrderId)} disabled={selectedProviderEventsLoading}>Refresh provider events</button></div>
           {selectedProviderEventsLoading?<p className={styles.empty}>Loading provider webhook events…</p>
+          :selectedProviderEventsWarning?<p className={styles.note} role="status">{selectedProviderEventsWarning}</p>
           :selectedProviderEvents.length?<div className={styles.paymentEventList}>{selectedProviderEvents.map(event=><article key={event.id}>
             <div><b>{event.event_type}</b><span className={styles.status}>{event.processing_status}</span></div>
             <p>{event.status_message}</p><small>{event.provider_event_id} · {new Date(event.received_at).toLocaleString('en-IN')}{event.processed_at?' · processed '+new Date(event.processed_at).toLocaleString('en-IN'):''}</small>
