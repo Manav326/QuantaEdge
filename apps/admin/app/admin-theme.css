@@ -1882,7 +1882,7 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
 }
 html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   [class*="tabs"], [class*="Tabs"]
-) button:not(.activeTab):not(.active):not([aria-pressed="true"]) {
+) button:not([class*="activeTab"]):not(.active):not([aria-pressed="true"]):not([aria-selected="true"]) {
   background: var(--qe-color-surface, var(--admin-surface)) !important;
   color: var(--qe-color-text-muted, var(--admin-muted)) !important;
   border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
@@ -1894,13 +1894,13 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   color: var(--qe-color-text, var(--admin-text)) !important;
   border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
 }
-html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is(.activeTab,.active,[aria-pressed="true"]) {
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is([class*="activeTab"],.active,[aria-pressed="true"],[aria-selected="true"]) {
   background: var(--qe-color-selected-background, var(--qe-color-primary-container, var(--admin-primary-container))) !important;
   color: var(--qe-color-selected-text, var(--qe-color-text, var(--admin-text))) !important;
   border-color: var(--qe-color-primary, var(--admin-primary)) !important;
   box-shadow: inset 0 -2px 0 var(--qe-color-primary, var(--admin-primary));
 }
-html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is(.activeTab,.active,[aria-pressed="true"]) :is(span,b,strong) {
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is([class*="activeTab"],.active,[aria-pressed="true"],[aria-selected="true"]) :is(span,b,strong) {
   background: transparent !important;
   color: inherit !important;
 }
