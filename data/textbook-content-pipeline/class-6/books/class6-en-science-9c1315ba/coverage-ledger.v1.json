@@ -44166,11 +44166,11 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide the actual length of the table."
+          "The table does not provide the actual length of the table."
         ]
       },
       "chapter_id": null,
@@ -50050,7 +50050,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
           "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
@@ -50066,29 +50066,25 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "diarrhoea",
-          "dehydration",
-          "primary health centres",
-          "market",
-          "packet",
-          "dissolution",
-          "home preparation",
-          "sugar",
-          "salt",
-          "boiled and cooled water",
-          "liquids",
-          "oil",
-          "vinegar",
-          "honey",
-          "dissolution in water",
-          "gases",
-          "water",
-          "survival",
-          "animals"
+          "Diarrhoea",
+          "Dehydration",
+          "Primary health centres",
+          "Home preparation of ORS",
+          "Sugars",
+          "Common salt",
+          "Boiled and cooled water",
+          "Liquids",
+          "Dissolution",
+          "Gases",
+          "Water",
+          "Survival of animals and plants",
+          "Density",
+          "Activity 6.8: Let us measure"
         ],
-        "context_relation": "The image is a page from a textbook that explains the use of Oral Rehydration Solution (ORS) and a related activity involving the measurement of density using paper cups filled with different materials.",
+        "context_relation": "The page explains the use of Oral Rehydration Solution (ORS) and provides a related activity to measure the density of different materials.",
         "limitations": [
-          "The image does not provide specific details about the ORS packets or their preparation."
+          "The page does not provide specific instructions for the activity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
