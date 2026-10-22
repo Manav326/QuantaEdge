@@ -429,7 +429,8 @@ export default function ParentCoursesPage() {
           <p><LocaleText hinglish="कोड केवल उसी course और institution पर लागू होगा जिसके लिए HRMS ने approval दिया है। कीमत और tax की गणना server पर होती है।"
             english="Codes apply only to the course and institution approved by HRMS. The server calculates the discount, payable amount and tax." /></p>
         </section>
-        <BillingProfileEditor workspace="PARENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />
+        {courses.some(course => Number(course.price_paise) > 0 && course.currency === 'INR') &&
+          <BillingProfileEditor workspace="PARENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />}
         <InvoiceDownloads workspace="PARENT" english={english} />
         {checkoutIntent !== null && (
           <BillingAddressSelection
