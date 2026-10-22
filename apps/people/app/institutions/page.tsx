@@ -208,7 +208,7 @@ export default function InstitutionsAdminPage() {
   };
   const billingChanged=Boolean(detail)&&(
     billing.currency!==String(detail?.currency||'INR')||
-    billing.unitPriceRupees!==(detail?.unit_price_paise===undefined?'0.00':(Number(detail.unit_price_paise||0)/100).toFixed(2))||
+    Number(billing.unitPriceRupees)!==(Number(detail?.unit_price_paise||0)/100)||
     billing.billingCadence!==String(detail?.billing_cadence||'MONTHLY')||
     billing.effectiveFrom!==(detail?.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10))||
     billing.effectiveUntil!==(detail?.effective_until?.slice(0,10)||'')
