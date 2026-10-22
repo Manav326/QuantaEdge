@@ -70,6 +70,8 @@ const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.ts
 const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
 const adminLogin = read('apps/admin/app/login/page.tsx');
 const adminWorkspaceLayout = read('apps/admin/app/components/AdminWorkspaceLayout.tsx');
+const adminSessionBoundary = read('apps/admin/app/components/AdminSessionBoundary.tsx');
+const adminDashboard = read('apps/admin/app/page.tsx');
 const peopleWorkspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const peopleLogin = read('apps/people/app/login/page.tsx');
 const peopleChangePassword = read('apps/people/app/change-password/page.tsx');
@@ -236,6 +238,11 @@ assert(adminThemeProvider.includes('/api/v1/institution/public/branding/') && ad
 assert(adminBrandComponent.includes('brand?.logoUrl') && adminBrandComponent.includes('brand?.appIconUrl') && adminBrandComponent.includes('institutionCode'), 'Tenant Admin headers and sidebar must use the active institution full logo and square app icon, not a fixed platform logo.');
 assert(adminThemeStyles.includes('html[data-qe-appearance="dark"]') && adminThemeStyles.includes('.qe-admin-workspace-page-slot') && adminThemeStyles.includes('button[class*="primaryButton"]') && adminThemeStyles.includes(':focus-visible'), 'Shared Admin theme styles must cover dark surfaces, route content, tenant primary actions and visible keyboard focus.');
 assert(adminThemeStyles.includes('[class*="chip"]') && adminThemeStyles.includes('[class*="Chip"]') && adminThemeStyles.includes('[style*="#fff" i]') && adminThemeStyles.includes('[style*="255, 255, 255" i]'), 'Dark Admin theme must normalize chips and override common hard-coded light surfaces across routes.');
+assert(adminSessionBoundary.includes('Keep the authenticated shell mounted during App Router navigation') && !adminSessionBoundary.includes('setReady(false)'), 'Admin session verification must not unmount the workspace shell on every route change.');
+assert(adminWorkspaceLayout.includes("key={pathname + '|' + institutionCode}") && !adminWorkspaceLayout.includes('window.location.reload()'), 'Admin route and institution changes must update only the page slot, not reload the whole browser.');
+assert(!adminWorkspaceLayout.includes('router.refresh()'), 'Admin logout navigation must not trigger a second full route refresh.');
+assert(!adminDashboard.includes('window.location.reload()') && adminDashboard.includes('reloadVersion') && adminDashboard.includes('void reloadCourses()'), 'Admin dashboard refresh and retry must refetch data through component state rather than reload the page.');
+assert(adminThemeStyles.includes('qe-admin-route-enter') && adminThemeStyles.includes('prefers-reduced-motion: reduce'), 'Admin route transitions must be subtle and disabled when reduced motion is preferred.');
 assert(adminThemeStyles.includes('.qe-nav-icon') && adminThemeStyles.includes('background: transparent !important') && adminThemeStyles.includes('.admin-visual-card'), 'Admin navigation icons must not use distracting tiles and the dark overview must not retain near-white illustration cards.');
 assert(adminThemeStyles.includes('[class*="Heading"]') && adminThemeStyles.includes('color: var(--qe-color-text) !important'), 'Dark Admin theme must maintain readable headings and labels for curriculum, chapters and topics.');
 assert(adminThemeProvider.includes("link[rel~='icon']") || adminThemeProvider.includes('link[rel~="icon"]'), 'Admin must dynamically bind browser favicon rendering to the validated HRMS icon.');
