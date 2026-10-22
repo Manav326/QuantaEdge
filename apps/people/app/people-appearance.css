@@ -18,6 +18,7 @@
   --qe-people-brand-strong: #c2410c;
   --qe-people-brand-hover: #c2410c;
   --qe-people-brand-soft: #fff0e5;
+  --qe-people-on-brand: #ffffff;
   --qe-people-focus: #c2410c;
   --qe-people-sidebar: #ffffff;
   --qe-people-sidebar-ink: #344054;
@@ -49,6 +50,39 @@
   --success-soft: var(--qe-people-success-soft);
   --warning: var(--qe-people-warning);
   --warning-soft: var(--qe-people-warning-soft);
+  --surface: var(--qe-people-surface);
+  --surface-subtle: var(--qe-people-surface-subtle);
+  --surface-hover: var(--qe-people-surface-hover);
+  --field: var(--qe-people-field);
+  --table-head: var(--qe-people-table-head);
+  --table-line: var(--qe-people-table-line);
+  --qe-color-text: var(--qe-people-ink);
+  --qe-color-on-surface: var(--qe-people-ink);
+  --qe-color-text-muted: var(--qe-people-muted);
+  --qe-color-surface: var(--qe-people-surface);
+  --qe-color-surface-raised: var(--qe-people-card);
+  --qe-color-surface-elevated: var(--qe-people-card);
+  --qe-color-surface-subtle: var(--qe-people-surface-subtle);
+  --qe-color-border: var(--qe-people-line);
+  --qe-color-border-subtle: var(--qe-people-line);
+  --qe-color-focus: var(--qe-people-focus);
+  --qe-color-primary: var(--qe-people-brand-strong);
+  --qe-color-on-primary: var(--qe-people-on-brand);
+  --qe-color-accent: var(--qe-people-brand-strong);
+  --qe-color-on-accent: var(--qe-people-on-brand);
+  --qe-color-primary-container: var(--qe-people-brand-soft);
+  --qe-color-on-primary-container: var(--qe-people-brand-strong);
+  --qe-color-accent-container: var(--qe-people-brand-soft);
+  --qe-color-on-accent-container: var(--qe-people-brand-strong);
+  --qe-color-success: var(--qe-people-success);
+  --qe-color-success-container: var(--qe-people-success-soft);
+  --qe-color-on-success-container: var(--qe-people-success);
+  --qe-color-warning: var(--qe-people-warning);
+  --qe-color-warning-container: var(--qe-people-warning-soft);
+  --qe-color-on-warning-container: var(--qe-people-warning);
+  --qe-color-error: var(--qe-people-danger);
+  --qe-color-error-container: var(--qe-people-danger-soft);
+  --qe-color-on-error-container: var(--qe-people-danger);
   --focus: var(--qe-people-focus);
 }
 
@@ -68,6 +102,7 @@ html[data-qe-people-appearance="dark"] {
   --qe-people-brand-strong: #fdba74;
   --qe-people-brand-hover: #ea580c;
   --qe-people-brand-soft: #3a281c;
+  --qe-people-on-brand: #182337;
   --qe-people-focus: #fb923c;
   --qe-people-sidebar: #111a2b;
   --qe-people-sidebar-ink: #d5deeb;
@@ -105,6 +140,7 @@ html[data-qe-people-appearance="dark"] {
     --qe-people-brand-strong: #fdba74;
     --qe-people-brand-hover: #ea580c;
     --qe-people-brand-soft: #3a281c;
+  --qe-people-on-brand: #182337;
     --qe-people-focus: #fb923c;
     --qe-people-sidebar: #111a2b;
     --qe-people-sidebar-ink: #d5deeb;
@@ -1062,7 +1098,7 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   [role="dialog"], [class*="Card"], [class*="Panel"],
   [class*="Modal"], [class*="Dialog"], [class*="surface"], [class*="Surface"],
   [class*="box"], [class*="Box"]
-):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]) {
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="logoCanvas"]):not([class*="hero"]):not([class*="Hero"]):not([class*="overlay"]):not([class*="Overlay"]):not([class*="status"]):not([class*="Status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="error"]):not([class*="Error"]):not([class*="warning"]):not([class*="Warning"]) {
   background-color: var(--qe-people-card) !important;
   color: var(--qe-people-ink) !important;
   border-color: var(--qe-people-line) !important;
@@ -1178,4 +1214,600 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff
 }
 html[data-qe-people-appearance] .qe-people-page-slot :is(.qe-audit-row,.qe-staff-row) :is(strong,span,small,b) {
   overflow-wrap: anywhere;
+}
+
+
+/*
+ * HRMS route-complete appearance parity
+ * -------------------------------------
+ * Route CSS modules were authored independently and several retain literal
+ * light-only fills. Keep their surfaces semantic in BOTH modes. The intentional
+ * stationery, logo canvases and institution palette previews are excluded so
+ * users can inspect the actual output colours.
+ */
+html[data-qe-people-appearance="light"] { color-scheme: light; }
+html[data-qe-people-appearance="dark"] { color-scheme: dark; }
+
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"],
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="Page"] {
+  --ink: var(--qe-people-ink);
+  --muted: var(--qe-people-muted);
+  --line: var(--qe-people-line);
+  --paper: var(--qe-people-paper);
+  --card: var(--qe-people-card);
+  --brand: var(--qe-people-brand);
+  --brand2: var(--qe-people-brand-strong);
+  --brand-deep: var(--qe-people-brand-strong);
+  --focus: var(--qe-people-focus);
+  color: var(--qe-people-ink);
+  background-color: transparent;
+}
+
+/* Auth routes are outside the signed-in page slot, but must honour the same mode. */
+html[data-qe-people-appearance] .login-panel,
+html[data-qe-people-appearance] .login-card,
+html[data-qe-people-appearance] .login-card form,
+html[data-qe-people-appearance] .login-card label,
+html[data-qe-people-appearance] .qe-people-auth-panel {
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance] .login-panel,
+html[data-qe-people-appearance] .login-card {
+  background-color: var(--qe-people-card);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .login-card input,
+html[data-qe-people-appearance] .login-card select,
+html[data-qe-people-appearance] .login-card textarea,
+html[data-qe-people-appearance] .qe-people-auth-panel input,
+html[data-qe-people-appearance] .qe-people-auth-panel select,
+html[data-qe-people-appearance] .qe-people-auth-panel textarea {
+  background-color: var(--qe-people-field);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .login-card input::placeholder,
+html[data-qe-people-appearance] .qe-people-auth-panel input::placeholder {
+  color: var(--qe-people-muted);
+  opacity: 1;
+}
+html[data-qe-people-appearance] .login-card .primary,
+html[data-qe-people-appearance] .qe-people-auth-panel .primary {
+  background-color: var(--qe-people-brand-strong);
+  color: #fff;
+}
+html[data-qe-people-appearance="dark"] .login-card .primary,
+html[data-qe-people-appearance="dark"] .qe-people-auth-panel .primary {
+  background-color: var(--qe-people-brand-strong);
+  color: #182337;
+}
+
+/* Shared control contract: hover/focus must keep text readable and never flash white. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+) {
+  background-color: var(--qe-people-field);
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+  caret-color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  select, textarea, [contenteditable="true"]
+):is(:focus, :focus-visible) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-focus) !important;
+  outline: 2px solid var(--qe-people-focus);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--qe-people-focus) 18%, transparent) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(button, a, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--qe-people-focus);
+  outline-offset: 2px;
+}
+html[data-qe-people-appearance] .qe-people-page-slot input::placeholder,
+html[data-qe-people-appearance] .qe-people-page-slot textarea::placeholder {
+  color: var(--qe-people-muted);
+  opacity: 1;
+}
+
+/* Route-module surfaces: Finance, Institutions, QA and shared editor components. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="panel"], [class*="Panel"], [class*="credentials"], [class*="Credentials"],
+  [class*="confirmPanel"], [class*="gateGrid"] > div, [class*="checkRow"],
+  [class*="entityRow"], [class*="policyRow"], [class*="recipientEditor"],
+  [class*="billingBox"], [class*="versionBanner"], [class*="approvalBox"],
+  [class*="paymentEventList"] > article, [class*="readOnlyItem"],
+  [class*="readOnlyMetric"], [class*="assetEditorRow"], [class*="invitationLinkPreview"],
+  [class*="courseItem"], [class*="listItem"], [class*="emptyPanel"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]):not([class*="paper"]):not([class*="status"]):not([class*="Status"]):not([class*="danger"]):not([class*="Danger"]):not([class*="success"]):not([class*="Success"]):not([class*="warning"]):not([class*="Warning"]):not([class*="error"]):not([class*="Error"]) {
+  background-color: var(--qe-people-card) !important;
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="inputGrid"] input, [class*="form"] input, [class*="form"] select,
+  [class*="form"] textarea, [class*="Filters"] input, [class*="Filters"] select,
+  [class*="Controls"] input, [class*="Controls"] select, [class*="Controls"] textarea,
+  [class*="themeSettingsGrid"] select
+) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tab"], [class*="Tab"], [role="tab"]
+):not([class*="themePreview"]):not([aria-selected="true"]):not([class*="tabActive"]):not([class*="TabActive"]) {
+  color: var(--qe-people-muted);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tabActive"], [class*="TabActive"], [role="tab"][aria-selected="true"]
+) {
+  background-color: var(--qe-people-brand-soft);
+  border-color: var(--qe-people-brand);
+  color: var(--qe-people-brand-strong);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) th {
+  background-color: var(--qe-people-table-head);
+  color: var(--qe-people-muted);
+  border-color: var(--qe-people-table-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="tableScroll"], [class*="TableScroll"], [class*="policyTableWrap"],
+  [class*="PolicyTableWrap"], [class*="table-wrap"], [class*="tableWrap"]
+) td {
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-table-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="emptyPanel"], [class*="json"], [class*="Json"], [class*="manifestRow"],
+  [class*="ManifestRow"], [class*="readOnlyItem"], [class*="valueChip"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  color: var(--qe-people-ink);
+  border-color: var(--qe-people-line);
+}
+
+/* Inputs and neutral controls use a restrained surface lift in both appearances. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  button, [role="button"], [role="tab"], .secondary,
+  [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) {
+  border-color: var(--qe-people-focus);
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button.secondary, [class*="secondary"], [class*="Secondary"], [class*="quiet"], [class*="Quiet"]
+):not(:disabled):is(:hover, :focus-visible) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+
+/* Filled primary actions use sufficient contrast; brand orange remains the accent. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
+  [class*="generateButton"], [class*="sendButton"], [class*="cta"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong) !important;
+  color: #fff !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button.primary, a.primary, [class*="primary"], [class*="Primary"], [class*="primarySmall"], [class*="PrimarySmall"],
+  [class*="generateButton"], [class*="sendButton"], [class*="cta"]
+):not([class*="themePreview"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong) !important;
+  color: #182337 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-people-appearance] .qe-people-page-slot,
+  html[data-qe-people-appearance] .qe-people-page-slot * {
+    scroll-behavior: auto;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+
+/* Semantic feedback states remain tinted, never washed out by neutral surface rules. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 28%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="alertError"], [class*="AlertError"], [class*="error"], [class*="Error"], [class*="cropError"], [class*="CropError"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 28%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class*="notice"], [class*="Notice"], [class*="success"]:not(button), [class*="Success"]:not(button)
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 40%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
+  [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
+) {
+  background-color: #fff8ec;
+  color: #784b16;
+  border-color: #f1dfc0;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
+  [class*="note"], [class*="guardNote"], [class*="GuardNote"], [class*="refundNote"], [class*="einvoiceHelp"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="status"].active, [class*="status"].suspended, [class*="Status"].active, [class*="Status"].suspended
+) { border-color: var(--qe-people-line); }
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="status"].active, [class*="Status"].active, [class*="status"][class*="active"], [class*="Status"][class*="active"]
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="status"].suspended, [class*="Status"].suspended, [class*="status"][class*="suspended"], [class*="Status"][class*="suspended"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="dangerButton"], [class*="DangerButton"], [class*="danger"].primary
+) {
+  background-color: #b42318 !important;
+  border-color: #b42318 !important;
+  color: #fff !important;
+}
+
+/* Document paper and brand assets are previews, not app chrome: keep their true colours. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="paper"], [class*="logoCanvas"], [class*="readOnlyLogo"],
+  [class*="readOnlyIcon"], [class*="brandAssetPreview"] img,
+  [class*="themePreview"], [class*="brandTemplatePreview"],
+  [class*="brandTemplateLogoStage"], [class*="brandTemplateCompactStage"],
+  [class*="brandTemplateIconPlaceholder"]
+) { forced-color-adjust: auto; }
+
+
+/* Nested copy and labels inside the older module layouts must follow the same text roles. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  label, dt, .label, [class*="form"] label, [class*="Filters"] label,
+  [class*="Controls"] label, [class*="themeSettingsGrid"] label
+) {
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="header"] p, [class*="panelHead"] p, [class*="panel"] > p,
+  [class*="metrics"] span, [class*="metrics"] small, [class*="steps"] span,
+  [class*="entityRow"] span, [class*="entityRow"] small,
+  [class*="policyRow"] span, [class*="policyRow"] small,
+  [class*="listCopy"] small, [class*="packKey"], [class*="runMeta"],
+  [class*="manifestRow"] span, [class*="planList"] span, [class*="footer"],
+  [class*="skeleton"], [class*="emptyText"], [class*="emptyCell"],
+  [class*="emptyValue"], [class*="readOnlyItem"] > span,
+  [class*="readOnlyItem"] > small, [class*="readOnlyMetric"] span,
+  [class*="billingBox"] span, [class*="billingBox"] small,
+  [class*="paymentEventList"] article p, [class*="paymentEventList"] article small,
+  [class*="listItem"] small, [class*="courseItem"] small
+) {
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="header"] h1, [class*="panel"] h2, [class*="panelHeading"],
+  [class*="listCopy"] strong, [class*="readOnlyItem"] > strong,
+  [class*="metrics"] strong, [class*="emptyPanel"] b,
+  [class*="packHeading"] h3, [class*="sectionHeading"] h2
+) {
+  color: var(--qe-people-ink) !important;
+}
+
+/* QA confirmation/data panels remain legible and don't inherit stale near-white text roles. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="confirmPanel"], [class*="credentials"], [class*="json"],
+  [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
+):not([class*="themePreview"]) {
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="confirmPanel"], [class*="credentials"], [class*="json"],
+  [class*="checkRow"], [class*="gateGrid"] > div, [class*="manifestRow"]
+):not([class*="themePreview"]) {
+  background-color: var(--qe-people-card) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot [class*="dangerButton"] {
+  background-color: #b42318 !important;
+  border-color: #b42318 !important;
+  color: #fff !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] {
+  background-color: var(--qe-people-info-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-info) 36%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="approvalBox"] p {
+  color: var(--qe-people-ink) !important;
+}
+
+
+/* Route-specific semantic states: selected directory rows, warnings, and upload controls. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="listItem"][class*="selected"], [class*="listItem"][class*="Selected"],
+  [class*="courseItem"][class*="selected"], [class*="courseItem"][class*="Selected"],
+  [class*="cropRatioButtonActive"], [class*="CropRatioButtonActive"]
+) {
+  background-color: var(--qe-people-brand-soft) !important;
+  border-color: var(--qe-people-brand) !important;
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="warning"]:not(button), [class*="Warning"]:not(button)
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="danger"]:not(button):not([class*="dangerButton"]),
+  [class*="Danger"]:not(button):not([class*="DangerButton"])
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
+) {
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="fileButton"], [class*="FileButton"], [class*="cropRatioButton"], [class*="CropRatioButton"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="cropModalHeader"] p, [class*="cropHelp"], [class*="cropZoomLabel"],
+  [class*="einvoiceHelp"], [class*="providerMessage"]
+) {
+  color: var(--qe-people-muted);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="cropStage"] {
+  border-color: var(--qe-people-line);
+  background-color: var(--qe-people-surface-subtle);
+}
+
+
+/* Remaining named component families found in the Finance/Institutions/QA module audit. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="eyebrow"] {
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"],
+  [class*="codeNotice"], [class*="cropError"], [class*="cropHelp"], [class*="themePreviewNotice"]
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"]
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-soft) !important;
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="codeNotice"], [class*="approvalBox"], [class*="billingBox"], [class*="readOnlyMetric"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="codeNotice"], [class*="approvalBox"]
+) :is(span, small, p, strong) {
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="status"], [class*="Status"]
+):not([class*="qe-people-status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="active"]):not([class*="suspended"]) {
+  background-color: var(--qe-people-info-soft) !important;
+  color: var(--qe-people-info) !important;
+  border-color: color-mix(in srgb, var(--qe-people-info) 35%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="warning"], [class*="Warning"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
+
+
+/* Deep component sweep: compact Finance controls and Institutions brand-template authoring. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="removeRow"], [class*="RemoveRow"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 34%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="pdfPreviewToolbar"], [class*="PdfPreviewToolbar"]
+) a {
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="courseList"], [class*="CourseList"], [class*="brandSwatches"] i,
+  [class*="brandTemplateOptional"], [class*="BrandTemplateOptional"]
+) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplate"], [class*="BrandTemplate"]
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+  border-color: var(--qe-people-line);
+  color: var(--qe-people-ink);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplate"], [class*="BrandTemplate"]
+):not([class*="brandTemplatePreviewCard"]):not([class*="BrandTemplatePreviewCard"]):not([class*="brandTemplateLogoStage"]):not([class*="BrandTemplateLogoStage"]):not([class*="brandTemplateCompactStage"]):not([class*="BrandTemplateCompactStage"]):not([class*="brandTemplateIconPlaceholder"]):not([class*="BrandTemplateIconPlaceholder"]):not([class*="brandTemplateLogoStageDark"]):not([class*="BrandTemplateLogoStageDark"]) {
+  background: var(--qe-people-card) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="brandTemplateFields"] input:not([type="file"]),
+  [class*="brandTemplateFields"] input[type="file"],
+  [class*="colorGrid"] input[type="color"]
+) {
+  background-color: var(--qe-people-field) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateFields"] small,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandTemplateActions"] > span,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="auditList"] :is(small,p),
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="brandSwatches"] > span,
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="seriesInline"] {
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateOptional"] {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-muted) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] {
+  background-color: var(--qe-people-success-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 38%, var(--qe-people-line)) !important;
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="brandTemplateGenerated"] :is(strong,span,small) {
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="colorGrid"] label {
+  color: var(--qe-people-ink) !important;
+}
+
+
+/* Text-only accent controls use the contrast-safe brand shade; the orange brand stays unchanged. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="selectedTag"], [class*="SelectedTag"], [class*="previewButton"], [class*="PreviewButton"]
+) {
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="selectedTag"], [class*="SelectedTag"]
+) {
+  background-color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-strong);
+  color: var(--qe-people-on-brand) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="previewButton"], [class*="PreviewButton"]
+) {
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand);
+}
+
+
+/* Default (not only focused) neutral actions and selected/hovered collection rows. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button[class*="secondary"], a[class*="secondary"],
+  button[class*="Secondary"], a[class*="Secondary"],
+  [class*="secondarySmall"], [class*="SecondarySmall"],
+  [class*="ghostButton"], [class*="GhostButton"]
+):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="themePreview"]) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  button[class*="tab"], button[class*="Tab"]
+):is(:hover, :focus-visible):not([class*="tabActive"]):not([class*="TabActive"]):not([aria-selected="true"]) {
+  background-color: var(--qe-people-surface-hover) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="listItem"], [class*="courseItem"], [class*="entityRow"], [class*="policyRow"]
+):is(:hover, :focus-visible):not([class*="selected"]):not([class*="Selected"]) {
+  background-color: var(--qe-people-surface-hover) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="previewNote"], [class*="PreviewNote"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+  color: var(--qe-people-warning) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="themePreviewNotice"], [class*="ThemePreviewNotice"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-muted) !important;
+}
+
+
+/* Nested card regions and embedded data editors identified by the module stylesheet sweep. */
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="metrics"], [class*="Metrics"]
+) > article {
+  background: var(--qe-people-card) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="paymentEventList"], [class*="PaymentEventList"]
+) pre {
+  background: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] [class*="paperWrap"] {
+  background: var(--qe-people-surface-subtle) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="panelHeading"] > b {
+  background: var(--qe-people-brand-soft) !important;
+  color: var(--qe-people-brand-strong) !important;
+  border-color: var(--qe-people-brand-soft) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="metrics"] article, [class*="Metrics"] article
+) {
+  color: var(--qe-people-ink);
 }

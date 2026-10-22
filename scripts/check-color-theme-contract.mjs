@@ -318,6 +318,125 @@ assert(adminNotificationStudio.includes('data-surface={surface}') &&
   peopleNotificationCss.includes('.page .side') && peopleNotificationCss.includes('.page .editor'),
   'Admin and HRMS notification editors must put summary cards under tabs and give the editor the available width.');
 
+
+/* HRMS exhaustive route/component colour contract: both appearances, every shared and modular surface. */
+const peopleSharedComponents = discoverFiles('apps/people/app/components', path => /\.(?:tsx|ts|jsx|js)$/.test(path));
+const peopleInstitutionComponents = discoverFiles('apps/people/app/institutions', path => /\.(?:tsx|ts|jsx|js)$/.test(path) && !/\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+assert(peopleRouteFiles.length >= 13, 'The HRMS colour audit must enumerate every current route, including public login/change-password routes.');
+assert(peopleModuleStyles.length >= 6, 'The HRMS colour audit must cover every CSS module family, including Finance, Institutions, QA and notification/brand editors.');
+assert(peopleSharedComponents.length >= 9, 'The HRMS colour audit must enumerate shared UI components such as controls, dialogs, toasts and notification renderers.');
+assert(peopleInstitutionComponents.some(path => path.endsWith('/InstitutionBrandAssetEditor.tsx')) &&
+  peopleInstitutionComponents.some(path => path.endsWith('/InstitutionBrandTemplate.tsx')),
+  'Institution logo crop and branding-template components must be included in the route/component audit.');
+
+for (const path of [...peopleRouteFiles, ...peopleModuleStyles, ...peopleSharedComponents, ...peopleInstitutionComponents]) {
+  const source = read(path);
+  assert(source.trim().length > 0, 'HRMS route/component is empty or unreadable for theme audit: ' + path);
+}
+assert(peopleAppearanceCss.includes('HRMS route-complete appearance parity') &&
+  peopleAppearanceCss.includes('Route-module surfaces: Finance, Institutions, QA') &&
+  peopleAppearanceCss.includes('Nested copy and labels inside the older module layouts'),
+  'HRMS shared CSS must centrally theme module-specific hard-coded surfaces and nested legacy text roles.');
+assert(peopleAppearanceCss.includes('html[data-qe-people-appearance="light"]') &&
+  peopleAppearanceCss.includes('html[data-qe-people-appearance="dark"]') &&
+  peopleAppearanceCss.includes(':is(:focus, :focus-visible)') &&
+  peopleAppearanceCss.includes('background-color: var(--qe-people-field) !important'),
+  'Every HRMS route must keep contrast-safe surfaces, fields and visible focus indicators in both light and dark modes.');
+assert(peopleAppearanceCss.includes('.login-card input') &&
+  peopleAppearanceCss.includes('.qe-people-auth-panel input') &&
+  peopleWorkspaceLayout.includes("pathname === '/login'") &&
+  peopleWorkspaceLayout.includes("pathname === '/change-password'"),
+  'Public login and password routes must be theme-aware even though they bypass the signed-in page slot.');
+assert(peopleAppearanceCss.includes('[class*="primary"], [class*="Primary"]') &&
+  peopleAppearanceCss.includes('color: #182337 !important') &&
+  peopleAppearanceCss.includes('color: #fff !important'),
+  'Filled actions must keep readable foregrounds against the correct light/dark orange and destructive action fills.');
+assert(peopleAppearanceCss.includes('[class*="listItem"][class*="selected"]') &&
+  peopleAppearanceCss.includes('[class*="warning"]') &&
+  peopleAppearanceCss.includes('[class*="danger"]') &&
+  peopleAppearanceCss.includes('[class*="cropRatioButton"]'),
+  'Selected directory rows, semantic status states and institution asset-editor controls must remain theme-aware.');
+assert(peopleAppearanceCss.includes('[class*="themePreview"]') &&
+  peopleAppearanceCss.includes('[class*="brandTemplatePreview"]') &&
+  peopleAppearanceCss.includes('[class*="paper"]') &&
+  peopleAppearanceCss.includes('[class*="readOnlyLogo"]'),
+  'Institution palette/logo previews and genuine document-paper assets must keep their intended preview colours.');
+assert(peopleAppearanceCss.includes('prefers-reduced-motion: reduce') &&
+  peopleAppearanceCss.includes('transition-duration: .01ms !important') &&
+  peopleDesignCss.includes('tbody tr:focus-within'),
+  'Appearance transitions must respect reduced-motion preferences while legacy focus/hover fills remain covered.');
+for (const route of peopleRouteFiles) {
+  const source = read(route);
+  assert(source.includes('export default'), 'Every HRMS route must expose a component for the shared appearance audit: ' + route);
+}
+console.log('HRMS exhaustive theme coverage: ' + peopleRouteFiles.length + ' routes, ' +
+  peopleSharedComponents.length + ' shared components, ' + peopleInstitutionComponents.length +
+  ' institution subcomponents, and ' + peopleModuleStyles.length + ' CSS modules.');
+
+
+assert(peopleAppearanceCss.includes('--surface-subtle: var(--qe-people-surface-subtle)') &&
+  peopleAppearanceCss.includes('--surface-hover: var(--qe-people-surface-hover)') &&
+  peopleAppearanceCss.includes('--qe-color-surface-subtle: var(--qe-people-surface-subtle)') &&
+  peopleAppearanceCss.includes('--qe-color-text: var(--qe-people-ink)'),
+  'Legacy and tokenized HRMS components must resolve their surfaces and text to the active appearance rather than fixed light fallbacks.');
+assert(peopleAppearanceCss.includes('--qe-color-primary: var(--qe-people-brand-strong)') &&
+  peopleAppearanceCss.includes('--qe-color-on-primary: var(--qe-people-on-brand)') &&
+  peopleAppearanceCss.includes('--qe-people-on-brand: #182337;'),
+  'Filled HRMS accent surfaces must use a contrast-safe foreground in dark mode without changing the QuantaEdge orange brand.');
+assert(peopleAppearanceCss.includes('[class*="selectedTag"]') &&
+  peopleAppearanceCss.includes('[class*="previewButton"]') &&
+  peopleAppearanceCss.includes('[class*="brandTemplateGenerated"]'),
+  'Theme editor and notification studio component actions, selection badges and generated-state panels must remain readable.');
+
+
+/* Contrast-check the actual HRMS light/dark semantic token pairs (WCAG AA: 4.5:1). */
+function themeBlock(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  const end = source.indexOf(endMarker, start + startMarker.length);
+  return start >= 0 && end > start ? source.slice(start, end) : '';
+}
+function themeHex(block, token) {
+  const match = block.match(new RegExp('(?:^|\\n)\\s*--' + token + ':\\s*(#[0-9a-fA-F]{6})\\s*;'));
+  return match ? match[1] : null;
+}
+function relativeLuminance(hex) {
+  if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) return null;
+  const channels = [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16) / 255)
+    .map(value => value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4));
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+function contrastRatio(foreground, background) {
+  const fg = relativeLuminance(foreground);
+  const bg = relativeLuminance(background);
+  if (fg === null || bg === null) return null;
+  return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+}
+function assertThemeContrast(block, mode, foregroundToken, backgroundToken) {
+  const foreground = themeHex(block, foregroundToken);
+  const background = themeHex(block, backgroundToken);
+  const ratio = contrastRatio(foreground, background);
+  assert(ratio !== null && ratio >= 4.5,
+    'HRMS ' + mode + ' theme fails WCAG AA contrast for --' + foregroundToken +
+    ' on --' + backgroundToken + ' (ratio=' + (ratio === null ? 'unavailable' : ratio.toFixed(2)) + ':1).');
+}
+const peopleLightTokens = themeBlock(peopleAppearanceCss, ':root {', '\n}\n\nhtml[data-qe-people-appearance="dark"]');
+const peopleDarkTokens = themeBlock(peopleAppearanceCss, 'html[data-qe-people-appearance="dark"] {', '\n}\n\n/* Before client preference restoration');
+const contrastPairs = [
+  ['qe-people-ink', 'qe-people-card'],
+  ['qe-people-muted', 'qe-people-card'],
+  ['qe-people-brand-strong', 'qe-people-card'],
+  ['qe-people-on-brand', 'qe-people-brand-strong'],
+  ['qe-people-success', 'qe-people-success-soft'],
+  ['qe-people-warning', 'qe-people-warning-soft'],
+  ['qe-people-danger', 'qe-people-danger-soft'],
+  ['qe-people-info', 'qe-people-info-soft'],
+  ['qe-people-focus', 'qe-people-card']
+];
+for (const [foreground, background] of contrastPairs) {
+  assertThemeContrast(peopleLightTokens, 'light', foreground, background);
+  assertThemeContrast(peopleDarkTokens, 'dark', foreground, background);
+}
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);
