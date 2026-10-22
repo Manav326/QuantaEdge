@@ -50,6 +50,17 @@ const studentEmptyState = read('../app/student/components/StudentEmptyState.tsx'
 const englishUiCatalog = read('../app/i18n/catalogs/english.json');
 const hinglishUiCatalog = read('../app/i18n/catalogs/hinglish.json');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidRouteBody = (name, nextName) => {
+  const start = androidApp.indexOf(`fun ${name}()`);
+  const end = androidApp.indexOf(`fun ${nextName}()`, start + 1);
+  assert.ok(start >= 0 && end > start, `Android route helper ${name} must remain present and bounded by ${nextName}.`);
+  return androidApp.slice(start, end);
+};
+const androidCourseSubjectsRoute = androidRouteBody('renderSubjectLessonsRoute', 'renderLessonRoute');
+const androidLessonRoute = androidRouteBody('renderLessonRoute', 'renderPracticeRoute');
+const androidDiagnosticRoute = androidRouteBody('renderDiagnosticRoute', 'renderAssessmentsRoute');
+const androidAssessmentResultsRoute = androidRouteBody('renderAssessmentResultsRoute', 'renderAssessmentReviewRoute');
+const androidLeaderboardRoute = androidRouteBody('renderLeaderboardRoute', 'renderTutorRoute');
 const androidRouteCompatibilityTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
 const androidLessonContentBlock = read('../../android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt');
 const androidStructuredRenderer = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt');
@@ -456,10 +467,11 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('var structuredLessonMode by rememberSaveable { mutableStateOf(false) }') &&
   androidApp.includes('AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons(structuredSubjectFilter) else openSubject(currentSubject, currentCourseId)') &&
   androidApp.includes('val path = "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode)') &&
-  androidApp.includes('AppRoute.SUBJECT_LESSONS -> StudentCourseLearningScreen(') &&
-  androidApp.includes('if (noEnrolledCourses)') &&
-  androidApp.includes('onRefreshLegacy = { openSubject(currentSubject, currentCourseId) }') &&
-  androidApp.includes('onOpenLegacyLesson = ::openLesson'),
+  androidApp.includes('AppRoute.SUBJECT_LESSONS -> renderSubjectLessonsRoute()') &&
+  androidCourseSubjectsRoute.includes('StudentCourseLearningScreen(') &&
+  androidCourseSubjectsRoute.includes('if (noEnrolledCourses)') &&
+  androidCourseSubjectsRoute.includes('onRefreshLegacy = { openSubject(currentSubject, currentCourseId) }') &&
+  androidCourseSubjectsRoute.includes('onOpenLegacyLesson = ::openLesson'),
   'Android course subjects must open the original course-scoped lesson list and lesson screen by default.');
 
 assert.ok(
@@ -774,10 +786,10 @@ assert.ok(certificatesPage.includes("title={translateUi(locale, 'legacy.web.no.c
 assert.ok(androidEnrollmentEmptyState.includes('CardDefaults.cardElevation') &&
   androidEnrollmentEmptyState.includes('primaryLabel') && androidEnrollmentEmptyState.includes('onPrimary'),
   'Android must provide the same reusable, themed student empty-state card and actionable controls.');
-assert.ok(androidApp.includes('AppRoute.LESSON -> if (studentHasNoCourses())') &&
-  androidApp.includes('AppRoute.DIAGNOSTIC -> if (studentHasNoCourses())') &&
-  androidApp.includes('AppRoute.ASSESSMENT_RESULTS -> if (studentHasNoCourses())') &&
-  androidApp.includes('AppRoute.LEADERBOARD -> if (studentHasNoCourses())') &&
+assert.ok(androidLessonRoute.includes('if (studentHasNoCourses())') &&
+  androidDiagnosticRoute.includes('if (studentHasNoCourses())') &&
+  androidAssessmentResultsRoute.includes('if (studentHasNoCourses())') &&
+  androidLeaderboardRoute.includes('if (studentHasNoCourses())') &&
   androidApp.includes('noEnrolledCourses = studentHasNoCourses()') &&
   androidApp.includes('onMarketplace = ::openMarketplace'),
   'Android nested lesson, diagnostic, test results, leaderboard and course-dependent screens must route confirmed no-enrolment states to Marketplace.');
