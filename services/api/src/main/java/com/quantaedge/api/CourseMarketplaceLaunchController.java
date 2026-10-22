@@ -148,7 +148,8 @@ public class CourseMarketplaceLaunchController {
     List<Map<String,Object>> checks=(List<Map<String,Object>>)base.get("checks");
     List<String> contentBlockers=new ArrayList<>();
     List<String> courseReadinessCodes=List.of(
-        "INSTITUTION_ACTIVE","COURSE_ACTIVE","ASSIGNMENT_AND_RELEASE",
+        "INSTITUTION_ACTIVE","COURSE_ACTIVE","CONTENT_QUALITY_REVIEW",
+        "ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
         "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT");
     for(Map<String,Object> check:checks) {
       if(courseReadinessCodes.contains(text(check.get("code")))
