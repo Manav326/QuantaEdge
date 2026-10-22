@@ -1047,6 +1047,14 @@ assert.ok(
   'Selected institution/course/subject controls and keyboard-focused rich-notification editor blocks must use tenant contrast and focus tokens.'
 );
 
+
+assert.ok(
+  css.includes('html[data-qe-appearance] .tutor-modes button[aria-pressed="true"]:hover') &&
+  css.includes('background: var(--qe-color-primary);') &&
+  css.includes('color: var(--qe-color-on-primary);'),
+  'A selected tutor mode must retain its solid-primary background and on-primary foreground during hover.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 

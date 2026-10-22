@@ -2194,3 +2194,14 @@ html[data-qe-appearance] .institution-portal [class*="audienceBox"] select:focus
   outline: 2px solid color-mix(in srgb, var(--qe-color-focus) 45%, transparent);
   outline-offset: 1px;
 }
+
+
+/* Selected tutor mode remains a solid primary action, including hover/focus. */
+html[data-qe-appearance] .tutor-modes button.selected,
+html[data-qe-appearance] .tutor-modes button[aria-pressed="true"],
+html[data-qe-appearance] .tutor-modes button.selected:hover,
+html[data-qe-appearance] .tutor-modes button[aria-pressed="true"]:hover {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
