@@ -248,7 +248,7 @@ export default function StudentMarketplacePage() {
       return;
     }
     if (billingAddresses.length === 0) {
-      setStatus(tx('Save your billing address above before starting checkout.', 'Checkout शुरू करने से पहले ऊपर billing address save करें।'));
+      setStatus(tx('Add a complete billing address in My Profile before checkout.', 'Checkout से पहले My Profile में पूरा billing address जोड़ें।'));
       return;
     }
     if (billingAddresses.length === 1) {
@@ -402,7 +402,9 @@ export default function StudentMarketplacePage() {
         </div>
         <p>{tx('Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.', 'Offer code केवल उसी course और institution पर लागू होगा जिसे HRMS ने मंज़ूरी दी है। भुगतान और tax की गणना server पर होती है।')}</p>
       </section>
-      <BillingProfileEditor workspace="STUDENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />
+      {offers.some(offer => Number(offer.price_paise) > 0 && offer.currency === 'INR' &&
+        !offer.parent_managed && !offer.has_access && !offer.purchased) &&
+        <BillingProfileEditor workspace="STUDENT" placement="marketplace" onAddressesChange={syncBillingAddresses} />}
       <InvoiceDownloads workspace="STUDENT" english={english} />
       {checkoutCourseId !== null && (
         <BillingAddressSelection
