@@ -154,7 +154,7 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
     '--purple-dark': palette.accentText,
     '--purple-soft': palette.primaryContainer,
     '--qe-brand-orange': palette.primary,
-    '--qe-brand-orange-deep': palette.primaryText,
+    '--qe-brand-orange-deep': palette.accent,
     '--green': palette.success,
     '--qe-answer-correct-text': palette.success,
     '--qe-answer-correct-bg': palette.successContainer,
@@ -167,6 +167,30 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
     '--qe-answer-neutral-border': palette.borderSubtle,
   };
   for (const [name, value] of Object.entries(aliases)) root.style.setProperty(name, value);
+
+  // Older institution records only carry a few theme colours instead of light/dark palettes.
+  // Preserve that compatibility exactly as the learner web does while new saves use full roles.
+  if (!supplied && rawTokens) {
+    const legacyAliases: Record<string, string> = {
+      primary: '--qe-color-primary',
+      accent: '--qe-color-accent',
+      background: '--qe-color-background',
+      surface: '--qe-color-surface',
+      text: '--qe-color-text',
+    };
+    for (const [key, variable] of Object.entries(legacyAliases)) {
+      const color = safeColor(rawTokens[key] ?? rawTokens[key === 'primary' ? 'brandPrimary' : key === 'accent' ? 'brandAccent' : key]);
+      if (color) root.style.setProperty(variable, color);
+    }
+    const primary = safeColor(rawTokens.primary ?? rawTokens.brandPrimary);
+    const accent = safeColor(rawTokens.accent ?? rawTokens.brandAccent);
+    const background = safeColor(rawTokens.background);
+    const surface = safeColor(rawTokens.surface);
+    if (primary) root.style.setProperty('--qe-brand-orange', primary);
+    if (accent) root.style.setProperty('--qe-brand-orange-deep', accent);
+    if (background) root.style.setProperty('--paper', background);
+    if (surface) root.style.setProperty('--card', surface);
+  }
 }
 
 function approvedAssetUrl(value: unknown, code: string, assetType: 'logo' | 'app-icon'): value is string {
