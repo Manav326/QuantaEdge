@@ -764,14 +764,12 @@ public class CourseMarketplaceController {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         Map<String,Object> racedOrder = racedOrders.getFirst();
-        if (hasLockedFinancialSnapshots(racedOrder)) {
-          return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
+        if (!hasLockedFinancialSnapshots(racedOrder)) {
+          repairLegacyPendingOrderSnapshots(racedOrder,institutionId,
+              ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
+              title,buyerSnapshot,requestedDiscountCode);
         }
-        // Never create a replacement checkout for an order whose original financial facts are missing.
-        // Keep the existing order untouched for an explicit, auditable reconciliation.
-        throw new org.springframework.web.server.ResponseStatusException(
-            org.springframework.http.HttpStatus.CONFLICT,
-            "An existing order has no locked tax/share snapshot. Do not pay again or create another order; the same order requires explicit financial reconciliation.", conflict);
+        return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
