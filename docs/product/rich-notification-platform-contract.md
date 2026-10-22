@@ -30,6 +30,12 @@ Hard rules:
 - Record sender, workspace, institution/course scope, audience filter, resolved recipient count, timestamp and send outcome. Campaign/template mutations are auditable.
 - Support idempotency so request retries do not create duplicate campaigns or recipient deliveries.
 
+## 2B. Receiving inboxes by workspace
+
+The durable recipient row is the inbox source of truth. Student and parent Web inboxes and Android remain on their existing recipient APIs. Institution Admin uses the already authenticated institution-admin inbox API in a separate Inbox tab within the tenant-branded institution portal; Notification Studio remains a separate sender tab.
+
+Education Admin uses a distinct staff inbox route that binds every query and state transition to the authenticated staff account plus the authenticated QuantaEdge institution. It does not display institution-less platform notifications. HRMS uses a separate authenticated staff inbox route that binds to the signed-in staff account and only HRMS-originated campaigns. Read, unread, archive, pagination and unread badge queries are all server-scoped to the same identity and workspace. The header bell is a convenience and is not itself authorization. Staff targeting remains fail-closed until canonical staff-to-institution/course mappings exist; adding inbox screens does not enable broad or inferred staff delivery.
+
 ## 2A. Recipient review and individual exclusions
 
 Before send or schedule, the preview step returns the eligible recipient directory resolved by the server, grouped in the sender UI by institution and recipient role. Each row includes recipient display name, account identity, class where applicable, and institution context. Institution options show status plus active learner, eligible consented guardian, and active institution-admin counts.

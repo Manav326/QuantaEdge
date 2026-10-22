@@ -24,7 +24,16 @@ type NotificationItem = {
   unread?: boolean;
 };
 type InboxResponse = { items?: NotificationItem[]; nextBeforeId?: number | null };
-type Role = 'student' | 'parent';
+type Role = 'student' | 'parent' | 'institution';
+
+function inboxEndpoint(role: Role) {
+  return role === 'institution' ? '/api/v1/institution/notifications' : '/api/v1/notifications';
+}
+function notificationApiFetch(role: Role, input: string, init: RequestInit = {}) {
+  const headers = new Headers(init.headers);
+  if (role === 'institution') headers.set('X-QE-Workspace', 'INSTITUTION');
+  return apiFetch(input, { ...init, headers });
+}
 
 export function NotificationBell({ role }: { role: Role | null }) {
   const { locale } = useLocale();
@@ -34,7 +43,7 @@ export function NotificationBell({ role }: { role: Role | null }) {
   const loadCount = useCallback(async () => {
     if (!role) return;
     try {
-      const response = await apiFetch('/api/v1/notifications?limit=100&unreadOnly=true', { cache: 'no-store' });
+      const response = await notificationApiFetch(role, inboxEndpoint(role) + '?limit=100&unreadOnly=true', { cache: 'no-store' });
       if (!response.ok) { setAvailable(false); return; }
       const data = await response.json() as InboxResponse;
       setCount(Array.isArray(data.items) ? data.items.length : 0);
@@ -52,7 +61,7 @@ export function NotificationBell({ role }: { role: Role | null }) {
   }, [loadCount, role]);
 
   if (!role || !available) return null;
-  return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : '/parent/notifications'}
+  return <Link className={styles.bell} href={role === 'student' ? '/student/notifications' : role === 'parent' ? '/parent/notifications' : '/institution?notifications=inbox'}
     aria-label={english ? `Notifications${count ? `, ${count} unread` : ''}` : `Notifications${count ? `, ${count} unread` : ''}`}>
     <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>
@@ -62,6 +71,7 @@ export function NotificationBell({ role }: { role: Role | null }) {
 }
 
 export default function NotificationInboxClient({ role }: { role: Role }) {
+  const endpoint = inboxEndpoint(role);
   const { locale } = useLocale();
   const english = locale === 'english';
   const [items, setItems] = useState<NotificationItem[]>([]);
@@ -81,7 +91,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
     try {
       const params = new URLSearchParams({ limit: '50', unreadOnly: String(unreadOnly) });
       if (beforeId) params.set('beforeId', String(beforeId));
-      const response = await apiFetch('/api/v1/notifications?' + params.toString(), { cache: 'no-store' });
+      const response = await notificationApiFetch(role, endpoint + '?' + params.toString(), { cache: 'no-store' });
       if (!response.ok) throw new Error(t('Notifications could not be loaded. Retry.', 'Notifications load nahi ho sakin. Dobara try karein.'));
       const data = await response.json() as InboxResponse;
       const next = Array.isArray(data.items) ? data.items : [];
@@ -95,14 +105,14 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [english]);
+  }, [english, role, endpoint]);
 
   useEffect(() => { void load(null, false, false); }, [load]);
 
   async function markRead(item: NotificationItem) {
     if (!item.unread && item.state === 'READ') return;
     try {
-      const response = await apiFetch('/api/v1/notifications/' + item.recipient_id + '/read', {
+      const response = await notificationApiFetch(role, endpoint + '/' + item.recipient_id + '/read', {
         method: 'POST', cache: 'no-store',
       });
       if (!response.ok) throw new Error(t('Read state could not be saved.', 'Read state save nahi ho saka.'));
@@ -115,7 +125,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
 
   async function markUnread(item: NotificationItem) {
     try {
-      const response = await apiFetch('/api/v1/notifications/' + item.recipient_id + '/unread', {
+      const response = await notificationApiFetch(role, endpoint + '/' + item.recipient_id + '/unread', {
         method: 'POST', cache: 'no-store',
       });
       if (!response.ok) throw new Error(t('Notification could not be restored as unread.', 'Notification ko unread nahi kar sake.'));
@@ -129,7 +139,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
 
   async function dismissNotification(item: NotificationItem) {
     try {
-      const response = await apiFetch('/api/v1/notifications/' + item.recipient_id + '/dismiss', {
+      const response = await notificationApiFetch(role, endpoint + '/' + item.recipient_id + '/dismiss', {
         method: 'POST', cache: 'no-store',
       });
       if (!response.ok) throw new Error(t('Notification could not be archived.', 'Notification archive nahi ho saka.'));
@@ -145,7 +155,7 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
   async function markAllRead() {
     setSaving(true); setError('');
     try {
-      const response = await apiFetch('/api/v1/notifications/read-all', { method: 'POST', cache: 'no-store' });
+      const response = await notificationApiFetch(role, endpoint + '/read-all', { method: 'POST', cache: 'no-store' });
       if (!response.ok) throw new Error(t('Notifications could not be marked as read.', 'Notifications read nahi ho sakin.'));
       setItems(current => current.map(item => item.state === 'DISMISSED' ? item : ({ ...item, state: 'READ', read_at: item.read_at || new Date().toISOString(), unread: false })));
     } catch (err) {
@@ -165,14 +175,15 @@ export default function NotificationInboxClient({ role }: { role: Role }) {
   });
   const unreadCount = items.filter(item => (item.unread ?? item.state !== 'READ') && item.state !== 'DISMISSED').length;
 
-  return <main className={styles.page}>
+  return <main className={styles.page + (role === 'institution' ? ' ' + styles.institutionPage : '')}>
     <div className={styles.pageHeader}>
       <div>
-        <p className={styles.eyebrow}>{role === 'parent' ? t('FAMILY & LEARNING', 'FAMILY & LEARNING') : t('YOUR LEARNING', 'YOUR LEARNING')}</p>
+        <p className={styles.eyebrow}>{role === 'parent' ? t('FAMILY & LEARNING', 'FAMILY & LEARNING') : role === 'institution' ? t('INSTITUTION WORKSPACE', 'INSTITUTION WORKSPACE') : t('YOUR LEARNING', 'YOUR LEARNING')}</p>
         <h1>{t('Notifications', 'Notifications')}</h1>
         <p>{t('Important updates from your courses and institution, kept in one place.', 'Aapke course aur institution ke zaroori updates, ek hi jagah.')}</p>
       </div>
       <div className={styles.headerActions}>
+        {role === 'institution' ? <Link className={styles.secondaryButton} href="/institution?notifications=studio">{t('Notification studio', 'Notification studio')}</Link> : null}
         <span className={styles.unreadPill}>{unreadCount} {t('unread', 'unread')}</span>
         <button type="button" className={styles.secondaryButton} onClick={() => void markAllRead()} disabled={saving || unreadCount === 0}>
           {saving ? t('Saving…', 'Save ho raha hai…') : t('Mark all read', 'Sab read karein')}

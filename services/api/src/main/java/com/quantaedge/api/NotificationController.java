@@ -146,6 +146,141 @@ public class NotificationController {
     return Map.of("readAll",true);
   }
 
+  @GetMapping("/admin/notifications/inbox")
+  public Map<String,Object> educationStaffInbox(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @RequestParam(defaultValue="50") int limit,@RequestParam(required=false) Long beforeId,
+      @RequestParam(defaultValue="false") boolean unreadOnly) {
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
+    requireEducationStaffInboxActor(actor);
+    return inboxResponse(notifications.inboxForEducationStaff(
+        actor.staffId(),actor.institutionId(),limit,beforeId,unreadOnly),limit,unreadOnly);
+  }
+
+  @PostMapping("/admin/notifications/inbox/{recipientId}/read")
+  public Map<String,Object> markEducationStaffRead(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
+    requireEducationStaffInboxActor(actor);
+    if(!notifications.markReadForStaff(actor.staffId(),actor.institutionId(),recipientId,false))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("read",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/admin/notifications/inbox/{recipientId}/unread")
+  public Map<String,Object> markEducationStaffUnread(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
+    requireEducationStaffInboxActor(actor);
+    if(!notifications.markUnreadForStaff(actor.staffId(),actor.institutionId(),recipientId))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("unread",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/admin/notifications/inbox/{recipientId}/dismiss")
+  public Map<String,Object> dismissEducationStaffNotification(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
+      @PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
+    requireEducationStaffInboxActor(actor);
+    if(!notifications.dismissForStaff(actor.staffId(),actor.institutionId(),recipientId))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("dismissed",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/admin/notifications/inbox/read-all")
+  public Map<String,Object> markEducationStaffAllRead(HttpServletRequest request,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    RichNotificationService.Actor actor=campaignReaderActor(request,context,institutionCode);
+    requireEducationStaffInboxActor(actor);
+    notifications.markReadForStaff(actor.staffId(),actor.institutionId(),null,true);
+    return Map.of("readAll",true);
+  }
+
+  @GetMapping("/hrms/notifications/inbox")
+  public Map<String,Object> hrmsStaffInbox(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam(defaultValue="50") int limit,@RequestParam(required=false) Long beforeId,
+      @RequestParam(defaultValue="false") boolean unreadOnly) {
+    long staffId=hrmsInboxStaffId(context);
+    return inboxResponse(notifications.inboxForHrmsStaff(staffId,limit,beforeId,unreadOnly),limit,unreadOnly);
+  }
+
+  @PostMapping("/hrms/notifications/inbox/{recipientId}/read")
+  public Map<String,Object> markHrmsStaffRead(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    long staffId=hrmsInboxStaffId(context);
+    if(!notifications.markReadForStaff(staffId,null,recipientId,false))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("read",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/hrms/notifications/inbox/{recipientId}/unread")
+  public Map<String,Object> markHrmsStaffUnread(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    long staffId=hrmsInboxStaffId(context);
+    if(!notifications.markUnreadForStaff(staffId,null,recipientId))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("unread",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/hrms/notifications/inbox/{recipientId}/dismiss")
+  public Map<String,Object> dismissHrmsStaffNotification(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long recipientId) {
+    if(recipientId<1)throw new IllegalArgumentException("Notification identity is invalid.");
+    long staffId=hrmsInboxStaffId(context);
+    if(!notifications.dismissForStaff(staffId,null,recipientId))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Notification was not found for this recipient.");
+    return Map.of("dismissed",true,"recipientId",recipientId);
+  }
+
+  @PostMapping("/hrms/notifications/inbox/read-all")
+  public Map<String,Object> markHrmsStaffAllRead(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long staffId=hrmsInboxStaffId(context);
+    notifications.markReadForStaff(staffId,null,null,true);
+    return Map.of("readAll",true);
+  }
+
+  private void requireEducationStaffInboxActor(RichNotificationService.Actor actor) {
+    if(actor.staffId()==null||!"EDUCATION_ADMIN".equals(actor.workspace())
+        ||actor.institutionId()==null) {
+      throw new SecurityException("An authorized Education Admin staff session is required.");
+    }
+  }
+
+  private long hrmsInboxStaffId(AuthContext supplied) {
+    AuthContext context=authorization.requireAuth(supplied);
+    if(context.staffId()==null||!"HRMS".equals(AuthService.normalizeWorkspace(context.workspace()))) {
+      throw new SecurityException("An authenticated HRMS staff session is required.");
+    }
+    Boolean active=jdbc.queryForObject(
+        "select exists(select 1 from staff_account where id=? and active=true)",Boolean.class,context.staffId());
+    if(!Boolean.TRUE.equals(active))throw new SecurityException("The HRMS staff account is not active.");
+    return context.staffId();
+  }
+
+  private Map<String,Object> inboxResponse(List<Map<String,Object>> rows,int requestedLimit,boolean unreadOnly) {
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("items",rows);
+    response.put("limit",Math.max(1,Math.min(requestedLimit,100)));
+    response.put("nextBeforeId",rows.isEmpty()?null:rows.get(rows.size()-1).get("recipient_id"));
+    response.put("unreadOnly",unreadOnly);
+    return response;
+  }
+
   @GetMapping({
     "/admin/notifications/options",
     "/hrms/notifications/options",

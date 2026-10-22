@@ -87,6 +87,33 @@ for (const app of senderApps) {
     app + ' notification sender is missing grouped recipient-review styles');
 }
 
+const notificationService = read('services/api/src/main/java/com/quantaedge/api/RichNotificationService.java');
+for (const required of [
+  'inboxForEducationStaff(', 'inboxForHrmsStaff(', 'markReadForStaff(',
+  "r.staff_account_id=? and r.institution_id=?", "c.sender_workspace='HRMS'"
+]) {
+  assert.ok(notificationService.includes(required), 'Cross-workspace inbox service is missing ' + required);
+}
+const notificationController = read('services/api/src/main/java/com/quantaedge/api/NotificationController.java');
+for (const required of [
+  '/admin/notifications/inbox', '/hrms/notifications/inbox',
+  'requireEducationStaffInboxActor(', 'hrmsInboxStaffId('
+]) {
+  assert.ok(notificationController.includes(required), 'Cross-workspace inbox authorization is missing ' + required);
+}
+const adminInbox = read('apps/admin/app/components/StaffNotificationInbox.tsx');
+const peopleInbox = read('apps/people/app/components/StaffNotificationInbox.tsx');
+assert.ok(adminInbox.includes('/api/v1/admin/notifications/inbox'), 'Education Admin inbox must use its scoped API.');
+assert.ok(peopleInbox.includes('/api/v1/hrms/notifications/inbox'), 'HRMS inbox must use its scoped API.');
+assert.ok(read('apps/admin/app/components/AdminWorkspaceLayout.tsx').includes('<StaffNotificationBell workspace="admin" />'),
+  'Education Admin header needs a permission-aware notification bell.');
+assert.ok(read('apps/people/app/components/PeopleWorkspaceLayout.tsx').includes('<StaffNotificationBell workspace="hrms" />'),
+  'HRMS header needs a notification bell.');
+assert.ok(read('apps/web/app/components/NotificationInboxClient.tsx').includes("role === 'institution'"),
+  'Institution Admin inbox must reuse the durable inbox client.');
+assert.ok(read('apps/web/app/institution/page.tsx').includes('<NotificationInboxClient role="institution" />'),
+  'Institution Admin portal needs an inbox view separate from the sender studio.');
+
 const webLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 assert.ok(webLayout.includes('<NotificationBell role={role} />'),
   'The learner/parent workspace header must include the persistent notification bell.');

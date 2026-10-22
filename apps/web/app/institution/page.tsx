@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import PasswordField from '../components/PasswordField';
 import NotificationStudio from '../components/NotificationStudio';
+import NotificationInboxClient, { NotificationBell } from '../components/NotificationInboxClient';
 
 type Brand = {
   institutionCode?: string;
@@ -97,13 +98,19 @@ export default function InstitutionPortalPage() {
   const [learners, setLearners] = useState<Learner[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState('');
-  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications'>('overview');
+  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications' | 'notificationInbox'>('overview');
   const [currentPassword, setCurrentPassword] = useState('');
   const [nextPassword, setNextPassword] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginMode, setLoginMode] = useState(true);
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('notifications');
+    if (requested === 'inbox') setActiveView('notificationInbox');
+    if (requested === 'studio') setActiveView('notifications');
+  }, []);
 
   const applyBrand = useCallback((value: Brand | null) => {
     setBrand(value);
@@ -305,6 +312,7 @@ export default function InstitutionPortalPage() {
         {principal ? (
           <div className="institution-account">
             <span>{principal.adminDisplayName || principal.adminUsername}</span>
+            <NotificationBell role="institution" />
             <button type="button" className="institution-quiet-button" onClick={() => void logout()}>Sign out</button>
           </div>
         ) : (
@@ -387,7 +395,7 @@ export default function InstitutionPortalPage() {
             </div>
           </div>
           <nav className="institution-tabs" aria-label="Institution report sections">
-            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notifications','Notifications']] as const).map(([id,label]) =>
+            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notificationInbox','Inbox'],['notifications','Notification studio']] as const).map(([id,label]) =>
               <button type="button" key={id} className={activeView===id?'is-active':''} onClick={()=>setActiveView(id)}>{label}</button>
             )}
             <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
@@ -427,6 +435,8 @@ export default function InstitutionPortalPage() {
               </div>
               <p className="institution-small-note">This profile contains city/state only, not an exact home address. Contact details and any additional sensitive fields are intentionally not exposed in the institution roster.</p>
             </div>
+          ) : activeView === 'notificationInbox' ? (
+            <div className="institution-notifications"><NotificationInboxClient role="institution" /></div>
           ) : activeView === 'notifications' ? (
             <div className="institution-notifications"><NotificationStudio surface="institution" /></div>
           ) : (

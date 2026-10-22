@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
+import { StaffNotificationBell } from './StaffNotificationInbox';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { AdminAppearanceModeButton, AdminThemeProvider } from './AdminThemeProvider';
 import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
@@ -290,6 +291,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             <strong>{t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
+            {session?.permissions?.some(permission => ['NOTIFICATION_CAMPAIGN_VIEW','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND','NOTIFICATION_TEMPLATE_MANAGE'].includes(permission)) ? <StaffNotificationBell workspace="admin" /> : null}
             {canSelectInstitution ? <label className="qe-admin-institution-switcher" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
               <span>Institution</span>
               <select
