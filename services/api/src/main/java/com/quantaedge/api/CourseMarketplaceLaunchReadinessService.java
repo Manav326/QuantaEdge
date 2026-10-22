@@ -44,6 +44,85 @@ public class CourseMarketplaceLaunchReadinessService {
     this.razorpayWebhookSecret = clean(razorpayWebhookSecret);
   }
 
+  public Map<String,Object> inspectAssignment(long assignmentId,long institutionScope) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select a.id as assignment_id,a.institution_id,a.status as assignment_status,
+          r.id as release_id,r.release_state,r.content_fingerprint,
+          t.display_name as institution_name,t.status as institution_status,
+          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,
+          (select count(distinct ps.subject_id)
+             from curriculum_program_subject ps join curriculum_subject s
+               on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+               and (s.program_id=ps.program_id or s.program_id is null)
+            where ps.program_id=p.id) as subject_count,
+          (select count(distinct ch.id)
+             from curriculum_program_subject ps join curriculum_subject s
+               on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+               and (s.program_id=ps.program_id or s.program_id is null)
+             join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+            where ps.program_id=p.id) as published_chapter_count,
+          (select count(distinct l.id)
+             from curriculum_program_subject ps join curriculum_subject s
+               on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+               and (s.program_id=ps.program_id or s.program_id is null)
+             join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+             join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+            where ps.program_id=p.id) as published_lesson_count,
+          o.id as offer_id
+        from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id
+        join curriculum_program p on p.id=r.program_id
+        join institution_tenant t on t.id=a.institution_id
+        left join institution_marketplace_offer o on o.institution_id=a.institution_id
+          and o.assignment_id=a.id
+        where a.id=? and a.institution_id=?
+        """,assignmentId,institutionScope);
+    if(rows.isEmpty()) throw new IllegalArgumentException("The course assignment was not found for this institution.");
+    Map<String,Object> row=rows.getFirst();
+    if(row.get("offer_id") instanceof Number offerId) return inspect(offerId.longValue(),institutionScope);
+
+    List<Map<String,Object>> checks=new ArrayList<>();
+    add(checks,"INSTITUTION_ACTIVE","Institution is active",
+        "ACTIVE".equals(text(row.get("institution_status"))),
+        "Activate or resolve the institution in HRMS before launching its course.");
+    add(checks,"COURSE_ACTIVE","Course is active",
+        "ACTIVE".equals(text(row.get("course_status")))&&!"GENERAL".equalsIgnoreCase(text(row.get("course_code"))),
+        "The course must be an active, independently selectable course product.");
+    add(checks,"ASSIGNMENT_AND_RELEASE","Course release is approved for sharing",
+        "ASSIGNED".equals(text(row.get("assignment_status")))&&"SHAREABLE".equals(text(row.get("release_state"))),
+        "The institution needs an active assignment to a platform-reviewed SHAREABLE course release.");
+    long courseId=number(row.get("course_id"));
+    String savedFingerprint=text(row.get("content_fingerprint"));
+    boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
+    add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
+        "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+    long subjectCount=number(row.get("subject_count"));
+    long chapterCount=number(row.get("published_chapter_count"));
+    long lessonCount=number(row.get("published_lesson_count"));
+    add(checks,"PUBLISHED_LEARNING_CONTENT","Published subjects, chapters and lessons exist",
+        subjectCount>0&&chapterCount>0&&lessonCount>0,
+        "Publish at least one active subject, chapter and lesson before listing the course.");
+    add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
+        "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
+    List<String> blockers=checks.stream().filter(check->!Boolean.TRUE.equals(check.get("passed")))
+        .map(check->text(check.get("label"))+": "+text(check.get("message"))).toList();
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("assignmentId",assignmentId);
+    result.put("offerId",null);
+    result.put("institutionId",institutionScope);
+    result.put("institutionName",text(row.get("institution_name")));
+    result.put("courseId",courseId);
+    result.put("courseName",text(row.get("course_name")));
+    result.put("offerStatus","NOT_CONFIGURED");
+    result.put("pricePaise",null);
+    result.put("currency","INR");
+    result.put("ready",false);
+    result.put("checks",checks);
+    result.put("blockingIssues",blockers);
+    result.put("message","A marketplace draft must be created before the complete launch checklist can be evaluated.");
+    return result;
+  }
+
   public Map<String,Object> inspect(long offerId, Long institutionScope) {
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select o.id as offer_id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,
