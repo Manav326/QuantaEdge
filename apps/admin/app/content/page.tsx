@@ -339,6 +339,7 @@ export default function ContentStudio(){
  const [activeBlock,setActiveBlock]=useState(0),[showPreview,setShowPreview]=useState(true),[previewMode,setPreviewMode]=useState<'desktop'|'phone'>('desktop'),[previewLanguage,setPreviewLanguage]=useState<'hi'|'en'>('hi'),[showAdvancedQuestions,setShowAdvancedQuestions]=useState(false),[questionJson,setQuestionJson]=useState('[]');
  const workspaceRef=useRef<HTMLElement|null>(null);
   const editorReturnFocusRef=useRef<HTMLElement|null>(null);
+ const backToLibraryRef=useRef<(()=>void)|null>(null);
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
  useEffect(()=>{
   let mounted=true;
@@ -495,6 +496,7 @@ export default function ContentStudio(){
   if(createType){setCreateType(null);setSelected(null);setDetail(null);}
   setBaselineSnapshot('');setError('');setNotice('');
  };
+ backToLibraryRef.current=backToLibrary;
  useEffect(()=>{
   if(!editorOpen){editorReturnFocusRef.current?.focus({preventScroll:true});editorReturnFocusRef.current=null;return;}
   const dialog=workspaceRef.current;
@@ -502,7 +504,7 @@ export default function ContentStudio(){
   const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(node=>!node.hasAttribute('hidden')&&node.getAttribute('aria-hidden')!=='true');
   (focusable()[0]||dialog).focus({preventScroll:true});
   const handleKeyDown=(event:KeyboardEvent)=>{
-   if(event.key==='Escape'){event.preventDefault();backToLibrary();return;}
+   if(event.key==='Escape'){event.preventDefault();backToLibraryRef.current?.();return;}
    if(event.key!=='Tab')return;
    const nodes=focusable();
    if(nodes.length===0){event.preventDefault();dialog.focus();return;}
@@ -552,6 +554,7 @@ export default function ContentStudio(){
   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.openContentFailed'))}
  }
  function beginCreate(type:'chapter'|'lesson'){
+  if(!editorOpen&&typeof document!=='undefined')editorReturnFocusRef.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const chapter=rows.find(r=>r.chapter_id!==null&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
   const selectedCourse=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
   const subjectCode=subjectFilter!=='ALL'?subjectFilter:(chapter?.subject_code||selectedCourse?.subjects?.[0]?.subject_code||selectedCourse?.subjects?.[0]?.code||'');
