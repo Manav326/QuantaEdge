@@ -136,6 +136,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [audiencePages, setAudiencePages] = useState<Record<string, number>>({});
   const [recipientReviewQuery, setRecipientReviewQuery] = useState('');
   const [previewed, setPreviewed] = useState(false);
+  const [previewToken, setPreviewToken] = useState('');
   const [scheduledAt, setScheduledAt] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
   const [loading, setLoading] = useState(true);
@@ -144,6 +145,11 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+
+  function invalidatePreview() {
+    setPreviewed(false);
+    setPreviewToken('');
+  }
 
   const activeBlock = document.blocks[selectedBlock] ?? null;
   const selectedTemplateForSave = templateId ? templates.find(item => String(item.id) === templateId) : null;
@@ -196,7 +202,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }, [workspaceTab, loadCampaigns]);
 
   function clearInstitutionSelectionReview() {
-    setPreviewed(false);
+    invalidatePreview();
     setPreviewCount(null);
     setPreviewCounts({});
     setPreviewRecipients([]);
@@ -214,7 +220,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       if (included) next.delete(key); else next.add(key);
       return next;
     });
-    setPreviewed(false);
+    invalidatePreview();
     setPreviewCount(null);
     setPreviewCounts({});
     setNotice('Recipient choices changed. Preview the audience again before sending.');
@@ -226,7 +232,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       if (included) next.delete(institutionId); else next.add(institutionId);
       return next;
     });
-    setPreviewed(false);
+    invalidatePreview();
     setPreviewCount(null);
     setPreviewCounts({});
     setNotice('Institution selection changed. Preview the audience again before sending.');
@@ -252,7 +258,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       setSelectedBlock(blocks.length - 1);
     }
     setWorkspaceTab('studio');
-    setPreviewed(false);
+    invalidatePreview();
     setPreviewCount(null);
     setNotice('Logo asset added to the notification design. Preview and validate again before sending.');
   }
@@ -274,7 +280,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   }
 
   function chooseTemplate(id: string) {
-    setTemplateId(id); setPreviewed(false); setPreviewCount(null); setError(''); setNotice('');
+    setTemplateId(id); invalidatePreview(); setPreviewCount(null); setError(''); setNotice('');
     const row = templates.find(t => String(t.id) === id);
     if (!row) {
       setTemplateVersion(null);
@@ -296,7 +302,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       blocks[selectedBlock] = target;
       return { ...current, blocks };
     });
-    setPreviewed(false); setPreviewCount(null);
+    invalidatePreview(); setPreviewCount(null);
   }
 
   function addBlock(type: string) {
@@ -316,7 +322,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     const blocks = [...document.blocks, base];
     setDocument({ ...document, blocks });
     setSelectedBlock(blocks.length - 1);
-    setPreviewed(false); setPreviewCount(null);
+    invalidatePreview(); setPreviewCount(null);
   }
 
   function moveBlock(delta: number) {
@@ -326,7 +332,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     [blocks[selectedBlock], blocks[next]] = [blocks[next], blocks[selectedBlock]];
     setDocument({ ...document, blocks });
     setSelectedBlock(next);
-    setPreviewed(false); setPreviewCount(null);
+    invalidatePreview(); setPreviewCount(null);
   }
 
   function reorderBlocks(from: number, to: number) {
@@ -336,7 +342,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     blocks.splice(to, 0, moved);
     setDocument({ ...document, blocks });
     setSelectedBlock(to);
-    setPreviewed(false); setPreviewCount(null);
+    invalidatePreview(); setPreviewCount(null);
   }
 
   function removeBlock() {
@@ -344,7 +350,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     const blocks = document.blocks.filter((_, index) => index !== selectedBlock);
     setDocument({ ...document, blocks });
     setSelectedBlock(Math.max(0, selectedBlock - 1));
-    setPreviewed(false); setPreviewCount(null);
+    invalidatePreview(); setPreviewCount(null);
   }
 
   async function uploadMedia(event: ChangeEvent<HTMLInputElement>) {
@@ -450,6 +456,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   async function preview() {
     const issue = validateLocally();
     if (issue) { setError(issue); return; }
+    invalidatePreview();
     setSaving(true); setError(''); setNotice('');
     try {
       const response = await apiFetch(prefix + '/preview', {
@@ -457,9 +464,14 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       });
       const data = await response.json().catch(() => ({})) as {
         valid?: boolean; recipientCount?: number; recipientCounts?: Record<string, number>;
-        recipients?: Recipient[]; message?: string;
+        recipients?: Recipient[]; previewToken?: string; message?: string;
       };
-      if (!response.ok || !data.valid) throw new Error(data.message || 'Preview validation failed.');
+      if (!response.ok || !data.valid || !data.previewToken) {
+        throw new Error(data.message || (response.ok
+          ? 'The server did not issue a review token. Run preview again before sending.'
+          : 'Preview validation failed.'));
+      }
+      setPreviewToken(data.previewToken);
       setPreviewRecipients(Array.isArray(data.recipients) ? data.recipients : []);
       setPreviewCount(Number(data.recipientCount ?? 0));
       setPreviewCounts(data.recipientCounts ?? {});
@@ -505,7 +517,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   async function send() {
     const issue = validateLocally();
     if (issue) { setError(issue); return; }
-    if (!previewed) { setError('Preview and validate the notification before sending.'); return; }
+    if (!previewed || !previewToken) { setError('Preview and validate the notification before sending.'); return; }
     if (!window.confirm(`Send this notification to ${previewCount ?? 'the resolved'} eligible recipients? The recipient audience will be rechecked by the server.`)) return;
     setSending(true); setError(''); setNotice('');
     try {
@@ -518,12 +530,12 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       }
       const response = await apiFetch(prefix + '/send', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...baseBody, idempotencyKey: idempotency.key })
+        body: JSON.stringify({ ...baseBody, idempotencyKey: idempotency.key, previewToken })
       });
       const data = await response.json().catch(() => ({})) as { status?: string; resolved_recipient_count?: number; resolvedRecipientCount?: number; id?: number; message?: string; idempotentReplay?: boolean };
       if (!response.ok) throw new Error(data.message || 'Notification could not be sent.');
       setNotice(`Campaign ${data.id ?? ''} · ${data.status ?? 'QUEUED'} · ${data.resolved_recipient_count ?? data.resolvedRecipientCount ?? previewCount ?? 0} recipients`);
-      setPreviewed(false);
+      invalidatePreview();
       setPreviewCount(null);
       idempotencyRef.current = null;
       if (data.idempotentReplay) setNotice('This send was already accepted. ' + (data.status ?? 'Campaign recorded.') );
@@ -579,7 +591,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             </select></label>
             <label>Preset<select value="" onChange={event => {
               const preset = PRESETS[Number(event.target.value)];
-              if (preset) { setDocument(clone(preset.document)); setTemplateName(preset.name); setSummary(preset.summary); setTemplateId(''); setTemplateVersion(null); setSelectedBlock(0); setPreviewed(false); }
+              if (preset) { setDocument(clone(preset.document)); setTemplateName(preset.name); setSummary(preset.summary); setTemplateId(''); setTemplateVersion(null); setSelectedBlock(0); invalidatePreview(); }
             }}><option value="">Pick a layout…</option>{PRESETS.map((preset,index)=><option value={index} key={preset.name}>{preset.name}</option>)}</select></label>
           </div>
           <div className={styles.formGrid}>
@@ -587,8 +599,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
             <label>Description<input value={templateDescription} maxLength={500} onChange={event=>setTemplateDescription(event.target.value)} placeholder="Internal description"/></label>
           </div>
           <div className={styles.formGrid}>
-            <label>Notification title<input value={title} maxLength={180} onChange={event=>{setTitle(event.target.value);setPreviewed(false);}}/></label>
-            <label>Short summary<input value={summary} maxLength={400} onChange={event=>{setSummary(event.target.value);setPreviewed(false);}}/></label>
+            <label>Notification title<input value={title} maxLength={180} onChange={event=>{setTitle(event.target.value);invalidatePreview();}}/></label>
+            <label>Short summary<input value={summary} maxLength={400} onChange={event=>{setSummary(event.target.value);invalidatePreview();}}/></label>
           </div>
         </div>
 
@@ -825,7 +837,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
                       blocks[selectedBlock]=block;
                       return {...current,blocks};
                     });
-                    setPreviewed(false);setPreviewCount(null);
+                    invalidatePreview();setPreviewCount(null);
                   }}>Reset appearance</button>
                 </div>
                 {['image','video','animation','hero'].includes(activeBlock.type) ? <div className={styles.mediaControl}>
@@ -875,8 +887,8 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         <div className={styles.panel}>
           <div className={styles.sectionHeading}><span>04</span><div><h2>Preview, validate and send</h2><p>Delivery begins only after a successful server-side preview and confirmation.</p></div></div>
           <div className={styles.formGrid}>
-            <label>Schedule send (optional)<input type="datetime-local" value={scheduledAt} onChange={event=>{setScheduledAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
-            <label>Expiry (optional)<input type="datetime-local" value={expiresAt} onChange={event=>{setExpiresAt(event.target.value);setPreviewed(false);setPreviewCount(null);}}/></label>
+            <label>Schedule send (optional)<input type="datetime-local" value={scheduledAt} onChange={event=>setScheduledAt(event.target.value)}/></label>
+            <label>Expiry (optional)<input type="datetime-local" value={expiresAt} onChange={event=>setExpiresAt(event.target.value)}/></label>
           </div>
           {previewCount!==null?<div className={styles.audienceResult}><strong>{previewCount} selected recipients</strong><span>{Object.entries(previewCounts).map(([kind,count])=>recipientKindLabel(kind)+': '+count).join(' · ')}</span></div>:null}
           <div className={styles.sendActions}>
@@ -934,7 +946,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         <div><p className={styles.eyebrow}>REUSABLE DESIGNS</p><h2>Template library</h2><p>Each edit creates a new version. Sent campaigns retain the content they were sent with.</p></div>
         <button type="button" className={styles.sendButton} onClick={()=>{
           setTemplateId('');setTemplateVersion(null);setTemplateName('New notification template');setTemplateDescription('');
-          setDocument(clone(DEFAULT_DOCUMENT));setSelectedBlock(0);setPreviewed(false);setWorkspaceTab('studio');
+          setDocument(clone(DEFAULT_DOCUMENT));setSelectedBlock(0);invalidatePreview();setWorkspaceTab('studio');
         }}>+ Create a template</button>
       </div>
       {templates.length===0 ? <div className={styles.campaignEmpty}><h3>No saved templates yet</h3><p>Create a design in Design Studio and save it as a reusable template.</p></div> :
