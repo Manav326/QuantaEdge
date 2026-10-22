@@ -226,7 +226,6 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
       // Return to the login page even when the logout endpoint is unavailable.
     } finally {
       router.replace('/login');
-      router.refresh();
       setLoggingOut(false);
     }
   }
@@ -338,7 +337,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
         </header>
 
 
-        <div className="qe-people-page-slot" id="main-content" tabIndex={-1}>
+        <div className="qe-people-page-slot" id="main-content" tabIndex={-1} key={pathname}>
           {children}
         </div>
       </div>
