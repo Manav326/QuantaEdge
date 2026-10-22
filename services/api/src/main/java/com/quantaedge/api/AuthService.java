@@ -367,9 +367,12 @@ public class AuthService {
           values (?,?,?,'ADMIN',true) returning id
           """, Long.class, UUID.randomUUID(), normalized, staffName);
         jdbc.update("""
-          insert into staff_permission_grant(staff_id,permission_key)
-          select ?, permission_key from staff_permission_catalog
-          on conflict(staff_id,permission_key) do nothing
+          insert into staff_permission_grant(staff_id,workspace_key,permission_key)
+          select ?, 'EDUCATION_ADMIN', permission_key
+          from staff_permission_catalog
+          where permission_key not like 'HR\\_%' escape '\\'
+            and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
+          on conflict(staff_id,workspace_key,permission_key) do nothing
           """, staffId);
       } else {
         throw new SecurityException("This mobile is not assigned to an active staff account.");
