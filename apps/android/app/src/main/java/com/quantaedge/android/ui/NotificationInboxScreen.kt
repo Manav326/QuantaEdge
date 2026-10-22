@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -172,7 +173,7 @@ private fun NotificationInboxDialog(
             val array = response.optJSONArray("items") ?: JSONArray()
             val next = (0 until array.length()).mapNotNull { index ->
                 val row = array.optJSONObject(index) ?: return@mapNotNull null
-                val content = row.optJSONObject("contentDocument") ?: JSONObject()
+                val content = normalizeNotificationDocument(row.opt("contentDocument"))
                 NotificationRow(
                     id = row.optLong("recipient_id"),
                     title = row.optString("title", text("Notification", "सूचना")),
@@ -201,7 +202,7 @@ private fun NotificationInboxDialog(
         error = ""
         try {
             val row = ApiClient.getObject("/api/v1/notifications/$recipientId")
-            val content = row.optJSONObject("contentDocument") ?: JSONObject()
+            val content = normalizeNotificationDocument(row.opt("contentDocument"))
             items = listOf(NotificationRow(
                 id = row.optLong("recipient_id", recipientId),
                 title = row.optString("title", text("Notification", "सूचना")),
@@ -430,6 +431,44 @@ private fun NotificationInboxDialog(
             }
         }
     }
+}
+
+/**
+ * Match the web renderer's compatibility behavior for old or double-serialized
+ * API payloads. New API responses should be objects; this is for durable older rows.
+ */
+private fun normalizeNotificationDocument(raw: Any?): JSONObject {
+    var value: Any? = raw
+    for (attempt in 0 until 4) {
+        when (value) {
+            is String -> {
+                value = runCatching { JSONTokener(value).nextValue() }.getOrNull() ?: return JSONObject()
+            }
+            is JSONObject -> {
+                val document = value
+                var blocks: Any? = document.opt("blocks")
+                if (blocks is String) {
+                    blocks = runCatching { JSONTokener(blocks).nextValue() }.getOrNull()
+                    if (blocks is JSONArray) document.put("blocks", blocks)
+                }
+                if (document.optJSONArray("blocks") != null) {
+                    val version = document.opt("version")
+                    if (version == null || version == JSONObject.NULL || version.toString() == "1") {
+                        document.put("version", 1)
+                    }
+                    return document
+                }
+                val wrapped = listOf("contentDocument", "content_document", "document")
+                    .asSequence()
+                    .map { document.opt(it) }
+                    .firstOrNull { it != null && it != JSONObject.NULL }
+                if (wrapped == null) return JSONObject()
+                value = wrapped
+            }
+            else -> return JSONObject()
+        }
+    }
+    return JSONObject()
 }
 
 @Composable
