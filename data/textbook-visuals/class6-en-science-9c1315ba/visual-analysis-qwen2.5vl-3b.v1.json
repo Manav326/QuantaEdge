@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1328,
+    "assets_selected": 1329,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1324,
-    "assets_remaining": 754,
-    "assets_completion_percent": 63.7,
+    "assets_analyzed": 1325,
+    "assets_remaining": 753,
+    "assets_completion_percent": 63.8,
     "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 1323,
+    "assets_skipped_from_checkpoint": 1324,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:17:52Z"
+      "checkpointed_at": "2026-10-22T09:23:30Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:18:51Z"
+      "checkpointed_at": "2026-10-22T09:24:28Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:19:52Z"
+      "checkpointed_at": "2026-10-22T09:25:29Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44223,7 +44223,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T09:20:36Z"
+      "checkpointed_at": "2026-10-22T09:26:14Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44388,6 +44388,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T09:22:11Z"
+    },
+    {
+      "asset_id": "0eb79e09a9a6944e48d08514",
+      "asset_sha256": "8acff5bd1ab4252f4cd9228526b4b3748e5b78e42673388d3fb8c69216343d10",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 136,
+      "asset_path": "assets/8acff5bd1ab4252f4cd9228526b4b3748e5b78e42673388d3fb8c69216343d10.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02621ef4e2bce627cb660730ae04f0f02c8f04591ad5d5f6a13169a066d975dc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a sun rising over a body of water, with a blue sky and green land in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "sunrise",
+          "water",
+          "sky",
+          "land",
+          "classification",
+          "properties",
+          "materials",
+          "groups"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the summary, illustrating the concept of classification and properties of materials.",
+        "limitations": [
+          "The image does not provide specific details about the classification or properties of materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T09:27:55Z"
     }
   ]
 }
