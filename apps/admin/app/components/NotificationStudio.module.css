@@ -170,3 +170,6 @@ html[data-qe-appearance="dark"] .page .studioNavItem:hover,html[data-qe-appearan
 @media(max-width:1200px){.page .layout,.page[data-surface="hrms"] .layout{grid-template-columns:minmax(0,1fr)}.page .side,.page[data-surface="hrms"] .side{display:block}.page .sticky,.page[data-surface="hrms"] .sticky{grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));height:auto;max-height:none;overflow:visible}}
 @media(max-width:760px){.page .sticky,.page[data-surface="hrms"] .sticky{grid-template-columns:minmax(0,1fr)}.page .side,.page[data-surface="hrms"] .side{order:-1}}
 @media(prefers-reduced-motion:reduce){.studioNavItem,.studioNavActive{transition:none}}
+
+/* Keep non-studio tabs isolated; the wider editor layout applies only to the Studio tab. */
+.page .layout.workspaceHidden { display: none !important; }
