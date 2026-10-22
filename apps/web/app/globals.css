@@ -2004,6 +2004,13 @@ html[data-qe-appearance] .institution-portal :where(
   color: var(--qe-color-accent-text, var(--qe-color-primary-text)) !important;
 }
 
+
+html[data-qe-appearance] .qe-workspace-content [class*="RichNotificationRenderer_editorBlock"]:focus-visible,
+html[data-qe-appearance] .institution-portal [class*="RichNotificationRenderer_editorBlock"]:focus-visible {
+  outline: 3px solid var(--qe-color-focus);
+  outline-offset: 2px;
+}
+
 /* Notification Studio and Logo Graphics Lab share styles across workspaces;
    tune their institution-portal foregrounds here rather than modifying shared files. */
 html[data-qe-appearance] .institution-portal :where(

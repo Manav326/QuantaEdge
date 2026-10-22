@@ -1038,6 +1038,15 @@ assert.ok(
   'Rich notification CTA and accent labels must use institution contrast tokens in the User Web host while shared renderers remain byte-identical.'
 );
 
+
+const visualAuditScopeSelectedCss = read('../app/student/InstitutionCourseSubjectScope.module.css');
+assert.ok(
+  visualAuditScopeSelectedCss.includes('var(--qe-color-on-primary-container, var(--qe-color-primary-text') &&
+  css.includes('[class*="RichNotificationRenderer_editorBlock"]:focus-visible') &&
+  css.includes('outline: 3px solid var(--qe-color-focus)'),
+  'Selected institution/course/subject controls and keyboard-focused rich-notification editor blocks must use tenant contrast and focus tokens.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
