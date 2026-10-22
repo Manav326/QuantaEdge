@@ -26,7 +26,7 @@ async function contextPage(browser: Browser, storageState: string, url: string) 
   return { context, page };
 }
 
-test('parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
+test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const parentA = await contextPage(browser, join(privateDir(), 'parent-a.json'), WEB + '/parent');
   const parentB = await contextPage(browser, join(privateDir(), 'parent-b.json'), WEB + '/parent');
