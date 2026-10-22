@@ -1411,3 +1411,150 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
   .qe-admin-brand-lockup .qe-brand__logo { max-width: 155px; max-height: 38px; }
   .qe-admin-global-header .qe-brand__logo { max-width: 130px; max-height: 34px; }
 }
+
+
+/*
+ * Legacy Admin route surface inventory
+ * ------------------------------------
+ * These older screens predate semantic tokens and still declare literal white,
+ * blue and pale-gray surfaces. Keep the mapping here rather than changing the
+ * screen layouts or editing each page independently.
+ */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .top-status, .stats article, .admin-panel, .tr.th, .activity > div,
+  .admin-review-summary > div, .admin-sidebar-footer, .admin-refresh,
+  .admin-action-primary, .admin-action-secondary, .parent-secondary-button,
+  .admin-status-button, .parent-admin-children, .admin-mobile-nav a, .parent-notice,
+  .qe-content-shell, .qe-stats-grid article, .qe-library-panel, .qe-secondary-button,
+  .qe-filters, .qe-chapter-group, .qe-chapter-row, .qe-topic-row,
+  .qe-edit-card, .qe-icon-button, .qe-step-strip, .qe-block-list,
+  .qe-block-list-item, .qe-block-type-picker, .qe-rich-toolbar,
+  .qe-rich-toolbar button, .qe-rich-toolbar select, .qe-color-pick,
+  .qe-rich-editable, .qe-rich-helper, .qe-inline-media-preview, .qe-media-placeholder,
+  .qe-media-link, .qe-block-catalog-grid button, .qe-editor-hint,
+  .qe-question-remove, .qe-options-list label, .qe-advanced-toggle,
+  .qe-advanced-question, .qe-readiness-list > div, .qe-preview-column,
+  .qe-preview-mode, .qe-preview-mode button, .qe-device-screen,
+  .qe-student-topbar, .qe-preview-path, .qe-student-card,
+  .qe-student-rich blockquote, .qe-preview-feedback, .qe-student-callout,
+  .qe-preview-practice, .qe-preview-option, .qe-preview-disclaimer,
+  .qe-workspace-fullscreen, .qe-readiness-summary, .qe-edit-state,
+  .qe-review-status, .qe-staff-principles, .qe-staff-tabs button,
+  .qe-staff-directory, .qe-staff-editor, .qe-audit-panel,
+  .qe-staff-row, .qe-staff-row-action, .qe-permission-option,
+  .qe-audit-info, .qe-session-gate section, .qe-admin-secure-indicator,
+  .qe-admin-language-switcher, .qe-admin-mobile-nav, .qe-admin-logout-button,
+  .qe-admin-mobile-menu, .qe-admin-mobile-menu-header, .qe-admin-mobile-menu-footer,
+  .qe-admin-mobile-menu-items > a, .qe-visual-source-note,
+  .qe-visual-candidate-card, .qe-visual-thumb, .qe-visual-provenance,
+  .qe-visual-review-fields select, .qe-visual-kind-pill, .qe-visual-chapter-suggestion
+) {
+  background-color: var(--qe-color-surface) !important;
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+
+/* Topic/chapter selection and active authoring steps use one dark selected state. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .qe-chapter-row.selected, .qe-topic-row.selected, .qe-block-list-item.selected,
+  .qe-step-strip span.current, .qe-preview-mode button.active, .qe-staff-row.selected,
+  .qe-staff-tabs button.active, .qe-permission-option:has(input:checked),
+  .qe-content-main .qe-workflow-state, .qe-content-main .qe-question-workflow-state
+) {
+  background-color: var(--qe-color-primary-container) !important;
+  color: var(--qe-color-on-primary-container) !important;
+  border-color: var(--qe-color-primary) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .qe-chapter-row.selected, .qe-topic-row.selected, .qe-block-list-item.selected,
+  .qe-step-strip span.current, .qe-preview-mode button.active, .qe-staff-row.selected,
+  .qe-staff-tabs button.active, .qe-permission-option:has(input:checked)
+) :is(b, strong, span, small, em, label) {
+  color: inherit !important;
+}
+
+/* Icon tiles should be subdued, with orange reserved for actions and brand accents. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .avatar, .admin-panel-icon, .admin-empty-mark, .admin-loading-mark,
+  .admin-parent-avatar, .qe-stat-icon, .qe-chapter-glyph, .qe-topic-icon,
+  .qe-empty-symbol, .qe-block-count, .qe-question-num, .qe-question-activate,
+  .qe-question-diagnostic, .qe-login-proof-icon, .qe-login-symbol,
+  .qe-login-secure, .qe-login-recipient-icon, .qe-login-dev-code,
+  .qe-admin-brand-mark, .qe-admin-language-switcher, .qe-admin-mobile-menu-icon,
+  .qe-visual-candidate-state, .qe-visual-chapter-suggestion
+) {
+  background-color: var(--qe-color-surface-elevated) !important;
+  color: var(--qe-color-text) !important;
+  border-color: var(--qe-color-border-subtle);
+}
+
+/* Action and feedback colours stay semantic, but their backgrounds are never white. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .qe-primary-button, .qe-primary-button:hover, .qe-admin-logout-button,
+  .qe-question-remove, .qe-question-activate:not(.is-inactive),
+  .qe-add-block, .qe-admin-language-switcher button
+) {
+  background-color: var(--qe-color-primary) !important;
+  color: var(--qe-color-on-primary) !important;
+  border-color: var(--qe-color-primary) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .parent-notice, .qe-audit-status.ready, .qe-question-diagnostic.ready,
+  .qe-question-activate:not(.is-inactive)
+) {
+  background-color: var(--qe-color-success-container) !important;
+  color: var(--qe-color-on-success-container) !important;
+  border-color: var(--qe-color-success) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .admin-status-pill.inactive, .admin-status-button.suspend,
+  .qe-question-diagnostic.inactive, .qe-question-activate.is-inactive,
+  .qe-audit-status.failure, .qe-workspace-fullscreen .qe-fullscreen-message.error,
+  .qe-login-error
+) {
+  background-color: var(--qe-color-error-container) !important;
+  color: var(--qe-color-on-error-container) !important;
+  border-color: var(--qe-color-error) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .qe-review-status, .qe-edit-state.dirty, .qe-workspace-fullscreen .qe-fullscreen-message.notice
+) {
+  background-color: var(--qe-color-warning-container) !important;
+  color: var(--qe-color-on-warning-container) !important;
+  border-color: var(--qe-color-warning) !important;
+}
+
+/* Legacy text cells and navigation retain readable foreground on selected surfaces. */
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .tr, .tr strong, .qe-chapter-row b, .qe-topic-row b,
+  .qe-staff-row strong, .qe-staff-directory strong, .qe-staff-editor strong,
+  .qe-admin-mobile-menu-items > a, .qe-admin-mobile-nav a,
+  .qe-visual-candidate-card strong, .qe-visual-source-note strong
+) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  .tr.th, .top-status, .qe-chapter-row small, .qe-topic-row small,
+  .qe-staff-row small, .qe-visual-provenance, .qe-editor-hint
+) {
+  color: var(--qe-color-text-muted);
+}
+
+/* Keep public authentication and portaled visual lightboxes in the same palette. */
+html[data-qe-appearance="dark"] .qe-admin-public-page :is(
+  .qe-login-shell, .qe-login-card, .qe-login-input-wrap, .qe-login-activation-note,
+  .qe-login-recipient, .qe-login-otp, .qe-login-dev-code
+) {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] body .qe-admin-visual-lightbox {
+  background-color: rgb(8 12 20 / 94%);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] body .qe-admin-visual-lightbox button {
+  background-color: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
