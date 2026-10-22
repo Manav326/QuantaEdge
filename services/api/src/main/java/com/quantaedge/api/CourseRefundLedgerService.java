@@ -96,6 +96,8 @@ public class CourseRefundLedgerService {
         ||number(invoice.get("amount_paid_paise"))!=captured)
       throw new IllegalStateException("The original sale document does not reconcile to the captured amount.");
 
+    assertRefundAllowedForEntitlement(orderId);
+
     Long alreadyReserved=jdbc.queryForObject("""
       select coalesce(sum(requested_amount_paise),0)
       from course_payment_refund
@@ -124,10 +126,37 @@ public class CourseRefundLedgerService {
     return refundById(refundId);
   }
 
+  /** Blocks automated refunds for purchases whose course entitlement was permanently transferred. */
+  void assertRefundAllowedForEntitlement(long orderId) {
+    Integer transferred=jdbc.queryForObject("""
+      select count(*) from course_purchase cp
+      join course_entitlement ce on ce.source_purchase_id=cp.id
+      where cp.order_id=? and ce.transfer_count=1
+      """,Integer.class,orderId);
+    if(transferred!=null&&transferred>0)
+      throw new IllegalStateException("This course entitlement has been permanently transferred. Automatic refund is blocked until HRMS reviews the refund/access policy.");
+  }
+
   @Transactional
   public Map<String,Object> applyProviderResult(
       long refundId,String providerRefundId,String providerPaymentId,long providerAmountPaise,
       String providerCurrency,String providerStatus,Map<String,Object> providerSnapshot,long actorStaffId) {
+    return applyProviderResultInternal(refundId,providerRefundId,providerPaymentId,providerAmountPaise,
+        providerCurrency,providerStatus,providerSnapshot,Long.valueOf(actorStaffId));
+  }
+
+  /** Provider-signed webhook path. A provider event has no HRMS staff actor; ledger events allow null actors. */
+  @Transactional
+  public Map<String,Object> applyProviderResultFromWebhook(
+      long refundId,String providerRefundId,String providerPaymentId,long providerAmountPaise,
+      String providerCurrency,String providerStatus,Map<String,Object> providerSnapshot) {
+    return applyProviderResultInternal(refundId,providerRefundId,providerPaymentId,providerAmountPaise,
+        providerCurrency,providerStatus,providerSnapshot,null);
+  }
+
+  private Map<String,Object> applyProviderResultInternal(
+      long refundId,String providerRefundId,String providerPaymentId,long providerAmountPaise,
+      String providerCurrency,String providerStatus,Map<String,Object> providerSnapshot,Long actorStaffId) {
     Map<String,Object> refund=one("""
       select id,course_payment_order_id,request_idempotency_key,provider_idempotency_key,
         provider_payment_id,provider_refund_id,requested_amount_paise,currency,reason,status,
@@ -267,7 +296,7 @@ public class CourseRefundLedgerService {
       """,orderId);
   }
 
-  private void markReconciliationRequiredInternal(long refundId,long actorStaffId,String reason) {
+  private void markReconciliationRequiredInternal(long refundId,Long actorStaffId,String reason) {
     Map<String,Object> row=one("select status,provider_response_snapshot::text as response_json from course_payment_refund where id=?",refundId);
     if(row.isEmpty()||List.of("PROCESSED","FAILED").contains(string(row.get("status")))) return;
     Map<String,Object> snapshot=parseObject(row.get("response_json"));
@@ -282,7 +311,7 @@ public class CourseRefundLedgerService {
   }
 
   private long issueCreditNote(
-      Map<String,Object> refund,Map<String,Object> order,String providerRefundId,long actorStaffId) {
+      Map<String,Object> refund,Map<String,Object> order,String providerRefundId,Long actorStaffId) {
     long refundId=number(refund.get("id"));
     long orderId=number(refund.get("course_payment_order_id"));
     long amount=number(refund.get("requested_amount_paise"));
@@ -493,7 +522,7 @@ public class CourseRefundLedgerService {
 
   private void reverseInstitutionAllocations(
       Map<String,Object> refund,Map<String,Object> order,String providerRefundId,
-      long creditNoteDocumentId,long actorStaffId) {
+      long creditNoteDocumentId,Long actorStaffId) {
     long refundId=number(refund.get("id"));
     long orderId=number(refund.get("course_payment_order_id"));
     long currentAmount=number(refund.get("requested_amount_paise"));
@@ -585,7 +614,7 @@ public class CourseRefundLedgerService {
         nullableLong(row.get("credit_note_document_id")));
   }
 
-  private void event(long refundId,String type,String idempotencyKey,long actorStaffId,Map<String,Object> details) {
+  private void event(long refundId,String type,String idempotencyKey,Long actorStaffId,Map<String,Object> details) {
     jdbc.update("""
       insert into course_payment_refund_event(refund_id,event_type,idempotency_key,actor_staff_id,details)
       values(?,?,?,?,?::jsonb)

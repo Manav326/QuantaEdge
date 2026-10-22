@@ -25,6 +25,8 @@ app:
     key-id: ${APP_RAZORPAY_KEY_ID:}
     key-secret: ${APP_RAZORPAY_KEY_SECRET:}
     base-url: ${APP_RAZORPAY_BASE_URL:https://api.razorpay.com/v1}
+    webhook-secret: ${APP_RAZORPAY_WEBHOOK_SECRET:}
+    webhook-secret-previous: ${APP_RAZORPAY_WEBHOOK_SECRET_PREVIOUS:}
   media:
     storage-dir: ${APP_MEDIA_STORAGE_DIR:/var/lib/quantaedge/media}
   certificates:

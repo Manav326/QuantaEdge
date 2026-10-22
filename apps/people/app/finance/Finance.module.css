@@ -42,3 +42,20 @@
 .refundForm input:focus{outline:none;border-color:#fb923c;box-shadow:0 0 0 3px #f9731617}
 .refundNote{padding:10px 12px;border:1px solid #dbe7f2;border-radius:10px;background:#f7fbff!important;color:#334155!important}
 @media(max-width:850px){.refundForm{grid-template-columns:1fr}.documentActions{min-width:150px}}
+
+.paymentFilters{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(250px,2fr) auto;gap:10px;align-items:end}
+.paymentFilters label{display:grid;gap:6px;min-width:0;color:#475467;font-size:11px;font-weight:800}
+.paymentFilters input,.paymentFilters select{width:100%;min-width:0;min-height:39px;border:1px solid #d9dfe8;border-radius:10px;padding:8px 10px;background:#fff;color:var(--ink);font-size:12px}
+.paymentResultsMeta,.paymentPagination{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:11px}
+.paymentRowActions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.paymentEventList{display:grid;gap:10px}
+.paymentEventList article{border:1px solid var(--line);border-radius:13px;padding:13px;display:grid;gap:7px;background:#fff}
+.paymentEventList article>div{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.paymentEventList article p{font-size:12px;line-height:1.6;color:#475467;margin:0}
+.paymentEventList article small{font-size:10px;line-height:1.5;color:#7b8495}
+.paymentEventList details{font-size:11px;color:#475467}
+.paymentEventList pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;background:#f8fafc;border-radius:8px;padding:10px;font-size:10px}
+@media(max-width:820px){.paymentFilters{grid-template-columns:1fr}.paymentPagination{flex-wrap:wrap}.paymentResultsMeta{align-items:flex-start;flex-direction:column}}
+
+.providerMessage{font-size:12px;line-height:1.5;color:#475467;margin:0;min-width:210px;max-width:440px}
+.paymentEventList summary{cursor:pointer}

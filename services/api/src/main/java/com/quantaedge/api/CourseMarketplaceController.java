@@ -10,6 +10,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
+import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -358,6 +359,25 @@ public class CourseMarketplaceController {
       throw new SecurityException("The receiving learner is not an active member of this institution.");
     }
 
+    // Use the same lock order as refund preparation: payment order first, entitlement second.
+    // This serializes a permanent transfer against reservation/settlement of a course refund.
+    List<Map<String,Object>> sourceRows=jdbc.queryForList("""
+      select ce.source_purchase_id,cp.order_id
+      from course_entitlement ce
+      left join course_purchase cp on cp.id=ce.source_purchase_id
+      where ce.id=? and ce.institution_id=? and ce.holder_user_id=? and ce.transfer_count=0
+      """,entitlementId,institutionId,parentId);
+    if(sourceRows.isEmpty())
+      throw new IllegalArgumentException("This institution-scoped course is not owned by your account or has already been transferred.");
+    Map<String,Object> source=sourceRows.getFirst();
+    if(source.get("source_purchase_id")==null||source.get("order_id")==null)
+      throw new IllegalStateException("This entitlement has no purchase order link and cannot be transferred safely.");
+    long sourcePurchaseId=((Number)source.get("source_purchase_id")).longValue();
+    long paymentOrderId=((Number)source.get("order_id")).longValue();
+    List<Map<String,Object>> orderLock=jdbc.queryForList(
+        "select id from course_payment_order where id=? for update",paymentOrderId);
+    if(orderLock.isEmpty())throw new IllegalStateException("The source course payment order no longer exists.");
+
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select ce.id,ce.course_id,ce.source_purchase_id,ce.holder_student_id,
         ce.transfer_count,p.display_name as course_name
@@ -379,6 +399,15 @@ public class CourseMarketplaceController {
     }
     long courseId = ((Number) entitlement.get("course_id")).longValue();
     long purchaseId = ((Number) entitlement.get("source_purchase_id")).longValue();
+    if(purchaseId!=sourcePurchaseId)
+      throw new IllegalStateException("The entitlement purchase link changed while transfer was being prepared.");
+    Integer refundCount=jdbc.queryForObject("""
+      select count(*) from course_payment_refund
+      where course_payment_order_id=?
+        and status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED','PROCESSED')
+      """,Integer.class,paymentOrderId);
+    if(refundCount!=null&&refundCount>0)
+      throw new IllegalStateException("This purchase has an active or processed refund. Permanent transfer is blocked to avoid transferring refunded access.");
     Long currentStudentId = entitlement.get("holder_student_id") instanceof Number n ? n.longValue() : null;
     if (currentStudentId != null && currentStudentId == targetStudentId) {
       throw new IllegalArgumentException("This course is already assigned to that learner.");
@@ -1000,6 +1029,93 @@ public class CourseMarketplaceController {
 
   private Map<String, Object> reconcileOrderInternal(
       long localOrderId, Long callerStudentId, Long callerUserId, long institutionId) {
+    return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId, false);
+  }
+
+  /**
+   * Platform-owner entry point used by HRMS Payments & Reconciliation. The purchaser/beneficiary
+   * IDs are loaded from the persisted order, never accepted from the caller.
+   */
+  @Transactional
+  public Map<String, Object> reconcileOrderForHrms(long localOrderId, AuthContext context) {
+    authorization.requirePermission(context, "QE_PLATFORM_OWNER");
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,institution_id,course_id,status
+        from course_payment_order where id=? for update
+        """, localOrderId);
+    if (rows.isEmpty()) throw new IllegalArgumentException("Course payment order not found.");
+    Map<String,Object> order = rows.getFirst();
+    String state = String.valueOf(order.get("status"));
+    long courseId = ((Number) order.get("course_id")).longValue();
+    if ("VERIFIED".equals(state)) {
+      return new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
+    }
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException(
+          "This order is not eligible for provider reconciliation. Review its saved failure code and event history; do not mark it paid manually.");
+    }
+    if (order.get("institution_id") == null) {
+      throw new IllegalStateException(
+          "This legacy order has no institution scope. Do not reconcile or issue documents until finance resolves its ownership.");
+    }
+    Long callerStudentId = order.get("student_id") == null ? null : ((Number) order.get("student_id")).longValue();
+    Long callerUserId = order.get("purchaser_user_id") == null ? null : ((Number) order.get("purchaser_user_id")).longValue();
+    long institutionId = ((Number) order.get("institution_id")).longValue();
+    return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId, true);
+  }
+
+  /**
+   * Signed provider-webhook entry point. Resolve the local order solely from the already-saved
+   * Razorpay order ID; the webhook payload never supplies price, buyer, institution or entitlement.
+   * Existing server-side provider lookups and captured-payment checks remain authoritative.
+   */
+  @Transactional
+  public Map<String,Object> reconcileOrderFromProviderEvent(String providerOrderId) {
+    if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+"))
+      return Map.of("status","UNMATCHED","message","The provider event has no valid saved Razorpay order reference.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,institution_id,course_id,status
+        from course_payment_order where provider_order_id=? for update
+        """,providerOrderId);
+    if(rows.isEmpty())
+      return Map.of("status","UNMATCHED","message","No QuantaEdge course order references this Razorpay order. Finance must investigate.");
+    Map<String,Object> order=rows.getFirst();
+    long localOrderId=((Number)order.get("id")).longValue();
+    long courseId=((Number)order.get("course_id")).longValue();
+    String state=String.valueOf(order.get("status"));
+    if("VERIFIED".equals(state)) {
+      Map<String,Object> existing=new LinkedHashMap<>(verifiedResult(localOrderId,courseId));
+      existing.put("message","This exact provider order is already verified; no duplicate purchase or invoice was created.");
+      return existing;
+    }
+    if(!List.of("PENDING","EXPIRED").contains(state))
+      return Map.of("status","ACTION_BLOCKED","localOrderId",localOrderId,
+          "message","The local order is in "+state+" and cannot be automatically finalized. Keep the event for HRMS review.");
+    if(order.get("institution_id")==null)
+      return Map.of("status","RECONCILIATION_REQUIRED","localOrderId",localOrderId,
+          "message","The saved order lacks institution scope. Do not grant access or collect another payment.");
+
+    long institutionId=((Number)order.get("institution_id")).longValue();
+    Long studentId=order.get("student_id")==null?null:((Number)order.get("student_id")).longValue();
+    Long purchaserUserId=order.get("purchaser_user_id")==null?null:((Number)order.get("purchaser_user_id")).longValue();
+    // Catch here, inside this proxied method, so a provider timeout can be recorded as an
+    // actionable terminal inbox outcome instead of marking the outer webhook transaction rollback-only.
+    try {
+      return reconcileOrderInternal(localOrderId,studentId,purchaserUserId,institutionId,true);
+    } catch(RuntimeException providerOrFinalizationFailure) {
+      Map<String,Object> blocked=new LinkedHashMap<>();
+      blocked.put("status","RECONCILIATION_REQUIRED");
+      blocked.put("orderId",localOrderId);
+      blocked.put("canRetryCheckout",false);
+      blocked.put("message","The signed provider event was received, but authoritative payment verification/finalization did not complete. Reconcile this saved order in HRMS; do not collect another payment.");
+      blocked.put("errorCategory",providerOrFinalizationFailure.getClass().getSimpleName());
+      return blocked;
+    }
+  }
+
+  private Map<String, Object> reconcileOrderInternal(
+      long localOrderId, Long callerStudentId, Long callerUserId, long institutionId,
+      boolean includeProviderDiagnostics) {
     requireConfigured();
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
@@ -1061,15 +1177,28 @@ public class CourseMarketplaceController {
       // The provider API confirms the exact persisted order, amount and currency. Generate
       // the same callback HMAC server-side only after those authenticated provider checks.
       String signature = hmacSha256(providerOrderId + "|" + paymentId, keySecret);
-      return verifyOrderInternal(localOrderId,
+      Map<String,Object> verified = new LinkedHashMap<>(verifyOrderInternal(localOrderId,
           new VerifyCoursePaymentRequest(paymentId, providerOrderId, signature),
-          callerStudentId, callerUserId, institutionId);
+          callerStudentId, callerUserId, institutionId));
+      if (includeProviderDiagnostics) {
+        verified.putAll(providerPaymentDiagnostics(providerOrder, items, providerOrderId, expectedAmount, expectedCurrency));
+      }
+      return verified;
     }
 
     if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
         || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
-      throw new IllegalStateException(
-          "Razorpay says this order is paid, but its exact payment is not available for safe reconciliation. Do not pay again; contact support.");
+      String message="Razorpay reports this order as paid, but the exact matching payment is not available. Do not pay again; finance/engineering must reconcile the provider references.";
+      if (!includeProviderDiagnostics) throw new IllegalStateException(message);
+      Map<String,Object> result=new LinkedHashMap<>();
+      result.put("status","RECONCILIATION_REQUIRED");
+      result.put("entitled",false);
+      result.put("canRetryCheckout",false);
+      result.put("orderId",localOrderId);
+      result.put("courseId",courseId);
+      result.put("message",message);
+      result.putAll(providerPaymentDiagnostics(providerOrder,items,providerOrderId,expectedAmount,expectedCurrency));
+      return result;
     }
 
     Map<String,Object> result = new LinkedHashMap<>();
@@ -1081,7 +1210,52 @@ public class CourseMarketplaceController {
     result.put("message", paymentInProgress
         ? "Razorpay is still processing the payment. Retry verification shortly; do not pay again."
         : "No authorised or captured payment was found for this order. It is safe to retry checkout; a new Razorpay order will be created.");
+    if (includeProviderDiagnostics) {
+      result.putAll(providerPaymentDiagnostics(providerOrder, items, providerOrderId, expectedAmount, expectedCurrency));
+    }
     return result;
+  }
+
+  private Map<String,Object> providerPaymentDiagnostics(
+      JsonNode providerOrder, JsonNode paymentItems, String expectedOrderId,
+      long expectedAmountPaise, String expectedCurrency) {
+    Map<String,Object> diagnostic = new LinkedHashMap<>();
+    diagnostic.put("providerOrderId", expectedOrderId);
+    diagnostic.put("providerOrderStatus", providerOrder.path("status").asText("unknown"));
+    diagnostic.put("providerAmountPaidPaise", providerOrder.path("amount_paid").asLong(0));
+    diagnostic.put("providerAttemptCount", providerOrder.path("attempts").asInt(0));
+    List<Map<String,Object>> attempts = new ArrayList<>();
+    if (paymentItems != null && paymentItems.isArray()) {
+      for (JsonNode payment : paymentItems) {
+        String paymentOrderId = payment.path("order_id").asText("");
+        String paymentId = payment.path("id").asText("");
+        if (!expectedOrderId.equals(paymentOrderId) || !paymentId.matches("pay_[A-Za-z0-9]+")) continue;
+        Map<String,Object> attempt = new LinkedHashMap<>();
+        attempt.put("paymentId", paymentId);
+        attempt.put("status", payment.path("status").asText("unknown"));
+        attempt.put("amountPaise", payment.path("amount").asLong(-1));
+        attempt.put("currency", payment.path("currency").asText(""));
+        attempt.put("matchesExpectedAmountAndCurrency",
+            isPaymentForExactOrder(payment, paymentId, expectedOrderId, expectedAmountPaise, expectedCurrency));
+        String method = safeProviderDiagnosticText(payment.path("method").asText(""), 32);
+        String errorCode = safeProviderDiagnosticText(payment.path("error_code").asText(""), 80);
+        String errorReason = safeProviderDiagnosticText(payment.path("error_reason").asText(""), 120);
+        String errorDescription = safeProviderDiagnosticText(payment.path("error_description").asText(""), 240);
+        if (!method.isBlank()) attempt.put("method", method);
+        if (!errorCode.isBlank()) attempt.put("errorCode", errorCode);
+        if (!errorReason.isBlank()) attempt.put("errorReason", errorReason);
+        if (!errorDescription.isBlank()) attempt.put("errorDescription", errorDescription);
+        attempts.add(attempt);
+      }
+    }
+    diagnostic.put("paymentAttempts", attempts);
+    return diagnostic;
+  }
+
+  private static String safeProviderDiagnosticText(String raw, int maxLength) {
+    if (raw == null || raw.isBlank()) return "";
+    String safe = raw.replaceAll("[\\p{Cntrl}&&[^\\t]]", " ").replaceAll("\\s+", " ").trim();
+    return safe.length() <= maxLength ? safe : safe.substring(0, maxLength);
   }
 
   private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {

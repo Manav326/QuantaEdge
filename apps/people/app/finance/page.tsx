@@ -17,6 +17,34 @@ type PolicyDetail = Policy & { recipients:PolicyRecipient[] };
 type Template = { id:number; scope:string; legal_entity_id?:number|null; internal_name:string; template_version_id?:number|null; version_no?:number|null; version_status?:string; design_definition_json?:string|null; published_at?:string|null };
 type FinancialDocument = { id:number; document_type:string; document_number:string; issued_at:string; currency:string; total_value_paise:number; tax_value_paise:number; source_type:string; source_record_key:string; pdf_available:boolean };
 type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
+
+type CoursePaymentOrder = {
+  local_order_id:number; institution_id:number; institution_name:string; course_id:number; course_title:string;
+  student_id:number; learner_name?:string|null; purchaser_user_id?:number|null; target_student_id?:number|null;
+  recipient_type:string; status:string; failure_code?:string|null; currency:string;
+  listed_price_paise?:number|null; discount_amount_paise?:number|null; discount_reference?:string|null;
+  offer_price_paise:number; captured_amount_paise?:number|null; captured_at?:string|null;
+  provider_order_id?:string|null; provider_payment_id?:string|null; created_at:string; updated_at:string;
+  verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
+  last_operation_event?:string|null; last_resolution_code?:string|null; last_operation_message?:string|null;
+  last_operation_at?:string|null; resolution_code:string; recommended_action:string; resolution_message:string;
+};
+type PaymentOperationEvent = {
+  id:number; event_type:string; resolution_code:string; message:string; provider_order_id?:string|null;
+  provider_status?:string|null; details_json?:string|null; actor_staff_id:number; created_at:string;
+};
+type ProviderEventRecord = {
+  id:number; provider_event_id:string; event_type:string; local_order_id?:number|null; course_payment_refund_id?:number|null;
+  provider_order_id?:string|null; provider_payment_id?:string|null; provider_refund_id?:string|null; payload_sha256:string;
+  processing_status:string; status_message:string; details_json?:string|null; received_at:string; processed_at?:string|null;
+};
+type PaymentReconciliationResult = {
+  status:string; message?:string; resolutionCode?:string; resolutionMessage?:string; canRetryCheckout?:boolean;
+  entitled?:boolean; invoiceNumber?:string; providerOrderId?:string; providerOrderStatus?:string;
+  providerAmountPaidPaise?:number; providerAttemptCount?:number;
+  paymentAttempts?:Array<{paymentId:string;status:string;amountPaise:number;currency:string;matchesExpectedAmountAndCurrency:boolean;
+    method?:string;errorCode?:string;errorReason?:string;errorDescription?:string}>;
+};
 type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
@@ -48,7 +76,7 @@ function parseDesign(value?:string|null):Design{
 }
 
 export default function FinancePage(){
-  const [tab,setTab]=useState<'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'>('overview');
+  const [tab,setTab]=useState<'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments'>('overview');
   const [catalog,setCatalog]=useState<Catalog|null>(null);
   const [overview,setOverview]=useState<Overview|null>(null);
   const [policies,setPolicies]=useState<Policy[]>([]);
@@ -66,6 +94,25 @@ export default function FinancePage(){
   const [refundResult,setRefundResult]=useState<RefundRecord|null>(null);
   const [refundBusy,setRefundBusy]=useState(false);
   const [refundHistoryLoading,setRefundHistoryLoading]=useState(false);
+  const [paymentOrders,setPaymentOrders]=useState<CoursePaymentOrder[]>([]);
+  const [paymentTotal,setPaymentTotal]=useState(0);
+  const [paymentSearch,setPaymentSearch]=useState('');
+  const [paymentStatusFilter,setPaymentStatusFilter]=useState('');
+  const [paymentOffset,setPaymentOffset]=useState(0);
+  const [paymentLoading,setPaymentLoading]=useState(false);
+  const [selectedPaymentOrderId,setSelectedPaymentOrderId]=useState<number|null>(null);
+  const [paymentEvents,setPaymentEvents]=useState<PaymentOperationEvent[]>([]);
+  const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
+  const [paymentActionLoadingId,setPaymentActionLoadingId]=useState<number|null>(null);
+  const [paymentActionResult,setPaymentActionResult]=useState<PaymentReconciliationResult|null>(null);
+  const [providerEvents,setProviderEvents]=useState<ProviderEventRecord[]>([]);
+  const [providerEventTotal,setProviderEventTotal]=useState(0);
+  const [providerEventSearch,setProviderEventSearch]=useState('');
+  const [providerEventStatusFilter,setProviderEventStatusFilter]=useState('');
+  const [providerEventOffset,setProviderEventOffset]=useState(0);
+  const [providerEventLoading,setProviderEventLoading]=useState(false);
+  const [selectedProviderEvents,setSelectedProviderEvents]=useState<ProviderEventRecord[]>([]);
+  const [selectedProviderEventsLoading,setSelectedProviderEventsLoading]=useState(false);
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -275,6 +322,73 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Refund retry could not be confirmed.');}
     finally{setRefundBusy(false);}
   };
+  const loadPaymentOrders=async(offsetOverride?:number)=>{
+    const offset=offsetOverride??paymentOffset;
+    setPaymentLoading(true);setError('');
+    try{
+      const query=new URLSearchParams({limit:'50',offset:String(offset)});
+      if(paymentStatusFilter)query.set('status',paymentStatusFilter);
+      if(paymentSearch.trim())query.set('search',paymentSearch.trim());
+      const response=await api<{items:CoursePaymentOrder[];total:number;limit:number;offset:number}>('/api/v1/hrms/platform/finance/course-orders?'+query.toString());
+      setPaymentOrders(Array.isArray(response.items)?response.items:[]);
+      setPaymentTotal(Number(response.total||0));
+      setPaymentOffset(Number(response.offset||0));
+    }catch(e){setError(e instanceof Error?e.message:'Course payment orders could not be loaded.');}
+    finally{setPaymentLoading(false);}
+  };
+  const loadPaymentEvents=async(orderId:number)=>{
+    setPaymentEventsLoading(true);
+    try{
+      const response=await api<PaymentOperationEvent[]>('/api/v1/hrms/platform/finance/course-orders/'+orderId+'/events');
+      setPaymentEvents(Array.isArray(response)?response:[]);
+    }catch(e){setError(e instanceof Error?e.message:'Payment operation history could not be loaded.');}
+    finally{setPaymentEventsLoading(false);}
+  };
+  const loadProviderEvents=async(offsetOverride?:number)=>{
+    const offset=offsetOverride??providerEventOffset;
+    setProviderEventLoading(true);
+    try{
+      const query=new URLSearchParams({limit:'50',offset:String(offset)});
+      if(providerEventStatusFilter)query.set('status',providerEventStatusFilter);
+      if(providerEventSearch.trim())query.set('search',providerEventSearch.trim());
+      const response=await api<{items:ProviderEventRecord[];total:number;limit:number;offset:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      setProviderEvents(Array.isArray(response.items)?response.items:[]);
+      setProviderEventTotal(Number(response.total||0));
+      setProviderEventOffset(Number(response.offset||0));
+    }catch(e){setError(e instanceof Error?e.message:'Razorpay provider event inbox could not be loaded.');}
+    finally{setProviderEventLoading(false);}
+  };
+  const loadSelectedProviderEvents=async(orderId:number)=>{
+    setSelectedProviderEventsLoading(true);
+    try{
+      const query=new URLSearchParams({orderId:String(orderId),limit:'100',offset:'0'});
+      const response=await api<{items:ProviderEventRecord[];total:number}>('/api/v1/hrms/platform/finance/course-orders/provider-events?'+query.toString());
+      setSelectedProviderEvents(Array.isArray(response.items)?response.items:[]);
+    }catch(e){setError(e instanceof Error?e.message:'Provider events for this order could not be loaded.');}
+    finally{setSelectedProviderEventsLoading(false);}
+  };
+  const inspectPaymentOrderId=(orderId:number)=>{
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);
+    void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
+  };
+  const selectPaymentOrder=(order:CoursePaymentOrder)=>{
+    setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);
+    void Promise.all([loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id)]);
+  };
+  const reconcilePaymentOrder=async(order:CoursePaymentOrder)=>{
+    if(!['PENDING','EXPIRED','VERIFIED'].includes(String(order.status).toUpperCase()))return;
+    setPaymentActionLoadingId(order.local_order_id);setError('');setNotice('');setPaymentActionResult(null);
+    setSelectedPaymentOrderId(order.local_order_id);
+    try{
+      const result=await api<PaymentReconciliationResult>('/api/v1/hrms/platform/finance/course-orders/'+order.local_order_id+'/reconcile',{method:'POST'});
+      setPaymentActionResult(result);
+      setNotice(result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.');
+      await Promise.all([loadPaymentOrders(),loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id),loadProviderEvents()]);
+    }catch(e){
+      setError(e instanceof Error?e.message:'Payment reconciliation could not be completed. Do not ask the learner to pay again until provider status is checked.');
+      await loadPaymentEvents(order.local_order_id);
+    }finally{setPaymentActionLoadingId(null);}
+  };
   const createRegistration=async(event:FormEvent)=>{
     event.preventDefault();
     if(!gstEntityId){setError('Choose the legal entity that owns this GST registration.');return;}
@@ -471,7 +585,8 @@ export default function FinancePage(){
   const activeDraft=selectedTemplate?.version_status==='DRAFT' || !selectedTemplate;
   const tabs:[typeof tab,string,string][]=[
     ['overview','Overview','▦'],['entities','Legal entities & GST','⌂'],['tax','Tax profiles','%'],
-    ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],['documents','Issued documents','▣']
+    ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],
+    ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
   ];
   return <main className={styles.page}>
     <header className={styles.header}>
@@ -482,7 +597,8 @@ export default function FinancePage(){
     {error&&<div className={styles.alertError} role="alert">{error}</div>}
     {notice&&<div className={styles.alertSuccess} role="status">{notice}</div>}
     <nav className={styles.tabs} aria-label="Finance workspace">
-      {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab} onClick={()=>setTab(key)}><span>{icon}</span>{label}</button>)}
+      {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}
+        onClick={()=>{setTab(key);if(key==='payments')void Promise.all([loadPaymentOrders(),loadProviderEvents()]);}}><span>{icon}</span>{label}</button>)}
     </nav>
     {loading&&!catalog?<section className={styles.panel}>Loading financial configuration…</section>:!catalog?<section className={styles.panel}>The Finance workspace is unavailable. Confirm HRMS owner access and check the API response.</section>:<>
       {tab==='overview'&&<section className={styles.stack}>
@@ -674,6 +790,123 @@ export default function FinancePage(){
           {refundResult&&<p className={styles.refundNote} role="status">Latest result: <b>{refundResult.status}</b>{refundResult.provider_status?' · Provider: '+refundResult.provider_status:''}{refundResult.credit_note_number?' · Credit note '+refundResult.credit_note_number:''}{refundResult.message?' · '+refundResult.message:''}</p>}
           <div className={styles.panelHead}><div><h3>Refund history</h3><p>Amounts in this list remain reserved until processed or conclusively failed.</p></div><button type="button" className={styles.secondarySmall} onClick={()=>void loadRefundHistory(Number(selectedRefundDocument.source_record_key))} disabled={refundHistoryLoading||refundBusy}>{refundHistoryLoading?'Refreshing…':'Refresh history'}</button></div>
           {refundHistory.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Requested</th><th>Amount</th><th>Status</th><th>Credit note</th><th>Recovery</th></tr></thead><tbody>{refundHistory.map(refund=><tr key={refund.id}><td>{new Date(refund.requested_at).toLocaleString('en-IN')}<small>{refund.reason}</small></td><td>{rupees(refund.requested_amount_paise,refund.currency)}</td><td><b>{refund.status}</b><small>{refund.provider_status||'Provider state not yet confirmed'}</small></td><td>{refund.credit_note_number||'Not issued'}</td><td><div className={styles.documentActions}>{['PROCESSING','PENDING','RECONCILIATION_REQUIRED'].includes(String(refund.status).toUpperCase())&&<><button type="button" className={styles.secondarySmall} onClick={()=>void refreshRefund(refund)} disabled={refundBusy}>Refresh status</button><button type="button" className={styles.secondarySmall} onClick={()=>void retryRefund(refund)} disabled={refundBusy}>Retry safely</button></>}</div></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No refund requests for this order yet.</p>}
+        </section>}
+      </section>}
+      {tab==='payments'&&<section className={styles.stack}>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Course payments & reconciliation</h2>
+            <p>Inspect saved course orders, provider references, discounts, invoices and the immutable HRMS recovery history.</p></div>
+            <button type="button" className={styles.secondary} onClick={()=>void loadPaymentOrders()} disabled={paymentLoading}>↻ Refresh</button></div>
+          <p className={styles.note}>Never manually mark an order as paid. Reconciliation checks the saved Razorpay order and only completes a captured, matching payment. If status is uncertain, do not ask the learner to pay again.</p>
+          <div className={styles.paymentFilters}>
+            <label>Order status<select value={paymentStatusFilter} onChange={e=>{setPaymentStatusFilter(e.target.value);setPaymentOffset(0);}}>
+              <option value="">All statuses</option><option value="CREATING">Creating</option><option value="PENDING">Pending</option>
+              <option value="VERIFIED">Verified</option><option value="FAILED">Failed</option><option value="EXPIRED">Expired</option></select></label>
+            <label>Search orders<input value={paymentSearch} onChange={e=>setPaymentSearch(e.target.value)} maxLength={120}
+              placeholder="Order ID, school, course, learner, Razorpay ID or failure code"/></label>
+            <button type="button" className={styles.secondary} onClick={()=>{setPaymentOffset(0);void loadPaymentOrders(0);}} disabled={paymentLoading}>Search</button>
+          </div>
+          <div className={styles.paymentResultsMeta}>
+            <span>{paymentTotal.toLocaleString('en-IN')} matching orders</span>
+            <span>Showing {paymentOrders.length?paymentOffset+1:0}–{paymentOffset+paymentOrders.length}</span>
+          </div>
+          {paymentLoading?<p className={styles.empty}>Loading course payment orders…</p>
+          :paymentOrders.length?<div className={styles.policyTableWrap}><table className={styles.table}>
+            <thead><tr><th>Order / course</th><th>Institution / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Resolution</th></tr></thead>
+            <tbody>{paymentOrders.map(order=>{
+              const status=String(order.status||'').toUpperCase();
+              const canReconcile=['PENDING','EXPIRED'].includes(status);
+              return <tr key={order.local_order_id}>
+                <td><b>QE-ORDER-{order.local_order_id}</b><small>{order.course_title||('Course #'+order.course_id)}</small><small>{order.provider_order_id||'No Razorpay order reference'}</small></td>
+                <td><b>{order.institution_name}</b><small>{order.learner_name||('Learner #'+order.student_id)} · {order.recipient_type||'STUDENT'}</small><small>{order.purchaser_user_id?'Purchaser #'+order.purchaser_user_id:'Student purchase'}</small></td>
+                <td><span className={styles.status}>{status}</span><small>{order.failure_code||'No saved failure code'}</small><small>{order.provider_payment_id||'No payment ID recorded'}</small></td>
+                <td><b>{rupees(order.offer_price_paise,order.currency)}</b><small>Discount: {rupees(order.discount_amount_paise||0,order.currency)} {order.discount_reference||''}</small><small>Captured: {order.captured_amount_paise==null?'Not recorded':rupees(order.captured_amount_paise,order.currency)}</small></td>
+                <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
+                <td><div className={styles.paymentRowActions}>
+                  <button type="button" className={styles.secondarySmall} onClick={()=>selectPaymentOrder(order)}>Inspect</button>
+                  {canReconcile&&<button type="button" className={styles.primarySmall} disabled={paymentActionLoadingId!==null}
+                    onClick={()=>void reconcilePaymentOrder(order)}>{paymentActionLoadingId===order.local_order_id?'Checking…':'Check & reconcile'}</button>}
+                  {!canReconcile&&<small>{order.recommended_action}</small>}
+                </div><small>{order.last_resolution_code||order.resolution_code}</small><small>{order.last_operation_message||order.resolution_message}</small></td>
+              </tr>;
+            })}</tbody>
+          </table></div>:<div className={styles.emptyLarge}><span>↻</span><b>No course payment orders found</b><p>Adjust the filter or search. This workspace only shows recorded marketplace orders; it does not create charges.</p></div>}
+          <div className={styles.paymentPagination}>
+            <button type="button" className={styles.secondarySmall} disabled={paymentLoading||paymentOffset===0}
+              onClick={()=>void loadPaymentOrders(Math.max(0,paymentOffset-50))}>Previous</button>
+            <span>Page {Math.floor(paymentOffset/50)+1} · {Math.max(1,Math.ceil(paymentTotal/50))}</span>
+            <button type="button" className={styles.secondarySmall} disabled={paymentLoading||paymentOffset+paymentOrders.length>=paymentTotal||paymentOrders.length===0}
+              onClick={()=>void loadPaymentOrders(paymentOffset+50)}>Next</button>
+          </div>
+        </section>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Razorpay provider-event inbox</h2>
+            <p>Signature-verified webhook events are deduplicated by provider event ID. Unmatched or unresolved events need explicit finance investigation.</p></div>
+            <button type="button" className={styles.secondary} onClick={()=>void loadProviderEvents()} disabled={providerEventLoading}>↻ Refresh inbox</button></div>
+          <div className={styles.paymentFilters}>
+            <label>Event outcome<select value={providerEventStatusFilter} onChange={e=>{setProviderEventStatusFilter(e.target.value);setProviderEventOffset(0);}}>
+              <option value="">All outcomes</option><option value="RECONCILIATION_REQUIRED">Reconciliation required</option>
+              <option value="UNMATCHED">Unmatched</option><option value="IGNORED">Ignored / informational</option>
+              <option value="PROCESSED">Processed</option><option value="PROCESSING">Processing</option></select></label>
+            <label>Search provider events<input value={providerEventSearch} onChange={e=>{setProviderEventSearch(e.target.value);}}
+              maxLength={160} placeholder="Event ID, Razorpay order/payment/refund ID or message"/></label>
+            <button type="button" className={styles.secondary} onClick={()=>{setProviderEventOffset(0);void loadProviderEvents(0);}} disabled={providerEventLoading}>Search</button>
+          </div>
+          <div className={styles.paymentResultsMeta}><span>{providerEventTotal.toLocaleString('en-IN')} matching provider events</span>
+            <span>Showing {providerEvents.length?providerEventOffset+1:0}–{providerEventOffset+providerEvents.length}</span></div>
+          {providerEventLoading?<p className={styles.empty}>Loading signed provider events…</p>
+          :providerEvents.length?<div className={styles.policyTableWrap}><table className={styles.table}>
+            <thead><tr><th>Event / received</th><th>Outcome</th><th>Provider references</th><th>Resolution</th><th>Action</th></tr></thead>
+            <tbody>{providerEvents.map(event=><tr key={event.id}>
+              <td><b>{event.event_type}</b><small>{event.provider_event_id}</small><small>{new Date(event.received_at).toLocaleString('en-IN')}</small></td>
+              <td><span className={styles.status}>{event.processing_status}</span><small>{event.processed_at?'Processed '+new Date(event.processed_at).toLocaleTimeString('en-IN'):'Still processing'}</small></td>
+              <td><small>Order: {event.provider_order_id||'—'}</small><small>Payment: {event.provider_payment_id||'—'}</small><small>Refund: {event.provider_refund_id||'—'}</small><small>Payload SHA-256: {event.payload_sha256?.slice(0,12)||'—'}…</small></td>
+              <td><p className={styles.providerMessage}>{event.status_message}</p>{event.details_json&&event.details_json!=='{}'&&<details><summary>Safe event details</summary><pre>{event.details_json}</pre></details>}</td>
+              <td>{event.local_order_id?<button type="button" className={styles.secondarySmall} onClick={()=>inspectPaymentOrderId(Number(event.local_order_id))}>Inspect order #{event.local_order_id}</button>:<small>Unmatched: investigate provider reference</small>}</td>
+            </tr>)}</tbody></table></div>
+          :<div className={styles.emptyLarge}><span>↻</span><b>No provider events found</b><p>Configure the Razorpay webhook URL and signing secret to receive events. Events are not generated from browser callbacks.</p></div>}
+          <div className={styles.paymentPagination}>
+            <button type="button" className={styles.secondarySmall} disabled={providerEventLoading||providerEventOffset===0}
+              onClick={()=>void loadProviderEvents(Math.max(0,providerEventOffset-50))}>Previous</button>
+            <span>Page {Math.floor(providerEventOffset/50)+1} · {Math.max(1,Math.ceil(providerEventTotal/50))}</span>
+            <button type="button" className={styles.secondarySmall} disabled={providerEventLoading||providerEventOffset+providerEvents.length>=providerEventTotal||providerEvents.length===0}
+              onClick={()=>void loadProviderEvents(providerEventOffset+50)}>Next</button>
+          </div>
+        </section>
+        {selectedPaymentOrderId!==null&&<section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Order #{selectedPaymentOrderId} · resolution history</h2>
+            <p>Provider checks and staff actions are recorded as immutable events.</p></div>
+            <button type="button" className={styles.secondarySmall} onClick={()=>void Promise.all([loadPaymentEvents(selectedPaymentOrderId),loadSelectedProviderEvents(selectedPaymentOrderId)])} disabled={paymentEventsLoading||selectedProviderEventsLoading}>Refresh history</button></div>
+          {paymentActionResult&&<div className={paymentActionResult.status==='VERIFIED'?styles.alertSuccess:styles.note} role="status">
+            <b>{paymentActionResult.resolutionCode||paymentActionResult.status}</b>
+            <p>{paymentActionResult.resolutionMessage||paymentActionResult.message||'No provider message was returned.'}</p>
+            {paymentActionResult.invoiceNumber&&<p>Invoice: {paymentActionResult.invoiceNumber}</p>}
+            {paymentActionResult.providerOrderStatus&&<p>Razorpay: {paymentActionResult.providerOrderStatus} · attempts: {paymentActionResult.providerAttemptCount??'—'} · amount paid: {paymentActionResult.providerAmountPaidPaise==null?'—':rupees(paymentActionResult.providerAmountPaidPaise,'INR')}</p>}
+            {paymentActionResult.paymentAttempts&&paymentActionResult.paymentAttempts.length>0&&<div className={styles.policyTableWrap}><table className={styles.table}>
+              <thead><tr><th>Provider payment</th><th>Status</th><th>Amount</th><th>Failure details</th></tr></thead>
+              <tbody>{paymentActionResult.paymentAttempts.map((attempt,i)=><tr key={attempt.paymentId+'-'+i}>
+                <td><b>{attempt.paymentId}</b><small>{attempt.method||'Method not reported'}</small></td>
+                <td><span className={styles.status}>{attempt.status}</span><small>{attempt.matchesExpectedAmountAndCurrency?'Order / amount match':'Amount or currency mismatch'}</small></td>
+                <td>{rupees(attempt.amountPaise,attempt.currency||'INR')}</td>
+                <td><b>{attempt.errorCode||attempt.errorReason||'No provider failure code'}</b><small>{attempt.errorDescription||'No provider error description was returned.'}</small></td>
+              </tr>)}</tbody>
+            </table></div>}
+            {paymentActionResult.canRetryCheckout===true&&<p>Safe next step: learner may return to the marketplace and restart checkout. HRMS did not create a second payment.</p>}
+          </div>}
+          <div className={styles.panelHead}><div><h3>Provider webhook events for this order</h3><p>Raw payloads are never retained; the inbox stores signed-event references, hashes and safe diagnostic fields.</p></div>
+            <button type="button" className={styles.secondarySmall} onClick={()=>void loadSelectedProviderEvents(selectedPaymentOrderId)} disabled={selectedProviderEventsLoading}>Refresh provider events</button></div>
+          {selectedProviderEventsLoading?<p className={styles.empty}>Loading provider webhook events…</p>
+          :selectedProviderEvents.length?<div className={styles.paymentEventList}>{selectedProviderEvents.map(event=><article key={event.id}>
+            <div><b>{event.event_type}</b><span className={styles.status}>{event.processing_status}</span></div>
+            <p>{event.status_message}</p><small>{event.provider_event_id} · {new Date(event.received_at).toLocaleString('en-IN')}{event.processed_at?' · processed '+new Date(event.processed_at).toLocaleString('en-IN'):''}</small>
+            {event.details_json&&event.details_json!=='{}'&&<details><summary>Safe event details</summary><pre>{event.details_json}</pre></details>}
+          </article>)}</div>:<p className={styles.empty}>No Razorpay webhooks are recorded for this order. Use Check & reconcile when payment status is uncertain.</p>}
+          {paymentEventsLoading?<p className={styles.empty}>Loading payment operation history…</p>
+          :paymentEvents.length?<div className={styles.paymentEventList}>{paymentEvents.map(event=><article key={event.id}>
+            <div><b>{event.event_type.replaceAll('_',' ')}</b><span className={styles.status}>{event.resolution_code}</span></div>
+            <p>{event.message}</p><small>{new Date(event.created_at).toLocaleString('en-IN')} · HRMS staff #{event.actor_staff_id}{event.provider_order_id?' · '+event.provider_order_id:''}{event.provider_status?' · Provider '+event.provider_status:''}</small>
+            {event.details_json&&event.details_json!=='{}'&&<details><summary>Technical diagnostic details</summary><pre>{event.details_json}</pre></details>}
+          </article>)}</div>:<p className={styles.empty}>No HRMS reconciliation actions have been recorded for this order yet. Select Check & reconcile only for an eligible order.</p>}
         </section>}
       </section>}
     </>}
