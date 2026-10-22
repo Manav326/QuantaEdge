@@ -48,7 +48,7 @@ assert.ok(payroll.includes("!payDraft.providerReference.trim()"),
   'A payroll payment must require its provider reference.');
 
 const assignments = people('assignments/page.tsx');
-assert.ok(assignments.includes('savedWeeklyLimit') && assignments.includes('weeklyLimit===savedWeeklyLimit'),
+assert.ok(assignments.includes('savedWeeklyLimit') && assignments.includes('Number(weeklyLimit)===Number(savedWeeklyLimit)'),
   'Unchanged workload-policy values must not be resubmitted.');
 assert.ok(assignments.includes("setDraft({employeeId:'',subjectId:'',academicPeriodId:'',effectiveStart:'',effectiveEnd:'',replacesAssignmentId:'',assignmentNote:'',reason:''})"),
   'Successful assignment submission and edit cancellation must clear every draft field.');
