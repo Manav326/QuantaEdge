@@ -235,6 +235,7 @@ assert(adminThemeProvider.includes('themeTokens') && adminThemeProvider.includes
 assert(adminThemeProvider.includes('/api/v1/institution/public/branding/') && adminThemeProvider.includes("approvedAssetUrl(body.logoUrl, code, 'logo')") && adminThemeProvider.includes("approvedAssetUrl(body.appIconUrl, code, 'app-icon')"), 'Tenant brand URLs in Admin must be validated and bound to the active institution code.');
 assert(adminBrandComponent.includes('brand?.logoUrl') && adminBrandComponent.includes('brand?.appIconUrl') && adminBrandComponent.includes('institutionCode'), 'Tenant Admin headers and sidebar must use the active institution full logo and square app icon, not a fixed platform logo.');
 assert(adminThemeStyles.includes('html[data-qe-appearance="dark"]') && adminThemeStyles.includes('.qe-admin-workspace-page-slot') && adminThemeStyles.includes('button[class*="primaryButton"]') && adminThemeStyles.includes(':focus-visible'), 'Shared Admin theme styles must cover dark surfaces, route content, tenant primary actions and visible keyboard focus.');
+assert(adminThemeProvider.includes("'--qe-panel': palette.surface") && adminThemeStyles.includes('.qe-admin-marketplace-route') && adminThemeStyles.includes('[class*="previewBar"]') && adminThemeStyles.includes('[class*="rowSelected"]'), 'Admin must theme the legacy source-ingestion alias, Marketplace hero exception, and bespoke preview/translation surfaces.');
 
 function findAdminPageFiles(directory) {
   const absoluteDirectory = join(root, directory);
