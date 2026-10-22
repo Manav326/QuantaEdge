@@ -516,6 +516,8 @@ jobs:
       QE_E2E_COVERAGE_REPORT: /tmp/quantaedge-ui-e2e-coverage/coverage.json
       QE_E2E_PRODUCTION_GATE: "true"
       QE_E2E_EXTERNAL_PROVIDER_MODE: "fake"
+      QE_E2E_OTP_MOCK_URL: http://127.0.0.1:8090
+      QE_E2E_OTP_MOCK_TOKEN: qe-e2e-mock-only-token
     steps:
       - name: Checkout exact tested source
         uses: actions/checkout@v4
