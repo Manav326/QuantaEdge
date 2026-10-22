@@ -1,8 +1,10 @@
 package com.quantaedge.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -27,6 +29,13 @@ class CoursePaymentWebhookControllerTest {
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,"not-a-signature","configured-secret"));
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,"a".repeat(64),""));
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,sign(body,"configured-secret"),""));
+  }
+
+  @Test
+  void webhookBodyReaderStopsAtTheLimitPlusOneByte() throws Exception {
+    byte[] oversized=new byte[1_048_576+100];
+    byte[] bounded=CoursePaymentWebhookController.readBoundedBody(new ByteArrayInputStream(oversized));
+    assertEquals(1_048_577,bounded.length);
   }
 
   private static String sign(byte[] body,String secret) throws Exception {

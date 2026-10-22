@@ -3,6 +3,9 @@ package com.quantaedge.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,10 +67,15 @@ public class CoursePaymentWebhookController {
   public ResponseEntity<Map<String,Object>> receiveCoursePaymentEvent(
       @RequestHeader(value="X-Razorpay-Signature",required=false) String signature,
       @RequestHeader(value="X-Razorpay-Event-Id",required=false) String eventId,
-      @RequestBody byte[] rawBody) {
+      HttpServletRequest request) throws IOException {
     if(webhookSecret.isBlank()) return response(HttpStatus.SERVICE_UNAVAILABLE,"WEBHOOK_NOT_CONFIGURED",
         "Razorpay webhook signing secret is not configured on the server.");
-    if(rawBody==null||rawBody.length==0) return response(HttpStatus.BAD_REQUEST,"EMPTY_BODY","Webhook body is empty.");
+    // Reject declared oversized bodies before reading and cap streamed/chunked bodies too.
+    // @RequestBody byte[] would buffer an untrusted request in full before the size check.
+    if(request.getContentLengthLong()>MAX_BODY_BYTES)
+      return response(HttpStatus.PAYLOAD_TOO_LARGE,"BODY_TOO_LARGE","Webhook body exceeds the allowed size.");
+    byte[] rawBody=readBoundedBody(request.getInputStream());
+    if(rawBody.length==0) return response(HttpStatus.BAD_REQUEST,"EMPTY_BODY","Webhook body is empty.");
     if(rawBody.length>MAX_BODY_BYTES) return response(HttpStatus.PAYLOAD_TOO_LARGE,"BODY_TOO_LARGE","Webhook body exceeds the allowed size.");
     String normalizedEventId=eventId==null?"":eventId.trim();
     if(!EVENT_ID.matcher(normalizedEventId).matches())
@@ -276,6 +283,10 @@ public class CoursePaymentWebhookController {
     } catch(Exception cryptoFailure) {
       throw new IllegalStateException("Webhook signature verification is unavailable.",cryptoFailure);
     }
+  }
+
+  static byte[] readBoundedBody(InputStream input) throws IOException {
+    return input.readNBytes(MAX_BODY_BYTES+1);
   }
 
   static boolean verifySignatureForTest(byte[] body,String signature,String secret) {
