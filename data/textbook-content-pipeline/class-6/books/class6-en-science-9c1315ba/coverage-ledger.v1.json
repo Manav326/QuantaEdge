@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1351,
-    "successful_visual_analyses": 1324,
-    "missing_visual_analyses": 727,
+    "raw_analysis_result_rows": 1352,
+    "successful_visual_analyses": 1325,
+    "missing_visual_analyses": 726,
     "failed_visual_analyses": 27,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 754,
+    "unresolved_count": 753,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50731,9 +50731,9 @@
           "classification of non-living world",
           "invention of plastic"
         ],
-        "context_relation": "educational",
+        "context_relation": "explaining the classification of materials and their properties",
         "limitations": [
-          "The text is in English and does not include images or diagrams."
+          "the text does not provide specific examples or explanations for the classification of materials"
         ]
       },
       "chapter_id": null,
@@ -50780,9 +50780,19 @@
       "asset_path": "assets/6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A square of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a page with a torn edge.",
+        "limitations": [
+          "The visible text is not readable.",
+          "The image does not contain any equations or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1324,
+    "assets_selected": 1325,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1320,
-    "assets_remaining": 758,
-    "assets_completion_percent": 63.5,
+    "assets_analyzed": 1321,
+    "assets_remaining": 757,
+    "assets_completion_percent": 63.6,
     "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 1319,
+    "assets_skipped_from_checkpoint": 1320,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23586,7 +23586,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:43:20Z"
+      "checkpointed_at": "2026-10-22T08:52:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37486,7 +37486,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:44:20Z"
+      "checkpointed_at": "2026-10-22T08:53:59Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -43562,7 +43562,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:45:22Z"
+      "checkpointed_at": "2026-10-22T08:55:07Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44214,16 +44214,16 @@
           "classification of non-living world",
           "invention of plastic"
         ],
-        "context_relation": "educational",
+        "context_relation": "explaining the classification of materials and their properties",
         "limitations": [
-          "The text is in English and does not include images or diagrams."
+          "the text does not provide specific examples or explanations for the classification of materials"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
-      "checkpointed_at": "2026-10-22T08:49:47Z"
+      "checkpointed_at": "2026-10-22T08:55:55Z"
     },
     {
       "asset_id": "fd51915e0c0e231b2f1aaabf",
@@ -44254,6 +44254,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T08:51:32Z"
+    },
+    {
+      "asset_id": "0b54216110787eb29dec41e5",
+      "asset_sha256": "6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 135,
+      "asset_path": "assets/6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3dfd1e5f581ede50f2e624b99ea2b0af0f95df9b9fe7be3058c718a853f9c164",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A square of yellow paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a page with a torn edge.",
+        "limitations": [
+          "The visible text is not readable.",
+          "The image does not contain any equations or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39726988483",
+      "checkpointed_at": "2026-10-22T08:57:34Z"
     }
   ]
 }
