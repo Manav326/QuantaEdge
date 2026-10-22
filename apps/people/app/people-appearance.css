@@ -16,6 +16,7 @@
   --qe-people-table-line: #edf0f5;
   --qe-people-brand: #f97316;
   --qe-people-brand-strong: #c2410c;
+  --qe-people-brand-hover: #c2410c;
   --qe-people-brand-soft: #fff0e5;
   --qe-people-focus: #c2410c;
   --qe-people-sidebar: #ffffff;
@@ -65,6 +66,7 @@ html[data-qe-people-appearance="dark"] {
   --qe-people-table-head: #1d2a3d;
   --qe-people-table-line: #2c3a4e;
   --qe-people-brand-strong: #fdba74;
+  --qe-people-brand-hover: #ea580c;
   --qe-people-brand-soft: #3a281c;
   --qe-people-focus: #fb923c;
   --qe-people-sidebar: #111a2b;
@@ -101,6 +103,7 @@ html[data-qe-people-appearance="dark"] {
     --qe-people-table-head: #1d2a3d;
     --qe-people-table-line: #2c3a4e;
     --qe-people-brand-strong: #fdba74;
+    --qe-people-brand-hover: #ea580c;
     --qe-people-brand-soft: #3a281c;
     --qe-people-focus: #fb923c;
     --qe-people-sidebar: #111a2b;
@@ -880,7 +883,7 @@ html[data-qe-people-appearance="dark"] .login-story {
 
 [class*="Finance_page__"] .primary:hover,
 [class*="Institutions_page__"] .primary:hover {
-  background: var(--qe-people-brand-strong);
+  background: var(--qe-people-brand-hover);
 }
 
 .qe-people-auth-language .qe-people-appearance-toggle {
