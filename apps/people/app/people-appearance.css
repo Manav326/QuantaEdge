@@ -1380,30 +1380,6 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
   color: #182337 !important;
 }
 
-/* Don't apply global surface styles to brand/logo/theme swatches or real document paper. */
-html[data-qe-people-appearance] .qe-people-page-slot :is(
-  [class*="themePreviewLight"], [class*="themePreviewDark"],
-  [class*="themePreviewCard"], [class*="themePreviewStates"],
-  [class*="brandTemplatePreviewCard"], [class*="paper"], [class*="logoCanvas"],
-  [class*="themePreviewPrimary"], [class*="themePreviewSelected"]
-) {
-  color: revert;
-}
-html[data-qe-people-appearance] .qe-people-page-slot :is(
-  [class*="themePreviewLight"], [class*="themePreviewDark"],
-  [class*="themePreviewCard"], [class*="brandTemplatePreviewCard"]
-) {
-  background-color: revert;
-  border-color: revert;
-}
-
-/* Smooth focus/selection should not create a stacking context that traps modals. */
-html[data-qe-people-appearance] .qe-people-page-slot :is(
-  [class*="modal"], [class*="Modal"], [class*="dialog"], [class*="Dialog"],
-  [class*="overlay"], [class*="Overlay"], [role="dialog"], [role="alertdialog"]
-) {
-  color: var(--qe-people-ink);
-}
 @media (prefers-reduced-motion: reduce) {
   html[data-qe-people-appearance] .qe-people-page-slot,
   html[data-qe-people-appearance] .qe-people-page-slot * {
@@ -1412,3 +1388,81 @@ html[data-qe-people-appearance] .qe-people-page-slot :is(
     animation-duration: .01ms !important;
   }
 }
+
+
+/* Semantic feedback states remain tinted, never washed out by neutral surface rules. */
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="alertError"], [class*="AlertError"], [class="error"], [class*="cropError"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 28%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="alertError"], [class*="AlertError"], [class="error"], [class*="cropError"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+  border-color: color-mix(in srgb, var(--qe-people-danger) 40%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class="notice"], [class*="success"]:not(button)
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 28%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="alertSuccess"], [class*="AlertSuccess"], [class="notice"], [class*="success"]:not(button)
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+  border-color: color-mix(in srgb, var(--qe-people-success) 40%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="light"] .qe-people-page-slot :is(
+  [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
+  [class="note"], [class*="refundNote"], [class*="einvoiceHelp"]
+) {
+  background-color: #fff8ec;
+  color: #784b16;
+  border-color: #f1dfc0;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="guardNote"], [class*="GuardNote"], [class*="disclaimer"], [class*="Disclaimer"],
+  [class="note"], [class*="refundNote"], [class*="einvoiceHelp"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="status"].active, [class*="status"].suspended, [class*="Status"].active, [class*="Status"].suspended
+) { border-color: var(--qe-people-line); }
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="status"].active, [class*="Status"].active, [class*="status"][class*="active"], [class*="Status"][class*="active"]
+) {
+  background-color: var(--qe-people-success-soft) !important;
+  color: var(--qe-people-success) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(
+  [class*="status"].suspended, [class*="Status"].suspended, [class*="status"][class*="suspended"], [class*="Status"][class*="suspended"]
+) {
+  background-color: var(--qe-people-danger-soft) !important;
+  color: var(--qe-people-danger) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="dangerButton"], [class*="DangerButton"], [class*="danger"].primary
+) {
+  background-color: #b42318 !important;
+  border-color: #b42318 !important;
+  color: #fff !important;
+}
+
+/* Document paper and brand assets are previews, not app chrome: keep their true colours. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="paper"], [class*="logoCanvas"], [class*="readOnlyLogo"],
+  [class*="readOnlyIcon"], [class*="brandAssetPreview"] img,
+  [class*="themePreview"], [class*="brandTemplatePreview"],
+  [class*="brandTemplateLogoStage"], [class*="brandTemplateCompactStage"],
+  [class*="brandTemplateIconPlaceholder"]
+) { forced-color-adjust: auto; }
