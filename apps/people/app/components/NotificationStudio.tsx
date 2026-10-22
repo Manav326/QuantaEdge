@@ -129,6 +129,11 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
     templateDescription !== String(selectedTemplateForSave.description ?? '') ||
     !savedTemplateDocument || JSON.stringify(document) !== JSON.stringify(savedTemplateDocument);
   const isPlatform = surface === 'hrms';
+  const audienceConfigured = scope === 'HRMS_PLATFORM'
+    ? allInstitutions || selectedInstitutionIds.length > 0
+    : scope === 'COURSE' ? Boolean(courseId)
+    : scope === 'USER' ? directRecipients.length > 0
+    : recipientTypes.length > 0;
 
   const loadBase = useCallback(async () => {
     setLoading(true); setError('');
@@ -654,11 +659,35 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         </div>
       </section>
 
-      <aside className={styles.side}>
+      <aside className={styles.side} aria-label="Notification workspace summary">
         <div className={styles.sticky}>
-          <div className={styles.sideCard}><h3>Rich content blocks</h3><p>Combine hero layouts, formatted copy, image/video/animation assets, course and event cards, highlights and action buttons.</p><ul><li>Reorder blocks</li><li>Preview the actual renderer</li><li>Save immutable versions</li><li>Safe links and accessible media</li></ul></div>
-          <div className={styles.sideCard}><h3>Delivery behavior</h3><p>The persistent inbox is the source of truth. Push is a compact heads-up where configured; opening it reveals the complete content.</p><p className={styles.muted}>No send occurs until audience validation and confirmation succeed.</p></div>
-          <div className={styles.sideCard}><h3>Template library</h3>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{t.content_version ?? t.contentVersion ?? 1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</div>
+          <section className={styles.sideCard}>
+            <div className={styles.sideCardHeading}><h3>Current draft</h3><span className={templateId?'sideStatusSaved':'sideStatusDraft'}>{templateId?('Version '+(templateVersion??1)):'Not saved'}</span></div>
+            <strong className={styles.sideDraftName}>{templateName.trim()||'Untitled notification'}</strong>
+            <p>{templateId?'Changes create an immutable version; sent campaigns keep their original content.':'Save this design as a reusable template when it is ready.'}</p>
+            <div className={styles.sideMetrics}>
+              <div><span>Content blocks</span><b>{document.blocks.length} / 40</b></div>
+              <div><span>Selected element</span><b>{activeBlock?(BLOCK_OPTIONS.find(option=>option[0]===activeBlock.type)?.[1]??activeBlock.type):'None'}</b></div>
+            </div>
+            <div className={styles.sideStatusLine}><span className={validateContent()?'sideStatusWarning':'sideStatusReady'}>{validateContent()?'Needs attention':'Content checks passed'}</span><span className={templateDirty?'sideStatusWarning':'sideStatusReady'}>{templateDirty?'Unsaved changes':'Up to date'}</span></div>
+          </section>
+          <section className={styles.sideCard}>
+            <h3>Audience & preview</h3>
+            <p className={styles.sideDraftName}>{scope==='HRMS_PLATFORM'?'HRMS platform':scope==='COURSE'?'Course audience':scope==='USER'?'Selected people':'Institution audience'}</p>
+            <p>{scope==='HRMS_PLATFORM'?(allInstitutions?'All active institutions':selectedInstitutionIds.length+' institution(s) selected'):scope==='COURSE'?(courses.find(course=>String(course.course_id)===courseId)?.course_name??'Choose a course'):scope==='USER'?(directRecipients.length+' recipient(s) selected'):(recipientTypes.length+' recipient type(s) selected')}</p>
+            <div className={styles.sideStatusLine}><span className={audienceConfigured?'sideStatusReady':'sideStatusWarning'}>{audienceConfigured?'Audience selected':'Audience needs selection'}</span><span className={previewed?'sideStatusReady':'sideStatusWarning'}>{previewed?'Preview validated':'Preview required'}</span></div>
+            {previewed?<div className={styles.audienceResult}><strong>{(previewCount??0).toLocaleString('en-IN')} eligible recipients</strong><span>Server-resolved preview. The audience will be checked again at send time.</span></div>:<p className={styles.muted}>Preview and validate the audience before sending or scheduling.</p>}
+          </section>
+          <section className={styles.sideCard}>
+            <h3>Safe delivery checklist</h3>
+            <div className={styles.sideChecklist}>
+              <div><span className={styles.sideChecklistMark}>{validateContent()?'✓':'1'}</span><span><strong>Content</strong><small>{validateContent()?'Required content is present.':validateContent()}</small></span></div>
+              <div><span className={styles.sideChecklistMark}>{audienceConfigured?'✓':'2'}</span><span><strong>Audience</strong><small>{audienceConfigured?'A target audience is selected.':'Select an eligible target audience.'}</small></span></div>
+              <div><span className={styles.sideChecklistMark}>{previewed?'✓':'3'}</span><span><strong>Preview</strong><small>{previewed?'Server-side validation succeeded.':'Run Preview & validate audience.'}</small></span></div>
+            </div>
+            <p className={styles.muted}>Sending requires successful validation and confirmation. The server checks the audience again before delivery.</p>
+          </section>
+          <section className={styles.sideCard}><div className={styles.sideCardHeading}><h3>Saved templates</h3><span className={styles.sideCount}>{templates.length}</span></div>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{t.content_version ?? t.contentVersion ?? 1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</section>
         </div>
       </aside>
     </div>
