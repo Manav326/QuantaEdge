@@ -1365,9 +1365,11 @@ public class CourseMarketplaceController {
     if(rawAmount instanceof Number n&&n.longValue()!=0L) return false;
     String snapshot=order.get("discount_snapshot_json")==null?"":String.valueOf(order.get("discount_snapshot_json")).trim();
     if(snapshot.isBlank()||"{}".equals(snapshot)) return true;
-    return snapshot.contains("\"discountType\":\"NONE\"")
-        && !snapshot.contains("\"discountOfferId\"")
-        && !snapshot.contains("\"code\"");
+    // PostgreSQL jsonb::text may include whitespace around separators.
+    String compactSnapshot=snapshot.replaceAll("\\s+", "");
+    return compactSnapshot.contains("\"discountType\":\"NONE\"")
+        && !compactSnapshot.contains("\"discountOfferId\"")
+        && !compactSnapshot.contains("\"code\"");
   }
 
   static boolean providerConfirmsRetryIsSafe(String providerState) {
