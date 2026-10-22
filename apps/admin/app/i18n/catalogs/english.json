@@ -451,6 +451,7 @@
   "admin.contentStudio.connectingCurriculum": "Connecting to your curriculum",
   "admin.contentStudio.contentLibraryLoadFailed": "Could not load the content library or question counts. Sign in as an administrator and retry.",
   "admin.contentStudio.course": "Course",
+  "admin.contentStudio.courseSubjects": "Subjects with content",
   "admin.contentStudio.createChapterTitle": "Create a chapter",
   "admin.contentStudio.createDraft": "Create draft {kind}",
   "admin.contentStudio.createFailed": "Could not create content.",
