@@ -122,17 +122,6 @@ fun BillingAddressBook(
         formOpen = true
     }
 
-    LaunchedEffect(addresses, compactOnly, loading) {
-        if (compactOnly && !loading) {
-            val preferred = addresses.firstOrNull { it.optBoolean("is_default") } ?: addresses.firstOrNull()
-            when {
-                preferred == null && !formOpen -> resetDraft()
-                preferred != null && !billingAddressIsComplete(preferred) &&
-                    editingId != billingAddressId(preferred) -> editAddress(preferred)
-            }
-        }
-    }
-
     Column(verticalArrangement = Arrangement.spacedBy(9.dp), modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
@@ -163,7 +152,7 @@ fun BillingAddressBook(
                                     style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(addressValue(selected, "legal_name"), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                             }
-                            TextButton(onClick = { editAddress(selected) }, enabled = !busy) { Text("✎ " + t("Edit", "Edit")) }
+
                         }
                         linesForAddress(selected).forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
                         addressValue(selected, "gstin").takeIf { it.isNotBlank() }?.let {
@@ -179,12 +168,16 @@ fun BillingAddressBook(
                             t("You have " + addresses.size + " saved addresses. Checkout will ask you to choose one.",
                                 "आपके " + addresses.size + " saved addresses हैं। Checkout पर एक चुनना होगा।"),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (!billingAddressIsComplete(selected)) Text(
+                            t("Complete this address in My Profile before checkout.", "Checkout से पहले इस address को My Profile में पूरा करें।"),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                         TextButton(onClick = onOpenProfile, enabled = !busy) { Text(t("Manage in My Profile", "My Profile में manage करें")) }
                     }
                 }
             } else if (!formOpen) {
                 Text(t("Add your billing address before checkout.", "Checkout से पहले billing address जोड़ें।"),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                TextButton(onClick = onOpenProfile, enabled = !busy) { Text(t("Add in My Profile", "My Profile में जोड़ें")) }
             }
         } else if (addresses.isEmpty()) {
             Text(t("No billing address saved yet.", "अभी कोई billing address save नहीं है।"),
@@ -218,7 +211,7 @@ fun BillingAddressBook(
             }
         }
 
-        if (formOpen) {
+        if (formOpen && !compactOnly) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.fillMaxWidth().padding(13.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
