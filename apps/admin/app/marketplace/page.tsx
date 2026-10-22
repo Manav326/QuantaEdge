@@ -109,7 +109,7 @@ export default function CourseMarketplaceAdminPage() {
   }
 
   return (
-    <div className={styles.workspace}>
+    <div className={"qe-admin-marketplace-route " + styles.workspace}>
       <AdminSidebar active="marketplace" />
       <main className={styles.main}>
         <header className={styles.hero}>
