@@ -36,7 +36,15 @@ fun StudentMarketplaceScreen(
     language: String,
     busyCourseId: Long?,
     busy: Boolean,
-    onBuy: (Long, String) -> Unit,
+    billingAddresses: List<JSONObject>,
+    billingAddressesLoading: Boolean,
+    billingError: String = "",
+    billingStatus: String = "",
+    onSaveBillingAddress: (Long?, JSONObject, (Boolean) -> Unit) -> Unit,
+    onMakeDefaultBillingAddress: (Long) -> Unit,
+    onDeleteBillingAddress: (Long) -> Unit,
+    onOpenProfile: () -> Unit,
+    onBuy: (Long, String, Long) -> Unit,
     onJoinFree: (Long) -> Unit,
     onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
@@ -46,7 +54,36 @@ fun StudentMarketplaceScreen(
 ) {
     val hi = language == "hi"
     var discountCode by remember { mutableStateOf("") }
+    var checkoutCourseId by remember { mutableStateOf(0L) }
+    var selectedBillingAddressId by remember { mutableStateOf<Long?>(null) }
+    var billingCheckoutMessage by remember { mutableStateOf("") }
     val inr = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
+
+    fun requestPaidPurchase(courseId: Long) {
+        billingCheckoutMessage = ""
+        if (billingAddressesLoading) {
+            billingCheckoutMessage = if (hi) "Saved billing address load हो रहा है। थोड़ी देर बाद फिर कोशिश करें।"
+                else "Saved billing addresses are still loading. Please retry in a moment."
+            return
+        }
+        if (billingAddresses.isEmpty()) {
+            billingCheckoutMessage = if (hi) "Checkout से पहले ऊपर billing address save करें।"
+                else "Save a billing address above before checkout."
+            return
+        }
+        val preferred = billingAddresses.firstOrNull { it.optBoolean("is_default") } ?: billingAddresses.first()
+        if (billingAddresses.size == 1) {
+            if (!billingAddressIsComplete(preferred)) {
+                billingCheckoutMessage = if (hi) "Checkout से पहले billing address पूरा करें।"
+                    else "Complete your billing address before checkout."
+                return
+            }
+            onBuy(courseId, discountCode.trim(), billingAddressId(preferred))
+            return
+        }
+        checkoutCourseId = courseId
+        selectedBillingAddressId = preferred.let { billingAddressId(it) }
+    }
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -78,6 +115,22 @@ fun StudentMarketplaceScreen(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        BillingAddressBook(
+            addresses = billingAddresses,
+            loading = billingAddressesLoading,
+            busy = busy,
+            language = language,
+            compactOnly = true,
+            errorMessage = billingError,
+            statusMessage = billingStatus,
+            onSave = onSaveBillingAddress,
+            onMakeDefault = onMakeDefaultBillingAddress,
+            onDelete = onDeleteBillingAddress,
+            onOpenProfile = onOpenProfile
+        )
+        if (billingCheckoutMessage.isNotBlank()) {
+            Text(billingCheckoutMessage, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
         if (pendingVerification) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -166,7 +219,7 @@ fun StudentMarketplaceScreen(
                                 else if (hi) "अभिभावक से खरीदने को कहें" else "Ask parent to buy")
                         }
                         pricePaise > 0L && currency == "INR" -> Button(
-                            onClick = { onBuy(id, discountCode.trim()) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
+                            onClick = { requestPaidPurchase(id) }, enabled = !busy && !pendingVerification && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "Checkout खुल रहा है…" else "Opening checkout…" }
                                 else if (hi) "कोर्स खरीदें" else "Buy course")
@@ -180,5 +233,20 @@ fun StudentMarketplaceScreen(
                 }
             }
         }
+    }
+    if (checkoutCourseId > 0L) {
+        BillingAddressPickerDialog(
+            addresses = billingAddresses,
+            selectedAddressId = selectedBillingAddressId,
+            language = language,
+            onSelect = { selectedBillingAddressId = it },
+            onDismiss = { checkoutCourseId = 0L },
+            onConfirm = {
+                val courseId = checkoutCourseId
+                val addressId = selectedBillingAddressId
+                checkoutCourseId = 0L
+                if (addressId != null) onBuy(courseId, discountCode.trim(), addressId)
+            }
+        )
     }
 }
