@@ -1,6 +1,7 @@
 'use client';
 
 import { apiFetch } from '../components/apiClient';
+import { notifyUser } from '../components/GlobalNotificationHost';
 import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
 
@@ -75,6 +76,7 @@ export default function FinancePage(){
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [gstEntityId,setGstEntityId]=useState('');
+  const [editingEntityId,setEditingEntityId]=useState<number|null>(null);
   const [gstForm,setGstForm]=useState({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
   const [taxForm,setTaxForm]=useState<TaxForm>({offerId:'',legalEntityId:'',serviceClassificationCode:'',taxTreatment:'TAXABLE',gstPercent:'',cessPercent:'',priceIncludesTax:true,placeOfSupplyRule:'RECIPIENT_LOCATION',effectiveFrom:new Date(Date.now()-60000).toISOString().slice(0,16)});
   const [taxProfiles,setTaxProfiles]=useState<Record<string,any[]>>({});
@@ -116,10 +118,10 @@ export default function FinancePage(){
   useEffect(()=>{void loadAll();},[loadAll]);
   useEffect(()=>()=>{if(previewPdfUrl)URL.revokeObjectURL(previewPdfUrl);},[previewPdfUrl]);
 
-  const action=async(work:()=>Promise<unknown>,success:string)=>{
+  const action=async(work:()=>Promise<unknown>,success:string):Promise<boolean>=>{
     setBusy(true);setError('');setNotice('');
-    try{await work();setNotice(success);await loadAll();}
-    catch(e){setError(e instanceof Error?e.message:'The finance action failed.');}
+    try{await work();setNotice('');notifyUser(success,'success');await loadAll();return true;}
+    catch(e){setError(e instanceof Error?e.message:'The finance action failed.');return false;}
     finally{setBusy(false);}
   };
   const loadPolicy=async(id:string)=>{
@@ -139,14 +141,15 @@ export default function FinancePage(){
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
 
-  const createEntity=(event:FormEvent)=>{
+  const createEntity=async(event:FormEvent)=>{
     event.preventDefault();
-    void action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
+    const saved=await action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
       entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null,
       legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,
       invoiceSeriesCode:entityForm.invoiceSeriesCode,
       registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}
     })}), 'Legal entity saved as draft.');
+    if(saved)setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   };
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
@@ -271,21 +274,22 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Refund retry could not be confirmed.');}
     finally{setRefundBusy(false);}
   };
-  const createRegistration=(event:FormEvent)=>{
+  const createRegistration=async(event:FormEvent)=>{
     event.preventDefault();
     if(!gstEntityId){setError('Choose the legal entity that owns this GST registration.');return;}
-    void action(async()=>api(BASE+'/legal-entities/'+gstEntityId+'/gst-registrations',{method:'POST',body:JSON.stringify({
+    const saved=await action(async()=>api(BASE+'/legal-entities/'+gstEntityId+'/gst-registrations',{method:'POST',body:JSON.stringify({
       gstin:gstForm.gstin,legalName:gstForm.legalName,stateCode:gstForm.stateCode,effectiveFrom:gstForm.effectiveFrom,
       registeredAddress:{line1:gstForm.addressLine,city:gstForm.city,state:gstForm.state,postalCode:gstForm.postalCode,country:'India'}
     })}), 'GST registration saved pending verification.');
+    if(saved)setGstForm({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
   };
-  const createTaxProfile=(event:FormEvent)=>{
+  const createTaxProfile=async(event:FormEvent)=>{
     event.preventDefault();
     if(!taxForm.offerId||!taxForm.legalEntityId){setError('Choose both the course offer and legal seller.');return;}
     const treatment=taxForm.taxTreatment;
     const gstBps=treatment==='TAXABLE'?Math.round(Number(taxForm.gstPercent)*100):0;
     const cessBps=treatment==='TAXABLE'?Math.round(Number(taxForm.cessPercent||0)*100):0;
-    void action(async()=>{
+    const submitted=await action(async()=>{
       const result=await api<{id:number}>(BASE+'/offers/'+taxForm.offerId+'/tax-profiles',{method:'POST',body:JSON.stringify({
         legalEntityId:Number(taxForm.legalEntityId),serviceClassificationCode:taxForm.serviceClassificationCode||null,
         taxTreatment:treatment,gstRateBasisPoints:gstBps,cessRateBasisPoints:cessBps,
@@ -295,6 +299,7 @@ export default function FinancePage(){
       await api(BASE+'/tax-profiles/'+result.id+'/submit',{method:'POST'});
       setTaxProfiles(v=>({...v,[taxForm.offerId]:[...(v[taxForm.offerId]||[]),{id:result.id,status:'PENDING_APPROVAL'}]}));
     },'Tax profile submitted for HRMS approval.');
+    if(submitted)setTaxForm(v=>({...v,serviceClassificationCode:'',gstPercent:'',cessPercent:''}));
   };
   const loadTaxProfiles=async(offerId:string)=>{
     if(!offerId)return;
@@ -303,7 +308,7 @@ export default function FinancePage(){
   };
   useEffect(()=>{if(taxForm.offerId)void loadTaxProfiles(taxForm.offerId);},[taxForm.offerId]);
 
-  const createDiscount=()=>{
+  const createDiscount=async()=>{
     if(!discountForm.offerId){setError('Select a course offer for this discount code.');return;}
     if(!/^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$/.test(discountForm.code.trim())){setError('Offer codes must be 3–40 letters, digits, hyphens or underscores.');return;}
     if(discountForm.discountType==='PERCENTAGE'&&(!(Number(discountForm.percentage)>0)||Number(discountForm.percentage)>100)){setError('Discount percentage must be greater than 0 and no more than 100.');return;}
@@ -313,7 +318,7 @@ export default function FinancePage(){
     if(discountForm.maxRedemptions!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptions))||Number(discountForm.maxRedemptions)<=0)){setError('Maximum redemptions must be a positive whole number.');return;}
     if(discountForm.maxRedemptionsPerPurchaser!==''&&(!Number.isSafeInteger(Number(discountForm.maxRedemptionsPerPurchaser))||Number(discountForm.maxRedemptionsPerPurchaser)<=0)){setError('Per-purchaser limit must be a positive whole number.');return;}
     if(discountForm.effectiveUntil&&new Date(discountForm.effectiveUntil)<=new Date(discountForm.effectiveFrom)){setError('Offer end must be after its start.');return;}
-    void action(async()=>{
+    const submitted=await action(async()=>{
       const created=await api<{id:number;code:string;version:number}>(BASE+'/discounts',{method:'POST',body:JSON.stringify({
         institutionOfferId:Number(discountForm.offerId),code:discountForm.code.trim().toUpperCase(),
         currency:'INR',discountType:discountForm.discountType,
@@ -328,6 +333,7 @@ export default function FinancePage(){
       })});
       await api(BASE+'/discounts/'+created.id+'/submit',{method:'POST'});
     },'Discount created and submitted for independent HRMS approval. It cannot be used until approved.');
+    if(submitted)setDiscountForm(v=>({...v,code:'',percentage:'10',flatAmountRupees:'100',maxDiscountRupees:'',minListedPriceRupees:'0',maxRedemptions:'',maxRedemptionsPerPurchaser:'',effectiveFrom:new Date().toISOString().slice(0,16),effectiveUntil:''}));
   };
   const submitDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/submit',{method:'POST'}),'Discount submitted for HRMS approval.');
   const approveDiscount=(id:number)=>void action(()=>api(BASE+'/discounts/'+id+'/approve',{method:'POST'}),'Discount approved. The server will validate eligibility and enforce usage limits.');
@@ -462,14 +468,24 @@ export default function FinancePage(){
             <button className={styles.primary} disabled={busy}>Save legal entity draft</button>
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
-            <div className={styles.entitySummary}><b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span><small>{e.active_gst_registrations||0} verified registration(s)</small>
-              <label className={styles.seriesInline}>Invoice series prefix<input maxLength={3} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
-              <small>e-Invoice applicability: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
+            <div className={styles.entitySummary}>
+              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span>
+              <small>{e.active_gst_registrations||0} verified registration(s)</small>
+              <small>Invoice series: <b>{e.invoice_series_code||'QE'}</b></small>
+              <small>e-Invoice: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
             </div>
-            <div className={styles.entityActions}><button className={styles.secondarySmall} disabled={busy} onClick={()=>saveInvoiceSeries(e)}>Save series</button>
-              {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+            <div className={styles.entityActions}>
+              {editingEntityId===e.id ? <>
+                <button className={styles.secondarySmall} disabled={busy||(seriesDrafts[String(e.id)]??e.invoice_series_code??'QE').trim().toUpperCase()===(e.invoice_series_code||'QE')} onClick={()=>void saveInvoiceSeries(e)}>Save series</button>
+                <button className={styles.secondarySmall} disabled={busy||((einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED')===(e.einvoice_applicability??'UNREVIEWED')&&(einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??'').trim()===(e.einvoice_applicability_review_note??'').trim())} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
+                <button className={styles.secondarySmall} disabled={busy} onClick={()=>setEditingEntityId(null)}>Done</button>
+              </> : <>
+                <button className={styles.secondarySmall} disabled={busy} onClick={()=>{setEditingEntityId(e.id);setSeriesDrafts(v=>({...v,[String(e.id)]:e.invoice_series_code||'QE'}));setEinvoiceDrafts(v=>({...v,[String(e.id)]:e.einvoice_applicability||'UNREVIEWED'}));setEinvoiceNotes(v=>({...v,[String(e.id)]:e.einvoice_applicability_review_note||''}));}}>Edit settings</button>
+                {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
+              </>}
             </div>
-            <div className={styles.einvoiceReview}>
+            {editingEntityId===e.id && <div className={styles.einvoiceReview}>
+              <label>Invoice series prefix<input maxLength={3} value={seriesDrafts[String(e.id)]??e.invoice_series_code??'QE'} onChange={event=>setSeriesDrafts(old=>({...old,[String(e.id)]:event.target.value.toUpperCase()}))}/></label>
               <label>Reviewed applicability
                 <select value={einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED'} onChange={event=>setEinvoiceDrafts(old=>({...old,[String(e.id)]:event.target.value}))}>
                   <option value="UNREVIEWED" disabled>Not reviewed</option>
@@ -480,9 +496,8 @@ export default function FinancePage(){
               <label>Review rationale / tax-adviser reference
                 <input maxLength={1000} value={einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??''} placeholder="Reference and reason for the seller's applicability decision" onChange={event=>setEinvoiceNotes(old=>({...old,[String(e.id)]:event.target.value}))}/>
               </label>
-              <button className={styles.secondarySmall} disabled={busy} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
               <small className={styles.einvoiceHelp}>Human review only; this does not validate against the GST portal. REQUIRED keeps checkout blocked until IRP/IRN and signed-QR verification are integrated.</small>
-            </div>
+            </div>}
           </article>)}</div>
         </div>
         <div className={styles.panel}><h2>GST registrations</h2><p>Enter registration details, then independently review and mark them verified. This action records an HRMS review; it does not claim an automated GST-portal validation.</p>
