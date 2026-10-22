@@ -2069,3 +2069,70 @@ html[data-qe-appearance] :is(
 html[data-qe-appearance] .qe-language-switcher > span:first-child {
   color: var(--qe-color-primary-text);
 }
+
+
+/* Progress and family-report rows must fit long localized topic names and values. */
+.topic-line,
+.panel-title {
+  min-width: 0;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.topic-line > :first-child,
+.panel-title > :first-child {
+  min-width: 0;
+  flex: 1 1 10rem;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.topic-line > :last-child,
+.panel-title > :last-child {
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-align: right;
+}
+
+.mastery-row {
+  min-width: 0;
+  grid-template-columns: minmax(0, min(100px, 35%)) minmax(0, 1fr) minmax(36px, 45px);
+  gap: clamp(6px, 1.5vw, 12px);
+}
+
+.mastery-row > *,
+.mastery-row i {
+  min-width: 0;
+}
+
+.mastery-row > :first-child {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.mastery-row > strong {
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.student-certificate-actions a,
+.parent-certificate-actions a {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.parent-certificate-actions,
+.student-certificate-actions {
+  min-width: 0;
+  max-width: 100%;
+}

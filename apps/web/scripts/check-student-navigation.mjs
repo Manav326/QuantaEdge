@@ -994,6 +994,16 @@ assert.ok(
   'Active navigation, tinted badges, selected answer/tutor controls and language affordances must use the correct semantic foreground for their themed surface.'
 );
 
+
+assert.ok(
+  css.includes('.topic-line > :first-child') &&
+  css.includes('grid-template-columns: minmax(0, min(100px, 35%)) minmax(0, 1fr) minmax(36px, 45px)') &&
+  css.includes('.parent-certificate-actions a') &&
+  css.includes('white-space: normal') &&
+  css.includes('overflow-wrap: anywhere'),
+  'Student progress and parent report rows must wrap long localized topic names/counts, and certificate action links must fit narrow screens.'
+);
+
 console.log('Navigation, localization, student empty-state fallbacks, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
 
 
