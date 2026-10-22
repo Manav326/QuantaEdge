@@ -65,6 +65,7 @@ public class InstitutionCourseLifecycleController {
             count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
           from curriculum_program_subject ps
           join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or s.program_id is null)
           left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
           left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
           where ps.program_id=?
@@ -181,11 +182,12 @@ public class InstitutionCourseLifecycleController {
     if(owned.isEmpty()) throw new SecurityException("This active course is not owned by the current institution.");
 
     Map<String,Object> evidence=jdbc.queryForMap("""
-        select count(distinct ps.subject_id) as subject_count,
-          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+        select count(distinct s.id) as subject_count,
+          count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from curriculum_program_subject ps
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or s.program_id is null)
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where ps.program_id=?
