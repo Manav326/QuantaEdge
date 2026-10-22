@@ -625,3 +625,40 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="Card"]:hover:not
     transition: none;
   }
 }
+
+
+/* Keep the global header controls usable on phones when all tenant/theme controls are present. */
+.qe-admin-global-header .qe-brand__tagline {
+  display: none;
+}
+@media (max-width: 900px) {
+  .qe-admin-global-actions > .qe-admin-institution-switcher {
+    flex: 0 1 120px;
+    min-width: 0 !important;
+    max-width: 120px;
+  }
+  .qe-admin-global-actions > .qe-admin-institution-switcher > span {
+    display: none;
+  }
+  .qe-admin-global-actions > .qe-admin-institution-switcher select {
+    width: 100%;
+    min-width: 0 !important;
+    max-width: 120px !important;
+  }
+  .qe-admin-global-actions .qe-appearance-toggle-label {
+    display: none;
+  }
+}
+@media (max-width: 540px) {
+  .qe-admin-global-actions > .qe-admin-institution-switcher {
+    flex-basis: 86px;
+    max-width: 86px;
+  }
+  .qe-admin-global-actions > .qe-admin-institution-switcher select {
+    max-width: 86px !important;
+  }
+  .qe-admin-global-actions .qe-appearance-toggle {
+    min-width: 34px;
+    padding: 7px;
+  }
+}
