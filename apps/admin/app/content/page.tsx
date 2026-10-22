@@ -870,7 +870,7 @@ export default function ContentStudio(){
         {!totalLessons&&<div className="qe-topic-empty">{t('admin.contentStudio.noMicroTopics')} {t('admin.contentStudio.createFirstTopic')}</div>}
        </div>}
       </article>;
-     })</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
+     })}</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
     <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
    </section>
    {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} tabIndex={-1} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
