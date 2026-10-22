@@ -257,6 +257,10 @@ public class CoursePaymentWebhookController {
   }
 
   private boolean isValidSignature(byte[] rawBody,String signature) {
+    // Missing configuration is not a cryptographic failure: fail closed without attempting
+    // to initialize HMAC with an invalid empty key. The endpoint itself returns 503 before
+    // signature verification when the secret is not configured.
+    if(webhookSecret.isBlank())return false;
     if(signature==null||!signature.trim().matches("(?i)[0-9a-f]{64}"))return false;
     byte[] provided;
     try { provided=hexBytes(signature.trim()); } catch(IllegalArgumentException invalidHex) { return false; }

@@ -21,11 +21,12 @@ class CoursePaymentWebhookControllerTest {
   }
 
   @Test
-  void malformedOrMissingSignaturesFailClosed() {
+  void malformedOrMissingSignaturesFailClosed() throws Exception {
     byte[] body="{}".getBytes(StandardCharsets.UTF_8);
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,null,"configured-secret"));
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,"not-a-signature","configured-secret"));
     assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,"a".repeat(64),""));
+    assertFalse(CoursePaymentWebhookController.verifySignatureForTest(body,sign(body,"configured-secret"),""));
   }
 
   private static String sign(byte[] body,String secret) throws Exception {
