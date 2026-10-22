@@ -37,6 +37,24 @@ type AvailableRelease = {
   source_institution_code: string;
   source_institution_name: string;
 };
+type QualityReviewItem = {
+  release_id: number;
+  course_id: number;
+  release_version: number;
+  release_state: string;
+  content_fingerprint: string;
+  contentCurrent: boolean;
+  submitted_at?: string | null;
+  course_code: string;
+  course_name: string;
+  source_institution_id: number;
+  source_institution_code: string;
+  source_institution_name: string;
+  active_subject_count: number;
+  subjects_with_published_lessons: number;
+  published_chapters: number;
+  published_lessons: number;
+};
 type LaunchResponse = {
   institutionId: number;
   institutionName: string;
@@ -46,6 +64,8 @@ type LaunchResponse = {
   blockedCount: number;
   availableReleases?: AvailableRelease[];
   availableCount?: number;
+  qualityReviewItems?: QualityReviewItem[];
+  qualityReviewCount?: number;
 };
 type Draft = { title: string; description: string; priceRupees: string };
 
@@ -94,6 +114,7 @@ export default function MarketplaceLaunchStepper({
 }) {
   const [data, setData] = useState<LaunchResponse | null>(null);
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
+  const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -106,6 +127,13 @@ export default function MarketplaceLaunchStepper({
       const result = await api<LaunchResponse>('/api/v1/hrms/platform/institutions/' + institutionId + '/marketplace-launches');
       const items = Array.isArray(result.items) ? result.items : [];
       setData({ ...result, items });
+      setReviewNotes(previous => {
+        const next = { ...previous };
+        for (const release of result.qualityReviewItems || []) {
+          if (next[release.release_id] === undefined) next[release.release_id] = '';
+        }
+        return next;
+      });
       setDrafts(previous => {
         const next: Record<number, Draft> = {};
         for (const item of items) {
@@ -137,6 +165,37 @@ export default function MarketplaceLaunchStepper({
       ...current,
       [assignmentId]: { ...(current[assignmentId] || { title: '', description: '', priceRupees: '' }), ...patch },
     }));
+  };
+
+  const reviewQuality = async (release: QualityReviewItem, approved: boolean) => {
+    const notes = (reviewNotes[release.release_id] || '').trim();
+    if (notes.length < 3 || notes.length > 1000) {
+      setError('Add a review note between 3 and 1,000 characters before recording a quality decision.');
+      return;
+    }
+    if (approved && (!release.contentCurrent || release.active_subject_count < 1
+      || release.subjects_with_published_lessons !== release.active_subject_count
+      || release.published_chapters < 1 || release.published_lessons < 1)) {
+      setError('This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
+      return;
+    }
+    setBusyKey('quality-' + release.release_id);
+    setError('');
+    setNotice('');
+    try {
+      await api('/api/v1/hrms/platform/institutions/course-releases/' + release.release_id + '/quality-review', {
+        method: 'POST',
+        body: JSON.stringify({ approved, notes }),
+      });
+      setNotice(approved
+        ? 'Content quality approved. The source institution must still complete its origin approval before the release can be assigned.'
+        : 'Release returned for correction. The source institution must update the content and submit a fresh release.');
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'The course release quality decision could not be saved.');
+    } finally {
+      setBusyKey(null);
+    }
   };
 
   const assignRelease = async (release: AvailableRelease) => {
@@ -303,6 +362,53 @@ export default function MarketplaceLaunchStepper({
           <div><strong>{loading ? '—' : counts.published}</strong><span>Currently published</span></div>
         </div>
       </div>
+
+      {!loading && data && (data.qualityReviewItems || []).length > 0 && (
+        <section className={styles.qualityPanel}>
+          <header className={styles.availableHeader}>
+            <div><span className={styles.summaryLabel}>HRMS content gate</span><h3>Courses waiting for quality review</h3>
+              <p>Review the source institution’s submitted release. This is separate from origin approval and Marketplace publication.</p></div>
+            <span className={styles.qualityCount}>{data.qualityReviewItems?.length || 0} awaiting review</span>
+          </header>
+          <div className={styles.qualityList}>
+            {(data.qualityReviewItems || []).map(release => {
+              const qualityReady = release.contentCurrent && release.active_subject_count > 0
+                && release.subjects_with_published_lessons === release.active_subject_count
+                && release.published_chapters > 0 && release.published_lessons > 0;
+              return (
+                <article className={styles.qualityRow} key={release.release_id}>
+                  <div className={styles.availableMark} aria-hidden="true">✓</div>
+                  <div className={styles.qualityCopy}>
+                    <strong>{release.course_name} <span>v{release.release_version}</span></strong>
+                    <small>Source: {release.source_institution_name} · {release.source_institution_code} · Release #{release.release_id}</small>
+                    <div className={styles.qualityMetrics}>
+                      <span>{release.active_subject_count} active subjects</span>
+                      <span>{release.subjects_with_published_lessons} with lessons</span>
+                      <span>{release.published_chapters} chapters</span>
+                      <span>{release.published_lessons} lessons</span>
+                    </div>
+                    {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
+                    <label className={styles.reviewNote}>Quality review note
+                      <textarea rows={2} maxLength={1000} value={reviewNotes[release.release_id] || ''}
+                        onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
+                        placeholder="Record what was checked: syllabus coverage, published lessons, content integrity…" />
+                    </label>
+                    <div className={styles.qualityActions}>
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (reviewNotes[release.release_id] || '').trim().length < 3}
+                        onClick={() => void reviewQuality(release, true)}>
+                        {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
+                      </button>
+                      <button type="button" className={styles.secondaryButton} disabled={busyKey !== null || (reviewNotes[release.release_id] || '').trim().length < 3}
+                        onClick={() => void reviewQuality(release, false)}>Return for correction</button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <p className={styles.qualityFootnote}>Quality approval does not make the course purchasable by itself. The originating institution must complete release approval; HRMS can then assign the shareable release and continue through the listing checklist.</p>
+        </section>
+      )}
 
       {!loading && data && (data.availableReleases || []).length > 0 && (
         <section className={styles.availablePanel}>
