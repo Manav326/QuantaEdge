@@ -122,8 +122,9 @@ async function setUpEducationAdmin(browser: Browser): Promise<string> {
   await page.locator('#staff-mobile').fill(ADMIN_MOBILE);
   await page.locator('#staff-mobile').locator('xpath=ancestor::form').locator('button[type="submit"]').click();
   const otpResponse = await requestOtp;
-  expect(otpResponse.status(), 'Education Admin bootstrap OTP request must succeed through the local-only provider. Body: ' + (await otpResponse.clone().text()).slice(0, 250)).toBe(200);
-  const otpBody = await otpResponse.json();
+  const otpResponseBody = await otpResponse.text();
+  expect(otpResponse.status(), 'Education Admin bootstrap OTP request must succeed through the local-only provider. Body: ' + otpResponseBody.slice(0, 250)).toBe(200);
+  const otpBody = JSON.parse(otpResponseBody || '{}');
   expect(otpBody.firstAccess).toBe(true);
 
   await page.locator('#staff-otp').fill(String(otpBody.devCode || await readDisposableOtp(ADMIN_MOBILE, 'STAFF_LOGIN')));
