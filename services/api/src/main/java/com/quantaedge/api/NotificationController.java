@@ -517,7 +517,7 @@ public class NotificationController {
     if(idempotencyKey.isBlank()) throw new IllegalArgumentException("A unique idempotency key is required for sending.");
     return notifications.send(actor,target.scope(),target.institutionId(),target.courseId(),target.filter(),
       text(body,"title"),text(body,"summary"),document(request,actor,body),templateId,templateVersion,
-      idempotencyKey,scheduledAt,expiresAt);
+      idempotencyKey,text(body,"previewToken"),scheduledAt,expiresAt);
   }
 
   @PostMapping({
