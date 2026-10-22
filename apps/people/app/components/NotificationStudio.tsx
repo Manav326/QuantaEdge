@@ -662,20 +662,20 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
       <aside className={styles.side} aria-label="Notification workspace summary">
         <div className={styles.sticky}>
           <section className={styles.sideCard}>
-            <div className={styles.sideCardHeading}><h3>Current draft</h3><span className={templateId?'sideStatusSaved':'sideStatusDraft'}>{templateId?('Version '+(templateVersion??1)):'Not saved'}</span></div>
+            <div className={styles.sideCardHeading}><h3>Current draft</h3><span className={templateId?styles.sideStatusSaved:styles.sideStatusDraft}>{templateId?('Version '+(templateVersion??1)):'Not saved'}</span></div>
             <strong className={styles.sideDraftName}>{templateName.trim()||'Untitled notification'}</strong>
             <p>{templateId?'Changes create an immutable version; sent campaigns keep their original content.':'Save this design as a reusable template when it is ready.'}</p>
             <div className={styles.sideMetrics}>
               <div><span>Content blocks</span><b>{document.blocks.length} / 40</b></div>
               <div><span>Selected element</span><b>{activeBlock?(BLOCK_OPTIONS.find(option=>option[0]===activeBlock.type)?.[1]??activeBlock.type):'None'}</b></div>
             </div>
-            <div className={styles.sideStatusLine}><span className={validateContent()?'sideStatusWarning':'sideStatusReady'}>{validateContent()?'Needs attention':'Content checks passed'}</span><span className={templateDirty?'sideStatusWarning':'sideStatusReady'}>{templateDirty?'Unsaved changes':'Up to date'}</span></div>
+            <div className={styles.sideStatusLine}><span className={validateContent()?styles.sideStatusWarning:styles.sideStatusReady}>{validateContent()?'Needs attention':'Content checks passed'}</span><span className={templateDirty?styles.sideStatusWarning:styles.sideStatusReady}>{templateDirty?'Unsaved changes':'Up to date'}</span></div>
           </section>
           <section className={styles.sideCard}>
             <h3>Audience & preview</h3>
             <p className={styles.sideDraftName}>{scope==='HRMS_PLATFORM'?'HRMS platform':scope==='COURSE'?'Course audience':scope==='USER'?'Selected people':'Institution audience'}</p>
             <p>{scope==='HRMS_PLATFORM'?(allInstitutions?'All active institutions':selectedInstitutionIds.length+' institution(s) selected'):scope==='COURSE'?(courses.find(course=>String(course.course_id)===courseId)?.course_name??'Choose a course'):scope==='USER'?(directRecipients.length+' recipient(s) selected'):(recipientTypes.length+' recipient type(s) selected')}</p>
-            <div className={styles.sideStatusLine}><span className={audienceConfigured?'sideStatusReady':'sideStatusWarning'}>{audienceConfigured?'Audience selected':'Audience needs selection'}</span><span className={previewed?'sideStatusReady':'sideStatusWarning'}>{previewed?'Preview validated':'Preview required'}</span></div>
+            <div className={styles.sideStatusLine}><span className={audienceConfigured?styles.sideStatusReady:styles.sideStatusWarning}>{audienceConfigured?'Audience selected':'Audience needs selection'}</span><span className={previewed?styles.sideStatusReady:styles.sideStatusWarning}>{previewed?'Preview validated':'Preview required'}</span></div>
             {previewed?<div className={styles.audienceResult}><strong>{(previewCount??0).toLocaleString('en-IN')} eligible recipients</strong><span>Server-resolved preview. The audience will be checked again at send time.</span></div>:<p className={styles.muted}>Preview and validate the audience before sending or scheduling.</p>}
           </section>
           <section className={styles.sideCard}>
