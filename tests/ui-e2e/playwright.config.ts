@@ -1,6 +1,20 @@
 import { defineConfig } from '@playwright/test';
 
 const isCi = Boolean(process.env.CI);
+const productionGate = process.env.QE_E2E_PRODUCTION_GATE === 'true';
+
+if (productionGate) {
+  const testedSha = process.env.GITHUB_SHA || process.env.QE_E2E_SOURCE_SHA || '';
+  if (process.env.GITHUB_ACTIONS !== 'true' || !/^[0-9a-f]{40}$/i.test(testedSha)) {
+    throw new Error('Production-gate E2E requires GitHub Actions and an exact 40-character tested commit SHA.');
+  }
+  if (process.env.QE_E2E_ENVIRONMENT !== 'disposable-qa' || !process.env.QE_E2E_DATABASE_URL) {
+    throw new Error('Production-gate E2E requires an explicitly disposable QA environment and direct database assertions.');
+  }
+  if (!process.env.QE_E2E_SECRET_DIR || process.env.QE_E2E_EXTERNAL_PROVIDER_MODE === 'live') {
+    throw new Error('Production-gate E2E requires private fixture storage and forbids live external-provider mode.');
+  }
+}
 
 export default defineConfig({
   testDir: './tests',
