@@ -1575,3 +1575,47 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot [class*="cropStage"]
   border-color: var(--qe-people-line);
   background-color: var(--qe-people-surface-subtle);
 }
+
+
+/* Remaining named component families found in the Finance/Institutions/QA module audit. */
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] [class*="eyebrow"] {
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
+  [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"],
+  [class*="codeNotice"], [class*="cropError"], [class*="cropHelp"], [class*="themePreviewNotice"]
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="valueChip"], [class*="emptyIcon"], [class*="avatar"], [class*="samplePill"]
+):not([class*="themePreviewCard"]):not([class*="brandTemplatePreview"]) {
+  background-color: var(--qe-people-brand-soft) !important;
+  color: var(--qe-people-brand-strong) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="codeNotice"], [class*="approvalBox"], [class*="billingBox"], [class*="readOnlyMetric"]
+) {
+  background-color: var(--qe-people-surface-subtle) !important;
+  color: var(--qe-people-ink) !important;
+  border-color: var(--qe-people-line) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="codeNotice"], [class*="approvalBox"]
+) :is(span, small, p, strong) {
+  color: var(--qe-people-ink) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="status"], [class*="Status"]
+):not([class*="qe-people-status"]):not([class*="success"]):not([class*="Success"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]):not([class*="active"]):not([class*="suspended"]) {
+  background-color: var(--qe-people-info-soft) !important;
+  color: var(--qe-people-info) !important;
+  border-color: color-mix(in srgb, var(--qe-people-info) 35%, var(--qe-people-line)) !important;
+}
+html[data-qe-people-appearance="dark"] .qe-people-page-slot > [class*="page"] :is(
+  [class*="warning"], [class*="Warning"]
+) {
+  background-color: var(--qe-people-warning-soft) !important;
+  color: var(--qe-people-warning) !important;
+  border-color: color-mix(in srgb, var(--qe-people-warning) 38%, var(--qe-people-line)) !important;
+}
