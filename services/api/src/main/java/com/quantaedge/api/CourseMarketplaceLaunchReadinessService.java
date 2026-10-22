@@ -348,12 +348,14 @@ public class CourseMarketplaceLaunchReadinessService {
     boolean taxOk = true;
     String taxError = "";
     CourseTaxCalculator.Result quote = null;
+    CourseTaxCalculator.Treatment treatment = null;
+    int gstRate = 0;
+    int cessRate = 0;
+    boolean includesTax = Boolean.TRUE.equals(profile.get("price_includes_tax"));
     try {
-      CourseTaxCalculator.Treatment treatment =
-          CourseTaxCalculator.Treatment.valueOf(text(profile.get("tax_treatment")));
-      int gstRate = (int) number(profile.get("gst_rate_basis_points"));
-      int cessRate = (int) number(profile.get("cess_rate_basis_points"));
-      boolean includesTax = Boolean.TRUE.equals(profile.get("price_includes_tax"));
+      treatment = CourseTaxCalculator.Treatment.valueOf(text(profile.get("tax_treatment")));
+      gstRate = (int) number(profile.get("gst_rate_basis_points"));
+      cessRate = (int) number(profile.get("cess_rate_basis_points"));
       quote = CourseTaxCalculator.quote(pricePaise,0L,treatment,gstRate,cessRate,includesTax);
       if(treatment==CourseTaxCalculator.Treatment.TAXABLE) {
         String gstin=text(profile.get("supplier_gstin"));
@@ -391,7 +393,7 @@ public class CourseMarketplaceLaunchReadinessService {
         templateReady ? "A published platform or seller template is available for newly issued sale documents."
             : "Publish an approved platform-wide or seller-specific invoice template in HRMS Invoice Design Studio.");
 
-    if(quote==null||!taxOk||!invoiceModeSupported) {
+    if(quote==null||treatment==null||!taxOk||!invoiceModeSupported) {
       add(checks,"DISCOUNT_POOL_COMPATIBILITY","Approved discounts fit the verified tax/share model",false,
           "HRMS must correct the tax quote before active approved discounts can be checked against the revenue-share pool.");
       return new FinancialState(false,0L,false);
