@@ -950,3 +950,63 @@ html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand_
 html[data-qe-people-appearance="dark"] .qe-people-mobile-brand-lockup .qe-brand__tagline {
   color: var(--qe-people-muted);
 }
+
+
+/*
+ * Smooth HRMS navigation
+ * ----------------------
+ * The workspace/header remain mounted; only the path-keyed page slot animates.
+ * This avoids a perceived full-page refresh during normal in-app navigation.
+ */
+html[data-qe-people-appearance] body,
+html[data-qe-people-appearance] .qe-people-workspace,
+html[data-qe-people-appearance] .qe-people-content,
+html[data-qe-people-appearance] .qe-people-page-slot {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+html[data-qe-people-appearance] .qe-people-page-slot {
+  min-width: 0;
+  animation: qe-people-route-enter 170ms cubic-bezier(.2, .75, .25, 1) both;
+}
+@keyframes qe-people-route-enter {
+  from { opacity: .72; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-people-appearance] body,
+  html[data-qe-people-appearance] .qe-people-workspace,
+  html[data-qe-people-appearance] .qe-people-content,
+  html[data-qe-people-appearance] .qe-people-page-slot {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Navigation rows carry active emphasis; the glyph itself is not another card. */
+html[data-qe-people-appearance] .qe-people-navigation-icon {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit;
+}
+html[data-qe-people-appearance] .qe-people-navigation-link.is-active .qe-people-navigation-icon {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: inherit;
+}
+
+/* Common compact chips and labels inherit HRMS semantic surfaces across route families. */
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
+  [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
+  [class*="count"], [class*="Count"]
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) {
+  border-color: var(--qe-people-line);
+}
+html[data-qe-people-appearance] .qe-people-page-slot :is(
+  [class*="chip"], [class*="Chip"], [class*="badge"], [class*="Badge"],
+  [class*="pill"], [class*="Pill"], [class*="tag"], [class*="Tag"],
+  [class*="count"], [class*="Count"]
+):not([class*="success"]):not([class*="Success"]):not([class*="approved"]):not([class*="Approved"]):not([class*="error"]):not([class*="Error"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"]) :is(span, strong, b, small, em, label) {
+  color: inherit;
+}
