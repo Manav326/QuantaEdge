@@ -203,7 +203,7 @@ async function fetchInstitutionBrand(code: string): Promise<AdminTenantBrand> {
   const response = await apiFetch('/api/v1/institution/public/branding/' + encodeURIComponent(code), {
     credentials: 'same-origin',
     cache: 'no-store',
-    headers: { 'X-QE-Workspace': 'INSTITUTION' },
+    headers: { 'X-QE-Workspace': 'EDUCATION_ADMIN' },
   });
   const body = await response.json().catch(() => ({})) as Partial<AdminTenantBrand> & { message?: string; detail?: string };
   if (!response.ok) throw new Error(body.message || body.detail || 'Institution branding is unavailable.');
