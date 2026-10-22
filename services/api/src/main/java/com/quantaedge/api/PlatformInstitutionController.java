@@ -450,7 +450,8 @@ public class PlatformInstitutionController {
     Object raw=body==null?null:body.get("enabled");
     if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
-        select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,p.code,p.display_name
+        select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,
+          r.content_fingerprint,p.code,p.display_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where r.id=?
@@ -462,6 +463,29 @@ public class PlatformInstitutionController {
     long sourceInstitutionId=((Number)release.get("source_institution_id")).longValue();
     if(sourceInstitutionId==institutionId)
       throw new IllegalArgumentException("The origin institution already owns this course release; cross-institution assignment is for destination institutions.");
+    if(enabled) {
+      long courseId=((Number)release.get("program_id")).longValue();
+      String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
+      if(!savedFingerprint.equals(courseReleaseFingerprint(courseId)))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
+      Map<String,Object> contentReadiness=jdbc.queryForMap("""
+          select count(distinct ps.subject_id) as subject_count,
+            count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+            count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+          from curriculum_program_subject ps
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+          left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+          where ps.program_id=?
+          """,courseId);
+      long subjects=((Number)contentReadiness.get("subject_count")).longValue();
+      if(subjects==0||((Number)contentReadiness.get("subjects_with_published_lessons")).longValue()!=subjects
+          ||((Number)contentReadiness.get("published_chapters")).longValue()==0
+          ||((Number)contentReadiness.get("published_lessons")).longValue()==0)
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "Course content is not ready for assignment. Publish reviewed lessons for every mapped active subject first.");
+    }
     Long assignmentId=null;
     if(enabled) {
       assignmentId=jdbc.queryForObject("""
