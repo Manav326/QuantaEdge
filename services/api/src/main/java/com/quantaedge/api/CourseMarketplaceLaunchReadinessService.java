@@ -34,9 +34,9 @@ public class CourseMarketplaceLaunchReadinessService {
 
   public CourseMarketplaceLaunchReadinessService(
       JdbcTemplate jdbc, ObjectMapper mapper,
-      @Value("\${app.razorpay.key-id:}") String razorpayKeyId,
-      @Value("\${app.razorpay.key-secret:}") String razorpayKeySecret,
-      @Value("\${app.razorpay.webhook-secret:}") String razorpayWebhookSecret) {
+      @Value("${app.razorpay.key-id:}") String razorpayKeyId,
+      @Value("${app.razorpay.key-secret:}") String razorpayKeySecret,
+      @Value("${app.razorpay.webhook-secret:}") String razorpayWebhookSecret) {
     this.jdbc = jdbc;
     this.mapper = mapper;
     this.razorpayKeyId = clean(razorpayKeyId);
