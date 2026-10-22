@@ -67,6 +67,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const [institutionCode, setInstitutionCode] = useState('');
   const [institutionLoading, setInstitutionLoading] = useState(true);
   const [institutionError, setInstitutionError] = useState('');
+  const [institutionRetryVersion, setInstitutionRetryVersion] = useState(0);
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMoreButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -179,7 +180,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       })
       .finally(() => { if (alive) setInstitutionLoading(false); });
     return () => { alive = false; };
-  }, [publicRoute, session]);
+  }, [publicRoute, session, institutionRetryVersion]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -321,7 +322,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           {!publicRoute && !session ? <div role="status" style={{ padding: 28 }}>Preparing staff workspace…</div>
             : institutionLoading && canSelectInstitution ? <div role="status" style={{ padding: 28 }}>Loading institution access…</div>
             : institutionError && canSelectInstitution ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
-                <h2>Institution access unavailable</h2><p>{institutionError}</p><button type="button" onClick={() => window.location.reload()}>Retry</button>
+                <h2>Institution access unavailable</h2><p>{institutionError}</p><button type="button" onClick={() => setInstitutionRetryVersion(version => version + 1)}>Retry</button>
               </div>
             : institutionSelectionRequired ? <div role="status" style={{ margin: 24, padding: 22, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
                 <h2>Select an institution</h2><p>Choose the institution whose assigned courses and curriculum you need to manage.</p>
