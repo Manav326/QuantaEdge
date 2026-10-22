@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import PasswordField from '../components/PasswordField';
 import NotificationStudio from '../components/NotificationStudio';
 import NotificationInboxClient, { NotificationBell } from '../components/NotificationInboxClient';
@@ -88,6 +89,9 @@ function dateText(value?: string) {
 }
 
 export default function InstitutionPortalPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const notificationRoute = searchParams.get('notifications');
   const [tenantCode, setTenantCode] = useState('');
   const [brand, setBrand] = useState<Brand | null>(null);
   const [brandLoading, setBrandLoading] = useState(false);
@@ -107,10 +111,9 @@ export default function InstitutionPortalPage() {
   const [loginMode, setLoginMode] = useState(true);
 
   useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get('notifications');
-    if (requested === 'inbox') setActiveView('notificationInbox');
-    if (requested === 'studio') setActiveView('notifications');
-  }, []);
+    if (notificationRoute === 'inbox') setActiveView('notificationInbox');
+    if (notificationRoute === 'studio') setActiveView('notifications');
+  }, [notificationRoute]);
 
   const applyBrand = useCallback((value: Brand | null) => {
     setBrand(value);
@@ -396,7 +399,15 @@ export default function InstitutionPortalPage() {
           </div>
           <nav className="institution-tabs" aria-label="Institution report sections">
             {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notificationInbox','Inbox'],['notifications','Notification studio']] as const).map(([id,label]) =>
-              <button type="button" key={id} className={activeView===id?'is-active':''} onClick={()=>setActiveView(id)}>{label}</button>
+              <button type="button" key={id} className={activeView===id?'is-active':''} onClick={() => {
+                setActiveView(id);
+                const params = new URLSearchParams(searchParams.toString());
+                if (id === 'notificationInbox') params.set('notifications', 'inbox');
+                else if (id === 'notifications') params.set('notifications', 'studio');
+                else params.delete('notifications');
+                const query = params.toString();
+                void router.replace(query ? '/institution?' + query : '/institution', { scroll: false });
+              }}>{label}</button>
             )}
             <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
           </nav>
