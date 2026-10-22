@@ -143,6 +143,7 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
     '--qe-muted': palette.textMuted,
     '--qe-border': palette.borderSubtle,
     '--qe-surface': palette.surface,
+    '--qe-panel': palette.surface,
     '--qe-surface-raised': palette.surfaceElevated,
     '--qe-soft': palette.primaryContainer,
     '--qe-input': palette.surfaceElevated,
