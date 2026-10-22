@@ -1715,3 +1715,275 @@ html[data-qe-appearance="dark"] body :is(
   outline-color: var(--qe-color-focus);
   outline-offset: 2px;
 }
+
+
+/* Content Studio: crisp hierarchy, chapter disclosure, and a genuinely focused editor. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-stats-grid article,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-group,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-row,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-row {
+  background-color: var(--qe-color-surface, var(--admin-surface)) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-row {
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-title,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-title,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-title strong,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-title strong {
+  min-width: 0;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-title small,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-title em,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-title small,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-count small {
+  color: var(--qe-color-text-muted, var(--admin-muted)) !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-edit-button {
+  align-self: center;
+  max-width: 150px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+  border-radius: 10px;
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised));
+  color: var(--qe-color-text, var(--admin-text));
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-edit-button:hover,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-edit-button:focus-visible {
+  border-color: var(--qe-color-primary, var(--admin-primary));
+  background: var(--qe-color-surface-hover, var(--qe-color-surface-subtle, var(--admin-surface)));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-row.selected,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-row.selected {
+  background: var(--qe-color-selected-background, var(--qe-color-primary-container, var(--admin-primary-container))) !important;
+  color: var(--qe-color-selected-text, var(--qe-color-text, var(--admin-text))) !important;
+  border-color: var(--qe-color-primary, var(--admin-primary)) !important;
+  box-shadow: inset 3px 0 0 var(--qe-color-primary, var(--admin-primary));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-row.selected .qe-chapter-title :is(strong,small,em),
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-row.selected .qe-topic-title :is(strong,small) {
+  color: var(--qe-color-selected-text, var(--qe-color-text, var(--admin-text))) !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-topics {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 4px 0 6px 12px;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-topic-row {
+  text-align: left;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-stats-grid article :is(small,span,strong) {
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-library-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--qe-color-text-muted, var(--admin-muted));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-library-foot :is(b,span) {
+  color: inherit;
+}
+
+/* The content editor is modal/focused: the chapter/topic list remains mounted underneath
+   so page number, expanded chapter, and selected topic are preserved when it closes. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-workspace-fullscreen {
+  position: fixed !important;
+  z-index: 5000 !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: clamp(12px, 2vw, 28px) !important;
+  overflow: auto !important;
+  overscroll-behavior: contain;
+  isolation: isolate;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--qe-color-background, var(--admin-background)) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  box-shadow: none !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-fullscreen-bar {
+  position: sticky;
+  top: calc(-1 * clamp(12px, 2vw, 28px));
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: calc(-1 * clamp(12px, 2vw, 28px)) calc(-1 * clamp(12px, 2vw, 28px)) 18px;
+  padding: 16px clamp(12px, 2vw, 28px);
+  background: var(--qe-color-surface, var(--admin-surface));
+  border-bottom: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-fullscreen-bar :is(strong,p) {
+  color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-fullscreen-bar p {
+  margin: 4px 0 0;
+  color: var(--qe-color-text-muted, var(--admin-muted));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-fullscreen-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media(max-width:640px) {
+  html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-heading { grid-template-columns: minmax(0,1fr); }
+  html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-chapter-edit-button { justify-self: end; max-width: none; }
+  html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-fullscreen-actions { justify-content: flex-start; }
+}
+
+/* Route-level module surfaces inherit the institution palette, including counters and tab focus. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [class*="testCard"], [class*="reviewQuestion"], [class*="resultStats"],
+  [class*="reviewModal"], [class*="modalFooter"], [class*="certificatePanel"],
+  [class*="auditPanel"], [class*="revokeForm"], [class*="assignmentQueueRow"],
+  [class*="rangeReviewChapter"], [class*="previewDialog"]
+):not([class*="Header"]):not([class*="header"]) {
+  background-color: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [class*="testCard"], [class*="reviewQuestion"], [class*="resultStats"],
+  [class*="certificatePanel"], [class*="auditPanel"], [class*="revokeForm"]
+) :is(h1,h2,h3,h4,p,span,strong,b,small,label,dt,dd) {
+  color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="tabs"], [class*="Tabs"]
+) button:not(.activeTab):not(.active):not([aria-pressed="true"]) {
+  background: var(--qe-color-surface, var(--admin-surface)) !important;
+  color: var(--qe-color-text-muted, var(--admin-muted)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="tabs"], [class*="Tabs"]
+) button :is(span,b,strong) {
+  background-color: var(--qe-color-surface-subtle, var(--admin-surface)) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is(.activeTab,.active,[aria-pressed="true"]) {
+  background: var(--qe-color-selected-background, var(--qe-color-primary-container, var(--admin-primary-container))) !important;
+  color: var(--qe-color-selected-text, var(--qe-color-text, var(--admin-text))) !important;
+  border-color: var(--qe-color-primary, var(--admin-primary)) !important;
+  box-shadow: inset 0 -2px 0 var(--qe-color-primary, var(--admin-primary));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot [class*="tabs"] button:is(.activeTab,.active,[aria-pressed="true"]) :is(span,b,strong) {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* Stable, quiet table states: hover changes surfaces immediately without a white transition flash. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(table, [role="grid"], [role="table"]) tbody tr,
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(table, [role="grid"], [role="table"]) tbody td,
+html[data-qe-appearance] .qe-admin-workspace-page-slot [role="row"],
+html[data-qe-appearance] .qe-admin-workspace-page-slot [role="cell"] {
+  transition-property: color, border-color !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot tbody tr:is(:hover,:focus-within) > td,
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] {
+  background: var(--qe-color-surface-hover, var(--qe-color-surface-subtle, var(--admin-surface))) !important;
+  color: var(--qe-color-text, var(--admin-text)) !important;
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot tbody tr:is(:hover,:focus-within) > td :is(span,strong,b,small,em,a),
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot [role="row"]:is(:hover,:focus-within) [role="cell"] :is(span,strong,b,small,em,a) {
+  color: inherit !important;
+}
+
+/* Staff directory/audit counters and activity rows remain legible in either appearance. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-tabs button {
+  background: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text-muted, var(--admin-muted));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-tabs button b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 2px 6px;
+  border: 1px solid var(--qe-color-border-subtle, var(--admin-border));
+  border-radius: 999px;
+  background: var(--qe-color-surface-subtle, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-tabs button.active {
+  background: var(--qe-color-selected-background, var(--qe-color-primary-container, var(--admin-primary-container)));
+  color: var(--qe-color-selected-text, var(--qe-color-text, var(--admin-text)));
+  border-color: var(--qe-color-primary, var(--admin-primary));
+  box-shadow: inset 0 -2px 0 var(--qe-color-primary, var(--admin-primary));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-tabs button.active b {
+  background: var(--qe-color-primary, var(--admin-primary));
+  color: var(--qe-color-on-primary, #fff);
+  border-color: var(--qe-color-primary, var(--admin-primary));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(.qe-audit-panel, .qe-audit-row, .qe-staff-row, .qe-staff-directory, .qe-staff-editor) {
+  background: var(--qe-color-surface, var(--admin-surface));
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-event :is(strong,span,small,b) {
+  color: var(--qe-color-text, var(--admin-text));
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-event small {
+  color: var(--qe-color-text-muted, var(--admin-muted));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-row .qe-audit-status {
+  color: var(--qe-color-text, var(--admin-text));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-permission-option,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-row-action,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-info {
+  background: var(--qe-color-surface-elevated, var(--admin-surface-raised));
+  color: var(--qe-color-text, var(--admin-text));
+  border-color: var(--qe-color-border-subtle, var(--admin-border));
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-audit-info:hover,
+html[data-qe-appearance] .qe-admin-workspace-page-slot .qe-staff-row-action:hover {
+  border-color: var(--qe-color-primary, var(--admin-primary));
+  background: var(--qe-color-surface-hover, var(--qe-color-surface-subtle, var(--admin-surface)));
+}
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="tableWrap"], [class*="TableWrap"], [class*="tableContainer"], [class*="TableContainer"]
+) { background: var(--qe-color-surface, var(--admin-surface)) !important; }
+html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot :is(
+  [class*="table"], [class*="Table"]
+) th {
+  background: var(--qe-color-surface-subtle, var(--admin-surface)) !important;
+  color: var(--qe-color-text-muted, var(--admin-muted)) !important;
+  border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
+}
