@@ -327,7 +327,7 @@ export default function ContentStudio(){
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
  const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[statusFilter,setStatusFilter]=useState('ALL'),[search,setSearch]=useState('');
  const [programFilter,setProgramFilter]=useState(''),[programs,setPrograms]=useState<any[]>([]);
-  const [chapterPage,setChapterPage]=useState(0),[chapterPageSize,setChapterPageSize]=useState(8);
+  const [chapterPage,setChapterPage]=useState(0),[chapterPageSize,setChapterPageSize]=useState(10);
   const [expandedChapters,setExpandedChapters]=useState<Set<number>>(()=>new Set());
   const [editorOpen,setEditorOpen]=useState(false);
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
