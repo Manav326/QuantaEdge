@@ -2,7 +2,11 @@ name: Validate CI workflow syntax
 
 on:
   push:
-    branches: ["feat/reliable-ui-e2e-current-main-20261022"]
+    branches: ["main"]
+    paths: [".github/workflows/**"]
+  pull_request:
+    branches: ["main"]
+    paths: [".github/workflows/**"]
   workflow_dispatch:
 
 permissions:
