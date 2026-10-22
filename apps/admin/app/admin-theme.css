@@ -517,3 +517,29 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-sticky-actions
     max-width: 72px;
   }
 }
+
+
+/* Restore high-contrast text within CSS-module hero banners after semantic text normalization. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .admin-welcome, .qe-studio-hero, .qe-content-sidebar, [class*="hero"], [class*="Hero"]
+) :is(h1, h2, h3, h4, h5, p, small, strong, span, label) {
+  color: #ffffff;
+}
+
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [class*="activeTab"], [class*="ActiveTab"], [class*="canvasTabActive"]
+) {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container, var(--qe-color-text));
+  border-color: var(--qe-color-border-subtle);
+}
+
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  .bankHeader, .helpNote, .studio-section, .studio-row, .qe-step-strip,
+  .qe-block-type-picker, .qe-rich-toolbar, .qe-rich-helper,
+  .qe-options-list label, .qe-advanced-toggle, .qe-advanced-question,
+  .qe-readiness-list > div
+) {
+  background-color: var(--qe-color-surface-subtle, var(--qe-color-background));
+  border-color: var(--qe-color-border-subtle);
+}
